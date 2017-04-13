@@ -1,0 +1,17 @@
+@(headerId: String, heading: String)(implicit messages: Messages)
+<thead>
+<tr>
+    <th id="@{headerId}-table-heading" colspan="2">
+        <span class="h2-heading">
+            @heading
+        </span>
+    </th>
+    <th>
+        <span class="visuallyhidden">
+            @Messages("common.base.change")
+        </span>
+    </th>
+</tr>
+</thead>
+
+

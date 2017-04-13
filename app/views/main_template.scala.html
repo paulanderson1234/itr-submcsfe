@@ -1,0 +1,52 @@
+@import config.FrontendAppConfig
+@(title: String,
+sidebarLinks: Option[Html] = None,
+contentHeader: Option[Html] = None,
+bodyClasses: Option[String] = None,
+mainClass: Option[String] = None,
+scriptElem: Option[Html] = None,
+articleLayout: Boolean = true,
+backLink: Option[String] = None,
+sectionProgress: Option[String] = None,
+userLoggedIn: Boolean = true)(mainContent: Html)(implicit request : Request[_], messages: Messages)
+
+
+@import uk.gov.hmrc.play.views.html.layouts
+
+
+@serviceInfoContent = {}
+
+
+@sidebarContent = {
+<div class="service-info">
+    @sidebarLinks.get
+</div>
+}
+
+@sidebar = {
+@if(sidebarLinks.isDefined) {
+@layouts.sidebar(sidebarContent, Some("sidebar"))
+}
+}
+
+@contentLayout = {
+    @if(articleLayout) {
+        @layouts.article(mainContent)
+    }else{
+        @mainContent
+    }
+}
+
+@contentHeader = {}
+
+@govuk_wrapper(appConfig = config.FrontendAppConfig,
+    title = title,
+    mainClass = mainClass,
+    bodyClasses = bodyClasses,
+    sidebar = sidebar,
+    contentHeader = Some(contentHeader),
+    mainContent = contentLayout,
+    serviceInfoContent = serviceInfoContent,
+    scriptElem = scriptElem,
+    userLoggedIn = userLoggedIn
+)

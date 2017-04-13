@@ -1,0 +1,23 @@
+@import views.html.helpers.backButton
+
+@()(implicit request: Request[_], messages: Messages)
+
+@main_template(Messages("page.eisseis.investment.AnnualTurnoverError.title")) {
+
+    @backButton(controllers.eisseis.routes.TurnoverCostsController.show().toString)
+
+    <h1 id="main-heading" class="heading-xlarge">@Messages("page.eisseis.investment.AnnualTurnoverError.heading")</h1>
+
+    <div>
+        <p id="description">
+        @Messages("page.eisseis.investment.AnnualTurnoverError.description")
+        </p>
+    </div>
+
+    <div>
+        <p id="change-answers">@Messages("page.eisseis.investment.AnnualTurnoverError.incorrect.info")
+        <a class="link-style" id="change-answers-link" href="@controllers.eisseis.routes.TurnoverCostsController.show()">@Messages("page.eisseis.investment.AnnualTurnoverError.change.link")</a>.
+        </p>
+    </div>
+
+}
