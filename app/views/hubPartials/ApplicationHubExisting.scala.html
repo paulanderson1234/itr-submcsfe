@@ -1,0 +1,27 @@
+@import uk.gov.hmrc.play.views.html.helpers.{form}
+
+@(applicationContinueUrl: String, schemeTypeDescription: String)(implicit request: Request[_], messages: Messages)
+
+<div class="form-group">
+
+    <h2 class="heading-small" id="hub-application-heading">@Messages("page.introduction.hub.existing.heading")</h2>
+
+    <table id="hub-existing-table">
+        <tbody>
+        <tr>
+            <td id="hub-application-in-progress"><h2 class="heading-small">@Messages("page.introduction.hub.existing.table.heading")</h2></td>
+            <td></td>
+            <td></td>
+
+        </tr>
+        <tr>
+            <td id="hub-application">@schemeTypeDescription</td>
+            <td id="continue"><a id="continue-ref" href=@applicationContinueUrl>@Messages("common.button.continue")</a></td>
+            <td id="delete"> @form(action = controllers.routes.ApplicationHubController.delete) {
+                <button class="button--link-style font-xsmall removeLink" type="submit" id="delete-link"> @Messages("common.button.delete")</button>
+                }</td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>

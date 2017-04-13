@@ -9,5 +9,26 @@
 # !!!WARNING!!! Every route defined in this file MUST be prefixed with "/test-only/". This is because NGINX is blocking every uri containing the string "test-only" in production.
 # Failing to follow this rule may result in test routes deployed in production.
 
+GET        /investment-tax-relief-cs/test-only/clear-cache                                 testOnly.controllers.ClearCacheController.clearCache
+
+#eis
+GET        /investment-tax-relief-cs/test-only/test-endpoint/eis/page-1                        testOnly.controllers.eis.TestEndpointEISController.showPageOne(schemes: Option[Int])
+POST       /investment-tax-relief-cs/test-only/test-endpoint/eis/page-1                        testOnly.controllers.eis.TestEndpointEISController.submitPageOne
+
+GET        /investment-tax-relief-cs/test-only/test-endpoint/eis/page-2                        testOnly.controllers.eis.TestEndpointEISController.showPageTwo
+POST       /investment-tax-relief-cs/test-only/test-endpoint/eis/page-2                        testOnly.controllers.eis.TestEndpointEISController.submitPageTwo
+
+#seis
+GET        /investment-tax-relief-cs/test-only/test-endpoint/seis                              testOnly.controllers.seis.TestEndpointSEISController.showPageOne(schemes: Option[Int])
+POST       /investment-tax-relief-cs/test-only/test-endpoint/seis                              testOnly.controllers.seis.TestEndpointSEISController.submitPageOne
+
+#eisseis
+GET        /investment-tax-relief-cs/test-only/test-endpoint/eisseis/page-1                    testOnly.controllers.eisseis.TestEndpointEISSEISController.showPageOne(schemes: Option[Int])
+POST       /investment-tax-relief-cs/test-only/test-endpoint/eisseis/page-1                    testOnly.controllers.eisseis.TestEndpointEISSEISController.submitPageOne
+
+GET        /investment-tax-relief-cs/test-only/test-endpoint/eisseis/page-2                    testOnly.controllers.eisseis.TestEndpointEISSEISController.showPageTwo
+POST       /investment-tax-relief-cs/test-only/test-endpoint/eisseis/page-2                    testOnly.controllers.eisseis.TestEndpointEISSEISController.submitPageTwo
+
 # Add all the application routes to the prod.routes file
 ->         /                          prod.Routes
+

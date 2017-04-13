@@ -1,0 +1,64 @@
+@(formItem:Form[_], fieldName: String, legendQuestionText: Option[String], titleIsQuestion: Boolean, hintText: Option[String], legendClass: Option[String], args: (Symbol,Any)*)(implicit messages: Messages)
+
+@import uk.gov.hmrc.play.mappers.DateFields._
+@import play.api.i18n._
+@import uk.gov.hmrc.play.mappers.DateFormatSymbols._
+@import uk.gov.hmrc.play.views.html.{helpers => govHelpers}
+@import java.text.SimpleDateFormat
+@import play.api.i18n._
+@import views.html.helper._
+
+
+@fieldsetClasses = @{if(formItem.hasErrors && (formItem.errors.find(_.key == "").isDefined)) "form-field--error" else "" }
+
+<fieldset class="form-group form-date @fieldsetClasses" id="@fieldName-fieldset">
+
+   <legend id="question-date-text-legend-id" class="@if(titleIsQuestion == true){visuallyhidden}">
+         <span id="question-text-id"  class="@{legendClass.getOrElse("h2-heading")}">@legendQuestionText</span>
+    </legend>
+
+    @if(formItem.hasErrors) {
+        @formItem.errors.filter(_.key == "").map { error => <span class="error-notification">@error.message</span>}
+        @if(formItem.errors.find(_.key != "").isDefined) {
+            <span class="error-notification">@Messages("common.date.error.invalidDate")</span>
+        }
+    }
+
+    @hintText match {
+    case Some(hintText) => { <span id="form-hint-id" class="form-hint">@hintText</span> }
+    case None => { }
+    }
+
+    @simpleNoErrorInput(
+        formItem(s"${fieldName}Day"),
+        '_label -> Messages("common.date.fields.day"),
+        '_labelClass -> "form-group form-group-day",
+        '_type -> "text",
+        '_inputClass -> s"input--xxsmall input--no-spinner",
+        '_maxlength -> "2",
+        '_pattern -> "[0-9]{1,2}"
+     )
+
+    @simpleNoErrorInput(
+        formItem(s"${fieldName}Month"),
+        '_label -> Messages("common.date.fields.month"),
+        '_labelClass -> "form-group form-group-month",
+        '_type -> "text",
+        '_inputClass -> s"input--xxsmall input--no-spinner",
+        '_maxlength -> "2",
+        '_pattern -> "[0-9]{1,2}"
+
+    )
+
+    @simpleNoErrorInput(
+        formItem(s"${fieldName}Year"),
+        '_label -> Messages("common.date.fields.year"),
+        '_labelClass -> "form-group form-group-year",
+        '_type -> "text",
+        '_inputClass -> s"input--small input--no-spinner",
+        '_maxlength -> "4",
+        '_pattern -> "[0-9]{4}"
+
+    )
+
+</fieldset>

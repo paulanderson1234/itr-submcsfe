@@ -1,5 +1,8 @@
 # Add all the application routes to the app.routes file
-->         /investment-tax-relief-submission-cs-frontend              app.Routes
+->         /investment-tax-relief-cs              app.Routes
+->         /investment-tax-relief-cs/seis              seis.Routes
+->         /investment-tax-relief-cs/eis               eis.Routes
+->         /investment-tax-relief-cs/eisseis           eisseis.Routes
 ->         /                          health.Routes
 ->     	   /template                  template.Routes
 

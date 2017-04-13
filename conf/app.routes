@@ -1,3 +1,47 @@
 # microservice specific routes
+->         /investment-tax-relief-cs/seis          seis.Routes
 
-GET        /hello-world             uk.gov.hmrc.investmenttaxreliefsubmissioncsfrontend.controllers.HelloWorld.helloWorld
+GET         /assets/*file            controllers.Assets.at(path="/public", file)
+
+#Start route
+#####################################################################################################################
+GET        /                                        controllers.ApplicationHubController.show
+#####################################################################################################################
+
+#Session Timeout route
+#####################################################################################################################
+GET         /session-timeout         controllers.TimeoutController.timeout
+#####################################################################################################################
+
+GET        /select-schemes                          controllers.schemeSelection.SchemeSelectionController.show
+POST       /select-schemes                          controllers.schemeSelection.SchemeSelectionController.submit
+
+GET        /select-scheme                           controllers.schemeSelection.SingleSchemeSelectionController.show
+POST       /select-scheme                           controllers.schemeSelection.SingleSchemeSelectionController.submit
+
+GET        /sign-out                                controllers.SignOutController.signout
+GET        /signed-out                              controllers.SignOutController.show
+
+GET        /hub                                     controllers.ApplicationHubController.show
+POST       /hub                                     controllers.ApplicationHubController.newApplication
+POST       /hub-delete                              controllers.ApplicationHubController.delete
+
+GET        /fileUpload-acknowledgement              controllers.FileUploadAcknowledgementController.show
+POST       /fileUpload-acknowledgement              controllers.FileUploadAcknowledgementController.finish
+
+GET        /check-your-documents                    controllers.CheckDocumentsController.show(envelopeId:String)
+
+POST       /check-your-documents                    controllers.CheckDocumentsController.submit
+GET        /check-documents-redirect                controllers.CheckDocumentsController.redirectAttachments
+
+GET        /supporting-documents-upload             controllers.SupportingDocumentsUploadController.show
+POST       /supporting-documents-upload             controllers.SupportingDocumentsUploadController.submit
+GET        /supporting-documents-cancel             controllers.SupportingDocumentsUploadController.cancel
+GET        /historic-aa-submission                  controllers.HistoricAASubmissionController.show
+
+#Feedback routes
+#####################################################################################################################
+GET         /feedback                               controllers.feedback.FeedbackController.show
+POST        /feedback                               controllers.feedback.FeedbackController.submit
+GET         /thankyou                               controllers.feedback.FeedbackController.thankyou
+#####################################################################################################################

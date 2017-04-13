@@ -1,0 +1,210 @@
+
+.related
+{
+    border-top: 10px solid #005ea5;
+    padding-top: 5px;
+}
+
+related li a {
+    background-position: 0 -287px;
+    background-repeat: no-repeat;
+    display: block;
+    line-height: 1.25em;
+    orphans: 2;
+}
+
+related h2 {
+    font-size: 24px;
+    line-height: 1.25;
+    font-family: "nta", Arial, sans-serif;
+    font-weight: 400;
+    text-transform: none;
+    font-weight: 600;
+    color: #0b0c0c;
+    margin-top: 0.3em;
+    margin-bottom: 0.5em;
+    position: relative;
+}
+
+.related ul {
+    font-size: 16px;
+}
+
+related ul {
+    font-family: "nta", Arial, sans-serif;
+    font-weight: 400;
+    text-transform: none;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.related-container {
+    float: left;
+    padding: 0 15px;
+    box-sizing: border-box;
+    margin-top: 40px;
+    width: 33.33333%;
+}
+
+.phase-banner  {
+@include phase-banner(beta);
+}
+
+#progress-section
+{
+    padding-left:1.3em;
+}
+
+.poundSign {
+    position:relative;
+    margin-left:5px;
+    margin-right:-20px;
+    top:1px;
+    left:2px;
+}
+.moneyField {
+    padding-left:20px;
+    text-align:left;
+}
+
+.notice {
+  position: relative;
+}
+
+.notice .icon {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  margin-top: -17px;
+}
+
+.notice strong {
+  display: block;
+  padding-left: 65px;
+  margin-left: -15px;
+}
+
+
+.notice-wrapper {
+    border: 2px solid #BFC1C3;
+    padding: 20px;
+    border-left: none;
+    border-right: none;
+    background-color: #F8F8F8;
+}
+
+.icon-important-size {
+    width: 35px;
+    height: 35px;
+}
+
+.visuallyhidden {
+    position: absolute;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    width: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+}
+
+.visuallyhidden {
+    position: absolute;
+    left: -9999em;
+}
+
+.grid-layout__column--1-3 {
+    padding: 0 15px
+}
+
+.additional-option-block {
+    padding-left: 44px;
+    border-left-width: 10px;
+    margin-bottom: 0.7894736842em;
+    display: table;
+}
+
+.align-bottom {
+    vertical-align: bottom;
+}
+
+.align-top {
+    vertical-align: top;
+}
+
+.block-label input {
+    position: absolute;
+    top: 28px;
+    left: 10px;
+    cursor: pointer;
+    margin: 0;
+    width: 29px;
+    height: 29px;
+}
+
+
+.yes-no-button {
+    margin-top: 1em;
+}
+
+.error-border {
+  border: 4px solid #b10e1e !important;
+}
+
+.summaryQuestion {
+    width: 350px;
+    vertical-align: text-top;
+}
+
+.summaryAnswer {
+     overflow-wrap: break-word;
+      word-wrap: break-word;
+      -ms-word-break: break-all;
+       /* Instead use this non-standard one: */
+       word-break: break-word;
+        /* Adds a hyphen where the word breaks, if supported (No Blink) */
+       -ms-hyphens: auto;
+       -moz-hyphens: auto;
+       -webkit-hyphens: auto;
+       hyphens: auto;
+       white-space: pre-line;
+}
+
+.summaryMultiLine
+{
+      overflow-wrap: break-word;
+      word-wrap: break-word;
+      -ms-word-break: break-all;
+       /* Instead use this non-standard one: */
+       word-break: break-word;
+        /* Adds a hyphen where the word breaks, if supported (No Blink) */
+       -ms-hyphens: auto;
+       -moz-hyphens: auto;
+       -webkit-hyphens: auto;
+       hyphens: auto;
+}
+
+.summaryLink {
+    width: 1em;
+}
+
+
+.removeLink:hover, .button--link-style:focus, .button--link-style:active {
+    color: #2e8aca;
+    /*background-color:#ffbf47;*/
+    outline: thin dotted;
+}
+
+.in-focusd {
+  /*outline: 3px solid #ffbf47;*/
+  background-color:#ffbf47 !important;
+}
+
+.banner-white {
+
+           color: #fff;
+
+       }

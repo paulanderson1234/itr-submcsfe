@@ -1,0 +1,23 @@
+@(rowId: String, question: String, answerLines: Array[String], link: Option[String] = None, addExtraLineBreaks: Option[Boolean] = None)(implicit messages: Messages)
+
+<tr>
+    <td id="@{rowId}-question" class="summaryQuestion">@question</td>
+    <td id="@{rowId}-answer" class="summaryMultiLine">
+
+        @for((line, index) <- answerLines.zipWithIndex) {
+            <span id="@{rowId}-Line@{index}">@line</span>
+
+            @if(addExtraLineBreaks.isDefined) {
+                <br><br>
+            }
+
+            @if(!addExtraLineBreaks.isDefined) {
+                <br>
+            }
+       }
+
+    </td>
+    <td class="summaryLink align-top">@if(link.isDefined) {
+        <a id="@{rowId}-link" href=@link>@Messages("common.base.change")</a>
+        }</td>
+</tr>

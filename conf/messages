@@ -1,0 +1,884 @@
+#common
+common.button.next=Next
+common.button.continue=Continue
+common.button.continueNextSection=Continue to next section
+common.button.continueFirstSection=Continue to first section
+common.button.continueThirdSection=Continue to Section 3
+common.button.snc=Save and continue
+common.button.delete=Delete
+common.button.sign-in=Sign in
+common.button.back=Back
+common.button.start=Start now
+common.button.findAddress=Find address
+common.button.checkAnswers=Check your answers
+common.button.upload=Upload
+common.button.cancel=Cancel and go back
+common.errorSummary.label=The following errors were identified on this page.
+common.radioNoLabel=No
+common.radioYesLabel=Yes
+common.err.postcode.required=Please enter a valid postcode
+common.home=Home
+common.signInOut=Sign in/out
+common.feedbackFirst=This is a new service – your
+common.feedbackSecond=will help us to improve it.
+common.feedbackLinkText=feedback
+common.readMore=Read more
+common.error.fieldRequired=This field is required
+common.error.summary.heading=This page has errors
+common.readMore=Read more
+common.base.yes=Yes
+common.base.no=No
+common.day=Day
+common.month=Month
+common.year=Year
+common.base.change = Change
+common.base.remove = Remove
+common.pound = £
+common.notAvailable=None
+common.notAvailableAcronym=N/A
+common.address.postcode=Postcode
+common.address.findUKAddress=Find UK address
+common.back.dashboard=Dashboard
+
+## Common date Messages ##
+common.date.fields.day=Day
+common.date.fields.month=Month
+common.date.fields.year=Year
+common.date.hint=For example, 4 9 2016
+common.externalLink=opens in a new window
+common.date.error.invalidDate=Enter a valid date
+common.date.hint.example= For example, 31 3 1980.
+common.date.error.invalidDate=Date must have a valid day, month and a year with 4 numbers
+
+##common section headings##
+common.section.progress.company.details.one=Section 1 of 5: Company details
+common.section.progress.company.details.two=Section 2 of 5: Previous schemes
+common.section.progress.company.details.three=Section 3 of 5: This investment
+common.section.progress.company.details.five=Section 5 of 5: Supporting documents
+common.section.progress.company.details.four=Section 4 of 5: Contact details
+
+## Common report error ##
+common.error.help.text=Get help with this page.
+common.error.summary.heading=This page has errors
+
+
+#validation errors
+validation.error.country=Country must be no more than 20 valid characters if entered
+validation.error.postcode=Please enter a valid postcode
+validation.error.crn=Please enter a valid CRN
+validation.error.invalidDate=You have not entered a valid date
+validation.error.utrTenChar=Only 10 numeric digits should be entered
+validation.common.error.fieldRequired=This field is required
+validation.error.DateNotEntered=You must enter a valid day, month and year
+validation.error.enterDate=Please enter a date
+validation.error.operatingCosts=Please enter a value into
+validation.error.fourDigitYear=Enter a valid year
+validation.error.optionaladdresssline=Use fewer than 28 characters in the address line
+validation.error.mandatoryaddresssline=Address line must be entered
+validation.error.telephoneNumber=Enter a valid telephone number
+validation.error.postcode=Enter a valid postcode
+validation.error.countryCode=Country must be entered
+validation.error.linefouraddresssline=Use fewer than 18 characters in the address line
+validation.error.countrypostcode=Postcode must be entered if country selected is United Kingdom
+validation.error.email=Enter a valid email address
+
+## Session Timeout message ##
+session.timeout.message=Your session has ended
+session.timeout.startAgain=Start again
+
+#Welcome page
+page.start.welcome.title=Get tax relief for your investors
+page.start.welcome.heading=Get tax relief for your investors
+page.start.welcome.description.one=If you have a small or medium-sized company the government can help it grow by offering tax relief to your investors.
+page.start.welcome.description.two=This service lets you:
+page.start.welcome.bullet.learn=learn about tax relief schemes
+page.start.welcome.bullet.eligible=find out if your company''s eligible for them
+page.start.welcome.bullet.certify=prove to potential investors that they''ll get tax relief
+page.start.welcome.bullet.claim=help your investors claim tax relief
+page.start.welcome.apply.link=How to apply
+page.start.welcome.helpFirst=You will not be able to save your application.
+page.start.welcome.helpSecond=On completion you will be able to download your application to email as an attachment.
+page.start.welcome.schemeGuidance=scheme guidance
+
+
+#How To Apply page
+page.introduction.HowToApply.title=How to apply
+page.introduction.HowToApply.heading=How to apply
+page.introduction.HowToApply.number.fillOut= Fill out an application for an assurance letter
+page.introduction.HowToApply.number.send= Send your application and supporting documents to us
+page.introduction.HowToApply.number.receive= We''ll send your assurance letter
+page.introduction.HowToApply.fillOut.description= Assurance letters show potential investors that they may get tax relief by buying shares in your company.
+page.introduction.HowToApply.receive.description=If your application''s successful we''ll post your assurance letter to you or someone you nominate. You can then show it to potential investors.
+page.introduction.HowToApply.notBinding=Assurance letters aren''t guarantees or legally binding.
+page.introduction.HowToApply.send.descriptionOne=You can do this by email or post.
+page.introduction.HowToApply.send.descriptionTwo=When you send your application you''ll need to include your:
+page.introduction.HowToApply.number.sendOne=company accounts
+page.introduction.HowToApply.number.sendTwo=memorandum and articles of association
+page.introduction.HowToApply.number.sendThree=documents like prospectuses that you''ll use to attract investment
+
+#Qualifying for Scheme page
+page.introduction.qualifyingForScheme.title=Qualifying for the scheme
+page.introduction.qualifyingForScheme.heading.one=Business areas that don''t qualify
+page.introduction.qualifyingForScheme.description.one=Your company must have issued shares in the past 2 years.
+page.introduction.qualifyingForScheme.description.two=When it issued shares it must also have:
+page.introduction.qualifyingForScheme.description.three=You can find other conditions in the
+page.introduction.qualifyingForScheme.description.four=You can''t apply if your company''s involved in:
+page.introduction.qualifyingForScheme.description.five=There are also
+page.introduction.qualifyingForScheme.bullet.UKbase=had a permanent UK base
+page.introduction.qualifyingForScheme.bullet.listed=not been listed on a stock exchange, or had plans to be listed
+page.introduction.qualifyingForScheme.bullet.numEmployees=had fewer than 250 employees, or 500 if you''ve spent a certain amount of your operating costs on research and development
+page.introduction.qualifyingForScheme.bullet.farming=farming
+page.introduction.qualifyingForScheme.bullet.legal=legal or financial services
+page.introduction.qualifyingForScheme.bullet.property=buying or selling property or land
+page.introduction.qualifyingForScheme.bullet.hotels=running hotels or rental accommodation
+page.introduction.qualifyingForScheme.bullet.electricity=generating or exporting electricity
+page.introduction.qualifyingForScheme.link.schemeGuidance=scheme guidance
+page.introduction.qualifyingForScheme.link.unqualifiedBusiness=other business areas that don''t qualify
+
+#examples pages (to be deleted later)
+page.examples.CompanyAddress.title=Company address details
+page.examples.CompanyAddress.description=Please provide the following information
+page.examples.CompanyAddress.addressline1.label=Address line 1
+page.examples.CompanyAddress.addressline2.label=Address line 2
+page.examples.CompanyAddress.addressline3.label=Address line 3 (optional)
+page.examples.CompanyAddress.addressline4.label=Address line 4 (optional)
+page.examples.CompanyAddress.postcode.label=Postcode
+page.examples.CompanyAddress.country.label=Country (optional)
+page.examples.ContactDetails.title=Contact details
+page.examples.ContactDetails.heading=Contact details
+page.examples.DateFirstSale.heading=Date of first sale
+page.examples.DateFirstSale.title=Date of first sale
+page.examples.DateFirstSale.question=When was the date of first commercial sale for the company?
+page.examples.ContactDetails.description=Please provide the following information
+page.examples.ContactDetails.forename.label=Forename
+page.examples.ContactDetails.surname.label=Surname
+page.examples.ContactDetails.email.label=Email address
+validation.error.DateOfFirstSale.Future=Date of first sale cannot be a future date
+page.examples.DoSubmission.question=Do you want to submit your application?
+page.examples.DoSubmission.title=Submit application?
+page.examples.DoSubmission.heading=Submit application?
+page.examples.DoSubmission.helptext=You can download your application and email it to HMRC
+page.examples.Confirmation.title=Confirmation
+page.examples.Confirmation.heading=Confirmation
+
+#Scheme selection page
+validation.error.schemeSelection=Please select at least one scheme.
+page.schemeSelection.SchemeSelection.title=Which schemes are you applying for?'
+page.schemeSelection.SchemeSelection.heading=Which schemes are you applying for?'
+page.schemeSelection.SchemeSelction.hint=You can apply for up to 3 schemes
+page.schemeSelection.SchemeSelection.checkbox.seis=Seed Enterprise Investment Scheme
+page.schemeSelection.SchemeSelection.checkbox.eis=Enterprise Investment Scheme
+page.schemeSelection.SchemeSelection.checkbox.vct=Venture Capital Trust
+page.schemeSelection.SchemeSelection.help.seis.subHeading=What''s the Seed Enterprise Investment Scheme?
+page.schemeSelection.SchemeSelection.help.seis.text=The Seed Enterprise Investment Scheme helps startup companies raise investment by offering tax reliefs to individual investors who buy new shares in the company. Tax relief is available on a maximum of £150,000 received over the last 3 years.
+page.schemeSelection.SchemeSelection.help.seis.findOutMore=Find out more about the
+page.schemeSelection.SchemeSelection.help.seis.link=Seed Enterprise Investment Scheme
+page.schemeSelection.SchemeSelection.help.eis.subHeading=What''s the Enterprise Investment Scheme?
+page.schemeSelection.SchemeSelection.help.eis.text=The Enterprise Investment Scheme helps small and medium sized companies attract investment by offering tax reliefs to individual investors who buy new shares in the company. Tax relief is available on a maximum of:
+page.schemeSelection.SchemeSelection.help.eis.bullet.one=£5 million received in 1 year
+page.schemeSelection.SchemeSelection.help.eis.bullet.two=£12 million received over the company''s lifetime
+page.schemeSelection.SchemeSelection.help.eis.findOutMore=Find out more about the
+page.schemeSelection.SchemeSelection.help.eis.link=Enterprise Investment Scheme
+page.schemeSelection.SchemeSelection.help.vct.subHeading=What''s the Venture Capital Trust scheme?
+page.schemeSelection.SchemeSelection.help.vct.text=The Venture Capital Trust scheme helps companies raise finance by offering tax reliefs to individual investors who buy new shares in a Venture Capital Trust (VCT). The VCT then uses the money to invest in small & medium sized companies. Tax relief is available on a maximum investment from a VCT of:
+page.schemeSelection.SchemeSelection.help.vct.bullet.one=£5 million received in 1 year
+page.schemeSelection.SchemeSelection.help.vct.bullet.two=£12 million received over the company''s lifetime
+page.schemeSelection.SchemeSelection.help.vct.findOutMore=Find out more about the
+page.schemeSelection.SchemeSelection.help.vct.link=Venture Capital Trust scheme
+
+#single scheme selection page
+page.schemeSelection.SchemeSelection.singlescheme.title=Which scheme are you applying for?'
+page.schemeSelection.SchemeSelection.singlescheme.heading=Which scheme are you applying for?'
+page.schemeSelection.SchemeSelection.radiobutton.seis=Seed Enterprise Investment Scheme
+page.schemeSelection.SchemeSelection.radiobutton.eis=Enterprise Investment Scheme
+page.schemeSelection.SchemeSelection.radiobutton.vct=Venture Capital Trust
+
+#Utr page
+page.companyDetails.utr.heading=What''s your Company Unique Taxpayer Reference?
+page.companyDetails.utr.title=What''s your Company Unique Taxpayer Reference?
+page.companyDetails.utr.question.hint=If your UTR is 13 digits long, only enter the last 10
+page.companyDetails.utr.help.text=You can usually find it in letters we''ve sent to you, next to headings like “Tax Reference”, “UTR” or “Official Use”.
+page.companyDetails.utr.help.link=Where can I find this?
+
+#Your company need page
+page.introduction.YourCompanyNeed.title=What does your company need?
+page.introduction.YourCompanyNeed.heading=What does your company need?
+page.introduction.YourCompanyNeed.advancedAssurance=A letter to show to potential investors
+page.introduction.YourCompanyNeed.complianceStatement=A reference number so investors can claim relief
+
+#Date of incorporation page
+validation.error.DateOfIncorporation.Future=Date of incorporation cannot be a future date
+page.companyDetails.DateOfIncorporation.title= When was your company incorporated?
+page.companyDetails.DateOfIncorporation.heading= When was your company incorporated?
+page.companyDetails.DateOfIncorporation.question= When was your company incorporated?
+date.hint.dateOfIncorporation= For example, 31 3 1980.
+page.companyDetails.DateOfIncorporation.whereToFind=Where can I find this?
+page.companyDetails.DateOfIncorporation.location= It''s on your certificate of incorporation. You can also find it by searching for your company on the
+page.companyDetails.DateOfIncorporation.companiesHouse = Companies House database
+
+#What we'll ask you page
+page.introduction.WhatWeAskYou.title=What we''ll ask you
+page.introduction.WhatWeAskYou.heading.one=Section 1: Company details
+page.introduction.WhatWeAskYou.heading.two=Section 2: Previous tax relief investment schemes
+page.introduction.WhatWeAskYou.heading.three=Section 3: This investment
+page.introduction.WhatWeAskYou.heading.four=Section 4: Contact details
+page.introduction.WhatWeAskYou.heading.five=Section 5: Supporting documents
+page.introduction.WhatWeAskYou.description.one=You can''t save your progress, so make sure you have everything you need before you start your application.
+page.introduction.WhatWeAskYou.description.two=Applying takes up to an hour.
+page.introduction.WhatWeAskYou.bullet.compIncorporated=When your company was incorporated
+page.introduction.WhatWeAskYou.bullet.compDo=What your company does
+page.introduction.WhatWeAskYou.bullet.soldCommercially=When it first sold something commercially
+page.introduction.WhatWeAskYou.bullet.ownsControlsComp=If your company owns or controls any other companies
+page.introduction.WhatWeAskYou.bullet.spentRAndD=If your company''s spent a certain amount of its operating costs on research and development
+page.introduction.WhatWeAskYou.bullet.prevTaxRelief=If your company''s used tax relief investments before
+page.introduction.WhatWeAskYou.bullet.investRaised=How much the investments raised
+page.introduction.WhatWeAskYou.bullet.sharesIssued=When you issued shares under them
+page.introduction.WhatWeAskYou.bullet.nameSchemes=The names of the schemes
+page.introduction.WhatWeAskYou.bullet.howUseInvest=How you''ll use the investment (up to 200 words)
+page.introduction.WhatWeAskYou.bullet.amountToRaise=How much you want to raise
+page.introduction.WhatWeAskYou.bullet.whoToContact=Who you''d like us to contact
+page.introduction.WhatWeAskYou.bullet.contactDetails=Their contact details
+page.introduction.WhatWeAskYou.bullet.companyAccounts=Your company accounts
+page.introduction.WhatWeAskYou.bullet.otherCompAccounts=The accounts of other companies that your business owns or controls
+page.introduction.WhatWeAskYou.bullet.memorandum=Your memorandum and articles of association
+page.introduction.WhatWeAskYou.bullet.prospectuses=Prospectuses and anything else you''ll use to attract investment
+page.introduction.WhatWeAskYou.print.text=Print this page
+
+#commercial sale page
+page.companyDetails.CommercialSale.title=Has your company had its first commercial sale yet? If so, when?
+page.companyDetails.CommercialSale.heading=Has your company sold any goods or services commercially yet?
+page.companyDetails.CommercialSale.question.hint=When was its first commercial sale?
+validation.error.DateOfCommercialSale.Future=Date of first commercial sale cannot be a future date
+validation.error.DateForNoOption=Date should not be entered when '''No'' is selected
+
+#Is Knowledge Intensive Page
+page.companyDetails.IsKnowledgeIntensive.title = Do you want to apply as a knowledge intensive company?
+page.companyDetails.IsKnowledgeIntensive.heading = Do you want to apply as a knowledge intensive company?
+page.companyDetails.IsKnowledgeIntensive.description.1 = If you are a knowledge intensive company, you''re allowed to attract more investment. You can get up to £20million over your company''s lifetime.
+page.companyDetails.IsKnowledgeIntensive.description.2 = You also have up to 10 years after your first commercial sale to receive qualifying investment.
+page.companyDetails.IsKnowledgeIntensive.definition = What''s a knowledge intensive company?
+page.companyDetails.IsKnowledgeIntensive.ki-requirement-definition = Over the past 3 years, the amount you''ve spent on research and development must have been either:
+page.companyDetails.IsKnowledgeIntensive.ki-requirement-one = 15% or more of your operating costs for at least 1 year
+page.companyDetails.IsKnowledgeIntensive.ki-requirement-two = 10% or more of your operating costs per year
+page.companyDetails.IsKnowledgeIntensive.ki-requirement-also = You also need:
+page.companyDetails.IsKnowledgeIntensive.ki-requirement-three = at least 20% of your staff who do research and development to have master''s degrees, or
+page.companyDetails.IsKnowledgeIntensive.ki-requirement-four = to plan to develop, or have already developed, a product that you''ll own the rights to
+
+#Ineligible for Knowledge Intensive Page
+page.knowledgeIntensive.IneligibleForKI.title = Your company isn''t knowledge intensive
+page.knowledgeIntensive.IneligibleForKI.heading = Your company isn''t knowledge intensive
+page.knowledgeIntensive.IneligibleForKI.description.one = Your company:
+page.knowledgeIntensive.IneligibleForKI.description.two = You can still apply for advance assurance.
+page.knowledgeIntensive.IneligibleForKI.bullet.one = hasn''t spent enough on research and development, or,
+page.knowledgeIntensive.IneligibleForKI.bullet.two = hasn''t got enough qualified staff members, and,
+page.knowledgeIntensive.IneligibleForKI.bullet.three = doesn''t perform enough research and development.
+
+
+#Operating Costs Page
+page.companyDetails.OperatingCosts.title = What were the operating costs from your last 3 annual accounts?
+page.companyDetails.OperatingCosts.heading = What were the operating costs from your last 3 annual accounts?
+page.companyDetails.OperatingCosts.hint.one = Operating costs are all of the costs on your profit and loss account or income statement.
+page.companyDetails.OperatingCosts.hint.two = We also need the end-year values of your accounting periods. An accounting period is the time covered by your Company Tax Return.
+page.companyDetails.OperatingCosts.col.heading.one = Dates Column
+page.companyDetails.OperatingCosts.col.heading.two = End-year of accounting period
+page.companyDetails.OperatingCosts.col.heading.three = Operating costs
+page.companyDetails.OperatingCosts.col.heading.four = Research and Development costs
+page.companyDetails.OperatingCosts.row.heading.one = Most recent
+page.companyDetails.OperatingCosts.row.heading.two = Year 2
+page.companyDetails.OperatingCosts.row.heading.three = Year 3
+page.companyDetails.OperatingCosts.row.one.label.year = Most recent year
+page.companyDetails.OperatingCosts.row.one.label.operatingcosts = Most recent year operating costs
+page.companyDetails.OperatingCosts.row.one.label.randdcosts = Most recent year research and development costs
+page.companyDetails.OperatingCosts.row.two.label.year = Year 2
+page.companyDetails.OperatingCosts.row.two.label.operatingcosts = Year 2 operating costs
+page.companyDetails.OperatingCosts.row.two.label.randdcosts = Year 2 research and development costs
+page.companyDetails.OperatingCosts.row.three.label.year = Year 3
+page.companyDetails.OperatingCosts.row.three.label.operatingcosts = Year 3 operating costs
+page.companyDetails.OperatingCosts.row.three.label.randdcosts = Year 3 research and development costs
+page.companyDetails.OperatingCosts.error.field.one = Enter a value greater than 0 and fewer than 10 numbers for your most recent operating costs
+page.companyDetails.OperatingCosts.error.field.two = Enter a value greater than 0 and fewer than 10 numbers for your year 2 operating costs
+page.companyDetails.OperatingCosts.error.field.three = Enter a value greater than 0 and fewer than 10 numbers for your year 3 operating costs
+page.companyDetails.OperatingCosts.error.field.four = Enter fewer than 10 numbers for your most recent research and development costs
+page.companyDetails.OperatingCosts.error.field.five = Enter fewer than 10 numbers for your year 2 research and development costs
+page.companyDetails.OperatingCosts.error.field.six = Enter fewer than 10 numbers for your year 3 research and development costs
+
+#Turnover Costs Page
+page.companyDetails.TurnoverCosts.title =What was your company''s annual turnover over the past 5 accounting periods?
+page.companyDetails.TurnoverCosts.heading = What was your company''s annual turnover in the past 5 years?
+page.companyDetails.TurnoverCosts.hint.one = Annual turnover is the amount of money your company makes in a year before tax.
+page.companyDetails.TurnoverCosts.hint.two = We also need the end-year values of your accounting periods. An accounting period is the time covered by your Company Tax Return.
+page.companyDetails.TurnoverCosts.col.heading.one = Turnover year
+page.companyDetails.TurnoverCosts.col.heading.two = End-year of accounting period
+page.companyDetails.TurnoverCosts.col.heading.three = Annual turnover
+page.companyDetails.TurnoverCosts.row.heading.one = Most recent
+page.companyDetails.TurnoverCosts.row.heading.two = Year 2
+page.companyDetails.TurnoverCosts.row.heading.three = Year 3
+page.companyDetails.TurnoverCosts.row.heading.four = Year 4
+page.companyDetails.TurnoverCosts.row.heading.five = Year 5
+page.companyDetails.TurnoverCosts.row.one.label.year = Most recent year
+page.companyDetails.TurnoverCosts.row.one.label.turnover = Most recent year annual turnover
+page.companyDetails.TurnoverCosts.row.two.label.year = Year 2
+page.companyDetails.TurnoverCosts.row.two.label.turnover = Year 2 annual turnover
+page.companyDetails.TurnoverCosts.row.three.label.year = Year 3
+page.companyDetails.TurnoverCosts.row.three.label.turnover = Year 3 annual turnover
+page.companyDetails.TurnoverCosts.row.four.label.year = Year 4
+page.companyDetails.TurnoverCosts.row.four.label.turnover = Year 4 annual turnover
+page.companyDetails.TurnoverCosts.row.five.label.year = Year 5
+page.companyDetails.TurnoverCosts.row.five.label.turnover = Year 5 annual turnover
+page.companyDetails.TurnoverCosts.error.field.one = Enter fewer than 10 numbers for your most recent turnover
+page.companyDetails.TurnoverCosts.error.field.two = Enter fewer than 10 numbers for your year 2 turnover
+page.companyDetails.TurnoverCosts.error.field.three = Enter fewer than 10 numbers for your year 3 turnover
+page.companyDetails.TurnoverCosts.error.field.four = Enter fewer than 10 numbers for your year 4 turnover
+page.companyDetails.TurnoverCosts.error.field.five = Enter fewer than 10 numbers for your year 5 turnover
+page.companyDetails.TurnoverCosts.help.link= What''s annual turnover?
+page.companyDetails.TurnoverCosts.help.text= It''s the amount of money your company makes in a year before tax.
+
+
+#Subsidiaries Page
+page.companyDetails.Subsidiaries.title = Does your company own or control any other companies?
+page.companyDetails.Subsidiaries.heading = Does your company own or control any other companies?
+
+#Registered Address page
+page.companyDetails.RegisteredAddress.title=What''s your company''s registered address?
+page.companyDetails.RegisteredAddress.heading=What''s your company''s registered address?
+page.companyDetails.RegisteredAddress.description.one=Enter the address manually
+
+#nature of business page
+page.companyDetails.natureofbusiness.heading=What does your company do?
+page.companyDetails.natureofbusiness.title=What does your company do?
+page.companyDetails.natureofbusiness.question.hint=Suggested limit: 15 words
+page.companyDetails.natureofbusiness.example.text=For example:
+page.companyDetails.natureofbusiness.bullet.one=making motor vehicle parts and accessories
+page.companyDetails.natureofbusiness.bullet.two=developing software for businesses
+page.companyDetails.natureofbusiness.bullet.three=sound recording and music publishing
+
+#proposed investment amount
+page.investment.amount.invalidAmount=Enter an amount in the correct format e.g. 10000
+page.investment.amount.OutOfRange=Enter an amount between 1 and 5000000
+page.investment.amount.title=How much investment do you want to raise?
+page.investment.amount.heading=How much investment do you want to raise?
+page.investment.amount.hint=The total amount can''t be more than £5 million
+page.investment.help.link=What happens if I don''t raise this amount?
+page.investment.help.link.text=You might still be eligible for the scheme, as long as you don''t raise more than £5 million in a year.
+
+#percentage of staff with masters page
+page.knowledgeIntensive.PercentageStaffWithMasters.title=Do more than 20% of your staff who do research and development have master''s degrees?
+page.knowledgeIntensive.PercentageStaffWithMasters.heading=Do more than 20% of your staff who do research and development have master''s degrees?
+page.knowledgeIntensive.PercentageStaffWithMasters.hint=It must be a master''s degree that is closely related to the role they perform.
+page.percentageStaffWithMasters.more = More than 20%
+page.percentageStaffWithMasters.less = Less than 20%
+page.percentageStaffWithMasters.yes.hint=You''ll need to meet this condition when you get the investment and for 3 years afterwards.
+
+#used investment reason before page
+page.investment.UsedInvestmentReasonBefore.title=Has your company used a tax relief investment for the same purpose before?
+page.investment.UsedInvestmentReasonBefore.heading=Has your company used a tax relief investment for the same purpose before?
+
+#New product page
+page.investment.NewProduct.title=Will you use this investment to enter a new product market?
+page.investment.NewProduct.heading=Will you use this investment to enter a new product market?
+page.investment.NewProduct.hint=Read more about
+page.investment.NewProduct.hint.link=new product markets
+
+#New Geographical market page
+page.investment.NewGeographicalMarket.title=Will you use this investment to launch one of your products somewhere new?
+page.investment.NewGeographicalMarket.heading=Will you use this investment to launch one of your products somewhere new?
+page.investment.NewGeographicalMarket.hint=It''s sometimes called launching in a
+page.investment.NewGeographicalMarket.hint.link=new geographic market
+
+#ten year plan page
+page.knowledgeIntensive.TenYearPlan.title = Does your company plan to develop a product that you’ll own the rights to?
+page.knowledgeIntensive.TenYearPlan.heading = Does your company plan to develop a product that you’ll own the rights to?
+page.knowledgeIntensive.TenYearPlan.question.hint.one = This might be goods or a service that you''ve created in the past 3 years or that you will create in the future.
+page.knowledgeIntensive.TenYearPlan.question.hint.two = Your company could own the intellectual property rights by using copyright, a patent or a design.
+page.knowledgeIntensive.TenYearPlan.question.hint.three = Within 10 years of the investment, most of your company''s business activities must use, or make money from what you''ve developed.
+page.knowledgeIntensive.TenYearPlan.question.hint.four = Suggested limit: 200 words
+page.knowledgeIntensive.TenYearPlan.description.one = How does your company plan to do that?
+page.knowledgeIntensive.TenYearPlan.description.two = Based on the information you''ve given your company isn''t knowledge intensive
+validation.error.DescriptionEnteredForNoOption=If ''No'' is selected description should be removed from the ''Yes'' option.
+
+#had previous RFI
+page.previousInvestment.hadPreviousRFI.title=Has your company used a tax relief investment scheme before?
+page.previousInvestment.hadPreviousRFI.heading=Has your company used a tax relief investment scheme before?
+page.previousInvestment.hadPreviousRFI.hintTitle=We only need to know about:
+page.previousInvestment.schemes.bullet.one=the Enterprise Investment Scheme
+page.previousInvestment.schemes.bullet.two=the Seed Enterprise Investment Scheme
+page.previousInvestment.schemes.bullet.three=Social Investment Tax Relief
+page.previousInvestment.schemes.bullet.four=the Venture Capital Trust scheme
+
+#had other investments
+page.previousInvestment.hadOtherInvestments.title=Has your company had any other investments?
+page.previousInvestment.hadOtherInvestments.heading=Has your company had any other investments?
+page.previousInvestment.hadOtherInvestments.info=We only need to know about:
+page.previousInvestment.hadOtherInvestments.info.one=State aid you''ve received under the de minimis regulation
+page.previousInvestment.hadOtherInvestments.info.two=aid given to promote risk finance investment (under European Commission guidelines on state aid)
+page.previousInvestment.hadOtherInvestments.help.subHeading=How do I know if I''ve had de minimis State aid?
+page.previousInvestment.hadOtherInvestments.help.text=HMRC aren''t able to help you with this. You should contact the person who gave you the aid if you need advice.
+
+#subsidiaries spending investment
+page.investment.SubsidiariesSpendingInvestment.title = Will another company that''s owned or controlled by [your company name] spend this investment?
+page.investment.SubsidiariesSpendingInvestment.heading = Will another company that''s owned or controlled by [your company name] spend this investment?
+
+#previous before dofcs
+page.previousInvestment.previousBeforeDOFCS.title = Did your company get that investment between {0} and {1}?
+page.previousInvestment.previousBeforeDOFCS.heading = Did your company get that investment between {0} and {1}?
+page.previousInvestment.previousBeforeDOFCS.description = You must have got the investment within {0} years of your first commercial sale
+
+
+#Subsidiaries ninety percent owned:
+page.investment.SubsidiariesNinetyOwned.heading=Does [your company name] own more than 90% of that company?
+page.investment.SubsidiariesNinetyOwned.title=Does [your company name] own more than 90% of that company
+page.investment.SubsidiariesNinetyOwned.error.one=This makes you ineligible for the scheme. If you''ve made a mistake you can change your answer.
+page.investment.SubsidiariesNinetyOwned.error.two=If your answer''s correct you might still be eligible for other tax relief schemes.
+
+#investment grow description page
+page.investment.InvestmentGrow.heading=How will this investment help your company grow and develop?
+page.investment.InvestmentGrow.title=How will this investment help your company grow and develop?
+page.investment.InvestmentGrow.question.hint=Suggested limit: 200 words
+page.investment.InvestmentGrow.example.text=For example you may be planning to:
+page.investment.InvestmentGrow.bullet.one=hire more employees
+page.investment.InvestmentGrow.bullet.two=attract new customers
+page.investment.InvestmentGrow.bullet.three=develop a new product
+page.investment.InvestmentGrow.description.two=Make sure you explain how you’ll use the investment:
+page.investment.InvestmentGrow.bullet.geographicalMarket=to launch your product somewhere new
+page.investment.InvestmentGrow.bullet.productMarket=to enter a new product market
+page.investment.InvestmentGrow.description.three=You should also send a copy of your business plan with your supporting documents.
+page.investment.InvestmentGrow.businessplan.readmore=Read more about
+page.investment.InvestmentGrow.businessplan.link=how to write a business plan.
+
+#supporting documents page
+page.supportingDocuments.SupportingDocuments.title=Supporting documents
+page.supportingDocuments.SupportingDocuments.heading=Supporting documents
+page.supportingDocuments.SupportingDocuments.text.one=Check and submit your answers on the next page. Once you''ve submitted, you''ll need to separately email your company''s:
+page.supportingDocuments.SupportingDocuments.bullet.one=business plan
+page.supportingDocuments.SupportingDocuments.bullet.two=shareholder agreements or drafts
+page.supportingDocuments.SupportingDocuments.bullet.three=memorandum and articles of association
+page.supportingDocuments.SupportingDocuments.bullet.four=prospectuses and other documents for attracting investment
+page.supportingDocuments.SupportingDocuments.bullet.five=last annual accounts or cash flow forecast if you haven''t submitted accounts yet
+page.supportingDocuments.SupportingDocuments.text.two=If these aren''t up-to-date you should also tell us about any changes you''ll be making to them.
+
+#supporting docs upload
+page.supportingDocumentsUpload.heading=To support your application you''ll need to send us your company''s:
+page.supportingDocumentsUpload.bullet.one=business plan
+page.supportingDocumentsUpload.bullet.two=shareholder agreements or drafts
+page.supportingDocumentsUpload.bullet.three=memorandum and articles of association
+page.supportingDocumentsUpload.bullet.four= prospectuses and other documents for attracting investment
+page.supportingDocumentsUpload.bullet.five=last annual accounts or cash flow forecast if you haven''t submitted accounts yet
+page.supportingDocumentsUpload.docs.current=If your documents aren''t up-to-date, you need to tell us about any changes you plan to make.
+page.supportingDocumentsUpload.upload.instruction=You can either upload your documents now, or after you have checked and submitted your application.
+page.supportingDocumentsUpload.send.confirm=Send your documents now?
+page.supportingDocumentsUpload.Note=Your application will not be complete until you send us these files
+page.supportingDocumentsUpload.outFlow.heading=If you haven''t already submitted supporting documents, you''ll need to upload your company''s:
+page.supportingDocumentsUpload.outFlow.Note=You must submit these documents to complete your application
+
+#Confirm Correspondence Address
+page.contactInformation.ConfirmCorrespondAddress.heading=Is this the correspondence address you want us to use for this application?
+page.contactInformation.ConfirmCorrespondAddress.title=Is this the correspondence address you want us to use for this application?
+
+
+#check your answers page
+page.checkAndSubmit.checkAnswers.heading=Check your answers
+page.checkAndSubmit.checkAnswers.description.one=You''re applying for Advance Assurance for:
+page.checkAndSubmit.checkAnswers.scheme.eis=the Enterprise Investment Scheme
+page.checkAndSubmit.checkAnswers.scheme.seis=the Seed Enterprise Investment Scheme
+page.checkAndSubmit.checkAnswers.scheme.vct=the Venture Capital Trust scheme
+page.checkAndSubmit.checkAnswers.description.two=Check your answers are correct before submitting.
+page.checkAndSubmit.checkAnswers.print.text=Print this page
+page.checkAndSubmit.checkAnswers.button.confirm=Submit
+page.checkAndSubmit.checkAnswers.suportingDocs.desc=To support your application you will need to send us your company''s:
+
+#check your answers page
+page.checkAndSubmit.checkDocuments.title=Check your documents
+page.checkAndSubmit.checkDocuments.heading=Check your documents
+page.checkAndSubmit.checkDocuments.outsideFlow.desc=Check you''ve uploaded the correct supporting documents.
+page.checkAndSubmit.checkDocuments.outsideFlow.table.heading=Your supporting documents
+page.checkAndSubmit.checkDocuments.button.confirm=Submit
+
+#summaryQuestions
+summaryQuestion.companyDetailsSection =Section 1: Business details
+summaryQuestion.companyName =Company name
+summaryQuestion.utr =Company Unique Taxpayer Reference
+summaryQuestion.registeredAddress =Registered address
+summaryQuestion.dateOfIncorporation =Date of incorporation
+summaryQuestion.natureOfBusiness =What your company does
+summaryQuestion.hasCommercialSale =Sold any goods or services commercially
+summaryQuestion.commercialSaleDate =Date of first commercial sale
+summaryQuestion.hasTradeStartDate =Started trading yet
+summaryQuestion.tradeStartDate =Trade start date
+summaryQuestion.knowledgeIntensive =Knowledge intensive
+summaryQuestion.operatingCosts =Operating costs
+summaryQuestion.rdCosts =Research and development costs
+summaryQuestion.percentageStaffWithMasters =Percentage of staff with master's degrees
+summaryQuestion.developmentPlan =Plan to develop something that you''ll own the rights to
+summaryQuestion.developmentPlanDesc =How your company will do that
+summaryQuestion.subsidiaries =Own or control any other companies
+
+page.investment.PreviousScheme.investmentAmount.OutOfRange=Enter an amount between 1 and 999999999
+page.investment.PreviousScheme.otherScheme.OutOfRange=Other scheme name should be no more than 50 characters
+validation.error.ShareIssueDate.Future=Enter a past date or today''s date
+page.investment.PreviousScheme.otherSchemeName.label=What was its name?
+
+
+#summary questions section two
+summaryQuestion.previousRFISection =Section 2: Previous schemes
+
+page.investment.amount.label=Amount raised:
+page.investment.amountSpent.label=Amount spent:
+page.investment.dateOfShareIssue.label=Date of investment:
+page.summaryQuestion.none.question=Previous schemes
+page.summaryQuestion.none.answer=None
+
+#summary questions section three
+page.summaryQuestion.companyDetailsSectionThree=Section 3: This investment
+page.summaryQuestion.proposedInvestment=Amount to be raised
+page.summaryQuestion.usedRAndD=Used for research and development
+page.summaryQuestion.whatWillUseFor=What you''ll use it for
+page.summaryQuestion.usedInvestReasonBefore=Same reason as a previous investment
+page.summaryQuestion.previousBeforeDOFCS=Got the investment within 7 or 10 years of your first commercial sale
+page.summaryQuestion.newGeoMarket=Launching somewhere new
+page.summaryQuestion.newProduct=Entering a new product market
+page.summaryQuestion.subsSpendingInvest=Company owned or controlled by [company name] to spend this investment
+page.summaryQuestion.subNinetyOwned=[Company name] owns more than 90% of that company
+page.summaryQuestion.investmentGrow=How the investment will help your company grow
+
+#summary questions section four
+page.summaryQuestion.companyDetailsSectionFour=Section 4: Contact details for this application
+page.summaryQuestion.contactDetails=Contact details
+page.summaryQuestion.contactAddress=Contact address
+
+
+#supply contact address
+page.contactInformation.ProvideContactAddress.heading=Where should we send your correspondence?
+page.contactInformation.ProvideContactAddress.title=Where should we send your correspondence?
+page.contactInformation.ProvideContactAddress.addressline1.label=Address line 1
+page.contactInformation.ProvideContactAddress.addressline2.label=Address line 2
+page.contactInformation.ProvideContactAddress.addressline3.label=Address line 3 (optional)
+page.contactInformation.ProvideContactAddress.addressline4.label=Address line 4 (optional)
+page.contactInformation.ProvideContactAddress.postcode.label=Postcode
+page.contactInformation.ProvideContactAddress.country.label=Country
+page.address.country.select = Select one country
+#page.address.country.instruction = The ISO country code is internationally recognised and identifies a specific country e.g. United States = ''US''; Germany = ''DE''
+
+#contact details page
+page.contactInformation.contactDetails.title=Who should we contact about your application?
+page.contactInformation.contactDetails.heading=Who should we contact about your application?
+page.contactInformation.contactDetails.forename.label=First name
+page.contactInformation.contactDetails.surname.label=Last name
+page.contactInformation.contactDetails.phoneNumber.label=Landline (optional)
+page.contactInformation.contactDetails.mobileNumber.label=Mobile (optional)
+page.contactInformation.contactDetails.email.label=Email address
+
+#Confirm Contact Details Page
+page.contactInformation.ConfirmContactDetails.heading=Are these the contact details you want us to use for this application?
+page.contactInformation.ConfirmContactDetails.title=Are these the contact details you want us to use for this application?
+
+#summary questions section five
+page.summaryQuestion.supportingDocsSection=Section 5: Supporting documents
+
+#acknowledgement
+page.checkAndSubmit.acknowledgement.title=You''ve submitted your answers
+page.checkAndSubmit.acknowledgement.submissionConfirmation=Your application details have been submitted
+page.checkAndSubmit.acknowledgement.refNumberHeading=Make a note of your reference number:
+page.checkAndSubmit.acknowledgement.application.not.complete=Your application is not yet complete
+page.checkAndSubmit.acknowledgement.supporting.docs.heading=Supporting documentation
+page.checkAndSubmit.acknowledgement.review=To review your application, we need to see your company''s:
+page.checkAndSubmit.acknowledgement.doc.one=business plan
+page.checkAndSubmit.acknowledgement.doc.two=shareholder agreements or drafts
+page.checkAndSubmit.acknowledgement.doc.three=memorandum and articles of association
+page.checkAndSubmit.acknowledgement.doc.four=prospectuses and other documents for attracting investment
+page.checkAndSubmit.acknowledgement.doc.five=last annual accounts or cash flow forecast if you haven''t submitted accounts yet
+page.checkAndSubmit.acknowledgement.email.docs.heading=Send by email
+page.checkAndSubmit.acknowledgement.emailTo=You can email your documents to
+page.checkAndSubmit.acknowledgement.email.include=The subject line must include:
+page.checkAndSubmit.acknowledgement.email.one=your company name
+page.checkAndSubmit.acknowledgement.email.two=your company''s Unique Taxpayer Reference Number (UTR)
+page.checkAndSubmit.acknowledgement.email.three=the word ‘WHITELISTER’
+page.checkAndSubmit.acknowledgement.email.size=We can''t accept emails that are larger than 10MB.
+page.checkAndSubmit.acknowledgement.post.docs.heading=Send by post
+page.checkAndSubmit.acknowledgement.post.to=If you need to send by post, call the Small Companies Enterprise Centre (SCEC) on 0300 123 1083.
+page.checkAndSubmit.acknowledgement.waitingTime.heading=How long you''ll have to wait
+page.checkAndSubmit.acknowledgement.courseOfAction=Once we''ve received your supporting documents we''ll contact you within 4 weeks.
+page.checkAndSubmit.acknowledgement.button.confirm=Finish
+
+
+#lifetime allowance exceeded page
+page.investment.LifetimeAllowanceExceeded.title=You don''t qualify for the scheme
+page.investment.LifetimeAllowanceExceeded.heading=You don''t qualify for the scheme
+page.investment.LifetimeAllowanceExceeded.reason=You''ve already raised more than {0} million from tax relief investment schemes.
+page.investment.LifetimeAllowanceExceeded.link=Back to investment schemes
+
+#review previous schemes
+page.previousInvestment.reviewPreviousSchemes.title=Previous schemes
+page.previousInvestment.reviewPreviousSchemes.heading=Previous schemes
+page.previousInvestment.reviewPreviousSchemes.scheme=Scheme
+page.previousInvestment.reviewPreviousSchemes.dateOfShareIssue=Date of investment
+page.previousInvestment.reviewPreviousSchemes.investmentAmountRaised=Investment amount raised
+page.previousInvestment.reviewPreviousSchemes.investmentAmountSpent=Investment amount spent
+page.previousInvestment.reviewPreviousSchemes.totalInvestment=Total investment amount
+page.previousInvestment.reviewPreviousSchemes.add=Add another scheme
+page.previousInvestment.schemeType.eis=Enterprise Investment Scheme
+page.previousInvestment.schemeType.seis=Seed Enterprise Investment Scheme
+page.previousInvestment.schemeType.sitr=Social Investment Tax Relief
+page.previousInvestment.schemeType.vct=Venture Capital Trust
+page.previousInvestment.schemeType.other=Other
+page.previousInvestment.amountSpent.label=Investment amount spent
+
+#Invalid previous scheme SEIS
+page.previousInvestment.InvalidPreviousScheme.title=You don''t qualify for the scheme
+page.previousInvestment.InvalidPreviousScheme.heading=You don''t qualify for the scheme
+page.previousInvestment.InvalidPreviousScheme.reason=This is because your company has already raised investment through the Enterprise Investment Scheme or received investment from a Venture Capital Trust.
+page.previousInvestment.InvalidPreviousScheme.change-text=If this information is incorrect you can
+page.previousInvestment.InvalidPreviousScheme.change-link=change your answers
+
+#previous schemes
+page.investment.PreviousScheme.heading=Which schemes or investments has your company used?
+page.investment.PreviousScheme.schemeType=Scheme
+page.investment.PreviousScheme.oneAtATime =Add them one at a time.
+page.investment.PreviousScheme.button.add=Add this scheme
+page.investment.PreviousScheme.button.update=Update this scheme
+page.investment.PreviousScheme.title=Which schemes or investments has your company used?
+validation.error.InvestmentSpent.Present=Investment amount raised should not be entered for this scheme type
+validation.error.SchemeName.Present=Scheme name should not be entered for this scheme type
+page.investment.PreviousScheme.location=It should be on the certificates you gave to your shareholders. You can also find it by searching for your company on the
+page.investment.PreviousScheme.companiesHouse = Companies House database
+page.investment.PreviousScheme.howToFind=How can you find this out?
+page.investment.PreviousScheme.investmentAmount=Investment amount raised
+
+#annual turnover error
+page.investment.AnnualTurnoverError.title=You don''t qualify for the scheme
+page.investment.AnnualTurnoverError.heading=You don''t qualify for the scheme
+page.investment.AnnualTurnoverError.description=The amount you''re trying to raise must be at least 50% of your average annual turnover.
+page.investment.AnnualTurnoverError.guidance=Link back to guidance
+
+#EISSEIS annual turnover error
+page.eisseis.investment.AnnualTurnoverError.title=You don''t qualify for any of the schemes
+page.eisseis.investment.AnnualTurnoverError.heading=You don''t qualify for any of the schemes
+page.eisseis.investment.AnnualTurnoverError.description=The amount you''re trying to raise must be at least 50% of your average annual turnover.
+page.eisseis.investment.AnnualTurnoverError.incorrect.info=If this information is incorrect you can
+page.eisseis.investment.AnnualTurnoverError.change.link=change your answers
+
+
+#trading for too long error
+page.investment.TradingForTooLong.title=You don''t qualify for the scheme
+page.investment.TradingForTooLong.heading=You don''t qualify for the scheme
+page.investment.TradingForTooLong.reason=Your company:
+page.investment.TradingForTooLong.bullet.one=has been trading for too long to get tax relief on investment
+page.investment.TradingForTooLong.bullet.two=is not starting a new business activity that needs investment
+page.investment.TradingForTooLong.link.schemeGuidance=Link back to guidance
+
+#EISSEIS trading for too long error
+page.eisseis.investment.TradingForTooLong.title=You don''t qualify for any of the schemes
+page.eisseis.investment.TradingForTooLong.heading=You don''t qualify for any of the schemes
+page.eisseis.investment.TradingForTooLong.reason=Your company:
+page.eisseis.investment.TradingForTooLong.bullet.one=has been trading for too long to get tax relief on investment
+page.eisseis.investment.TradingForTooLong.bullet.two=is not starting a new business activity that needs investment
+page.eisseis.investment.TradingForTooLong.incorrect.info=If this information is incorrect you can
+page.eisseis.investment.TradingForTooLong.link.changeAnswers=change your answers
+
+#signout page
+page.signout.SignedOut.title = You''re signed out
+page.signout.SignedOut.header = You''re signed out
+page.signout.SignedOut.explore = Explore GOV.UK
+
+#hub page
+page.introduction.hub.title=Applications overview
+page.introduction.hub.heading=Applications overview
+page.introduction.hub.button=Create a new application
+page.introduction.hub.existing.heading=Applications in progress
+page.introduction.hub.existing.table.heading=Application type
+page.introduction.hub.new.heading=You have no unsubmitted applications
+page.introduction.hub.existing.advanced.assurance.type=Advance Assurance - Enterprise Investment Scheme
+page.introduction.hub.existing.seis.type=Advance Assurance - Seed Enterprise Investment Scheme
+page.introduction.hub.existing.vct.type=Advance Assurance - Venture Capital Trust scheme
+page.introduction.hub.existing.eis-seis.type=Advance Assurance - Enterprise Investment Scheme and Seed Enterprise Investment Scheme
+page.introduction.hub.existing.eis-vct.type=Advance Assurance - Enterprise Investment Scheme and Venture Capital Trust Scheme
+page.introduction.hub.existing.seis-vct.type=Advance Assurance - Seed Enterprise Investment Scheme and Venture Capital Trust Scheme
+page.introduction.hub.existing.eis-seis-vct.type=Advance Assurance - Enterprise Investment Scheme, Seed Enterprise Investment Scheme and Venture Capital Trust scheme
+
+#hub temp link to advanced assurance history
+page.PreviouslySubmitted.heading=Previously submitted applications
+page.introduction.hub.viewPrevious.AdvancedAssurance=View all of your Advance Assurance applications
+
+
+# SEIS trade start date
+page.seis.companyDetails.tradeStartDate.title=Has the trade you want investment in started?
+page.seis.companyDetails.tradeStartDate.heading=Has the trade you want investment in started?
+page.seis.companyDetails.text=The trade has started if your goods or services are available to the public. You may not have made a sale yet.
+page.seis.companyDetails.TradeStartDate.question.hint=When did this trade start?
+
+# EISSEIS trade start date
+page.eisseis.companyDetails.tradeStartDate.title=Has the trade you want investment in started?
+page.eisseis.companyDetails.tradeStartDate.heading=Has the trade you want investment in started?
+page.eisseis.companyDetails.text=The trade has started if your goods or services are available to the public. You may not have made a sale yet.
+page.eisseis.companyDetails.TradeStartDate.question.hint=When did this trade start?
+
+# SEIS trade start date error
+page.seis.companyDetails.tradeStartDateError.title=You don''t qualify for the scheme
+page.seis.companyDetails.tradeStartDateError.heading=You don''t qualify for the scheme
+page.seis.companyDetails.tradeStartDateError.trading.over.two.years=This is because the trade you want investment in started more than 2 years ago.
+page.seis.companyDetails.tradeStartDateError.incorrect.info=If this information is incorrect you can
+page.seis.companyDetails.tradeStartDateError.link.changeAnswers=change your answers
+
+#EISSEIS trade start date error
+page.eisseis.companyDetails.tradeStartDateError.title=You don''t qualify for the Seed Enterprise Investment Scheme
+page.eisseis.companyDetails.tradeStartDateError.heading=You don''t qualify for the Seed Enterprise Investment Scheme
+page.eisseis.companyDetails.tradeStartDateError.trading.over.two.years=This is because the trade you want investment in started more than 2 years ago.
+page.eisseis.companyDetails.tradeStartDateError.whatNext.heading=What happens next
+page.eisseis.companyDetails.tradeStartDateError.whatNext.continue=You can continue with your application for:
+page.eisseis.companyDetails.tradeStartDateError.whatNext.scheme.eis=the Enterprise Investment Scheme
+page.eisseis.companyDetails.tradeStartDateError.whatNext.scheme.vct=the Venture Capital Trust scheme
+page.eisseis.companyDetails.tradeStartDateError.incorrect.info=If this information is incorrect you can
+page.eisseis.companyDetails.tradeStartDateError.link.changeAnswers=change your answers
+
+#EISSEIS not first trade error
+page.eisseis.companyDetails.notFirstTradeError.title=You don''t qualify for the Seed Enterprise Investment Scheme
+page.eisseis.companyDetails.notFirstTradeError.heading=You don''t qualify for the Seed Enterprise Investment Scheme
+page.eisseis.companyDetails.notFirstTradeError.trading.reason=This is because your company carried out another trade before the one you''re seeking investment in.
+page.eisseis.companyDetails.notFirstTradeError.whatNext.heading=What happens next
+page.eisseis.companyDetails.notFirstTradeError.whatNext.continue=You can continue with your application for:
+page.eisseis.companyDetails.notFirstTradeError.whatNext.scheme.eis=the Enterprise Investment Scheme
+page.eisseis.companyDetails.notFirstTradeError.whatNext.scheme.vct=the Venture Capital Trust scheme
+page.eisseis.companyDetails.notFirstTradeError.incorrect.info=If this information is incorrect you can
+page.eisseis.companyDetails.notFirstTradeError.link.changeAnswers=change your answers
+
+# SEIS is first trade
+page.seis.companyDetails.isFirstTrade.title=Is this the first trade your company has carried out?
+page.seis.companyDetails.isFirstTrade.heading=Is this the first trade your company has carried out?
+page.seis.companyDetails.isFirstTrade.legend=Is this the first trade your company has carried out?
+
+# EISSEIS is first trade
+page.eisseis.companyDetails.isFirstTrade.title=Is this the first trade your company has carried out?
+page.eisseis.companyDetails.isFirstTrade.heading=Is this the first trade your company has carried out?
+page.eisseis.companyDetails.isFirstTrade.legend=Is this the first trade your company has carried out?
+
+# SEIS Proposed Investment page
+page.seis.investment.proposedInvestment.amount.title=How much investment do you want to raise?
+page.seis.investment.proposedInvestment.amount.heading=How much investment do you want to raise?
+page.seis.investment.proposedInvestment.help.link=What happens if I don''t raise this amount?
+page.seis.investment.proposedInvestment.help.link.text=You can raise more or less than this, but only £150,000 of the investments you''ve received over the past 3 years qualifies for relief. These investments can include:
+page.seis.investment.proposedInvestment.help.bullet.one=this SEIS investment
+page.seis.investment.proposedInvestment.help.bullet.two=any previous SEIS investments
+page.seis.investment.proposedInvestment.help.bullet.three=any State aid you''ve received under the de minimis regulation
+
+# SEIS Check Answers
+page.seis.checkAndSubmit.checkAnswers.description.one=You''re applying for Advance Assurance for the Seed Enterprise Investment Scheme.
+
+# SEIS acknowledgement
+page.seis.checkAndSubmit.acknowledgement.title=You''ve submitted your answers
+page.seis.checkAndSubmit.acknowledgement.submissionConfirmation=Your application details have been submitted
+page.seis.checkAndSubmit.acknowledgement.refNumberHeading=Make a note of your reference number:
+page.seis.checkAndSubmit.acknowledgement.application.not.complete=Your application is not yet complete
+page.seis.checkAndSubmit.acknowledgement.supporting.docs.heading=Supporting documentation
+page.seis.checkAndSubmit.acknowledgement.review=To review your application, we need to see your company''s:
+page.seis.checkAndSubmit.acknowledgement.doc.one=business plan
+page.seis.checkAndSubmit.acknowledgement.doc.two=shareholder agreements or drafts
+page.seis.checkAndSubmit.acknowledgement.doc.three=memorandum and articles of association
+page.seis.checkAndSubmit.acknowledgement.doc.four=prospectuses and other documents for attracting investment
+page.seis.checkAndSubmit.acknowledgement.doc.five=last annual accounts or cash flow forecast if you haven''t submitted accounts yet
+page.seis.checkAndSubmit.acknowledgement.email.docs.heading=Send by email
+page.seis.checkAndSubmit.acknowledgement.emailTo=You can email your documents to
+page.seis.checkAndSubmit.acknowledgement.email.include=The subject line must include:
+page.seis.checkAndSubmit.acknowledgement.email.one=your company name
+page.seis.checkAndSubmit.acknowledgement.email.two=your company''s Unique Taxpayer Reference Number (UTR)
+page.seis.checkAndSubmit.acknowledgement.email.three=the word ‘WHITELISTER’
+page.seis.checkAndSubmit.acknowledgement.email.size=We can''t accept emails that are larger than 10MB.
+page.seis.checkAndSubmit.acknowledgement.post.docs.heading=Send by post
+page.seis.checkAndSubmit.acknowledgement.post.to=If you need to send by post, call the Small Companies Enterprise Centre (SCEC) on 0300 123 1083.
+page.seis.checkAndSubmit.acknowledgement.waitingTime.heading=How long you''ll have to wait
+page.seis.checkAndSubmit.acknowledgement.courseOfAction=Once we''ve received your supporting documents we''ll contact you within 4 weeks.
+page.seis.checkAndSubmit.acknowledgement.button.confirm=Finish
+
+
+# EIS SEIS VCT Previous scheme error
+page.eisseis.previousInvestment.InvalidPreviousScheme.title=You don''t qualify for the Seed Enterprise Investment Scheme
+page.eisseis.previousInvestment.InvalidPreviousScheme.heading=You don''t qualify for the Seed Enterprise Investment Scheme
+page.eisseis.previousInvestment.InvalidPreviousScheme.reason=This is because your company has already raised investment through the Enterprise Investment Scheme or received investment from a Venture Capital Trust.
+page.eisseis.previousInvestment.InvalidPreviousScheme.next.heading=What happens next
+page.eisseis.previousInvestment.InvalidPreviousScheme.next.text=You can continue with your application for:
+page.eisseis.previousInvestment.InvalidPreviousScheme.next.eis=the Enterprise Investment Scheme
+page.eisseis.previousInvestment.InvalidPreviousScheme.next.vct=the Venture Capital Trust scheme
+page.eisseis.previousInvestment.InvalidPreviousScheme.change-text=If this information is incorrect you can
+page.eisseis.previousInvestment.InvalidPreviousScheme.change-link=change your answers
+
+# EIS SEIS lifetime allowance exceeded page
+page.eisseis.investment.LifetimeAllowanceExceeded.title=You don''t qualify for any of the schemes
+page.eisseis.investment.LifetimeAllowanceExceeded.heading=You don''t qualify for any of the schemes
+page.eisseis.investment.LifetimeAllowanceExceeded.reason=This is because you''ve already raised {0} million or more from tax relief investment schemes.
+page.eisseis.investment.LifetimeAllowanceExceeded.change.text=If this information is incorrect you can
+page.eisseis.investment.LifetimeAllowanceExceeded.change.link=change your answers
+
+# SEIS Not First Trade Error Page
+page.seis.companyDetails.NotFirstTradeError.title=You don''t qualify for the scheme
+page.seis.companyDetails.NotFirstTradeError.heading=You don''t qualify for the scheme
+page.seis.companyDetails.NotFirstTradeError.reason=This is because your company carried out another trade before the one you''re seeking investment in.
+page.seis.companyDetails.NotFirstTradeError.incorrect.info=If this information is incorrect you can
+page.seis.companyDetails.NotFirstTradeError.change.link.changeAnswers=change your answers
+
+
+#Delete Previous Scheme confirmation
+page.deletePreviousScheme.title=Confirm you want to remove this scheme or investment
+page.deletePreviousScheme.heading=Confirm you want to remove this scheme or investment
+page.deletePreviousScheme.hint=This will permanently remove the {0} (date of investment {1}) from your list of previous schemes and investments.
+page.deletePreviousScheme.confirm=Remove
+page.deletePreviousScheme.cancel=Cancel and go back
+
+#test
+page.test.clear-cache.button=Clear cache
+page.test.submit-form.button=Submit
+page.test.page-one.title=Test Endpoint Page One
+page.test.page-one.button=Go to Page One
+page.test.page-two.title=Test Endpoint Page Two
+page.test.page-two.button=Go to Page Two
+
+#EIS attachments acknowledgement
+page.checkAndSubmit.eis.attachments.acknowledgement.title=You''ve sent your application
+page.checkAndSubmit.eis.attachments.acknowledgement.what.happens.next.heading=What happens next
+page.checkAndSubmit.eis.attachments.acknowledgement.happens.next=We''ll contact you within 4 weeks to let you know the outcome of your application.
+page.checkAndSubmit.eis.attachments.acknowledgement.submissionConfirmation=You''ve sent your application
+page.checkAndSubmit.eis.attachments.acknowledgement.refNumberHeading=Make a note of your reference number:
+
+#EISSEIS attachments acknowledgement
+page.checkAndSubmit.eisseis.attachments.acknowledgement.title=You''ve sent your application
+page.checkAndSubmit.eisseis.attachments.acknowledgement.what.happens.next.heading=What happens next
+page.checkAndSubmit.eisseis.attachments.acknowledgement.happens.next=We''ll contact you within 4 weeks to let you know the outcome of your application.
+page.checkAndSubmit.eisseis.attachments.acknowledgement.submissionConfirmation=You''ve sent your application
+page.checkAndSubmit.eisseis.attachments.acknowledgement.refNumberHeading=Make a note of your reference number:
+
+#SEIS attachments acknowledgement
+page.checkAndSubmit.seis.attachments.acknowledgement.title=You''ve sent your application
+page.checkAndSubmit.seis.attachments.acknowledgement.what.happens.next.heading=What happens next
+page.checkAndSubmit.seis.attachments.acknowledgement.happens.next=We''ll contact you within 4 weeks to let you know the outcome of your application.
+page.checkAndSubmit.seis.attachments.acknowledgement.submissionConfirmation=You''ve sent your application
+page.checkAndSubmit.seis.attachments.acknowledgement.refNumberHeading=Make a note of your reference number:
+
+# OUTSIDE FLOW file upload acknowledgement
+page.hubPartials.fileUpload.acknowledgement.title=You''ve uploaded your documents
+page.hubPartials.fileUpload.acknowledgement.submission.confirmation=You''ve uploaded your documents
+page.hubPartials.fileUpload.acknowledgement.what.happens.heading=What happens next
+page.hubPartials.fileUpload.acknowledgement.what.happens.text=Once we''ve received your documents and answers, we''ll contact you within 4 weeks to let you know the outcome of your application.
+page.hubPartials.fileUpload.acknowledgement.button.confirm=Finish
+page.introduction.hub.upload.link=Upload documents
+page.introduction.hub.upload.desc=to support an application.
+
+
+#AA Applications
+page.historicSubmissions.applications.aa.section.dashboard=Dashboard
+page.historicSubmissions.applications.aa.title=Your applications for Advance Assurance
+page.historicSubmissions.applications.aa.advance.assurance.heading=Advance Assurance
+page.historicSubmissions.applications.aa.your.applications.heading=Your applications
+page.historicSubmissions.applications.aa.new.heading=Applications in progress
+page.historicSubmissions.applications.aa.new.text=You have no unsubmitted applications.
+page.historicSubmissions.applications.aa.previous.submitted.applications.heading=Previously submitted applications
+page.historicSubmissions.applications.aa.table.schemes.heading=Applicable schemes
+page.historicSubmissions.applications.aa.table.submissionDate.heading=Submission date
+page.historicSubmissions.applications.aa.table.refNo.heading=Reference number
+page.historicSubmissions.applications.aa.table.status.heading=Status
+page.historicSubmissions.applications.aa.no-previous.text=You have not submitted any applications.
+
+
+
+## Feedback ##
+feedback.title = Feedback
+
+## Feedback Thank You ##
+feedback.thankyou.title = Feedback received
+
