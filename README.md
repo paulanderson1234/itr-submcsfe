@@ -1,4 +1,4 @@
-# Investment Tax Relief Submission Frontend
+# Investment Tax Relief Submission Compliance Statement Frontend
 
 [![Apache-2.0 license](http://img.shields.io/badge/license-Apache-brightgreen.svg)](http://www.apache.org/licenses/LICENSE-2.0.html)[
 ![Build Status](https://api.travis-ci.org/hmrc/investment-tax-relief-submission-cs-frontend.svg?branch=master)](https://travis-ci.org/hmrc/investment-tax-relief-submission-cs-frontend) [ ![Download](https://api.bintray.com/packages/hmrc/releases/investment-tax-relief-submission-cs-frontend/images/download.svg) ](https://bintray.com/hmrc/releases/investment-tax-relief-submission-cs-frontend/_latestVersion)
@@ -40,7 +40,7 @@ sm --start ITR_DEP -f
 
 ##To run the application locally execute the following:
 
-Kill the service  ```sm --stop ITR_SUBM_FE``` then run:
+Kill the service  ```sm --stop ITR_SUBM_FE_CS``` then run:
 ```
 sbt 'run 9645' 
 ```
@@ -48,6 +48,13 @@ sbt 'run 9645'
 
 You can _*optionally*_ also run any of our other dependent microservices locally by killing the services specified and running the commands as shown below:
 
+
+[Submission Microservice](https://github.com/hmrc/investment-tax-relief-submission-frontend)
+
+Kill the service  ```sm --stop ITR_SUBM_FE``` in service Manager and run:
+```
+sbt 'run 9635'
+```
 
 [Submission Microservice](https://github.com/hmrc/investment-tax-relief-submission)
 
