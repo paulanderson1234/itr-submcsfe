@@ -32,7 +32,7 @@ trait AuthorisedAndEnrolledForTAVC extends Actions {
   val enrolmentConnector: EnrolmentConnector
   val applicationConfig: AppConfig
   val postSignInRedirectUrl: String = applicationConfig.introductionUrl
-  val notEnrolledRedirectUrl: String = applicationConfig.subscriptionUrl
+  val notEnrolledRedirectUrl: String = applicationConfig.introductionUrl
   val s4lConnector: S4LConnector
   val acceptedFlows: Seq[Seq[Flow]]
 
