@@ -15,14 +15,14 @@ private object AppDependencies {
 
   private val playHealthVersion = "2.1.0"
   private val logbackJsonLoggerVersion = "3.1.0"
-  private val frontendBootstrapVersion = "7.19.0"
+  private val frontendBootstrapVersion = "7.26.0"
   private val govukTemplateVersion = "5.1.0"
   private val playUiVersion = "7.2.1"
-  private val playPartialsVersion = "5.3.0"
-  private val playAuthorisedFrontendVersion = "6.3.0"
+  private val playPartialsVersion = "5.4.0"
+  private val playAuthorisedFrontendVersion = "6.4.0"
   private val playConfigVersion = "4.3.0"
   private val hmrcTestVersion = "2.3.0"
-  private val cachingClientVersion = "6.2.0"
+  private val cachingClientVersion = "6.3.0"
   private val mongoCachingVersion = "3.2.0"
   private val playConditionalMappingVersion = "0.2.0"
   private val scalaTestVersion = "2.2.6"
@@ -30,7 +30,7 @@ private object AppDependencies {
   private val pegDownVersion = "1.6.0"
   private val jSoupVersion = "1.8.3"
   private val mockitoAll = "1.9.5"
-  private val ipWhiteList = "1.2.0"
+  private val ipWhiteList = "2.0.0"
 
   val compile = Seq(
     ws,
@@ -45,7 +45,7 @@ private object AppDependencies {
     "uk.gov.hmrc" %% "http-caching-client" % cachingClientVersion,
     "uk.gov.hmrc" %% "mongo-caching" % mongoCachingVersion,
     "uk.gov.hmrc" %% "play-conditional-form-mapping" % playConditionalMappingVersion,
-    "uk.gov.hmrc" %% "play-whitelist-filter" % "1.2.0"
+    "uk.gov.hmrc" %% "play-whitelist-filter" % ipWhiteList
   )
 
 

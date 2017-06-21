@@ -63,7 +63,6 @@ object WhitelistFilter extends AkamaiWhitelistFilter with RunMode {
   override def whitelist: Seq[String] = FrontendAppConfig.whitelist
 
   override def excludedPaths: Seq[Call] = { FrontendAppConfig.whitelistExcluded.map { path =>  Call("GET", path) } }
-
   override def destination: Call = Call("GET", "https://www.tax.service.gov.uk/outage-investment-tax-relief-cs")
 }
 
