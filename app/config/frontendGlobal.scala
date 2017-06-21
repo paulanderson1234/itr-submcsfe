@@ -31,23 +31,27 @@ import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
 
 
-object FrontendGlobal
-  extends DefaultFrontendGlobal {
+object FrontendGlobal extends FrontendGlobal
 
-  override val auditConnector = FrontendAuditConnector
-  override val loggingFilter = LoggingFilter
-  override val frontendAuditFilter = AuditFilter
+  trait FrontendGlobal
+    extends DefaultFrontendGlobal
+      with RunMode {
 
-  override def onStart(app: Application) {
-    super.onStart(app)
-    ApplicationCrypto.verifyConfiguration()
+    override val auditConnector = FrontendAuditConnector
+    override val loggingFilter = LoggingFilter
+    override val frontendAuditFilter = AuditFilter
+
+    override def onStart(app: Application) {
+      super.onStart(app)
+      ApplicationCrypto.verifyConfiguration()
+    }
+
+    override def standardErrorTemplate(pageTitle: String, heading: String, message: String)(implicit rh: Request[_]): Html =
+      views.html.error_template(pageTitle, heading, message)
+
+    override def microserviceMetricsConfig(implicit app: Application): Option[Configuration] = app.configuration.getConfig(s"microservice.metrics")
   }
 
-  override def standardErrorTemplate(pageTitle: String, heading: String, message: String)(implicit rh: Request[_]): Html =
-    views.html.error_template(pageTitle, heading, message)
-
-  override def microserviceMetricsConfig(implicit app: Application): Option[Configuration] = app.configuration.getConfig(s"microservice.metrics")
-}
 
 object ControllerConfiguration extends ControllerConfig {
   lazy val controllerConfigs = Play.current.configuration.underlying.as[Config]("controllers")
@@ -67,3 +71,10 @@ object AuditFilter extends FrontendAuditFilter with RunMode with AppName with Mi
 
   override def controllerNeedsAuditing(controllerName: String): Boolean = ControllerConfiguration.paramsForController(controllerName).needsAuditing
 }
+
+object ProductionFrontendGlobal extends FrontendGlobal {
+
+  override def filters = WhitelistFilter +: super.filters
+}
+
+
