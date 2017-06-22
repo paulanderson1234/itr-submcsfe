@@ -875,6 +875,16 @@ page.historicSubmissions.applications.aa.table.status.heading=Status
 page.historicSubmissions.applications.aa.no-previous.text=You have not submitted any applications.
 
 
+#share issue date page
+validation.error.ShareIssueDate.Future=Share issue date cannot be a future date
+page.companyDetails.ShareIssueDate.title= When did your company issue the shares in this application?
+page.companyDetails.ShareIssueDate.heading= When did your company issue the shares in this application?
+page.companyDetails.ShareIssueDate.question= When did your company issue the shares in this application?
+date.hint.shareIssueDate= For example, 31 3 1980
+page.companyDetails.ShareIssueDate.whereToFind=Where can I find this?
+page.companyDetails.ShareIssueDate.location= It''s on your company''s Register of Members.
+
+
 
 ## Feedback ##
 feedback.title = Feedback
