@@ -51,7 +51,7 @@ common.date.hint.example= For example, 31 3 1980.
 common.date.error.invalidDate=Date must have a valid day, month and a year with 4 numbers
 
 ##common section headings##
-common.section.progress.company.details.one=Section 1 of 5: Company details
+common.section.progress.company.details.one=Section 1 of 6: Company details
 common.section.progress.company.details.two=Section 2 of 5: Previous schemes
 common.section.progress.company.details.three=Section 3 of 5: This investment
 common.section.progress.company.details.five=Section 5 of 5: Supporting documents
