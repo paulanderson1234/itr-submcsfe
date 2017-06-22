@@ -7,6 +7,9 @@ POST      /nature-of-business                       controllers.seis.NatureOfBus
 GET       /trade-start-date                        controllers.seis.TradeStartDateController.show
 POST      /trade-start-date                        controllers.seis.TradeStartDateController.submit
 
+GET       /research-start-date                     controllers.seis.ResearchStartDateController.show
+POST      /research-start-date                     controllers.seis.ResearchStartDateController.submit
+
 GET       /is-first-trade                           controllers.seis.IsFirstTradeController.show
 POST      /is-first-trade                           controllers.seis.IsFirstTradeController.submit
 

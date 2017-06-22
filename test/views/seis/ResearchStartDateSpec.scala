@@ -87,7 +87,7 @@ class ResearchStartDateSpec extends ViewSpec with OneAppPerSuite{
       }
 
       "have the correct back link url" in {
-        document.select("a.back-link").attr("href") shouldBe "" //TODO
+        document.select("a.back-link").attr("href") shouldBe "TODO - route to whatWillSpendInvestmentOn" //TODO
       }
 
       "have the progress details" in {
@@ -120,6 +120,10 @@ class ResearchStartDateSpec extends ViewSpec with OneAppPerSuite{
 
       "have the correct heading" in {
         document.select("h1").text() shouldBe Messages("page.seis.companyDetails.researchStartDate.heading")
+      }
+
+      "have a form posting to the correct route" in {
+        document.select("form").attr("action") shouldBe controllers.seis.routes.ResearchStartDateController.submit().url
       }
 
       "have the correct question in a legend" in {
@@ -163,7 +167,7 @@ class ResearchStartDateSpec extends ViewSpec with OneAppPerSuite{
       }
 
       "have the correct back link url" in {
-        document.select("a.back-link").attr("href") shouldBe "" //TODO
+        document.select("a.back-link").attr("href") shouldBe "TODO - route to whatWillSpendInvestmentOn" //TODO
       }
 
       "have the progress details" in {
