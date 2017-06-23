@@ -97,7 +97,7 @@ class FullTimeEmployeeCountFormSpec extends UnitSpec with OneAppPerSuite {
       }
 
       "contain the not a number error message" in {
-        form.errors.head.message shouldBe Messages("validation.error.notANumber")
+        form.errors.head.message shouldBe Messages("validation.error.employeeCount.notANumber")
       }
     }
 

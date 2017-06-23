@@ -581,7 +581,7 @@ object Validation {
           val sizeError = if (result > 9999999999999.0) Seq(ValidationError(Messages("validation.error.employeeCount.size"))) else Seq()
           val decimalError = if (result.scale > 13) Seq(ValidationError(Messages("validation.error.employeeCount.precision"))) else Seq()
           sizeError ++ decimalError
-        case Failure(_) => Seq(ValidationError(Messages("validation.error.notANumber")))
+        case Failure(_) => Seq(ValidationError(Messages("validation.error.employeeCount.notANumber")))
       }
         if (error.isEmpty) Valid else Invalid(error)
     }
