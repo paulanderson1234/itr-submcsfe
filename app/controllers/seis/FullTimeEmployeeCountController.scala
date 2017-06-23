@@ -20,20 +20,28 @@ import auth.{AuthorisedAndEnrolledForTAVC, SEIS}
 import config.{AppConfig, FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.predicates.FeatureSwitch
+import play.api.mvc.Action
 import uk.gov.hmrc.play.frontend.auth.connectors.AuthConnector
 import uk.gov.hmrc.play.frontend.controller.FrontendController
+import forms.FullTimeEmployeeCountForm._
+import play.api.Play.current
+import play.api.i18n.Messages.Implicits._
+
+import scala.concurrent.Future
 
 object FullTimeEmployeeCountController extends FullTimeEmployeeCountController {
-  override val enrolmentConnector: EnrolmentConnector = EnrolmentConnector
-  override val applicationConfig: AppConfig = FrontendAppConfig
-  override val s4lConnector: S4LConnector = S4LConnector
-  override val authConnector: AuthConnector = FrontendAuthConnector
+  override lazy val enrolmentConnector: EnrolmentConnector = EnrolmentConnector
+  override lazy val applicationConfig: AppConfig = FrontendAppConfig
+  override lazy val s4lConnector: S4LConnector = S4LConnector
+  override lazy val authConnector: AuthConnector = FrontendAuthConnector
 }
 
 trait FullTimeEmployeeCountController extends FrontendController with AuthorisedAndEnrolledForTAVC with FeatureSwitch {
   override val acceptedFlows = Seq(Seq(SEIS))
 
-  val show = TODO
+  val show = Action.async { implicit request =>
+    Future.successful(Ok(views.html.seis.companyDetails.FullTimeEmployeeCount(fullTimeEmployeeCountForm)))
+  }
 
   val submit = TODO
 }

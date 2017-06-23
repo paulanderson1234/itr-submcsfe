@@ -753,6 +753,14 @@ page.eisseis.companyDetails.isFirstTrade.title=Is this the first trade your comp
 page.eisseis.companyDetails.isFirstTrade.heading=Is this the first trade your company has carried out?
 page.eisseis.companyDetails.isFirstTrade.legend=Is this the first trade your company has carried out?
 
+#SEIS Full Time Employee Count Page
+page.seis.companyDetails.fullTimeEmployeeCount.title = How many full-time equivalent employees did your company have when the shares were issued?
+page.seis.companyDetails.fullTimeEmployeeCount.heading = How many full-time equivalent employees did your company have when the shares were issued?
+page.seis.companyDetails.fullTimeEmployeeCount.guidance.progressive = How to work this out
+page.seis.companyDetails.fullTimeEmployeeCount.guidance.one = A full-time employee works at least 35 hours a week. You can''t include any employees on maternity / paternity leave, apprentices or students on vocational training.
+page.seis.companyDetails.fullTimeEmployeeCount.guidance.two = The number of hours that each part-time employee works should be used to calculate their contribution to the full-time limit.
+page.seis.companyDetails.fullTimeEmployeeCount.guidance.three = For example, someone working 21 hours a week would count as 60% of a full-time employee and someone working 14 hours a week would count as 40% of a full-time employee. Together they would count as one full-time employee.
+
 # SEIS Proposed Investment page
 page.seis.investment.proposedInvestment.amount.title=How much investment do you want to raise?
 page.seis.investment.proposedInvestment.amount.heading=How much investment do you want to raise?
