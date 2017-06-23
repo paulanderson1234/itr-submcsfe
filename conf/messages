@@ -81,6 +81,9 @@ validation.error.countryCode=Country must be entered
 validation.error.linefouraddresssline=Use fewer than 18 characters in the address line
 validation.error.countrypostcode=Postcode must be entered if country selected is United Kingdom
 validation.error.email=Enter a valid email address
+validation.error.notANumber = Enter a valid number for your employee count
+validation.error.employeeCount.size = Enter a value with fewer than 13 numbers for your employee count
+validation.error.employeeCount.precision = Enter a value with fewer than 13 decimal places for your employee count
 
 ## Session Timeout message ##
 session.timeout.message=Your session has ended

@@ -572,4 +572,18 @@ object Validation {
       })
     text().verifying(yearCheckConstraint)
   }
+
+  def employeeCountCheck: Constraint[String] = {
+    Constraint("constraint.employeeCount") {
+      employees =>
+        val error = Try {BigDecimal(employees)} match {
+        case Success(result) =>
+          val sizeError = if (result > 9999999999999.0) Seq(ValidationError(Messages("validation.error.employeeCount.size"))) else Seq()
+          val decimalError = if (result.scale > 13) Seq(ValidationError(Messages("validation.error.employeeCount.precision"))) else Seq()
+          sizeError ++ decimalError
+        case Failure(_) => Seq(ValidationError(Messages("validation.error.notANumber")))
+      }
+        if (error.isEmpty) Valid else Invalid(error)
+    }
+  }
 }
