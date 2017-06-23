@@ -698,6 +698,10 @@ page.introduction.hub.existing.eis-seis-vct.type=Advance Assurance - Enterprise 
 page.PreviouslySubmitted.heading=Previously submitted applications
 page.introduction.hub.viewPrevious.AdvancedAssurance=View all of your Advance Assurance applications
 
+# SEIS Research Start Date
+page.seis.companyDetails.researchStartDate.title = Have you started research and development to do with the trade you want to raise investment for?
+page.seis.companyDetails.researchStartDate.heading = Have you started research and development to do with the trade you want to raise investment for?
+page.seis.companyDetails.researchStartDate.question = When did this research and development start?
 
 # SEIS trade start date
 page.seis.companyDetails.tradeStartDate.title=Has the trade you want investment in started?
@@ -873,7 +877,6 @@ page.historicSubmissions.applications.aa.table.submissionDate.heading=Submission
 page.historicSubmissions.applications.aa.table.refNo.heading=Reference number
 page.historicSubmissions.applications.aa.table.status.heading=Status
 page.historicSubmissions.applications.aa.no-previous.text=You have not submitted any applications.
-
 
 
 ## Feedback ##
