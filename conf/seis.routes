@@ -74,5 +74,8 @@ GET       /invalid-scheme-type                     controllers.seis.InvalidPrevi
 GET        /had-other-investments-before           controllers.seis.HadOtherInvestmentsController.show
 POST       /had-other-investments-before          controllers.seis.HadOtherInvestmentsController.submit
 
+GET        /full-time-employee-count               controllers.seis.FullTimeEmployeeCountController.show
+POST       /full-time-employee-count               controllers.seis.FullTimeEmployeeCountController.submit
+
 
 
