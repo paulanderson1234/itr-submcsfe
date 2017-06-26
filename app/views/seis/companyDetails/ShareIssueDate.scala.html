@@ -15,7 +15,7 @@
     @form(action = controllers.seis.routes.ShareIssueDateController.submit()) {
 
         @formInlineDateInput(shareIssueDateForm, "shareIssue", Some(Messages("page.companyDetails.ShareIssueDate.heading")),
-          true, Some(Messages("date.hint.shareIssueDate")), None)
+          true, Some(Messages("common.date.hint.example")), None)
 
         <details>
             <summary><span id="help" class="summary">@Messages("page.companyDetails.ShareIssueDate.whereToFind")</span></summary>

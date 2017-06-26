@@ -15,7 +15,7 @@
     @form(action = controllers.seis.routes.DateOfIncorporationController.submit()) {
 
         @formInlineDateInput(dateOfIncorporationForm, "incorporation", Some(Messages("page.companyDetails.DateOfIncorporation.heading")),
-          true, Some(Messages("date.hint.dateOfIncorporation")), None)
+          true, Some(Messages("common.date.hint.example")), None)
 
         <details>
             <summary><span id="help" class="summary">@Messages("page.companyDetails.DateOfIncorporation.whereToFind")</span></summary>
