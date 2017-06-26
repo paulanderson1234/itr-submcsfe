@@ -101,7 +101,7 @@ class ResearchStartDateControllerSpec extends BaseSpec {
         "researchStartYear" -> "")
       submitWithSessionAndAuth(setupController(None).submit, form: _*) { result =>
         status(result) shouldBe SEE_OTHER
-        redirectLocation(result) shouldBe Some("")
+        redirectLocation(result) shouldBe Some(routes.ResearchStartDateController.show().url)
       }
     }
 

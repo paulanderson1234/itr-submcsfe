@@ -6,7 +6,8 @@
 
 @main_template(Messages("page.seis.companyDetails.researchStartDate.title")) {
 
-    @backButtonWithProgress("TODO - route to whatWillSpendInvestmentOn", Messages("common.section.progress.company.details.one"))
+    <!--TODO - route to whatWillSpendInvestmentOn"-->
+    @backButtonWithProgress(controllers.seis.routes.ResearchStartDateController.show().url, Messages("common.section.progress.company.details.one"))
 
     @errorSummary(researchStartDateForm, "research-start-date", "researchStartDay")
 

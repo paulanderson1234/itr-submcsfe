@@ -16,6 +16,7 @@
 
 package views.seis
 
+import controllers.seis.ReviewPreviousSchemesController
 import forms.ResearchStartDateForm._
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -87,7 +88,8 @@ class ResearchStartDateSpec extends ViewSpec with OneAppPerSuite{
       }
 
       "have the correct back link url" in {
-        document.select("a.back-link").attr("href") shouldBe "TODO - route to whatWillSpendInvestmentOn" //TODO
+        //TODO route to whatWillSpendInvestmentOn"
+        document.select("a.back-link").attr("href") shouldBe  controllers.seis.routes.ResearchStartDateController.show().url
       }
 
       "have the progress details" in {
@@ -167,7 +169,8 @@ class ResearchStartDateSpec extends ViewSpec with OneAppPerSuite{
       }
 
       "have the correct back link url" in {
-        document.select("a.back-link").attr("href") shouldBe "TODO - route to whatWillSpendInvestmentOn" //TODO
+        //TODO route to whatWillSpendInvestmentOn"
+        document.select("a.back-link").attr("href") shouldBe  controllers.seis.routes.ResearchStartDateController.show().url
       }
 
       "have the progress details" in {

@@ -60,7 +60,7 @@ trait ResearchStartDateController extends FrontendController with AuthorisedAndE
 
       val successAction: ResearchStartDateModel => Future[Result] = model => {
         s4lConnector.saveFormData[ResearchStartDateModel](KeystoreKeys.researchStartDate, model).map { _ =>
-          Redirect("") //TODO set to Share Issue Date page
+          Redirect(routes.ResearchStartDateController.show()) //TODO set to Share Issue Date page
         }
       }
 
