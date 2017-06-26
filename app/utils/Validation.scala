@@ -117,6 +117,33 @@ object Validation {
     })
   }
 
+  def researchStartDateValidation: Constraint[ResearchStartDateModel] = {
+
+    def validateYes(dateForm: ResearchStartDateModel) = {
+      anyEmpty(dateForm.researchStartDay, dateForm.researchStartMonth, dateForm.researchStartYear) match {
+        case true => Invalid(Seq(ValidationError(Messages("validation.error.DateNotEntered"))))
+        case false => isValidDate(dateForm.researchStartDay.get, dateForm.researchStartMonth.get, dateForm.researchStartYear.get) match {
+          case false => Invalid(Seq(ValidationError(Messages("common.date.error.invalidDate"))))
+          case true => dateNotInFuture(dateForm.researchStartDay.get, dateForm.researchStartMonth.get, dateForm.researchStartYear.get) match {
+            case true => Valid
+            case false => Invalid(Seq(ValidationError(Messages("validation.error.ShareIssueDate.Future"))))
+          }
+        }
+      }
+    }
+
+    Constraint("constraints.research_start_date")({
+      dateForm: ResearchStartDateModel =>
+        dateForm.hasStartedResearch match {
+          case false => allDatesEmpty(dateForm.researchStartDay,
+            dateForm.researchStartMonth, dateForm.researchStartYear) match {
+            case true => Valid
+            case false => Invalid(Seq(ValidationError(Messages("validation.error.DateForNoOption"))))
+          }
+          case true => validateYes(dateForm)
+        }
+    })
+  }
 
   def tenYearPlanDescValidation: Constraint[TenYearPlanModel] = {
 

@@ -54,7 +54,7 @@ class ShareIssueDateSpec extends ViewSpec {
       }
       document.title() shouldBe Messages("page.companyDetails.ShareIssueDate.title")
       document.getElementById("main-heading").text() shouldBe Messages("page.companyDetails.ShareIssueDate.heading")
-      document.body.getElementsByClass("form-hint").text should include(Messages("date.hint.shareIssueDate"))
+      document.body.getElementsByClass("form-hint").text should include(Messages("common.date.hint.example"))
       document.body.getElementById("shareIssueDay").parent.text shouldBe Messages("common.date.fields.day")
       document.body.getElementById("shareIssueMonth").parent.text shouldBe Messages("common.date.fields.month")
       document.body.getElementById("shareIssueYear").parent.text shouldBe Messages("common.date.fields.year")
@@ -74,7 +74,7 @@ class ShareIssueDateSpec extends ViewSpec {
       }
       document.title() shouldBe Messages("page.companyDetails.ShareIssueDate.title")
       document.getElementById("main-heading").text() shouldBe Messages("page.companyDetails.ShareIssueDate.heading")
-      document.body.getElementsByClass("form-hint").text should include(Messages("date.hint.shareIssueDate"))
+      document.body.getElementsByClass("form-hint").text should include(Messages("common.date.hint.example"))
       document.body.getElementById("shareIssueDay").parent.text shouldBe Messages("common.date.fields.day")
       document.body.getElementById("shareIssueMonth").parent.text shouldBe Messages("common.date.fields.month")
       document.body.getElementById("shareIssueYear").parent.text shouldBe Messages("common.date.fields.year")

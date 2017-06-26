@@ -50,6 +50,7 @@ trait KeystoreKeys {
   val previousSchemes: String = "previousInvestmentScheme:previousInvestmentSchemes"
   val supportingDocumentsUpload: String = "attachments:supportingDocumentsUpload"
   val tradeStartDate: String = "companyDetails:tradeStartDate"
+  val researchStartDate: String = "companyDetails:researchStartDate"
   val isFirstTrade: String = "companyDetails:isFirstTrade"
   val hadOtherInvestments: String = "previousInvestmentScheme:hadOtherInvestments"
   val shareIssueDate: String = "companyDetails:shareIssueDate"

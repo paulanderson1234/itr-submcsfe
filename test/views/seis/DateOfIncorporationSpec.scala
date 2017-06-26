@@ -54,7 +54,7 @@ class DateOfIncorporationSpec extends ViewSpec {
       }
       document.title() shouldBe Messages("page.companyDetails.DateOfIncorporation.title")
       document.getElementById("main-heading").text() shouldBe Messages("page.companyDetails.DateOfIncorporation.heading")
-      document.body.getElementsByClass("form-hint").text should include(Messages("date.hint.dateOfIncorporation"))
+      document.body.getElementsByClass("form-hint").text should include(Messages("common.date.hint.example"))
       document.body.getElementById("incorporationDay").parent.text shouldBe Messages("common.date.fields.day")
       document.body.getElementById("incorporationMonth").parent.text shouldBe Messages("common.date.fields.month")
       document.body.getElementById("incorporationYear").parent.text shouldBe Messages("common.date.fields.year")
@@ -75,7 +75,7 @@ class DateOfIncorporationSpec extends ViewSpec {
       }
       document.title() shouldBe Messages("page.companyDetails.DateOfIncorporation.title")
       document.getElementById("main-heading").text() shouldBe Messages("page.companyDetails.DateOfIncorporation.heading")
-      document.body.getElementsByClass("form-hint").text should include(Messages("date.hint.dateOfIncorporation"))
+      document.body.getElementsByClass("form-hint").text should include(Messages("common.date.hint.example"))
       document.body.getElementById("incorporationDay").parent.text shouldBe Messages("common.date.fields.day")
       document.body.getElementById("incorporationMonth").parent.text shouldBe Messages("common.date.fields.month")
       document.body.getElementById("incorporationYear").parent.text shouldBe Messages("common.date.fields.year")
