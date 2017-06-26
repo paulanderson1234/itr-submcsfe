@@ -15,6 +15,9 @@ POST      /is-first-trade                           controllers.seis.IsFirstTrad
 
 GET       /trade-start-date-error                  controllers.seis.TradeStartDateErrorController.show
 
+GET       /share-issue-date                        controllers.seis.ShareIssueDateController.show
+POST      /share-issue-date                        controllers.seis.ShareIssueDateController.submit
+
 GET       /confirm-correspondence-address          controllers.seis.ConfirmCorrespondAddressController.show
 POST      /confirm-correspondence-address          controllers.seis.ConfirmCorrespondAddressController.submit
 
