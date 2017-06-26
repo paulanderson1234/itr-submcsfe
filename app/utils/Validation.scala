@@ -17,21 +17,20 @@
 package utils
 
 import java.text.SimpleDateFormat
+import java.util.{Calendar, Date}
 
+import common.Constants
 import models._
+import models.submission.SchemeTypesModel
+import org.joda.time.DateTime
+import play.api.Play.current
 import play.api.data.Forms._
 import play.api.data.Mapping
 import play.api.data.validation._
 import play.api.i18n.Messages
-import java.util.{Calendar, Date}
-
-import common.Constants
-import models.submission.SchemeTypesModel
-import org.joda.time.DateTime
+import play.api.i18n.Messages.Implicits._
 
 import scala.util.{Failure, Success, Try}
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
 
 object Validation {
 
@@ -81,6 +80,34 @@ object Validation {
         dateForm.hasCommercialSale match {
           case Constants.StandardRadioButtonNoValue => allDatesEmpty(dateForm.commercialSaleDay,
             dateForm.commercialSaleMonth, dateForm.commercialSaleYear) match {
+            case true => Valid
+            case false => Invalid(Seq(ValidationError(Messages("validation.error.DateForNoOption"))))
+          }
+          case Constants.StandardRadioButtonYesValue => validateYes(dateForm)
+        }
+    })
+  }
+
+  def dateOfHasInvestmentTradeStarted: Constraint[HasInvestmentTradeStartedModel] = {
+
+    def validateYes(dateForm: HasInvestmentTradeStartedModel) = {
+      anyEmpty(dateForm.hasInvestmentTradeStartedDay, dateForm.hasInvestmentTradeStartedMonth, dateForm.hasInvestmentTradeStartedYear) match {
+        case true => Invalid(Seq(ValidationError(Messages("validation.error.DateNotEntered"))))
+        case false => isValidDate(dateForm.hasInvestmentTradeStartedDay.get, dateForm.hasInvestmentTradeStartedMonth.get, dateForm.hasInvestmentTradeStartedYear.get) match {
+          case false => Invalid(Seq(ValidationError(Messages("common.date.error.invalidDate"))))
+          case true => dateNotInFuture(dateForm.hasInvestmentTradeStartedDay.get, dateForm.hasInvestmentTradeStartedMonth.get, dateForm.hasInvestmentTradeStartedYear.get) match {
+            case true => Valid
+            case false => Invalid(Seq(ValidationError(Messages("validation.error.ShareIssueDate.Future"))))
+          }
+        }
+      }
+    }
+
+    Constraint("constraints.has_investment_trade_started")({
+      dateForm: HasInvestmentTradeStartedModel =>
+        dateForm.hasInvestmentTradeStarted match {
+          case Constants.StandardRadioButtonNoValue => allDatesEmpty(dateForm.hasInvestmentTradeStartedDay,
+            dateForm.hasInvestmentTradeStartedMonth, dateForm.hasInvestmentTradeStartedYear) match {
             case true => Valid
             case false => Invalid(Seq(ValidationError(Messages("validation.error.DateForNoOption"))))
           }
