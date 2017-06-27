@@ -59,6 +59,7 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
         contactAddressForm <- fillForm[AddressModel](KeystoreKeys.manualContactAddress, ContactAddressForm.contactAddressForm)
         hadOtherInvestmentsForm <- fillForm[HadOtherInvestmentsModel](KeystoreKeys.hadOtherInvestments, HadOtherInvestmentsForm.hadOtherInvestmentsForm)
         qualifyBusinessActivityForm <- fillForm[QualifyBusinessActivityModel](KeystoreKeys.isQualifyBusinessActivity, QualifyBusinessActivityForm.qualifyBusinessActivityForm)
+        hasInvestmentTradeStarted <- fillForm[HasInvestmentTradeStartedModel](KeystoreKeys.hasInvestmentTradeStarted, HasInvestmentTradeStartedForm.hasInvestmentTradeStartedForm)
       } yield Ok(
         testOnly.views.html.seis.testEndpointSEISPageOne(
           natureOfBusinessForm,
@@ -74,7 +75,8 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
           confirmCorrespondAddressForm,
           contactAddressForm,
           hadOtherInvestmentsForm,
-          qualifyBusinessActivityForm
+          qualifyBusinessActivityForm,
+          hasInvestmentTradeStarted
         )
       )
   }
@@ -94,6 +96,8 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
     val hadOtherInvestments = bindForm[HadOtherInvestmentsModel](KeystoreKeys.hadOtherInvestments, HadOtherInvestmentsForm.hadOtherInvestmentsForm)
     val qualifyBusinessActivityForm = bindForm[QualifyBusinessActivityModel](KeystoreKeys.isQualifyBusinessActivity,
       QualifyBusinessActivityForm.qualifyBusinessActivityForm)
+    val hasInvestmentTradeStarted = bindForm[HasInvestmentTradeStartedModel](KeystoreKeys.hasInvestmentTradeStarted,
+      HasInvestmentTradeStartedForm.hasInvestmentTradeStartedForm)
     saveBackLinks()
     saveSchemeType()
     Future.successful(Ok(
@@ -111,7 +115,8 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
         confirmCorrespondAddress,
         contactAddress,
         hadOtherInvestments,
-        qualifyBusinessActivityForm
+        qualifyBusinessActivityForm,
+        hasInvestmentTradeStarted
       )
     ))
   }

@@ -186,6 +186,9 @@ $(document).ready($(function() {
          $("#tradeStartDay").val("");
          $("#tradeStartMonth").val("");
          $("#tradeStartYear").val("");
+         $("#hasInvestmentTradeStartedDay").val("");
+         $("#hasInvestmentTradeStartedMonth").val("");
+         $("#hasInvestmentTradeStartedYear").val("");
     }
 
     function ClearPageErrors()

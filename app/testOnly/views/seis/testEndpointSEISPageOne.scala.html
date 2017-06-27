@@ -3,13 +3,13 @@
 @import uk.gov.hmrc.play.views.html.helpers.form
 @import common.Constants
 @import utils.CountriesHelper
-@import views.html.helpers.{externalLink,formHint, formInputRadioGroup, backButtonWithProgress, input, inputWithCurrencySymbol, formInlineDateInput, hiddenField, errorSummary, formHiddenYesNoRadioNoError, textArea, dropdown}
+@import views.html.helpers.{externalLink,formHint, formInputRadioGroup, backButtonWithProgress, input, inputWithCurrencySymbol, formInlineDateInput, hiddenField, errorSummary, formShowYesNoRadioContent, textArea, dropdown}
 
 @(natureOfBusinessForm: Form[NatureOfBusinessModel],dateOfIncorporationForm: Form[DateOfIncorporationModel],tradeStartDateForm: Form[TradeStartDateModel], isFirstTradeForm: Form[IsFirstTradeModel],
 hadPreviousRFIForm: Form[HadPreviousRFIModel], testPreviousSchemesForm: Form[TestPreviousSchemesModel], previousSchemesSize: Int,
 proposedInvestmentForm: Form[ProposedInvestmentModel],confirmContactDetailsForm: Form[ConfirmContactDetailsModel], contactDetailsForm: Form[ContactDetailsModel],
 confirmCorrespondAddressForm: Form[ConfirmCorrespondAddressModel], contactAddressForm: Form[AddressModel], hadOtherInvestmentsForm: Form[HadOtherInvestmentsModel],
-qualifyBusinessActivityForm: Form[QualifyBusinessActivityModel])(implicit request: Request[_], messages: Messages)
+qualifyBusinessActivityForm: Form[QualifyBusinessActivityModel], hasInvestmentTradeStartedForm: Form[HasInvestmentTradeStartedModel])(implicit request: Request[_], messages: Messages)
 @main_template(Messages("page.test.page-one.title")) {
 <div class="grid-row">
 
@@ -53,9 +53,22 @@ qualifyBusinessActivityForm: Form[QualifyBusinessActivityModel])(implicit reques
         )
     </div>
 
+    <h2>Has Investment Trade Started</h2>
+    <div class="form-group">
+        @formShowYesNoRadioContent(
+        hasInvestmentTradeStartedForm,
+        "hasInvestmentTradeStarted",
+        Messages("page.companyDetails.HasInvestmentTradeStarted.question.hint"),
+        formInlineDateInput(hasInvestmentTradeStartedForm,"hasInvestmentTradeStarted",Some(Messages("page.companyDetails.HasInvestmentTradeStarted.question.hint")),
+        false, Some(Messages("common.date.hint.example")), None),
+        None,
+        Some("visuallyhidden")
+        )
+    </div>
+
     <h2>Trade Start Date</h2>
     <div class="form-group">
-        @formHiddenYesNoRadioNoError(
+        @formShowYesNoRadioContent(
         tradeStartDateForm,
         "hasTradeStartDate",
         Messages("page.seis.companyDetails.TradeStartDate.question.hint"),
