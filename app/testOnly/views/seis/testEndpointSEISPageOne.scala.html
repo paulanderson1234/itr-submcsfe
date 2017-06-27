@@ -5,7 +5,7 @@
 @import utils.CountriesHelper
 @import views.html.helpers.{externalLink,formHint, formInputRadioGroup, backButtonWithProgress, input, inputWithCurrencySymbol, formInlineDateInput, hiddenField, errorSummary, formHiddenYesNoRadioNoError, textArea, dropdown}
 
-@(natureOfBusinessForm: Form[NatureOfBusinessModel],dateOfIncorporationForm: Form[DateOfIncorporationModel],tradeStartDateForm: Form[TradeStartDateModel], isFirstTradeForm: Form[IsFirstTradeModel],
+@(grossAssetsForm: Form[GrossAssetsModel], shareIssueDateForm: Form[ShareIssueDateModel], natureOfBusinessForm: Form[NatureOfBusinessModel],dateOfIncorporationForm: Form[DateOfIncorporationModel],tradeStartDateForm: Form[TradeStartDateModel], isFirstTradeForm: Form[IsFirstTradeModel],
 hadPreviousRFIForm: Form[HadPreviousRFIModel], testPreviousSchemesForm: Form[TestPreviousSchemesModel], previousSchemesSize: Int,
 proposedInvestmentForm: Form[ProposedInvestmentModel],confirmContactDetailsForm: Form[ConfirmContactDetailsModel], contactDetailsForm: Form[ContactDetailsModel],
 confirmCorrespondAddressForm: Form[ConfirmCorrespondAddressModel], contactAddressForm: Form[AddressModel], hadOtherInvestmentsForm: Form[HadOtherInvestmentsModel])(implicit request: Request[_], messages: Messages)
@@ -60,6 +60,27 @@ confirmCorrespondAddressForm: Form[ConfirmCorrespondAddressModel], contactAddres
         '_labelClass -> "block-label",
         '_legendID -> "isFirstTrade",
         '_groupClass -> "inline"
+        )
+    </div>
+
+    <h2>Share Issue Date</h2>
+    <div class="form-group">
+        @formInlineDateInput(shareIssueDateForm, "shareIssue", Some(Messages("page.companyDetails.ShareIssueDate.heading")),
+        true, Some(Messages("common.date.hint.example")), None)
+    </div>
+
+    <h2>Gross Assets</h2>
+    <div class="form-group">
+        @inputWithCurrencySymbol(
+        grossAssetsForm("grossAmount"),
+        '_divClass -> "form-label",
+        '_labelId -> "label-amount",
+        '_label -> Messages("page.grossAssets.amount.heading"),
+        '_labelTextClass -> "visuallyhidden",
+        '_inputClass -> "input--normal input--no-spinner input--left-padding",
+        '_type -> "text",
+        '_maxlength -> "15",
+        'id -> "grossAmount"
         )
     </div>
 
