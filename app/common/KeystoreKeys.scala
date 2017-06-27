@@ -52,6 +52,7 @@ trait KeystoreKeys {
   val tradeStartDate: String = "companyDetails:tradeStartDate"
   val isFirstTrade: String = "companyDetails:isFirstTrade"
   val hadOtherInvestments: String = "previousInvestmentScheme:hadOtherInvestments"
+  val fullTimeEmployeeCount: String = "companyDetails:fullTimeEmployeeCount"
 
   // processing Keys
   val eisSeisProcessingModel: String = "processing:EisSeisProcessingModel"

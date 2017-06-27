@@ -17,15 +17,18 @@
 package controllers.seis
 
 import auth.{AuthorisedAndEnrolledForTAVC, SEIS}
+import common.KeystoreKeys
 import config.{AppConfig, FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.predicates.FeatureSwitch
-import play.api.mvc.Action
-import uk.gov.hmrc.play.frontend.auth.connectors.AuthConnector
-import uk.gov.hmrc.play.frontend.controller.FrontendController
 import forms.FullTimeEmployeeCountForm._
+import models.FullTimeEmployeeCountModel
 import play.api.Play.current
 import play.api.i18n.Messages.Implicits._
+import services.SubmissionService
+import uk.gov.hmrc.play.frontend.auth.connectors.AuthConnector
+import uk.gov.hmrc.play.frontend.controller.FrontendController
+import views.html.seis.companyDetails.FullTimeEmployeeCount
 
 import scala.concurrent.Future
 
@@ -34,14 +37,37 @@ object FullTimeEmployeeCountController extends FullTimeEmployeeCountController {
   override lazy val applicationConfig: AppConfig = FrontendAppConfig
   override lazy val s4lConnector: S4LConnector = S4LConnector
   override lazy val authConnector: AuthConnector = FrontendAuthConnector
+  val submissionService = SubmissionService
 }
 
 trait FullTimeEmployeeCountController extends FrontendController with AuthorisedAndEnrolledForTAVC with FeatureSwitch {
   override val acceptedFlows = Seq(Seq(SEIS))
+  val submissionService : SubmissionService
 
-  val show = Action.async { implicit request =>
-    Future.successful(Ok(views.html.seis.companyDetails.FullTimeEmployeeCount(fullTimeEmployeeCountForm)))
+  val show = featureSwitch(applicationConfig.seisFlowEnabled) {
+    AuthorisedAndEnrolled.async { implicit user =>
+      implicit request =>
+        s4lConnector.fetchAndGetFormData[FullTimeEmployeeCountModel](KeystoreKeys.fullTimeEmployeeCount).map {
+          case Some(data) => Ok(FullTimeEmployeeCount(fullTimeEmployeeCountForm.fill(data)))
+          case None => Ok(FullTimeEmployeeCount(fullTimeEmployeeCountForm))
+        }
+    }
   }
 
-  val submit = TODO
+  val submit = featureSwitch(applicationConfig.seisFlowEnabled) {
+    AuthorisedAndEnrolled.async { implicit user =>
+      implicit request =>
+        fullTimeEmployeeCountForm.bindFromRequest().fold(
+          formWithErrors => {
+            Future.successful(BadRequest(FullTimeEmployeeCount(formWithErrors)))
+          },
+          validFormData => {
+            submissionService.validateFullTimeEmployeeCount(validFormData.employeeCount).map {
+              case true => Redirect(routes.ConfirmCorrespondAddressController.show())
+              case false => Redirect(routes.ConfirmCorrespondAddressController.show())
+            }
+          }
+        )
+    }
+  }
 }

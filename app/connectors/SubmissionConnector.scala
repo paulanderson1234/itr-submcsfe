@@ -19,9 +19,12 @@ import config.{FrontendAppConfig, WSHttp}
 import models.{AnnualTurnoverCostsModel, ProposedInvestmentModel}
 import models.submission.{DesSubmitAdvancedAssuranceModel, Submission}
 import play.api.Logger
+import play.api.http.Status.OK
 import play.api.libs.json.{JsValue, Json}
 import uk.gov.hmrc.play.config.ServicesConfig
 import uk.gov.hmrc.play.http._
+import views.html.seis.companyDetails.FullTimeEmployeeCount_Scope0.FullTimeEmployeeCount_Scope1.FullTimeEmployeeCount
+
 import scala.concurrent.{ExecutionContext, Future}
 
 object SubmissionConnector extends SubmissionConnector with ServicesConfig {
@@ -98,4 +101,12 @@ trait SubmissionConnector {
     http.GET[Option[Boolean]](s"$serviceUrl/investment-tax-relief/trade-start-date/validate-trade-start-date/trade-start-day/$tradeStartDay/trade-start-month/$tradeStartMonth/trade-start-year/$tradeStartYear")
   }
 
+  def validateFullTimeEmployeeCount(employeeCount: BigDecimal)(implicit hc: HeaderCarrier): Future[Boolean] = {
+    http.GET[HttpResponse](s"$serviceUrl/investment-tax-relief/compliance-statement/full-time-equivalence-check/$employeeCount") map {
+      _.status match {
+        case OK => true
+        case _ => false
+      }
+    }
+  }
 }

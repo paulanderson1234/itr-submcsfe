@@ -43,6 +43,10 @@ trait SubmissionService {
         }
     }
   }
+
+  def validateFullTimeEmployeeCount(employeeCount: BigDecimal)(implicit hc: HeaderCarrier, user: TAVCUser): Future[Boolean] ={
+    submissionConnector.validateFullTimeEmployeeCount(employeeCount)
+  }
 }
 
 object SubmissionService extends SubmissionService {
