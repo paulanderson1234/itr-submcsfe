@@ -92,6 +92,7 @@ object FrontendAppConfig extends AppConfig with ServicesConfig {
     .decode(configuration.getString(key).getOrElse("")), "UTF-8"))
     .map(_.split(",")).getOrElse(Array.empty).toSeq
 
+  lazy val whitelistDestination = loadConfig("whitelistDestination")
   lazy val whitelist = whitelistConfig("whitelist")
   lazy val whitelistExcluded = whitelistConfig("whitelist-excluded")
 }

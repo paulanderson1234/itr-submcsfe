@@ -47,11 +47,11 @@ common.date.fields.year=Year
 common.date.hint=For example, 4 9 2016
 common.externalLink=opens in a new window
 common.date.error.invalidDate=Enter a valid date
-common.date.hint.example= For example, 31 3 1980.
+common.date.hint.example= For example, 31 3 1980
 common.date.error.invalidDate=Date must have a valid day, month and a year with 4 numbers
 
 ##common section headings##
-common.section.progress.company.details.one=Section 1 of 5: Company details
+common.section.progress.company.details.one=Section 1 of 6: Company details
 common.section.progress.company.details.two=Section 2 of 5: Previous schemes
 common.section.progress.company.details.three=Section 3 of 5: This investment
 common.section.progress.company.details.five=Section 5 of 5: Supporting documents
@@ -211,7 +211,6 @@ validation.error.DateOfIncorporation.Future=Date of incorporation cannot be a fu
 page.companyDetails.DateOfIncorporation.title= When was your company incorporated?
 page.companyDetails.DateOfIncorporation.heading= When was your company incorporated?
 page.companyDetails.DateOfIncorporation.question= When was your company incorporated?
-date.hint.dateOfIncorporation= For example, 31 3 1980.
 page.companyDetails.DateOfIncorporation.whereToFind=Where can I find this?
 page.companyDetails.DateOfIncorporation.location= It''s on your certificate of incorporation. You can also find it by searching for your company on the
 page.companyDetails.DateOfIncorporation.companiesHouse = Companies House database
@@ -698,6 +697,10 @@ page.introduction.hub.existing.eis-seis-vct.type=Advance Assurance - Enterprise 
 page.PreviouslySubmitted.heading=Previously submitted applications
 page.introduction.hub.viewPrevious.AdvancedAssurance=View all of your Advance Assurance applications
 
+# SEIS Research Start Date
+page.seis.companyDetails.researchStartDate.title = Have you started research and development to do with the trade you want to raise investment for?
+page.seis.companyDetails.researchStartDate.heading = Have you started research and development to do with the trade you want to raise investment for?
+page.seis.companyDetails.researchStartDate.question = When did this research and development start?
 
 # SEIS trade start date
 page.seis.companyDetails.tradeStartDate.title=Has the trade you want investment in started?
@@ -874,6 +877,7 @@ page.historicSubmissions.applications.aa.table.refNo.heading=Reference number
 page.historicSubmissions.applications.aa.table.status.heading=Status
 page.historicSubmissions.applications.aa.no-previous.text=You have not submitted any applications.
 
+
 #Gross assets page - SEIS
 page.grossAssets.amount.invalidAmount=Enter an amount in the correct format e.g. 10000
 page.grossAssets.amount.OutOfRange=Enter an amount between 1 and 5000000
@@ -901,6 +905,14 @@ page.seis.investment.proposedInvestment.help.link.text=You can raise more or les
 page.seis.investment.proposedInvestment.help.bullet.one=this SEIS investment
 page.seis.investment.proposedInvestment.help.bullet.two=any previous SEIS investments
 page.seis.investment.proposedInvestment.help.bullet.three=any State aid you''ve received under the de minimis regulation
+
+#share issue date page
+validation.error.ShareIssueDate.Future=Share issue date cannot be a future date
+page.companyDetails.ShareIssueDate.title= When did your company issue the shares in this application?
+page.companyDetails.ShareIssueDate.heading= When did your company issue the shares in this application?
+page.companyDetails.ShareIssueDate.question= When did your company issue the shares in this application?
+page.companyDetails.ShareIssueDate.whereToFind=Where can I find this?
+page.companyDetails.ShareIssueDate.location= It''s on your company''s Register of Members.
 
 ## Feedback ##
 feedback.title = Feedback
