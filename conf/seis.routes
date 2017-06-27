@@ -18,6 +18,13 @@ POST      /confirm-correspondence-address          controllers.seis.ConfirmCorre
 GET       /contact-address                         controllers.seis.ContactAddressController.show
 POST      /contact-address                         controllers.seis.ContactAddressController.submit
 
+GET       /gross-assets                            controllers.seis.GrossAssetsController.show
+POST      /gross-assets                            controllers.seis.GrossAssetsController.submit
+
+GET       /gross-assets-error                     controllers.seis.GrossAssetsErrorController.show
+POST      /gross-assets-error                     controllers.seis.GrossAssetsErrorController.submit
+
+
 GET       /confirm-contact-details                 controllers.seis.ConfirmContactDetailsController.show
 POST      /confirm-contact-details                 controllers.seis.ConfirmContactDetailsController.submit
 
