@@ -87,5 +87,10 @@ GET       /invalid-scheme-type                     controllers.seis.InvalidPrevi
 GET        /had-other-investments-before           controllers.seis.HadOtherInvestmentsController.show
 POST       /had-other-investments-before          controllers.seis.HadOtherInvestmentsController.submit
 
+GET        /qualify-business-activity               controllers.seis.QualifyBusinessActivityController.show
+POST       /qualify-business-activity               controllers.seis.QualifyBusinessActivityController.submit
+
+GET        /has-investment-trade-started           controllers.seis.HasInvestmentTradeStartedController.show
+POST       /has-investment-trade-started           controllers.seis.HasInvestmentTradeStartedController.submit
 
 

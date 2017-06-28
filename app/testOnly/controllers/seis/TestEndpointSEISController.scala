@@ -60,6 +60,8 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
         confirmCorrespondAddressForm <- fillForm[ConfirmCorrespondAddressModel](KeystoreKeys.confirmContactAddress, ConfirmCorrespondAddressForm.confirmCorrespondAddressForm)
         contactAddressForm <- fillForm[AddressModel](KeystoreKeys.manualContactAddress, ContactAddressForm.contactAddressForm)
         hadOtherInvestmentsForm <- fillForm[HadOtherInvestmentsModel](KeystoreKeys.hadOtherInvestments, HadOtherInvestmentsForm.hadOtherInvestmentsForm)
+        qualifyBusinessActivityForm <- fillForm[QualifyBusinessActivityModel](KeystoreKeys.isQualifyBusinessActivity, QualifyBusinessActivityForm.qualifyBusinessActivityForm)
+        hasInvestmentTradeStarted <- fillForm[HasInvestmentTradeStartedModel](KeystoreKeys.hasInvestmentTradeStarted, HasInvestmentTradeStartedForm.hasInvestmentTradeStartedForm)
       } yield Ok(
         testOnly.views.html.seis.testEndpointSEISPageOne(
           grossAssetsForm,
@@ -76,7 +78,9 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
           contactDetailsForm,
           confirmCorrespondAddressForm,
           contactAddressForm,
-          hadOtherInvestmentsForm
+          hadOtherInvestmentsForm,
+          qualifyBusinessActivityForm,
+          hasInvestmentTradeStarted
         )
       )
   }
@@ -96,6 +100,10 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
     val confirmCorrespondAddress = bindConfirmContactAddress()
     val contactAddress = bindForm[AddressModel](KeystoreKeys.manualContactAddress, ContactAddressForm.contactAddressForm)
     val hadOtherInvestments = bindForm[HadOtherInvestmentsModel](KeystoreKeys.hadOtherInvestments, HadOtherInvestmentsForm.hadOtherInvestmentsForm)
+    val qualifyBusinessActivityForm = bindForm[QualifyBusinessActivityModel](KeystoreKeys.isQualifyBusinessActivity,
+      QualifyBusinessActivityForm.qualifyBusinessActivityForm)
+    val hasInvestmentTradeStarted = bindForm[HasInvestmentTradeStartedModel](KeystoreKeys.hasInvestmentTradeStarted,
+      HasInvestmentTradeStartedForm.hasInvestmentTradeStartedForm)
     saveBackLinks()
     saveSchemeType()
     Future.successful(Ok(
@@ -114,7 +122,9 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
         contactDetails,
         confirmCorrespondAddress,
         contactAddress,
-        hadOtherInvestments
+        hadOtherInvestments,
+        qualifyBusinessActivityForm,
+        hasInvestmentTradeStarted
       )
     ))
   }

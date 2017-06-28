@@ -211,6 +211,7 @@ validation.error.DateOfIncorporation.Future=Date of incorporation cannot be a fu
 page.companyDetails.DateOfIncorporation.title= When was your company incorporated?
 page.companyDetails.DateOfIncorporation.heading= When was your company incorporated?
 page.companyDetails.DateOfIncorporation.question= When was your company incorporated?
+date.hint.dateOfIncorporation= For example, 31 3 1980
 page.companyDetails.DateOfIncorporation.whereToFind=Where can I find this?
 page.companyDetails.DateOfIncorporation.location= It''s on your certificate of incorporation. You can also find it by searching for your company on the
 page.companyDetails.DateOfIncorporation.companiesHouse = Companies House database
@@ -911,6 +912,7 @@ validation.error.ShareIssueDate.Future=Share issue date cannot be a future date
 page.companyDetails.ShareIssueDate.title= When did your company issue the shares in this application?
 page.companyDetails.ShareIssueDate.heading= When did your company issue the shares in this application?
 page.companyDetails.ShareIssueDate.question= When did your company issue the shares in this application?
+date.hint.shareIssueDate= For example, 31 3 1980
 page.companyDetails.ShareIssueDate.whereToFind=Where can I find this?
 page.companyDetails.ShareIssueDate.location= It''s on your company''s Register of Members.
 
@@ -936,3 +938,21 @@ feedback.title = Feedback
 ## Feedback Thank You ##
 feedback.thankyou.title = Feedback received
 
+# Compant details qualify business activity #
+page.companyDetails.qualifyBusinessActivity.title=What will the money your company has raised be used for?
+page.companyDetails.qualifyBusinessActivity.heading=What will the money your company has raised be used for?
+page.companyDetails.qualifyBusinessActivity.bullet.one=Doing business or getting ready to do business
+page.companyDetails.qualifyBusinessActivity.bullet.two=Research and development to do with your business activity
+page.companyDetails.qualifyBusinessActivity.help.heading=What''s the difference?
+page.companyDetails.qualifyBusinessActivity.help.text.one=You''re doing business when your goods or services are available to the public. You may not have made a sale yet.
+page.companyDetails.qualifyBusinessActivity.help.text.two=Getting ready is anything you do to prepare for doing business, for example:
+page.companyDetails.qualifyBusinessActivity.help.text.three=advertising
+page.companyDetails.qualifyBusinessActivity.help.text.four=building a website
+page.companyDetails.qualifyBusinessActivity.help.text.five=renting an office
+page.companyDetails.qualifyBusinessActivity.help.text.six=Research and development is work you do to improve existing products and create new products.
+
+#Has Investment Trade Started
+page.companyDetails.HasInvestmentTradeStarted.title=Has the trade you want to raise investment for started?
+page.companyDetails.HasInvestmentTradeStarted.heading=Has the trade you want to raise investment for started?
+page.companyDetails.HasInvestmentTradeStarted.question.hint=When did this trade start?
+page.companyDetails.HasInvestmentTradeStarted.descriptionOne.text=The trade has started if your goods or services are available to the public. You may not have made a sale yet.
