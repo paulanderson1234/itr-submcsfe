@@ -26,7 +26,7 @@ object FullTimeEmployeeCountForm {
     mapping(
       "employeeCount" -> nonEmptyText
         .verifying(employeeCountCheck)
-        .transform[BigDecimal](input => BigDecimal(input), _.toString)
+        .transform[BigDecimal](input => BigDecimal(input).setScale(5, BigDecimal.RoundingMode.HALF_UP), _.toString)
     )(FullTimeEmployeeCountModel.apply)(FullTimeEmployeeCountModel.unapply)
   )
 }
