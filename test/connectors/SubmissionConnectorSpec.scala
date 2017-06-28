@@ -313,4 +313,28 @@ class SubmissionConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndA
     }
   }
 
+  "Calling checkFullTimeEquivalence" should {
+
+    "return a true from a true response" in {
+      when(mockHttp.GET[Boolean](Matchers.any())(Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(true))
+      val result = TargetSubmissionConnector.checkFullTimeEquivalence(1)
+      await(result) shouldBe true
+    }
+
+    "return a false from a false response" in {
+      when(mockHttp.GET[Boolean](Matchers.any())(Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(false))
+      val result = TargetSubmissionConnector.checkFullTimeEquivalence(1)
+      await(result) shouldBe false
+    }
+
+    "return an exception if one occurs" in {
+      when(mockHttp.GET[Boolean](Matchers.any())(Matchers.any(), Matchers.any()))
+        .thenReturn(Future.failed {new Exception("Test message")})
+      val result = TargetSubmissionConnector.checkFullTimeEquivalence(0)
+      intercept[Exception] {await(result)}.getMessage shouldBe "Test message"
+    }
+  }
+
 }
