@@ -29,6 +29,8 @@ import utils.CountriesHelper
 import views.html.seis.contactInformation.ContactAddress
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
+import play.api.libs.json.Json
+import play.api.mvc.{Action, AnyContent}
 
 import scala.concurrent.Future
 
@@ -70,6 +72,12 @@ trait ContactAddressController extends FrontendController with AuthorisedAndEnro
           Future.successful(Redirect(routes.SupportingDocumentsController.show()))
         }
       )
+    }
+  }
+
+  val test: Action[AnyContent] = {
+    Action.async {
+      Future.successful(Ok(Json.toJson(true)))
     }
   }
 }
