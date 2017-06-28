@@ -15,6 +15,7 @@
  */
 
 package common
+
 object KeystoreKeys extends KeystoreKeys
 
 trait KeystoreKeys {
@@ -24,11 +25,13 @@ trait KeystoreKeys {
   val commercialSale: String = "companyDetails:commercialSale"
   val registeredAddress: String = "introduction:registeredAddress"
   val dateOfIncorporation: String = "companyDetails:dateOfIncorporation"
+  val isCompanyKnowledgeIntensive: String = "companyDetails:isCompanyKnowledgeIntensive"
   val isKnowledgeIntensive: String = "companyDetails:isKnowledgeIntensive"
   val subsidiaries: String = "companyDetails:subsidiaries"
   val natureOfBusiness: String = "companyDetails:natureOfBusiness"
   val operatingCosts: String = "companyDetails:operatingCosts"
   val turnoverCosts: String = "companyDetails:turnOverCosts"
+  val grossAssets: String = "companyDetails:grossAssets"
   val percentageStaffWithMasters: String = "knowledgeIntensive:percentageStaffWithMasters"
   val tenYearPlan: String = "knowledgeIntensive:tenYearPlan"
   val proposedInvestment: String = "investment:proposedInvestment"
@@ -50,8 +53,12 @@ trait KeystoreKeys {
   val previousSchemes: String = "previousInvestmentScheme:previousInvestmentSchemes"
   val supportingDocumentsUpload: String = "attachments:supportingDocumentsUpload"
   val tradeStartDate: String = "companyDetails:tradeStartDate"
+  val researchStartDate: String = "companyDetails:researchStartDate"
   val isFirstTrade: String = "companyDetails:isFirstTrade"
   val hadOtherInvestments: String = "previousInvestmentScheme:hadOtherInvestments"
+  val isQualifyBusinessActivity: String = "companyDetails:qualifyBusinessActivity"
+  val hasInvestmentTradeStarted: String = "companyDetails:hasInvestmentTradeStarted"
+  val shareIssueDate: String = "companyDetails:shareIssueDate"
   val fullTimeEmployeeCount: String = "companyDetails:fullTimeEmployeeCount"
 
   // processing Keys
@@ -87,4 +94,13 @@ trait KeystoreKeys {
 
   //file upload keys
   val envelopeID: String = "fileUpload:envelopeID"
+
+  //throttling
+  val throttlingToken: String = "throttling:token"
+  val isFirstTimeUsingService: String = "throttling:isFirstTimeUsingService"
+  val groupsAndSubsEligibility: String = "throttling:groupsAndSubsEligibility"
+  val acquiredTradeEligibility: String = "throttling:acquiredTradeEligibility"
+  val isAgentEligibility: String = "throttling:isAgentEligibility"
+  val throttleCheckPassed: String = "throttling:throttleCheckPassed"
+
 }

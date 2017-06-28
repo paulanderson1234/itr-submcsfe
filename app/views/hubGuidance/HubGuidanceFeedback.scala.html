@@ -1,0 +1,22 @@
+@import uk.gov.hmrc.play.views.html.helpers.{form}
+
+@()(implicit request: Request[_], messages: Messages)
+
+@main_template(title = Messages("page.hubGuidance.hubGuidanceFeedback.title"), mainClass=Some("full-width"), userLoggedIn = true) {
+
+    <div class="content-inner slides">
+
+        <div class="grid-row">
+            <div class="column-two-thirds-slides">
+                <h1 id="main-heading" class="banner-white">@Messages("page.hubGuidance.hubGuidanceFeedback.heading")</h1>
+                <span id="description">@Messages("page.hubGuidance.hubGuidanceFeedback.description")</span>
+                @form(action = controllers.hubGuidance.routes.HubGuidanceFeedbackController.submit()) {
+                    <div class="actions">
+                        <button class="btn button" type="submit" id="next">@Messages("common.button.continue")</button>
+                    </div>
+                    }
+            </div>
+        </div>
+    </div>
+
+}

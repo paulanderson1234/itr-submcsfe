@@ -46,6 +46,8 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
   def showPageOne(schemes: Option[Int]): Action[AnyContent] = AuthorisedAndEnrolled.async {
     implicit user => implicit request =>
       for {
+        grossAssetsForm <- fillForm[GrossAssetsModel](KeystoreKeys.grossAssets, GrossAssetsForm.grossAssetsForm)
+        shareIssueDateForm <- fillForm[ShareIssueDateModel](KeystoreKeys.shareIssueDate, ShareIssueDateForm.shareIssueDateForm)
         natureOfBusinessForm <- fillForm[NatureOfBusinessModel](KeystoreKeys.natureOfBusiness, NatureOfBusinessForm.natureOfBusinessForm)
         dateOfIncorporationForm <- fillForm[DateOfIncorporationModel](KeystoreKeys.dateOfIncorporation, DateOfIncorporationForm.dateOfIncorporationForm)
         tradeStartDateForm <- fillForm[TradeStartDateModel](KeystoreKeys.tradeStartDate, TradeStartDateForm.tradeStartDateForm)
@@ -58,8 +60,12 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
         confirmCorrespondAddressForm <- fillForm[ConfirmCorrespondAddressModel](KeystoreKeys.confirmContactAddress, ConfirmCorrespondAddressForm.confirmCorrespondAddressForm)
         contactAddressForm <- fillForm[AddressModel](KeystoreKeys.manualContactAddress, ContactAddressForm.contactAddressForm)
         hadOtherInvestmentsForm <- fillForm[HadOtherInvestmentsModel](KeystoreKeys.hadOtherInvestments, HadOtherInvestmentsForm.hadOtherInvestmentsForm)
+        qualifyBusinessActivityForm <- fillForm[QualifyBusinessActivityModel](KeystoreKeys.isQualifyBusinessActivity, QualifyBusinessActivityForm.qualifyBusinessActivityForm)
+        hasInvestmentTradeStarted <- fillForm[HasInvestmentTradeStartedModel](KeystoreKeys.hasInvestmentTradeStarted, HasInvestmentTradeStartedForm.hasInvestmentTradeStartedForm)
       } yield Ok(
         testOnly.views.html.seis.testEndpointSEISPageOne(
+          grossAssetsForm,
+          shareIssueDateForm,
           natureOfBusinessForm,
           dateOfIncorporationForm,
           tradeStartDateForm,
@@ -72,12 +78,16 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
           contactDetailsForm,
           confirmCorrespondAddressForm,
           contactAddressForm,
-          hadOtherInvestmentsForm
+          hadOtherInvestmentsForm,
+          qualifyBusinessActivityForm,
+          hasInvestmentTradeStarted
         )
       )
   }
 
   def submitPageOne: Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user => implicit request =>
+    val grossAssets = bindForm[GrossAssetsModel](KeystoreKeys.grossAssets, GrossAssetsForm.grossAssetsForm)
+    val shareIssueDate = bindForm[ShareIssueDateModel](KeystoreKeys.shareIssueDate, ShareIssueDateForm.shareIssueDateForm)
     val natureOfBusiness = bindForm[NatureOfBusinessModel](KeystoreKeys.natureOfBusiness, NatureOfBusinessForm.natureOfBusinessForm)
     val dateOfIncorporation = bindForm[DateOfIncorporationModel](KeystoreKeys.dateOfIncorporation, DateOfIncorporationForm.dateOfIncorporationForm)
     val tradeStartDate = bindForm[TradeStartDateModel](KeystoreKeys.tradeStartDate, TradeStartDateForm.tradeStartDateForm)
@@ -90,10 +100,16 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
     val confirmCorrespondAddress = bindConfirmContactAddress()
     val contactAddress = bindForm[AddressModel](KeystoreKeys.manualContactAddress, ContactAddressForm.contactAddressForm)
     val hadOtherInvestments = bindForm[HadOtherInvestmentsModel](KeystoreKeys.hadOtherInvestments, HadOtherInvestmentsForm.hadOtherInvestmentsForm)
+    val qualifyBusinessActivityForm = bindForm[QualifyBusinessActivityModel](KeystoreKeys.isQualifyBusinessActivity,
+      QualifyBusinessActivityForm.qualifyBusinessActivityForm)
+    val hasInvestmentTradeStarted = bindForm[HasInvestmentTradeStartedModel](KeystoreKeys.hasInvestmentTradeStarted,
+      HasInvestmentTradeStartedForm.hasInvestmentTradeStartedForm)
     saveBackLinks()
     saveSchemeType()
     Future.successful(Ok(
       testOnly.views.html.seis.testEndpointSEISPageOne(
+        grossAssets,
+        shareIssueDate,
         natureOfBusiness,
         dateOfIncorporation,
         tradeStartDate,
@@ -106,7 +122,9 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
         contactDetails,
         confirmCorrespondAddress,
         contactAddress,
-        hadOtherInvestments
+        hadOtherInvestments,
+        qualifyBusinessActivityForm,
+        hasInvestmentTradeStarted
       )
     ))
   }

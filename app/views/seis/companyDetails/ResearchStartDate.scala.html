@@ -1,0 +1,33 @@
+@import models.ResearchStartDateModel
+@import uk.gov.hmrc.play.views.html.helpers.form
+@import views.html.helpers.{externalLink, backButtonWithProgress, errorSummary,formHiddenYesNoRadioNoError, formInlineDateInput}
+
+@(researchStartDateForm: Form[ResearchStartDateModel])(implicit request: Request[_], messages: Messages)
+
+@main_template(Messages("page.seis.companyDetails.researchStartDate.title")) {
+
+    <!--TODO - route to whatWillSpendInvestmentOn"-->
+    @backButtonWithProgress(controllers.seis.routes.ResearchStartDateController.show().url, Messages("common.section.progress.company.details.one"))
+
+    @errorSummary(researchStartDateForm, "research-start-date", "researchStartDay")
+
+    <h1 class="heading-xlarge" id="main-heading">@Messages("page.seis.companyDetails.researchStartDate.heading")</h1>
+
+    @form(action = controllers.seis.routes.ResearchStartDateController.submit()) {
+
+        @formHiddenYesNoRadioNoError(
+            researchStartDateForm,
+            "hasStartedResearch",
+            Messages("page.seis.companyDetails.researchStartDate.heading"),
+            formInlineDateInput(researchStartDateForm, "researchStart",
+                Some(Messages("page.seis.companyDetails.researchStartDate.question")), false,
+                Some(Messages("common.date.hint.example")), None),
+            None,
+            Some("visuallyhidden")
+        )
+
+        <div class="form-group">
+            <button class="btn button" type="submit" id="next">@Messages("common.button.snc")</button>
+        </div>
+    }
+}

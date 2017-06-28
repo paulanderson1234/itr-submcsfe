@@ -39,6 +39,14 @@ POST       /supporting-documents-upload             controllers.SupportingDocume
 GET        /supporting-documents-cancel             controllers.SupportingDocumentsUploadController.cancel
 GET        /historic-aa-submission                  controllers.HistoricAASubmissionController.show
 
+# Hub Guidance
+GET         /hub-guidance-who-can-use-new-service   controllers.hubGuidance.WhoCanUseNewServiceController.show
+POST        /hub-guidance-who-can-use-new-service   controllers.hubGuidance.WhoCanUseNewServiceController.submit
+
+GET         /hub-guidance-feedback                  controllers.hubGuidance.HubGuidanceFeedbackController.show
+POST        /hub-guidance-feedback                  controllers.hubGuidance.HubGuidanceFeedbackController.submit
+
+
 #Feedback routes
 #####################################################################################################################
 GET         /feedback                               controllers.feedback.FeedbackController.show

@@ -15,15 +15,15 @@
     @form(action = controllers.seis.routes.DateOfIncorporationController.submit()) {
 
         @formInlineDateInput(dateOfIncorporationForm, "incorporation", Some(Messages("page.companyDetails.DateOfIncorporation.heading")),
-          true, Some(Messages("date.hint.dateOfIncorporation")), None)
+          true, Some(Messages("common.date.hint.example")), None)
 
         <details>
             <summary><span id="help" class="summary">@Messages("page.companyDetails.DateOfIncorporation.whereToFind")</span></summary>
             <div class="panel panel-indent panel-border-narrow">
-                <p class = "form-hint" id = "date-of-incorporation-where-to-find">@Messages("page.companyDetails.DateOfIncorporation.location")
+                <p id="date-of-incorporation-where-to-find">@Messages("page.companyDetails.DateOfIncorporation.location")
                     @externalLink(Messages("page.companyDetails.DateOfIncorporation.companiesHouse"),
                     "https://www.gov.uk/get-information-about-a-company",
-                    Some("company-house-db"))
+                    Some("company-house-db")).
                 </p>
             </div>
         </details>
