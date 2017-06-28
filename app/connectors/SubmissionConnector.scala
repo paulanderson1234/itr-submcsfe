@@ -109,12 +109,7 @@ trait SubmissionConnector {
     http.GET[Option[Boolean]](s"$serviceUrl/investment-tax-relief/trade-start-date/validate-trade-start-date/trade-start-day/$tradeStartDay/trade-start-month/$tradeStartMonth/trade-start-year/$tradeStartYear")
   }
 
-  def validateFullTimeEmployeeCount(employeeCount: BigDecimal)(implicit hc: HeaderCarrier): Future[Boolean] = {
-    http.GET[HttpResponse](s"$serviceUrl/investment-tax-relief/compliance-statement/full-time-equivalence-check/$employeeCount") map {
-      _.status match {
-        case OK => true
-        case _ => false
-      }
-    }
+  def validateFullTimeEmployeeCount(employeeCount: BigDecimal)(implicit hc: HeaderCarrier): Future[HttpResponse] = {
+    http.GET[HttpResponse](s"$serviceUrl/investment-tax-relief/compliance-statement/full-time-equivalence-check/$employeeCount")
   }
 }
