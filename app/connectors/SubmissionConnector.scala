@@ -16,14 +16,14 @@
 
 package connectors
 import config.{FrontendAppConfig, WSHttp}
-import models.{AnnualTurnoverCostsModel, GrossAssetsModel, ProposedInvestmentModel}
 import models.submission.{DesSubmitAdvancedAssuranceModel, Submission}
+import models.{AnnualTurnoverCostsModel, GrossAssetsModel, ProposedInvestmentModel}
 import play.api.Logger
 import play.api.libs.json.{JsValue, Json}
 import uk.gov.hmrc.play.config.ServicesConfig
 import uk.gov.hmrc.play.http._
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.Future
 
 object SubmissionConnector extends SubmissionConnector with ServicesConfig {
   val serviceUrl = FrontendAppConfig.submissionUrl
@@ -107,4 +107,7 @@ trait SubmissionConnector {
     http.GET[Option[Boolean]](s"$serviceUrl/investment-tax-relief/trade-start-date/validate-trade-start-date/trade-start-day/$tradeStartDay/trade-start-month/$tradeStartMonth/trade-start-year/$tradeStartYear")
   }
 
+  def validateHasInvestmentTradeStartedCondition(hasInvestmentTradeStartedDay: Int, hasInvestmentTradeStartedMonth: Int, hasInvestmentTradeStartedYear: Int)(implicit hc: HeaderCarrier): Future[Option[Boolean]] = {
+    http.GET[Option[Boolean]](s"$serviceUrl/investment-tax-relief/compliance-statement/has-investment-trade-started/validate-has-investment-trade-started/day/$hasInvestmentTradeStartedDay/month/$hasInvestmentTradeStartedMonth/year/$hasInvestmentTradeStartedYear")
+  }
 }

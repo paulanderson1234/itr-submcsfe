@@ -18,11 +18,13 @@ package controllers.seis
 
 import auth.{AuthorisedAndEnrolledForTAVC, SEIS}
 import common.{Constants, KeystoreKeys}
+import config.FrontendGlobal.internalServerErrorTemplate
 import config.{FrontendAppConfig, FrontendAuthConnector}
-import connectors.{EnrolmentConnector, S4LConnector}
+import connectors.{EnrolmentConnector, S4LConnector, SubmissionConnector}
 import controllers.predicates.FeatureSwitch
 import forms.HasInvestmentTradeStartedForm._
 import models.HasInvestmentTradeStartedModel
+import play.Logger
 import play.api.Play.current
 import play.api.i18n.Messages.Implicits._
 import uk.gov.hmrc.play.frontend.controller.FrontendController
@@ -35,6 +37,8 @@ object HasInvestmentTradeStartedController extends HasInvestmentTradeStartedCont
   override lazy val applicationConfig = FrontendAppConfig
   override lazy val authConnector = FrontendAuthConnector
   override lazy val enrolmentConnector = EnrolmentConnector
+  override lazy val submissionConnector = SubmissionConnector
+
 }
 
 
@@ -42,16 +46,14 @@ trait HasInvestmentTradeStartedController extends FrontendController with Author
 
   override val acceptedFlows = Seq(Seq(SEIS))
 
+  val submissionConnector: SubmissionConnector
 
   val show = featureSwitch(applicationConfig.seisFlowEnabled) {
-    AuthorisedAndEnrolled.async {
-      implicit user =>
-        implicit request =>
-
-          s4lConnector.fetchAndGetFormData[HasInvestmentTradeStartedModel](KeystoreKeys.hasInvestmentTradeStarted).map {
-            case Some(data) => Ok(HasInvestmentTradeStarted(hasInvestmentTradeStartedForm.fill(data)))
-            case None => Ok(HasInvestmentTradeStarted(hasInvestmentTradeStartedForm))
-          }
+    AuthorisedAndEnrolled.async { implicit user => implicit request =>
+      s4lConnector.fetchAndGetFormData[HasInvestmentTradeStartedModel](KeystoreKeys.hasInvestmentTradeStarted).map {
+        case Some(data) => Ok(HasInvestmentTradeStarted(hasInvestmentTradeStartedForm.fill(data)))
+        case None => Ok(HasInvestmentTradeStarted(hasInvestmentTradeStartedForm))
+      }
     }
   }
 
@@ -62,18 +64,31 @@ trait HasInvestmentTradeStartedController extends FrontendController with Author
           Future.successful(BadRequest(HasInvestmentTradeStarted(formWithErrors)))
         },
         validFormData => {
-          s4lConnector.saveFormData(KeystoreKeys.hasInvestmentTradeStarted, validFormData)
           validFormData.hasInvestmentTradeStarted match {
             case Constants.StandardRadioButtonYesValue => {
-              Future.successful(Redirect(controllers.seis.routes.HasInvestmentTradeStartedController.show()))
+              s4lConnector.saveFormData(KeystoreKeys.hasInvestmentTradeStarted, validFormData)
+              submissionConnector.validateHasInvestmentTradeStartedCondition(validFormData.hasInvestmentTradeStartedDay.get,
+                validFormData.hasInvestmentTradeStartedMonth.get, validFormData.hasInvestmentTradeStartedYear.get).map {
+                case Some(validated) => if (validated) Redirect(routes.HasInvestmentTradeStartedController.show()) else
+                  Redirect(routes.ShareIssueDateController.show())
+                case _ => {
+                  Logger.warn(s"[HasInvestmentTradeStartedController][submit] - Call to validate investment trade start date in backend failed")
+                  InternalServerError(internalServerErrorTemplate)
+                }
+              }.recover {
+                case e: Exception => {
+                  Logger.warn(s"[HasInvestmentTradeStartedController][submit] - Exception: ${e.getMessage}")
+                  InternalServerError(internalServerErrorTemplate)
+                }
+              }
             }
             case Constants.StandardRadioButtonNoValue => {
-              Future.successful(Redirect(controllers.seis.routes.HasInvestmentTradeStartedController.show()))
+              s4lConnector.saveFormData(KeystoreKeys.hasInvestmentTradeStarted, validFormData)
+              Future.successful(Redirect(routes.ShareIssueDateController.show()))
             }
           }
         }
       )
     }
   }
-
 }
