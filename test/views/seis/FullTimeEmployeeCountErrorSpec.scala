@@ -67,9 +67,8 @@ class FullTimeEmployeeCountErrorSpec extends ViewSpec {
         link.attr("class") shouldBe "button"
       }
 
-      //TODO update test name
-      "has a link to TODO" in {
-        link.attr("href") shouldBe "TODO"
+      "has a link to Previous Schemes" in {
+        link.attr("href") shouldBe controllers.seis.routes.PreviousSchemeController.show().url
       }
 
       "has the text continue" in {
