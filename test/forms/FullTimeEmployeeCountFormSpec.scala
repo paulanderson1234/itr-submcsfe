@@ -44,8 +44,8 @@ class FullTimeEmployeeCountFormSpec extends UnitSpec with OneAppPerSuite {
         form.errors.isEmpty shouldBe true
       }
 
-      "contain the correct model" in {
-        form.value shouldBe Some(FullTimeEmployeeCountModel(1.1111111111111))
+      "contain the correct model limited to 5 decimal places" in {
+        form.value shouldBe Some(FullTimeEmployeeCountModel(1.11111))
       }
     }
 
@@ -59,19 +59,6 @@ class FullTimeEmployeeCountFormSpec extends UnitSpec with OneAppPerSuite {
 
       "contain the correct model" in {
         form.value shouldBe Some(FullTimeEmployeeCountModel(9999999999999.0))
-      }
-    }
-
-    "provided with an invalid map with one too many decimal places" should {
-      val map = Map("employeeCount" -> "1.11111111111111")
-      lazy val form = fullTimeEmployeeCountForm.bind(map)
-
-      "contain one error" in {
-        form.errors.size shouldBe 1
-      }
-
-      "contain the too many decimals error message" in {
-        form.errors.head.message shouldBe Messages("validation.error.employeeCount.precision")
       }
     }
 
@@ -101,12 +88,16 @@ class FullTimeEmployeeCountFormSpec extends UnitSpec with OneAppPerSuite {
       }
     }
 
-    "provided with an invalid map with multiple errors" should {
-      val map = Map("employeeCount" -> "9999999999999.11111111111111")
+    "provided with an invalid map with an empty value" should {
+      val map = Map("employeeCount" -> " ")
       lazy val form = fullTimeEmployeeCountForm.bind(map)
 
-      "contain two errors" in {
-        form.errors.size shouldBe 2
+      "contain one error" in {
+        form.errors.size shouldBe 1
+      }
+
+      "contain the not a number error message" in {
+        form.errors.head.message shouldBe "error.required"
       }
     }
   }
