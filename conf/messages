@@ -763,6 +763,14 @@ page.seis.investment.proposedInvestment.help.bullet.one=this SEIS investment
 page.seis.investment.proposedInvestment.help.bullet.two=any previous SEIS investments
 page.seis.investment.proposedInvestment.help.bullet.three=any State aid you''ve received under the de minimis regulation
 
+# SEIS Full Time Employee Count Error
+page.seis.companyDetails.fullTimeEmployeeCountError.title = You don''t appear to qualify for this scheme
+page.seis.companyDetails.fullTimeEmployeeCountError.error = This is because your company had 25 or more full-time equivalent employees on the share issue date.
+page.seis.companyDetails.fullTimeEmployeeCountError.whatNext = What happens next
+page.seis.companyDetails.fullTimeEmployeeCountError.guidance = You can continue with your application if you think that you should qualify.
+page.seis.companyDetails.fullTimeEmployeeCountError.incorrect = If this information is incorrect you can 
+page.seis.companyDetails.fullTimeEmployeeCountError.incorrect.link = change your answers
+
 # SEIS Check Answers
 page.seis.checkAndSubmit.checkAnswers.description.one=You''re applying for Advance Assurance for the Seed Enterprise Investment Scheme.
 
