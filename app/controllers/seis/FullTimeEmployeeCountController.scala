@@ -62,8 +62,11 @@ trait FullTimeEmployeeCountController extends FrontendController with Authorised
             Future.successful(BadRequest(FullTimeEmployeeCount(formWithErrors)))
           },
           validFormData => {
+            val employeeCount = validFormData.employeeCount
+            employeeCount.setScale(5)
+            println(s" ********************* EMPLOYEE COUNT ------------ $employeeCount")
             s4lConnector.saveFormData[FullTimeEmployeeCountModel](KeystoreKeys.fullTimeEmployeeCount, validFormData)
-            submissionService.validateFullTimeEmployeeCount(validFormData.employeeCount).map {
+            submissionService.validateFullTimeEmployeeCount(employeeCount).map {
               case true => Redirect(routes.ConfirmCorrespondAddressController.show())
               case false => Redirect(routes.ConfirmCorrespondAddressController.show())
             }
