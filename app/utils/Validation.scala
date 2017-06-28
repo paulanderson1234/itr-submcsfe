@@ -632,7 +632,7 @@ object Validation {
       employees =>
         val error = Try {BigDecimal(employees)} match {
         case Success(result) =>
-          val sizeError = if (result < 1 && result > 9999999999999.0) Seq(ValidationError(Messages("validation.error.employeeCount.size"))) else Seq()
+          val sizeError = if (result < 1 || result > 9999999999999.0) Seq(ValidationError(Messages("validation.error.employeeCount.size"))) else Seq()
           sizeError
         case Failure(_) => Seq(ValidationError(Messages("validation.error.employeeCount.notANumber")))
       }
