@@ -82,7 +82,7 @@ class QualifyBusinessActivityControllerSpec extends BaseSpec {
       submitWithSessionAndAuth(TestController.submit,formInput)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(controllers.seis.routes.HadPreviousRFIController.show().url)
+          redirectLocation(result) shouldBe Some(controllers.seis.routes.HasInvestmentTradeStartedController.show().url)
         }
       )
     }
@@ -97,7 +97,7 @@ class QualifyBusinessActivityControllerSpec extends BaseSpec {
         result => {
           status(result) shouldBe SEE_OTHER
      // To navigate to NotFirstTradeError page
-          redirectLocation(result) shouldBe Some(controllers.seis.routes.NotFirstTradeController.show().url)
+          redirectLocation(result) shouldBe Some(controllers.seis.routes.ResearchStartDateController.show().url)
         }
       )
     }
