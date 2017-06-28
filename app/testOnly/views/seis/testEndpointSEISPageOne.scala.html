@@ -5,7 +5,7 @@
 @import utils.CountriesHelper
 @import views.html.helpers.{externalLink,formHint, formInputRadioGroup, backButtonWithProgress, input, inputWithCurrencySymbol, formInlineDateInput, hiddenField, errorSummary, formShowYesNoRadioContent, textArea, dropdown}
 
-@(grossAssetsForm: Form[GrossAssetsModel], shareIssueDateForm: Form[ShareIssueDateModel], natureOfBusinessForm: Form[NatureOfBusinessModel],dateOfIncorporationForm: Form[DateOfIncorporationModel],tradeStartDateForm: Form[TradeStartDateModel], isFirstTradeForm: Form[IsFirstTradeModel],
+@(grossAssetsForm: Form[GrossAssetsModel], shareIssueDateForm: Form[ShareIssueDateModel], natureOfBusinessForm: Form[NatureOfBusinessModel],dateOfIncorporationForm: Form[DateOfIncorporationModel],tradeStartDateForm: Form[TradeStartDateModel], isFirstTradeForm: Form[IsFirstTradeModel], researchStartDateForm: Form[ResearchStartDateModel],
 hadPreviousRFIForm: Form[HadPreviousRFIModel], testPreviousSchemesForm: Form[TestPreviousSchemesModel], previousSchemesSize: Int,
 proposedInvestmentForm: Form[ProposedInvestmentModel],confirmContactDetailsForm: Form[ConfirmContactDetailsModel], contactDetailsForm: Form[ContactDetailsModel],
 confirmCorrespondAddressForm: Form[ConfirmCorrespondAddressModel], contactAddressForm: Form[AddressModel], hadOtherInvestmentsForm: Form[HadOtherInvestmentsModel],
@@ -92,6 +92,20 @@ qualifyBusinessActivityForm: Form[QualifyBusinessActivityModel], hasInvestmentTr
         '_legendID -> "isFirstTrade",
         '_groupClass -> "inline"
         )
+    </div>
+
+    <h2>Research Started Date</h2>
+    <div class="form-group">
+    @formShowYesNoRadioContent(
+    researchStartDateForm,
+    "hasStartedResearch",
+    Messages("page.seis.companyDetails.researchStartDate.heading"),
+    formInlineDateInput(researchStartDateForm, "researchStart",
+    Some(Messages("page.seis.companyDetails.researchStartDate.question")), false,
+    Some(Messages("common.date.hint.example")), None),
+    None,
+    Some("visuallyhidden")
+    )
     </div>
 
     <h2>Share Issue Date</h2>
