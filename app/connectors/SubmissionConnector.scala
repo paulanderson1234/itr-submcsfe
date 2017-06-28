@@ -16,12 +16,13 @@
 
 package connectors
 import config.{FrontendAppConfig, WSHttp}
-import models.{AnnualTurnoverCostsModel, ProposedInvestmentModel}
+import models.{AnnualTurnoverCostsModel, GrossAssetsModel, ProposedInvestmentModel}
 import models.submission.{DesSubmitAdvancedAssuranceModel, Submission}
 import play.api.Logger
 import play.api.libs.json.{JsValue, Json}
 import uk.gov.hmrc.play.config.ServicesConfig
 import uk.gov.hmrc.play.http._
+
 import scala.concurrent.{ExecutionContext, Future}
 
 object SubmissionConnector extends SubmissionConnector with ServicesConfig {
@@ -64,6 +65,14 @@ trait SubmissionConnector {
     http.GET[Option[Boolean]](s"$serviceUrl/investment-tax-relief/averaged-annual-turnover/check-averaged-annual-turnover/" +
       s"proposed-investment-amount/${proposedInvestmentAmount.investmentAmount}/annual-turn-over/${annualTurnoverCostsModel.amount1}" +
       s"/${annualTurnoverCostsModel.amount2}/${annualTurnoverCostsModel.amount3}/${annualTurnoverCostsModel.amount4}/${annualTurnoverCostsModel.amount5}")
+  }
+
+  def checkGrossAssetsAmountExceeded(grossAssetAmount: GrossAssetsModel)
+                                    (implicit hc: HeaderCarrier): Future[Option[Boolean]] = {
+
+    http.GET[Option[Boolean]](s"$serviceUrl/investment-tax-relief/gross-assets/gross-assets-checker/check-total/gross-amount/" +
+      s"${grossAssetAmount.grossAmount}")
+
   }
 
   def submitAdvancedAssurance(submissionRequest: Submission, tavcReferenceNumber: String)(implicit hc: HeaderCarrier): Future[HttpResponse] = {

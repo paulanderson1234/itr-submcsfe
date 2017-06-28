@@ -61,8 +61,6 @@ trait Constants {
 
   val guidanceRedirectUrl = "https://www.gov.uk/guidance/venture-capital-schemes-apply-for-advance-assurance"
 
-
-
   object EmailConfirmationParameters{
     val companyName = "companyName"
     val date = "date"

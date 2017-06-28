@@ -878,6 +878,35 @@ page.historicSubmissions.applications.aa.table.refNo.heading=Reference number
 page.historicSubmissions.applications.aa.table.status.heading=Status
 page.historicSubmissions.applications.aa.no-previous.text=You have not submitted any applications.
 
+
+#Gross assets page - SEIS
+page.grossAssets.amount.invalidAmount=Enter an amount in the correct format e.g. 10000
+page.grossAssets.amount.OutOfRange=Enter an amount between 1 and 5000000
+page.grossAssets.amount.title=What were your company''s gross assets worth immediately before the share issue?
+page.grossAssets.amount.heading=What were your company''s gross assets worth immediately before the share issue?
+page.grossAssets.help.link=What happens if I don''t raise this amount?
+page.grossAssets.help.link.text=You might still be eligible for the scheme, as long as you don''t raise more than £5 million in a year.
+
+#gross assets error
+page.companyDetails.grossAssetsError.title=You don''t appear to qualify for this scheme
+page.companyDetails.grossAssetsError.heading=You don''t appear to qualify for this scheme
+page.companyDetails.grossAssetsError.description=This is because your company''s gross assets were worth more than £200,000 when the shares were issued.
+page.companyDetails.grossAssetsError.whatNext.heading=What happens next
+page.companyDetails.grossAssetsError.whatNext.continue=You can continue with your application if you think that you should qualify.
+
+
+page.companyDetails.grossAssetsError.incorrect.info=If this information is incorrect you can
+page.companyDetails.grossAssetsError.link.changeAnswers=change your answers
+
+# SEIS Proposed Investment page
+page.seis.investment.proposedInvestment.amount.title=How much investment do you want to raise?
+page.seis.investment.proposedInvestment.amount.heading=How much investment do you want to raise?
+page.seis.investment.proposedInvestment.help.link=What happens if I don''t raise this amount?
+page.seis.investment.proposedInvestment.help.link.text=You can raise more or less than this, but only £150,000 of the investments you''ve received over the past 3 years qualifies for relief. These investments can include:
+page.seis.investment.proposedInvestment.help.bullet.one=this SEIS investment
+page.seis.investment.proposedInvestment.help.bullet.two=any previous SEIS investments
+page.seis.investment.proposedInvestment.help.bullet.three=any State aid you''ve received under the de minimis regulation
+
 #share issue date page
 validation.error.ShareIssueDate.Future=Share issue date cannot be a future date
 page.companyDetails.ShareIssueDate.title= When did your company issue the shares in this application?
@@ -886,6 +915,22 @@ page.companyDetails.ShareIssueDate.question= When did your company issue the sha
 date.hint.shareIssueDate= For example, 31 3 1980
 page.companyDetails.ShareIssueDate.whereToFind=Where can I find this?
 page.companyDetails.ShareIssueDate.location= It''s on your company''s Register of Members.
+
+##  Hub Guidance ##
+page.hubGuidance.whoCanUseNewService.title=Who can use this new service
+page.hubGuidance.whoCanUseNewService.heading=Who can use this new service
+page.hubGuidance.whoCanUseNewService.apply.if=At the moment, you can only use the new online service if your company:
+page.hubGuidance.whoCanUseNewService.apply.if.one=is applying for the Enterprise Investment Scheme, Seed Enterprise Investment Scheme or for investment from a Venture Capital Trust
+page.hubGuidance.whoCanUseNewService.apply.if.two=isn''t using an agent to apply
+page.hubGuidance.whoCanUseNewService.apply.if.three=isn''t part of a group of companies
+page.hubGuidance.whoCanUseNewService.apply.if.four=didn''t acquire the trade you want to raise investment for
+page.hubGuidance.whoCanUseNewService.still.apply=You can still apply for Advance Assurance if you don''t meet these conditions,
+page.hubGuidance.whoCanUseNewService.existing=find out how to use our existing service.
+
+page.hubGuidance.hubGuidanceFeedback.title=Feedback
+page.hubGuidance.hubGuidanceFeedback.heading=Feedback
+page.hubGuidance.hubGuidanceFeedback.description=We''re keen to know what you think of the new service so please complete the survey at the end.
+
 
 ## Feedback ##
 feedback.title = Feedback
