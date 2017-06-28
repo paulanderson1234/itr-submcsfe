@@ -66,12 +66,10 @@ trait QualifyBusinessActivityController extends FrontendController with Authoris
           validFormData.isQualifyBusinessActivity match {
 
             case Constants.qualifyPrepareToTrade => {
-              // to navigate to usedInvestmentSchemeBefore for SEIS only flow
-              Future.successful(Redirect(routes.HadPreviousRFIController.show()))
+              Future.successful(Redirect(routes.HasInvestmentTradeStartedController.show()))
             }
             case Constants.qualifyResearchAndDevelopment => {
-              // to navigate to errorNotFirstTrade for SEIS only flow
-              Future.successful(Redirect(routes.NotFirstTradeController.show()))
+              Future.successful(Redirect(routes.ResearchStartDateController.show()))
             }
           }
         }
