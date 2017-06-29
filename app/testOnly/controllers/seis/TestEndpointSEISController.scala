@@ -46,12 +46,14 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
   def showPageOne(schemes: Option[Int]): Action[AnyContent] = AuthorisedAndEnrolled.async {
     implicit user => implicit request =>
       for {
+        seventyPercentForm <- fillForm[SeventyPercentSpentModel](KeystoreKeys.seventyPercentSpent, SeventyPercentSpentForm.seventyPercentSpentForm)
         grossAssetsForm <- fillForm[GrossAssetsModel](KeystoreKeys.grossAssets, GrossAssetsForm.grossAssetsForm)
         shareIssueDateForm <- fillForm[ShareIssueDateModel](KeystoreKeys.shareIssueDate, ShareIssueDateForm.shareIssueDateForm)
         natureOfBusinessForm <- fillForm[NatureOfBusinessModel](KeystoreKeys.natureOfBusiness, NatureOfBusinessForm.natureOfBusinessForm)
         dateOfIncorporationForm <- fillForm[DateOfIncorporationModel](KeystoreKeys.dateOfIncorporation, DateOfIncorporationForm.dateOfIncorporationForm)
         tradeStartDateForm <- fillForm[TradeStartDateModel](KeystoreKeys.tradeStartDate, TradeStartDateForm.tradeStartDateForm)
         isFirstStartDateForm <- fillForm[IsFirstTradeModel](KeystoreKeys.isFirstTrade, IsFirstTradeForm.isFirstTradeForm)
+        researchStartDateForm <- fillForm[ResearchStartDateModel](KeystoreKeys.researchStartDate, ResearchStartDateForm.researchStartDateForm)
         hadPreviousRFIForm <- fillForm[HadPreviousRFIModel](KeystoreKeys.hadPreviousRFI, HadPreviousRFIForm.hadPreviousRFIForm)
         previousSchemesForm <- fillPreviousSchemesForm
         proposedInvestmentForm <- fillForm[ProposedInvestmentModel](KeystoreKeys.proposedInvestment, ProposedInvestmentForm.proposedInvestmentForm)
@@ -62,14 +64,17 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
         hadOtherInvestmentsForm <- fillForm[HadOtherInvestmentsModel](KeystoreKeys.hadOtherInvestments, HadOtherInvestmentsForm.hadOtherInvestmentsForm)
         qualifyBusinessActivityForm <- fillForm[QualifyBusinessActivityModel](KeystoreKeys.isQualifyBusinessActivity, QualifyBusinessActivityForm.qualifyBusinessActivityForm)
         hasInvestmentTradeStarted <- fillForm[HasInvestmentTradeStartedModel](KeystoreKeys.hasInvestmentTradeStarted, HasInvestmentTradeStartedForm.hasInvestmentTradeStartedForm)
+        fullTimeEmployeeCount <- fillForm[FullTimeEmployeeCountModel](KeystoreKeys.fullTimeEmployeeCount, FullTimeEmployeeCountForm.fullTimeEmployeeCountForm)
       } yield Ok(
         testOnly.views.html.seis.testEndpointSEISPageOne(
+          seventyPercentForm,
           grossAssetsForm,
           shareIssueDateForm,
           natureOfBusinessForm,
           dateOfIncorporationForm,
           tradeStartDateForm,
           isFirstStartDateForm,
+          researchStartDateForm,
           hadPreviousRFIForm,
           previousSchemesForm,
           schemes.getOrElse(defaultPreviousSchemesSize),
@@ -80,18 +85,21 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
           contactAddressForm,
           hadOtherInvestmentsForm,
           qualifyBusinessActivityForm,
-          hasInvestmentTradeStarted
+          hasInvestmentTradeStarted,
+          fullTimeEmployeeCount
         )
       )
   }
 
   def submitPageOne: Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user => implicit request =>
+    val seventyPercent = bindForm[SeventyPercentSpentModel](KeystoreKeys.seventyPercentSpent, SeventyPercentSpentForm.seventyPercentSpentForm)
     val grossAssets = bindForm[GrossAssetsModel](KeystoreKeys.grossAssets, GrossAssetsForm.grossAssetsForm)
     val shareIssueDate = bindForm[ShareIssueDateModel](KeystoreKeys.shareIssueDate, ShareIssueDateForm.shareIssueDateForm)
     val natureOfBusiness = bindForm[NatureOfBusinessModel](KeystoreKeys.natureOfBusiness, NatureOfBusinessForm.natureOfBusinessForm)
     val dateOfIncorporation = bindForm[DateOfIncorporationModel](KeystoreKeys.dateOfIncorporation, DateOfIncorporationForm.dateOfIncorporationForm)
     val tradeStartDate = bindForm[TradeStartDateModel](KeystoreKeys.tradeStartDate, TradeStartDateForm.tradeStartDateForm)
     val isFirstTrade = bindForm[IsFirstTradeModel](KeystoreKeys.isFirstTrade, IsFirstTradeForm.isFirstTradeForm)
+    val researchStartDate = bindForm[ResearchStartDateModel](KeystoreKeys.researchStartDate, ResearchStartDateForm.researchStartDateForm)
     val hadPreviousRFI = bindForm[HadPreviousRFIModel](KeystoreKeys.hadPreviousRFI, HadPreviousRFIForm.hadPreviousRFIForm)
     val testPreviousSchemes = bindPreviousSchemesForm()
     val proposedInvestment = bindForm[ProposedInvestmentModel](KeystoreKeys.proposedInvestment, ProposedInvestmentForm.proposedInvestmentForm)
@@ -104,16 +112,20 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
       QualifyBusinessActivityForm.qualifyBusinessActivityForm)
     val hasInvestmentTradeStarted = bindForm[HasInvestmentTradeStartedModel](KeystoreKeys.hasInvestmentTradeStarted,
       HasInvestmentTradeStartedForm.hasInvestmentTradeStartedForm)
+    val fullTimeEmployeeCount = bindForm[FullTimeEmployeeCountModel](KeystoreKeys.fullTimeEmployeeCount,
+    FullTimeEmployeeCountForm.fullTimeEmployeeCountForm)
     saveBackLinks()
     saveSchemeType()
     Future.successful(Ok(
       testOnly.views.html.seis.testEndpointSEISPageOne(
+        seventyPercent,
         grossAssets,
         shareIssueDate,
         natureOfBusiness,
         dateOfIncorporation,
         tradeStartDate,
         isFirstTrade,
+        researchStartDate,
         hadPreviousRFI,
         testPreviousSchemes,
         defaultPreviousSchemesSize,
@@ -124,7 +136,8 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
         contactAddress,
         hadOtherInvestments,
         qualifyBusinessActivityForm,
-        hasInvestmentTradeStarted
+        hasInvestmentTradeStarted,
+        fullTimeEmployeeCount
       )
     ))
   }

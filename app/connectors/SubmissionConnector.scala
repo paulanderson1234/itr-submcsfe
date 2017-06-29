@@ -19,10 +19,11 @@ import config.{FrontendAppConfig, WSHttp}
 import models.submission.{DesSubmitAdvancedAssuranceModel, Submission}
 import models.{AnnualTurnoverCostsModel, GrossAssetsModel, ProposedInvestmentModel}
 import play.api.Logger
+import play.api.http.Status.OK
 import play.api.libs.json.{JsValue, Json}
 import uk.gov.hmrc.play.config.ServicesConfig
 import uk.gov.hmrc.play.http._
-
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 object SubmissionConnector extends SubmissionConnector with ServicesConfig {
@@ -108,9 +109,16 @@ trait SubmissionConnector {
       s"trade-start-month/$tradeStartMonth/trade-start-year/$tradeStartYear")
   }
 
+
   def  validateHasInvestmentTradeStartedCondition(hasInvestmentTradeStartedDay: Int, hasInvestmentTradeStartedMonth: Int, hasInvestmentTradeStartedYear: Int)
                                                 (implicit hc: HeaderCarrier): Future[Option[Boolean]] = {
     http.GET[Option[Boolean]](s"$serviceUrl/investment-tax-relief/compliance-statement/has-investment-trade-started/validate-has-investment-trade-started/day" +
       s"/$hasInvestmentTradeStartedDay/month/$hasInvestmentTradeStartedMonth/year/$hasInvestmentTradeStartedYear")
   }
+
+  def validateFullTimeEmployeeCount(employeeCount: BigDecimal)(implicit hc: HeaderCarrier): Future[HttpResponse] = {
+    http.GET[HttpResponse](s"$serviceUrl/investment-tax-relief/compliance-statement/full-time-equivalence-check/$employeeCount")
+  }
+
 }
+

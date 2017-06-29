@@ -1,0 +1,32 @@
+@import views.html.helpers.backButton
+@import uk.gov.hmrc.play.views.html.helpers.{form}
+
+@()(implicit request: Request[_], messages: Messages)
+
+    @main_template(Messages("page.seis.companyDetails.fullTimeEmployeeCountError.title")) {
+
+        @backButton(controllers.seis.routes.FullTimeEmployeeCountController.show().url)
+
+        <h1 class="heading-xlarge">@Messages("page.seis.companyDetails.fullTimeEmployeeCountError.title")</h1>
+
+        <div class="form-group">
+            <p>@Messages("page.seis.companyDetails.fullTimeEmployeeCountError.error")</p>
+        </div>
+
+        <div class="form-group">
+            <h2 class="heading-medium">@Messages("page.seis.companyDetails.fullTimeEmployeeCountError.whatNext")</h2>
+
+            <p>@Messages("page.seis.companyDetails.fullTimeEmployeeCountError.guidance")</p>
+        </div>
+        <div class="form-group">
+            @form(action = controllers.seis.routes.HadPreviousRFIController.show()) {
+            <button class="btn button" id="next" type="submit">@Messages("common.button.continue")</button>
+            }
+        </div>
+        <div>
+            <span>
+                @Messages("page.seis.companyDetails.fullTimeEmployeeCountError.incorrect")
+                <a href="@controllers.seis.routes.FullTimeEmployeeCountController.show().url">@Messages("page.seis.companyDetails.fullTimeEmployeeCountError.incorrect.link")</a>.
+            </span>
+        </div>
+    }

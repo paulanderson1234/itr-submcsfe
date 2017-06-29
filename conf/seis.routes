@@ -15,6 +15,8 @@ POST      /is-first-trade                           controllers.seis.IsFirstTrad
 
 GET       /trade-start-date-error                  controllers.seis.TradeStartDateErrorController.show
 
+GET       /full-time-employee-count-error          controllers.seis.FullTimeEmployeeCountErrorController.show
+
 GET       /share-issue-date                        controllers.seis.ShareIssueDateController.show
 POST      /share-issue-date                        controllers.seis.ShareIssueDateController.submit
 
@@ -30,6 +32,10 @@ POST      /gross-assets                            controllers.seis.GrossAssetsC
 GET       /gross-assets-error                     controllers.seis.GrossAssetsErrorController.show
 POST      /gross-assets-error                     controllers.seis.GrossAssetsErrorController.submit
 
+GET       /seventy-percent                        controllers.seis.SeventyPercentSpentController.show
+POST      /seventy-percent                        controllers.seis.SeventyPercentSpentController.submit
+
+GET       /seventy-percent-error                  controllers.seis.SeventyPercentSpentErrorController.show
 
 GET       /confirm-contact-details                 controllers.seis.ConfirmContactDetailsController.show
 POST      /confirm-contact-details                 controllers.seis.ConfirmContactDetailsController.submit
@@ -92,5 +98,9 @@ POST       /qualify-business-activity               controllers.seis.QualifyBusi
 
 GET        /has-investment-trade-started           controllers.seis.HasInvestmentTradeStartedController.show
 POST       /has-investment-trade-started           controllers.seis.HasInvestmentTradeStartedController.submit
+
+GET        /full-time-employee-count               controllers.seis.FullTimeEmployeeCountController.show
+POST       /full-time-employee-count               controllers.seis.FullTimeEmployeeCountController.submit
+
 
 

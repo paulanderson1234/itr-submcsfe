@@ -42,6 +42,8 @@ class TestEndpointSEISControllerSpec extends BaseSpec {
   implicit val user = TAVCUser(ggUser.allowedAuthContext,internalId)
 
   def setupShowMocks(): Unit = {
+    when(mockS4lConnector.fetchAndGetFormData[SeventyPercentSpentModel](Matchers.eq(KeystoreKeys.seventyPercentSpent))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
     when(mockS4lConnector.fetchAndGetFormData[ShareIssueDateModel](Matchers.eq(KeystoreKeys.shareIssueDate))
       (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
     when(mockS4lConnector.fetchAndGetFormData[GrossAssetsModel](Matchers.eq(KeystoreKeys.grossAssets))
@@ -54,6 +56,8 @@ class TestEndpointSEISControllerSpec extends BaseSpec {
       (Matchers.any(), Matchers.any(),Matchers.any())).thenReturn(Future.successful(None))
     when(mockS4lConnector.fetchAndGetFormData[IsFirstTradeModel](Matchers.eq(KeystoreKeys.isFirstTrade))
       (Matchers.any(), Matchers.any(),Matchers.any())).thenReturn(Future.successful(None))
+    when(mockS4lConnector.fetchAndGetFormData[ResearchStartDateModel](Matchers.eq(KeystoreKeys.researchStartDate))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
     when(mockS4lConnector.fetchAndGetFormData[HadPreviousRFIModel](Matchers.eq(KeystoreKeys.hadPreviousRFI))
       (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
     when(mockS4lConnector.fetchAndGetFormData[UsedInvestmentReasonBeforeModel](Matchers.eq(KeystoreKeys.usedInvestmentReasonBefore))
@@ -71,6 +75,10 @@ class TestEndpointSEISControllerSpec extends BaseSpec {
     when(mockS4lConnector.fetchAndGetFormData[AddressModel](Matchers.eq(KeystoreKeys.manualContactAddress))
       (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
     when(mockS4lConnector.fetchAndGetFormData[HadOtherInvestmentsModel](Matchers.eq(KeystoreKeys.hadOtherInvestments))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
+    when(mockS4lConnector.fetchAndGetFormData[QualifyBusinessActivityModel](Matchers.eq(KeystoreKeys.isQualifyBusinessActivity))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
+    when(mockS4lConnector.fetchAndGetFormData[HasInvestmentTradeStartedModel](Matchers.eq(KeystoreKeys.hasInvestmentTradeStarted))
       (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
     when(mockS4lConnector.fetchAndGetFormData[String](Matchers.any())
       (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
