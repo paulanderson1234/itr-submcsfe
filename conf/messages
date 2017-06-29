@@ -893,10 +893,20 @@ page.companyDetails.grossAssetsError.heading=You don''t appear to qualify for th
 page.companyDetails.grossAssetsError.description=This is because your company''s gross assets were worth more than £200,000 when the shares were issued.
 page.companyDetails.grossAssetsError.whatNext.heading=What happens next
 page.companyDetails.grossAssetsError.whatNext.continue=You can continue with your application if you think that you should qualify.
-
-
 page.companyDetails.grossAssetsError.incorrect.info=If this information is incorrect you can
 page.companyDetails.grossAssetsError.link.changeAnswers=change your answers
+
+#  seventy percent 70 percent
+page.companyDetails.seventyPercentSpent.title=Has more than 70% of the SEIS Investment been spent?
+page.companyDetails.seventyPercentSpent.heading=Have you spent at least 70% of the money you raised in this share issue?
+page.companyDetails.seventyPercentSpent.legend=Have you spent at least 70% of the money you raised in this share issue?
+
+# Seventy Percent Error Page
+page.companyDetails.SeventyPercentError.title=You can''t use this service yet
+page.companyDetails.SeventyPercentError.heading=You can''t use this service yet
+page.companyDetails.SeventyPercentError.reason=This is because you haven't spent enough of the SEIS Investment.
+page.companyDetails.SeventyPercentError.incorrect.info=If this information is incorrect you can
+page.companyDetails.SeventyPercentError.change.link.changeAnswers=change your answers
 
 # SEIS Proposed Investment page
 page.seis.investment.proposedInvestment.amount.title=How much investment do you want to raise?
