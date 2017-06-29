@@ -9,7 +9,8 @@
 hadPreviousRFIForm: Form[HadPreviousRFIModel], testPreviousSchemesForm: Form[TestPreviousSchemesModel], previousSchemesSize: Int,
 proposedInvestmentForm: Form[ProposedInvestmentModel],confirmContactDetailsForm: Form[ConfirmContactDetailsModel], contactDetailsForm: Form[ContactDetailsModel],
 confirmCorrespondAddressForm: Form[ConfirmCorrespondAddressModel], contactAddressForm: Form[AddressModel], hadOtherInvestmentsForm: Form[HadOtherInvestmentsModel],
-qualifyBusinessActivityForm: Form[QualifyBusinessActivityModel], hasInvestmentTradeStartedForm: Form[HasInvestmentTradeStartedModel])(implicit request: Request[_], messages: Messages)
+qualifyBusinessActivityForm: Form[QualifyBusinessActivityModel], hasInvestmentTradeStartedForm: Form[HasInvestmentTradeStartedModel],
+fullTimeEmployeeCountForm : Form[FullTimeEmployeeCountModel])(implicit request: Request[_], messages: Messages)
 @main_template(Messages("page.test.page-one.title")) {
 <div class="grid-row">
 
@@ -112,6 +113,19 @@ qualifyBusinessActivityForm: Form[QualifyBusinessActivityModel], hasInvestmentTr
         '_type -> "text",
         '_maxlength -> "15",
         'id -> "grossAmount"
+        )
+    </div>
+
+    <h2>Full time Employee Count</h2>
+    <div class="form-group">
+        @input(
+        fullTimeEmployeeCountForm("employeeCount"),
+        '_divClass -> "form-label",
+        '_labelId -> "label-fullTimeEmployeeCount",
+        '_label -> Messages("page.seis.companyDetails.fullTimeEmployeeCount.heading"),
+        '_labelTextClass -> "visuallyhidden",
+        '_inputClass -> "input--fullwidth",
+        '_maxlength-> "20"
         )
     </div>
 

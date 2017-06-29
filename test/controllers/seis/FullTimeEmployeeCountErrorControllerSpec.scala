@@ -21,6 +21,7 @@ import config.{AppConfig, FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
 import uk.gov.hmrc.play.frontend.auth.connectors.AuthConnector
+import play.api.test.Helpers._
 
 class FullTimeEmployeeCountErrorControllerSpec extends BaseSpec {
 
@@ -54,7 +55,7 @@ class FullTimeEmployeeCountErrorControllerSpec extends BaseSpec {
     "return a valid 200 response from a show GET request when authorised" in {
       showWithSessionAndAuth(controller.show)(
         result => {
-          status(result) shouldBe 200
+          status(result) shouldBe OK
         }
       )
     }

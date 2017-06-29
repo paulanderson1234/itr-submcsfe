@@ -46,7 +46,7 @@ class FullTimeEmployeeCountSpec extends ViewSpec {
       }
 
       "have the correct back link url" in {
-        document.select("a.back-link").attr("href") shouldBe "TODO" //TODO
+        document.select("a.back-link").attr("href") shouldBe "/investment-tax-relief-cs/seis/gross-assets"
       }
 
       "have the progress details" in {
@@ -110,7 +110,7 @@ class FullTimeEmployeeCountSpec extends ViewSpec {
       }
 
       "have the correct back link url" in {
-        document.select("a.back-link").attr("href") shouldBe "TODO" //TODO
+        document.select("a.back-link").attr("href") shouldBe "/investment-tax-relief-cs/seis/gross-assets"
       }
 
       "have the progress details" in {

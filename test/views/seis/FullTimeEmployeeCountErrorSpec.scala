@@ -38,9 +38,8 @@ class FullTimeEmployeeCountErrorSpec extends ViewSpec {
         backLink.text() shouldBe Messages("common.button.back")
       }
 
-      //TODO update test name
-      "has a link to TODO" in {
-        backLink.attr("href") shouldBe "TODO"
+      "has a link to FullTimeEmployeeCount page" in {
+        backLink.attr("href") shouldBe "/investment-tax-relief-cs/seis/full-time-employee-count"
       }
     }
 
@@ -60,22 +59,6 @@ class FullTimeEmployeeCountErrorSpec extends ViewSpec {
       doc.select("article p").get(1).text() shouldBe Messages("page.seis.companyDetails.fullTimeEmployeeCountError.guidance")
     }
 
-    "contain a continue link" which {
-      lazy val link = doc.select("article div > a")
-
-      "appears as a button" in {
-        link.attr("class") shouldBe "button"
-      }
-
-      "has a link to Previous Schemes" in {
-        link.attr("href") shouldBe controllers.seis.routes.PreviousSchemeController.show().url
-      }
-
-      "has the text continue" in {
-        link.text() shouldBe Messages("common.button.continue")
-      }
-    }
-
     "contain a change link" which {
       lazy val change = doc.select("article div span")
 
@@ -83,9 +66,8 @@ class FullTimeEmployeeCountErrorSpec extends ViewSpec {
         change.text() shouldBe s"${Messages("page.seis.companyDetails.fullTimeEmployeeCountError.incorrect")} ${Messages("page.seis.companyDetails.fullTimeEmployeeCountError.incorrect.link")}."
       }
 
-      //TODO update test name
-      "has a link with an href to TODO" in {
-        change.select("a").attr("href") shouldBe "TODO"
+      "has a link with an href to FullTimeEmployeeCount page" in {
+        change.select("a").attr("href") shouldBe "/investment-tax-relief-cs/seis/full-time-employee-count"
       }
 
       "has the correct link component text" in {
