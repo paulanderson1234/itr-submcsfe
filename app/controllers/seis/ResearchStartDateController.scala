@@ -44,6 +44,7 @@ trait ResearchStartDateController extends FrontendController with AuthorisedAndE
 
   override val acceptedFlows = Seq(Seq(SEIS))
 
+
   val submissionConnector: SubmissionConnector
 
   val show = featureSwitch(applicationConfig.seisFlowEnabled) {

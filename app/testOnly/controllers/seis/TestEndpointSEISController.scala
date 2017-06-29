@@ -46,6 +46,7 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
   def showPageOne(schemes: Option[Int]): Action[AnyContent] = AuthorisedAndEnrolled.async {
     implicit user => implicit request =>
       for {
+        seventyPercentForm <- fillForm[SeventyPercentSpentModel](KeystoreKeys.seventyPercentSpent, SeventyPercentSpentForm.seventyPercentSpentForm)
         grossAssetsForm <- fillForm[GrossAssetsModel](KeystoreKeys.grossAssets, GrossAssetsForm.grossAssetsForm)
         shareIssueDateForm <- fillForm[ShareIssueDateModel](KeystoreKeys.shareIssueDate, ShareIssueDateForm.shareIssueDateForm)
         natureOfBusinessForm <- fillForm[NatureOfBusinessModel](KeystoreKeys.natureOfBusiness, NatureOfBusinessForm.natureOfBusinessForm)
@@ -65,6 +66,7 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
         hasInvestmentTradeStarted <- fillForm[HasInvestmentTradeStartedModel](KeystoreKeys.hasInvestmentTradeStarted, HasInvestmentTradeStartedForm.hasInvestmentTradeStartedForm)
       } yield Ok(
         testOnly.views.html.seis.testEndpointSEISPageOne(
+          seventyPercentForm,
           grossAssetsForm,
           shareIssueDateForm,
           natureOfBusinessForm,
@@ -88,6 +90,7 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
   }
 
   def submitPageOne: Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user => implicit request =>
+    val seventyPercent = bindForm[SeventyPercentSpentModel](KeystoreKeys.seventyPercentSpent, SeventyPercentSpentForm.seventyPercentSpentForm)
     val grossAssets = bindForm[GrossAssetsModel](KeystoreKeys.grossAssets, GrossAssetsForm.grossAssetsForm)
     val shareIssueDate = bindForm[ShareIssueDateModel](KeystoreKeys.shareIssueDate, ShareIssueDateForm.shareIssueDateForm)
     val natureOfBusiness = bindForm[NatureOfBusinessModel](KeystoreKeys.natureOfBusiness, NatureOfBusinessForm.natureOfBusinessForm)
@@ -111,6 +114,7 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
     saveSchemeType()
     Future.successful(Ok(
       testOnly.views.html.seis.testEndpointSEISPageOne(
+        seventyPercent,
         grossAssets,
         shareIssueDate,
         natureOfBusiness,
