@@ -64,6 +64,7 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
         hadOtherInvestmentsForm <- fillForm[HadOtherInvestmentsModel](KeystoreKeys.hadOtherInvestments, HadOtherInvestmentsForm.hadOtherInvestmentsForm)
         qualifyBusinessActivityForm <- fillForm[QualifyBusinessActivityModel](KeystoreKeys.isQualifyBusinessActivity, QualifyBusinessActivityForm.qualifyBusinessActivityForm)
         hasInvestmentTradeStarted <- fillForm[HasInvestmentTradeStartedModel](KeystoreKeys.hasInvestmentTradeStarted, HasInvestmentTradeStartedForm.hasInvestmentTradeStartedForm)
+        fullTimeEmployeeCount <- fillForm[FullTimeEmployeeCountModel](KeystoreKeys.fullTimeEmployeeCount, FullTimeEmployeeCountForm.fullTimeEmployeeCountForm)
       } yield Ok(
         testOnly.views.html.seis.testEndpointSEISPageOne(
           seventyPercentForm,
@@ -84,7 +85,8 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
           contactAddressForm,
           hadOtherInvestmentsForm,
           qualifyBusinessActivityForm,
-          hasInvestmentTradeStarted
+          hasInvestmentTradeStarted,
+          fullTimeEmployeeCount
         )
       )
   }
@@ -110,6 +112,8 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
       QualifyBusinessActivityForm.qualifyBusinessActivityForm)
     val hasInvestmentTradeStarted = bindForm[HasInvestmentTradeStartedModel](KeystoreKeys.hasInvestmentTradeStarted,
       HasInvestmentTradeStartedForm.hasInvestmentTradeStartedForm)
+    val fullTimeEmployeeCount = bindForm[FullTimeEmployeeCountModel](KeystoreKeys.fullTimeEmployeeCount,
+    FullTimeEmployeeCountForm.fullTimeEmployeeCountForm)
     saveBackLinks()
     saveSchemeType()
     Future.successful(Ok(
@@ -132,7 +136,8 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
         contactAddress,
         hadOtherInvestments,
         qualifyBusinessActivityForm,
-        hasInvestmentTradeStarted
+        hasInvestmentTradeStarted,
+        fullTimeEmployeeCount
       )
     ))
   }

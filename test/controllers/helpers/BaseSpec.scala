@@ -209,5 +209,4 @@ trait BaseSpec extends UnitSpec with OneAppPerSuite with MockitoSugar with FakeR
     Some(hasInvestmentTradeStartedDay), Some(hasInvestmentTradeStartedMonth), Some(hasInvestmentTradeStartedYear))
   val hasInvestmentTradeStartedModelNo = HasInvestmentTradeStartedModel(Constants.StandardRadioButtonNoValue, None, None, None)
 
-
 }

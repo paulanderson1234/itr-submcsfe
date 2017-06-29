@@ -43,6 +43,18 @@ trait SubmissionService {
         }
     }
   }
+
+  def validateFullTimeEmployeeCount(employeeCount: BigDecimal)(implicit hc: HeaderCarrier, user: TAVCUser): Future[Boolean] ={
+    submissionConnector.validateFullTimeEmployeeCount(employeeCount) map {
+      employeeCountValidation =>
+        employeeCountValidation.json.validate[Boolean] match {
+          case data: JsSuccess[Boolean] => data.value
+          case e: JsError =>
+            Logger.warn(s"[SubmissionService][validateFullTimeEmployeeCount] - Failed to parse JSON response. Errors=${e.errors}")
+            false
+        }
+    }
+  }
 }
 
 object SubmissionService extends SubmissionService {
