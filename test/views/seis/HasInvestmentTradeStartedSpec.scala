@@ -18,6 +18,7 @@ package views.seis
 
 import auth.{MockAuthConnector, MockConfig}
 import common.KeystoreKeys
+import connectors.SubmissionConnector
 import controllers.seis.HasInvestmentTradeStartedController
 import models.HasInvestmentTradeStartedModel
 import org.jsoup.Jsoup
@@ -41,6 +42,8 @@ class HasInvestmentTradeStartedSpec extends ViewSpec {
     override lazy val authConnector = MockAuthConnector
     override lazy val s4lConnector = mockS4lConnector
     override lazy val enrolmentConnector = mockEnrolmentConnector
+    override lazy val submissionConnector = mockSubmissionConnector
+
   }
 
   def setupMocks(hasInvestmentTradeStartedModelModel: Option[HasInvestmentTradeStartedModel] = None): Unit = {
