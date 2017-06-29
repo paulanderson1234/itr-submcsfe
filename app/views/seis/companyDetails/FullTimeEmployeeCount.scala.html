@@ -8,7 +8,7 @@
 
 @main_template(Messages("page.seis.companyDetails.fullTimeEmployeeCount.title")) {
 
-    @backButtonWithProgress("TODO", Messages("common.section.progress.company.details.one"))
+    @backButtonWithProgress("controllers.seis.routes.GrossAssetsController.show().url", Messages("common.section.progress.company.details.one"))
 
     @errorSummary(fullTimeEmployeeCountForm, "full-time-employee-count")
 
@@ -29,8 +29,10 @@
     </div>
 
     @form(action = controllers.seis.routes.FullTimeEmployeeCountController.submit()) {
-        <fieldset class="form-group">
-            @input(
+        <fieldset>
+            <legend class="visuallyhidden">@Messages("page.companyDetails.fullTimeEmployeeCount.heading")</legend>
+            <div class="form-group">
+                @input(
                 fullTimeEmployeeCountForm("employeeCount"),
                 '_divClass -> "form-label",
                 '_labelId -> "label-employeeCount",
@@ -38,9 +40,9 @@
                 '_label -> Messages("page.seis.companyDetails.fullTimeEmployeeCount.heading"),
                 '_labelTextClass -> "visuallyhidden",
                 '_inputClass -> "input"
-            )
+                )
+            </div>
         </fieldset>
-
         <div class="form-group">
             <button class="btn button" type="submit" id="next">@Messages("common.button.snc")</button>
         </div>

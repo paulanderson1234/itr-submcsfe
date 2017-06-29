@@ -65,7 +65,7 @@ trait FullTimeEmployeeCountController extends FrontendController with Authorised
             s4lConnector.saveFormData[FullTimeEmployeeCountModel](KeystoreKeys.fullTimeEmployeeCount, validFormData)
             submissionService.validateFullTimeEmployeeCount(validFormData.employeeCount).map {
               case true => Redirect(routes.HadPreviousRFIController.show())
-              case false => Redirect(routes.FullTimeEmployeeCountController.show())
+              case false => Redirect(routes.FullTimeEmployeeCountErrorController.show())
             }
           }
         )

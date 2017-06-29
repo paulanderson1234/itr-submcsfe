@@ -4,7 +4,7 @@
 
     @main_template(Messages("page.seis.companyDetails.fullTimeEmployeeCountError.title")) {
 
-        @backButton("TODO")
+        @backButton("controllers.seis.routes.FullTimeEmployeeCountController.show().url")
 
         <h1 class="heading-xlarge">@Messages("page.seis.companyDetails.fullTimeEmployeeCountError.title")</h1>
 
@@ -17,13 +17,13 @@
 
             <p>@Messages("page.seis.companyDetails.fullTimeEmployeeCountError.guidance")</p>
 
-            <a href="@controllers.seis.routes.PreviousSchemeController.show().url" class="button" id="next">@Messages("common.button.continue")</a>
+            <a href="@controllers.seis.routes.HadPreviousRFIController.show().url" class="button" id="next">@Messages("common.button.continue")</a>
         </div>
 
         <div>
             <span>
                 @Messages("page.seis.companyDetails.fullTimeEmployeeCountError.incorrect")
-                <a href="TODO">@Messages("page.seis.companyDetails.fullTimeEmployeeCountError.incorrect.link")</a>.
+                <a href="@controllers.seis.routes.FullTimeEmployeeCountController.show().url">@Messages("page.seis.companyDetails.fullTimeEmployeeCountError.incorrect.link")</a>.
             </span>
         </div>
     }
