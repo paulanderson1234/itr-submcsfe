@@ -73,9 +73,8 @@ class HasInvestmentTradeStartedControllerSpec extends BaseSpec {
     }
   }
 
-  /*TODO Change to 70% page*/
   "Sending a valid Yes form submission to the HasInvestmentTradeStartedController when authenticated and enrolled" should {
-    "redirect to the itself (TODO) when the investment start date is greater than 4 months" in {
+    "redirect to share issue date when the investment start date is greater than 4 months" in {
       when(TestController.submissionConnector.validateHasInvestmentTradeStartedCondition(Matchers.any(),
         Matchers.any(),Matchers.any())(Matchers.any())).thenReturn(Some(true))
       val formInput = Seq("hasInvestmentTradeStarted" -> Constants.StandardRadioButtonYesValue,
@@ -86,14 +85,15 @@ class HasInvestmentTradeStartedControllerSpec extends BaseSpec {
       submitWithSessionAndAuth(TestController.submit,formInput: _*)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(controllers.seis.routes.HasInvestmentTradeStartedController.show().url)
+          redirectLocation(result) shouldBe Some(controllers.seis.routes.ShareIssueDateController.show().url)
         }
       )
     }
   }
 
+  /*TODO Change to 70% page*/
   "Sending a valid Yes form submission to the HasInvestmentTradeStartedController when authenticated and enrolled" should {
-    "redirect to the share issue date if the investment start date is less than 4 months" in {
+    "redirect to itself(todo) if the investment start date is less than 4 months" in {
       when(TestController.submissionConnector.validateHasInvestmentTradeStartedCondition(Matchers.any(),
         Matchers.any(),Matchers.any())(Matchers.any())).thenReturn(Some(false))
       val formInput = Seq("hasInvestmentTradeStarted" -> Constants.StandardRadioButtonYesValue,
@@ -104,14 +104,16 @@ class HasInvestmentTradeStartedControllerSpec extends BaseSpec {
       submitWithSessionAndAuth(TestController.submit,formInput: _*)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(controllers.seis.routes.ShareIssueDateController.show().url)
+          redirectLocation(result) shouldBe Some(controllers.seis.routes.HasInvestmentTradeStartedController.show().url)
         }
       )
     }
   }
 
+
+  /*TODO Change to 70% page*/
   "Sending a valid No form submission to the HasInvestmentTradeStartedController when authenticated and enrolled" should {
-    "redirect to the share issue date page" in {
+    "redirect to itself(todo)" in {
       val formInput = Seq(
         "hasInvestmentTradeStarted" -> Constants.StandardRadioButtonNoValue,
         "hasInvestmentTradeStartedDay" -> "",
@@ -121,7 +123,7 @@ class HasInvestmentTradeStartedControllerSpec extends BaseSpec {
       submitWithSessionAndAuth(TestController.submit,formInput:_*)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(controllers.seis.routes.ShareIssueDateController.show().url)
+          redirectLocation(result) shouldBe Some(controllers.seis.routes.HasInvestmentTradeStartedController.show().url)
         }
       )
     }
