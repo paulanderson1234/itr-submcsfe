@@ -1,0 +1,29 @@
+@import views.html.helpers.backButton
+
+@()(implicit request: Request[_], messages: Messages)
+
+    @main_template(Messages("page.seis.companyDetails.fullTimeEmployeeCountError.title")) {
+
+        @backButton("TODO")
+
+        <h1 class="heading-xlarge">@Messages("page.seis.companyDetails.fullTimeEmployeeCountError.title")</h1>
+
+        <div class="form-group">
+            <p>@Messages("page.seis.companyDetails.fullTimeEmployeeCountError.error")</p>
+        </div>
+
+        <div class="form-group">
+            <h2 class="heading-medium">@Messages("page.seis.companyDetails.fullTimeEmployeeCountError.whatNext")</h2>
+
+            <p>@Messages("page.seis.companyDetails.fullTimeEmployeeCountError.guidance")</p>
+
+            <a href="@controllers.seis.routes.PreviousSchemeController.show().url" class="button" id="next">@Messages("common.button.continue")</a>
+        </div>
+
+        <div>
+            <span>
+                @Messages("page.seis.companyDetails.fullTimeEmployeeCountError.incorrect")
+                <a href="TODO">@Messages("page.seis.companyDetails.fullTimeEmployeeCountError.incorrect.link")</a>.
+            </span>
+        </div>
+    }
