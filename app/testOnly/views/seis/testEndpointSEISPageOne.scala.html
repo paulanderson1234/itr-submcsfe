@@ -5,7 +5,7 @@
 @import utils.CountriesHelper
 @import views.html.helpers.{externalLink,formHint, formInputRadioGroup, backButtonWithProgress, input, inputWithCurrencySymbol, formInlineDateInput, hiddenField, errorSummary, formShowYesNoRadioContent, textArea, dropdown}
 
-@(grossAssetsForm: Form[GrossAssetsModel], shareIssueDateForm: Form[ShareIssueDateModel], natureOfBusinessForm: Form[NatureOfBusinessModel],dateOfIncorporationForm: Form[DateOfIncorporationModel],tradeStartDateForm: Form[TradeStartDateModel], isFirstTradeForm: Form[IsFirstTradeModel], researchStartDateForm: Form[ResearchStartDateModel],
+@(seventyPercentSpentForm:Form[SeventyPercentSpentModel], grossAssetsForm: Form[GrossAssetsModel], shareIssueDateForm: Form[ShareIssueDateModel], natureOfBusinessForm: Form[NatureOfBusinessModel],dateOfIncorporationForm: Form[DateOfIncorporationModel],tradeStartDateForm: Form[TradeStartDateModel], isFirstTradeForm: Form[IsFirstTradeModel], researchStartDateForm: Form[ResearchStartDateModel],
 hadPreviousRFIForm: Form[HadPreviousRFIModel], testPreviousSchemesForm: Form[TestPreviousSchemesModel], previousSchemesSize: Int,
 proposedInvestmentForm: Form[ProposedInvestmentModel],confirmContactDetailsForm: Form[ConfirmContactDetailsModel], contactDetailsForm: Form[ContactDetailsModel],
 confirmCorrespondAddressForm: Form[ConfirmCorrespondAddressModel], contactAddressForm: Form[AddressModel], hadOtherInvestmentsForm: Form[HadOtherInvestmentsModel],
@@ -30,6 +30,7 @@ qualifyBusinessActivityForm: Form[QualifyBusinessActivityModel], hasInvestmentTr
         'id -> "utr"
         )
     </div>
+
 
     <h2>Date of Incorporation</h2>
     <div class="form-group">
@@ -106,6 +107,22 @@ qualifyBusinessActivityForm: Form[QualifyBusinessActivityModel], hasInvestmentTr
     None,
     Some("visuallyhidden")
     )
+    </div>
+
+    <h2>Seventy Percent Spent</h2>
+    <div class="form-group">
+        @formInputRadioGroup(
+        field = seventyPercentSpentForm("isSeventyPercentSpent"),
+        Seq(
+        Constants.StandardRadioButtonYesValue -> Messages("common.radioYesLabel"),
+        Constants.StandardRadioButtonNoValue -> Messages("common.radioNoLabel")),
+        '_legend -> Messages("page.companyDetails.seventyPercentSpent.legend"),
+        '_legendClass -> "visuallyhidden",
+        '_labelAfter -> true,
+        '_labelClass -> "block-label",
+        '_legendID -> "seventyPercentSpent",
+        '_groupClass -> "inline"
+        )
     </div>
 
     <h2>Share Issue Date</h2>
