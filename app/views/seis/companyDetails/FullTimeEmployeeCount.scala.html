@@ -8,9 +8,9 @@
 
 @main_template(Messages("page.seis.companyDetails.fullTimeEmployeeCount.title")) {
 
-    @backButtonWithProgress("controllers.seis.routes.GrossAssetsController.show().url", Messages("common.section.progress.company.details.one"))
+    @backButtonWithProgress(controllers.seis.routes.GrossAssetsController.show().url, Messages("common.section.progress.company.details.one"))
 
-    @errorSummary(fullTimeEmployeeCountForm, "full-time-employee-count")
+    @errorSummary(fullTimeEmployeeCountForm, "full-time-employee-count", "fullTimeEmployeeCount")
 
     <h1 class="heading-xlarge" id="main-heading">@Messages("page.seis.companyDetails.fullTimeEmployeeCount.heading")</h1>
 
@@ -33,13 +33,14 @@
             <legend class="visuallyhidden">@Messages("page.companyDetails.fullTimeEmployeeCount.heading")</legend>
             <div class="form-group">
                 @input(
-                fullTimeEmployeeCountForm("employeeCount"),
+                fullTimeEmployeeCountForm("fullTimeEmployeeCount"),
                 '_divClass -> "form-label",
-                '_labelId -> "label-employeeCount",
-                '_hintId -> "label-employeeCount-hint",
+                '_labelId -> "label-fullTimeEmployeeCount",
+                '_hintId -> "label-fullTimeEmployeeCount-hint",
                 '_label -> Messages("page.seis.companyDetails.fullTimeEmployeeCount.heading"),
                 '_labelTextClass -> "visuallyhidden",
-                '_inputClass -> "input"
+                '_inputClass -> "input--fullwidth",
+                '_maxlength-> Constants.SuggestedMaxLengthForEmployeeCount
                 )
             </div>
         </fieldset>
