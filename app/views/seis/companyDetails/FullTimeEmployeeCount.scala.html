@@ -3,6 +3,7 @@
 @import views.html.helpers.errorSummary
 @import views.html.helpers.input
 @import uk.gov.hmrc.play.views.html.helpers.form
+@import common.Constants
 
 @(fullTimeEmployeeCountForm: Form[FullTimeEmployeeCountModel])(implicit request: Request[_], messages: Messages)
 
@@ -33,10 +34,9 @@
             <legend class="visuallyhidden">@Messages("page.companyDetails.fullTimeEmployeeCount.heading")</legend>
             <div class="form-group">
                 @input(
-                fullTimeEmployeeCountForm("fullTimeEmployeeCount"),
+                fullTimeEmployeeCountForm("employeeCount"),
                 '_divClass -> "form-label",
                 '_labelId -> "label-fullTimeEmployeeCount",
-                '_hintId -> "label-fullTimeEmployeeCount-hint",
                 '_label -> Messages("page.seis.companyDetails.fullTimeEmployeeCount.heading"),
                 '_labelTextClass -> "visuallyhidden",
                 '_inputClass -> "input--fullwidth",
