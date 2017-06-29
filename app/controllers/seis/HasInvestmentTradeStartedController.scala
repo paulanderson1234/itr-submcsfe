@@ -69,8 +69,11 @@ trait HasInvestmentTradeStartedController extends FrontendController with Author
               s4lConnector.saveFormData(KeystoreKeys.hasInvestmentTradeStarted, validFormData)
               submissionConnector.validateHasInvestmentTradeStartedCondition(validFormData.hasInvestmentTradeStartedDay.get,
                 validFormData.hasInvestmentTradeStartedMonth.get, validFormData.hasInvestmentTradeStartedYear.get).map {
-                case Some(validated) => if (validated) Redirect(routes.HasInvestmentTradeStartedController.show()) else
-                  Redirect(routes.ShareIssueDateController.show())
+                case Some(validated) =>
+                  /*TODO Redirect to 70% page*/
+                  if (validated)
+                    Redirect(routes.HasInvestmentTradeStartedController.show())
+                  else Redirect(routes.ShareIssueDateController.show())
                 case _ => {
                   Logger.warn(s"[HasInvestmentTradeStartedController][submit] - Call to validate investment trade start date in backend failed")
                   InternalServerError(internalServerErrorTemplate)

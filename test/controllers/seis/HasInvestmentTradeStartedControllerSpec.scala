@@ -19,7 +19,7 @@ package controllers.seis
 import auth.{MockAuthConnector, MockConfig}
 import common.Constants
 import config.FrontendAuthConnector
-import connectors.{EnrolmentConnector, S4LConnector}
+import connectors.{SubmissionConnector, EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
 import models.HasInvestmentTradeStartedModel
 import org.mockito.Matchers
@@ -35,6 +35,7 @@ class HasInvestmentTradeStartedControllerSpec extends BaseSpec {
     override lazy val authConnector = MockAuthConnector
     override lazy val s4lConnector = mockS4lConnector
     override lazy val enrolmentConnector = mockEnrolmentConnector
+    override lazy val submissionConnector = mockSubmissionConnector
   }
 
   "HasInvestmentTradeStartedController" should {
@@ -72,13 +73,15 @@ class HasInvestmentTradeStartedControllerSpec extends BaseSpec {
     }
   }
 
-  /*todo*/
+  /*TODO Change to 70% page*/
   "Sending a valid Yes form submission to the HasInvestmentTradeStartedController when authenticated and enrolled" should {
-    "redirect to the itself (TODO)" in {
+    "redirect to the itself (TODO) when the investment start date is greater than 4 months" in {
+      when(TestController.submissionConnector.validateHasInvestmentTradeStartedCondition(Matchers.any(),
+        Matchers.any(),Matchers.any())(Matchers.any())).thenReturn(Some(true))
       val formInput = Seq("hasInvestmentTradeStarted" -> Constants.StandardRadioButtonYesValue,
         "hasInvestmentTradeStartedDay" -> "23",
         "hasInvestmentTradeStartedMonth" -> "11",
-        "hasInvestmentTradeStartedYear" -> "1993")
+        "hasInvestmentTradeStartedYear" -> "2000")
       mockEnrolledRequest(seisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,formInput: _*)(
         result => {
@@ -89,9 +92,26 @@ class HasInvestmentTradeStartedControllerSpec extends BaseSpec {
     }
   }
 
-  /*todo*/
-  "Sending a valid No form submission with a empty KI Model to the HasInvestmentTradeStartedController when authenticated and enrolled" should {
-    "redirect to itself(todo)" in {
+  "Sending a valid Yes form submission to the HasInvestmentTradeStartedController when authenticated and enrolled" should {
+    "redirect to the share issue date if the investment start date is less than 4 months" in {
+      when(TestController.submissionConnector.validateHasInvestmentTradeStartedCondition(Matchers.any(),
+        Matchers.any(),Matchers.any())(Matchers.any())).thenReturn(Some(false))
+      val formInput = Seq("hasInvestmentTradeStarted" -> Constants.StandardRadioButtonYesValue,
+        "hasInvestmentTradeStartedDay" -> "29",
+        "hasInvestmentTradeStartedMonth" -> "6",
+        "hasInvestmentTradeStartedYear" -> "2017")
+      mockEnrolledRequest(seisSchemeTypesModel)
+      submitWithSessionAndAuth(TestController.submit,formInput: _*)(
+        result => {
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(controllers.seis.routes.ShareIssueDateController.show().url)
+        }
+      )
+    }
+  }
+
+  "Sending a valid No form submission to the HasInvestmentTradeStartedController when authenticated and enrolled" should {
+    "redirect to the share issue date page" in {
       val formInput = Seq(
         "hasInvestmentTradeStarted" -> Constants.StandardRadioButtonNoValue,
         "hasInvestmentTradeStartedDay" -> "",
@@ -101,7 +121,7 @@ class HasInvestmentTradeStartedControllerSpec extends BaseSpec {
       submitWithSessionAndAuth(TestController.submit,formInput:_*)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(controllers.seis.routes.HasInvestmentTradeStartedController.show().url)
+          redirectLocation(result) shouldBe Some(controllers.seis.routes.ShareIssueDateController.show().url)
         }
       )
     }

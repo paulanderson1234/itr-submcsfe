@@ -104,10 +104,13 @@ trait SubmissionConnector {
   }
 
   def validateTradeStartDateCondition(tradeStartDay: Int, tradeStartMonth: Int, tradeStartYear: Int)(implicit hc: HeaderCarrier): Future[Option[Boolean]] = {
-    http.GET[Option[Boolean]](s"$serviceUrl/investment-tax-relief/trade-start-date/validate-trade-start-date/trade-start-day/$tradeStartDay/trade-start-month/$tradeStartMonth/trade-start-year/$tradeStartYear")
+    http.GET[Option[Boolean]](s"$serviceUrl/investment-tax-relief/trade-start-date/validate-trade-start-date/trade-start-day/$tradeStartDay/" +
+      s"trade-start-month/$tradeStartMonth/trade-start-year/$tradeStartYear")
   }
 
-  def validateHasInvestmentTradeStartedCondition(hasInvestmentTradeStartedDay: Int, hasInvestmentTradeStartedMonth: Int, hasInvestmentTradeStartedYear: Int)(implicit hc: HeaderCarrier): Future[Option[Boolean]] = {
-    http.GET[Option[Boolean]](s"$serviceUrl/investment-tax-relief/compliance-statement/has-investment-trade-started/validate-has-investment-trade-started/day/$hasInvestmentTradeStartedDay/month/$hasInvestmentTradeStartedMonth/year/$hasInvestmentTradeStartedYear")
+  def  validateHasInvestmentTradeStartedCondition(hasInvestmentTradeStartedDay: Int, hasInvestmentTradeStartedMonth: Int, hasInvestmentTradeStartedYear: Int)
+                                                (implicit hc: HeaderCarrier): Future[Option[Boolean]] = {
+    http.GET[Option[Boolean]](s"$serviceUrl/investment-tax-relief/compliance-statement/has-investment-trade-started/validate-has-investment-trade-started/day" +
+      s"/$hasInvestmentTradeStartedDay/month/$hasInvestmentTradeStartedMonth/year/$hasInvestmentTradeStartedYear")
   }
 }
