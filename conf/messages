@@ -81,6 +81,9 @@ validation.error.countryCode=Country must be entered
 validation.error.linefouraddresssline=Use fewer than 18 characters in the address line
 validation.error.countrypostcode=Postcode must be entered if country selected is United Kingdom
 validation.error.email=Enter a valid email address
+validation.error.employeeCount.notANumber = Enter a valid number for your employee count
+validation.error.employeeCount.size = The employee count should be between 1 and 9999999999999
+validation.error.employeeCount.precision = Enter a value with fewer than 13 decimal places for your employee count
 
 ## Session Timeout message ##
 session.timeout.message=Your session has ended
@@ -754,6 +757,14 @@ page.eisseis.companyDetails.isFirstTrade.title=Is this the first trade your comp
 page.eisseis.companyDetails.isFirstTrade.heading=Is this the first trade your company has carried out?
 page.eisseis.companyDetails.isFirstTrade.legend=Is this the first trade your company has carried out?
 
+#SEIS Full Time Employee Count Page
+page.seis.companyDetails.fullTimeEmployeeCount.title = How many full-time equivalent employees did your company have when the shares were issued?
+page.seis.companyDetails.fullTimeEmployeeCount.heading = How many full-time equivalent employees did your company have when the shares were issued?
+page.seis.companyDetails.fullTimeEmployeeCount.guidance.progressive = How to work this out
+page.seis.companyDetails.fullTimeEmployeeCount.guidance.one = A full-time employee works at least 35 hours a week. You can''t include any employees on maternity / paternity leave, apprentices or students on vocational training.
+page.seis.companyDetails.fullTimeEmployeeCount.guidance.two = The number of hours that each part-time employee works should be used to calculate their contribution to the full-time limit.
+page.seis.companyDetails.fullTimeEmployeeCount.guidance.three = For example, someone working 21 hours a week would count as 60% of a full-time employee and someone working 14 hours a week would count as 40% of a full-time employee. Together they would count as one full-time employee.
+
 # SEIS Proposed Investment page
 page.seis.investment.proposedInvestment.amount.title=How much investment do you want to raise?
 page.seis.investment.proposedInvestment.amount.heading=How much investment do you want to raise?
@@ -762,6 +773,14 @@ page.seis.investment.proposedInvestment.help.link.text=You can raise more or les
 page.seis.investment.proposedInvestment.help.bullet.one=this SEIS investment
 page.seis.investment.proposedInvestment.help.bullet.two=any previous SEIS investments
 page.seis.investment.proposedInvestment.help.bullet.three=any State aid you''ve received under the de minimis regulation
+
+# SEIS Full Time Employee Count Error
+page.seis.companyDetails.fullTimeEmployeeCountError.title = You don''t appear to qualify for this scheme
+page.seis.companyDetails.fullTimeEmployeeCountError.error = This is because your company had 25 or more full-time equivalent employees on the share issue date.
+page.seis.companyDetails.fullTimeEmployeeCountError.whatNext = What happens next
+page.seis.companyDetails.fullTimeEmployeeCountError.guidance = You can continue with your application if you think that you should qualify.
+page.seis.companyDetails.fullTimeEmployeeCountError.incorrect = If this information is incorrect you can 
+page.seis.companyDetails.fullTimeEmployeeCountError.incorrect.link = change your answers
 
 # SEIS Check Answers
 page.seis.checkAndSubmit.checkAnswers.description.one=You''re applying for Advance Assurance for the Seed Enterprise Investment Scheme.

@@ -299,6 +299,21 @@ class SubmissionConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndA
 
 
 
+  "Calling validateHasInvestmentTradeStartedCondition" should {
+
+    when(mockHttp.GET[Option[Boolean]](Matchers.anyString())(Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(validResponse)))
+
+    "return a valid response" in {
+
+      val investmentStartDay = 1
+      val investmentStartMonth = 1
+      val investmentStartYear = 2000
+
+      val result = TargetSubmissionConnector.validateHasInvestmentTradeStartedCondition(investmentStartDay, investmentStartMonth, investmentStartYear)
+      await(result) shouldBe Some(validResponse)
+    }
+  }
+
   "Calling getAASubmissionDetails" should {
     "throw an error if the TAVCRef is empty" in {
       intercept[IllegalArgumentException]{
