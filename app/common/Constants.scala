@@ -76,6 +76,4 @@ trait Constants {
   val qualifyPrepareToTrade = "Preparing to Trade"
   val qualifyResearchAndDevelopment = "Research and Development"
 
-  val SuggestedMaxLengthForEmployeeCount : Int = 20
-
 }
