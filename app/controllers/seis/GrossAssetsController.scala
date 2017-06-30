@@ -61,11 +61,9 @@ trait GrossAssetsController extends FrontendController with AuthorisedAndEnrolle
     AuthorisedAndEnrolled.async { implicit user => implicit request =>
 
       def routeRequest(grossAssetsExceeded: Option[Boolean]): Future[Result] = {
-
         if (grossAssetsExceeded.nonEmpty) {
           grossAssetsExceeded match {
-            //TODO navigate to FTE page
-            case Some(false) => Future.successful(Redirect(routes.GrossAssetsController.show()))
+            case Some(false) => Future.successful(Redirect(routes.FullTimeEmployeeCountController.show()))
             case _ => Future.successful(Redirect(routes.GrossAssetsErrorController.show()))
           }
         }

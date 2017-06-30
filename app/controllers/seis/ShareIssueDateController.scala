@@ -20,7 +20,7 @@ import auth.{AuthorisedAndEnrolledForTAVC, SEIS}
 import common.KeystoreKeys
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
-import controllers.Helpers.KnowledgeIntensiveHelper
+import controllers.Helpers.{ControllerHelpers, KnowledgeIntensiveHelper}
 import controllers.predicates.FeatureSwitch
 import forms.ShareIssueDateForm._
 import models.ShareIssueDateModel
@@ -30,7 +30,6 @@ import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
 
 import scala.concurrent.Future
-
 
 object ShareIssueDateController extends ShareIssueDateController{
   override lazy val s4lConnector = S4LConnector
@@ -43,23 +42,38 @@ trait ShareIssueDateController extends FrontendController with AuthorisedAndEnro
 
   override val acceptedFlows = Seq(Seq(SEIS))
 
-  val show = featureSwitch(applicationConfig.seisFlowEnabled) { AuthorisedAndEnrolled.async { implicit user => implicit request =>
-      s4lConnector.fetchAndGetFormData[ShareIssueDateModel](KeystoreKeys.shareIssueDate).map {
-        case Some(data) => Ok(ShareIssueDate(shareIssueDateForm.fill(data)))
-        case None => Ok(ShareIssueDate(shareIssueDateForm))
+  val show = featureSwitch(applicationConfig.seisFlowEnabled) {
+    AuthorisedAndEnrolled.async { implicit user => implicit request =>
+
+      def routeRequest(backUrl: Option[String]) = {
+        if (backUrl.isDefined) {
+          s4lConnector.fetchAndGetFormData[ShareIssueDateModel](KeystoreKeys.shareIssueDate).map {
+            case Some(data) => Ok(ShareIssueDate(shareIssueDateForm.fill(data), backUrl.getOrElse("")))
+            case None => Ok(ShareIssueDate(shareIssueDateForm, backUrl.getOrElse("")))
+          }
+        }
+        else Future.successful(Redirect(routes.QualifyBusinessActivityController.show()))
       }
+      for {
+        link <- ControllerHelpers.getSavedBackLink(KeystoreKeys.backLinkShareIssueDate, s4lConnector)
+        route <- routeRequest(link)
+      } yield route
     }
   }
 
-  val submit = featureSwitch(applicationConfig.seisFlowEnabled) { AuthorisedAndEnrolled.async { implicit user => implicit request =>
+  val submit = featureSwitch(applicationConfig.seisFlowEnabled) {
+    AuthorisedAndEnrolled.async { implicit user => implicit request =>
       shareIssueDateForm.bindFromRequest().fold(
         formWithErrors => {
-          Future.successful(BadRequest(ShareIssueDate(formWithErrors)))
+
+          ControllerHelpers.getSavedBackLink(KeystoreKeys.backLinkShareIssueDate, s4lConnector).flatMap {
+            case Some(data) => Future.successful(BadRequest(ShareIssueDate(formWithErrors, data)))
+            case None => Future.successful(Redirect(routes.QualifyBusinessActivityController.show()))
+          }
         },
         validFormData => {
           s4lConnector.saveFormData(KeystoreKeys.shareIssueDate, validFormData)
-          KnowledgeIntensiveHelper.setKiDateCondition(s4lConnector, validFormData.day.get, validFormData.month.get, validFormData.year.get)
-          Future.successful(Redirect(routes.ShareIssueDateController.show()))
+          Future.successful(Redirect(routes.GrossAssetsController.show()))
         }
       )
     }

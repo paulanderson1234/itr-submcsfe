@@ -6,7 +6,7 @@
 
 @main_template(Messages("page.companyDetails.HasInvestmentTradeStarted.title")) {
 
-@backButtonWithProgress(controllers.seis.routes.HasInvestmentTradeStartedController.show().url, Messages("common.section.progress.company.details.one"))
+@backButtonWithProgress(controllers.seis.routes.QualifyBusinessActivityController.show().url, Messages("common.section.progress.company.details.one"))
 
 @errorSummary(hasInvestmentTradeStartedForm, "has-investment-trade-started", "hasInvestmentTradeStartedDay")
 

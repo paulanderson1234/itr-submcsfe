@@ -18,92 +18,149 @@ package controllers.seis
 
 import auth.{MockAuthConnector, MockConfig}
 import common.{Constants, KeystoreKeys}
-import config.{AppConfig, FrontendAuthConnector}
+import config.FrontendAuthConnector
 import connectors.{EnrolmentConnector, S4LConnector, SubmissionConnector}
 import controllers.helpers.BaseSpec
 import models.ResearchStartDateModel
 import org.mockito.Matchers
 import org.mockito.Mockito._
-import uk.gov.hmrc.http.cache.client.CacheMap
-import uk.gov.hmrc.play.frontend.auth.connectors.AuthConnector
 import play.api.test.Helpers._
+import uk.gov.hmrc.http.cache.client.CacheMap
 
 import scala.concurrent.Future
 
 class ResearchStartDateControllerSpec extends BaseSpec {
 
-  def setupController(researchStartDateModel: Option[ResearchStartDateModel]): ResearchStartDateController = {
-
-    when(mockS4lConnector.fetchAndGetFormData[ResearchStartDateModel](Matchers.eq(KeystoreKeys.researchStartDate))(Matchers.any(), Matchers.any(), Matchers.any()))
-      .thenReturn(Future.successful(researchStartDateModel))
-
-    when(mockS4lConnector.saveFormData(Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
-      .thenReturn(Future.successful(mock[CacheMap]))
-
-    mockEnrolledRequest(seisSchemeTypesModel)
-
-    new ResearchStartDateController {
-      override lazy val submissionConnector: SubmissionConnector = mockSubmissionConnector
-      override lazy val enrolmentConnector: EnrolmentConnector = mockEnrolmentConnector
-      override lazy val applicationConfig: AppConfig = MockConfig
-      override lazy val s4lConnector: S4LConnector = mockS4lConnector
-      override lazy val authConnector: AuthConnector = MockAuthConnector
-    }
+  object TestController extends ResearchStartDateController {
+    override lazy val applicationConfig = MockConfig
+    override lazy val authConnector = MockAuthConnector
+    override lazy val s4lConnector = mockS4lConnector
+    override lazy val enrolmentConnector = mockEnrolmentConnector
+    override lazy val submissionConnector = mockSubmissionConnector
   }
 
   "ResearchStartDateController" should {
-
     "use the correct auth connector" in {
       ResearchStartDateController.authConnector shouldBe FrontendAuthConnector
     }
-
     "use the correct keystore connector" in {
       ResearchStartDateController.s4lConnector shouldBe S4LConnector
     }
-
     "use the correct enrolment connector" in {
       ResearchStartDateController.enrolmentConnector shouldBe EnrolmentConnector
     }
+  }
 
-    "use the correct submission Connector" in {
-      ResearchStartDateController.submissionConnector shouldBe SubmissionConnector
+  def setupShowMocks(hasStartedResearchModel: Option[ResearchStartDateModel] = None): Unit = {
+    when(mockS4lConnector.fetchAndGetFormData[ResearchStartDateModel](Matchers.any())(Matchers.any(), Matchers.any(),
+      Matchers.any())).thenReturn(Future.successful(hasStartedResearchModel))
+    when(mockS4lConnector.saveFormData(Matchers.eq(KeystoreKeys.backLinkSeventyPercentSpent),
+      Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(CacheMap("", Map())))
+    when(mockS4lConnector.saveFormData(Matchers.eq(KeystoreKeys.backLinkShareIssueDate),
+      Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(CacheMap("", Map())))
+
+  }
+
+  def setUpSubmitMocks(tradeIsvalidated:Boolean = false):Unit = {
+    when(mockS4lConnector.saveFormData(Matchers.eq(KeystoreKeys.backLinkSeventyPercentSpent),
+      Matchers.any())(Matchers.any(), Matchers.any(),Matchers.any()))
+      .thenReturn(Future.successful(CacheMap("", Map())))
+
+    when(mockS4lConnector.saveFormData(Matchers.eq(KeystoreKeys.backLinkShareIssueDate),
+      Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(CacheMap("", Map())))
+
+    when(TestController.submissionConnector.validateHasInvestmentTradeStartedCondition(Matchers.any(),
+      Matchers.any(),Matchers.any())(Matchers.any())).thenReturn(Some(tradeIsvalidated))
+  }
+
+  "Sending a GET request to ResearchStartDateController when authenticated and enrolled" should {
+    "return a 200 when something is fetched from keystore" in {
+      setupShowMocks(Some(researchStartDateModelYes))
+      mockEnrolledRequest(seisSchemeTypesModel)
+      showWithSessionAndAuth(TestController.show)(
+        result => status(result) shouldBe OK
+      )
     }
 
-    "return a valid OK response on a GET with no stored data" in {
-      showWithSessionAndAuth(setupController(None).show) { result =>
-        status(result) shouldBe OK
-      }
+    "provide an empty model and return a 200 when nothing is fetched using keystore" in {
+      setupShowMocks()
+      mockEnrolledRequest(seisSchemeTypesModel)
+      showWithSessionAndAuth(TestController.show)(
+        result => status(result) shouldBe OK
+      )
     }
+  }
 
-    "return a valid OK response on a GET with stored data" in {
-      val model = Some(ResearchStartDateModel(hasStartedResearch = false, None, None, None))
-      showWithSessionAndAuth(setupController(model).show) { result =>
-        status(result) shouldBe OK
-      }
-    }
-
-    "return a valid BAD_REQUEST response on a POST with an invalid form submission" in {
-      val form = Seq(
-        "hasStartedResearch" -> Constants.StandardRadioButtonYesValue,
+  "Sending a valid Yes form submission to the ResearchStartDateController when authenticated and enrolled" should {
+    "redirect to share issue date when the investment start date is greater than 4 months" in {
+     setUpSubmitMocks(true)
+      val formInput = Seq("hasStartedResearch" -> Constants.StandardRadioButtonYesValue,
         "researchStartDay" -> "23",
         "researchStartMonth" -> "11",
-        "researchStartYear" -> "")
-      submitWithSessionAndAuth(setupController(None).submit, form: _*) { result =>
-        status(result) shouldBe BAD_REQUEST
-      }
+        "researchStartYear" -> "2000")
+      mockEnrolledRequest(seisSchemeTypesModel)
+      submitWithSessionAndAuth(TestController.submit,formInput: _*)(
+        result => {
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(controllers.seis.routes.ShareIssueDateController.show().url)
+        }
+      )
     }
+  }
 
-    "return a valid SEE_OTHER response on a POST with a valid form submission" in {
-      val form = Seq(
+  "Sending a valid Yes form submission to the ResearchStartDateController when authenticated and enrolled" should {
+    "redirect to itself(todo) if the investment start date is less than 4 months" in {
+      setUpSubmitMocks(false)
+      val formInput = Seq("hasStartedResearch" -> Constants.StandardRadioButtonYesValue,
+        "researchStartDay" -> "29",
+        "researchStartMonth" -> "6",
+        "researchStartYear" -> "2017")
+      mockEnrolledRequest(seisSchemeTypesModel)
+      submitWithSessionAndAuth(TestController.submit,formInput: _*)(
+        result => {
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(controllers.seis.routes.SeventyPercentSpentController.show().url)
+        }
+      )
+    }
+  }
+
+  "Sending a valid No form submission to the ResearchStartDateController when authenticated and enrolled" should {
+    "redirect to itself(todo)" in {
+      val formInput = Seq(
         "hasStartedResearch" -> Constants.StandardRadioButtonNoValue,
         "researchStartDay" -> "",
         "researchStartMonth" -> "",
         "researchStartYear" -> "")
-      submitWithSessionAndAuth(setupController(None).submit, form: _*) { result =>
-        status(result) shouldBe SEE_OTHER
-        redirectLocation(result) shouldBe Some(routes.ResearchStartDateController.show().url)
-      }
+      mockEnrolledRequest(seisSchemeTypesModel)
+      setUpSubmitMocks(true)
+      submitWithSessionAndAuth(TestController.submit,formInput:_*)(
+        result => {
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(controllers.seis.routes.SeventyPercentSpentController.show().url)
+        }
+      )
     }
-
   }
+
+  "Sending an invalid form submission to the ResearchStartDateController when authenticated and enrolled" should {
+    "redirect respond with BADREQUEST" in {
+      setUpSubmitMocks(true)
+      val formInput = Seq(
+        "hasStartedResearch" -> "",
+        "researchStartDay" -> "",
+        "researchStartMonth" -> "",
+        "researchStartYear" -> "")
+      mockEnrolledRequest(seisSchemeTypesModel)
+      submitWithSessionAndAuth(TestController.submit,formInput:_*)(
+        result => {
+          status(result) shouldBe BAD_REQUEST
+        }
+      )
+    }
+  }
+
 }

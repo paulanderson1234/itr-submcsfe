@@ -37,7 +37,7 @@ class FullTimeEmployeeCountFormSpec extends UnitSpec with OneAppPerSuite {
     }
 
     "provided with a valid map with the maximum number of decimal places" should {
-      val map = Map("employeeCount" -> "1.1111111111111")
+      val map = Map("employeeCount" -> "0.1111111111111")
       lazy val form = fullTimeEmployeeCountForm.bind(map)
 
       "contain no errors" in {
@@ -45,7 +45,20 @@ class FullTimeEmployeeCountFormSpec extends UnitSpec with OneAppPerSuite {
       }
 
       "contain the correct model limited to 5 decimal places" in {
-        form.value shouldBe Some(FullTimeEmployeeCountModel(1.11111))
+        form.value shouldBe Some(FullTimeEmployeeCountModel(0.11111))
+      }
+    }
+
+    "provided with a valid map with the minimum amount" should {
+      val map = Map("employeeCount" -> "0.00000000000")
+      lazy val form = fullTimeEmployeeCountForm.bind(map)
+
+      "contain no errors" in {
+        form.errors.isEmpty shouldBe true
+      }
+
+      "contain the correct model limited to 5 decimal places" in {
+        form.value shouldBe Some(FullTimeEmployeeCountModel(0.00000))
       }
     }
 

@@ -40,7 +40,7 @@ class GrossAssetsSpec extends ViewSpec {
       document.getElementById("label-amount").select("span").hasClass("visuallyhidden") shouldBe true
       document.getElementById("label-amount").select(".visuallyhidden").text() shouldBe Messages("page.grossAssets.amount.heading")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
-      document.body.getElementById("back-link").attr("href") shouldEqual routes.GrossAssetsController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual routes.ShareIssueDateController.show().url
       document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.company.details.one")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
     }
@@ -52,7 +52,7 @@ class GrossAssetsSpec extends ViewSpec {
       document.getElementById("label-amount").select("span").hasClass("visuallyhidden") shouldBe true
       document.getElementById("label-amount").select(".visuallyhidden").text() shouldBe Messages("page.grossAssets.amount.heading")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
-      document.body.getElementById("back-link").attr("href") shouldEqual routes.GrossAssetsController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual routes.ShareIssueDateController.show().url
       document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.company.details.one")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       document.getElementById("error-summary-display").hasClass("error-summary--show")
@@ -65,7 +65,7 @@ class GrossAssetsSpec extends ViewSpec {
       document.getElementById("label-amount").select("span").hasClass("visuallyhidden") shouldBe true
       document.getElementById("label-amount").select(".visuallyhidden").text() shouldBe Messages("page.grossAssets.amount.heading")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
-      document.body.getElementById("back-link").attr("href") shouldEqual routes.GrossAssetsController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual routes.ShareIssueDateController.show().url
       document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.company.details.one")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
 

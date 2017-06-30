@@ -89,7 +89,7 @@ class GrossAssetsControllerSpec extends BaseSpec {
         "grossAmount" -> "200000")(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(routes.GrossAssetsController.show().url) //TODO: go to next page
+          redirectLocation(result) shouldBe Some(routes.FullTimeEmployeeCountController.show().url)
         }
       )
     }
