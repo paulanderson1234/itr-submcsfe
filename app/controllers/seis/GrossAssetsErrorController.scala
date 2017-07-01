@@ -47,8 +47,7 @@ trait GrossAssetsErrorController extends FrontendController with AuthorisedAndEn
 
   val submit = featureSwitch(applicationConfig.seisFlowEnabled) {
     AuthorisedAndEnrolled.async { implicit user => implicit request =>
-      //TODO: route to FTE count page
-      Future.successful(Redirect(routes.GrossAssetsController.show()))
+      Future.successful(Redirect(routes.FullTimeEmployeeCountController.show()))
     }
   }
 

@@ -17,14 +17,15 @@
 package controllers.seis
 
 import auth.{MockAuthConnector, MockConfig}
-import common.Constants
+import common.{Constants, KeystoreKeys}
 import config.FrontendAuthConnector
-import connectors.{SubmissionConnector, EnrolmentConnector, S4LConnector}
+import connectors.{EnrolmentConnector, S4LConnector, SubmissionConnector}
 import controllers.helpers.BaseSpec
 import models.HasInvestmentTradeStartedModel
 import org.mockito.Matchers
 import org.mockito.Mockito._
 import play.api.test.Helpers._
+import uk.gov.hmrc.http.cache.client.CacheMap
 
 import scala.concurrent.Future
 
@@ -50,9 +51,30 @@ class HasInvestmentTradeStartedControllerSpec extends BaseSpec {
     }
   }
 
-  def setupShowMocks(hasInvestmentTradeStartedModel: Option[HasInvestmentTradeStartedModel] = None): Unit =
-    when(mockS4lConnector.fetchAndGetFormData[HasInvestmentTradeStartedModel](Matchers.any())(Matchers.any(), Matchers.any(),Matchers.any()))
+  def setupShowMocks(hasInvestmentTradeStartedModel: Option[HasInvestmentTradeStartedModel] = None): Unit = {
+    when(mockS4lConnector.fetchAndGetFormData[HasInvestmentTradeStartedModel](Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
       .thenReturn(Future.successful(hasInvestmentTradeStartedModel))
+    when(mockS4lConnector.saveFormData(Matchers.eq(KeystoreKeys.backLinkSeventyPercentSpent),
+      Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(CacheMap("", Map())))
+
+    when(mockS4lConnector.saveFormData(Matchers.eq(KeystoreKeys.backLinkShareIssueDate),
+      Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(CacheMap("", Map())))
+  }
+
+  def setUpSubmitMocks(tradeIsvalidated:Boolean = false):Unit = {
+    when(mockS4lConnector.saveFormData(Matchers.eq(KeystoreKeys.backLinkSeventyPercentSpent),
+      Matchers.any())(Matchers.any(), Matchers.any(),Matchers.any()))
+      .thenReturn(Future.successful(CacheMap("", Map())))
+
+    when(mockS4lConnector.saveFormData(Matchers.eq(KeystoreKeys.backLinkShareIssueDate),
+      Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(CacheMap("", Map())))
+
+    when(TestController.submissionConnector.validateHasInvestmentTradeStartedCondition(Matchers.any(),
+      Matchers.any(),Matchers.any())(Matchers.any())).thenReturn(Some(tradeIsvalidated))
+  }
 
 
   "Sending a GET request to HasInvestmentTradeStartedController when authenticated and enrolled" should {
@@ -75,8 +97,7 @@ class HasInvestmentTradeStartedControllerSpec extends BaseSpec {
 
   "Sending a valid Yes form submission to the HasInvestmentTradeStartedController when authenticated and enrolled" should {
     "redirect to share issue date when the investment start date is greater than 4 months" in {
-      when(TestController.submissionConnector.validateHasInvestmentTradeStartedCondition(Matchers.any(),
-        Matchers.any(),Matchers.any())(Matchers.any())).thenReturn(Some(true))
+      setUpSubmitMocks(true)
       val formInput = Seq("hasInvestmentTradeStarted" -> Constants.StandardRadioButtonYesValue,
         "hasInvestmentTradeStartedDay" -> "23",
         "hasInvestmentTradeStartedMonth" -> "11",
@@ -91,11 +112,9 @@ class HasInvestmentTradeStartedControllerSpec extends BaseSpec {
     }
   }
 
-  /*TODO Change to 70% page*/
   "Sending a valid Yes form submission to the HasInvestmentTradeStartedController when authenticated and enrolled" should {
     "redirect to itself(todo) if the investment start date is less than 4 months" in {
-      when(TestController.submissionConnector.validateHasInvestmentTradeStartedCondition(Matchers.any(),
-        Matchers.any(),Matchers.any())(Matchers.any())).thenReturn(Some(false))
+      setUpSubmitMocks(false)
       val formInput = Seq("hasInvestmentTradeStarted" -> Constants.StandardRadioButtonYesValue,
         "hasInvestmentTradeStartedDay" -> "29",
         "hasInvestmentTradeStartedMonth" -> "6",
@@ -104,16 +123,15 @@ class HasInvestmentTradeStartedControllerSpec extends BaseSpec {
       submitWithSessionAndAuth(TestController.submit,formInput: _*)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(controllers.seis.routes.HasInvestmentTradeStartedController.show().url)
+          redirectLocation(result) shouldBe Some(controllers.seis.routes.SeventyPercentSpentController.show().url)
         }
       )
     }
   }
 
-
-  /*TODO Change to 70% page*/
   "Sending a valid No form submission to the HasInvestmentTradeStartedController when authenticated and enrolled" should {
     "redirect to itself(todo)" in {
+      setUpSubmitMocks(true)
       val formInput = Seq(
         "hasInvestmentTradeStarted" -> Constants.StandardRadioButtonNoValue,
         "hasInvestmentTradeStartedDay" -> "",
@@ -123,7 +141,7 @@ class HasInvestmentTradeStartedControllerSpec extends BaseSpec {
       submitWithSessionAndAuth(TestController.submit,formInput:_*)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(controllers.seis.routes.HasInvestmentTradeStartedController.show().url)
+          redirectLocation(result) shouldBe Some(controllers.seis.routes.SeventyPercentSpentController.show().url)
         }
       )
     }
@@ -136,6 +154,7 @@ class HasInvestmentTradeStartedControllerSpec extends BaseSpec {
         "hasInvestmentTradeStartedDay" -> "",
         "hasInvestmentTradeStartedMonth" -> "",
         "hasInvestmentTradeStartedYear" -> "")
+      setUpSubmitMocks(true)
       mockEnrolledRequest(seisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,formInput:_*)(
         result => {

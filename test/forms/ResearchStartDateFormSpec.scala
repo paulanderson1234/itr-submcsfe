@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-package forms.seis
+package forms
 
 import java.time.ZoneId
 import java.util.Date
 
 import common.Constants
+import forms.ResearchStartDateForm._
 import models.ResearchStartDateModel
 import org.scalatestplus.play.OneAppPerSuite
 import uk.gov.hmrc.play.test.UnitSpec
-import forms.ResearchStartDateForm._
 
 /**
   * Created by james-forster on 22/06/17.
@@ -44,21 +44,21 @@ class ResearchStartDateFormSpec extends UnitSpec with OneAppPerSuite {
 
   "Creating the form for the research start date" should {
     "return a populated yes form using .fill" in {
-      val model = ResearchStartDateModel(true, Some(10), Some(2), Some(2016))
+      val model = ResearchStartDateModel(Constants.StandardRadioButtonYesValue, Some(10), Some(2), Some(2016))
       val form = researchStartDateForm.fill(model)
-      form.value.get shouldBe ResearchStartDateModel(true, Some(10), Some(2), Some(2016))
+      form.value.get shouldBe ResearchStartDateModel(Constants.StandardRadioButtonYesValue, Some(10), Some(2), Some(2016))
     }
 
     "return a populated no form using .fill" in {
-      val model = ResearchStartDateModel(false, None, None, None)
+      val model = ResearchStartDateModel(Constants.StandardRadioButtonNoValue, None, None, None)
       val form = researchStartDateForm.fill(model)
-      form.value.get shouldBe ResearchStartDateModel(false, None, None, None)
+      form.value.get shouldBe ResearchStartDateModel(Constants.StandardRadioButtonNoValue, None, None, None)
     }
 
     "return a Some if a model with valid inputs is supplied using .bind" in {
       val map = Map(("hasStartedResearch",Constants.StandardRadioButtonYesValue),("researchStartDay", "10"), ("researchStartMonth", "3"), ("researchStartYear", "2016"))
       val form = researchStartDateForm.bind(map)
-      form.value shouldBe Some(ResearchStartDateModel(true, Some(10), Some(3), Some(2016)))
+      form.value shouldBe Some(ResearchStartDateModel(Constants.StandardRadioButtonYesValue, Some(10), Some(3), Some(2016)))
     }
 
     "return a None if a model with non-numeric inputs is supplied using .bind" in {

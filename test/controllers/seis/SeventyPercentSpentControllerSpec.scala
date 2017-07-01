@@ -25,6 +25,7 @@ import models._
 import org.mockito.Matchers
 import org.mockito.Mockito._
 import play.api.test.Helpers._
+import uk.gov.hmrc.http.cache.client.CacheMap
 
 import scala.concurrent.Future
 
@@ -49,24 +50,45 @@ class SeventyPercentSpentControllerSpec extends BaseSpec {
     }
   }
 
-  def setupMocks(seventyPercentSpentModel: Option[SeventyPercentSpentModel] = None): Unit = {
+  def setupMocks(seventyPercentSpentModel: Option[SeventyPercentSpentModel] = None, backLink: Option[String] = None): Unit = {
     when(mockS4lConnector.fetchAndGetFormData[SeventyPercentSpentModel](Matchers.eq(KeystoreKeys.seventyPercentSpent))
       (Matchers.any(), Matchers.any(), Matchers.any()))
-        .thenReturn(Future.successful(seventyPercentSpentModel))
+      .thenReturn(Future.successful(seventyPercentSpentModel))
+
+    when(mockS4lConnector.saveFormData(Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(CacheMap("", Map())))
+
+    when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.backLinkSeventyPercentSpent))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(backLink))
+
+    when(mockS4lConnector.saveFormData(Matchers.eq(KeystoreKeys.backLinkShareIssueDate),
+      Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(CacheMap("", Map())))
 
   }
 
   "Sending a GET request to SeventyPercentSpentController when authenticated and enrolled" should {
-    "return a 200 when something is fetched from keystore" in {
-      setupMocks(Some(isSeventyPercentSpentModelYes))
+    "return a 200 when something is fetched from keystore and back link returned" in {
+      setupMocks(Some(isSeventyPercentSpentModelYes), Some("/test/test"))
       mockEnrolledRequest(seisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show())(
         result => status(result) shouldBe OK
       )
     }
 
+    "return a 200 when something is fetched from keystore and back link is None" in {
+      setupMocks(Some(isSeventyPercentSpentModelYes), None)
+      mockEnrolledRequest(seisSchemeTypesModel)
+      showWithSessionAndAuth(TestController.show())(
+        result => {
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(controllers.seis.routes.QualifyBusinessActivityController.show().url)
+        }
+      )
+    }
+
     "provide an empty model and return a 200 when nothing is fetched using keystore" in {
-      setupMocks(None)
+      setupMocks(None, Some("/test/test/"))
       mockEnrolledRequest(seisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show())(
         result => status(result) shouldBe OK
@@ -77,9 +99,9 @@ class SeventyPercentSpentControllerSpec extends BaseSpec {
   "Sending a valid Yes form submission to the SeventyPercentSpentController when authenticated and enrolled" should {
     "redirect to the Share IssueDate page" in {
       val formInput = "isSeventyPercentSpent" -> Constants.StandardRadioButtonYesValue
-      setupMocks()
+      setupMocks(None, Some("/test/test"))
       mockEnrolledRequest(seisSchemeTypesModel)
-      submitWithSessionAndAuth(TestController.submit,formInput)(
+      submitWithSessionAndAuth(TestController.submit, formInput)(
         result => {
           status(result) shouldBe SEE_OTHER
           redirectLocation(result) shouldBe Some(controllers.seis.routes.ShareIssueDateController.show().url)
@@ -91,9 +113,9 @@ class SeventyPercentSpentControllerSpec extends BaseSpec {
   "Sending a valid No form submission to the SeventyPercentSpentController when authenticated and enrolled" should {
     "redirect to the Is This First Trade Error page" in {
       val formInput = "isSeventyPercentSpent" -> Constants.StandardRadioButtonNoValue
-      setupMocks()
+      setupMocks(None, Some("/test/test"))
       mockEnrolledRequest(seisSchemeTypesModel)
-      submitWithSessionAndAuth(TestController.submit,formInput)(
+      submitWithSessionAndAuth(TestController.submit, formInput)(
         result => {
           status(result) shouldBe SEE_OTHER
           redirectLocation(result) shouldBe Some(controllers.seis.routes.SeventyPercentSpentErrorController.show().url)
@@ -104,9 +126,10 @@ class SeventyPercentSpentControllerSpec extends BaseSpec {
 
   "Sending an invalid form submission with validation errors to the SeventyPercentSpentController when authenticated and enrolled" should {
     "redirect to itself" in {
+      setupMocks(None, Some("/test/test"))
       mockEnrolledRequest(seisSchemeTypesModel)
       val formInput = "isSeventyPercentSpent" -> ""
-      submitWithSessionAndAuth(TestController.submit,formInput)(
+      submitWithSessionAndAuth(TestController.submit, formInput)(
         result => {
           status(result) shouldBe BAD_REQUEST
         }
@@ -115,3 +138,4 @@ class SeventyPercentSpentControllerSpec extends BaseSpec {
   }
 
 }
+

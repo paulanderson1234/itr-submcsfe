@@ -205,8 +205,25 @@ trait BaseSpec extends UnitSpec with OneAppPerSuite with MockitoSugar with FakeR
   val hasInvestmentTradeStartedYear = 2004
   val hasInvestmentTradeStartedMonth = 2
   val hasInvestmentTradeStartedDay = 29
+
+  val researchStartedYear = 2004
+  val researchStartedMonth = 2
+  val researchStartedDay = 29
+
+  val shareIssueDateYear = 2004
+  val shareIssueDateMonth = 2
+  val shareIssueDateDay = 29
+
   val hasInvestmentTradeStartedModelYes = HasInvestmentTradeStartedModel(Constants.StandardRadioButtonYesValue,
     Some(hasInvestmentTradeStartedDay), Some(hasInvestmentTradeStartedMonth), Some(hasInvestmentTradeStartedYear))
   val hasInvestmentTradeStartedModelNo = HasInvestmentTradeStartedModel(Constants.StandardRadioButtonNoValue, None, None, None)
+
+  val researchStartDateModelYes = ResearchStartDateModel(Constants.StandardRadioButtonYesValue,
+    Some(researchStartedDay), Some(researchStartedMonth), Some(researchStartedYear))
+  val researchStartDateModelNo = ResearchStartDateModel(Constants.StandardRadioButtonNoValue, None, None, None)
+
+  val shareIssuetDateModel = ShareIssueDateModel(
+    Some(shareIssueDateDay), Some(shareIssueDateMonth), Some(shareIssueDateYear))
+  val shareIssuetDateModelEmpty = ShareIssueDateModel(None, None, None)
 
 }

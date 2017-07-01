@@ -56,8 +56,7 @@ class GrossAssetsErrorControllerSpec extends BaseSpec {
       submitWithSessionAndAuth(TestController.submit)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(controllers.seis.routes.GrossAssetsController.show().url)
-          //TODO: chnage to correct FTE page when avilable
+          redirectLocation(result) shouldBe Some(controllers.seis.routes.FullTimeEmployeeCountController.show().url)
         }
       )
     }

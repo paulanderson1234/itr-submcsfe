@@ -162,12 +162,12 @@ object Validation {
     Constraint("constraints.research_start_date")({
       dateForm: ResearchStartDateModel =>
         dateForm.hasStartedResearch match {
-          case false => allDatesEmpty(dateForm.researchStartDay,
+          case Constants.StandardRadioButtonNoValue => allDatesEmpty(dateForm.researchStartDay,
             dateForm.researchStartMonth, dateForm.researchStartYear) match {
             case true => Valid
             case false => Invalid(Seq(ValidationError(Messages("validation.error.DateForNoOption"))))
           }
-          case true => validateYes(dateForm)
+          case Constants.StandardRadioButtonYesValue => validateYes(dateForm)
         }
     })
   }
@@ -632,7 +632,7 @@ object Validation {
       employees =>
         val error = Try {BigDecimal(employees)} match {
         case Success(result) =>
-          val sizeError = if (result < 1 || result > 9999999999999.0) Seq(ValidationError(Messages("validation.error.employeeCount.size"))) else Seq()
+          val sizeError = if (result < 0 || result > 9999999999999.0) Seq(ValidationError(Messages("validation.error.employeeCount.size"))) else Seq()
           sizeError
         case Failure(_) if employees.trim.nonEmpty => Seq(ValidationError(Messages("validation.error.employeeCount.notANumber")))
         case _ => Seq()

@@ -88,8 +88,7 @@ class ResearchStartDateSpec extends ViewSpec with OneAppPerSuite{
       }
 
       "have the correct back link url" in {
-        //TODO route to whatWillSpendInvestmentOn"
-        document.select("a.back-link").attr("href") shouldBe  controllers.seis.routes.ResearchStartDateController.show().url
+        document.select("a.back-link").attr("href") shouldBe  controllers.seis.routes.QualifyBusinessActivityController.show().url
       }
 
       "have the progress details" in {
@@ -169,8 +168,7 @@ class ResearchStartDateSpec extends ViewSpec with OneAppPerSuite{
       }
 
       "have the correct back link url" in {
-        //TODO route to whatWillSpendInvestmentOn"
-        document.select("a.back-link").attr("href") shouldBe  controllers.seis.routes.ResearchStartDateController.show().url
+        document.select("a.back-link").attr("href") shouldBe  controllers.seis.routes.QualifyBusinessActivityController.show().url
       }
 
       "have the progress details" in {
