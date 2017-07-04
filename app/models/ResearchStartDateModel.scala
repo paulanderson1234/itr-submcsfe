@@ -19,7 +19,7 @@ package models
 import play.api.libs.json.{Json, OFormat}
 import utils.DateFormatter
 
-case class ResearchStartDateModel(hasStartedResearch: Boolean, researchStartDay: Option[Int],
+case class ResearchStartDateModel(hasStartedResearch: String, researchStartDay: Option[Int],
                                   researchStartMonth: Option[Int], researchStartYear: Option[Int]){
   val toDate = if(researchStartDay.isDefined && researchStartMonth.isDefined &&
     researchStartYear.isDefined) s"${researchStartDay.get}-${researchStartMonth.get}-${researchStartYear.get}"

@@ -2,11 +2,11 @@
 @import uk.gov.hmrc.play.views.html.helpers.form
 @import views.html.helpers.{externalLink, backButtonWithProgress, errorSummary, formInlineDateInput}
 
-@(shareIssueDateForm: Form[ShareIssueDateModel])(implicit request: Request[_], messages: Messages)
+@(shareIssueDateForm: Form[ShareIssueDateModel],backLink:String)(implicit request: Request[_], messages: Messages)
 
 @main_template(Messages("page.companyDetails.ShareIssueDate.title")) {
 
-    @backButtonWithProgress(controllers.seis.routes.ShareIssueDateController.show().url, Messages("common.section.progress.company.details.one"))
+    @backButtonWithProgress(backLink, Messages("common.section.progress.company.details.one"))
 
     @errorSummary(shareIssueDateForm, "share-issue-date", "shareIssueDay")
 

@@ -41,7 +41,6 @@ object HasInvestmentTradeStartedController extends HasInvestmentTradeStartedCont
 
 }
 
-
 trait HasInvestmentTradeStartedController extends FrontendController with AuthorisedAndEnrolledForTAVC with FeatureSwitch {
 
   override val acceptedFlows = Seq(Seq(SEIS))
@@ -64,16 +63,22 @@ trait HasInvestmentTradeStartedController extends FrontendController with Author
           Future.successful(BadRequest(HasInvestmentTradeStarted(formWithErrors)))
         },
         validFormData => {
+          s4lConnector.saveFormData(KeystoreKeys.hasInvestmentTradeStarted, validFormData)
           validFormData.hasInvestmentTradeStarted match {
             case Constants.StandardRadioButtonYesValue => {
-              s4lConnector.saveFormData(KeystoreKeys.hasInvestmentTradeStarted, validFormData)
               submissionConnector.validateHasInvestmentTradeStartedCondition(validFormData.hasInvestmentTradeStartedDay.get,
                 validFormData.hasInvestmentTradeStartedMonth.get, validFormData.hasInvestmentTradeStartedYear.get).map {
                 case Some(validated) =>
-                  if (validated)
+                  if (validated) {
+                    s4lConnector.saveFormData(KeystoreKeys.backLinkShareIssueDate,
+                      routes.HasInvestmentTradeStartedController.show().url)
+
                     Redirect(routes.ShareIssueDateController.show())
-                  /*TODO Redirect to 70% page*/
-                  else Redirect(routes.HasInvestmentTradeStartedController.show())
+                  }
+                  else {
+                    s4lConnector.saveFormData(KeystoreKeys.backLinkSeventyPercentSpent, routes.HasInvestmentTradeStartedController.show().url)
+                    Redirect(routes.SeventyPercentSpentController.show())
+                  }
                 case _ => {
                   Logger.warn(s"[HasInvestmentTradeStartedController][submit] - Call to validate investment trade start date in backend failed")
                   InternalServerError(internalServerErrorTemplate)
@@ -85,10 +90,9 @@ trait HasInvestmentTradeStartedController extends FrontendController with Author
                 }
               }
             }
-            /*TODO Redirect to 70% page*/
             case Constants.StandardRadioButtonNoValue => {
-              s4lConnector.saveFormData(KeystoreKeys.hasInvestmentTradeStarted, validFormData)
-              Future.successful(Redirect(routes.HasInvestmentTradeStartedController.show()))
+              s4lConnector.saveFormData(KeystoreKeys.backLinkSeventyPercentSpent, routes.HasInvestmentTradeStartedController.show().url)
+              Future.successful(Redirect(routes.SeventyPercentSpentController.show()))
             }
           }
         }

@@ -67,7 +67,7 @@ class HasInvestmentTradeStartedSpec extends ViewSpec {
       document.body.getElementById("hasInvestmentTradeStartedMonth").parent.text shouldBe Messages("common.date.fields.month")
       document.body.getElementById("hasInvestmentTradeStartedYear").parent.text shouldBe Messages("common.date.fields.year")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
-      document.body.getElementById("back-link").attr("href") shouldEqual controllers.seis.routes.HasInvestmentTradeStartedController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual controllers.seis.routes.QualifyBusinessActivityController.show().url
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.company.details.one")
 
     }
@@ -87,7 +87,7 @@ class HasInvestmentTradeStartedSpec extends ViewSpec {
       document.body.getElementById("hasInvestmentTradeStartedMonth").parent.text shouldBe Messages("common.date.fields.month")
       document.body.getElementById("hasInvestmentTradeStartedYear").parent.text shouldBe Messages("common.date.fields.year")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
-      document.body.getElementById("back-link").attr("href") shouldEqual controllers.seis.routes.HasInvestmentTradeStartedController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual controllers.seis.routes.QualifyBusinessActivityController.show().url
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.company.details.one")
       document.getElementById("error-summary-display").hasClass("error-summary--show")
     }

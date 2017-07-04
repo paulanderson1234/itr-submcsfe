@@ -17,7 +17,7 @@
 package controllers.seis
 
 import auth.{MockAuthConnector, MockConfig}
-import common.KeystoreKeys
+import common.{Constants, KeystoreKeys}
 import config.FrontendAuthConnector
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
@@ -25,21 +25,18 @@ import models._
 import org.mockito.Matchers
 import org.mockito.Mockito._
 import play.api.test.Helpers._
+import uk.gov.hmrc.http.cache.client.CacheMap
 
 import scala.concurrent.Future
 
 class ShareIssueDateControllerSpec extends BaseSpec {
 
-  object ShareIssueDateControllerTest extends ShareIssueDateController {
+  object TestController extends ShareIssueDateController {
     override lazy val applicationConfig = MockConfig
     override lazy val authConnector = MockAuthConnector
     override lazy val s4lConnector = mockS4lConnector
     override lazy val enrolmentConnector = mockEnrolmentConnector
   }
-
-  def setupMocks(shareIssueDateModel: Option[ShareIssueDateModel] = None): Unit =
-    when(mockS4lConnector.fetchAndGetFormData[ShareIssueDateModel](Matchers.any())(Matchers.any(), Matchers.any(),Matchers.any()))
-      .thenReturn(Future.successful(shareIssueDateModel))
 
   "ShareIssueDateController" should {
     "use the correct keystore connector" in {
@@ -53,19 +50,47 @@ class ShareIssueDateControllerSpec extends BaseSpec {
     }
   }
 
+  def setupMocks(shareIssueDateModel: Option[ShareIssueDateModel] = None, backLink: Option[String] = None): Unit = {
+    when(mockS4lConnector.fetchAndGetFormData[ShareIssueDateModel](Matchers.eq(KeystoreKeys.shareIssueDate))
+      (Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(shareIssueDateModel))
+
+    when(mockS4lConnector.saveFormData(Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(CacheMap("", Map())))
+
+    when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.backLinkShareIssueDate))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(backLink))
+
+    when(mockS4lConnector.saveFormData(Matchers.eq(KeystoreKeys.backLinkShareIssueDate),
+      Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(CacheMap("", Map())))
+
+  }
+
   "Sending a GET request to ShareIssueDateController when authenticated and enrolled" should {
-    "return a 200 when something is fetched from keystore" in {
-      setupMocks(Some(shareIssueDateModel))
+    "return a 200 when something is fetched from keystore and back link returned" in {
+      setupMocks(Some(shareIssuetDateModel), Some("/test/test"))
       mockEnrolledRequest(seisSchemeTypesModel)
-      showWithSessionAndAuth(ShareIssueDateControllerTest.show())(
+      showWithSessionAndAuth(TestController.show())(
         result => status(result) shouldBe OK
       )
     }
 
-    "provide an empty model and return a 200 when nothing is fetched using keystore" in {
-      setupMocks()
+    "return a 200 when something is fetched from keystore and back link is None" in {
+      setupMocks(Some(shareIssuetDateModel), None)
       mockEnrolledRequest(seisSchemeTypesModel)
-      showWithSessionAndAuth(ShareIssueDateControllerTest.show())(
+      showWithSessionAndAuth(TestController.show())(
+        result => {
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(controllers.seis.routes.QualifyBusinessActivityController.show().url)
+        }
+      )
+    }
+
+    "provide an empty model and return a 200 when nothing is fetched using keystore" in {
+      setupMocks(None, Some("/test/test/"))
+      mockEnrolledRequest(seisSchemeTypesModel)
+      showWithSessionAndAuth(TestController.show())(
         result => status(result) shouldBe OK
       )
     }
@@ -81,10 +106,10 @@ class ShareIssueDateControllerSpec extends BaseSpec {
         "shareIssueMonth" -> "11",
         "shareIssueYear" -> "1993")
 
-      submitWithSessionAndAuth(ShareIssueDateControllerTest.submit,formInput:_*)(
+      submitWithSessionAndAuth(TestController.submit,formInput:_*)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(routes.ShareIssueDateController.show().url)
+          redirectLocation(result) shouldBe Some(routes.GrossAssetsController.show().url)
         }
       )
     }
@@ -92,13 +117,14 @@ class ShareIssueDateControllerSpec extends BaseSpec {
 
   "Sending an invalid form submission with validation errors to the ShareIssueDateController when authenticated and enrolled" should {
     "return a bad request" in {
+      setupMocks(None, Some("/test/test"))
       mockEnrolledRequest(seisSchemeTypesModel)
       val formInput = Seq(
         "shareIssueDay" -> "",
         "shareIssueMonth" -> "",
         "shareIssueYear" -> "")
 
-      submitWithSessionAndAuth(ShareIssueDateControllerTest.submit,formInput:_*)(
+      submitWithSessionAndAuth(TestController.submit,formInput:_*)(
         result => {
           status(result) shouldBe BAD_REQUEST
         }
@@ -107,3 +133,4 @@ class ShareIssueDateControllerSpec extends BaseSpec {
   }
 
 }
+

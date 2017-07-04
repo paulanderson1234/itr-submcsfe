@@ -25,10 +25,7 @@ import utils.Validation._
 object ResearchStartDateForm {
   val researchStartDateForm = Form(
     mapping(
-      "hasStartedResearch" -> nonEmptyText.transform[Boolean](
-        string => if (string == Constants.StandardRadioButtonYesValue) true else false,
-        bool => if (bool) Constants.StandardRadioButtonYesValue else Constants.StandardRadioButtonNoValue
-      ),
+      "hasStartedResearch" -> nonEmptyText,
       "researchStartDay" -> optional(number),
       "researchStartMonth" -> optional(number),
       "researchStartYear" -> optional(number)

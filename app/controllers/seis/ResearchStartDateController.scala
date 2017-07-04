@@ -17,33 +17,33 @@
 package controllers.seis
 
 import auth.{AuthorisedAndEnrolledForTAVC, SEIS}
-import common.KeystoreKeys
+import common.{Constants, KeystoreKeys}
+import config.FrontendGlobal.internalServerErrorTemplate
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector, SubmissionConnector}
 import controllers.predicates.FeatureSwitch
 import forms.ResearchStartDateForm._
 import models.ResearchStartDateModel
+import play.Logger
 import play.api.Play.current
-import play.api.data.Form
 import play.api.i18n.Messages.Implicits._
-import play.api.mvc.Result
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import views.html.seis.companyDetails.ResearchStartDate
 
 import scala.concurrent.Future
 
-object ResearchStartDateController extends ResearchStartDateController {
+object ResearchStartDateController extends ResearchStartDateController{
   override lazy val s4lConnector = S4LConnector
   override lazy val applicationConfig = FrontendAppConfig
   override lazy val authConnector = FrontendAuthConnector
   override lazy val enrolmentConnector = EnrolmentConnector
   override lazy val submissionConnector = SubmissionConnector
+
 }
 
 trait ResearchStartDateController extends FrontendController with AuthorisedAndEnrolledForTAVC with FeatureSwitch {
 
   override val acceptedFlows = Seq(Seq(SEIS))
-
 
   val submissionConnector: SubmissionConnector
 
@@ -58,18 +58,45 @@ trait ResearchStartDateController extends FrontendController with AuthorisedAndE
 
   val submit = featureSwitch(applicationConfig.seisFlowEnabled) {
     AuthorisedAndEnrolled.async { implicit user => implicit request =>
+      researchStartDateForm.bindFromRequest().fold(
+        formWithErrors => {
+          Future.successful(BadRequest(ResearchStartDate(formWithErrors)))
+        },
+        validFormData => {
+          s4lConnector.saveFormData(KeystoreKeys.researchStartDate, validFormData)
+          validFormData.hasStartedResearch match {
+            case Constants.StandardRadioButtonYesValue => {
+              submissionConnector.validateHasInvestmentTradeStartedCondition(validFormData.researchStartDay.get,
+                validFormData.researchStartMonth.get, validFormData.researchStartYear.get).map {
+                case Some(validated) =>
+                  if (validated) {
+                    s4lConnector.saveFormData(KeystoreKeys.backLinkShareIssueDate,
+                      routes.ResearchStartDateController.show().url)
 
-      val successAction: ResearchStartDateModel => Future[Result] = model => {
-        s4lConnector.saveFormData[ResearchStartDateModel](KeystoreKeys.researchStartDate, model).map { _ =>
-          Redirect(routes.ResearchStartDateController.show()) //TODO set to Share Issue Date page
+                    Redirect(routes.ShareIssueDateController.show())
+                  }
+                  else {
+                    s4lConnector.saveFormData(KeystoreKeys.backLinkSeventyPercentSpent, routes.ResearchStartDateController.show().url)
+                    Redirect(routes.SeventyPercentSpentController.show())
+                  }
+                case _ => {
+                  Logger.warn(s"[ResearchStartDateController][submit] - Call to validate investment trade start date in backend failed")
+                  InternalServerError(internalServerErrorTemplate)
+                }
+              }.recover {
+                case e: Exception => {
+                  Logger.warn(s"[ResearchStartDateController][submit] - Exception: ${e.getMessage}")
+                  InternalServerError(internalServerErrorTemplate)
+                }
+              }
+            }
+            case Constants.StandardRadioButtonNoValue => {
+              s4lConnector.saveFormData(KeystoreKeys.backLinkSeventyPercentSpent, routes.ResearchStartDateController.show().url)
+              Future.successful(Redirect(routes.SeventyPercentSpentController.show()))
+            }
+          }
         }
-      }
-
-      val errorAction: Form[ResearchStartDateModel] => Future[Result] = form => {
-        Future.successful(BadRequest(ResearchStartDate(form)))
-      }
-
-      researchStartDateForm.bindFromRequest.fold(errorAction, successAction)
+      )
     }
   }
 }

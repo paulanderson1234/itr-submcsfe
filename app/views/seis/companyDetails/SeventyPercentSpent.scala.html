@@ -3,11 +3,11 @@
 @import common.Constants
 @import views.html.helpers.{backButtonWithProgress, formInputRadioGroup, errorSummary, formHint}
 
-@(seventyPercentSpentForm: Form[SeventyPercentSpentModel])(implicit request: Request[_], messages: Messages)
+@(seventyPercentSpentForm: Form[SeventyPercentSpentModel], backLink:String)(implicit request: Request[_], messages: Messages)
 
 @main_template(Messages("page.companyDetails.seventyPercentSpent.title")) {
 
-@backButtonWithProgress(controllers.seis.routes.ResearchStartDateController.show().url, Messages("common.section.progress.company.details.one"))
+@backButtonWithProgress(backLink, Messages("common.section.progress.company.details.one"))
 
 @errorSummary(seventyPercentSpentForm, "is-first-trade", "isSeventyPercentSpent")
 <h1 class="heading-xlarge" id="main-heading">@Messages("page.companyDetails.seventyPercentSpent.heading")</h1>
