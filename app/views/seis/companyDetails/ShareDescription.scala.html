@@ -1,40 +1,42 @@
 @import uk.gov.hmrc.play.views.html.helpers.form
 @import models.ShareDescriptionModel
 @import common.Constants
-@import views.html.helpers {backButtonWithProgress, errorSummary, input}
+@import views.html.helpers.{backButtonWithProgress, errorSummary, input}
 
 @(ShareDescriptionForm: Form[ShareDescriptionModel])(implicit request: Request[_], messages: Messages)
 
-@backButtonWithProgress(controllers.routes.ApplicationHubController.show().url, Messages("common.section.progress.company.details.one"))
+@main_template(Messages("page.shares.shareDescription.title")) {
 
-    @errorSummary(shareDescriptionForm, "share-description", "sharedescription")
+@backButtonWithProgress(controllers.routes.ApplicationHubController.show().url, Messages("common.section.progress.company.details.three"))
 
-    <h1 id="main-heading" class="form-title heading-xlarge">@Messages("page.companyDetails.sharedescription.heading")</h1>
+    @errorSummary(ShareDescriptionForm, "share-description", "shareDescription")
+
+    <h1 id="main-heading" class="form-title heading-xlarge">@Messages("page.shares.shareDescription.heading")</h1>
 
     <div>
-        <p id="description-two" class="lede">@Messages("page.companyDetails.sharedescription.example.text")</p>
+        <p id="description-two" class="lede">@Messages("page.shares.shareDescription.example.text")</p>
         <ul class="list list-bullet">
-            <li id="bullet-one">@Messages("page.companyDetails.sharedescription.bullet.one")</li>
-            <li id="bullet-two">@Messages("page.companyDetails.sharedescription.bullet.two")</li>
-            <li id="bullet-three">@Messages("page.companyDetails.sharedescription.bullet.three")</li>
+            <li id="bullet-one">@Messages("page.shares.shareDescription.bullet.one")</li>
+            <li id="bullet-two">@Messages("page.shares.shareDescription.bullet.two")</li>
+            <li id="bullet-three">@Messages("page.shares.shareDescription.bullet.three")</li>
         </ul>
     </div>
 
     @form(action = controllers.seis.routes.ShareDescriptionController.submit()) {
 
     <fieldset>
-        <legend class="visuallyhidden">@Messages("page.companyDetails.sharedescription.heading")</legend>
+        <legend class="visuallyhidden">@Messages("page.shares.shareDescription.heading")</legend>
         <div class="form-group">
             @input(
-            shareDescriptionForm("sharedescription"),
+            ShareDescriptionForm("shareDescription"),
             '_divClass -> "form-label",
-            '_labelId -> "label-sharedescription",
-            '_hintId -> "label-sharedescription-hint",
-            '_label -> Messages("page.companyDetails.sharedescription.heading"),
+            '_labelId -> "label-shareDescription",
+            '_hintId -> "label-shareDescription-hint",
+            '_label -> Messages("page.shares.shareDescription.heading"),
             '_labelTextClass -> "visuallyhidden",
             '_inputClass -> "input--fullwidth",
-            '_maxlength-> Constants.SuggestedshareDescriptionLength,
-            '_inputHint -> Messages("page.companyDetails.sharedescription.question.hint")
+            '_maxlength-> Constants.SuggestedShareDescriptionLength,
+            '_inputHint -> Messages("page.shares.shareDescription.question.hint")
             )
 
         </div>
@@ -43,4 +45,4 @@
         <button class="btn button" type="submit" id="next">@Messages("common.button.snc")</button>
     </div>
     }
-    }
+}

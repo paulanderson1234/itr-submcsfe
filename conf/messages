@@ -52,10 +52,11 @@ common.date.error.invalidDate=Date must have a valid day, month and a year with 
 
 ##common section headings##
 common.section.progress.company.details.one=Section 1 of 6: Company details
-common.section.progress.company.details.two=Section 2 of 5: Previous schemes
-common.section.progress.company.details.three=Section 3 of 5: This investment
-common.section.progress.company.details.five=Section 5 of 5: Supporting documents
-common.section.progress.company.details.four=Section 4 of 5: Contact details
+common.section.progress.company.details.two=Section 2 of 6: Previous schemes
+common.section.progress.company.details.three=Section 3 of 6: Shares
+common.section.progress.company.details.four=Section 4 of 6: This investment
+common.section.progress.company.details.six=Section 6 of 6: Supporting documents
+common.section.progress.company.details.five=Section 5 of 6: Contact details
 
 ## Common report error ##
 common.error.help.text=Get help with this page.
@@ -935,6 +936,15 @@ page.seis.investment.proposedInvestment.help.link.text=You can raise more or les
 page.seis.investment.proposedInvestment.help.bullet.one=this SEIS investment
 page.seis.investment.proposedInvestment.help.bullet.two=any previous SEIS investments
 page.seis.investment.proposedInvestment.help.bullet.three=any State aid you''ve received under the de minimis regulation
+
+# Share Description
+page.shares.shareDescription.title=What class of shares were issued?
+page.shares.shareDescription.heading=What class of shares were issued?
+page.shares.shareDescription.example.text=For example:
+page.shares.shareDescription.bullet.one=non-voting shares
+page.shares.shareDescription.bullet.two=ordinary shares
+page.shares.shareDescription.bullet.three=seed shares
+page.shares.shareDescription.question.hint=Suggested limit: 20 words
 
 #share issue date page
 validation.error.ShareIssueDate.Future=Share issue date cannot be a future date
