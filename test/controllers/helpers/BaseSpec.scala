@@ -226,4 +226,5 @@ trait BaseSpec extends UnitSpec with OneAppPerSuite with MockitoSugar with FakeR
     Some(shareIssueDateDay), Some(shareIssueDateMonth), Some(shareIssueDateYear))
   val shareIssuetDateModelEmpty = ShareIssueDateModel(None, None, None)
 
+  val numberOfSharesModel= NumberOfSharesModel(9999999999999.00)
 }

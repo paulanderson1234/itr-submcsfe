@@ -627,16 +627,16 @@ object Validation {
     text().verifying(yearCheckConstraint)
   }
 
-  def employeeCountCheck: Constraint[String] = {
-    Constraint("constraint.employeeCount") {
+  def genericDecimalCheck(formValueMessageKey: String) : Constraint[String] = {
+    Constraint("constraint.numberOfSharesCheck") {
       employees =>
         val error = Try {BigDecimal(employees)} match {
-        case Success(result) =>
-          val sizeError = if (result < 0 || result > 9999999999999.0) Seq(ValidationError(Messages("validation.error.employeeCount.size"))) else Seq()
-          sizeError
-        case Failure(_) if employees.trim.nonEmpty => Seq(ValidationError(Messages("validation.error.employeeCount.notANumber")))
-        case _ => Seq()
-      }
+          case Success(result) =>
+            val sizeError = if (result < 0 || result > 9999999999999.0) Seq(ValidationError(Messages(s"validation.error.$formValueMessageKey.size"))) else Seq()
+            sizeError
+          case Failure(_) if employees.trim.nonEmpty => Seq(ValidationError(Messages(s"validation.error.$formValueMessageKey.notANumber")))
+          case _ => Seq()
+        }
         if (error.isEmpty) Valid else Invalid(error)
     }
   }
