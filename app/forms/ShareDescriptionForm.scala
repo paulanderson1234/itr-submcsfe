@@ -23,7 +23,7 @@ import play.api.data.Forms._
 object ShareDescriptionForm {
   val shareDescriptionForm = Form(
     mapping(
-      "sharedescription" -> nonEmptyText
+      "shareDescription" -> nonEmptyText
     )(ShareDescriptionModel.apply)(ShareDescriptionModel.unapply)
   )
 }
