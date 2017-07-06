@@ -1,15 +1,15 @@
 @import uk.gov.hmrc.play.views.html.helpers.form
 @import models.ShareDescriptionModel
 @import common.Constants
-@import views.html.helpers.{backButtonWithProgress, errorSummary, input}
+@import views.html.helpers.{backButtonWithProgress, errorSummary, textArea, externalLink}
 
-@(ShareDescriptionForm: Form[ShareDescriptionModel])(implicit request: Request[_], messages: Messages)
+@(shareDescriptionForm: Form[ShareDescriptionModel])(implicit request: Request[_], messages: Messages)
 
 @main_template(Messages("page.shares.shareDescription.title")) {
 
 @backButtonWithProgress(controllers.routes.ApplicationHubController.show().url, Messages("common.section.progress.company.details.three"))
 
-    @errorSummary(ShareDescriptionForm, "share-description", "shareDescription")
+    @errorSummary(shareDescriptionForm, "share-description", "shareDescription")
 
     <h1 id="main-heading" class="form-title heading-xlarge">@Messages("page.shares.shareDescription.heading")</h1>
 
@@ -27,19 +27,28 @@
     <fieldset>
         <legend class="visuallyhidden">@Messages("page.shares.shareDescription.heading")</legend>
         <div class="form-group">
-            @input(
-            ShareDescriptionForm("shareDescription"),
+            @textArea(
+            shareDescriptionForm("shareDescription"),
+            '_cols -> "45",
+            '_rows -> "2",
             '_divClass -> "form-label",
             '_labelId -> "label-shareDescription",
             '_hintId -> "label-shareDescription-hint",
-            '_label -> Messages("page.shares.shareDescription.heading"),
-            '_labelTextClass -> "visuallyhidden",
-            '_inputClass -> "input--fullwidth",
+            '_label -> Messages("page.shares.shareDescription.question.hint"),
             '_maxlength-> Constants.SuggestedShareDescriptionLength,
             '_inputHint -> Messages("page.shares.shareDescription.question.hint")
             )
-
         </div>
+
+        <details>
+            <summary><span id="help" class="summary">@Messages("page.shares.shareDescription.whereToFind")</span></summary>
+            <div class="panel panel-indent panel-border-narrow">
+                <p id="date-of-incorporation-where-to-find">@Messages("page.shares.ShareDescription.location")
+                </p>
+            </div>
+        </details>
+
+
     </fieldset>
     <div class="form-group">
         <button class="btn button" type="submit" id="next">@Messages("common.button.snc")</button>

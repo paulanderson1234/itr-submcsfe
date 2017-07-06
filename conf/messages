@@ -945,6 +945,8 @@ page.shares.shareDescription.bullet.one=non-voting shares
 page.shares.shareDescription.bullet.two=ordinary shares
 page.shares.shareDescription.bullet.three=seed shares
 page.shares.shareDescription.question.hint=Suggested limit: 20 words
+page.shares.shareDescription.whereToFind=Where can I find this?
+page.shares.ShareDescription.location=It''s on your company''s Register of Members and share certificates.
 
 #share issue date page
 validation.error.ShareIssueDate.Future=Share issue date cannot be a future date
