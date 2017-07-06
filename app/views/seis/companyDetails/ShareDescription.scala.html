@@ -1,0 +1,46 @@
+@import uk.gov.hmrc.play.views.html.helpers.form
+@import models.ShareDescriptionModel
+@import common.Constants
+@import views.html.helpers {backButtonWithProgress, errorSummary, input}
+
+@(ShareDescriptionForm: Form[ShareDescriptionModel])(implicit request: Request[_], messages: Messages)
+
+@backButtonWithProgress(controllers.routes.ApplicationHubController.show().url, Messages("common.section.progress.company.details.one"))
+
+    @errorSummary(shareDescriptionForm, "share-description", "sharedescription")
+
+    <h1 id="main-heading" class="form-title heading-xlarge">@Messages("page.companyDetails.sharedescription.heading")</h1>
+
+    <div>
+        <p id="description-two" class="lede">@Messages("page.companyDetails.sharedescription.example.text")</p>
+        <ul class="list list-bullet">
+            <li id="bullet-one">@Messages("page.companyDetails.sharedescription.bullet.one")</li>
+            <li id="bullet-two">@Messages("page.companyDetails.sharedescription.bullet.two")</li>
+            <li id="bullet-three">@Messages("page.companyDetails.sharedescription.bullet.three")</li>
+        </ul>
+    </div>
+
+    @form(action = controllers.seis.routes.ShareDescriptionController.submit()) {
+
+    <fieldset>
+        <legend class="visuallyhidden">@Messages("page.companyDetails.sharedescription.heading")</legend>
+        <div class="form-group">
+            @input(
+            shareDescriptionForm("sharedescription"),
+            '_divClass -> "form-label",
+            '_labelId -> "label-sharedescription",
+            '_hintId -> "label-sharedescription-hint",
+            '_label -> Messages("page.companyDetails.sharedescription.heading"),
+            '_labelTextClass -> "visuallyhidden",
+            '_inputClass -> "input--fullwidth",
+            '_maxlength-> Constants.SuggestedshareDescriptionLength,
+            '_inputHint -> Messages("page.companyDetails.sharedescription.question.hint")
+            )
+
+        </div>
+    </fieldset>
+    <div class="form-group">
+        <button class="btn button" type="submit" id="next">@Messages("common.button.snc")</button>
+    </div>
+    }
+    }
