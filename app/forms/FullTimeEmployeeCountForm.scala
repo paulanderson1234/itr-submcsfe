@@ -24,10 +24,12 @@ import utils.Validation._
 object FullTimeEmployeeCountForm {
 
   val formValueMessageKey = "employeeCount"
+  val minimumValue = 0
+
   val fullTimeEmployeeCountForm = Form(
     mapping(
       "employeeCount" -> nonEmptyText
-        .verifying(genericDecimalCheck(formValueMessageKey))
+        .verifying(genericDecimalCheck(formValueMessageKey, minimumValue))
         .transform[BigDecimal](input => BigDecimal(input).setScale(5, BigDecimal.RoundingMode.HALF_UP), _.toString)
     )(FullTimeEmployeeCountModel.apply)(FullTimeEmployeeCountModel.unapply)
   )

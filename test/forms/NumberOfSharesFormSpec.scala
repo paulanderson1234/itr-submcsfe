@@ -25,6 +25,8 @@ import play.api.i18n.Messages.Implicits._
 
 class NumberOfSharesFormSpec extends UnitSpec with OneAppPerSuite {
 
+  val minimumValue:Int = 1
+
   "The NumberOfSharesForm" when {
 
     "provided with a model" should {
@@ -37,7 +39,7 @@ class NumberOfSharesFormSpec extends UnitSpec with OneAppPerSuite {
     }
 
     "provided with a valid map with the maximum number of decimal places" should {
-      val map = Map("numberOfShares" -> "0.1111111111111")
+      val map = Map("numberOfShares" -> "1.1111111111111")
       lazy val form = numberOfSharesForm.bind(map)
 
       "contain no errors" in {
@@ -45,12 +47,12 @@ class NumberOfSharesFormSpec extends UnitSpec with OneAppPerSuite {
       }
 
       "contain the correct model limited to 5 decimal places" in {
-        form.value shouldBe Some(NumberOfSharesModel(0.11111))
+        form.value shouldBe Some(NumberOfSharesModel(1.11111))
       }
     }
 
     "provided with a valid map with the minimum amount" should {
-      val map = Map("numberOfShares" -> "0.00000000000")
+      val map = Map("numberOfShares" -> "1.00000000000")
       lazy val form = numberOfSharesForm.bind(map)
 
       "contain no errors" in {
@@ -58,7 +60,7 @@ class NumberOfSharesFormSpec extends UnitSpec with OneAppPerSuite {
       }
 
       "contain the correct model limited to 5 decimal places" in {
-        form.value shouldBe Some(NumberOfSharesModel(0.00000))
+        form.value shouldBe Some(NumberOfSharesModel(1.00000))
       }
     }
 
@@ -84,7 +86,7 @@ class NumberOfSharesFormSpec extends UnitSpec with OneAppPerSuite {
       }
 
       "contain the too large error message" in {
-        form.errors.head.message shouldBe Messages("validation.error.numberOfShares.size")
+        form.errors.head.message shouldBe Messages("validation.error.numberOfShares.size", minimumValue)
       }
     }
 

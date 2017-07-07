@@ -25,6 +25,8 @@ import play.api.i18n.Messages.Implicits._
 
 class FullTimeEmployeeCountFormSpec extends UnitSpec with OneAppPerSuite {
 
+  val minimumValue:Int = 0
+
   "The FullTimeEmployeeCountForm" when {
 
     "provided with a model" should {
@@ -84,7 +86,7 @@ class FullTimeEmployeeCountFormSpec extends UnitSpec with OneAppPerSuite {
       }
 
       "contain the too large error message" in {
-        form.errors.head.message shouldBe Messages("validation.error.employeeCount.size")
+        form.errors.head.message shouldBe Messages("validation.error.employeeCount.size", minimumValue)
       }
     }
 

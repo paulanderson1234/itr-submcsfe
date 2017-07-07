@@ -25,10 +25,11 @@ import utils.Validation._
 object NumberOfSharesForm {
 
   val formValueMessageKey = "numberOfShares"
+  val minimumValue = 1
   val numberOfSharesForm = Form(
     mapping(
       "numberOfShares" -> nonEmptyText
-        .verifying(genericDecimalCheck(formValueMessageKey))
+        .verifying(genericDecimalCheck(formValueMessageKey, minimumValue))
         .transform[BigDecimal](input => BigDecimal(input).setScale(5, BigDecimal.RoundingMode.HALF_UP), _.toString)
     )(NumberOfSharesModel.apply)(NumberOfSharesModel.unapply)
   )

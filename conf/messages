@@ -84,11 +84,11 @@ validation.error.linefouraddresssline=Use fewer than 18 characters in the addres
 validation.error.countrypostcode=Postcode must be entered if country selected is United Kingdom
 validation.error.email=Enter a valid email address
 validation.error.employeeCount.notANumber = Enter a valid number for your employee count
-validation.error.employeeCount.size = The employee count should be between 0 and 9999999999999
+validation.error.employeeCount.size = The employee count should be between {0} and 9999999999999
 validation.error.employeeCount.precision = Enter a value with fewer than 13 decimal places for your employee count
 
 # number of shares validation
-validation.error.numberOfShares.size = The number of shares count should be between 0 and 9999999999999
+validation.error.numberOfShares.size = The number of shares count should be between {0} and 9999999999999
 validation.error.numberOfShares.notANumber=Enter a valid number for your number of shares
 
 ## Session Timeout message ##

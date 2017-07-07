@@ -627,12 +627,12 @@ object Validation {
     text().verifying(yearCheckConstraint)
   }
 
-  def genericDecimalCheck(formValueMessageKey: String) : Constraint[String] = {
+  def genericDecimalCheck(formValueMessageKey: String, minimumValue: Int) : Constraint[String] = {
     Constraint("constraint.numberOfSharesCheck") {
       employees =>
         val error = Try {BigDecimal(employees)} match {
           case Success(result) =>
-            val sizeError = if (result < 0 || result > 9999999999999.0) Seq(ValidationError(Messages(s"validation.error.$formValueMessageKey.size"))) else Seq()
+            val sizeError = if (result < minimumValue || result > 9999999999999.0) Seq(ValidationError(Messages(s"validation.error.$formValueMessageKey.size", minimumValue))) else Seq()
             sizeError
           case Failure(_) if employees.trim.nonEmpty => Seq(ValidationError(Messages(s"validation.error.$formValueMessageKey.notANumber")))
           case _ => Seq()
