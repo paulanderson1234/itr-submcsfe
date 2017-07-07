@@ -6,7 +6,7 @@
 @import views.html.helpers.{externalLink,formHint, formInputRadioGroup, backButtonWithProgress, input, inputWithCurrencySymbol, formInlineDateInput, hiddenField, errorSummary, formShowYesNoRadioContent, textArea, dropdown}
 
 @(numberOfSharesForm:Form[NumberOfSharesModel])(implicit request: Request[_], messages: Messages)
-@main_template(Messages("page.test.page-one.title")) {
+@main_template(Messages("page.test.page-two.title")) {
 <div class="grid-row">
 
     @form(action = testOnly.controllers.seis.routes.TestEndpointSEISController.submitPageTwo()) {
