@@ -47,7 +47,7 @@ trait NominalValueOfSharesController extends FrontendController with AuthorisedA
     AuthorisedAndEnrolled.async {
       implicit user =>
         implicit request =>
-          s4lConnector.fetchAndGetFormData[NominalValueOfSharesModel](KeystoreKeys.nominalValueofShares).map {
+          s4lConnector.fetchAndGetFormData[NominalValueOfSharesModel](KeystoreKeys.nominalValueOfShares).map {
             case Some(data) => Ok(views.html.seis.shares.NominalValueOfShares(nominalValueOfSharesForm.fill(data)))
             case None => Ok(views.html.seis.shares.NominalValueOfShares(nominalValueOfSharesForm))
           }
@@ -59,7 +59,7 @@ trait NominalValueOfSharesController extends FrontendController with AuthorisedA
       implicit user =>
         implicit request =>
           val success: NominalValueOfSharesModel => Future[Result] = { model =>
-            s4lConnector.saveFormData(KeystoreKeys.nominalValueofShares, model).map(_ =>
+            s4lConnector.saveFormData(KeystoreKeys.nominalValueOfShares, model).map(_ =>
               Redirect(controllers.seis.routes.NominalValueOfSharesController.show())
             )
           }

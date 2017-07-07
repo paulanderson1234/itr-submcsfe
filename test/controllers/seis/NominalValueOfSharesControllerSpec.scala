@@ -42,7 +42,7 @@ class NominalValueOfSharesControllerSpec extends BaseSpec {
   def setupMocks(model: Option[NominalValueOfSharesModel]): Unit = {
     mockEnrolledRequest(seisSchemeTypesModel)
 
-    when(mockS4lConnector.fetchAndGetFormData[NominalValueOfSharesModel](Matchers.eq(KeystoreKeys.nominalValueofShares))(Matchers.any(),
+    when(mockS4lConnector.fetchAndGetFormData[NominalValueOfSharesModel](Matchers.eq(KeystoreKeys.nominalValueOfShares))(Matchers.any(),
       Matchers.any(), Matchers.any()))
       .thenReturn(Future.successful(model))
 
