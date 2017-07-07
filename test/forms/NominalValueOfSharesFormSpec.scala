@@ -20,6 +20,8 @@ import org.scalatestplus.play.OneAppPerSuite
 import uk.gov.hmrc.play.test.UnitSpec
 import NominalValueOfSharesForm._
 import models.NominalValueOfSharesModel
+import play.api.i18n.Messages
+import play.api.i18n.Messages.Implicits._
 
 class NominalValueOfSharesFormSpec extends UnitSpec with OneAppPerSuite {
 
@@ -82,7 +84,7 @@ class NominalValueOfSharesFormSpec extends UnitSpec with OneAppPerSuite {
         }
 
         "contain an error message for non-numeric values" in {
-          form.errors.head.message shouldBe "validation.error.nominalValueOfShares.notANumber"
+          form.errors.head.message shouldBe Messages("validation.error.nominalValueOfShares.notANumber")
         }
       }
 
@@ -94,7 +96,7 @@ class NominalValueOfSharesFormSpec extends UnitSpec with OneAppPerSuite {
         }
 
         "contain an error message for values with decimal places" in {
-          form.errors.head.message shouldBe "validation.error.nominalValueOfShares.decimalPlaces"
+          form.errors.head.message shouldBe Messages("validation.error.nominalValueOfShares.decimalPlaces")
         }
       }
 
@@ -106,7 +108,7 @@ class NominalValueOfSharesFormSpec extends UnitSpec with OneAppPerSuite {
         }
 
         "contain an error message for values with too many digits" in {
-          form.errors.head.message shouldBe "validation.error.nominalValueOfShares.size"
+          form.errors.head.message shouldBe Messages("validation.error.nominalValueOfShares.size")
         }
       }
 
@@ -118,7 +120,7 @@ class NominalValueOfSharesFormSpec extends UnitSpec with OneAppPerSuite {
         }
 
         "contain an error message for values with a negative value" in {
-          form.errors.head.message shouldBe "validation.error.nominalValueOfShares.negative"
+          form.errors.head.message shouldBe Messages("validation.error.nominalValueOfShares.negative")
         }
       }
 

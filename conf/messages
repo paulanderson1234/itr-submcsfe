@@ -86,6 +86,10 @@ validation.error.email=Enter a valid email address
 validation.error.employeeCount.notANumber = Enter a valid number for your employee count
 validation.error.employeeCount.size = The employee count should be between {0} and 9999999999999
 validation.error.employeeCount.precision = Enter a value with fewer than 13 decimal places for your employee count
+validation.error.nominalValueOfShares.decimalPlaces = The share value should not contain decimal places
+validation.error.nominalValueOfShares.size =  The share value should be between 0 and 9999999999999
+validation.error.nominalValueOfShares.negative = The share value should not be negative
+validation.error.nominalValueOfShares.notANumber = Enter a valid number for the share value
 
 # number of shares validation
 validation.error.numberOfShares.size = The number of shares count should be between {0} and 9999999999999
@@ -787,6 +791,10 @@ page.seis.companyDetails.fullTimeEmployeeCountError.whatNext = What happens next
 page.seis.companyDetails.fullTimeEmployeeCountError.guidance = You can continue with your application if you think that you should qualify.
 page.seis.companyDetails.fullTimeEmployeeCountError.incorrect = If this information is incorrect you can 
 page.seis.companyDetails.fullTimeEmployeeCountError.incorrect.link = change your answers
+
+# SEIS Nominal Value of Shares
+page.seis.nominalValueOfShares.title = What was the nominal value of each share when they were issued?
+page.seis.nominalValueOfShares.hint = The nominal value is the amount shown on the share certificate.
 
 # SEIS Check Answers
 page.seis.checkAndSubmit.checkAnswers.description.one=You''re applying for Advance Assurance for the Seed Enterprise Investment Scheme.

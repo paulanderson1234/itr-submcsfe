@@ -84,8 +84,17 @@ class NominalValueOfSharesViewSpec extends ViewSpec with FakeRequestHelper {
         }
       }
 
-      "contains a button with the correct text" in {
+      "have a button with the correct text" in {
         doc.select("button").text() shouldBe Messages("common.button.snc")
+      }
+    }
+
+    "supplied with some errors" should {
+      lazy val view = views.html.seis.shares.NominalValueOfShares(nominalValueOfSharesForm.bind(Map("value" -> "")))
+      lazy val doc = Jsoup.parse(view.body)
+
+      "have an error summary" in {
+        doc.getElementById("error-summary-display").hasClass("error-summary--show")
       }
     }
   }

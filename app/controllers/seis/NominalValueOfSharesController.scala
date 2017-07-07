@@ -23,19 +23,26 @@ import controllers.predicates.FeatureSwitch
 import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.play.frontend.auth.connectors.AuthConnector
 import uk.gov.hmrc.play.frontend.controller.FrontendController
+import forms.NominalValueOfSharesForm._
+import play.api.Play.current
+import play.api.i18n.Messages.Implicits._
+
+import scala.concurrent.Future
 
 object NominalValueOfSharesController extends NominalValueOfSharesController {
-  override val enrolmentConnector: EnrolmentConnector = EnrolmentConnector
-  override val applicationConfig: AppConfig = FrontendAppConfig
-  override val s4lConnector: S4LConnector = S4LConnector
-  override val authConnector: AuthConnector = FrontendAuthConnector
+  override lazy val enrolmentConnector: EnrolmentConnector = EnrolmentConnector
+  override lazy val applicationConfig: AppConfig = FrontendAppConfig
+  override lazy val s4lConnector: S4LConnector = S4LConnector
+  override lazy val authConnector: AuthConnector = FrontendAuthConnector
 }
 
 trait NominalValueOfSharesController extends FrontendController with AuthorisedAndEnrolledForTAVC with FeatureSwitch {
 
   override val acceptedFlows = Seq(Seq(SEIS))
 
-  val show: Action[AnyContent] = TODO
+  val show: Action[AnyContent] = Action.async { implicit request =>
+    Future.successful(Ok(views.html.seis.shares.NominalValueOfShares(nominalValueOfSharesForm)))
+  }
 
   val submit: Action[AnyContent] = TODO
 }
