@@ -19,8 +19,11 @@ GET        /investment-tax-relief-cs/test-only/test-endpoint/eis/page-2         
 POST       /investment-tax-relief-cs/test-only/test-endpoint/eis/page-2                        testOnly.controllers.eis.TestEndpointEISController.submitPageTwo
 
 #seis
-GET        /investment-tax-relief-cs/test-only/test-endpoint/seis                              testOnly.controllers.seis.TestEndpointSEISController.showPageOne(schemes: Option[Int])
-POST       /investment-tax-relief-cs/test-only/test-endpoint/seis                              testOnly.controllers.seis.TestEndpointSEISController.submitPageOne
+GET        /investment-tax-relief-cs/test-only/test-endpoint/seis/page-1                       testOnly.controllers.seis.TestEndpointSEISController.showPageOne(schemes: Option[Int])
+POST       /investment-tax-relief-cs/test-only/test-endpoint/seis/page-1                       testOnly.controllers.seis.TestEndpointSEISController.submitPageOne
+
+GET        /investment-tax-relief-cs/test-only/test-endpoint/seis/page-2                       testOnly.controllers.seis.TestEndpointSEISController.showPageTwo
+POST       /investment-tax-relief-cs/test-only/test-endpoint/seis/page-2                       testOnly.controllers.seis.TestEndpointSEISController.submitPageTwo
 
 #eisseis
 GET        /investment-tax-relief-cs/test-only/test-endpoint/eisseis/page-1                    testOnly.controllers.eisseis.TestEndpointEISSEISController.showPageOne(schemes: Option[Int])

@@ -1,0 +1,41 @@
+@import models._
+@import testOnly.models.TestPreviousSchemesModel
+@import uk.gov.hmrc.play.views.html.helpers.form
+@import common.Constants
+@import utils.CountriesHelper
+@import views.html.helpers.{externalLink,formHint, formInputRadioGroup, backButtonWithProgress, input, inputWithCurrencySymbol, formInlineDateInput, hiddenField, errorSummary, formShowYesNoRadioContent, textArea, dropdown}
+
+@(numberOfSharesForm:Form[NumberOfSharesModel])(implicit request: Request[_], messages: Messages)
+@main_template(Messages("page.test.page-two.title")) {
+<div class="grid-row">
+
+    @form(action = testOnly.controllers.seis.routes.TestEndpointSEISController.submitPageTwo()) {
+
+    <h2>Number of Shares</h2>
+    <div class="form-group">
+        @input(
+        numberOfSharesForm("numberOfShares"),
+        '_divClass -> "form-label",
+        '_labelId -> "label-numberOfShares",
+        '_label -> Messages("page.shareDetails.numberOfShares.heading"),
+        '_labelTextClass -> "visuallyhidden",
+        '_inputClass -> "input--fullwidth"
+        )
+    </div>
+
+
+    <div class="form-group">
+        <button class="btn button" type="submit" id="next">
+            @Messages("page.test.submit-form.button")
+        </button>
+
+        <a class="btn button" id="clear-cache" href="@testOnly.controllers.routes.ClearCacheController.clearCache()">
+            @Messages("page.test.clear-cache.button")
+        </a>
+    </div>
+
+    }
+
+
+</div>
+}

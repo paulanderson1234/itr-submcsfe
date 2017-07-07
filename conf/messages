@@ -57,6 +57,8 @@ common.section.progress.company.details.three=Section 3 of 5: This investment
 common.section.progress.company.details.five=Section 5 of 5: Supporting documents
 common.section.progress.company.details.four=Section 4 of 5: Contact details
 
+common.section.progress.share.details.three=Section 3 of 6: Shares
+
 ## Common report error ##
 common.error.help.text=Get help with this page.
 common.error.summary.heading=This page has errors
@@ -82,8 +84,12 @@ validation.error.linefouraddresssline=Use fewer than 18 characters in the addres
 validation.error.countrypostcode=Postcode must be entered if country selected is United Kingdom
 validation.error.email=Enter a valid email address
 validation.error.employeeCount.notANumber = Enter a valid number for your employee count
-validation.error.employeeCount.size = The employee count should be between 0 and 9999999999999
+validation.error.employeeCount.size = The employee count should be between {0} and 9999999999999
 validation.error.employeeCount.precision = Enter a value with fewer than 13 decimal places for your employee count
+
+# number of shares validation
+validation.error.numberOfShares.size = The number of shares count should be between {0} and 9999999999999
+validation.error.numberOfShares.notANumber=Enter a valid number for your number of shares
 
 ## Session Timeout message ##
 session.timeout.message=Your session has ended
@@ -985,3 +991,7 @@ page.companyDetails.HasInvestmentTradeStarted.title=Has the trade you want to ra
 page.companyDetails.HasInvestmentTradeStarted.heading=Has the trade you want to raise investment for started?
 page.companyDetails.HasInvestmentTradeStarted.question.hint=When did this trade start?
 page.companyDetails.HasInvestmentTradeStarted.descriptionOne.text=The trade has started if your goods or services are available to the public. You may not have made a sale yet.
+
+# number of shares
+page.shareDetails.numberOfShares.title=How many of these shares did your company issue?
+page.shareDetails.numberOfShares.heading=How many of these shares did your company issue?
