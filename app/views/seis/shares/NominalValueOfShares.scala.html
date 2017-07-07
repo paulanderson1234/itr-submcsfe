@@ -1,0 +1,27 @@
+@import views.html.helpers.backButtonWithProgress
+@import views.html.helper.form
+@import views.html.helpers.input
+
+@(nominalValueOfSharesForm: Form[NominalValueOfSharesModel])(implicit request: Request[_], messages: Messages)
+
+@main_template(Messages("page.seis.nominalValueOfShares.title")) {
+    @backButtonWithProgress(controllers.seis.routes.NominalValueOfSharesController.show().url, Messages("common.section.progress.company.details.three"))
+
+    <h1 class="heading-xlarge">@Messages("page.seis.nominalValueOfShares.title")</h1>
+
+    @form(action = controllers.seis.routes.NominalValueOfSharesController.submit){
+        <fieldset>
+            <p>@Messages("page.seis.nominalValueOfShares.hint")</p>
+            @input(
+                nominalValueOfSharesForm("value"),
+                '_divClass -> "form-label",
+                '_label -> Messages("page.seis.nominalValueOfShares.title"),
+                '_labelTextClass -> "visuallyhidden"
+            )
+        </fieldset>
+
+        <div class="form-group">
+            <button class="btn button" type="submit" id="next">@Messages("common.button.snc")</button>
+        </div>
+    }
+}
