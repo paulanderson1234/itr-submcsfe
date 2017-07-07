@@ -17,15 +17,18 @@
 package controllers.seis
 
 import auth.{AuthorisedAndEnrolledForTAVC, SEIS}
+import common.KeystoreKeys
 import config.{AppConfig, FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.predicates.FeatureSwitch
-import play.api.mvc.{Action, AnyContent}
+import forms.NominalValueOfSharesForm._
+import models.NominalValueOfSharesModel
+import play.api.Play.current
+import play.api.data.Form
+import play.api.i18n.Messages.Implicits._
+import play.api.mvc.{Action, AnyContent, Result}
 import uk.gov.hmrc.play.frontend.auth.connectors.AuthConnector
 import uk.gov.hmrc.play.frontend.controller.FrontendController
-import forms.NominalValueOfSharesForm._
-import play.api.Play.current
-import play.api.i18n.Messages.Implicits._
 
 import scala.concurrent.Future
 
@@ -40,9 +43,32 @@ trait NominalValueOfSharesController extends FrontendController with AuthorisedA
 
   override val acceptedFlows = Seq(Seq(SEIS))
 
-  val show: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok(views.html.seis.shares.NominalValueOfShares(nominalValueOfSharesForm)))
+  val show: Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
+    AuthorisedAndEnrolled.async {
+      implicit user =>
+        implicit request =>
+          s4lConnector.fetchAndGetFormData[NominalValueOfSharesModel](KeystoreKeys.nominalValueofShares).map {
+            case Some(data) => Ok(views.html.seis.shares.NominalValueOfShares(nominalValueOfSharesForm.fill(data)))
+            case None => Ok(views.html.seis.shares.NominalValueOfShares(nominalValueOfSharesForm))
+          }
+    }
   }
 
-  val submit: Action[AnyContent] = TODO
+  val submit: Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
+    AuthorisedAndEnrolled.async {
+      implicit user =>
+        implicit request =>
+          val success: NominalValueOfSharesModel => Future[Result] = { model =>
+            s4lConnector.saveFormData(KeystoreKeys.nominalValueofShares, model).map(_ =>
+              Redirect(controllers.seis.routes.NominalValueOfSharesController.show())
+            )
+          }
+
+          val failure: Form[NominalValueOfSharesModel] => Future[Result] = { form =>
+            Future.successful(BadRequest(views.html.seis.shares.NominalValueOfShares(form)))
+          }
+
+          nominalValueOfSharesForm.bindFromRequest().fold(failure, success)
+    }
+  }
 }
