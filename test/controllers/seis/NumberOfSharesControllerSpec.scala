@@ -65,7 +65,7 @@ class NumberOfSharesControllerSpec extends BaseSpec {
     }
 
 
-    "Sending a GET request to ShareIssueDateController when authenticated and enrolled" should {
+    "Sending a GET request to the NumberOfSharesControllerController when authenticated and enrolled" should {
       "return a 200 when something is fetched from keystore" in {
         setupMocks(Some(numberOfSharesModel))
         mockEnrolledRequest(seisSchemeTypesModel)
