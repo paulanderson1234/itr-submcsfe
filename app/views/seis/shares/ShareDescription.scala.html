@@ -13,7 +13,7 @@
 
     <h1 id="main-heading" class="form-title heading-xlarge">@Messages("page.shares.shareDescription.heading")</h1>
 
-    <div>
+    <div class="form-group">
         <p id="description-two" class="lede">@Messages("page.shares.shareDescription.example.text")</p>
         <ul class="list list-bullet">
             <li id="bullet-one">@Messages("page.shares.shareDescription.bullet.one")</li>
@@ -27,23 +27,21 @@
     <fieldset>
         <legend class="visuallyhidden">@Messages("page.shares.shareDescription.heading")</legend>
         <div class="form-group">
+            <span class = "form-hint" id="desc-one">@Messages("page.shares.shareDescription.question.hint")</span>
             @textArea(
             shareDescriptionForm("shareDescription"),
             '_cols -> "45",
             '_rows -> "2",
-            '_divClass -> "form-label",
-            '_labelId -> "label-shareDescription",
-            '_hintId -> "label-shareDescription-hint",
-            '_label -> Messages("page.shares.shareDescription.question.hint"),
-            '_maxlength-> Constants.SuggestedShareDescriptionLength,
-            '_inputHint -> Messages("page.shares.shareDescription.question.hint")
+            '_maxLength-> Constants.SuggestedShareDescriptionLength,
+            '_label-> Messages("page.shares.shareDescription.heading"),
+            '_labelTextClass-> "visuallyhidden"
             )
         </div>
 
         <details>
             <summary><span id="help" class="summary">@Messages("page.shares.shareDescription.whereToFind")</span></summary>
             <div class="panel panel-indent panel-border-narrow">
-                <p id="share-descriptionm-where-to-find">@Messages("page.shares.ShareDescription.location")
+                <p id="share-description-where-to-find">@Messages("page.shares.ShareDescription.location")
                 </p>
             </div>
         </details>

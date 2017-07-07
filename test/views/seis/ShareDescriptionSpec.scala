@@ -43,20 +43,17 @@ class ShareDescriptionSpec extends ViewSpec {
         val page = ShareDescription(shareDescriptionForm)(authorisedFakeRequest, applicationMessages)
         val document = Jsoup.parse(page.body)
 
-//        document.title() shouldBe Messages("page.shares.shareDescription.title")
-//        document.getElementById("main-heading").text() shouldBe Messages("page.shares.shareDescription.heading")
-//        document.getElementById("description-two").text() shouldBe Messages("page.shares.shareDescription.example.text")
-//        document.getElementById("bullet-one").text() shouldBe Messages("page.shares.shareDescription.bullet.one")
-//        document.getElementById("bullet-two").text() shouldBe Messages("page.shares.shareDescription.bullet.two")
-//        document.getElementById("bullet-three").text() shouldBe Messages("page.shares.shareDescription.bullet.three")
-//        document.getElementById("label-shareDescription-hint").text() should include
-//        Messages("page.shares.shareDescription.question.hint")
-//        document.getElementById("help").text() shouldBe Messages("page.shares.shareDescription.whereToFind")
-//        document.getElementById("share-descriptionm-where-to-find").text() shouldBe Messages("page.shares.ShareDescription.location")
+        document.title() shouldBe Messages("page.shares.shareDescription.title")
+        document.getElementById("main-heading").text() shouldBe Messages("page.shares.shareDescription.heading")
+        document.getElementById("description-two").text() shouldBe Messages("page.shares.shareDescription.example.text")
+        document.getElementById("bullet-one").text() shouldBe Messages("page.shares.shareDescription.bullet.one")
+        document.getElementById("bullet-two").text() shouldBe Messages("page.shares.shareDescription.bullet.two")
+        document.getElementById("bullet-three").text() shouldBe Messages("page.shares.shareDescription.bullet.three")
+        document.getElementById("labelTextId").text() shouldBe Messages("page.shares.shareDescription.heading")
+        document.getElementById("help").text() shouldBe Messages("page.shares.shareDescription.whereToFind")
+        document.getElementById("share-description-where-to-find").text() shouldBe Messages("page.shares.ShareDescription.location")
       }
-    }
 
-    "show the correct elements" when {
       "there is a share description model" in {
         val shareDescriptionModel = ShareDescriptionModel("")
         val page = ShareDescription(shareDescriptionForm.fill(shareDescriptionModel))(authorisedFakeRequest, applicationMessages)
@@ -68,9 +65,9 @@ class ShareDescriptionSpec extends ViewSpec {
         document.getElementById("bullet-one").text() shouldBe Messages("page.shares.shareDescription.bullet.one")
         document.getElementById("bullet-two").text() shouldBe Messages("page.shares.shareDescription.bullet.two")
         document.getElementById("bullet-three").text() shouldBe Messages("page.shares.shareDescription.bullet.three")
-        document.getElementById("label-shareDescription-hint").text() shouldBe Messages("page.shares.shareDescription.question.hint")
+        document.getElementById("labelTextId").text() shouldBe Messages("page.shares.shareDescription.heading")
         document.getElementById("help").text() shouldBe Messages("page.shares.shareDescription.whereToFind")
-        document.getElementById("share-descriptionm-where-to-find").text() shouldBe Messages("page.shares.ShareDescription.location")
+        document.getElementById("share-description-where-to-find").text() shouldBe Messages("page.shares.ShareDescription.location")
       }
     }
   }
