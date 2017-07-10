@@ -56,8 +56,16 @@ class InvalidPreviousSchemeSpec extends ViewSpec with FakeRequestHelper {
       document.select("article div p").first().text() shouldBe Messages("page.previousInvestment.InvalidPreviousScheme.reason")
     }
 
+    "contain the correct secondary heading" in {
+      document.select("h2").text().trim shouldBe Messages("page.previousInvestment.InvalidPreviousScheme.secondaryHeading")
+    }
+
+    "contains the correct what next information" in {
+      document.select("article div p").get(1).text() shouldBe Messages("page.previousInvestment.InvalidPreviousScheme.whatNext")
+    }
+
     "contain a change link" which {
-      lazy val changeLink = document.select("article div p").get(1)
+      lazy val changeLink = document.select("article div p").get(2)
 
       "has the correct sentence" in {
         changeLink.text() shouldBe Messages("page.previousInvestment.InvalidPreviousScheme.change-text") +
@@ -69,7 +77,7 @@ class InvalidPreviousSchemeSpec extends ViewSpec with FakeRequestHelper {
       }
 
       "contains a link to the previous schemes page" in {
-        changeLink.select("a").attr("href") shouldBe routes.ReviewPreviousSchemesController.show().url
+        changeLink.select("a").attr("href") shouldBe routes.PreviousSchemeController.show().url
       }
     }
 
@@ -77,11 +85,11 @@ class InvalidPreviousSchemeSpec extends ViewSpec with FakeRequestHelper {
       lazy val button = document.select("a.button")
 
       "contains the correct message" in {
-        button.text() shouldBe Messages("page.previousInvestment.InvalidPreviousScheme.disregard")
+        button.text() shouldBe Messages("common.button.continue")
       }
 
       "contains a forward link to the previous schemes page" in {
-        button.attr("href") shouldBe routes.PreviousSchemeController.show().url
+        button.attr("href") shouldBe routes.ReviewPreviousSchemesController.show().url
       }
     }
   }
