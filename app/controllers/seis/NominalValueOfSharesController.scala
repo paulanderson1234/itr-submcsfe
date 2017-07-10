@@ -48,8 +48,8 @@ trait NominalValueOfSharesController extends FrontendController with AuthorisedA
       implicit user =>
         implicit request =>
           s4lConnector.fetchAndGetFormData[NominalValueOfSharesModel](KeystoreKeys.nominalValueOfShares).map {
-            case Some(data) => Ok(views.html.seis.shares.NominalValueOfShares(nominalValueOfSharesForm.fill(data)))
-            case None => Ok(views.html.seis.shares.NominalValueOfShares(nominalValueOfSharesForm))
+            case Some(data) => Ok(views.html.seis.shareDetails.NominalValueOfShares(nominalValueOfSharesForm.fill(data)))
+            case None => Ok(views.html.seis.shareDetails.NominalValueOfShares(nominalValueOfSharesForm))
           }
     }
   }
@@ -65,7 +65,7 @@ trait NominalValueOfSharesController extends FrontendController with AuthorisedA
           }
 
           val failure: Form[NominalValueOfSharesModel] => Future[Result] = { form =>
-            Future.successful(BadRequest(views.html.seis.shares.NominalValueOfShares(form)))
+            Future.successful(BadRequest(views.html.seis.shareDetails.NominalValueOfShares(form)))
           }
 
           nominalValueOfSharesForm.bindFromRequest().fold(failure, success)
