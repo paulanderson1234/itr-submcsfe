@@ -28,7 +28,7 @@ import play.api.test.Helpers._
 
 import scala.concurrent.Future
 
-class ShareDescriptionSpec extends BaseSpec {
+class ShareDescriptionControllerSpec extends BaseSpec {
 
   object TestController extends ShareDescriptionController {
     override lazy val applicationConfig = MockConfig
