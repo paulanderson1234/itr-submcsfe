@@ -27,8 +27,8 @@ import play.api.Play.current
 
 object GrossAssetsForm {
 
-  val maxAllowableAmount: Int = 5000000
-  val minAllowableAmount: Int = 1
+  val maxAllowableAmount: Int = 999999999
+  val minAllowableAmount: Int = 0
 
   val grossAssetsForm = Form(
     mapping(

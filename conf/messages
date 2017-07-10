@@ -914,7 +914,7 @@ page.historicSubmissions.applications.aa.no-previous.text=You have not submitted
 
 #Gross assets page - SEIS
 page.grossAssets.amount.invalidAmount=Enter an amount in the correct format e.g. 10000
-page.grossAssets.amount.OutOfRange=Enter an amount between 1 and 5000000
+page.grossAssets.amount.OutOfRange=Enter an amount between 0 and 999999999
 page.grossAssets.amount.title=What were your company''s gross assets worth immediately before the share issue?
 page.grossAssets.amount.heading=What were your company''s gross assets worth immediately before the share issue?
 page.grossAssets.help.link=What happens if I don''t raise this amount?
