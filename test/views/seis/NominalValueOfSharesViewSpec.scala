@@ -29,7 +29,7 @@ class NominalValueOfSharesViewSpec extends ViewSpec with FakeRequestHelper {
     implicit lazy val request = fakeRequest
 
     "supplied with no errors" should {
-      lazy val view = views.html.seis.shares.NominalValueOfShares(nominalValueOfSharesForm)
+      lazy val view = views.html.seis.shareDetails.NominalValueOfShares(nominalValueOfSharesForm)
       lazy val doc = Jsoup.parse(view.body)
 
       "have the correct title" in {
@@ -90,7 +90,7 @@ class NominalValueOfSharesViewSpec extends ViewSpec with FakeRequestHelper {
     }
 
     "supplied with some errors" should {
-      lazy val view = views.html.seis.shares.NominalValueOfShares(nominalValueOfSharesForm.bind(Map("value" -> "")))
+      lazy val view = views.html.seis.shareDetails.NominalValueOfShares(nominalValueOfSharesForm.bind(Map("value" -> "")))
       lazy val doc = Jsoup.parse(view.body)
 
       "have an error summary" in {
