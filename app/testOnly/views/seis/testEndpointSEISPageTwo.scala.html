@@ -26,7 +26,7 @@
         <h2>Nominal Value of Shares</h2>
         <div class="form-group">
             <p>@Messages("page.seis.nominalValueOfShares.hint")</p>
-            @input(
+            @inputWithCurrencySymbol(
                 nominalValueOfSharesForm("nominalValueOfShares"),
                 '_divClass -> "form-label",
                 '_label -> Messages("page.seis.nominalValueOfShares.title"),

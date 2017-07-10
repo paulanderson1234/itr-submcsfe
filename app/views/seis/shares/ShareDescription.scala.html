@@ -3,11 +3,11 @@
 @import common.Constants
 @import views.html.helpers.{backButtonWithProgress, errorSummary, textArea, externalLink}
 
-@(shareDescriptionForm: Form[ShareDescriptionModel])(implicit request: Request[_], messages: Messages)
+@(shareDescriptionForm: Form[ShareDescriptionModel], backUrl: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(Messages("page.shares.shareDescription.title")) {
 
-@backButtonWithProgress(controllers.routes.ApplicationHubController.show().url, Messages("common.section.progress.company.details.three"))
+@backButtonWithProgress(backUrl, Messages("common.section.progress.company.details.three"))
 
     @errorSummary(shareDescriptionForm, "share-description", "shareDescription")
 

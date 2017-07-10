@@ -48,8 +48,8 @@ trait ShareDescriptionController extends FrontendController with AuthorisedAndEn
       def routeRequest(backUrl: Option[String]) = {
         if (backUrl.isDefined) {
           s4lConnector.fetchAndGetFormData[ShareDescriptionModel](KeystoreKeys.shareDescription).map {
-            case Some(data) => Ok(ShareDescription(shareDescriptionForm.fill(data)))
-            case None => Ok(ShareDescription(shareDescriptionForm))
+            case Some(data) => Ok(ShareDescription(shareDescriptionForm.fill(data), backUrl.get))
+            case None => Ok(ShareDescription(shareDescriptionForm, backUrl.get))
           }
         }
         else {
@@ -69,7 +69,7 @@ trait ShareDescriptionController extends FrontendController with AuthorisedAndEn
       shareDescriptionForm.bindFromRequest().fold(
         formWithErrors => {
           ControllerHelpers.getSavedBackLink(KeystoreKeys.backLinkShareDescription, s4lConnector).flatMap(url =>
-            Future.successful(BadRequest(ShareDescription(formWithErrors))))
+            Future.successful(BadRequest(ShareDescription(formWithErrors,url.get))))
         },
         validFormData => {
           s4lConnector.saveFormData(KeystoreKeys.shareDescription, validFormData)

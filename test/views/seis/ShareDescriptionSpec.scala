@@ -40,7 +40,8 @@ class ShareDescriptionSpec extends ViewSpec {
   "The share description page" should {
     "show the correct elements" when {
       "there is no share description model" in {
-        val page = ShareDescription(shareDescriptionForm)(authorisedFakeRequest, applicationMessages)
+        val page = ShareDescription(shareDescriptionForm,
+          controllers.seis.routes.HadOtherInvestmentsController.show().toString)(authorisedFakeRequest, applicationMessages)
         val document = Jsoup.parse(page.body)
 
         document.title() shouldBe Messages("page.shares.shareDescription.title")
@@ -56,7 +57,8 @@ class ShareDescriptionSpec extends ViewSpec {
 
       "there is a share description model" in {
         val shareDescriptionModel = ShareDescriptionModel("")
-        val page = ShareDescription(shareDescriptionForm.fill(shareDescriptionModel))(authorisedFakeRequest, applicationMessages)
+        val page = ShareDescription(shareDescriptionForm.fill(shareDescriptionModel),
+          controllers.seis.routes.HadOtherInvestmentsController.show().toString)(authorisedFakeRequest, applicationMessages)
         val document = Jsoup.parse(page.body)
 
         document.title() shouldBe Messages("page.shares.shareDescription.title")
