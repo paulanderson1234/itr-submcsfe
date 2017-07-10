@@ -23,6 +23,7 @@ import controllers.predicates.FeatureSwitch
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
+import views.html.seis.companyDetails.GrossAssetsError
 
 import scala.concurrent.Future
 
@@ -41,7 +42,7 @@ trait GrossAssetsErrorController extends FrontendController with AuthorisedAndEn
 
   val show = featureSwitch(applicationConfig.seisFlowEnabled) {
     AuthorisedAndEnrolled.async { implicit user => implicit request =>
-      Future.successful(Ok(views.html.seis.companyDetails.GrossAssetsError()))
+      Future.successful(Ok(GrossAssetsError()))
     }
   }
 

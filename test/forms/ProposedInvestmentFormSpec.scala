@@ -25,6 +25,10 @@ import play.api.i18n.Messages.Implicits._
 
 class ProposedInvestmentFormSpec extends UnitSpec with OneAppPerSuite{
 
+  val maxAmount = 5000000
+  val minAmount = 1
+
+
   "Creating a form using an empty model" should {
     lazy val form = proposedInvestmentForm
     "return an empty string for amount" in {
@@ -99,7 +103,7 @@ class ProposedInvestmentFormSpec extends UnitSpec with OneAppPerSuite{
     }
 
     "supplied with an amount that's greater than the max" should {
-      lazy val form = proposedInvestmentForm.bind(Map("investmentAmount" -> "5000001"))
+      lazy val form = proposedInvestmentForm.bind(Map("investmentAmount" -> s"${maxAmount + 1}"))
       "raise form error" in {
         form.hasErrors shouldBe true
       }
@@ -113,7 +117,7 @@ class ProposedInvestmentFormSpec extends UnitSpec with OneAppPerSuite{
     }
 
     "supplied with an amount that's lower than the min" should {
-      lazy val form = proposedInvestmentForm.bind(Map("investmentAmount" -> "0"))
+      lazy val form = proposedInvestmentForm.bind(Map("investmentAmount" -> s"${minAmount -1}"))
       "raise form error" in {
         form.hasErrors shouldBe true
       }
@@ -131,14 +135,14 @@ class ProposedInvestmentFormSpec extends UnitSpec with OneAppPerSuite{
 
     "supplied with valid amount at the maximum allowed" should {
       "not raise form error" in {
-        val form = proposedInvestmentForm.bind(Map("investmentAmount" -> "5000000"))
+        val form = proposedInvestmentForm.bind(Map("investmentAmount" -> s"$maxAmount"))
         form.hasErrors shouldBe false
       }
     }
 
     "supplied with valid amount at the minimum allowed" should {
       "not raise form error" in {
-        val form = proposedInvestmentForm.bind(Map("investmentAmount" -> "1"))
+        val form = proposedInvestmentForm.bind(Map("investmentAmount" -> s"$minAmount"))
         form.hasErrors shouldBe false
       }
     }
