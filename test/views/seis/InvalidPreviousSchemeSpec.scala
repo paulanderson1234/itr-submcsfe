@@ -16,41 +16,73 @@
 
 package views.seis
 
-import auth.{MockConfigSingleFlow, MockAuthConnector}
-import controllers.seis.{InvalidPreviousSchemeController, routes}
+import controllers.helpers.FakeRequestHelper
+import controllers.seis.routes
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.i18n.Messages
-import play.api.test.Helpers._
-import views.helpers.ViewSpec
 import play.api.i18n.Messages.Implicits._
+import views.helpers.ViewSpec
 
-class InvalidPreviousSchemeSpec extends ViewSpec {
+class InvalidPreviousSchemeSpec extends ViewSpec with FakeRequestHelper {
 
-  object TestController extends InvalidPreviousSchemeController {
-    override lazy val applicationConfig = MockConfigSingleFlow
-    override lazy val authConnector = MockAuthConnector
-    override lazy val enrolmentConnector = mockEnrolmentConnector
-    override lazy val s4lConnector = mockS4lConnector
-  }
+  implicit val request = fakeRequest
 
   "The Invalid Previous Scheme error page" should {
+    lazy val view = views.html.seis.previousInvestment.InvalidPreviousScheme()
+    lazy val document: Document = Jsoup.parse(view.body)
 
-    "Verify that start page contains the correct elements" in new SEISSetup {
-      val document: Document = {
-        val result = TestController.show.apply(authorisedFakeRequest)
-        Jsoup.parse(contentAsString(result))
+    "contain the correct title" in {
+      document.title shouldBe Messages("page.previousInvestment.InvalidPreviousScheme.title")
+    }
+
+    "contain a back link" which {
+      lazy val backLink = document.select("article > a")
+
+      "has the correct text" in {
+        backLink.text() shouldBe Messages("common.button.back")
       }
 
-      document.title shouldEqual Messages("page.previousInvestment.InvalidPreviousScheme.title")
-      document.body.getElementById("main-heading").text() shouldEqual Messages("page.previousInvestment.InvalidPreviousScheme.heading")
+      "has the correct link" in {
+        backLink.attr("href") shouldBe routes.ReviewPreviousSchemesController.show().url
+      }
+    }
 
-      document.body.getElementById("invalid-scheme-reason").text() shouldEqual Messages("page.previousInvestment.InvalidPreviousScheme.reason")
-      document.body.getElementById("change-answers").text() shouldEqual Messages("page.previousInvestment.InvalidPreviousScheme.change-text") +
-        " " + Messages("page.previousInvestment.InvalidPreviousScheme.change-link") + "."
-      document.body.getElementById("back-link").attr("href") shouldEqual routes.ReviewPreviousSchemesController.show().url
-      document.body.getElementById("change-answers-link").attr("href") shouldEqual routes.ReviewPreviousSchemesController.show().url
+    "contain the correct heading" in {
+      document.select("h1").text() shouldBe Messages("page.previousInvestment.InvalidPreviousScheme.heading")
+    }
 
+    "contain a description of the error" in {
+      document.select("article div p").first().text() shouldBe Messages("page.previousInvestment.InvalidPreviousScheme.reason")
+    }
+
+    "contain a change link" which {
+      lazy val changeLink = document.select("article div p").get(1)
+
+      "has the correct sentence" in {
+        changeLink.text() shouldBe Messages("page.previousInvestment.InvalidPreviousScheme.change-text") +
+          " " + Messages("page.previousInvestment.InvalidPreviousScheme.change-link") + "."
+      }
+
+      "contains the correct link text" in {
+        changeLink.select("a").text() shouldBe Messages("page.previousInvestment.InvalidPreviousScheme.change-link")
+      }
+
+      "contains a link to the previous schemes page" in {
+        changeLink.select("a").attr("href") shouldBe routes.ReviewPreviousSchemesController.show().url
+      }
+    }
+
+    "contain a continue button" which {
+      lazy val button = document.select("a.button")
+
+      "contains the correct message" in {
+        button.text() shouldBe Messages("page.previousInvestment.InvalidPreviousScheme.disregard")
+      }
+
+      "contains a forward link to the previous schemes page" in {
+        button.attr("href") shouldBe routes.PreviousSchemeController.show().url
+      }
     }
   }
 }
