@@ -16,6 +16,7 @@
 
 package controllers.seis
 
+import controllers.Helpers.ControllerHelpers
 import play.api.Play.current
 import play.api.i18n.Messages.Implicits._
 import auth.{AuthorisedAndEnrolledForTAVC, SEIS}
@@ -30,10 +31,7 @@ import views.html.seis.shares.ShareDescription
 
 import scala.concurrent.Future
 
-
 object ShareDescriptionController extends ShareDescriptionController {
-
-
   override lazy val s4lConnector = S4LConnector
   override lazy val applicationConfig = FrontendAppConfig
   override lazy val authConnector = FrontendAuthConnector
@@ -45,24 +43,39 @@ trait ShareDescriptionController extends FrontendController with AuthorisedAndEn
 
   override val acceptedFlows = Seq(Seq(SEIS))
 
-  val show = featureSwitch(applicationConfig.seisFlowEnabled) { AuthorisedAndEnrolled.async { implicit user => implicit request =>
-    s4lConnector.fetchAndGetFormData[ShareDescriptionModel](KeystoreKeys.shareDescription).map {
-      case Some(data) => Ok(ShareDescription(shareDescriptionForm.fill(data)))
-      case None => Ok(ShareDescription(shareDescriptionForm))
+  val show = featureSwitch(applicationConfig.seisFlowEnabled) {
+    AuthorisedAndEnrolled.async { implicit user => implicit request =>
+      def routeRequest(backUrl: Option[String]) = {
+        if (backUrl.isDefined) {
+          s4lConnector.fetchAndGetFormData[ShareDescriptionModel](KeystoreKeys.shareDescription).map {
+            case Some(data) => Ok(ShareDescription(shareDescriptionForm.fill(data)))
+            case None => Ok(ShareDescription(shareDescriptionForm))
+          }
+        }
+        else {
+          Future.successful(Redirect(controllers.seis.routes.HadOtherInvestmentsController.show()))
+        }
       }
+
+      for {
+        link <- ControllerHelpers.getSavedBackLink(KeystoreKeys.backLinkShareDescription, s4lConnector)
+        route <- routeRequest(link)
+      } yield route
     }
   }
 
-  val submit = featureSwitch(applicationConfig.seisFlowEnabled) { AuthorisedAndEnrolled.async { implicit user => implicit request =>
-    shareDescriptionForm.bindFromRequest().fold(
-      formWithErrors => {
-        Future.successful(BadRequest(ShareDescription(formWithErrors)))
-      },
-      validFormData => {
-        s4lConnector.saveFormData(KeystoreKeys.shareDescription, validFormData)
-        Future.successful(Redirect(controllers.seis.routes.ShareDescriptionController.show()))
-      }
-    )
-  }
+  val submit = featureSwitch(applicationConfig.seisFlowEnabled) {
+    AuthorisedAndEnrolled.async { implicit user => implicit request =>
+      shareDescriptionForm.bindFromRequest().fold(
+        formWithErrors => {
+          ControllerHelpers.getSavedBackLink(KeystoreKeys.backLinkShareDescription, s4lConnector).flatMap(url =>
+            Future.successful(BadRequest(ShareDescription(formWithErrors))))
+        },
+        validFormData => {
+          s4lConnector.saveFormData(KeystoreKeys.shareDescription, validFormData)
+          Future.successful(Redirect(controllers.seis.routes.ShareDescriptionController.show()))
+        }
+      )
+    }
   }
 }

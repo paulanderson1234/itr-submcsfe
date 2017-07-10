@@ -25,7 +25,7 @@ import play.api.mvc.{AnyContent, Request}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-object ControllerHelpers extends ControllerHelpers {
+object  ControllerHelpers extends ControllerHelpers {
 
 }
 
