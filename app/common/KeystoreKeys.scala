@@ -63,6 +63,7 @@ trait KeystoreKeys {
   val fullTimeEmployeeCount: String = "companyDetails:fullTimeEmployeeCount"
   val numberOfShares: String = "shares:numberOfShares"
   val nominalValueOfShares: String = "shares:nominalValueofShares"
+  val totalAmountRaised: String = "shares:totalAmountRaised"
 
   // processing Keys
   val eisSeisProcessingModel: String = "processing:EisSeisProcessingModel"

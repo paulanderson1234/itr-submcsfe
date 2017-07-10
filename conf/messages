@@ -959,6 +959,14 @@ date.hint.shareIssueDate= For example, 31 3 1980
 page.companyDetails.ShareIssueDate.whereToFind=Where can I find this?
 page.companyDetails.ShareIssueDate.location= It''s on your company''s Register of Members.
 
+# Total Amount Raised page
+page.shareDetails.totalAmountRaised.title=How much did your company raise in this share issue?
+page.shareDetails.totalAmountRaised.heading=How much did your company raise in this share issue?
+page.shareDetails.totalAmountRaised.OutOfRange=Enter an amount between 0 and 999999999
+page.shareDetails.totalAmountRaised.invalidAmount=Enter an amount in the correct format e.g. 1000
+page.shareDetails.totalAmountRaised.descriptionOne.text=You must only include share subscriptions from investors in this application.
+
+
 ##  Hub Guidance ##
 page.hubGuidance.whoCanUseNewService.title=Who can use this new service
 page.hubGuidance.whoCanUseNewService.heading=Who can use this new service
