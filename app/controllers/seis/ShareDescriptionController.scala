@@ -27,7 +27,7 @@ import controllers.predicates.FeatureSwitch
 import forms.ShareDescriptionForm._
 import models.ShareDescriptionModel
 import uk.gov.hmrc.play.frontend.controller.FrontendController
-import views.html.seis.shares.ShareDescription
+import views.html.seis.shareDetails.ShareDescription
 
 import scala.concurrent.Future
 

@@ -28,9 +28,9 @@ import play.api.i18n.Messages
 import play.api.test.Helpers._
 import views.helpers.ViewSpec
 import play.api.i18n.Messages.Implicits._
-import views.html.seis.shares.ShareDescription
 import forms.ShareDescriptionForm._
 import views.html.seis.checkAndSubmit.CheckAnswers
+import views.html.seis.shareDetails.ShareDescription
 
 import scala.concurrent.Future
 
