@@ -14,17 +14,15 @@
  * limitations under the License.
  */
 
-package forms
+package controllers.helpers
 
-import common.Constants
-import models.ShareDescriptionModel
-import play.api.data.Form
-import play.api.data.Forms._
+object MockDataGenerator {
 
-object ShareDescriptionForm {
-  val shareDescriptionForm = Form(
-    mapping(
-      "shareDescription" -> nonEmptyText(maxLength = Constants.ShareDescriptionMaxLength)
-    )(ShareDescriptionModel.apply)(ShareDescriptionModel.unapply)
-  )
+  val random = new scala.util.Random
+
+  def randomString(alphabet: String)(n: Int): String =
+    Stream.continually(random.nextInt(alphabet.size)).map(alphabet).take(n).mkString
+
+  def randomAlphanumericString(n: Int): String =
+    randomString("abcdefghijklmnopqrstuvwxyz0123456789")(n)
 }

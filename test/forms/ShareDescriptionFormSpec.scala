@@ -16,6 +16,8 @@
 
 package forms
 
+import common.Constants
+import controllers.helpers.MockDataGenerator
 import forms.ShareDescriptionForm.shareDescriptionForm
 import models.ShareDescriptionModel
 import org.scalatestplus.play.OneAppPerSuite
@@ -45,6 +47,24 @@ class ShareDescriptionFormSpec extends UnitSpec with OneAppPerSuite{
 
   val shareDescriptionJson = """{"shareDescription":"Ordinary shares"}"""
   val shareDescriptionModel = ShareDescriptionModel("Ordinary shares")
+
+  val shareDescriptionExceedsMaxJson =
+    """{"shareDescription":"Arise, arise, Riders of Théoden
+      |Fell deeds awake: fire and slaughter!
+      |Spear shall be shaken, shield be splintered,
+      |A sword-day, a red day, ere the sun rises!
+      |Ride now, ride now! Ride to Gondor!
+      |Arise, arise, Riders of Théoden
+      |Fell deeds awake: fire and slaughter!
+      |Spear shall be shaken, shield be splintered,
+      |A sword-day, a red day, ere the sun rises!
+      |Ride now, ride now! Ride to Gondor!
+      |Arise, arise, Riders of Théoden
+      |Fell deeds awake: fire and slaughter!
+      |Spear shall be shaken, shield be splintered,
+      |A sword-day, a red day, ere the sun rises!
+      |Ride now, ride now! Ride to Gondor!"}""".stripMargin
+
 
   "The share description Form" should {
     "return an error if share description is empty" in {
@@ -79,15 +99,47 @@ class ShareDescriptionFormSpec extends UnitSpec with OneAppPerSuite{
   }
 
   "The share description Form" should {
-    "not return an error if entry is above the suggested 15 word limit (16 words)" in {
+    "not return an error if entry is above the suggested 20 word limit (21 words)" in {
       val request = FakeRequest("GET", "/").withFormUrlEncodedBody(
-        "shareDescription" -> "this is more than 15 words to see if that amount is suggested but not enforced"
+        "shareDescription" -> "this is more than 20 words to see if that amount is suggested but not enforced"
       )
       bindWithError(request) match {
         case Some(err) => {
           fail("Validation error not expected")
         }
         case _ => ()
+      }
+    }
+  }
+
+  "The share description Form" should {
+    "not return an error if entry is on boundary (250)" in {
+      val request = FakeRequest("GET", "/").withFormUrlEncodedBody(
+        "shareDescription" -> MockDataGenerator.randomAlphanumericString(250)
+      )
+      bindWithError(request) match {
+        case Some(err) => {
+          fail("Validation error not expected")
+        }
+        case _ => ()
+      }
+    }
+  }
+
+  "The share description Form" should {
+    "return an error if entry is greater than 250 words in length" in {
+      val request = FakeRequest("GET", "/").withFormUrlEncodedBody(
+        "shareDescription" -> MockDataGenerator.randomAlphanumericString(251)
+      )
+      bindWithError(request) match {
+        case Some(err) => {
+          err.key shouldBe "shareDescription"
+          Messages(err.message) shouldBe Messages("error.maxLength")
+          err.args shouldBe Array(Constants.ShareDescriptionMaxLength)
+        }
+        case _ => {
+          fail("Missing error")
+        }
       }
     }
   }
