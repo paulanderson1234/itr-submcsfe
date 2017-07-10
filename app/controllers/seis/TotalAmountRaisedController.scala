@@ -94,7 +94,6 @@ trait TotalAmountRaisedController extends FrontendController with AuthorisedAndE
           } yield route) recover {
             case e: Exception => {
               Logger.warn(s"[TotalAmountRaisedController][submit]- Exception occurred: ${e.getMessage}")
-              println(s"[TotalAmountRaisedController][submit]- Exception occurred: ${e.getMessage}")
               InternalServerError(internalServerErrorTemplate)
             }
           }
