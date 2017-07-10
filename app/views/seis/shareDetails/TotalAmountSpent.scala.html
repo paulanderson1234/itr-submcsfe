@@ -1,7 +1,5 @@
 @import models.TotalAmountSpentModel
-@import views.html.helpers.backButtonWithProgress
-@import views.html.helpers.errorSummary
-@import views.html.helpers.input
+@import views.html.helpers.{errorSummary, inputWithCurrencySymbol, backButtonWithProgress}
 @import uk.gov.hmrc.play.views.html.helpers.form
 @import common.Constants
 
@@ -27,15 +25,20 @@
 <fieldset>
     <legend class="visuallyhidden">@Messages("page.seis.shareDetails.totalAmountSpent.heading")</legend>
     <div class="form-group">
-        @input(
+        @inputWithCurrencySymbol(
         totalAmountSpentForm("totalAmountSpent"),
         '_divClass -> "form-label",
-        '_labelId -> "label-totalAmountSpent",
+        '_labelId -> "label-amount",
         '_label -> Messages("page.seis.shareDetails.totalAmountSpent.heading"),
         '_labelTextClass -> "visuallyhidden",
-        '_inputClass -> "input--fullwidth"
+        '_inputClass -> "input--no-spinner input--left-padding",
+        '_type -> "text",
+        'id -> "totalAmountSpent"
         )
     </div>
+
+
+
 </fieldset>
 <div class="form-group">
     <button class="btn button" type="submit" id="next">@Messages("common.button.snc")</button>
