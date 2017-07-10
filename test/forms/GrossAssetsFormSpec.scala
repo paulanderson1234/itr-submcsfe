@@ -25,6 +25,10 @@ import play.api.i18n.Messages.Implicits._
 
 class GrossAssetsFormSpec extends UnitSpec with OneAppPerSuite{
 
+  val maxAmount = 999999999
+  val minAmount = 0
+  val validAmount = 10
+
   "Creating a form using an empty model" should {
     lazy val form = grossAssetsForm
     "return an empty string for amount" in {
@@ -34,9 +38,9 @@ class GrossAssetsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "Creating a form using a valid model" should {
     "return a form with the data specified in the model" in {
-      val model = GrossAssetsModel(15)
+      val model = GrossAssetsModel(validAmount)
       val form = grossAssetsForm.fill(model)
-      form.data("grossAmount") shouldBe "15"
+      form.data("grossAmount") shouldBe s"$validAmount"
       form.errors.length shouldBe 0
     }
   }
@@ -99,7 +103,7 @@ class GrossAssetsFormSpec extends UnitSpec with OneAppPerSuite{
     }
 
     "supplied with an amount that's greater than the max" should {
-      lazy val form = grossAssetsForm.bind(Map("grossAmount" -> "5000001"))
+      lazy val form = grossAssetsForm.bind(Map("grossAmount" -> s"${maxAmount + 1}"))
       "raise form error" in {
         form.hasErrors shouldBe true
       }
@@ -113,7 +117,7 @@ class GrossAssetsFormSpec extends UnitSpec with OneAppPerSuite{
     }
 
     "supplied with an amount that's lower than the min" should {
-      lazy val form = grossAssetsForm.bind(Map("grossAmount" -> "0"))
+      lazy val form = grossAssetsForm.bind(Map("grossAmount" -> s"${minAmount - 1}"))
       "raise form error" in {
         form.hasErrors shouldBe true
       }
@@ -131,14 +135,14 @@ class GrossAssetsFormSpec extends UnitSpec with OneAppPerSuite{
 
     "supplied with valid amount at the maximum allowed" should {
       "not raise form error" in {
-        val form = grossAssetsForm.bind(Map("grossAmount" -> "5000000"))
+        val form = grossAssetsForm.bind(Map("grossAmount" -> s"$maxAmount"))
         form.hasErrors shouldBe false
       }
     }
 
     "supplied with valid amount at the minimum allowed" should {
       "not raise form error" in {
-        val form = grossAssetsForm.bind(Map("grossAmount" -> "1"))
+        val form = grossAssetsForm.bind(Map("grossAmount" -> s"$minAmount"))
         form.hasErrors shouldBe false
       }
     }

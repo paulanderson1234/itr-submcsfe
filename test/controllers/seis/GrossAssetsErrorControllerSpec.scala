@@ -17,8 +17,8 @@
 package controllers.seis
 
 import auth.{MockAuthConnector, MockConfig}
-import config.FrontendAuthConnector
-import connectors.EnrolmentConnector
+import config.{FrontendAppConfig, FrontendAuthConnector}
+import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
 import play.api.test.Helpers._
 
@@ -32,12 +32,18 @@ class GrossAssetsErrorControllerSpec extends BaseSpec {
     override lazy val s4lConnector = mockS4lConnector
   }
 
-  "GrossAssetsErrorController" should {
+  "GrossAssetsController" should {
+    "use the correct keystore connector" in {
+      GrossAssetsErrorController.s4lConnector shouldBe S4LConnector
+    }
     "use the correct auth connector" in {
       GrossAssetsErrorController.authConnector shouldBe FrontendAuthConnector
     }
     "use the correct enrolment connector" in {
       GrossAssetsErrorController.enrolmentConnector shouldBe EnrolmentConnector
+    }
+    "use the correct application config" in {
+      GrossAssetsErrorController.applicationConfig shouldBe FrontendAppConfig
     }
   }
 
