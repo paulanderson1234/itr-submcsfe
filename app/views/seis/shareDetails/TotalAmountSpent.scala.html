@@ -1,0 +1,41 @@
+@import models.TotalAmountSpentModel
+@import views.html.helpers.backButtonWithProgress
+@import views.html.helpers.errorSummary
+@import views.html.helpers.input
+@import uk.gov.hmrc.play.views.html.helpers.form
+@import common.Constants
+
+@(totalAmountSpentForm: Form[TotalAmountSpentModel])(implicit request: Request[_], messages: Messages)
+
+@main_template(Messages("page.seis.shareDetails.totalAmountSpent.title")) {
+
+@backButtonWithProgress(controllers.seis.routes.TotalAmountSpentController.show().url, Messages("common.section.progress.share.details.three"))
+
+@errorSummary(totalAmountSpentForm, "total-amount-spent", "totalAmountSpent")
+
+<h1 class="heading-xlarge" id="main-heading">@Messages("page.seis.shareDetails.totalAmountSpent.heading")</h1>
+
+<div>
+    <p1>@Messages("page.seis.shareDetails.totalAmountSpent.guidance.one")</p1>
+    <p2>@Messages("page.seis.shareDetails.totalAmountSpent.guidance.two")</p2>
+</div>
+
+@form(action = controllers.seis.routes.TotalAmountSpentController.submit()) {
+<fieldset>
+    <legend class="visuallyhidden">@Messages("page.seis.shareDetails.totalAmountSpent.heading")</legend>
+    <div class="form-group">
+        @input(
+        totalAmountSpentForm("totalAmountSpent"),
+        '_divClass -> "form-label",
+        '_labelId -> "label-totalAmountSpent",
+        '_label -> Messages("page.seis.shareDetails.totalAmountSpent.heading"),
+        '_labelTextClass -> "visuallyhidden",
+        '_inputClass -> "input--fullwidth"
+        )
+    </div>
+</fieldset>
+<div class="form-group">
+    <button class="btn button" type="submit" id="next">@Messages("common.button.snc")</button>
+</div>
+}
+}

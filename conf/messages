@@ -86,6 +86,10 @@ validation.error.email=Enter a valid email address
 validation.error.employeeCount.notANumber = Enter a valid number for your employee count
 validation.error.employeeCount.size = The employee count should be between {0} and 9999999999999
 validation.error.employeeCount.precision = Enter a value with fewer than 13 decimal places for your employee count
+validation.error.totalAmountSpent.size = The total amount spent should be between 0 and 9999999999999
+validation.error.totalAmountSpent.notANumber = Enter a valid number for the total amount spent
+validation.error.totalAmountSpent.decimalPlaces = The total amount spent should not contain decimal places
+validation.error.totalAmountSpent.negative = The total amount spent should not be negative
 
 # number of shares validation
 validation.error.numberOfShares.size = The number of shares count should be between {0} and 9999999999999
@@ -771,6 +775,12 @@ page.seis.companyDetails.fullTimeEmployeeCount.guidance.one = A full-time employ
 page.seis.companyDetails.fullTimeEmployeeCount.guidance.two = The number of hours that each part-time employee works should be used to calculate their contribution to the full-time limit.
 page.seis.companyDetails.fullTimeEmployeeCount.guidance.three = For example, someone working 21 hours a week would count as 60% of a full-time employee and someone working 14 hours a week would count as 40% of a full-time employee. Together they would count as one full-time employee.
 
+#SEIS Total Amount Spent
+page.seis.shareDetails.totalAmountSpent.heading=Total amount spent
+page.seis.shareDetails.totalAmountSpent.title=Total amount spent
+page.seis.shareDetails.totalAmountSpent.guidance.one=...
+page.seis.shareDetails.totalAmountSpent.guidance.two=...
+
 # SEIS Proposed Investment page
 page.seis.investment.proposedInvestment.amount.title=How much investment do you want to raise?
 page.seis.investment.proposedInvestment.amount.heading=How much investment do you want to raise?
@@ -995,3 +1005,5 @@ page.companyDetails.HasInvestmentTradeStarted.descriptionOne.text=The trade has 
 # number of shares
 page.shareDetails.numberOfShares.title=How many of these shares did your company issue?
 page.shareDetails.numberOfShares.heading=How many of these shares did your company issue?
+
+

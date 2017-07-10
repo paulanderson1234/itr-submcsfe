@@ -16,9 +16,123 @@
 
 package forms
 
+import models.TotalAmountSpentModel
 import org.scalatestplus.play.OneAppPerSuite
 import uk.gov.hmrc.play.test.UnitSpec
+import forms.TotalAmountSpentForm._
+import play.api.i18n.Messages
+import play.api.i18n.Messages.Implicits._
 
 class TotalAmountSpentFormSpec extends UnitSpec with OneAppPerSuite {
 
+  "The TotalAmountSpentForm" when {
+
+    "provided with a model" should {
+      val model = TotalAmountSpentModel(123)
+      lazy val form = totalAmountSpentForm.fill(model)
+
+      "return a valid map" in {
+        form.data shouldBe Map("totalAmountSpent" -> "123")
+      }
+    }
+
+
+    "provided with a valid map with the minimum amount" should {
+      val map = Map("totalAmountSpent" -> "0")
+      lazy val form = totalAmountSpentForm.bind(map)
+
+      "contain no errors" in {
+        form.errors.isEmpty shouldBe true
+      }
+
+    }
+
+    "provided with a valid map with the maximum size" should {
+      val map = Map("totalAmountSpent" -> "9999999999999")
+      lazy val form = totalAmountSpentForm.bind(map)
+
+      "contain no errors" in {
+        form.errors.isEmpty shouldBe true
+      }
+
+      "contain the correct model" in {
+        form.value shouldBe Some(TotalAmountSpentModel(BigDecimal("9999999999999")))
+      }
+    }
+
+    "provided with an invalid map which is too large" should {
+      val map = Map("totalAmountSpent" -> "10000000000000")
+      lazy val form = totalAmountSpentForm.bind(map)
+
+      "contain one error" in {
+        form.errors.size shouldBe 1
+      }
+
+      "contain the too large error message" in {
+        form.errors.head.message shouldBe Messages("validation.error.totalAmountSpent.size")
+      }
+    }
+
+    "provided with an invalid map with a non-numeric value" should {
+      val map = Map("totalAmountSpent" -> "a")
+      lazy val form = totalAmountSpentForm.bind(map)
+
+      "contain one error" in {
+        form.errors.size shouldBe 1
+      }
+
+      "contain the not a number error message" in {
+        form.errors.head.message shouldBe Messages("validation.error.totalAmountSpent.notANumber")
+      }
+    }
+
+      "provided with an invalid map with a decimal value" should {
+        val map = Map("totalAmountSpent" -> "12.12")
+        lazy val form = totalAmountSpentForm.bind(map)
+
+        "contain one error" in {
+          form.errors.size shouldBe 1
+        }
+
+        "contain the decimal place error message" in {
+          form.errors.head.message shouldBe Messages("validation.error.totalAmountSpent.decimalPlaces")
+        }
+      }
+
+      "provided with an invalid map with a negative value" should {
+        val map = Map("totalAmountSpent" -> "-123")
+        lazy val form = totalAmountSpentForm.bind(map)
+
+        "contain one error" in {
+          form.errors.size shouldBe 1
+        }
+
+        "contain the negative number error message" in {
+          form.errors.head.message shouldBe Messages("validation.error.totalAmountSpent.negative")
+        }
+      }
+
+      "provided with an invalid map with a negative decimal large value " should {
+        val map = Map("totalAmountSpent" -> "-123.3485684756875346876538743")
+        lazy val form = totalAmountSpentForm.bind(map)
+
+        "contain three errors" in {
+          form.errors.size shouldBe 3
+        }
+
+      }
+
+      "provided with an invalid map with an empty value" should {
+      val map = Map("totalAmountSpent" -> " ")
+      lazy val form = totalAmountSpentForm.bind(map)
+
+      "contain one error" in {
+        form.errors.size shouldBe 1
+      }
+
+      "contain the not a number error message" in {
+        form.errors.head.message shouldBe "error.required"
+      }
+    }
+  }
 }

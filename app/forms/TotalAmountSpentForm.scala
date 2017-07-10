@@ -18,7 +18,16 @@ package forms
 
 import models.TotalAmountSpentModel
 import play.api.data.Form
+import utils.Validation
+import play.api.data.Forms._
 
 object TotalAmountSpentForm {
-  val totalAmountSpentForm: Form[TotalAmountSpentModel] = ???
+  val totalAmountSpentForm = Form(
+    mapping(
+      "totalAmountSpent" -> nonEmptyText
+        .verifying(Validation.totalAmountSpentCheck)
+        .transform[BigDecimal](value => BigDecimal(value), _.toString())
+    )(TotalAmountSpentModel.apply)(TotalAmountSpentModel.unapply)
+  )
 }
+

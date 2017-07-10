@@ -16,12 +16,21 @@
 
 package controllers.seis
 
+import forms.TotalAmountSpentForm
+import models.TotalAmountSpentModel
+import forms.TotalAmountSpentForm._
+import play.api.Play.current
+import play.api.data.Form
+import play.api.i18n.Messages.Implicits._
+import play.api.mvc.{Action, AnyContent, Result}
+import uk.gov.hmrc.play.frontend.controller.FrontendController
 import auth.{AuthorisedAndEnrolledForTAVC, SEIS}
-import config.{FrontendAppConfig, FrontendAuthConnector}
+import common.KeystoreKeys
+import config.{AppConfig, FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.predicates.FeatureSwitch
-import play.api.mvc.{Action, AnyContent}
-import uk.gov.hmrc.play.frontend.controller.FrontendController
+
+import scala.concurrent.Future
 
 object TotalAmountSpentController extends TotalAmountSpentController {
   override lazy val s4lConnector = S4LConnector
@@ -34,7 +43,34 @@ trait TotalAmountSpentController extends FrontendController with AuthorisedAndEn
 
   override val acceptedFlows = Seq(Seq(SEIS))
 
-  val show: Action[AnyContent] = TODO
+  val show: Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
+    AuthorisedAndEnrolled.async {
+      implicit user =>
+        implicit request =>
+          s4lConnector.fetchAndGetFormData[TotalAmountSpentModel](KeystoreKeys.totalAmountSpent).map {
+            case Some(data) => Ok(views.html.seis.shareDetails.TotalAmountSpent(totalAmountSpentForm.fill(data)))
+            case None => Ok(views.html.seis.shareDetails.TotalAmountSpent(totalAmountSpentForm))
+          }
+    }
+  }
 
-  val submit: Action[AnyContent] = TODO
+  val submit: Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
+    AuthorisedAndEnrolled.async {
+      implicit user =>
+        implicit request =>
+          val success: TotalAmountSpentModel => Future[Result] = { model =>
+            s4lConnector.saveFormData(KeystoreKeys.totalAmountSpent, model).map(_ =>
+              Redirect(controllers.seis.routes.TotalAmountSpentController.show())
+            )
+          }
+
+          val failure: Form[TotalAmountSpentModel] => Future[Result] = { form =>
+            Future.successful(BadRequest(views.html.seis.shareDetails.TotalAmountSpent(form)))
+          }
+
+          TotalAmountSpentForm.totalAmountSpentForm.bindFromRequest().fold(failure, success)
+    }
+  }
 }
+
+
