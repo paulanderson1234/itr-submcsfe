@@ -80,7 +80,7 @@ class NominalValueOfSharesViewSpec extends ViewSpec with FakeRequestHelper {
         }
 
         "contains an input field with the correct name" in {
-          input.select("input").attr("name") shouldBe "value"
+          input.select("input").attr("name") shouldBe "nominalValueOfShares"
         }
       }
 

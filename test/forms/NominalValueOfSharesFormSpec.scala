@@ -31,14 +31,14 @@ class NominalValueOfSharesFormSpec extends UnitSpec with OneAppPerSuite {
       lazy val form = nominalValueOfSharesForm.fill(NominalValueOfSharesModel(1000))
 
       "return a map with the data held" in {
-        form.data shouldBe Map("value" -> "1000")
+        form.data shouldBe Map("nominalValueOfShares" -> "1000")
       }
     }
 
     "supplied with a valid map" which {
 
       "contains a thirteen digit value" should {
-        lazy val form = nominalValueOfSharesForm.bind(Map("value" -> "9999999999999"))
+        lazy val form = nominalValueOfSharesForm.bind(Map("nominalValueOfShares" -> "9999999999999"))
 
         "contain no errors" in {
           form.errors.isEmpty shouldBe true
@@ -50,7 +50,7 @@ class NominalValueOfSharesFormSpec extends UnitSpec with OneAppPerSuite {
       }
 
       "contains a zero value" should {
-        lazy val form = nominalValueOfSharesForm.bind(Map("value" -> "0"))
+        lazy val form = nominalValueOfSharesForm.bind(Map("nominalValueOfShares" -> "0"))
 
         "contain no errors" in {
           form.errors.isEmpty shouldBe true
@@ -65,7 +65,7 @@ class NominalValueOfSharesFormSpec extends UnitSpec with OneAppPerSuite {
     "supplied with an invalid map" which {
 
       "contains an empty field" should {
-        lazy val form = nominalValueOfSharesForm.bind(Map("value" -> ""))
+        lazy val form = nominalValueOfSharesForm.bind(Map("nominalValueOfShares" -> ""))
 
         "contain one error" in {
           form.errors.size shouldBe 1
@@ -77,7 +77,7 @@ class NominalValueOfSharesFormSpec extends UnitSpec with OneAppPerSuite {
       }
 
       "contains a non-numeric value" should {
-        lazy val form = nominalValueOfSharesForm.bind(Map("value" -> "a"))
+        lazy val form = nominalValueOfSharesForm.bind(Map("nominalValueOfShares" -> "a"))
 
         "contain one error" in {
           form.errors.size shouldBe 1
@@ -89,7 +89,7 @@ class NominalValueOfSharesFormSpec extends UnitSpec with OneAppPerSuite {
       }
 
       "contains decimal places" should {
-        lazy val form = nominalValueOfSharesForm.bind(Map("value" -> "2.3"))
+        lazy val form = nominalValueOfSharesForm.bind(Map("nominalValueOfShares" -> "2.3"))
 
         "contain one error" in {
           form.errors.size shouldBe 1
@@ -101,7 +101,7 @@ class NominalValueOfSharesFormSpec extends UnitSpec with OneAppPerSuite {
       }
 
       "contains more than thirteen digits" should {
-        lazy val form = nominalValueOfSharesForm.bind(Map("value" -> "99999999999999"))
+        lazy val form = nominalValueOfSharesForm.bind(Map("nominalValueOfShares" -> "99999999999999"))
 
         "contain one error" in {
           form.errors.size shouldBe 1
@@ -113,7 +113,7 @@ class NominalValueOfSharesFormSpec extends UnitSpec with OneAppPerSuite {
       }
 
       "contains a negative number" should {
-        lazy val form = nominalValueOfSharesForm.bind(Map("value" -> "-1"))
+        lazy val form = nominalValueOfSharesForm.bind(Map("nominalValueOfShares" -> "-1"))
 
         "contain one error" in {
           form.errors.size shouldBe 1
@@ -125,7 +125,7 @@ class NominalValueOfSharesFormSpec extends UnitSpec with OneAppPerSuite {
       }
 
       "contains multiple form errors" should {
-        lazy val form = nominalValueOfSharesForm.bind(Map("value" -> "-9999999999999.0"))
+        lazy val form = nominalValueOfSharesForm.bind(Map("nominalValueOfShares" -> "-9999999999999.0"))
 
         "contain three errors" in {
           form.errors.size shouldBe 3

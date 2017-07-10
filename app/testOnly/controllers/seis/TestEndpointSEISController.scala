@@ -146,21 +146,24 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
     implicit user => implicit request =>
       for {
         numberOfSharesForm <- fillForm[NumberOfSharesModel](KeystoreKeys.numberOfShares, NumberOfSharesForm.numberOfSharesForm)
-
+        nominalValueOfSharesForm <- fillForm[NominalValueOfSharesModel](KeystoreKeys.nominalValueOfShares, NominalValueOfSharesForm.nominalValueOfSharesForm)
       } yield Ok(
         testOnly.views.html.seis.testEndpointSEISPageTwo(
-          numberOfSharesForm
+          numberOfSharesForm,
+          nominalValueOfSharesForm
         )
       )
   }
 
   def submitPageTwo: Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user => implicit request =>
     val numberOfShares = bindForm[NumberOfSharesModel](KeystoreKeys.numberOfShares, NumberOfSharesForm.numberOfSharesForm)
+    val nominalValueOfShares = bindForm[NominalValueOfSharesModel](KeystoreKeys.nominalValueOfShares, NominalValueOfSharesForm.nominalValueOfSharesForm)
     saveBackLinks()
     saveSchemeType()
     Future.successful(Ok(
       testOnly.views.html.seis.testEndpointSEISPageTwo(
-        numberOfShares
+        numberOfShares,
+        nominalValueOfShares
       )
     ))
   }

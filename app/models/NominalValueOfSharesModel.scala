@@ -18,7 +18,7 @@ package models
 
 import play.api.libs.json.{Json, OFormat}
 
-case class NominalValueOfSharesModel(value: BigDecimal)
+case class NominalValueOfSharesModel(nominalValueOfShares: BigDecimal)
 
 object NominalValueOfSharesModel {
   implicit val formats: OFormat[NominalValueOfSharesModel] = Json.format[NominalValueOfSharesModel]

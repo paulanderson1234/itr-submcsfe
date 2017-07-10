@@ -83,7 +83,7 @@ class NominalValueOfSharesControllerSpec extends BaseSpec {
 
     "return a 303 on a successful POST request" in {
       setupMocks(None)
-      val form = Seq("value" -> "1000")
+      val form = Seq("nominalValueOfShares" -> "1000")
       submitWithSessionAndAuth(controller.submit, form: _*) (
         result => {
           status(result) shouldBe 303
@@ -94,7 +94,7 @@ class NominalValueOfSharesControllerSpec extends BaseSpec {
 
     "return a 400 on a form validation failure" in {
       setupMocks(None)
-      val form = Seq("value" -> "")
+      val form = Seq("nominalValueOfShares" -> "")
       submitWithSessionAndAuth(controller.submit, form: _*) (
         result => status(result) shouldBe 400
       )

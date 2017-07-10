@@ -25,7 +25,7 @@ object NominalValueOfSharesForm {
 
   val nominalValueOfSharesForm = Form(
     mapping(
-      "value" -> nonEmptyText
+      "nominalValueOfShares" -> nonEmptyText
         .verifying(Validation.nominalValueOfSharesCheck)
         .transform[BigDecimal](value => BigDecimal(value), _.toString())
     )(NominalValueOfSharesModel.apply)(NominalValueOfSharesModel.unapply)
