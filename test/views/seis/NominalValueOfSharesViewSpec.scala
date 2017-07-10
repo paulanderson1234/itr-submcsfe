@@ -61,7 +61,7 @@ class NominalValueOfSharesViewSpec extends ViewSpec with FakeRequestHelper {
       }
 
       "have an input" which {
-        lazy val input = doc.select("fieldset")
+        lazy val input = doc.select("div.form-group")
 
         "contains a label" which {
           lazy val label = input.select("label")

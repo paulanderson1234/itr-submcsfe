@@ -13,7 +13,7 @@
     <h1 class="heading-xlarge">@Messages("page.seis.nominalValueOfShares.title")</h1>
 
     @form(action = controllers.seis.routes.NominalValueOfSharesController.submit()) {
-        <fieldset class="form-group">
+        <div class="form-group">
             <p>@Messages("page.seis.nominalValueOfShares.hint")</p>
             @input(
                 nominalValueOfSharesForm("value"),
@@ -21,7 +21,7 @@
                 '_label -> Messages("page.seis.nominalValueOfShares.title"),
                 '_labelTextClass -> "visuallyhidden"
             )
-        </fieldset>
+        </div>
 
         <div>
             <button class="btn button" type="submit" id="next">@Messages("common.button.snc")</button>
