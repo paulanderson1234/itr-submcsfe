@@ -627,17 +627,35 @@ object Validation {
     text().verifying(yearCheckConstraint)
   }
 
-  def employeeCountCheck: Constraint[String] = {
-    Constraint("constraint.employeeCount") {
+  def genericDecimalCheck(formValueMessageKey: String, minimumValue: Int) : Constraint[String] = {
+    Constraint("constraint.numberOfSharesCheck") {
       employees =>
         val error = Try {BigDecimal(employees)} match {
-        case Success(result) =>
-          val sizeError = if (result < 0 || result > 9999999999999.0) Seq(ValidationError(Messages("validation.error.employeeCount.size"))) else Seq()
-          sizeError
-        case Failure(_) if employees.trim.nonEmpty => Seq(ValidationError(Messages("validation.error.employeeCount.notANumber")))
-        case _ => Seq()
-      }
+          case Success(result) =>
+            val sizeError = if (result < minimumValue || result > 9999999999999.0) Seq(ValidationError(Messages(s"validation.error.$formValueMessageKey.size", minimumValue))) else Seq()
+            sizeError
+          case Failure(_) if employees.trim.nonEmpty => Seq(ValidationError(Messages(s"validation.error.$formValueMessageKey.notANumber")))
+          case _ => Seq()
+        }
         if (error.isEmpty) Valid else Invalid(error)
+    }
+  }
+
+  def nominalValueOfSharesCheck: Constraint[String] = {
+    Constraint("constraint.nominalValueOfShares") {
+      value =>
+        val errors = Try {BigDecimal(value)} match {
+          case Success(result) =>
+            val decimal = if (!(result.scale == 0)) Seq(ValidationError(Messages("validation.error.nominalValueOfShares.decimalPlaces"))) else Seq()
+            val size = if (result.precision > 13) Seq(ValidationError(Messages("validation.error.nominalValueOfShares.size"))) else Seq()
+            val negative = if (result < 0) Seq(ValidationError(Messages("validation.error.nominalValueOfShares.negative"))) else Seq()
+
+            decimal ++ size ++ negative
+          case Failure(_) if value.trim.nonEmpty => Seq(ValidationError(Messages("validation.error.nominalValueOfShares.notANumber")))
+          case _ => Seq()
+        }
+
+        if (errors.isEmpty) Valid else Invalid(errors)
     }
   }
 }

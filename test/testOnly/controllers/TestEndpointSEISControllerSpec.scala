@@ -44,6 +44,8 @@ class TestEndpointSEISControllerSpec extends BaseSpec {
   def setupShowMocks(): Unit = {
     when(mockS4lConnector.fetchAndGetFormData[SeventyPercentSpentModel](Matchers.eq(KeystoreKeys.seventyPercentSpent))
       (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
+    when(mockS4lConnector.fetchAndGetFormData[NumberOfSharesModel](Matchers.eq(KeystoreKeys.numberOfShares))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
     when(mockS4lConnector.fetchAndGetFormData[ShareIssueDateModel](Matchers.eq(KeystoreKeys.shareIssueDate))
       (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
     when(mockS4lConnector.fetchAndGetFormData[GrossAssetsModel](Matchers.eq(KeystoreKeys.grossAssets))
@@ -132,6 +134,37 @@ class TestEndpointSEISControllerSpec extends BaseSpec {
       "Return OK" in {
         mockEnrolledRequest()
         submitWithSessionAndAuth(TestController.submitPageOne())(
+          result => status(result) shouldBe OK
+        )
+      }
+
+    }
+
+  }
+
+  "TestEndpointSEISController.showPageTwo" when {
+
+    "Called as an authorised and enrolled user" should {
+
+      "Return OK" in {
+        mockEnrolledRequest()
+        setupShowMocks()
+        showWithSessionAndAuth(TestController.showPageTwo())(
+          result => status(result) shouldBe OK
+        )
+      }
+
+    }
+
+  }
+
+  "TestEndpointSEISController.submitPageTwo" when {
+
+    "Called as an authorised and enrolled user" should {
+
+      "Return OK" in {
+        mockEnrolledRequest()
+        submitWithSessionAndAuth(TestController.submitPageTwo())(
           result => status(result) shouldBe OK
         )
       }

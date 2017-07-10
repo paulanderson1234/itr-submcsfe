@@ -17,10 +17,13 @@
 package controllers.Helpers
 
 import auth.TAVCUser
+import common.{Constants, KeystoreKeys}
+import models.{HasInvestmentTradeStartedModel, QualifyBusinessActivityModel, ResearchStartDateModel, TradeStartDateModel}
 import models.submission.SchemeTypesModel
 import uk.gov.hmrc.play.http.HeaderCarrier
 import play.api.i18n.Messages
 import play.api.mvc.{AnyContent, Request}
+import views.html.seis.companyDetails.QualifyBusinessActivity_Scope0.QualifyBusinessActivity_Scope1.QualifyBusinessActivity
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -37,6 +40,43 @@ trait ControllerHelpers {
       case Some(data) => Future.successful(Some(data))
       case None => Future.successful(None)
     }
+  }
+
+  /** Helper method to return the correct trade start date depending on whether the business activity is tarde or R&D.
+    *  A single TradeStartDateModel is returned form checking S4L.
+    *  If expected values are not found None is returned
+    *
+    * @param s4lConnector An instance of the Save4Later Connector.
+    */
+  def getTradeStartDate(s4lConnector: connectors.S4LConnector)
+                       (implicit hc: HeaderCarrier, user: TAVCUser): Future[Option[HasInvestmentTradeStartedModel]] = {
+
+    def getDate(businessActivity:Option[QualifyBusinessActivityModel],
+                researchDateStarted: Option[ResearchStartDateModel],
+                tradeStartDateStarted: Option[HasInvestmentTradeStartedModel]) = {
+
+      if (businessActivity.nonEmpty) {
+        businessActivity.get.isQualifyBusinessActivity match {
+          case Constants.qualifyPrepareToTrade => Future.successful(tradeStartDateStarted)
+          case Constants.qualifyResearchAndDevelopment => if (researchDateStarted.nonEmpty)
+            Future.successful(
+              Some(HasInvestmentTradeStartedModel(researchDateStarted.get.hasStartedResearch, researchDateStarted.get.researchStartDay,
+                researchDateStarted.get.researchStartMonth, researchDateStarted.get.researchStartYear)))
+          else Future.successful(None)
+        }
+      } else {
+        Future.successful(None)
+      }
+    }
+
+    for {
+      businessActivity <- s4lConnector.fetchAndGetFormData[QualifyBusinessActivityModel](KeystoreKeys.isQualifyBusinessActivity)
+      researchDate <- s4lConnector.fetchAndGetFormData[ResearchStartDateModel](KeystoreKeys.researchStartDate)
+      tradeStartDate <- s4lConnector.fetchAndGetFormData[HasInvestmentTradeStartedModel](KeystoreKeys.hasInvestmentTradeStarted)
+      date <- getDate(businessActivity, researchDate, tradeStartDate)
+
+    } yield date
+
   }
 
   def routeToScheme(schemeTypesModel: SchemeTypesModel)(implicit request: Request[AnyContent]): String = {

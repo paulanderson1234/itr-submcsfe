@@ -16,21 +16,18 @@
 
 package forms
 
-import models.FullTimeEmployeeCountModel
+import models.NominalValueOfSharesModel
 import play.api.data.Form
 import play.api.data.Forms._
-import utils.Validation._
+import utils.Validation
 
-object FullTimeEmployeeCountForm {
+object NominalValueOfSharesForm {
 
-  val formValueMessageKey = "employeeCount"
-  val minimumValue = 0
-
-  val fullTimeEmployeeCountForm = Form(
+  val nominalValueOfSharesForm = Form(
     mapping(
-      "employeeCount" -> nonEmptyText
-        .verifying(genericDecimalCheck(formValueMessageKey, minimumValue))
-        .transform[BigDecimal](input => BigDecimal(input).setScale(5, BigDecimal.RoundingMode.HALF_UP), _.toString)
-    )(FullTimeEmployeeCountModel.apply)(FullTimeEmployeeCountModel.unapply)
+      "nominalValueOfShares" -> nonEmptyText
+        .verifying(Validation.nominalValueOfSharesCheck)
+        .transform[BigDecimal](value => BigDecimal(value), _.toString())
+    )(NominalValueOfSharesModel.apply)(NominalValueOfSharesModel.unapply)
   )
 }

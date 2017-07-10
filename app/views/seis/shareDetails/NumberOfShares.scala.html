@@ -1,0 +1,36 @@
+@import models.NumberOfSharesModel
+@import views.html.helpers.backButtonWithProgress
+@import views.html.helpers.errorSummary
+@import views.html.helpers.input
+@import uk.gov.hmrc.play.views.html.helpers.form
+@import common.Constants
+
+@(numberOfSharesForm: Form[NumberOfSharesModel])(implicit request: Request[_], messages: Messages)
+
+@main_template(Messages("page.shareDetails.numberOfShares.title")) {
+
+    @backButtonWithProgress(controllers.seis.routes.NumberOfSharesController.show().url, Messages("common.section.progress.share.details.three"))
+
+    @errorSummary(numberOfSharesForm, "full-time-employee-count", "numberOfShares")
+
+    <h1 class="heading-xlarge" id="main-heading">@Messages("page.shareDetails.numberOfShares.heading")</h1>
+
+    @form(action = controllers.seis.routes.NumberOfSharesController.submit()) {
+        <fieldset>
+            <legend class="visuallyhidden">@Messages("page.shareDetails.numberOfShares.heading")</legend>
+            <div class="form-group">
+                @input(
+                numberOfSharesForm("numberOfShares"),
+                '_divClass -> "form-label",
+                '_labelId -> "label-numberOfShares",
+                '_label -> Messages("page.shareDetails.numberOfShares.heading"),
+                '_labelTextClass -> "visuallyhidden",
+                '_inputClass -> "input--fullwidth"
+                )
+            </div>
+        </fieldset>
+        <div class="form-group">
+            <button class="btn button" type="submit" id="next">@Messages("common.button.snc")</button>
+        </div>
+    }
+}

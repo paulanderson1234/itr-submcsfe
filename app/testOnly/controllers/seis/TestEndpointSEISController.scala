@@ -142,6 +142,33 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
     ))
   }
 
+  def showPageTwo: Action[AnyContent] = AuthorisedAndEnrolled.async {
+    implicit user => implicit request =>
+      for {
+        numberOfSharesForm <- fillForm[NumberOfSharesModel](KeystoreKeys.numberOfShares, NumberOfSharesForm.numberOfSharesForm)
+        nominalValueOfSharesForm <- fillForm[NominalValueOfSharesModel](KeystoreKeys.nominalValueOfShares, NominalValueOfSharesForm.nominalValueOfSharesForm)
+      } yield Ok(
+        testOnly.views.html.seis.testEndpointSEISPageTwo(
+          numberOfSharesForm,
+          nominalValueOfSharesForm
+        )
+      )
+  }
+
+  def submitPageTwo: Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user => implicit request =>
+    val numberOfShares = bindForm[NumberOfSharesModel](KeystoreKeys.numberOfShares, NumberOfSharesForm.numberOfSharesForm)
+    val nominalValueOfShares = bindForm[NominalValueOfSharesModel](KeystoreKeys.nominalValueOfShares, NominalValueOfSharesForm.nominalValueOfSharesForm)
+    saveBackLinks()
+    saveSchemeType()
+    Future.successful(Ok(
+      testOnly.views.html.seis.testEndpointSEISPageTwo(
+        numberOfShares,
+        nominalValueOfShares
+      )
+    ))
+  }
+
+
   private def saveBackLinks()(implicit hc: HeaderCarrier, user: TAVCUser) = {
     s4lConnector.saveFormData[Boolean](KeystoreKeys.applicationInProgress, true)
     s4lConnector.saveFormData[String](KeystoreKeys.backLinkConfirmCorrespondence, routes.TestEndpointSEISController.showPageOne(None).url)

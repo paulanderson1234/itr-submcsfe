@@ -14,23 +14,12 @@
  * limitations under the License.
  */
 
-package forms
+package models
 
-import models.FullTimeEmployeeCountModel
-import play.api.data.Form
-import play.api.data.Forms._
-import utils.Validation._
+import play.api.libs.json.{Json, OFormat}
 
-object FullTimeEmployeeCountForm {
+case class NominalValueOfSharesModel(nominalValueOfShares: BigDecimal)
 
-  val formValueMessageKey = "employeeCount"
-  val minimumValue = 0
-
-  val fullTimeEmployeeCountForm = Form(
-    mapping(
-      "employeeCount" -> nonEmptyText
-        .verifying(genericDecimalCheck(formValueMessageKey, minimumValue))
-        .transform[BigDecimal](input => BigDecimal(input).setScale(5, BigDecimal.RoundingMode.HALF_UP), _.toString)
-    )(FullTimeEmployeeCountModel.apply)(FullTimeEmployeeCountModel.unapply)
-  )
+object NominalValueOfSharesModel {
+  implicit val formats: OFormat[NominalValueOfSharesModel] = Json.format[NominalValueOfSharesModel]
 }

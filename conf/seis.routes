@@ -105,7 +105,8 @@ POST       /full-time-employee-count               controllers.seis.FullTimeEmpl
 GET        /share-description                      controllers.seis.ShareDescriptionController.show
 POST       /share-description                      controllers.seis.ShareDescriptionController.submit
 
+GET        /number-of-shares                      controllers.seis.NumberOfSharesController.show
+POST       /number-of-shares                      controllers.seis.NumberOfSharesController.submit
 
-
-
-
+GET        /nominal-value-of-shares                controllers.seis.NominalValueOfSharesController.show
+POST       /nominal-value-of-shares                controllers.seis.NominalValueOfSharesController.submit
