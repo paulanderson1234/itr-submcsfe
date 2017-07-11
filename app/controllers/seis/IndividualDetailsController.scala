@@ -22,8 +22,11 @@ import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.predicates.FeatureSwitch
 import forms.IndividualDetailsForm.individualDetailsForm
-import models.{AddressModel, IndividualDetailsModel}
+import models.IndividualDetailsModel
+import play.api.Play.current
 import play.api.i18n.Messages
+import play.api.i18n.Messages.Implicits._
+import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import utils.CountriesHelper
 import views.html.seis.investors.IndividualDetails
@@ -41,30 +44,34 @@ trait IndividualDetailsController extends FrontendController with AuthorisedAndE
 
   override val acceptedFlows = Seq(Seq(SEIS))
 
-  lazy val countriesList = CountriesHelper.getIsoCodeTupleList
+  lazy val countriesList: List[(String, String)] = CountriesHelper.getIsoCodeTupleList
 
-  val show = featureSwitch(applicationConfig.seisFlowEnabled) {
-    AuthorisedAndEnrolled.async { implicit user => implicit request =>
-      s4lConnector.fetchAndGetFormData[IndividualDetailsModel](KeystoreKeys.individualDetails).map {
-        case Some(data) => Ok(IndividualDetails(individualDetailsForm.fill(data), countriesList))
-        case None => Ok(IndividualDetails(individualDetailsForm.fill(AddressModel("", "")), countriesList))
-      }
+  val show: Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
+    AuthorisedAndEnrolled.async { implicit user =>
+      implicit request =>
+        s4lConnector.fetchAndGetFormData[IndividualDetailsModel](KeystoreKeys.individualDetails).map {
+          case Some(data) => Ok(IndividualDetails(individualDetailsForm.fill(data), countriesList))
+          case None => Ok(IndividualDetails(individualDetailsForm, countriesList))
+        }
     }
   }
 
-  val submit = featureSwitch(applicationConfig.seisFlowEnabled) {
-    AuthorisedAndEnrolled.async { implicit user => implicit request =>
-      individualDetailsForm.bindFromRequest().fold(
-        formWithErrors => {
-          Future.successful(BadRequest(IndividualDetails(if (formWithErrors.hasGlobalErrors)
-            formWithErrors.discardingErrors.withError("postcode", Messages("validation.error.countrypostcode"))
-          else formWithErrors, countriesList)))
-        },
-        validFormData => {
-          s4lConnector.saveFormData(KeystoreKeys.individualDetails, validFormData)
-          Future.successful(Redirect(routes.IndividualDetailsController.show()))
-        }
-      )
+  val submit: Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
+    AuthorisedAndEnrolled.async { implicit user =>
+      implicit request =>
+        individualDetailsForm.bindFromRequest().fold(
+          formWithErrors => {
+            val form = if (formWithErrors.hasGlobalErrors)
+              formWithErrors.discardingErrors.withError("postcode", Messages("validation.error.countrypostcode"))
+            else formWithErrors
+
+            Future.successful(BadRequest(IndividualDetails(form, countriesList)))
+          },
+          validFormData => {
+            s4lConnector.saveFormData(KeystoreKeys.individualDetails, validFormData)
+            Future.successful(Redirect(routes.IndividualDetailsController.show()))
+          }
+        )
     }
   }
 }
