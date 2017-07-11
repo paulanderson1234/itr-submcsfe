@@ -106,14 +106,14 @@ class ReviewPreviousSchemesControllerSpec extends BaseSpec {
     }
 
     "Posting to the continue button on the ReviewPreviousSchemesController when authenticated and enrolled" should {
-      "redirect to 'Proposed Investment' page if table is not empty" in {
+      "redirect to 'Share Description' page if table is not empty" in {
         setupMocks(Some(previousSchemeVectorList), Some("link"), Some(startDateModelModelYes))
 
         mockEnrolledRequest(seisSchemeTypesModel)
         submitWithSessionAndAuth(TestController.submit)(
           result => {
             status(result) shouldBe SEE_OTHER
-            redirectLocation(result) shouldBe Some("/investment-tax-relief-cs/seis/proposed-investment")
+            redirectLocation(result) shouldBe Some("/investment-tax-relief-cs/seis/share-description")
           }
         )
       }

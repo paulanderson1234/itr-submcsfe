@@ -102,11 +102,11 @@ trait ReviewPreviousSchemesController extends FrontendController with Authorised
           Future.successful(Redirect(routes.ReviewPreviousSchemesController.show()))
         }
         else {
-            Future.successful(Redirect(routes.ProposedInvestmentController.show()))
+            Future.successful(Redirect(routes.ShareDescriptionController.show()))
         }
       }
 
-      s4lConnector.saveFormData(KeystoreKeys.backLinkProposedInvestment, routes.ReviewPreviousSchemesController.show().url)
+      s4lConnector.saveFormData(KeystoreKeys.backLinkShareDescription, routes.ReviewPreviousSchemesController.show().url)
       for {
         previousSchemesExist <- PreviousSchemesHelper.previousInvestmentsExist(s4lConnector)
         hadPrevRFI <- s4lConnector.fetchAndGetFormData[HadPreviousRFIModel](KeystoreKeys.hadPreviousRFI)
