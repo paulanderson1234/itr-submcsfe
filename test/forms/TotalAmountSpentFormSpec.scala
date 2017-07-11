@@ -23,7 +23,15 @@ import forms.TotalAmountSpentForm._
 import play.api.i18n.Messages
 import play.api.i18n.Messages.Implicits._
 
+import scala.collection.immutable.Range
+
 class TotalAmountSpentFormSpec extends UnitSpec with OneAppPerSuite {
+
+  val maxAmount:BigDecimal = BigDecimal("9999999999999")
+  val mimAmount = 0
+  val invalidAmount = 12.12
+  val negativeAmount = -1
+  val largeNegativeAmount =  BigDecimal("-123.3485684756875346876538743")
 
   "The TotalAmountSpentForm" when {
 
@@ -48,7 +56,7 @@ class TotalAmountSpentFormSpec extends UnitSpec with OneAppPerSuite {
     }
 
     "provided with a valid map with the maximum size" should {
-      val map = Map("totalAmountSpent" -> "9999999999999")
+      val map = Map("totalAmountSpent" -> s"$maxAmount")
       lazy val form = totalAmountSpentForm.bind(map)
 
       "contain no errors" in {
@@ -56,12 +64,12 @@ class TotalAmountSpentFormSpec extends UnitSpec with OneAppPerSuite {
       }
 
       "contain the correct model" in {
-        form.value shouldBe Some(TotalAmountSpentModel(BigDecimal("9999999999999")))
+        form.value shouldBe Some(TotalAmountSpentModel(maxAmount))
       }
     }
 
     "provided with an invalid map which is too large" should {
-      val map = Map("totalAmountSpent" -> "10000000000000")
+      val map = Map("totalAmountSpent" -> s"${maxAmount + 1}")
       lazy val form = totalAmountSpentForm.bind(map)
 
       "contain one error" in {
@@ -87,7 +95,7 @@ class TotalAmountSpentFormSpec extends UnitSpec with OneAppPerSuite {
     }
 
       "provided with an invalid map with a decimal value" should {
-        val map = Map("totalAmountSpent" -> "12.12")
+        val map = Map("totalAmountSpent" -> s"$invalidAmount")
         lazy val form = totalAmountSpentForm.bind(map)
 
         "contain one error" in {
@@ -100,7 +108,7 @@ class TotalAmountSpentFormSpec extends UnitSpec with OneAppPerSuite {
       }
 
       "provided with an invalid map with a negative value" should {
-        val map = Map("totalAmountSpent" -> "-123")
+        val map = Map("totalAmountSpent" -> s"$negativeAmount")
         lazy val form = totalAmountSpentForm.bind(map)
 
         "contain one error" in {
@@ -113,7 +121,7 @@ class TotalAmountSpentFormSpec extends UnitSpec with OneAppPerSuite {
       }
 
       "provided with an invalid map with a negative decimal large value " should {
-        val map = Map("totalAmountSpent" -> "-123.3485684756875346876538743")
+        val map = Map("totalAmountSpent" -> s"$largeNegativeAmount")
         lazy val form = totalAmountSpentForm.bind(map)
 
         "contain three errors" in {
