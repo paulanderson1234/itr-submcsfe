@@ -641,6 +641,8 @@ page.previousInvestment.InvalidPreviousScheme.heading=You don''t qualify for the
 page.previousInvestment.InvalidPreviousScheme.reason=This is because your company has already raised investment through the Enterprise Investment Scheme or received investment from a Venture Capital Trust.
 page.previousInvestment.InvalidPreviousScheme.change-text=If this information is incorrect you can
 page.previousInvestment.InvalidPreviousScheme.change-link=change your answers
+page.previousInvestment.InvalidPreviousScheme.secondaryHeading = What happens next
+page.previousInvestment.InvalidPreviousScheme.whatNext = You can continue with your application if you think that you should qualify.
 
 #previous schemes
 page.investment.PreviousScheme.heading=Which schemes or investments has your company used?
