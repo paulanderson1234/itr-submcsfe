@@ -149,12 +149,14 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
         nominalValueOfSharesForm <- fillForm[NominalValueOfSharesModel](KeystoreKeys.nominalValueOfShares, NominalValueOfSharesForm.nominalValueOfSharesForm)
         shareDescription <- fillForm[ShareDescriptionModel](KeystoreKeys.shareDescription, ShareDescriptionForm.shareDescriptionForm)
         totalAmountSpentForm <- fillForm[TotalAmountSpentModel](KeystoreKeys.totalAmountSpent, TotalAmountSpentForm.totalAmountSpentForm)
+        addInvestorOrNomineeForm <- fillForm[AddInvestorOrNomineeModel](KeystoreKeys.addInvestor, AddInvestorOrNomineeForm.addInvestorOrNomineeForm)
       } yield Ok(
         testOnly.views.html.seis.testEndpointSEISPageTwo(
           numberOfSharesForm,
           nominalValueOfSharesForm,
           shareDescription,
-          totalAmountSpentForm
+          totalAmountSpentForm,
+          addInvestorOrNomineeForm
         )
       )
 
@@ -165,14 +167,16 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
     val nominalValueOfShares = bindForm[NominalValueOfSharesModel](KeystoreKeys.nominalValueOfShares, NominalValueOfSharesForm.nominalValueOfSharesForm)
     val shareDescription = bindForm[ShareDescriptionModel](KeystoreKeys.shareDescription, ShareDescriptionForm.shareDescriptionForm)
     val totalAmountSpent = bindForm[TotalAmountSpentModel](KeystoreKeys.totalAmountSpent, TotalAmountSpentForm.totalAmountSpentForm)
- saveBackLinks()
+    val addInvestorOrNomineeForm = bindForm[AddInvestorOrNomineeModel](KeystoreKeys.addInvestor, AddInvestorOrNomineeForm.addInvestorOrNomineeForm)
+    saveBackLinks()
     saveSchemeType()
     Future.successful(Ok(
       testOnly.views.html.seis.testEndpointSEISPageTwo(
         numberOfShares,
         nominalValueOfShares,
         shareDescription,
-        totalAmountSpent
+        totalAmountSpent,
+        addInvestorOrNomineeForm
       )
     ))
   }

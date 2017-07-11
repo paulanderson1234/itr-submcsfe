@@ -50,7 +50,7 @@ class AddInvestorOrNomineeSpec extends ViewSpec {
       }*/
 
       "have the progress details" in {
-        document.select("article span").first().text shouldBe Messages("common.section.progress.company.details.one")
+        document.select("article span").first().text shouldBe Messages("common.section.progress.company.details.four")
       }
 
       "have the correct heading" in {

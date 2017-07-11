@@ -10,7 +10,7 @@
 
 @main_template(Messages("page.seis.investors.AddInvestorOrNominee.title")) {
 
-    @backButtonWithProgress(controllers.seis.routes.GrossAssetsController.show().url, Messages("common.section.progress.company.details.one"))
+    @backButtonWithProgress(controllers.seis.routes.TotalAmountSpentController.show().url, Messages("common.section.progress.company.details.four"))
 
     @errorSummary(addInvestorOrNomineeForm, "add-investor-or-nominee", "addInvestorOrNominee")
 

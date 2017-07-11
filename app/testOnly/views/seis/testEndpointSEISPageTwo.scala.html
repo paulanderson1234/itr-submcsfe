@@ -7,7 +7,8 @@
 @import views.html.helpers.{externalLink,formHint, formInputRadioGroup, backButtonWithProgress, input, inputWithCurrencySymbol, formInlineDateInput, hiddenField, errorSummary, formShowYesNoRadioContent, textArea, dropdown}
 
 
-@(numberOfSharesForm:Form[NumberOfSharesModel], nominalValueOfSharesForm: Form[NominalValueOfSharesModel], shareDescriptionForm: Form[ShareDescriptionModel], totalAmountSpentForm:Form[TotalAmountSpentModel])(implicit request: Request[_], messages: Messages)
+@(numberOfSharesForm:Form[NumberOfSharesModel], nominalValueOfSharesForm: Form[NominalValueOfSharesModel], shareDescriptionForm: Form[ShareDescriptionModel],
+totalAmountSpentForm:Form[TotalAmountSpentModel], addInvestorOrNomineeForm: Form[AddInvestorOrNomineeModel])(implicit request: Request[_], messages: Messages)
 
 @main_template(Messages("page.test.page-two.title")) {
 
