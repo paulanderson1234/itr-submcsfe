@@ -87,7 +87,7 @@ class NominalValueOfSharesControllerSpec extends BaseSpec {
       submitWithSessionAndAuth(controller.submit, form: _*) (
         result => {
           status(result) shouldBe 303
-          redirectLocation(result) shouldBe Some(controllers.seis.routes.NominalValueOfSharesController.show().url)
+          redirectLocation(result) shouldBe Some(controllers.seis.routes.TotalAmountRaisedController.show().url)
         }
       )
     }

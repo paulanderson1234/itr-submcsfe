@@ -66,7 +66,7 @@ trait TotalAmountRaisedController extends FrontendController with AuthorisedAndE
           if (dateForActivity.get.hasInvestmentTradeStarted == Constants.StandardRadioButtonYesValue) {
             submissionConnector.validateHasInvestmentTradeStartedCondition(dateForActivity.get.hasInvestmentTradeStartedDay.get,
               dateForActivity.get.hasInvestmentTradeStartedMonth.get, dateForActivity.get.hasInvestmentTradeStartedYear.get).map {
-              case Some(valid) if valid => Redirect(routes.ShareIssueDateController.show()) // TODO: to total amount spent when done
+              case Some(valid) if valid => Redirect(routes.TotalAmountSpentController.show())
               case Some(valid) if !valid => Redirect(routes.GrossAssetsController.show()) // TODO: to Investor Nominee Page when done
               case None =>
                 Logger.warn("[TotalAmountRaisedController][submit] - validateHasInvestmentTradeStartedCondition did not return expected true/false answer")
@@ -75,7 +75,7 @@ trait TotalAmountRaisedController extends FrontendController with AuthorisedAndE
           }
           else
             // trade not started so treat as less than 4 months trading
-            Future.successful(Redirect(routes.NumberOfSharesController.show())) // TODO: to total amount spent when done
+            Future.successful(Redirect(routes.TotalAmountSpentController.show()))
         }
         else
           // inconsistent date. User page skipping etc. Send to start of flow.

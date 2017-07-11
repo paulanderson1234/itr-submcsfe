@@ -47,7 +47,7 @@ class TotalAmountSpentSpec extends ViewSpec {
       }
 
       "have the correct back link url" in {
-        document.select("a.back-link").attr("href") shouldBe "/investment-tax-relief-cs/seis/total-amount-spent"
+        document.select("a.back-link").attr("href") shouldBe "/investment-tax-relief-cs/seis/total-amount-raised"
       }
 
       "have the progress details" in {
@@ -99,7 +99,7 @@ class TotalAmountSpentSpec extends ViewSpec {
       }
 
       "have the correct back link url" in {
-        document.select("a.back-link").attr("href") shouldBe "/investment-tax-relief-cs/seis/total-amount-spent"
+        document.select("a.back-link").attr("href") shouldBe "/investment-tax-relief-cs/seis/total-amount-raised"
       }
 
       "have the progress details" in {

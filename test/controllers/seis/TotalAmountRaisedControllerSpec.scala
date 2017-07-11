@@ -33,6 +33,7 @@ class TotalAmountRaisedControllerSpec extends BaseSpec {
 
   val tradeDateConditionMet = Some(true)
   val tradeDateConditionNotMet = Some(false)
+  val validTotalAmountRaisedModel = TotalAmountRaisedModel(12345)
 
   object TestController extends TotalAmountRaisedController {
     override lazy val applicationConfig = MockConfig
@@ -74,8 +75,6 @@ class TotalAmountRaisedControllerSpec extends BaseSpec {
     (Matchers.any())).thenReturn(tradingConditionLessThanFourMonths)
 
   }
-
-  val validTotalAmountRaisedModel = TotalAmountRaisedModel(12345)
 
   "TotalAmountRaisedController" should {
     "use the correct keystore connector" in {
@@ -119,8 +118,7 @@ class TotalAmountRaisedControllerSpec extends BaseSpec {
         "amount" -> "1")(
         result => {
           status(result) shouldBe SEE_OTHER
-          //TODO: navigate to TODO: to total amount spent when page when available
-          redirectLocation(result) shouldBe Some(routes.ShareIssueDateController.show().url)
+          redirectLocation(result) shouldBe Some(routes.TotalAmountSpentController.show().url)
         }
       )
     }
@@ -152,8 +150,7 @@ class TotalAmountRaisedControllerSpec extends BaseSpec {
         "amount" -> "1")(
         result => {
           status(result) shouldBe SEE_OTHER
-          //TODO: navigate to TODO: to total amount spent when page when available
-          redirectLocation(result) shouldBe Some(routes.ShareIssueDateController.show().url)
+          redirectLocation(result) shouldBe Some(routes.TotalAmountSpentController.show().url)
         }
       )
     }
@@ -184,8 +181,7 @@ class TotalAmountRaisedControllerSpec extends BaseSpec {
         "amount" -> "1")(
         result => {
           status(result) shouldBe SEE_OTHER
-          //TODO: navigate to TODO: to total amount spent when page when available
-          redirectLocation(result) shouldBe Some(routes.NumberOfSharesController.show().url)
+          redirectLocation(result) shouldBe Some(routes.TotalAmountSpentController.show().url)
         }
       )
     }
@@ -200,8 +196,7 @@ class TotalAmountRaisedControllerSpec extends BaseSpec {
         "amount" -> "1")(
         result => {
           status(result) shouldBe SEE_OTHER
-          //TODO: navigate to TODO: to total amount spent when page when available
-          redirectLocation(result) shouldBe Some(routes.NumberOfSharesController.show().url)
+          redirectLocation(result) shouldBe Some(routes.TotalAmountSpentController.show().url)
         }
       )
     }
