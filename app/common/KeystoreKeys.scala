@@ -109,4 +109,7 @@ trait KeystoreKeys {
   val isAgentEligibility: String = "throttling:isAgentEligibility"
   val throttleCheckPassed: String = "throttling:throttleCheckPassed"
 
+  // investors
+  val addInvestor: String = "investors:addInvestor"
+
 }

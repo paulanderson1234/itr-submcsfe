@@ -1020,3 +1020,10 @@ page.shareDetails.numberOfShares.title=How many of these shares did your company
 page.shareDetails.numberOfShares.heading=How many of these shares did your company issue?
 
 
+#Has Investment Trade Started
+page.seis.investors.AddInvestorOrNominee.title=Add each investor or nominee
+page.seis.investors.AddInvestorOrNominee.heading=Add each investor or nominee
+page.seis.investors.AddInvestorOrNominee.info.one=Only add the investors or nominees seeking tax relief from this share issue.
+page.seis.investors.AddInvestorOrNominee.info.two=A nominee is someone who acts on behalf of an individual investor.
+page.seis.investors.AddInvestorOrNominee.radioButton.one=Investor
+page.seis.investors.AddInvestorOrNominee.radioButton.two=Nominee

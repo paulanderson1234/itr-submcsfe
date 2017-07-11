@@ -227,4 +227,7 @@ trait BaseSpec extends UnitSpec with OneAppPerSuite with MockitoSugar with FakeR
   val shareIssuetDateModelEmpty = ShareIssueDateModel(None, None, None)
 
   val numberOfSharesModel= NumberOfSharesModel(9999999999999.00)
+
+  val investor = AddInvestorOrNomineeModel(Constants.investor)
+  val nominee = AddInvestorOrNomineeModel(Constants.nominee)
 }

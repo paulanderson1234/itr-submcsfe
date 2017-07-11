@@ -1,0 +1,45 @@
+@import models.FullTimeEmployeeCountModel
+@import views.html.helpers.backButtonWithProgress
+@import views.html.helpers.errorSummary
+@import views.html.helpers.input
+@import uk.gov.hmrc.play.views.html.helpers.form
+@import common.Constants
+@import views.html.helpers.{backButtonWithProgress, formInputRadioGroup, errorSummary, formHint}
+
+@(addInvestorOrNomineeForm: Form[AddInvestorOrNomineeModel])(implicit request: Request[_], messages: Messages)
+
+@main_template(Messages("page.seis.investors.AddInvestorOrNominee.title")) {
+
+    @backButtonWithProgress(controllers.seis.routes.GrossAssetsController.show().url, Messages("common.section.progress.company.details.one"))
+
+    @errorSummary(addInvestorOrNomineeForm, "add-investor-or-nominee", "addInvestorOrNominee")
+
+    <h1 class="heading-xlarge" id="main-heading">@Messages("page.seis.investors.AddInvestorOrNominee.heading")</h1>
+
+    <div>
+        <p>@Messages("page.seis.investors.AddInvestorOrNominee.info.one")</p>
+
+        <p>@Messages("page.seis.investors.AddInvestorOrNominee.info.two")</p>
+    </div>
+
+    @form(action = controllers.seis.routes.AddInvestorOrNomineeController.submit()) {
+        <div class="form-group">
+            @formInputRadioGroup(
+            field = addInvestorOrNomineeForm("addInvestorOrNominee"),
+            Seq(
+            Constants.investor -> Messages("page.seis.investors.AddInvestorOrNominee.radioButton.one"),
+            Constants.nominee -> Messages("page.seis.investors.AddInvestorOrNominee.radioButton.two")),
+            '_legend -> Messages("page.seis.investors.AddInvestorOrNominee.heading"),
+            '_legendClass -> "visuallyhidden",
+            '_labelAfter -> true,
+            '_labelClass -> "block-label",
+            '_legendID -> "addInvestorOrNominee",
+            '_groupClass -> "inline"
+            )
+        </div>
+
+        <div class="form-group">
+            <button class="btn button" type="submit" id="next">@Messages("common.button.snc")</button>
+        </div>
+    }
+}
