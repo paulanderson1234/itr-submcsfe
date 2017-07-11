@@ -102,6 +102,9 @@ POST       /has-investment-trade-started           controllers.seis.HasInvestmen
 GET        /full-time-employee-count               controllers.seis.FullTimeEmployeeCountController.show
 POST       /full-time-employee-count               controllers.seis.FullTimeEmployeeCountController.submit
 
+GET        /share-description                      controllers.seis.ShareDescriptionController.show
+POST       /share-description                      controllers.seis.ShareDescriptionController.submit
+
 GET        /number-of-shares                      controllers.seis.NumberOfSharesController.show
 POST       /number-of-shares                      controllers.seis.NumberOfSharesController.submit
 

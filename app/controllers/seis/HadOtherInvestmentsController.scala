@@ -119,9 +119,9 @@ trait HadOtherInvestmentsController extends FrontendController with AuthorisedAn
           }
         }
         else {
-          s4lConnector.saveFormData(KeystoreKeys.backLinkProposedInvestment, routes.HadOtherInvestmentsController.show().url)
+          s4lConnector.saveFormData(KeystoreKeys.backLinkShareDescription, routes.HadOtherInvestmentsController.show().url)
           clearPreviousInvestments(s4lConnector)
-          Future.successful(Redirect(routes.ProposedInvestmentController.show()))
+          Future.successful(Redirect(routes.ShareDescriptionController.show()))
         }
       }
     }

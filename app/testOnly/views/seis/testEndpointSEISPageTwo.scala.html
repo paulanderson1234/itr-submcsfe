@@ -1,12 +1,16 @@
 @import models._
+@import forms._
 @import testOnly.models.TestPreviousSchemesModel
 @import uk.gov.hmrc.play.views.html.helpers.form
 @import common.Constants
 @import utils.CountriesHelper
 @import views.html.helpers.{externalLink,formHint, formInputRadioGroup, backButtonWithProgress, input, inputWithCurrencySymbol, formInlineDateInput, hiddenField, errorSummary, formShowYesNoRadioContent, textArea, dropdown}
 
-@(numberOfSharesForm:Form[NumberOfSharesModel], nominalValueOfSharesForm: Form[NominalValueOfSharesModel])(implicit request: Request[_], messages: Messages)
+
+@(numberOfSharesForm:Form[NumberOfSharesModel], nominalValueOfSharesForm: Form[NominalValueOfSharesModel], shareDescriptionForm: Form[ShareDescriptionModel], totalAmountSpentForm:Form[TotalAmountSpentModel])(implicit request: Request[_], messages: Messages)
+
 @main_template(Messages("page.test.page-two.title")) {
+
 <div class="grid-row">
 
     @form(action = testOnly.controllers.seis.routes.TestEndpointSEISController.submitPageTwo()) {
@@ -26,7 +30,7 @@
         <h2>Nominal Value of Shares</h2>
         <div class="form-group">
             <p>@Messages("page.seis.nominalValueOfShares.hint")</p>
-            @input(
+            @inputWithCurrencySymbol(
                 nominalValueOfSharesForm("nominalValueOfShares"),
                 '_divClass -> "form-label",
                 '_label -> Messages("page.seis.nominalValueOfShares.title"),
@@ -34,8 +38,33 @@
             )
         </div>
 
-
+        <h2>Share Description</h2>
         <div class="form-group">
+            <span class = "form-hint" id="desc-one">@Messages("page.shares.shareDescription.question.hint")</span>
+            @textArea(
+            shareDescriptionForm("shareDescription"),
+            '_cols -> "45",
+            '_rows -> "2",
+            '_maxLength-> Constants.ShareDescriptionMaxLength,
+            '_label-> Messages("page.shares.shareDescription.heading"),
+            '_labelTextClass-> "visuallyhidden"
+            )
+        </div>
+
+        <h2>Total Amount Spent</h2>
+        <div class="form-group">
+            @inputWithCurrencySymbol(
+            totalAmountSpentForm("totalAmountSpent"),
+            '_divClass -> "form-label",
+            '_labelId -> "label-totalAmountSpent",
+            '_label -> Messages("page.seis.shareDetails.totalAmountSpent.heading=Total amount spent"),
+            '_labelTextClass -> "visuallyhidden",
+            '_inputClass -> "input--fullwidth"
+            )
+        </div>
+
+
+    <div class="form-group">
             <button class="btn button" type="submit" id="next">
                 @Messages("page.test.submit-form.button")
             </button>
@@ -46,7 +75,6 @@
         </div>
 
     }
-
 
 </div>
 }

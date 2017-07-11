@@ -1,6 +1,6 @@
 @import views.html.helpers.backButtonWithProgress
 @import uk.gov.hmrc.play.views.html.helpers.form
-@import views.html.helpers.input
+@import views.html.helpers.inputWithCurrencySymbol
 @import views.html.helpers.errorSummary
 
 @(nominalValueOfSharesForm: Form[NominalValueOfSharesModel])(implicit request: Request[_], messages: Messages)
@@ -15,7 +15,7 @@
     @form(action = controllers.seis.routes.NominalValueOfSharesController.submit()) {
         <div class="form-group">
             <p>@Messages("page.seis.nominalValueOfShares.hint")</p>
-            @input(
+            @inputWithCurrencySymbol(
                 nominalValueOfSharesForm("nominalValueOfShares"),
                 '_divClass -> "form-label",
                 '_label -> Messages("page.seis.nominalValueOfShares.title"),
