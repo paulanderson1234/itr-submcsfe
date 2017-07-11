@@ -1,12 +1,16 @@
 @import models._
+@import forms._
 @import testOnly.models.TestPreviousSchemesModel
 @import uk.gov.hmrc.play.views.html.helpers.form
 @import common.Constants
 @import utils.CountriesHelper
 @import views.html.helpers.{externalLink,formHint, formInputRadioGroup, backButtonWithProgress, input, inputWithCurrencySymbol, formInlineDateInput, hiddenField, errorSummary, formShowYesNoRadioContent, textArea, dropdown}
 
-@(numberOfSharesForm:Form[NumberOfSharesModel], nominalValueOfSharesForm: Form[NominalValueOfSharesModel], shareDescriptionForm: Form[ShareDescriptionModel])(implicit request: Request[_], messages: Messages)
+
+@(numberOfSharesForm:Form[NumberOfSharesModel], nominalValueOfSharesForm: Form[NominalValueOfSharesModel], shareDescriptionForm: Form[ShareDescriptionModel], totalAmountSpentForm:Form[TotalAmountSpentModel])(implicit request: Request[_], messages: Messages)
+
 @main_template(Messages("page.test.page-two.title")) {
+
 <div class="grid-row">
 
     @form(action = testOnly.controllers.seis.routes.TestEndpointSEISController.submitPageTwo()) {
@@ -47,6 +51,18 @@
             )
         </div>
 
+        <h2>Total Amount Spent</h2>
+        <div class="form-group">
+            @inputWithCurrencySymbol(
+            totalAmountSpentForm("totalAmountSpent"),
+            '_divClass -> "form-label",
+            '_labelId -> "label-totalAmountSpent",
+            '_label -> Messages("page.seis.shareDetails.totalAmountSpent.heading=Total amount spent"),
+            '_labelTextClass -> "visuallyhidden",
+            '_inputClass -> "input--fullwidth"
+            )
+        </div>
+
 
     <div class="form-group">
             <button class="btn button" type="submit" id="next">
@@ -59,7 +75,6 @@
         </div>
 
     }
-
 
 </div>
 }
