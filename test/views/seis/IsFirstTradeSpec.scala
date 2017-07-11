@@ -19,7 +19,7 @@ package views.seis
 import auth.{MockAuthConnector, MockConfigSingleFlow}
 import common.{Constants, KeystoreKeys}
 import connectors.SubmissionConnector
-import controllers.seis.IsFirstTradeController
+import controllers.seis.{IsFirstTradeController, routes}
 import models.IsFirstTradeModel
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -59,7 +59,7 @@ class IsFirstTradeSpec extends ViewSpec {
       document.getElementById("main-heading").hasClass("h1-heading")
       document.getElementById("isFirstTrade-yesLabel").text() shouldBe Messages("common.radioYesLabel")
       document.getElementById("isFirstTrade-noLabel").text() shouldBe Messages("common.radioNoLabel")
-      document.body.getElementById("back-link").attr("href") shouldEqual controllers.seis.routes.TradeStartDateController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual routes.TradeStartDateController.show().url
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.company.details.one")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       document.getElementById("isFirstTrade-legend").hasClass("visuallyhidden")

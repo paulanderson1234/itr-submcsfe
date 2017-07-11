@@ -16,8 +16,7 @@
 
 package views.seis
 
-import auth.{MockAuthConnector, MockConfig}
-import controllers.seis.{GrossAssetsErrorController, routes}
+import controllers.seis.routes
 import org.jsoup.Jsoup
 import play.api.i18n.Messages
 import views.helpers.ViewSpec
@@ -25,13 +24,6 @@ import play.api.i18n.Messages.Implicits._
 import views.html.seis.companyDetails.GrossAssetsError
 
 class GrossAssetsErrorSpec extends ViewSpec {
-
-  object TestController extends GrossAssetsErrorController {
-    override lazy val applicationConfig = MockConfig
-    override lazy val authConnector = MockAuthConnector
-    override lazy val enrolmentConnector = mockEnrolmentConnector
-    override lazy val s4lConnector = mockS4lConnector
-  }
 
   "The Gross Assets error page" should {
 
@@ -47,7 +39,7 @@ class GrossAssetsErrorSpec extends ViewSpec {
 
       document.body.getElementById("incorrect-info").text() shouldEqual Messages("page.companyDetails.grossAssetsError.incorrect.info") +
         " " + Messages("page.companyDetails.grossAssetsError.link.changeAnswers") + "."
-      document.body.getElementById("change-answers").attr("href") shouldEqual controllers.seis.routes.GrossAssetsController.show().url
+      document.body.getElementById("change-answers").attr("href") shouldEqual routes.GrossAssetsController.show().url
       document.body.getElementById("back-link").attr("href") shouldEqual routes.GrossAssetsController.show().url
       document.getElementById("next").text() shouldBe Messages("common.button.continue")
     }

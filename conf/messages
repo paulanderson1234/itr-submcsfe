@@ -53,7 +53,7 @@ common.date.error.invalidDate=Date must have a valid day, month and a year with 
 ##common section headings##
 common.section.progress.company.details.one=Section 1 of 6: Company details
 common.section.progress.company.details.two=Section 2 of 5: Previous schemes
-common.section.progress.company.details.three=Section 3 of 5: This investment
+common.section.progress.company.details.three=Section 3 of 6: Shares
 common.section.progress.company.details.five=Section 5 of 5: Supporting documents
 common.section.progress.company.details.four=Section 4 of 5: Contact details
 
@@ -86,10 +86,17 @@ validation.error.email=Enter a valid email address
 validation.error.employeeCount.notANumber = Enter a valid number for your employee count
 validation.error.employeeCount.size = The employee count should be between {0} and 9999999999999
 validation.error.employeeCount.precision = Enter a value with fewer than 13 decimal places for your employee count
+
 validation.error.totalAmountSpent.size = The total amount spent should be between 0 and 9999999999999
 validation.error.totalAmountSpent.notANumber = Enter a valid number for the total amount spent
 validation.error.totalAmountSpent.decimalPlaces = The total amount spent should not contain decimal places
 validation.error.totalAmountSpent.negative = The total amount spent should not be negative
+
+validation.error.nominalValueOfShares.decimalPlaces = The share value should not contain decimal places
+validation.error.nominalValueOfShares.size =  The share value should be between 0 and 9999999999999
+validation.error.nominalValueOfShares.negative = The share value should not be negative
+validation.error.nominalValueOfShares.notANumber = Enter a valid number for the share value
+
 
 # number of shares validation
 validation.error.numberOfShares.size = The number of shares count should be between {0} and 9999999999999
@@ -641,6 +648,8 @@ page.previousInvestment.InvalidPreviousScheme.heading=You don''t qualify for the
 page.previousInvestment.InvalidPreviousScheme.reason=This is because your company has already raised investment through the Enterprise Investment Scheme or received investment from a Venture Capital Trust.
 page.previousInvestment.InvalidPreviousScheme.change-text=If this information is incorrect you can
 page.previousInvestment.InvalidPreviousScheme.change-link=change your answers
+page.previousInvestment.InvalidPreviousScheme.secondaryHeading = What happens next
+page.previousInvestment.InvalidPreviousScheme.whatNext = You can continue with your application if you think that you should qualify.
 
 #previous schemes
 page.investment.PreviousScheme.heading=Which schemes or investments has your company used?
@@ -798,6 +807,10 @@ page.seis.companyDetails.fullTimeEmployeeCountError.guidance = You can continue 
 page.seis.companyDetails.fullTimeEmployeeCountError.incorrect = If this information is incorrect you can 
 page.seis.companyDetails.fullTimeEmployeeCountError.incorrect.link = change your answers
 
+# SEIS Nominal Value of Shares
+page.seis.nominalValueOfShares.title = What was the nominal value of each share when they were issued?
+page.seis.nominalValueOfShares.hint = The nominal value is the amount shown on the share certificate.
+
 # SEIS Check Answers
 page.seis.checkAndSubmit.checkAnswers.description.one=You''re applying for Advance Assurance for the Seed Enterprise Investment Scheme.
 
@@ -916,7 +929,7 @@ page.historicSubmissions.applications.aa.no-previous.text=You have not submitted
 
 #Gross assets page - SEIS
 page.grossAssets.amount.invalidAmount=Enter an amount in the correct format e.g. 10000
-page.grossAssets.amount.OutOfRange=Enter an amount between 1 and 5000000
+page.grossAssets.amount.OutOfRange=Enter an amount between 0 and 999999999
 page.grossAssets.amount.title=What were your company''s gross assets worth immediately before the share issue?
 page.grossAssets.amount.heading=What were your company''s gross assets worth immediately before the share issue?
 page.grossAssets.help.link=What happens if I don''t raise this amount?
