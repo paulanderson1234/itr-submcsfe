@@ -11,19 +11,29 @@
 
 <div class="grid-row">
     <div class="column-two-thirds">
-        <div id="main">
-            <h1 class="form-title heading-xlarge" id="main-heading" >@Messages("page.previousInvestment.InvalidPreviousScheme.heading")</h1>
+        <h1 class="form-title heading-xlarge" id="main-heading" >@Messages("page.previousInvestment.InvalidPreviousScheme.heading")</h1>
+
+        <div class="form-group">
+            <p id="invalid-scheme-reason">@Messages("page.previousInvestment.InvalidPreviousScheme.reason")</p>
+        </div>
+
+        <h2 class="heading-medium">@Messages("page.previousInvestment.InvalidPreviousScheme.secondaryHeading")</h2>
+
+        <div class="form-group">
+            <p>@Messages("page.previousInvestment.InvalidPreviousScheme.whatNext")</p>
         </div>
 
         <div class="form-group">
-            <span id="invalid-scheme-reason">@Messages("page.previousInvestment.InvalidPreviousScheme.reason")</span>
+            <a class="button" href="@controllers.seis.routes.ReviewPreviousSchemesController.show().url">@Messages("common.button.continue")</a>
         </div>
-        <p class="form-group" id="change-answers">
-            @Messages("page.previousInvestment.InvalidPreviousScheme.change-text")
-            <a id="change-answers-link" class="link"
-              href="@controllers.seis.routes.ReviewPreviousSchemesController.show().url">@Messages("page.previousInvestment.InvalidPreviousScheme.change-link")</a>.
-        </p>
 
+        <div class="form-group">
+            <p>
+                @Messages("page.previousInvestment.InvalidPreviousScheme.change-text")
+                <a id="change-answers-link" class="link"
+                  href="@controllers.seis.routes.PreviousSchemeController.show().url">@Messages("page.previousInvestment.InvalidPreviousScheme.change-link")</a>.
+            </p>
+        </div>
     </div>
 </div>
 }
