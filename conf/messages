@@ -56,7 +56,7 @@ common.section.progress.company.details.two=Section 2 of 5: Previous schemes
 common.section.progress.company.details.three=Section 3 of 6: Shares
 common.section.progress.company.details.five=Section 5 of 5: Supporting documents
 common.section.progress.company.details.four=Section 4 of 5: Contact details
-
+common.section.progress.company.details.three=Section 4 of 6: Investors
 common.section.progress.share.details.three=Section 3 of 6: Shares
 
 ## Common report error ##
@@ -797,6 +797,17 @@ page.seis.companyDetails.fullTimeEmployeeCountError.incorrect.link = change your
 # SEIS Nominal Value of Shares
 page.seis.nominalValueOfShares.title = What was the nominal value of each share when they were issued?
 page.seis.nominalValueOfShares.hint = The nominal value is the amount shown on the share certificate.
+
+# SEIS Individual Details Page
+page.seis.individualDetails.title = Where should we send your correspondence?
+page.seis.individualDetails.forename.label= First Name
+page.seis.individualDetails.surname.label= Last Name
+page.seis.individualDetails.addressline1.label= Address line 1
+page.seis.individualDetails.addressline2.label= Address line 2
+page.seis.individualDetails.addressline3.label= Address line 3 (optional)
+page.seis.individualDetails.addressline4.label= Address line 4 (optional)
+page.seis.individualDetails.postcode.label= Postcode
+page.seis.individualDetails.country.label= Country
 
 # SEIS Check Answers
 page.seis.checkAndSubmit.checkAnswers.description.one=You''re applying for Advance Assurance for the Seed Enterprise Investment Scheme.

@@ -107,3 +107,6 @@ POST       /number-of-shares                      controllers.seis.NumberOfShare
 
 GET        /nominal-value-of-shares                controllers.seis.NominalValueOfSharesController.show
 POST       /nominal-value-of-shares                controllers.seis.NominalValueOfSharesController.submit
+
+GET        /individuals-details                   controllers.seis.IndividualDetailsController.show
+POST       /individuals-details                   controllers.seis.IndividualDetailsController.submit
