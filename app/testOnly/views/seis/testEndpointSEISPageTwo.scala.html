@@ -7,7 +7,9 @@
 @import views.html.helpers.{externalLink,formHint, formInputRadioGroup, backButtonWithProgress, input, inputWithCurrencySymbol, formInlineDateInput, hiddenField, errorSummary, formShowYesNoRadioContent, textArea, dropdown}
 
 
-@(numberOfSharesForm:Form[NumberOfSharesModel], nominalValueOfSharesForm: Form[NominalValueOfSharesModel], shareDescriptionForm: Form[ShareDescriptionModel], totalAmountSpentForm:Form[TotalAmountSpentModel])(implicit request: Request[_], messages: Messages)
+@(numberOfSharesForm:Form[NumberOfSharesModel], nominalValueOfSharesForm: Form[NominalValueOfSharesModel],
+shareDescriptionForm: Form[ShareDescriptionModel], totalAmountRaisedForm:Form[TotalAmountRaisedModel],
+totalAmountSpentForm:Form[TotalAmountSpentModel])(implicit request: Request[_], messages: Messages)
 
 @main_template(Messages("page.test.page-two.title")) {
 
@@ -48,6 +50,21 @@
             '_maxLength-> Constants.ShareDescriptionMaxLength,
             '_label-> Messages("page.shares.shareDescription.heading"),
             '_labelTextClass-> "visuallyhidden"
+            )
+        </div>
+
+        <h2>Total Amount Spent</h2>
+        <div class="form-group">
+            @inputWithCurrencySymbol(
+            totalAmountRaisedForm("amount"),
+            '_divClass -> "form-label",
+            '_labelId -> "label-amount",
+            '_label -> Messages("page.shareDetails.totalAmountRaised.heading"),
+            '_labelTextClass -> "visuallyhidden",
+            '_inputClass -> "input--normal input--no-spinner input--left-padding",
+            '_type -> "text",
+            '_maxlength -> "9",
+            'id -> "amount"
             )
         </div>
 
