@@ -61,6 +61,7 @@ trait KeystoreKeys {
   val shareIssueDate: String = "companyDetails:shareIssueDate"
   val seventyPercentSpent: String = "companyDetails:seventyPercentSpent"
   val fullTimeEmployeeCount: String = "companyDetails:fullTimeEmployeeCount"
+  val shareDescription: String = "companyDetails:shareDescription"
   val numberOfShares: String = "shares:numberOfShares"
   val totalAmountSpent: String = "shares:totalAmountSpent"
   val nominalValueOfShares: String = "shares:nominalValueofShares"
@@ -91,6 +92,7 @@ trait KeystoreKeys {
   val backLinkSeventyPercentSpent: String = "backLink:backLinkSeventyPercentSpent"
   val backLinkShareIssueDate: String = "backLink:backLinkShareIssueDate"
   val backLinkHadRFI: String = "backLink:backLinkHadRFI"
+  val backLinkShareDescription: String = "backLink:shareDescription"
 
   //application in progress key
   val applicationInProgress: String = "applicationInProgress"

@@ -102,14 +102,14 @@ class HadOtherInvestmentsControllerSpec extends BaseSpec {
 
   "Sending a valid 'No' form submit to the HadOtherInvestmentsController with 'No' to the previous RFI when authenticated " +
     "and enrolled for combined" should {
-    "redirect to the commercial sale page" in {
+    "redirect to the share description page" in {
       setupMocks(None, None, None, Some(hadPreviousRFIModelNo))
       mockEnrolledRequest(seisSchemeTypesModel)
       val formInput = "hadOtherInvestments" -> Constants.StandardRadioButtonNoValue
       submitWithSessionAndAuth(TestController.submit,formInput)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some("/investment-tax-relief-cs/seis/proposed-investment")
+          redirectLocation(result) shouldBe Some("/investment-tax-relief-cs/seis/share-description")
         }
       )
     }
