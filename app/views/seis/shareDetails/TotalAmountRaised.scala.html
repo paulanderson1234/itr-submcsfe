@@ -1,0 +1,44 @@
+@import models.TotalAmountRaisedModel
+@import uk.gov.hmrc.play.views.html.helpers.form
+@import views.html.helpers.{errorSummary, inputWithCurrencySymbol, backButtonWithProgress}
+
+@(totalAmountRaisedForm: Form[TotalAmountRaisedModel])(implicit request: Request[_], messages: Messages)
+
+@main_template(Messages("page.shareDetails.totalAmountRaised.title")) {
+
+@backButtonWithProgress(controllers.seis.routes.NominalValueOfSharesController.show().url, Messages("common.section.progress.company.details.three"))
+
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+
+        @errorSummary(totalAmountRaisedForm, "total-amount-raised", "amount")        
+		<h1 class="heading-xlarge" id="main-heading">@Messages("page.shareDetails.totalAmountRaised.heading")</h1>
+
+		<div class="form-group">
+			<p id="description-one" class="lede">@Messages("page.shareDetails.totalAmountRaised.descriptionOne.text")</p>
+		</div>
+        
+		@form(action = controllers.seis.routes.TotalAmountRaisedController.submit()) {
+        <div class="form-group">
+            @inputWithCurrencySymbol(
+            totalAmountRaisedForm("amount"),
+            '_divClass -> "form-label",
+            '_labelId -> "label-amount",
+            '_label -> Messages("page.shareDetails.totalAmountRaised.heading"),
+            '_labelTextClass -> "visuallyhidden",
+            '_inputClass -> "input--normal input--no-spinner input--left-padding",
+            '_type -> "text",
+            '_maxlength -> "9",
+            'id -> "amount"
+            )
+
+        </div>
+
+        <div class="form-group">
+            <button class="btn button" type="submit" id="next">@Messages("common.button.snc")</button>
+        </div>
+        }
+    </div>
+</div>
+}
