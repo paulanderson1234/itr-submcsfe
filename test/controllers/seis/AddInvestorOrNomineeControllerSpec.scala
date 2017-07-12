@@ -24,7 +24,7 @@ import controllers.helpers.BaseSpec
 import models._
 import org.mockito.Matchers
 import org.mockito.Mockito._
-import play.api.test.Helpers._
+import play.api.test.Helpers.{redirectLocation, _}
 
 import scala.concurrent.Future
 
@@ -76,6 +76,17 @@ class AddInvestorOrNomineeControllerSpec extends BaseSpec {
         result => status(result) shouldBe OK
       )
     }
+
+    "provide an empty model and no back url return a 200 and redirect to Share Description details page" in {
+      setupMocks(None, None)
+      mockEnrolledRequest(seisSchemeTypesModel)
+      showWithSessionAndAuth(TestController.show())(
+        result => {
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(controllers.seis.routes.ShareDescriptionController.show().url)
+        }
+      )
+    }
   }
 
   "By selecting the investor submission to the AddInvestorOrNomineeController when authenticated and enrolled" should {
@@ -100,7 +111,7 @@ class AddInvestorOrNomineeControllerSpec extends BaseSpec {
       submitWithSessionAndAuth(TestController.submit,formInput)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(controllers.seis.routes.ShareDescriptionController.show().url)
+          redirectLocation(result) shouldBe Some(controllers.seis.routes.AddInvestorOrNomineeController.show().url)
         }
       )
     }
@@ -114,7 +125,7 @@ class AddInvestorOrNomineeControllerSpec extends BaseSpec {
     submitWithSessionAndAuth(TestController.submit,formInput)(
       result => {
         status(result) shouldBe SEE_OTHER
-        redirectLocation(result) shouldBe Some(controllers.seis.routes.ShareDescriptionController.show().url)
+        redirectLocation(result) shouldBe Some(controllers.seis.routes.AddInvestorOrNomineeController.show().url)
       }
     )
   }
