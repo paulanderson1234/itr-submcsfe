@@ -150,13 +150,15 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
         shareDescription <- fillForm[ShareDescriptionModel](KeystoreKeys.shareDescription, ShareDescriptionForm.shareDescriptionForm)
         totalAmountRaisedForm <- fillForm[TotalAmountRaisedModel](KeystoreKeys.totalAmountRaised, TotalAmountRaisedForm.totalAmountRaisedForm)
         totalAmountSpentForm <- fillForm[TotalAmountSpentModel](KeystoreKeys.totalAmountSpent, TotalAmountSpentForm.totalAmountSpentForm)
+        addInvestorOrNomineeForm <- fillForm[AddInvestorOrNomineeModel](KeystoreKeys.addInvestor, AddInvestorOrNomineeForm.addInvestorOrNomineeForm)
       } yield Ok(
         testOnly.views.html.seis.testEndpointSEISPageTwo(
           numberOfSharesForm,
           nominalValueOfSharesForm,
           shareDescription,
           totalAmountRaisedForm,
-          totalAmountSpentForm
+          totalAmountSpentForm,
+          addInvestorOrNomineeForm
         )
       )
 
@@ -168,7 +170,8 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
     val shareDescription = bindForm[ShareDescriptionModel](KeystoreKeys.shareDescription, ShareDescriptionForm.shareDescriptionForm)
     val totalAmountRaised = bindForm[TotalAmountRaisedModel](KeystoreKeys.totalAmountRaised, TotalAmountRaisedForm.totalAmountRaisedForm)
     val totalAmountSpent = bindForm[TotalAmountSpentModel](KeystoreKeys.totalAmountSpent, TotalAmountSpentForm.totalAmountSpentForm)
- saveBackLinks()
+    val addInvestorOrNomineeForm = bindForm[AddInvestorOrNomineeModel](KeystoreKeys.addInvestor, AddInvestorOrNomineeForm.addInvestorOrNomineeForm)
+    saveBackLinks()
     saveSchemeType()
     Future.successful(Ok(
       testOnly.views.html.seis.testEndpointSEISPageTwo(
@@ -176,7 +179,8 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
         nominalValueOfShares,
         shareDescription,
         totalAmountRaised,
-        totalAmountSpent
+        totalAmountSpent,
+        addInvestorOrNomineeForm
       )
     ))
   }

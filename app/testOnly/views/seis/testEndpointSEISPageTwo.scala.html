@@ -6,10 +6,9 @@
 @import utils.CountriesHelper
 @import views.html.helpers.{externalLink,formHint, formInputRadioGroup, backButtonWithProgress, input, inputWithCurrencySymbol, formInlineDateInput, hiddenField, errorSummary, formShowYesNoRadioContent, textArea, dropdown}
 
-
 @(numberOfSharesForm:Form[NumberOfSharesModel], nominalValueOfSharesForm: Form[NominalValueOfSharesModel],
 shareDescriptionForm: Form[ShareDescriptionModel], totalAmountRaisedForm:Form[TotalAmountRaisedModel],
-totalAmountSpentForm:Form[TotalAmountSpentModel])(implicit request: Request[_], messages: Messages)
+totalAmountSpentForm:Form[TotalAmountSpentModel], addInvestorOrNomineeForm: Form[AddInvestorOrNomineeModel])(implicit request: Request[_], messages: Messages)
 
 @main_template(Messages("page.test.page-two.title")) {
 
@@ -80,6 +79,21 @@ totalAmountSpentForm:Form[TotalAmountSpentModel])(implicit request: Request[_], 
             )
         </div>
 
+        <h2>Add each investor or nominee</h2>
+        <div class="form-group">
+            @formInputRadioGroup(
+            field = addInvestorOrNomineeForm("addInvestorOrNominee"),
+            Seq(
+            Constants.investor -> Messages("page.seis.investors.AddInvestorOrNominee.radioButton.one"),
+            Constants.nominee -> Messages("page.seis.investors.AddInvestorOrNominee.radioButton.two")),
+            '_legend -> Messages("page.seis.investors.AddInvestorOrNominee.heading"),
+            '_legendClass -> "visuallyhidden",
+            '_labelAfter -> true,
+            '_labelClass -> "block-label",
+            '_legendID -> "addInvestorOrNominee",
+            '_groupClass -> "inline"
+            )
+        </div>
 
     <div class="form-group">
             <button class="btn button" type="submit" id="next">

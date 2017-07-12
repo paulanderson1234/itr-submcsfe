@@ -77,4 +77,7 @@ trait Constants {
   val qualifyPrepareToTrade = "Preparing to Trade"
   val qualifyResearchAndDevelopment = "Research and Development"
 
+  val investor = "Investor"
+  val nominee = "Nominee"
+
 }
