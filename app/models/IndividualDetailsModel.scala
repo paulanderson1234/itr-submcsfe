@@ -24,9 +24,10 @@ case class IndividualDetailsModel( forename : String,
                                    addressline2 : String,
                                    addressline3 : Option[String]=None,
                                    addressline4 : Option[String]=None,
-                                   postcode : String,
-                                   country : String)
+                                   postcode :Option[String] = None,
+                                   countryCode : String)
 
 object IndividualDetailsModel {
   implicit val format = Json.format[IndividualDetailsModel]
+  implicit val writes = Json.writes[IndividualDetailsModel]
 }

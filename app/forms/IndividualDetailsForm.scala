@@ -30,9 +30,9 @@ object IndividualDetailsForm {
       "addressline2" -> mandatoryAddressLineCheck,
       "addressline3" -> optional(optionalAddressLineCheck),
       "addressline4" -> optional(addressLineFourCheck),
-      "postcode" ->     postcodeCheck,
+      "postcode" ->    optional(postcodeCheck),
       "countryCode" -> countryCodeCheck
 
-    )(IndividualDetailsModel.apply)(IndividualDetailsModel.unapply))
+    )(IndividualDetailsModel.apply)(IndividualDetailsModel.unapply).verifying(postcodeCountryCheck))
 
 }

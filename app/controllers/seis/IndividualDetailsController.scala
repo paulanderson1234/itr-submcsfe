@@ -61,11 +61,9 @@ trait IndividualDetailsController extends FrontendController with AuthorisedAndE
       implicit request =>
         individualDetailsForm.bindFromRequest().fold(
           formWithErrors => {
-            val form = if (formWithErrors.hasGlobalErrors)
+            Future.successful(BadRequest(IndividualDetails(if (formWithErrors.hasGlobalErrors)
               formWithErrors.discardingErrors.withError("postcode", Messages("validation.error.countrypostcode"))
-            else formWithErrors
-
-            Future.successful(BadRequest(IndividualDetails(form, countriesList)))
+            else formWithErrors, countriesList)))
           },
           validFormData => {
             s4lConnector.saveFormData(KeystoreKeys.individualDetails, validFormData)

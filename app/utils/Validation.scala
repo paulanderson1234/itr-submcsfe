@@ -658,4 +658,16 @@ object Validation {
         if (errors.isEmpty) Valid else Invalid(errors)
     }
   }
+
+  def postcodeCountryCheck: Constraint[IndividualDetailsModel] = {
+    Constraint("constraints.postcodeCountryCheck")({
+      addressForm: IndividualDetailsModel =>
+        if (addressForm.countryCode == "GB" && addressForm.postcode.isEmpty) {
+          Invalid(Seq(ValidationError(Messages("validation.error.countrypostcode"))))
+        } else {
+          Valid
+        }
+    })
+  }
 }
+
