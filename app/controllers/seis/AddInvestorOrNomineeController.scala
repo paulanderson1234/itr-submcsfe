@@ -20,6 +20,7 @@ import auth.{AuthorisedAndEnrolledForTAVC, SEIS}
 import common.KeystoreKeys
 import config.{AppConfig, FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
+import controllers.Helpers.ControllerHelpers
 import controllers.predicates.FeatureSwitch
 import forms.AddInvestorOrNomineeForm._
 import models.AddInvestorOrNomineeModel
@@ -44,10 +45,23 @@ trait AddInvestorOrNomineeController extends FrontendController with AuthorisedA
   val show = featureSwitch(applicationConfig.seisFlowEnabled) {
     AuthorisedAndEnrolled.async { implicit user =>
       implicit request =>
-        s4lConnector.fetchAndGetFormData[AddInvestorOrNomineeModel](KeystoreKeys.addInvestor).map {
-          case Some(data) => Ok(AddInvestorOrNominee(addInvestorOrNomineeForm.fill(data)))
-          case None => Ok(AddInvestorOrNominee(addInvestorOrNomineeForm))
+        def routeRequest(backUrl: Option[String]) = {
+          if (backUrl.isDefined) {
+            s4lConnector.fetchAndGetFormData[AddInvestorOrNomineeModel](KeystoreKeys.addInvestor).map {
+              case Some(data) => Ok(AddInvestorOrNominee(addInvestorOrNomineeForm.fill(data), backUrl.get))
+              case None => Ok(AddInvestorOrNominee(addInvestorOrNomineeForm, backUrl.get))
+            }
+          }
+          // Remove this else block once all the remaining back redirection pages are implemented
+          else {
+            Future.successful(Redirect(controllers.seis.routes.TotalAmountSpentController.show()))
+          }
         }
+
+        for {
+          link <- ControllerHelpers.getSavedBackLink(KeystoreKeys.backLinkAddInvestorOrNominee, s4lConnector)
+          route <- routeRequest(link)
+        } yield route
     }
   }
 
@@ -56,7 +70,8 @@ trait AddInvestorOrNomineeController extends FrontendController with AuthorisedA
       implicit request =>
         addInvestorOrNomineeForm.bindFromRequest().fold(
           formWithErrors => {
-            Future.successful(BadRequest(AddInvestorOrNominee(formWithErrors)))
+            ControllerHelpers.getSavedBackLink(KeystoreKeys.backLinkAddInvestorOrNominee, s4lConnector).flatMap(url =>
+              Future.successful(BadRequest(AddInvestorOrNominee(formWithErrors, url.get))))
           },
           validFormData => {
             s4lConnector.saveFormData[AddInvestorOrNomineeModel](KeystoreKeys.addInvestor, validFormData)

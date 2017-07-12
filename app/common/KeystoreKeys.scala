@@ -93,6 +93,7 @@ trait KeystoreKeys {
   val backLinkShareIssueDate: String = "backLink:backLinkShareIssueDate"
   val backLinkHadRFI: String = "backLink:backLinkHadRFI"
   val backLinkShareDescription: String = "backLink:shareDescription"
+  val backLinkAddInvestorOrNominee: String = "backLink:AddInvestorOrNominee"
 
   //application in progress key
   val applicationInProgress: String = "applicationInProgress"

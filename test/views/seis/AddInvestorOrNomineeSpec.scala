@@ -21,61 +21,36 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.i18n.Messages
 import play.api.i18n.Messages.Implicits._
-import play.api.test.FakeRequest
-import play.api.test.Helpers._
 import views.helpers.ViewSpec
 import views.html.seis.investors.AddInvestorOrNominee
 
 class AddInvestorOrNomineeSpec extends ViewSpec {
 
-  "AddInvestorOrNominee view" when {
-    implicit lazy val request = FakeRequest("GET", "")
+  "AddInvestorOrNominee view" should {
 
-    "not supplied with form errors" should {
-      lazy val document: Document = {
-        val result = AddInvestorOrNominee(addInvestorOrNomineeForm)
-        Jsoup.parse(contentAsString(result))
-      }
+    "show the valid page details" in {
 
-      "have the correct title" in {
-        document.title() shouldBe Messages("page.seis.investors.AddInvestorOrNominee.title")
-      }
+      val page =
+        AddInvestorOrNominee(addInvestorOrNomineeForm,
+          controllers.seis.routes.TotalAmountSpentController.show().toString)(authorisedFakeRequest, applicationMessages)
+      val document = Jsoup.parse(page.body)
 
-      "have the correct back link text" in {
-        document.select("a.back-link").text() shouldBe Messages("common.button.back")
-      }
+      document.title() shouldBe Messages("page.seis.investors.AddInvestorOrNominee.title")
+      document.select("a.back-link").text() shouldBe Messages("common.button.back")
+      document.select("a.back-link").attr("href") shouldBe "/investment-tax-relief-cs/seis/total-amount-spent"
 
-      /*"have the correct back link url" in {
-        document.select("a.back-link").attr("href") shouldBe "/investment-tax-relief-cs/seis/gross-assets"
-      }*/
-
-      "have the progress details" in {
-        document.select("article span").first().text shouldBe Messages("common.section.progress.company.details.four")
-      }
-
-      "have the correct heading" in {
-        document.select("h1").text() shouldBe Messages("page.seis.investors.AddInvestorOrNominee.heading")
-      }
-
-      "have a first paragraph of disclosed text" in {
-        document.select("article p").get(0).text() shouldBe Messages("page.seis.investors.AddInvestorOrNominee.info.one")
-      }
-
-      "have a second paragraph of disclosed text" in {
-        document.select("article p").get(1).text() shouldBe Messages("page.seis.investors.AddInvestorOrNominee.info.two")
-      }
+      document.select("article span").first().text shouldBe Messages("common.section.progress.company.details.four")
+      document.select("h1").text() shouldBe Messages("page.seis.investors.AddInvestorOrNominee.heading")
+      document.select("article p").get(0).text() shouldBe Messages("page.seis.investors.AddInvestorOrNominee.info.one")
+      document.select("article p").get(1).text() shouldBe Messages("page.seis.investors.AddInvestorOrNominee.info.two")
       document.getElementById("addInvestorOrNominee-investorLabel").text() shouldBe Messages("page.seis.investors.AddInvestorOrNominee.radioButton.one")
       document.getElementById("addInvestorOrNominee-nomineeLabel").text() shouldBe Messages("page.seis.investors.AddInvestorOrNominee.radioButton.two")
       document.getElementById("addInvestorOrNominee-legend").select(".visuallyhidden").text() shouldBe
         Messages("page.seis.investors.AddInvestorOrNominee.heading")
 
-      "have a form posting to the correct route" in {
-        document.select("form").attr("action") shouldBe controllers.seis.routes.AddInvestorOrNomineeController.submit().url
-      }
+      document.select("form").attr("action") shouldBe controllers.seis.routes.AddInvestorOrNomineeController.submit().url
+      document.select("button").text() shouldBe Messages("common.button.snc")
 
-      "have a next button" in {
-        document.select("button").text() shouldBe Messages("common.button.snc")
-      }
     }
   }
 }

@@ -30,6 +30,8 @@ import scala.concurrent.Future
 
 class AddInvestorOrNomineeControllerSpec extends BaseSpec {
 
+  val validBackLink = controllers.seis.routes.TotalAmountSpentController.show().toString
+
   object TestController extends AddInvestorOrNomineeController {
     override lazy val applicationConfig = MockConfig
     override lazy val authConnector = MockAuthConnector
@@ -49,16 +51,18 @@ class AddInvestorOrNomineeControllerSpec extends BaseSpec {
     }
   }
 
-  def setupMocks(addInvestorOrNomineeModel : Option[AddInvestorOrNomineeModel] = None): Unit = {
+  def setupMocks(addInvestorOrNomineeModel : Option[AddInvestorOrNomineeModel] = None, backUrl: Option[String] = None): Unit = {
     when(mockS4lConnector.fetchAndGetFormData[AddInvestorOrNomineeModel](Matchers.eq(KeystoreKeys.addInvestor))
       (Matchers.any(), Matchers.any(), Matchers.any()))
         .thenReturn(Future.successful(addInvestorOrNomineeModel))
-
+    when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.backLinkAddInvestorOrNominee))
+      (Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(backUrl))
   }
 
   "Sending a GET request to AddInvestorOrNomineeController when authenticated and enrolled" should {
     "return a 200 when something is fetched from keystore" in {
-      setupMocks(Some(investor))
+      setupMocks(Some(investor), Some(validBackLink))
       mockEnrolledRequest(seisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show())(
         result => status(result) shouldBe OK
@@ -66,7 +70,7 @@ class AddInvestorOrNomineeControllerSpec extends BaseSpec {
     }
 
     "provide an empty model and return a 200 when nothing is fetched using keystore" in {
-      setupMocks(None)
+      setupMocks(None, Some(validBackLink))
       mockEnrolledRequest(seisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show())(
         result => status(result) shouldBe OK
@@ -77,7 +81,7 @@ class AddInvestorOrNomineeControllerSpec extends BaseSpec {
   "By selecting the investor submission to the AddInvestorOrNomineeController when authenticated and enrolled" should {
     "redirect to the AddInvestorOrNominee page" in {
       val formInput = "addInvestorOrNominee" -> Constants.investor
-      setupMocks()
+      setupMocks(None, Some(validBackLink))
       mockEnrolledRequest(seisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,formInput)(
         result => {
@@ -96,7 +100,6 @@ class AddInvestorOrNomineeControllerSpec extends BaseSpec {
       submitWithSessionAndAuth(TestController.submit,formInput)(
         result => {
           status(result) shouldBe SEE_OTHER
-     // To navigate to NotFirstTradeError page
           redirectLocation(result) shouldBe Some(controllers.seis.routes.AddInvestorOrNomineeController.show().url)
         }
       )
@@ -105,6 +108,7 @@ class AddInvestorOrNomineeControllerSpec extends BaseSpec {
 
   "Sending an invalid form submission with validation errors to the AddInvestorOrNomineeController when authenticated and enrolled" should {
     "redirect to itself" in {
+      setupMocks(None, Some(validBackLink))
       mockEnrolledRequest(seisSchemeTypesModel)
       val formInput = "addInvestorOrNominee" -> ""
       submitWithSessionAndAuth(TestController.submit,formInput)(
