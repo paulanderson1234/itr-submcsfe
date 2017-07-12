@@ -20,29 +20,29 @@ import auth.{MockAuthConnector, MockConfig}
 import common.KeystoreKeys
 import config.{AppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
-import controllers.helpers.BaseSpec
-import models.NominalValueOfSharesModel
+import controllers.helpers.{BaseSpec, FakeRequestHelper}
+import models.{IndividualDetailsModel, NominalValueOfSharesModel}
 import org.mockito.Matchers
-import uk.gov.hmrc.play.frontend.auth.connectors.AuthConnector
 import org.mockito.Mockito._
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.cache.client.CacheMap
+import uk.gov.hmrc.play.frontend.auth.connectors.AuthConnector
 
 import scala.concurrent.Future
 
-class NominalValueOfSharesControllerSpec extends BaseSpec {
+class IndividualDetailsControllerSpec extends BaseSpec with FakeRequestHelper{
 
-  lazy val controller = new NominalValueOfSharesController {
+    lazy val controller = new IndividualDetailsController{
     override lazy val s4lConnector: S4LConnector = mockS4lConnector
     override lazy val enrolmentConnector: EnrolmentConnector = mockEnrolmentConnector
     override lazy val applicationConfig: AppConfig = MockConfig
     override lazy val authConnector: AuthConnector = MockAuthConnector
   }
 
-  def setupMocks(model: Option[NominalValueOfSharesModel]): Unit = {
+  def setupMocks(model: Option[IndividualDetailsModel]): Unit = {
     mockEnrolledRequest(seisSchemeTypesModel)
 
-    when(mockS4lConnector.fetchAndGetFormData[NominalValueOfSharesModel](Matchers.eq(KeystoreKeys.nominalValueOfShares))(Matchers.any(),
+    when(mockS4lConnector.fetchAndGetFormData[IndividualDetailsModel](Matchers.eq(KeystoreKeys.individualDetails))(Matchers.any(),
       Matchers.any(), Matchers.any()))
       .thenReturn(Future.successful(model))
 
@@ -50,18 +50,18 @@ class NominalValueOfSharesControllerSpec extends BaseSpec {
       .thenReturn(Future.successful(mock[CacheMap]))
   }
 
-  "The NominalValueOfShares controller" should {
+  "The IndividualDetails controller" should {
 
     "use the correct auth connector" in {
-      NominalValueOfSharesController.authConnector shouldBe FrontendAuthConnector
+      IndividualDetailsController.authConnector shouldBe FrontendAuthConnector
     }
 
     "use the correct keystore connector" in {
-      NominalValueOfSharesController.s4lConnector shouldBe S4LConnector
+      IndividualDetailsController.s4lConnector shouldBe S4LConnector
     }
 
     "use the correct enrolment connector" in {
-      NominalValueOfSharesController.enrolmentConnector shouldBe EnrolmentConnector
+      IndividualDetailsController.enrolmentConnector shouldBe EnrolmentConnector
     }
 
     "return a 200 on a GET request" when {
@@ -74,7 +74,7 @@ class NominalValueOfSharesControllerSpec extends BaseSpec {
       }
 
       "data is already stored" in {
-        setupMocks(Some(NominalValueOfSharesModel(20.0)))
+        setupMocks(Some(IndividualDetailsModel("", "", "", "", Some(""), Some(""), "", "")))
         showWithSessionAndAuth(controller.show)(
           result => status(result) shouldBe 200
         )
@@ -83,18 +83,35 @@ class NominalValueOfSharesControllerSpec extends BaseSpec {
 
     "return a 303 on a successful POST request" in {
       setupMocks(None)
-      val form = Seq("nominalValueOfShares" -> "1000")
-      submitWithSessionAndAuth(controller.submit, form: _*) (
+      val formInput = Seq(
+        "forename" -> "TEST",
+        "surname" -> "TESTING",
+        "addressline1" -> "Line 1",
+        "addressline2" -> "Line 2",
+        "addressline3" -> "Line 3",
+        "addressline4" -> "line 4",
+        "postcode" -> "AA1 1AA",
+        "countryCode" -> "GB")
+
+      submitWithSessionAndAuth(controller.submit, formInput: _*)(
         result => {
           status(result) shouldBe 303
-          redirectLocation(result) shouldBe Some(controllers.seis.routes.NominalValueOfSharesController.show().url)
+          redirectLocation(result) shouldBe Some(controllers.seis.routes.IndividualDetailsController.show().url)
         }
       )
     }
 
     "return a 400 on a form validation failure" in {
       setupMocks(None)
-      val form = Seq("nominalValueOfShares" -> "")
+      val form = Seq(
+        "forename" -> "",
+        "surname" -> "",
+        "addressline1" -> "Line 1",
+        "addressline2" -> "Line 2",
+        "addressline3" -> "Line 3",
+        "addressline4" -> "line 4",
+        "postcode" -> "",
+        "countryCode" -> "GB")
       submitWithSessionAndAuth(controller.submit, form: _*) (
         result => status(result) shouldBe 400
       )

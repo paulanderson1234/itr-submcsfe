@@ -799,7 +799,7 @@ page.seis.nominalValueOfShares.title = What was the nominal value of each share 
 page.seis.nominalValueOfShares.hint = The nominal value is the amount shown on the share certificate.
 
 # SEIS Individual Details Page
-page.seis.individualDetails.title = Where should we send your correspondence?
+page.seis.individualDetails.title =What are this individual’s details?
 page.seis.individualDetails.forename.label= First Name
 page.seis.individualDetails.surname.label= Last Name
 page.seis.individualDetails.addressline1.label= Address line 1
