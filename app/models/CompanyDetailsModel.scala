@@ -24,7 +24,7 @@ case class CompanyDetailsModel(name : String,
                                addressline3 : Option[String],
                                addressline4 : Option[String],
                                postcode : Option[String],
-                               country : String)
+                               countryCode : String)
 
 object CompanyDetailsModel {
   implicit val format: OFormat[CompanyDetailsModel] = Json.format[CompanyDetailsModel]

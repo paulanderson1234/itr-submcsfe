@@ -16,6 +16,7 @@
 
 package forms
 
+import common.Constants
 import models.CompanyDetailsModel
 import play.api.data.Form
 import utils.Validation._
@@ -25,7 +26,7 @@ import play.api.data.Forms._
 object CompanyDetailsForm  {
   val companyDetailsForm = Form(
     mapping(
-      "name" -> mandatoryNameCheck,
+      "name"  -> nonEmptyText(maxLength = Constants.CompanyDetailsMaxLength),
       "addressline1" -> mandatoryAddressLineCheck,
       "addressline2" -> mandatoryAddressLineCheck,
       "addressline3" -> optional(optionalAddressLineCheck),

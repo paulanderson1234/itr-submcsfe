@@ -224,19 +224,7 @@ object Validation {
   }
 
 
-  def mandatoryNameCheck: Mapping[String] = {
-    val validName = """^$|[a-zA-Z0-9,.\(\)/&'"\-]{1}[a-zA-Z0-9, .\(\)/&'"\-]{0,34}""".r
-    val nameCheckConstraint: Constraint[String] =
-      Constraint("contraints.mandatoryName")({
-        text =>
-          val error = text match {
-            case validName() => Nil
-            case _ => Seq(ValidationError(Messages("validation.error.mandatoryname")))
-          }
-          if (error.isEmpty) Valid else Invalid(error)
-      })
-    text.verifying(nameCheckConstraint)
-  }
+
 
 
   def mandatoryAddressLineCheck: Mapping[String] = {
@@ -405,7 +393,7 @@ object Validation {
 
     Constraint("constraints.postcodeCountryCheck")({
       case a: AddressModel => validate(a.countryCode, a.postcode)
-      case b: CompanyDetailsModel => validate(b.country, b.postcode)
+      case b: CompanyDetailsModel => validate(b.countryCode, b.postcode)
       case _ => Valid
     })
   }

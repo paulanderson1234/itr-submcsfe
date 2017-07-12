@@ -10,7 +10,7 @@
 
 @main_template(Messages("page.investment.companyDetails.title")) {
 
-@backButtonWithProgress("", Messages("common.section.progress.company.details.four"))
+@backButtonWithProgress(controllers.seis.routes.CompanyDetailsController.show().url, Messages("common.section.progress.company.details.four"))
 
 <div class="grid-row">
     <div class="column-two-thirds">
@@ -26,7 +26,7 @@
             '_divClass -> "form-label",
             '_labelId -> "label-name",
             '_label -> Messages("page.investment.companyDetails.companyname.label"),
-            '_maxlength -> "35",
+            '_maxlength -> "56",
             '_inputClass -> "input--medium input--cleared",
             'id -> "name"
             )

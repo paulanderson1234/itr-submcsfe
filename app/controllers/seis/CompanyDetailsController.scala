@@ -68,9 +68,8 @@ trait CompanyDetailsController extends FrontendController with AuthorisedAndEnro
           else formWithErrors, countriesList)))
         },
         validFormData => {
-          s4lConnector.saveFormData(KeystoreKeys.companyDetails, validFormData).map {
-            _ => Redirect(routes.CompanyDetailsController.show())
-          }
+          s4lConnector.saveFormData(KeystoreKeys.companyDetails, validFormData)
+          Future.successful(Redirect(routes.CompanyDetailsController.show()))
         }
       )
     }
