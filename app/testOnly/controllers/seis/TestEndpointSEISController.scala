@@ -148,6 +148,7 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
         numberOfSharesForm <- fillForm[NumberOfSharesModel](KeystoreKeys.numberOfShares, NumberOfSharesForm.numberOfSharesForm)
         nominalValueOfSharesForm <- fillForm[NominalValueOfSharesModel](KeystoreKeys.nominalValueOfShares, NominalValueOfSharesForm.nominalValueOfSharesForm)
         shareDescription <- fillForm[ShareDescriptionModel](KeystoreKeys.shareDescription, ShareDescriptionForm.shareDescriptionForm)
+        totalAmountRaisedForm <- fillForm[TotalAmountRaisedModel](KeystoreKeys.totalAmountRaised, TotalAmountRaisedForm.totalAmountRaisedForm)
         totalAmountSpentForm <- fillForm[TotalAmountSpentModel](KeystoreKeys.totalAmountSpent, TotalAmountSpentForm.totalAmountSpentForm)
         addInvestorOrNomineeForm <- fillForm[AddInvestorOrNomineeModel](KeystoreKeys.addInvestor, AddInvestorOrNomineeForm.addInvestorOrNomineeForm)
       } yield Ok(
@@ -155,6 +156,7 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
           numberOfSharesForm,
           nominalValueOfSharesForm,
           shareDescription,
+          totalAmountRaisedForm,
           totalAmountSpentForm,
           addInvestorOrNomineeForm
         )
@@ -166,6 +168,7 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
     val numberOfShares = bindForm[NumberOfSharesModel](KeystoreKeys.numberOfShares, NumberOfSharesForm.numberOfSharesForm)
     val nominalValueOfShares = bindForm[NominalValueOfSharesModel](KeystoreKeys.nominalValueOfShares, NominalValueOfSharesForm.nominalValueOfSharesForm)
     val shareDescription = bindForm[ShareDescriptionModel](KeystoreKeys.shareDescription, ShareDescriptionForm.shareDescriptionForm)
+    val totalAmountRaised = bindForm[TotalAmountRaisedModel](KeystoreKeys.totalAmountRaised, TotalAmountRaisedForm.totalAmountRaisedForm)
     val totalAmountSpent = bindForm[TotalAmountSpentModel](KeystoreKeys.totalAmountSpent, TotalAmountSpentForm.totalAmountSpentForm)
     val addInvestorOrNomineeForm = bindForm[AddInvestorOrNomineeModel](KeystoreKeys.addInvestor, AddInvestorOrNomineeForm.addInvestorOrNomineeForm)
     saveBackLinks()
@@ -175,6 +178,7 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
         numberOfShares,
         nominalValueOfShares,
         shareDescription,
+        totalAmountRaised,
         totalAmountSpent,
         addInvestorOrNomineeForm
       )

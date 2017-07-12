@@ -115,6 +115,10 @@ POST       /total-amount-spent                    controllers.seis.TotalAmountSp
 GET        /nominal-value-of-shares                controllers.seis.NominalValueOfSharesController.show
 POST       /nominal-value-of-shares                controllers.seis.NominalValueOfSharesController.submit
 
+GET       /total-amount-raised                    controllers.seis.TotalAmountRaisedController.show
+POST      /total-amount-raised                    controllers.seis.TotalAmountRaisedController.submit
+
 GET        /add-investor-or-nominee               controllers.seis.AddInvestorOrNomineeController.show
 POST       /add-investor-or-nominee               controllers.seis.AddInvestorOrNomineeController.submit
+
 
