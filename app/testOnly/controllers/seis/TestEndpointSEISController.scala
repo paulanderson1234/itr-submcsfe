@@ -151,6 +151,7 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
         totalAmountRaisedForm <- fillForm[TotalAmountRaisedModel](KeystoreKeys.totalAmountRaised, TotalAmountRaisedForm.totalAmountRaisedForm)
         totalAmountSpentForm <- fillForm[TotalAmountSpentModel](KeystoreKeys.totalAmountSpent, TotalAmountSpentForm.totalAmountSpentForm)
         addInvestorOrNomineeForm <- fillForm[AddInvestorOrNomineeModel](KeystoreKeys.addInvestor, AddInvestorOrNomineeForm.addInvestorOrNomineeForm)
+        companyOrIndividualForm <- fillForm[CompanyOrIndividualModel](KeystoreKeys.companyOrIndividual, CompanyOrIndividualForm.companyOrIndividualForm)
       } yield Ok(
         testOnly.views.html.seis.testEndpointSEISPageTwo(
           numberOfSharesForm,
@@ -158,7 +159,8 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
           shareDescription,
           totalAmountRaisedForm,
           totalAmountSpentForm,
-          addInvestorOrNomineeForm
+          addInvestorOrNomineeForm,
+          companyOrIndividualForm
         )
       )
 
@@ -171,6 +173,7 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
     val totalAmountRaised = bindForm[TotalAmountRaisedModel](KeystoreKeys.totalAmountRaised, TotalAmountRaisedForm.totalAmountRaisedForm)
     val totalAmountSpent = bindForm[TotalAmountSpentModel](KeystoreKeys.totalAmountSpent, TotalAmountSpentForm.totalAmountSpentForm)
     val addInvestorOrNomineeForm = bindForm[AddInvestorOrNomineeModel](KeystoreKeys.addInvestor, AddInvestorOrNomineeForm.addInvestorOrNomineeForm)
+    val companyOrIndividual = bindForm[CompanyOrIndividualModel](KeystoreKeys.companyOrIndividual, CompanyOrIndividualForm.companyOrIndividualForm)
     saveBackLinks()
     saveSchemeType()
     Future.successful(Ok(
@@ -180,7 +183,8 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
         shareDescription,
         totalAmountRaised,
         totalAmountSpent,
-        addInvestorOrNomineeForm
+        addInvestorOrNomineeForm,
+        companyOrIndividual
       )
     ))
   }
@@ -195,6 +199,7 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
     s4lConnector.saveFormData[String](KeystoreKeys.backLinkSupportingDocs, routes.TestEndpointSEISController.showPageOne(None).url)
     s4lConnector.saveFormData[String](KeystoreKeys.backLinkShareIssueDate, routes.TestEndpointSEISController.showPageOne(None).url)
     s4lConnector.saveFormData[String](KeystoreKeys.backLinkSeventyPercentSpent, routes.TestEndpointSEISController.showPageOne(None).url)
+    s4lConnector.saveFormData[String](KeystoreKeys.backLinkShareDescription, routes.TestEndpointSEISController.showPageOne(None).url)
   }
 
   private def saveSchemeType()(implicit hc: HeaderCarrier, user: TAVCUser) = {

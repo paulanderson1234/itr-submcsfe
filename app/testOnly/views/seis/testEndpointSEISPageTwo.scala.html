@@ -8,7 +8,8 @@
 
 @(numberOfSharesForm:Form[NumberOfSharesModel], nominalValueOfSharesForm: Form[NominalValueOfSharesModel],
 shareDescriptionForm: Form[ShareDescriptionModel], totalAmountRaisedForm:Form[TotalAmountRaisedModel],
-totalAmountSpentForm:Form[TotalAmountSpentModel], addInvestorOrNomineeForm: Form[AddInvestorOrNomineeModel])(implicit request: Request[_], messages: Messages)
+totalAmountSpentForm:Form[TotalAmountSpentModel], addInvestorOrNomineeForm: Form[AddInvestorOrNomineeModel],
+companyOrIndividualForm: Form[CompanyOrIndividualModel])(implicit request: Request[_], messages: Messages)
 
 @main_template(Messages("page.test.page-two.title")) {
 
@@ -92,6 +93,22 @@ totalAmountSpentForm:Form[TotalAmountSpentModel], addInvestorOrNomineeForm: Form
             '_labelClass -> "block-label",
             '_legendID -> "addInvestorOrNominee",
             '_groupClass -> "inline"
+            )
+        </div>
+
+        <h2>Company or Individual</h2>
+        <div class="form-group">
+            @formInputRadioGroup(
+            field = companyOrIndividualForm("companyOrIndividual"),
+            Seq(
+            Constants.typeCompany -> Messages("page.investors.companyOrIndividual.company"),
+            Constants.typeIndividual -> Messages("page.investors.companyOrIndividual.individual")),
+            '_legend -> Messages("page.investors.companyOrIndividual.heading"),
+            '_legendClass -> "visuallyhidden",
+            '_labelAfter -> true,
+            '_labelClass -> "block-label",
+            '_legendID -> "companyOrIndividual",
+            '_groupClass -> "block"
             )
         </div>
 

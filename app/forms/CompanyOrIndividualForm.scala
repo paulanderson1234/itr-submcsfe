@@ -14,12 +14,16 @@
  * limitations under the License.
  */
 
-package models
+package forms
 
-import play.api.libs.json.Json
+import models.CompanyOrIndividualModel
+import play.api.data.Form
+import play.api.data.Forms._
 
-case class AddInvestorOrNomineeModel (addInvestorOrNominee : String)
 
-object AddInvestorOrNomineeModel {
-  implicit val format = Json.format[AddInvestorOrNomineeModel]
+object CompanyOrIndividualForm {
+  val companyOrIndividualForm = Form(
+    mapping(
+    "companyOrIndividual" -> nonEmptyText)
+    (CompanyOrIndividualModel.apply)(CompanyOrIndividualModel.unapply))
 }

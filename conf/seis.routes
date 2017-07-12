@@ -121,4 +121,5 @@ POST      /total-amount-raised                    controllers.seis.TotalAmountRa
 GET        /add-investor-or-nominee               controllers.seis.AddInvestorOrNomineeController.show
 POST       /add-investor-or-nominee               controllers.seis.AddInvestorOrNomineeController.submit
 
-
+GET        /company-or-individual                 controllers.seis.CompanyOrIndividualController.show
+POST       /company-or-individual                 controllers.seis.CompanyOrIndividualController.submit
