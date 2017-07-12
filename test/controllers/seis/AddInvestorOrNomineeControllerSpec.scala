@@ -93,18 +93,32 @@ class AddInvestorOrNomineeControllerSpec extends BaseSpec {
   }
 
   "By selecting the nominee submission to the AddInvestorOrNomineeController when authenticated and enrolled" should {
-    "redirect to the AddInvestorOrNominee page" in {
+    "redirect to the beginning of the flow if no backlink is present in s4l even if a model is retrieved" in {
       val formInput = "addInvestorOrNominee" -> Constants.nominee
-      setupMocks()
+      setupMocks(Some(investor), None)
       mockEnrolledRequest(seisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,formInput)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(controllers.seis.routes.AddInvestorOrNomineeController.show().url)
+          redirectLocation(result) shouldBe Some(controllers.seis.routes.ShareDescriptionController.show().url)
         }
       )
     }
   }
+
+  "By selecting the nominee submission to the AddInvestorOrNomineeController when authenticated and enrolled" should {
+  "redirect to the beginning of the flow if no backlink or model is present in s4l" in {
+    val formInput = "addInvestorOrNominee" -> Constants.nominee
+    setupMocks(None, None)
+    mockEnrolledRequest(seisSchemeTypesModel)
+    submitWithSessionAndAuth(TestController.submit,formInput)(
+      result => {
+        status(result) shouldBe SEE_OTHER
+        redirectLocation(result) shouldBe Some(controllers.seis.routes.ShareDescriptionController.show().url)
+      }
+    )
+  }
+}
 
   "Sending an invalid form submission with validation errors to the AddInvestorOrNomineeController when authenticated and enrolled" should {
     "redirect to itself" in {

@@ -52,9 +52,9 @@ trait AddInvestorOrNomineeController extends FrontendController with AuthorisedA
               case None => Ok(AddInvestorOrNominee(addInvestorOrNomineeForm, backUrl.get))
             }
           }
-          // Remove this else block once all the remaining back redirection pages are implemented
+          // inconsistent data navigate to beginning of flow
           else {
-            Future.successful(Redirect(controllers.seis.routes.TotalAmountSpentController.show()))
+            Future.successful(Redirect(controllers.seis.routes.ShareDescriptionController.show()))
           }
         }
 
