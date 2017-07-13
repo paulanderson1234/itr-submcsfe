@@ -35,6 +35,7 @@ import scala.util.{Failure, Success, Try}
 object Validation {
 
   val EmailThresholdLength = 132
+  val financialMaxAmountLength = 11
 
   // use new Date() to get the date now
   lazy val sf = new SimpleDateFormat("dd/MM/yyyy")
@@ -664,7 +665,7 @@ object Validation {
     }
   }
 
-  def genericWholeAmountCheck(formValueMessageKey: String, minimumAmount:Int): Constraint[String] = {
+  def genericWholeAmountCheck(formValueMessageKey: String, minimumAmount:Int, maxLength:Int = financialMaxAmountLength): Constraint[String] = {
     Constraint("constraint.genericWholeAmountCheck") {
       value =>
         val errors = Try {
@@ -672,12 +673,12 @@ object Validation {
         } match {
           case Success(result) =>
             val decimal = if (!(result.scale == 0)) Seq(ValidationError(Messages(s"validation.error.$formValueMessageKey.decimalPlaces"))) else Seq()
-            val size = if (result.precision > 11) Seq(ValidationError(Messages(s"validation.error.$formValueMessageKey.size"))) else Seq()
+            val size = if (result.precision > maxLength) Seq(ValidationError(Messages(s"validation.error.$formValueMessageKey.size"))) else Seq()
             val negative = if (result < 0) Seq(ValidationError(Messages(s"validation.error.$formValueMessageKey.negative"))) else Seq()
             val minCheck = if (result < minimumAmount) Seq(ValidationError(Messages(s"validation.error.$formValueMessageKey.size", minimumAmount))) else Seq()
 
             decimal ++ size ++ negative ++ minCheck
-          case Failure(_) if value.trim.nonEmpty => Seq(ValidationError(Messages("validation.error.totalAmountSpent.notANumber")))
+          case Failure(_) if value.trim.nonEmpty => Seq(ValidationError(Messages(s"validation.error.$formValueMessageKey.notANumber")))
           case _ => Seq()
         }
 

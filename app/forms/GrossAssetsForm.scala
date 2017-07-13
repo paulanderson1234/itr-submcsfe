@@ -30,11 +30,12 @@ object GrossAssetsForm {
 
   val messageKey = "grossAssets"
   val minAllowableAmount: Int = 0
+  val maxLength: Int = 9
 
   val grossAssetsForm = Form(
     mapping(
       "grossAmount" -> nonEmptyText
-        .verifying(Validation.genericWholeAmountCheck(messageKey, minAllowableAmount))
+        .verifying(Validation.genericWholeAmountCheck(messageKey, minAllowableAmount, maxLength))
         .transform[BigDecimal](value => BigDecimal(value), _.toString())
     )(GrossAssetsModel.apply)(GrossAssetsModel.unapply)
   )
