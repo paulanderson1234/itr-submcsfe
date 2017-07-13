@@ -721,8 +721,8 @@ page.PreviouslySubmitted.heading=Previously submitted applications
 page.introduction.hub.viewPrevious.AdvancedAssurance=View all of your Advance Assurance applications
 
 # SEIS Research Start Date
-page.seis.companyDetails.researchStartDate.title = Have you started research and development to do with the trade you want to raise investment for?
-page.seis.companyDetails.researchStartDate.heading = Have you started research and development to do with the trade you want to raise investment for?
+page.seis.companyDetails.researchStartDate.title = Have you started research and development to do with the business activity you got investment for?
+page.seis.companyDetails.researchStartDate.heading = Have you started research and development to do with the business activity you got investment for?
 page.seis.companyDetails.researchStartDate.question = When did this research and development start?
 
 # SEIS trade start date
@@ -1040,10 +1040,10 @@ page.companyDetails.qualifyBusinessActivity.help.text.five=renting an office
 page.companyDetails.qualifyBusinessActivity.help.text.six=Research and development is work you do to improve existing products and create new products.
 
 #Has Investment Trade Started
-page.companyDetails.HasInvestmentTradeStarted.title=Has the trade you want to raise investment for started?
-page.companyDetails.HasInvestmentTradeStarted.heading=Has the trade you want to raise investment for started?
-page.companyDetails.HasInvestmentTradeStarted.question.hint=When did this trade start?
-page.companyDetails.HasInvestmentTradeStarted.descriptionOne.text=The trade has started if your goods or services are available to the public. You may not have made a sale yet.
+page.companyDetails.HasInvestmentTradeStarted.title=Has the business activity you got investment for started?
+page.companyDetails.HasInvestmentTradeStarted.heading=Has the business activity you got investment for started?
+page.companyDetails.HasInvestmentTradeStarted.question.hint=When did this business activity start?
+page.companyDetails.HasInvestmentTradeStarted.descriptionOne.text=The business activity has started if your goods or services are available to the public. You may not have made a sale yet.
 
 # number of shares
 page.shareDetails.numberOfShares.title=How many of these shares did your company issue?
