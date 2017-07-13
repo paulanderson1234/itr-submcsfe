@@ -75,6 +75,7 @@ validation.error.DateNotEntered=You must enter a valid day, month and year
 validation.error.enterDate=Please enter a date
 validation.error.operatingCosts=Please enter a value into
 validation.error.fourDigitYear=Enter a valid year
+validation.error.mandatoryname=Enter a valid company name
 validation.error.optionaladdresssline=Use fewer than 28 characters in the address line
 validation.error.mandatoryaddresssline=Address line must be entered
 validation.error.telephoneNumber=Enter a valid telephone number
@@ -740,6 +741,18 @@ page.seis.companyDetails.tradeStartDate.title=Has the trade you want investment 
 page.seis.companyDetails.tradeStartDate.heading=Has the trade you want investment in started?
 page.seis.companyDetails.text=The trade has started if your goods or services are available to the public. You may not have made a sale yet.
 page.seis.companyDetails.TradeStartDate.question.hint=When did this trade start?
+
+# SEIS Company Details
+page.investment.companyDetails.heading=What are this company’s details?
+page.investment.companyDetails.title=What are this company’s details?
+page.investment.companyDetails.companyname.label=Company name
+page.investment.companyDetails.addressline1.label=Address line 1
+page.investment.companyDetails.addressline2.label=Address line 2
+page.investment.companyDetails.addressline3.label=Address line 3 (optional)
+page.investment.companyDetails.addressline4.label=Address line 4 (optional)
+page.investment.companyDetails.postcode.label=Postcode
+page.investment.companyDetails.country.label=Country
+page.address.country.select = Select one country
 
 # EISSEIS trade start date
 page.eisseis.companyDetails.tradeStartDate.title=Has the trade you want investment in started?
