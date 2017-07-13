@@ -16,10 +16,10 @@
 
 package models
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.Json
 
 case class TotalAmountSpentModel(totalAmountSpent: BigDecimal)
 
 object TotalAmountSpentModel {
-  implicit val formats: OFormat[TotalAmountSpentModel] = Json.format[TotalAmountSpentModel]
+  implicit val formats = Json.format[TotalAmountSpentModel]
 }

@@ -22,10 +22,14 @@ import utils.Validation
 import play.api.data.Forms._
 
 object TotalAmountSpentForm {
+
+  val messageKey = "totalAmountSpent"
+  val minimumAmount = 0
+
   val totalAmountSpentForm = Form(
     mapping(
       "totalAmountSpent" -> nonEmptyText
-        .verifying(Validation.totalAmountSpentCheck)
+        .verifying(Validation.genericWholeAmountCheck(messageKey, minimumAmount))
         .transform[BigDecimal](value => BigDecimal(value), _.toString())
     )(TotalAmountSpentModel.apply)(TotalAmountSpentModel.unapply)
   )

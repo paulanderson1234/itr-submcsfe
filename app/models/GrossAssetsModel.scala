@@ -19,7 +19,7 @@ package models
 import play.api.libs.json.Json
 import utils.CostFormatter
 
-case class GrossAssetsModel(grossAmount : Int)
+case class GrossAssetsModel(grossAmount : BigDecimal)
 
 object GrossAssetsModel extends CostFormatter{
 
