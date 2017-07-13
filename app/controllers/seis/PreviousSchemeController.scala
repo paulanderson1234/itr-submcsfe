@@ -83,6 +83,7 @@ trait PreviousSchemeController extends FrontendController with AuthorisedAndEnro
           s4lConnector.saveFormData(KeystoreKeys.backLinkReviewPreviousSchemes, routes.PreviousSchemeController.show().url)
 
           if (validFormData.schemeTypeDesc == Constants.schemeTypeVct || validFormData.schemeTypeDesc == Constants.schemeTypeEis) {
+            s4lConnector.saveFormData(KeystoreKeys.tempPreviousSchemes, validFormData)
             Future.successful(Redirect(routes.InvalidPreviousSchemeController.show()))
           } else {
             validFormData.processingId match {
