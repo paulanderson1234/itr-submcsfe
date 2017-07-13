@@ -73,7 +73,7 @@ trait ShareDescriptionController extends FrontendController with AuthorisedAndEn
         },
         validFormData => {
           s4lConnector.saveFormData(KeystoreKeys.shareDescription, validFormData)
-          Future.successful(Redirect(controllers.seis.routes.ShareDescriptionController.show()))
+          Future.successful(Redirect(controllers.seis.routes.NumberOfSharesController.show()))
         }
       )
     }
