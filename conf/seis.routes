@@ -89,6 +89,7 @@ GET       /attachments-acknowledgement             controllers.seis.AttachmentsA
 POST      /attachments-acknowledgement             controllers.seis.AttachmentsAcknowledgementController.submit
 
 GET       /invalid-scheme-type                     controllers.seis.InvalidPreviousSchemeController.show
+POST      /invalid-scheme-type                     controllers.seis.InvalidPreviousSchemeController.submit
 
 GET        /had-other-investments-before           controllers.seis.HadOtherInvestmentsController.show
 POST       /had-other-investments-before          controllers.seis.HadOtherInvestmentsController.submit

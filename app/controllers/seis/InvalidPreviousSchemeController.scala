@@ -17,12 +17,15 @@
 package controllers.seis
 
 import auth.{AuthorisedAndEnrolledForTAVC, SEIS}
+import common.KeystoreKeys
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
+import controllers.Helpers.PreviousSchemesHelper
 import controllers.predicates.FeatureSwitch
-import uk.gov.hmrc.play.frontend.controller.FrontendController
-import play.api.i18n.Messages.Implicits._
+import models.PreviousSchemeModel
 import play.api.Play.current
+import play.api.i18n.Messages.Implicits._
+import uk.gov.hmrc.play.frontend.controller.FrontendController
 import views.html.seis.previousInvestment.InvalidPreviousScheme
 
 import scala.concurrent.Future
@@ -44,4 +47,10 @@ trait InvalidPreviousSchemeController extends FrontendController with Authorised
     }
   }
 
+  val submit = featureSwitch(applicationConfig.seisFlowEnabled) {
+    AuthorisedAndEnrolled.async { implicit user => implicit request =>
+      PreviousSchemesHelper.addTempPreviousInvestmentToKeystore(s4lConnector)
+      Future.successful(Redirect(routes.ReviewPreviousSchemesController.show()))
+    }
+  }
 }
