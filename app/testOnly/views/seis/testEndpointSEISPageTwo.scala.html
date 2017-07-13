@@ -5,7 +5,7 @@
 @import utils.CountriesHelper
 @import views.html.helpers.{externalLink,formHint, formInputRadioGroup, backButtonWithProgress, input, inputWithCurrencySymbol, formInlineDateInput, hiddenField, errorSummary, formShowYesNoRadioContent, textArea, dropdown}
 
-@(numberOfSharesForm:Form[NumberOfSharesModel], nominalValueOfSharesForm: Form[NominalValueOfSharesModel], shareDescriptionForm: Form[ShareDescriptionModel])(implicit request: Request[_], messages: Messages)
+@(numberOfSharesForm:Form[NumberOfSharesModel], nominalValueOfSharesForm: Form[NominalValueOfSharesModel], shareDescriptionForm: Form[ShareDescriptionModel], companyDetailsForm: Form[CompanyDetailsModel])(implicit request: Request[_], messages: Messages)
 @main_template(Messages("page.test.page-two.title")) {
 <div class="grid-row">
 
@@ -34,7 +34,7 @@
             )
         </div>
 
-        <h2>Share Description</h2>
+        <h2>What are this company’s details?</h2>
         <div class="form-group">
             <span class = "form-hint" id="desc-one">@Messages("page.shares.shareDescription.question.hint")</span>
             @textArea(
@@ -46,6 +46,86 @@
             '_labelTextClass-> "visuallyhidden"
             )
         </div>
+
+    <h2>Company Details</h2>
+    <div class="form-group">
+        <div class="form-group">
+            @input(
+            companyDetailsForm("name"),
+            '_divClass -> "form-label",
+            '_labelId -> "label-name",
+            '_label -> Messages("page.investment.companyDetails.companyname.label"),
+            '_maxlength -> "56",
+            '_inputClass -> "input--medium input--cleared",
+            'id -> "name"
+            )
+        </div>
+        <div class="form-group">
+            @input(
+            companyDetailsForm("addressline1"),
+            '_divClass -> "form-label",
+            '_labelId -> "label-addressline1",
+            '_label -> Messages("page.investment.companyDetails.addressline1.label"),
+            '_maxlength -> "35",
+            '_inputClass -> "input--medium input--cleared",
+            'id -> "addressline1"
+            )
+        </div>
+        <div class="form-group">
+            @input(
+            companyDetailsForm("addressline2"),
+            '_divClass -> "form-label",
+            '_labelId -> "label-addressline2",
+            '_label -> Messages("page.investment.companyDetails.addressline2.label"),
+            '_maxlength -> "35",
+            '_inputClass -> "input--medium input--cleared",
+            'id -> "addressline2"
+            )
+        </div>
+        <div class="form-group">
+            @input(
+            companyDetailsForm("addressline3"),
+            '_divClass -> "form-label",
+            '_labelId -> "label-addressline3",
+            '_label -> Messages("page.investment.companyDetails.addressline3.label"),
+            '_maxlength -> "35",
+            '_inputClass -> "input--medium input--cleared",
+            'id -> "addressline3"
+            )
+        </div>
+        <div class="form-group">
+            @input(
+            companyDetailsForm("addressline4"),
+            '_divClass -> "form-label",
+            '_labelId -> "label-addressline4",
+            '_label -> Messages("page.investment.companyDetails.addressline4.label"),
+            '_maxlength -> "35",
+            '_inputClass -> "input--medium input--cleared",
+            'id -> "addressline4"
+            )
+        </div>
+        <div class="form-group">
+            @input(
+            companyDetailsForm("postcode"),
+            '_divClass -> "form-label",
+            '_labelId -> "label-postcode",
+            '_label -> Messages("page.investment.companyDetails.postcode.label"),
+            '_maxlength -> "10",
+            '_inputClass -> "input--small input--cleared",
+            'id -> "postcode"
+            )
+        </div>
+        <div class="form-group">
+            @dropdown(companyDetailsForm("countryCode"),
+            elementOptions = CountriesHelper.getIsoCodeTupleList,
+            displayEmptyValue = true,
+            '_emptyValueText -> Messages("page.address.country.select"),
+            '_labelId -> "label-country",
+            '_id -> "countryCode",
+            '_inputClass -> "input--medium input--cleared",
+            '_label -> Html(Messages("page.investment.companyDetails.country.label")))
+        </div>
+    </div>
 
 
     <div class="form-group">
