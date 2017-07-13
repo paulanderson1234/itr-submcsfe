@@ -43,7 +43,7 @@ class IndividualDetailsSpec extends ViewSpec with FakeRequestHelper {
       }
 
       "have the correct section" in {
-        document.select("article span").first().text() shouldBe Messages("common.section.progress.company.details.three")
+        document.select("article span").first().text() shouldBe Messages("common.section.progress.company.details.four")
       }
 
       "have a link to the number of shares page" in {

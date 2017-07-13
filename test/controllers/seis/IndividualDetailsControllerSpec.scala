@@ -74,7 +74,7 @@ class IndividualDetailsControllerSpec extends BaseSpec with FakeRequestHelper{
       }
 
       "data is already stored" in {
-        setupMocks(Some(IndividualDetailsModel("", "", "", "", Some(""), Some(""), "", "")))
+        setupMocks(Some(IndividualDetailsModel("", "", "", "", Some(""), Some(""), Some(""), "")))
         showWithSessionAndAuth(controller.show)(
           result => status(result) shouldBe 200
         )
