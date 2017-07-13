@@ -23,9 +23,11 @@
             <p>@Messages("page.previousInvestment.InvalidPreviousScheme.whatNext")</p>
         </div>
 
+        @form(action = controllers.seis.routes.InvalidPreviousSchemeController.submit()) {
         <div class="form-group">
-            <a class="button" href="@controllers.seis.routes.ReviewPreviousSchemesController.show().url">@Messages("common.button.continue")</a>
+            <button class="btn button" type="submit" id="submit">@Messages("common.button.continue")</button>
         </div>
+        }
 
         <div class="form-group">
             <p>

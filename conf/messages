@@ -54,7 +54,7 @@ common.date.error.invalidDate=Date must have a valid day, month and a year with 
 common.section.progress.company.details.one=Section 1 of 6: Company details
 common.section.progress.company.details.two=Section 2 of 6: Previous schemes
 common.section.progress.company.details.three=Section 3 of 6: Shares
-common.section.progress.company.details.four=Section 4 of 6: This investment
+common.section.progress.company.details.four=Section 4 of 6: Investors
 common.section.progress.company.details.five=Section 5 of 6: Contact details
 common.section.progress.company.details.six=Section 6 of 6: Supporting documents
 common.section.progress.share.details.three=Section 3 of 6: Shares
@@ -653,8 +653,8 @@ page.previousInvestment.schemeType.other=Other
 page.previousInvestment.amountSpent.label=Investment amount spent
 
 #Invalid previous scheme SEIS
-page.previousInvestment.InvalidPreviousScheme.title=You don''t qualify for the scheme
-page.previousInvestment.InvalidPreviousScheme.heading=You don''t qualify for the scheme
+page.previousInvestment.InvalidPreviousScheme.title=You don''t appear to qualify for this scheme
+page.previousInvestment.InvalidPreviousScheme.heading=You don''t appear to qualify for this scheme
 page.previousInvestment.InvalidPreviousScheme.reason=This is because your company has already raised investment through the Enterprise Investment Scheme or received investment from a Venture Capital Trust.
 page.previousInvestment.InvalidPreviousScheme.change-text=If this information is incorrect you can
 page.previousInvestment.InvalidPreviousScheme.change-link=change your answers
@@ -731,8 +731,8 @@ page.PreviouslySubmitted.heading=Previously submitted applications
 page.introduction.hub.viewPrevious.AdvancedAssurance=View all of your Advance Assurance applications
 
 # SEIS Research Start Date
-page.seis.companyDetails.researchStartDate.title = Have you started research and development to do with the trade you want to raise investment for?
-page.seis.companyDetails.researchStartDate.heading = Have you started research and development to do with the trade you want to raise investment for?
+page.seis.companyDetails.researchStartDate.title = Have you started research and development to do with the business activity you got investment for?
+page.seis.companyDetails.researchStartDate.heading = Have you started research and development to do with the business activity you got investment for?
 page.seis.companyDetails.researchStartDate.question = When did this research and development start?
 
 # SEIS trade start date
@@ -820,6 +820,17 @@ page.seis.companyDetails.fullTimeEmployeeCountError.incorrect.link = change your
 # SEIS Nominal Value of Shares
 page.seis.nominalValueOfShares.title = What was the nominal value of each share when they were issued?
 page.seis.nominalValueOfShares.hint = The nominal value is the amount shown on the share certificate.
+
+# SEIS Individual Details Page
+page.seis.individualDetails.title =What are this individual’s details?
+page.seis.individualDetails.forename.label= First Name
+page.seis.individualDetails.surname.label= Last Name
+page.seis.individualDetails.addressline1.label= Address line 1
+page.seis.individualDetails.addressline2.label= Address line 2
+page.seis.individualDetails.addressline3.label= Address line 3 (optional)
+page.seis.individualDetails.addressline4.label= Address line 4 (optional)
+page.seis.individualDetails.postcode.label= Postcode
+page.seis.individualDetails.country.label= Country
 
 # SEIS Check Answers
 page.seis.checkAndSubmit.checkAnswers.description.one=You''re applying for Advance Assurance for the Seed Enterprise Investment Scheme.
@@ -1039,10 +1050,10 @@ page.companyDetails.qualifyBusinessActivity.help.text.five=renting an office
 page.companyDetails.qualifyBusinessActivity.help.text.six=Research and development is work you do to improve existing products and create new products.
 
 #Has Investment Trade Started
-page.companyDetails.HasInvestmentTradeStarted.title=Has the trade you want to raise investment for started?
-page.companyDetails.HasInvestmentTradeStarted.heading=Has the trade you want to raise investment for started?
-page.companyDetails.HasInvestmentTradeStarted.question.hint=When did this trade start?
-page.companyDetails.HasInvestmentTradeStarted.descriptionOne.text=The trade has started if your goods or services are available to the public. You may not have made a sale yet.
+page.companyDetails.HasInvestmentTradeStarted.title=Has the business activity you got investment for started?
+page.companyDetails.HasInvestmentTradeStarted.heading=Has the business activity you got investment for started?
+page.companyDetails.HasInvestmentTradeStarted.question.hint=When did this business activity start?
+page.companyDetails.HasInvestmentTradeStarted.descriptionOne.text=The business activity has started if your goods or services are available to the public. You may not have made a sale yet.
 
 # number of shares
 page.shareDetails.numberOfShares.title=How many of these shares did your company issue?

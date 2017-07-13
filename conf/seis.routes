@@ -89,6 +89,7 @@ GET       /attachments-acknowledgement             controllers.seis.AttachmentsA
 POST      /attachments-acknowledgement             controllers.seis.AttachmentsAcknowledgementController.submit
 
 GET       /invalid-scheme-type                     controllers.seis.InvalidPreviousSchemeController.show
+POST      /invalid-scheme-type                     controllers.seis.InvalidPreviousSchemeController.submit
 
 GET        /had-other-investments-before           controllers.seis.HadOtherInvestmentsController.show
 POST       /had-other-investments-before          controllers.seis.HadOtherInvestmentsController.submit
@@ -102,8 +103,8 @@ POST       /has-investment-trade-started           controllers.seis.HasInvestmen
 GET        /full-time-employee-count               controllers.seis.FullTimeEmployeeCountController.show
 POST       /full-time-employee-count               controllers.seis.FullTimeEmployeeCountController.submit
 
-GET        /share-description                      controllers.seis.ShareDescriptionController.show
-POST       /share-description                      controllers.seis.ShareDescriptionController.submit
+GET        /share-description                     controllers.seis.ShareDescriptionController.show
+POST       /share-description                     controllers.seis.ShareDescriptionController.submit
 
 GET        /number-of-shares                      controllers.seis.NumberOfSharesController.show
 POST       /number-of-shares                      controllers.seis.NumberOfSharesController.submit
@@ -112,13 +113,14 @@ POST       /number-of-shares                      controllers.seis.NumberOfShare
 GET        /total-amount-spent                    controllers.seis.TotalAmountSpentController.show
 POST       /total-amount-spent                    controllers.seis.TotalAmountSpentController.submit
 
-GET        /nominal-value-of-shares                controllers.seis.NominalValueOfSharesController.show
-POST       /nominal-value-of-shares                controllers.seis.NominalValueOfSharesController.submit
+GET        /nominal-value-of-shares               controllers.seis.NominalValueOfSharesController.show
+POST       /nominal-value-of-shares               controllers.seis.NominalValueOfSharesController.submit
 
-GET       /total-amount-raised                    controllers.seis.TotalAmountRaisedController.show
-POST      /total-amount-raised                    controllers.seis.TotalAmountRaisedController.submit
+GET        /individuals-details                   controllers.seis.IndividualDetailsController.show
+POST       /individuals-details                   controllers.seis.IndividualDetailsController.submit
+
+GET        /total-amount-raised                   controllers.seis.TotalAmountRaisedController.show
+POST       /total-amount-raised                   controllers.seis.TotalAmountRaisedController.submit
 
 GET        /add-investor-or-nominee               controllers.seis.AddInvestorOrNomineeController.show
 POST       /add-investor-or-nominee               controllers.seis.AddInvestorOrNomineeController.submit
-
-
