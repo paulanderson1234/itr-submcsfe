@@ -63,7 +63,7 @@ class SeventyPercentSpentSpec extends ViewSpec {
 
   "The Is this the first trade your company has carried out page" should {
 
-    "Verify that the Is First Trade page contains the correct elements when a valid IsFirstTRadeModel is passed from keystore with expected url" in new SEISSetup {
+    "Verify that the page contains the correct elements when a valid model is passed from keystore with expected url" in new SEISSetup {
       val document: Document = {
         setupMocks(Some(isSeventyPercentSpentModelYes), Some(testUrl))
         val result = TestController.show.apply(authorisedFakeRequest)
@@ -81,7 +81,7 @@ class SeventyPercentSpentSpec extends ViewSpec {
       document.getElementById("seventyPercentSpent-legend").text shouldBe Messages("page.companyDetails.seventyPercentSpent.legend")
     }
 
-    "Verify that the Is First Trade page contains the correct elements when a valid IsFirstTRadeModel is passed from keystore with alternate url" in new SEISSetup {
+    "Verify that the page contains the correct elements when a valid IsFirstTRadeModel is passed from keystore with alternate url" in new SEISSetup {
       val document: Document = {
         setupMocks(Some(isSeventyPercentSpentModelYes), Some(testUrlOther))
         val result = TestController.show.apply(authorisedFakeRequest)
@@ -100,7 +100,7 @@ class SeventyPercentSpentSpec extends ViewSpec {
     }
 
 
-    "Verify that the Is First Trade page contains the correct elements when an invalid SeventyPercentSpentModel is passed" in new SEISSetup {
+    "Verify that the page page contains the correct elements when an invalid SeventyPercentSpentModel is passed" in new SEISSetup {
       val document: Document = {
         setupMocks(None, Some(testUrl))
         val result = TestController.submit.apply(authorisedFakeRequest)

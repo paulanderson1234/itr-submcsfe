@@ -223,6 +223,10 @@ object Validation {
     }
   }
 
+
+
+
+
   def mandatoryAddressLineCheck: Mapping[String] = {
     val validAddressLine = """[a-zA-Z0-9,.\(\)/&'"\-]{1}[a-zA-Z0-9, .\(\)/&'"\-]{0,34}""".r
     val addresssLineCheckConstraint: Constraint[String] =
@@ -377,16 +381,23 @@ object Validation {
     text().verifying(telephoneNumberCheckConstraint)
   }
 
-  def postcodeCountryCheckConstraint: Constraint[AddressModel] = {
+  def postcodeCountryCheckConstraint[A]: Constraint[A] = {
+
+    def validate(countryCode: String, postcode: Option[String]) = {
+      if (countryCode == "GB" && postcode.fold(true)(_.isEmpty)) {
+        Invalid(Seq(ValidationError(Messages("validation.error.countrypostcode"))))
+      } else {
+        Valid
+      }
+    }
+
     Constraint("constraints.postcodeCountryCheck")({
-      addressForm: AddressModel =>
-        if (addressForm.countryCode == "GB" && addressForm.postcode.fold(true)(_.isEmpty)) {
-          Invalid(Seq(ValidationError(Messages("validation.error.countrypostcode"))))
-        } else {
-          Valid
-        }
+      case a: AddressModel => validate(a.countryCode, a.postcode)
+      case b: CompanyDetailsModel => validate(b.countryCode, b.companyPostcode)
+      case _ => Valid
     })
   }
+
 
   def schemeTypesConstraint: Constraint[SchemeTypesModel] = {
     Constraint("constraints.schemeSelection")({

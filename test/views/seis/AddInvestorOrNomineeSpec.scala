@@ -16,28 +16,83 @@
 
 package views.seis
 
-import forms.AddInvestorOrNomineeForm._
+import auth.{MockAuthConnector, MockConfigSingleFlow}
+import common.{Constants, KeystoreKeys}
+import controllers.seis.AddInvestorOrNomineeController
+import models.AddInvestorOrNomineeModel
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import org.mockito.Matchers
+import org.mockito.Mockito._
 import play.api.i18n.Messages
 import play.api.i18n.Messages.Implicits._
+import play.api.test.Helpers._
+import uk.gov.hmrc.http.cache.client.CacheMap
 import views.helpers.ViewSpec
-import views.html.seis.investors.AddInvestorOrNominee
+
+import scala.concurrent.Future
 
 class AddInvestorOrNomineeSpec extends ViewSpec {
 
+  val testUrl = "/test/test"
+  val testUrlOther = "/test/test/testanother"
+  val validModel = AddInvestorOrNomineeModel(Constants.investor)
+
+  object TestController extends AddInvestorOrNomineeController {
+    override lazy val applicationConfig = MockConfigSingleFlow
+    override lazy val authConnector = MockAuthConnector
+    override lazy val s4lConnector = mockS4lConnector
+    override lazy val enrolmentConnector = mockEnrolmentConnector
+  }
+
+  def setupMocks(addInvestorOrNomineeModel: Option[AddInvestorOrNomineeModel] = None, backLink: Option[String] = None): Unit = {
+    when(mockS4lConnector.fetchAndGetFormData[AddInvestorOrNomineeModel](Matchers.eq(KeystoreKeys.addInvestor))
+      (Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(addInvestorOrNomineeModel))
+
+    when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.backLinkAddInvestorOrNominee))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(backLink))
+
+    when(mockS4lConnector.saveFormData(Matchers.eq(KeystoreKeys.addInvestor),
+      Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(CacheMap("", Map())))
+  }
+
   "AddInvestorOrNominee view" should {
+      "Verify that the page contains the correct elements when a valid model is passed from keystore with expected url" in new SEISSetup {
+        val document: Document = {
+          setupMocks(Some(validModel), Some(testUrl))
+          val result = TestController.show.apply(authorisedFakeRequest)
+          Jsoup.parse(contentAsString(result))
+        }
+        document.title() shouldBe Messages("page.seis.investors.AddInvestorOrNominee.title")
+        document.select("a.back-link").text() shouldBe Messages("common.button.back")
+        document.select("a.back-link").attr("href") shouldBe testUrl
 
-    "show the valid page details" in {
+        document.select("article span").first().text shouldBe Messages("common.section.progress.company.details.four")
+        document.select("h1").text() shouldBe Messages("page.seis.investors.AddInvestorOrNominee.heading")
+        document.select("article p").get(0).text() shouldBe Messages("page.seis.investors.AddInvestorOrNominee.info.one")
+        document.select("article p").get(1).text() shouldBe Messages("page.seis.investors.AddInvestorOrNominee.info.two")
+        document.getElementById("addInvestorOrNominee-investorLabel").text() shouldBe Messages("page.seis.investors.AddInvestorOrNominee.radioButton.one")
+        document.getElementById("addInvestorOrNominee-nomineeLabel").text() shouldBe Messages("page.seis.investors.AddInvestorOrNominee.radioButton.two")
+        document.getElementById("addInvestorOrNominee-legend").select(".visuallyhidden").text() shouldBe
+          Messages("page.seis.investors.AddInvestorOrNominee.heading")
 
-      val page =
-        AddInvestorOrNominee(addInvestorOrNomineeForm,
-          controllers.seis.routes.TotalAmountSpentController.show().toString)(authorisedFakeRequest, applicationMessages)
-      val document = Jsoup.parse(page.body)
+        document.select("form").attr("action") shouldBe controllers.seis.routes.AddInvestorOrNomineeController.submit().url
+        document.select("button").text() shouldBe Messages("common.button.snc")
 
+      }
+
+
+    "Verify that page contains the correct elements when a valid model is passed from keystore with alternate url" in new SEISSetup {
+      val document: Document = {
+        setupMocks(Some(validModel), Some(testUrlOther))
+        val result = TestController.show.apply(authorisedFakeRequest)
+        Jsoup.parse(contentAsString(result))
+      }
       document.title() shouldBe Messages("page.seis.investors.AddInvestorOrNominee.title")
       document.select("a.back-link").text() shouldBe Messages("common.button.back")
-      document.select("a.back-link").attr("href") shouldBe "/investment-tax-relief-cs/seis/total-amount-spent"
+      document.select("a.back-link").attr("href") shouldBe testUrlOther
 
       document.select("article span").first().text shouldBe Messages("common.section.progress.company.details.four")
       document.select("h1").text() shouldBe Messages("page.seis.investors.AddInvestorOrNominee.heading")
@@ -50,7 +105,33 @@ class AddInvestorOrNomineeSpec extends ViewSpec {
 
       document.select("form").attr("action") shouldBe controllers.seis.routes.AddInvestorOrNomineeController.submit().url
       document.select("button").text() shouldBe Messages("common.button.snc")
+    }
+
+    "Verify that the page page contains the correct elements when an invalid models is passed" in new SEISSetup {
+      val document: Document = {
+        setupMocks(None, Some(testUrl))
+        val result = TestController.submit.apply(authorisedFakeRequest)
+        Jsoup.parse(contentAsString(result))
+      }
+      document.title() shouldBe Messages("page.seis.investors.AddInvestorOrNominee.title")
+      document.select("a.back-link").text() shouldBe Messages("common.button.back")
+      document.select("a.back-link").attr("href") shouldBe testUrl
+
+      document.select("article span").first().text shouldBe Messages("common.section.progress.company.details.four")
+      document.select("h1").text() shouldBe Messages("page.seis.investors.AddInvestorOrNominee.heading")
+      document.select("article p").get(0).text() shouldBe Messages("page.seis.investors.AddInvestorOrNominee.info.one")
+      document.select("article p").get(1).text() shouldBe Messages("page.seis.investors.AddInvestorOrNominee.info.two")
+      document.getElementById("addInvestorOrNominee-investorLabel").text() shouldBe Messages("page.seis.investors.AddInvestorOrNominee.radioButton.one")
+      document.getElementById("addInvestorOrNominee-nomineeLabel").text() shouldBe Messages("page.seis.investors.AddInvestorOrNominee.radioButton.two")
+      document.getElementById("addInvestorOrNominee-legend").select(".visuallyhidden").text() shouldBe
+        Messages("page.seis.investors.AddInvestorOrNominee.heading")
+
+      document.select("form").attr("action") shouldBe controllers.seis.routes.AddInvestorOrNomineeController.submit().url
+      document.select("button").text() shouldBe Messages("common.button.snc")
+      // check error
+      document.getElementById("addInvestorOrNominee-error-summary")
 
     }
+
   }
 }
