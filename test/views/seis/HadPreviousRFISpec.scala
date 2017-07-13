@@ -62,7 +62,7 @@ class HadPreviousRFISpec extends ViewSpec {
     document.getElementById("bullet-three").text() shouldBe Messages("page.previousInvestment.schemes.bullet.three")
     document.getElementById("bullet-four").text() shouldBe Messages("page.previousInvestment.schemes.bullet.four")
     document.select("#hadPreviousRFI-yes").size() shouldBe 1
-    document.select("#hadPreviousRFI-yes").size() shouldBe 1
+    document.select("#hadPreviousRFI-no").size() shouldBe 1
     document.getElementById("hadPreviousRFI-yesLabel").text() shouldBe Messages("common.radioYesLabel")
     document.getElementById("hadPreviousRFI-noLabel").text() shouldBe Messages("common.radioNoLabel")
     document.getElementById("hadPreviousRFI-legend").select(".visuallyhidden").text() shouldBe Messages("page.previousInvestment.hadPreviousRFI.heading")

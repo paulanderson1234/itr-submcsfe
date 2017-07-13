@@ -82,62 +82,62 @@ class ControllerHelpersSpec extends BaseSpec {
   "ControllerHelpers.getTradeStartDate" should {
     "return None if no qualifyBusinessActivityModel exists in S4L" in {
       setupMocks(None, None, None)
-      val result = controllerHelper.getTradeStartDate(mockS4lConnector)
+      val result = controllerHelper.getTradeStartDateForBusinessActivity(mockS4lConnector)
       await(result) shouldBe None
     }
     "return None if no qualifyBusinessActivityModel exists even if the trade and research dates are present in S4L" in {
       setupMocks(None, Some(researchStartDateModelYes), Some(hasInvestmentTradeStartedModelNo))
-      val result = controllerHelper.getTradeStartDate(mockS4lConnector)
+      val result = controllerHelper.getTradeStartDateForBusinessActivity(mockS4lConnector)
       await(result) shouldBe None
     }
     "return None if no qualifyBusinessActivityModel exists even if the trade date is present in S4L" in {
       setupMocks(None, None, Some(hasInvestmentTradeStartedModelNo))
-      val result = controllerHelper.getTradeStartDate(mockS4lConnector)
+      val result = controllerHelper.getTradeStartDateForBusinessActivity(mockS4lConnector)
       await(result) shouldBe None
     }
     "return None if no qualifyBusinessActivityModel exists even if the research date is present in S4L" in {
       setupMocks(None, Some(researchStartDateModelYes), None)
-      val result = controllerHelper.getTradeStartDate(mockS4lConnector)
+      val result = controllerHelper.getTradeStartDateForBusinessActivity(mockS4lConnector)
       await(result) shouldBe None
     }
     "return None if qualifyBusinessActivityModel trade exists in S4L but start date or research date are not present in S4L" in {
       setupMocks(Some(qualifyPrepareToTrade), None, None)
-      val result = controllerHelper.getTradeStartDate(mockS4lConnector)
+      val result = controllerHelper.getTradeStartDateForBusinessActivity(mockS4lConnector)
       await(result) shouldBe None
     }
     "return None if qualifyBusinessActivityModel research exists in S4L but start date or research date are not present in S4L" in {
       setupMocks(Some(qualifyResearchAndDevelopment), None, None)
-      val result = controllerHelper.getTradeStartDate(mockS4lConnector)
+      val result = controllerHelper.getTradeStartDateForBusinessActivity(mockS4lConnector)
       await(result) shouldBe None
     }
     "return the trade start date if the qualifyBusinessActivityModel exists and set to Trade in S4L" in {
       setupMocks(Some(qualifyPrepareToTrade), None, Some(hasInvestmentTradeStartedModelYes))
-      val result = controllerHelper.getTradeStartDate(mockS4lConnector)
+      val result = controllerHelper.getTradeStartDateForBusinessActivity(mockS4lConnector)
       await(result) shouldEqual Some(hasInvestmentTradeStartedModelYes)
     }
     "return the trade start date if the qualifyBusinessActivityModel exists and set to Trade but both dates are in S4L" in {
       setupMocks(Some(qualifyPrepareToTrade),  Some(researchStartDateModelYes), Some(hasInvestmentTradeStartedModelYes))
-      val result = controllerHelper.getTradeStartDate(mockS4lConnector)
+      val result = controllerHelper.getTradeStartDateForBusinessActivity(mockS4lConnector)
       await(result) shouldEqual Some(hasInvestmentTradeStartedModelYes)
     }
     "return the empty trade start date if the qualifyBusinessActivityModel in S4L is trade but it hasn't started yet" in {
       setupMocks(Some(qualifyPrepareToTrade), None, Some(hasInvestmentTradeStartedModelNo))
-      val result = controllerHelper.getTradeStartDate(mockS4lConnector)
+      val result = controllerHelper.getTradeStartDateForBusinessActivity(mockS4lConnector)
       await(result) shouldEqual Some(hasInvestmentTradeStartedModelNo)
     }
     "return the research start date if the qualifyBusinessActivityModel exists and set to research and development in S4L" in {
       setupMocks(Some(qualifyResearchAndDevelopment), Some(researchStartDateModelYes), None)
-      val result = controllerHelper.getTradeStartDate(mockS4lConnector)
+      val result = controllerHelper.getTradeStartDateForBusinessActivity(mockS4lConnector)
       validateTradeDateMatchesResearchTestDate(await(result), Some(researchStartDateModelYes)) shouldBe true
     }
     "return the research start date if the qualifyBusinessActivityModel exists and set to Reserach but both dates are in S4L" in {
       setupMocks(Some(qualifyResearchAndDevelopment), Some(researchStartDateModelYes), None)
-      val result = controllerHelper.getTradeStartDate(mockS4lConnector)
+      val result = controllerHelper.getTradeStartDateForBusinessActivity(mockS4lConnector)
       validateTradeDateMatchesResearchTestDate(await(result), Some(researchStartDateModelYes)) shouldBe true
     }
     "return the empty research start date if the qualifyBusinessActivityModel in S4L is trade but it hasn't started yet" in {
       setupMocks(Some(qualifyResearchAndDevelopment), Some(researchStartDateModelNo), None)
-      val result = controllerHelper.getTradeStartDate(mockS4lConnector)
+      val result = controllerHelper.getTradeStartDateForBusinessActivity(mockS4lConnector)
       validateTradeDateMatchesResearchTestDate(await(result), Some(researchStartDateModelNo)) shouldBe true
     }
 
