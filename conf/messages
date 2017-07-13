@@ -643,8 +643,8 @@ page.previousInvestment.schemeType.other=Other
 page.previousInvestment.amountSpent.label=Investment amount spent
 
 #Invalid previous scheme SEIS
-page.previousInvestment.InvalidPreviousScheme.title=You don''t qualify for the scheme
-page.previousInvestment.InvalidPreviousScheme.heading=You don''t qualify for the scheme
+page.previousInvestment.InvalidPreviousScheme.title=You don''t appear to qualify for this scheme
+page.previousInvestment.InvalidPreviousScheme.heading=You don''t appear to qualify for this scheme
 page.previousInvestment.InvalidPreviousScheme.reason=This is because your company has already raised investment through the Enterprise Investment Scheme or received investment from a Venture Capital Trust.
 page.previousInvestment.InvalidPreviousScheme.change-text=If this information is incorrect you can
 page.previousInvestment.InvalidPreviousScheme.change-link=change your answers
