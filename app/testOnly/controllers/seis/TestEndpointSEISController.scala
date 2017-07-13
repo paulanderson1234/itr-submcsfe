@@ -113,7 +113,7 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
     val hasInvestmentTradeStarted = bindForm[HasInvestmentTradeStartedModel](KeystoreKeys.hasInvestmentTradeStarted,
       HasInvestmentTradeStartedForm.hasInvestmentTradeStartedForm)
     val fullTimeEmployeeCount = bindForm[FullTimeEmployeeCountModel](KeystoreKeys.fullTimeEmployeeCount,
-    FullTimeEmployeeCountForm.fullTimeEmployeeCountForm)
+      FullTimeEmployeeCountForm.fullTimeEmployeeCountForm)
     saveBackLinks()
     saveSchemeType()
     Future.successful(Ok(

@@ -59,11 +59,11 @@ class TotalAmountSpentSpec extends ViewSpec {
       }
 
       "have a first paragraph of disclosed text" in {
-        document.select("p1").get(0).text() shouldBe Messages("page.seis.shareDetails.totalAmountSpent.guidance.one")
+        document.getElementById("p1").text() shouldBe Messages("page.seis.shareDetails.totalAmountSpent.guidance.one")
       }
 
       "have a second paragraph of disclosed text" in {
-        document.select("p2").get(0).text() shouldBe Messages("page.seis.shareDetails.totalAmountSpent.guidance.two")
+        document.getElementById("p2").text() shouldBe Messages("page.seis.shareDetails.totalAmountSpent.guidance.two")
       }
 
       "have a form posting to the correct route" in {
@@ -111,11 +111,11 @@ class TotalAmountSpentSpec extends ViewSpec {
       }
 
       "have a first paragraph of disclosed text" in {
-        document.select("p1").get(0).text() shouldBe Messages("page.seis.shareDetails.totalAmountSpent.guidance.one")
+        document.getElementById("p1").text() shouldBe Messages("page.seis.shareDetails.totalAmountSpent.guidance.one")
       }
 
       "have a second paragraph of disclosed text" in {
-        document.select("p2").get(0).text() shouldBe Messages("page.seis.shareDetails.totalAmountSpent.guidance.two")
+        document.getElementById("p2").text() shouldBe Messages("page.seis.shareDetails.totalAmountSpent.guidance.two")
       }
 
       "have a form posting to the correct route" in {

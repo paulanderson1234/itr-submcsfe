@@ -175,4 +175,25 @@ trait PreviousSchemesHelper {
     s4lConnector.saveFormData(KeystoreKeys.previousSchemes, Vector[PreviousSchemeModel]())
   }
 
+  def addTempPreviousInvestmentToKeystore(s4lConnector: connectors.S4LConnector)
+                                     (implicit hc: HeaderCarrier, user: TAVCUser): Future[CacheMap] = {
+    val defaultId: Int = 1
+
+    val result = for {
+      tempPreviousScheme <- s4lConnector.fetchAndGetFormData[PreviousSchemeModel](KeystoreKeys.tempPreviousSchemes)
+      currentPreviousScheme <- s4lConnector.fetchAndGetFormData[Vector[PreviousSchemeModel]](KeystoreKeys.previousSchemes)
+    } yield (tempPreviousScheme, currentPreviousScheme)
+
+    val previousSchemes = result.map {
+      case (Some(data1), Some(data2)) => {
+        val newId = data2.last.processingId.get + 1
+        data2 :+ data1.copy(processingId = Some(newId))
+      }
+      case (None, Some(data2))  => data2
+      case (Some(data), None) => Vector.empty :+ data.copy(processingId = Some(defaultId))
+    }.recover { case _ => Vector[PreviousSchemeModel]() }
+
+    previousSchemes.flatMap(newVectorList => s4lConnector.saveFormData(KeystoreKeys.previousSchemes, newVectorList))
+
+  }
 }
