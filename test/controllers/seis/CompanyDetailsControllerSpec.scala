@@ -54,7 +54,7 @@ class CompanyDetailsControllerSpec extends BaseSpec {
   }
 
   def setupMocks(companyDetailsModel : Option[CompanyDetailsModel] = None): Unit =
-    when(mockS4lConnector.fetchAndGetFormData[CompanyDetailsModel](Matchers.eq(KeystoreKeys.manualCompanyDetails))
+    when(mockS4lConnector.fetchAndGetFormData[CompanyDetailsModel](Matchers.eq(KeystoreKeys.companyDetails))
       (Matchers.any(), Matchers.any(),Matchers.any())).thenReturn(Future.successful(companyDetailsModel))
 
   "Sending a GET request to CompanyDetailsController when authenticated and enrolled" should {

@@ -66,7 +66,6 @@ trait KeystoreKeys {
   val totalAmountSpent: String = "shares:totalAmountSpent"
   val nominalValueOfShares: String = "shares:nominalValueofShares"
   val companyDetails: String = "investment:companyDetails"
-  val manualCompanyDetails: String = "investment:manualCompanyDetails"
   val totalAmountRaised: String = "shares:totalAmountRaised"
 
 

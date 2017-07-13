@@ -25,6 +25,8 @@ import play.api.i18n.Messages.Implicits._
 
 class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
+  val companyNameMax56 = "testval" * 8
+
   "Creating a form using an empty model" should {
     lazy val form = companyDetailsForm
     "return an empty string for companyName, companyAddressline1, companyAddressline2, telephone number and email" in {
@@ -716,7 +718,7 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "companyName value supplied with the maximum allowed (on the boundary)" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "companyName" -> "line0                                                   ",
+      "companyName" -> companyNameMax56,
       "companyAddressline1" -> "line1",
       "companyAddressline2" -> "line2",
       "companyAddressline3" -> "",

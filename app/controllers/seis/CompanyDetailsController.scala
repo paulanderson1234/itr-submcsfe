@@ -52,7 +52,7 @@ trait CompanyDetailsController extends FrontendController with AuthorisedAndEnro
 
   val show = featureSwitch(applicationConfig.seisFlowEnabled) {
     AuthorisedAndEnrolled.async { implicit user => implicit request =>
-      s4lConnector.fetchAndGetFormData[CompanyDetailsModel](KeystoreKeys.manualCompanyDetails).map {
+      s4lConnector.fetchAndGetFormData[CompanyDetailsModel](KeystoreKeys.companyDetails).map {
         case Some(data) => Ok(CompanyDetails(companyDetailsForm.fill(data), countriesList))
         case None => Ok(CompanyDetails(companyDetailsForm, countriesList))
       }
