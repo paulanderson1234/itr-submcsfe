@@ -16,120 +16,130 @@
 
 package forms
 
+import models.NominalValueOfSharesModel
 import org.scalatestplus.play.OneAppPerSuite
 import uk.gov.hmrc.play.test.UnitSpec
-import NominalValueOfSharesForm._
-import models.NominalValueOfSharesModel
+import forms.NominalValueOfSharesForm._
 import play.api.i18n.Messages
 import play.api.i18n.Messages.Implicits._
 
+import scala.collection.immutable.Range
+
 class NominalValueOfSharesFormSpec extends UnitSpec with OneAppPerSuite {
 
-  "NominalValueOfSharesForm" when {
+  val maxAmount:BigDecimal = BigDecimal("99999999999")
+  val mimAmount = 0
+  val invalidAmount = 12.12
+  val negativeAmount = -1
+  val largeNegativeAmount =  BigDecimal("-123.3485684756875346876538743")
 
-    "supplied with a model" should {
-      lazy val form = nominalValueOfSharesForm.fill(NominalValueOfSharesModel(1000))
+  "The NominalValueOfSharesForm" when {
 
-      "return a map with the data held" in {
-        form.data shouldBe Map("nominalValueOfShares" -> "1000")
+    "provided with a model" should {
+      val model = NominalValueOfSharesModel(123)
+      lazy val form = nominalValueOfSharesForm.fill(model)
+
+      "return a valid map" in {
+        form.data shouldBe Map("nominalValueOfShares" -> "123")
       }
     }
 
-    "supplied with a valid map" which {
 
-      "contains a thirteen digit value" should {
-        lazy val form = nominalValueOfSharesForm.bind(Map("nominalValueOfShares" -> "9999999999999"))
+    "provided with a valid map with the minimum amount" should {
+      val map = Map("nominalValueOfShares" -> "0")
+      lazy val form = nominalValueOfSharesForm.bind(map)
 
-        "contain no errors" in {
-          form.errors.isEmpty shouldBe true
-        }
-
-        "contain a valid model" in {
-          form.value shouldBe Some(NominalValueOfSharesModel(BigDecimal("9999999999999")))
-        }
+      "contain no errors" in {
+        form.errors.isEmpty shouldBe true
       }
 
-      "contains a zero value" should {
-        lazy val form = nominalValueOfSharesForm.bind(Map("nominalValueOfShares" -> "0"))
+    }
 
-        "contain no errors" in {
-          form.errors.isEmpty shouldBe true
-        }
+    "provided with a valid map with the maximum size" should {
+      val map = Map("nominalValueOfShares" -> s"$maxAmount")
+      lazy val form = nominalValueOfSharesForm.bind(map)
 
-        "contain a valid model" in {
-          form.value shouldBe Some(NominalValueOfSharesModel(0))
-        }
+      "contain no errors" in {
+        form.errors.isEmpty shouldBe true
+      }
+
+      "contain the correct model" in {
+        form.value shouldBe Some(NominalValueOfSharesModel(maxAmount))
       }
     }
 
-    "supplied with an invalid map" which {
+    "provided with an invalid map which is too large" should {
+      val map = Map("nominalValueOfShares" -> s"${maxAmount + 1}")
+      lazy val form = nominalValueOfSharesForm.bind(map)
 
-      "contains an empty field" should {
-        lazy val form = nominalValueOfSharesForm.bind(Map("nominalValueOfShares" -> ""))
-
-        "contain one error" in {
-          form.errors.size shouldBe 1
-        }
-
-        "contain an error message for empty values" in {
-          form.errors.head.message shouldBe "error.required"
-        }
+      "contain one error" in {
+        form.errors.size shouldBe 1
       }
 
-      "contains a non-numeric value" should {
-        lazy val form = nominalValueOfSharesForm.bind(Map("nominalValueOfShares" -> "a"))
+      "contain the too large error message" in {
+        form.errors.head.message shouldBe Messages("validation.error.nominalValueOfShares.size")
+      }
+    }
 
-        "contain one error" in {
-          form.errors.size shouldBe 1
-        }
+    "provided with an invalid map with a non-numeric value" should {
+      val map = Map("nominalValueOfShares" -> "a")
+      lazy val form = nominalValueOfSharesForm.bind(map)
 
-        "contain an error message for non-numeric values" in {
-          form.errors.head.message shouldBe Messages("validation.error.nominalValueOfShares.notANumber")
-        }
+      "contain one error" in {
+        form.errors.size shouldBe 1
       }
 
-      "contains decimal places" should {
-        lazy val form = nominalValueOfSharesForm.bind(Map("nominalValueOfShares" -> "2.3"))
+      "contain the not a number error message" in {
+        form.errors.head.message shouldBe Messages("validation.error.nominalValueOfShares.notANumber")
+      }
+    }
 
-        "contain one error" in {
-          form.errors.size shouldBe 1
-        }
+    "provided with an invalid map with a decimal value" should {
+      val map = Map("nominalValueOfShares" -> s"$invalidAmount")
+      lazy val form = nominalValueOfSharesForm.bind(map)
 
-        "contain an error message for values with decimal places" in {
-          form.errors.head.message shouldBe Messages("validation.error.nominalValueOfShares.decimalPlaces")
-        }
+      "contain one error" in {
+        form.errors.size shouldBe 1
       }
 
-      "contains more than thirteen digits" should {
-        lazy val form = nominalValueOfSharesForm.bind(Map("nominalValueOfShares" -> "99999999999999"))
+      "contain the decimal place error message" in {
+        form.errors.head.message shouldBe Messages("validation.error.nominalValueOfShares.decimalPlaces")
+      }
+    }
 
-        "contain one error" in {
-          form.errors.size shouldBe 1
-        }
+    "provided with an invalid map with a negative value" should {
+      val map = Map("nominalValueOfShares" -> s"$negativeAmount")
+      lazy val form = nominalValueOfSharesForm.bind(map)
 
-        "contain an error message for values with too many digits" in {
-          form.errors.head.message shouldBe Messages("validation.error.nominalValueOfShares.size")
-        }
+      "contain one error" in {
+        form.hasErrors shouldBe true
       }
 
-      "contains a negative number" should {
-        lazy val form = nominalValueOfSharesForm.bind(Map("nominalValueOfShares" -> "-1"))
+      "contain the negative number error message" in {
+        form.errors.head.message shouldBe Messages("validation.error.nominalValueOfShares.negative")
+      }
+    }
 
-        "contain one error" in {
-          form.errors.size shouldBe 1
-        }
+    "provided with an invalid map with a negative decimal large value " should {
+      val map = Map("nominalValueOfShares" -> s"$largeNegativeAmount")
+      lazy val form = nominalValueOfSharesForm.bind(map)
 
-        "contain an error message for values with a negative value" in {
-          form.errors.head.message shouldBe Messages("validation.error.nominalValueOfShares.negative")
-        }
+      "contain three errors" in {
+        form.errors.size shouldBe 4
       }
 
-      "contains multiple form errors" should {
-        lazy val form = nominalValueOfSharesForm.bind(Map("nominalValueOfShares" -> "-9999999999999.0"))
+    }
 
-        "contain three errors" in {
-          form.errors.size shouldBe 3
-        }
+    "provided with an invalid map with an empty value" should {
+      val map = Map("nominalValueOfShares" -> " ")
+      lazy val form = nominalValueOfSharesForm.bind(map)
+
+      "contain one error" in {
+        form.errors.size shouldBe 1
+      }
+
+      "contain the not a number error message" in {
+        form.errors.head.message shouldBe "error.required"
       }
     }
   }

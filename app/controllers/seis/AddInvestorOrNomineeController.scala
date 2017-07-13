@@ -17,7 +17,7 @@
 package controllers.seis
 
 import auth.{AuthorisedAndEnrolledForTAVC, SEIS}
-import common.KeystoreKeys
+import common.{Constants, KeystoreKeys}
 import config.{AppConfig, FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.Helpers.ControllerHelpers
@@ -75,7 +75,13 @@ trait AddInvestorOrNomineeController extends FrontendController with AuthorisedA
           },
           validFormData => {
             s4lConnector.saveFormData[AddInvestorOrNomineeModel](KeystoreKeys.addInvestor, validFormData)
-              Future.successful(Redirect(routes.AddInvestorOrNomineeController.show()))
+
+            if(validFormData.addInvestorOrNominee == Constants.investor) {
+              Future.successful(Redirect(routes.CompanyDetailsController.show()))
+            }else
+            {
+              Future.successful(Redirect(routes.IndividualDetailsController.show()))
+            }
           }
         )
     }

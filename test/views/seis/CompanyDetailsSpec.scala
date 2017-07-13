@@ -70,7 +70,7 @@ class CompanyDetailsSpec extends ViewSpec {
       document.title() shouldBe Messages("page.investment.companyDetails.title")
       document.getElementById("main-heading").text() shouldBe Messages("page.investment.companyDetails.heading")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
-      document.body.getElementById("back-link").attr("href") shouldEqual routes.CompanyDetailsController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual routes.AddInvestorOrNomineeController.show().url
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.company.details.four")
       document.body.getElementById("companyName").`val`() shouldBe companyDetailsModel.companyName
       document.body.getElementById("companyAddressline1").`val`() shouldBe companyDetailsModel.companyAddressline1
@@ -92,7 +92,7 @@ class CompanyDetailsSpec extends ViewSpec {
       document.title() shouldBe Messages("page.investment.companyDetails.title")
       document.getElementById("main-heading").text() shouldBe Messages("page.investment.companyDetails.heading")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
-      document.body.getElementById("back-link").attr("href") shouldEqual routes.CompanyDetailsController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual routes.AddInvestorOrNomineeController.show().url
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.company.details.four")
       document.body.getElementById("get-help-action").text shouldBe Messages("common.error.help.text")
       document.getElementById("error-summary-display").hasClass("error-summary--show")
@@ -110,7 +110,7 @@ class CompanyDetailsSpec extends ViewSpec {
       document.title() shouldBe Messages("page.investment.companyDetails.title")
       document.getElementById("main-heading").text() shouldBe Messages("page.investment.companyDetails.heading")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
-      document.body.getElementById("back-link").attr("href") shouldEqual routes.CompanyDetailsController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual routes.AddInvestorOrNomineeController.show().url
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.company.details.four")
       document.body.getElementById("get-help-action").text shouldBe Messages("common.error.help.text")
       document.getElementById("error-summary-display").hasClass("error-summary--show")

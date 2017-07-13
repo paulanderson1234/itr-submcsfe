@@ -667,7 +667,6 @@ object Validation {
     })
   }
 
-
   def genericWholeAmountCheck(formValueMessageKey: String, minimumAmount:Int, maxLength:Int = financialMaxAmountLength): Constraint[String] = {
     Constraint("constraint.genericWholeAmountCheck") {
       value =>
@@ -689,25 +688,5 @@ object Validation {
     }
   }
 
-  def nominalValueOfSharesCheck: Constraint[String] = {
-    Constraint("constraint.nominalValueOfShares") {
-      value =>
-        val errors = Try {
-          BigDecimal(value)
-        } match {
-          case Success(result) =>
-            val decimal = if (!(result.scale == 0)) Seq(ValidationError(Messages("validation.error.nominalValueOfShares.decimalPlaces"))) else Seq()
-            val size = if (result.precision > 13) Seq(ValidationError(Messages("validation.error.nominalValueOfShares.size"))) else Seq()
-            val negative = if (result < 0) Seq(ValidationError(Messages("validation.error.nominalValueOfShares.negative"))) else Seq()
-
-            decimal ++ size ++ negative
-          case Failure(_) if value.trim.nonEmpty => Seq(ValidationError(Messages("validation.error.nominalValueOfShares.notANumber")))
-
-          case _ => Seq()
-        }
-
-        if (errors.isEmpty) Valid else Invalid(errors)
-    }
-  }
 }
 

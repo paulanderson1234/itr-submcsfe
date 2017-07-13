@@ -47,7 +47,7 @@ class IndividualDetailsSpec extends ViewSpec with FakeRequestHelper {
       }
 
       "have a link to the number of shares page" in {
-        document.select("article a").first().attr("href") shouldBe controllers.seis.routes.IndividualDetailsController.show().url
+        document.select("article a").first().attr("href") shouldBe controllers.seis.routes.AddInvestorOrNomineeController.show().url
       }
 
       "have a header with the correct question" in {

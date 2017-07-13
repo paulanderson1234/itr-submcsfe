@@ -90,46 +90,33 @@ class AddInvestorOrNomineeControllerSpec extends BaseSpec {
   }
 
   "By selecting the investor submission to the AddInvestorOrNomineeController when authenticated and enrolled" should {
-    "redirect to the AddInvestorOrNominee page" in {
+    "redirect to the correct page if an investor" in {
       val formInput = "addInvestorOrNominee" -> Constants.investor
       setupMocks(None, Some(validBackLink))
       mockEnrolledRequest(seisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,formInput)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(controllers.seis.routes.AddInvestorOrNomineeController.show().url)
+          redirectLocation(result) shouldBe Some(controllers.seis.routes.CompanyDetailsController.show().url)
         }
       )
     }
   }
 
-  "By selecting the nominee submission to the AddInvestorOrNomineeController when authenticated and enrolled" should {
-    "redirect to the beginning of the flow if no backlink is present in s4l even if a model is retrieved" in {
+  "By selecting the investor submission to the AddInvestorOrNomineeController when authenticated and enrolled" should {
+    "redirect to the correct page if a nominee" in {
       val formInput = "addInvestorOrNominee" -> Constants.nominee
-      setupMocks(Some(investor), None)
+      setupMocks(None, Some(validBackLink))
       mockEnrolledRequest(seisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,formInput)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(controllers.seis.routes.AddInvestorOrNomineeController.show().url)
+          redirectLocation(result) shouldBe Some(controllers.seis.routes.IndividualDetailsController.show().url)
         }
       )
     }
   }
-
-  "By selecting the nominee submission to the AddInvestorOrNomineeController when authenticated and enrolled" should {
-  "redirect to the beginning of the flow if no backlink or model is present in s4l" in {
-    val formInput = "addInvestorOrNominee" -> Constants.nominee
-    setupMocks(None, None)
-    mockEnrolledRequest(seisSchemeTypesModel)
-    submitWithSessionAndAuth(TestController.submit,formInput)(
-      result => {
-        status(result) shouldBe SEE_OTHER
-        redirectLocation(result) shouldBe Some(controllers.seis.routes.AddInvestorOrNomineeController.show().url)
-      }
-    )
-  }
-}
+  
 
   "Sending an invalid form submission with validation errors to the AddInvestorOrNomineeController when authenticated and enrolled" should {
     "redirect to itself" in {

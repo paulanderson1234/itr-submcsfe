@@ -23,10 +23,13 @@ import utils.Validation
 
 object NominalValueOfSharesForm {
 
+  val messageKey = "nominalValueOfShares"
+  val minimumAmount = 0
+
   val nominalValueOfSharesForm = Form(
     mapping(
       "nominalValueOfShares" -> nonEmptyText
-        .verifying(Validation.nominalValueOfSharesCheck)
+        .verifying(Validation.genericWholeAmountCheck(messageKey, minimumAmount))
         .transform[BigDecimal](value => BigDecimal(value), _.toString())
     )(NominalValueOfSharesModel.apply)(NominalValueOfSharesModel.unapply)
   )
