@@ -656,25 +656,6 @@ object Validation {
     })
   }
 
-  def totalAmountSpentCheck: Constraint[String] = {
-    Constraint("constraint.totalAmountSpent") {
-      value =>
-        val errors = Try {
-          BigDecimal(value)
-        } match {
-          case Success(result) =>
-            val decimal = if (!(result.scale == 0)) Seq(ValidationError(Messages("validation.error.totalAmountSpent.decimalPlaces"))) else Seq()
-            val size = if (result.precision > 13) Seq(ValidationError(Messages("validation.error.totalAmountSpent.size"))) else Seq()
-            val negative = if (result < 0) Seq(ValidationError(Messages("validation.error.totalAmountSpent.negative"))) else Seq()
-
-            decimal ++ size ++ negative
-          case Failure(_) if value.trim.nonEmpty => Seq(ValidationError(Messages("validation.error.totalAmountSpent.notANumber")))
-          case _ => Seq()
-        }
-
-        if (errors.isEmpty) Valid else Invalid(errors)
-    }
-  }
 
   def genericWholeAmountCheck(formValueMessageKey: String, minimumAmount:Int, maxLength:Int = financialMaxAmountLength): Constraint[String] = {
     Constraint("constraint.genericWholeAmountCheck") {
