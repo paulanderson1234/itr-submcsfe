@@ -64,7 +64,7 @@ trait CompanyDetailsController extends FrontendController with AuthorisedAndEnro
       companyDetailsForm.bindFromRequest().fold(
         formWithErrors => {
           Future.successful(BadRequest(CompanyDetails(if (formWithErrors.hasGlobalErrors)
-            formWithErrors.discardingErrors.withError("postcode", Messages("validation.error.countrypostcode"))
+            formWithErrors.discardingErrors.withError("companyPostcode", Messages("validation.error.countrypostcode"))
           else formWithErrors, countriesList)))
         },
         validFormData => {

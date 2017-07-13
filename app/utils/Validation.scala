@@ -393,7 +393,7 @@ object Validation {
 
     Constraint("constraints.postcodeCountryCheck")({
       case a: AddressModel => validate(a.countryCode, a.postcode)
-      case b: CompanyDetailsModel => validate(b.countryCode, b.postcode)
+      case b: CompanyDetailsModel => validate(b.countryCode, b.companyPostcode)
       case _ => Valid
     })
   }

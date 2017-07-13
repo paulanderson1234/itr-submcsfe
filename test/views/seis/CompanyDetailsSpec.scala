@@ -30,28 +30,28 @@ class CompanyDetailsSpec extends ViewSpec {
 
   val emptyCompanyDetailsModel = new CompanyDetailsModel("", "", "", None, None, None, countryCode = "")
 
-  lazy val form = companyDetailsForm.bind(Map("name" -> "Line 0",
-    "addressline1" -> "Line 1",
-    "addressline2" -> "Line 2",
-    "addressline3" -> "",
-    "addressline4" -> "",
-    "postcode" -> "",
+  lazy val form = companyDetailsForm.bind(Map("companyName" -> "Line 0",
+    "companyAddressline1" -> "Line 1",
+    "companyAddressline2" -> "Line 2",
+    "companyAddressline3" -> "",
+    "companyAddressline4" -> "",
+    "companyPostcode" -> "",
     "countryCode" -> "JP"))
 
-  lazy val emptyForm = companyDetailsForm.bind(Map("name" -> "",
-    "addressline1" -> "",
-    "addressline2" -> "",
-    "addressline3" -> "",
-    "addressline4" -> "",
-    "postcode" -> "",
+  lazy val emptyForm = companyDetailsForm.bind(Map("companyName" -> "",
+    "companyAddressline1" -> "",
+    "companyAddressline2" -> "",
+    "companyAddressline3" -> "",
+    "companyAddressline4" -> "",
+    "companyPostcode" -> "",
     "countryCode" -> ""))
 
-  lazy val errorForm = companyDetailsForm.bind(Map("name" -> "ABCorp",
-    "addressline1" -> "ABC XYZ",
-    "addressline2" -> "1 ABCDE Street",
-    "addressline3" -> "",
-    "addressline4" -> "",
-    "postcode" -> "",
+  lazy val errorForm = companyDetailsForm.bind(Map("companyName" -> "ABCorp",
+    "companyAddressline1" -> "ABC XYZ",
+    "companyAddressline2" -> "1 ABCDE Street",
+    "companyAddressline3" -> "",
+    "companyAddressline4" -> "",
+    "companyPostcode" -> "",
     "countryCode" -> ""))
 
   val countriesList: List[(String, String)] = List(("JP", "Japan"), ("GB", "United Kingdom"))
@@ -72,12 +72,12 @@ class CompanyDetailsSpec extends ViewSpec {
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       document.body.getElementById("back-link").attr("href") shouldEqual routes.CompanyDetailsController.show().url
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.company.details.four")
-      document.body.getElementById("name").`val`() shouldBe companyDetailsModel.name
-      document.body.getElementById("addressline1").`val`() shouldBe companyDetailsModel.addressline1
-      document.body.getElementById("addressline2").`val`() shouldBe companyDetailsModel.addressline2
-      document.body.getElementById("addressline3").`val`() shouldBe ""
-      document.body.getElementById("addressline4").`val`() shouldBe ""
-      document.body.getElementById("postcode").`val`() shouldBe ""
+      document.body.getElementById("companyName").`val`() shouldBe companyDetailsModel.companyName
+      document.body.getElementById("companyAddressline1").`val`() shouldBe companyDetailsModel.companyAddressline1
+      document.body.getElementById("companyAddressline2").`val`() shouldBe companyDetailsModel.companyAddressline2
+      document.body.getElementById("companyAddressline3").`val`() shouldBe ""
+      document.body.getElementById("companyAddressline4").`val`() shouldBe ""
+      document.body.getElementById("companyPostcode").`val`() shouldBe ""
       document.body.select("select[name=countryCode] option[selected]").`val`() shouldBe companyDetailsModel.countryCode
       document.body.getElementById("get-help-action").text shouldBe Messages("common.error.help.text")
     }
@@ -97,8 +97,8 @@ class CompanyDetailsSpec extends ViewSpec {
       document.body.getElementById("get-help-action").text shouldBe Messages("common.error.help.text")
       document.getElementById("error-summary-display").hasClass("error-summary--show")
       document.getElementById("countryCode-error-summary").text should include(Messages("validation.error.countryCode"))
-      document.getElementById("addressline1-error-summary").text should include(Messages("validation.error.mandatoryaddresssline"))
-      document.getElementById("addressline2-error-summary").text should include(Messages("validation.error.mandatoryaddresssline"))
+      document.getElementById("companyAddressline1-error-summary").text should include(Messages("validation.error.mandatoryaddresssline"))
+      document.getElementById("companyAddressline2-error-summary").text should include(Messages("validation.error.mandatoryaddresssline"))
     }
 
     "Verify that the Company Details page contains the correct elements " +

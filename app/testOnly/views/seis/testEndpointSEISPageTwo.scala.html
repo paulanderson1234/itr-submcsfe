@@ -104,68 +104,68 @@ companyDetailsForm: Form[CompanyDetailsModel])(implicit request: Request[_], mes
     <div class="form-group">
         <div class="form-group">
             @input(
-            companyDetailsForm("name"),
+            companyDetailsForm("companyName"),
             '_divClass -> "form-label",
-            '_labelId -> "label-name",
+            '_labelId -> "label-companyName",
             '_label -> Messages("page.investment.companyDetails.companyname.label"),
             '_maxlength -> "56",
             '_inputClass -> "input--medium input--cleared",
-            'id -> "name"
+            'id -> "companyName"
             )
         </div>
         <div class="form-group">
             @input(
-            companyDetailsForm("addressline1"),
+            companyDetailsForm("companyAddressline1"),
             '_divClass -> "form-label",
-            '_labelId -> "label-addressline1",
+            '_labelId -> "label-companyAddressline1",
             '_label -> Messages("page.investment.companyDetails.addressline1.label"),
             '_maxlength -> "35",
             '_inputClass -> "input--medium input--cleared",
-            'id -> "addressline1"
+            'id -> "companyAddressline1"
             )
         </div>
         <div class="form-group">
             @input(
-            companyDetailsForm("addressline2"),
+            companyDetailsForm("companyAddressline2"),
             '_divClass -> "form-label",
-            '_labelId -> "label-addressline2",
+            '_labelId -> "label-companyAddressline2",
             '_label -> Messages("page.investment.companyDetails.addressline2.label"),
             '_maxlength -> "35",
             '_inputClass -> "input--medium input--cleared",
-            'id -> "addressline2"
+            'id -> "companyAddressline2"
             )
         </div>
         <div class="form-group">
             @input(
-            companyDetailsForm("addressline3"),
+            companyDetailsForm("companyAddressline3"),
             '_divClass -> "form-label",
-            '_labelId -> "label-addressline3",
+            '_labelId -> "label-companyAddressline3",
             '_label -> Messages("page.investment.companyDetails.addressline3.label"),
             '_maxlength -> "35",
             '_inputClass -> "input--medium input--cleared",
-            'id -> "addressline3"
+            'id -> "companyAddressline3"
             )
         </div>
         <div class="form-group">
             @input(
-            companyDetailsForm("addressline4"),
+            companyDetailsForm("companyAddressline4"),
             '_divClass -> "form-label",
-            '_labelId -> "label-addressline4",
+            '_labelId -> "label-companyAddressline4",
             '_label -> Messages("page.investment.companyDetails.addressline4.label"),
             '_maxlength -> "35",
             '_inputClass -> "input--medium input--cleared",
-            'id -> "addressline4"
+            'id -> "companyAddressline4"
             )
         </div>
         <div class="form-group">
             @input(
-            companyDetailsForm("postcode"),
+            companyDetailsForm("companyPostcode"),
             '_divClass -> "form-label",
-            '_labelId -> "label-postcode",
+            '_labelId -> "label-companyPostcode",
             '_label -> Messages("page.investment.companyDetails.postcode.label"),
             '_maxlength -> "10",
             '_inputClass -> "input--small input--cleared",
-            'id -> "postcode"
+            'id -> "companyPostcode"
             )
         </div>
         <div class="form-group">

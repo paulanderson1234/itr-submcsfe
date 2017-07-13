@@ -18,12 +18,12 @@ package models
 
 import play.api.libs.json.{Json, OFormat}
 
-case class CompanyDetailsModel(name : String,
-                               addressline1 : String,
-                               addressline2 : String,
-                               addressline3 : Option[String],
-                               addressline4 : Option[String],
-                               postcode : Option[String],
+case class CompanyDetailsModel(companyName : String,
+                               companyAddressline1 : String,
+                               companyAddressline2 : String,
+                               companyAddressline3 : Option[String],
+                               companyAddressline4 : Option[String],
+                               companyPostcode : Option[String],
                                countryCode : String)
 
 object CompanyDetailsModel {

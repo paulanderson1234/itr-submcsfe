@@ -27,7 +27,7 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "Creating a form using an empty model" should {
     lazy val form = companyDetailsForm
-    "return an empty string for name, addressline1, addressline2, telephone number and email" in {
+    "return an empty string for companyName, companyAddressline1, companyAddressline2, telephone number and email" in {
       form.data.isEmpty shouldBe true
     }
   }
@@ -37,9 +37,9 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
       val model = CompanyDetailsModel("line0","line1","line2",None,None,None,"JP")
       val form = companyDetailsForm.fill(model)
 
-      form.data("name") shouldBe "line0"
-      form.data("addressline1") shouldBe "line1"
-      form.data("addressline2") shouldBe "line2"
+      form.data("companyName") shouldBe "line0"
+      form.data("companyAddressline1") shouldBe "line1"
+      form.data("companyAddressline2") shouldBe "line2"
       form.data("countryCode") shouldBe "JP"
       form.errors.length shouldBe 0
       form.data.size shouldBe 4
@@ -47,14 +47,14 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
   }
 
   "Creating a form using an invalid post" when {
-    "supplied with no data for name" should {
+    "supplied with no data for companyName" should {
       lazy val form = companyDetailsForm.bind(Map(
-        "name" -> "",
-        "addressline1" -> "line1",
-        "addressline2" -> "line2",
-        "addressline3" -> "",
-        "addressline4" -> "",
-        "postcode" -> "",
+        "companyName" -> "",
+        "companyAddressline1" -> "line1",
+        "companyAddressline2" -> "line2",
+        "companyAddressline3" -> "",
+        "companyAddressline4" -> "",
+        "companyPostcode" -> "",
         "countryCode" -> "JP")
       )
       "raise form error" in {
@@ -64,24 +64,24 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
         form.errors.length shouldBe 1
 
-        form.errors.head.key shouldBe "name"
+        form.errors.head.key shouldBe "companyName"
       }
       "associate the correct error message to the error" in {
-        Messages(form.error("name").get.message) shouldBe Messages("error.required")
+        Messages(form.error("companyName").get.message) shouldBe Messages("error.required")
       }
     }
   }
 
 
   "Creating a form using an invalid post" when {
-    "supplied with no data for addressline1" should {
+    "supplied with no data for companyAddressline1" should {
       lazy val form = companyDetailsForm.bind(Map(
-        "name" -> "line0",
-        "addressline1" -> "",
-        "addressline2" -> "line2",
-        "addressline3" -> "",
-        "addressline4" -> "",
-        "postcode" -> "",
+        "companyName" -> "line0",
+        "companyAddressline1" -> "",
+        "companyAddressline2" -> "line2",
+        "companyAddressline3" -> "",
+        "companyAddressline4" -> "",
+        "companyPostcode" -> "",
         "countryCode" -> "JP")
       )
       "raise form error" in {
@@ -91,23 +91,23 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
         form.errors.length shouldBe 1
 
-        form.errors.head.key shouldBe "addressline1"
+        form.errors.head.key shouldBe "companyAddressline1"
       }
       "associate the correct error message to the error" in {
-        form.error("addressline1").get.message shouldBe Messages("validation.error.mandatoryaddresssline")
+        form.error("companyAddressline1").get.message shouldBe Messages("validation.error.mandatoryaddresssline")
       }
     }
   }
 
   "Creating a form using an invalid post" when {
-    "supplied with no data for addressline2" should {
+    "supplied with no data for companyAddressline2" should {
       lazy val form = companyDetailsForm.bind(Map(
-        "name" -> "line0",
-        "addressline1" -> "line1",
-        "addressline2" -> "",
-        "addressline3" -> "",
-        "addressline4" -> "",
-        "postcode" -> "",
+        "companyName" -> "line0",
+        "companyAddressline1" -> "line1",
+        "companyAddressline2" -> "",
+        "companyAddressline3" -> "",
+        "companyAddressline4" -> "",
+        "companyPostcode" -> "",
         "countryCode" -> "JP")
       )
       "raise form error" in {
@@ -115,10 +115,10 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
       }
       "raise 1 form error" in {
         form.errors.length shouldBe 1
-        form.errors.head.key shouldBe "addressline2"
+        form.errors.head.key shouldBe "companyAddressline2"
       }
       "associate the correct error message to the error" in {
-        form.error("addressline2").get.message shouldBe Messages("validation.error.mandatoryaddresssline")
+        form.error("companyAddressline2").get.message shouldBe Messages("validation.error.mandatoryaddresssline")
       }
     }
   }
@@ -126,12 +126,12 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
   "Creating a form using an invalid post" when {
     "supplied with no data for country" should {
       lazy val form = companyDetailsForm.bind(Map(
-        "name" -> "line0",
-        "addressline1" -> "line1",
-        "addressline2" -> "line2",
-        "addressline3" -> "",
-        "addressline4" -> "",
-        "postcode" -> "",
+        "companyName" -> "line0",
+        "companyAddressline1" -> "line1",
+        "companyAddressline2" -> "line2",
+        "companyAddressline3" -> "",
+        "companyAddressline4" -> "",
+        "companyPostcode" -> "",
         "countryCode" -> "")
       )
       "raise form error" in {
@@ -148,14 +148,14 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
   }
 
   "Creating a form using an invalid post" when {
-    "supplied with no data for name and addressline1" should {
+    "supplied with no data for companyName and companyAddressline1" should {
       lazy val form = companyDetailsForm.bind(Map(
-        "name" -> "",
-        "addressline1" -> "",
-        "addressline2" -> "line2",
-        "addressline3" -> "",
-        "addressline4" -> "",
-        "postcode" -> "",
+        "companyName" -> "",
+        "companyAddressline1" -> "",
+        "companyAddressline2" -> "line2",
+        "companyAddressline3" -> "",
+        "companyAddressline4" -> "",
+        "companyPostcode" -> "",
         "countryCode" -> "JP")
       )
       "raise form error" in {
@@ -163,26 +163,26 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
       }
       "raise 2 form errors" in {
         form.errors.length shouldBe 2
-        form.errors.head.key shouldBe "name"
-        form.errors(1).key shouldBe "addressline1"
+        form.errors.head.key shouldBe "companyName"
+        form.errors(1).key shouldBe "companyAddressline1"
       }
       "associate the correct error message to the error" in {
-        Messages(form.error("name").get.message) shouldBe Messages("error.required")
-        form.error("addressline1").get.message shouldBe Messages("validation.error.mandatoryaddresssline")
+        Messages(form.error("companyName").get.message) shouldBe Messages("error.required")
+        form.error("companyAddressline1").get.message shouldBe Messages("validation.error.mandatoryaddresssline")
       }
     }
   }
 
 
   "Creating a form using an invalid post" when {
-    "supplied with no data for addressline1 and addressline2" should {
+    "supplied with no data for companyAddressline1 and companyAddressline2" should {
       lazy val form = companyDetailsForm.bind(Map(
-        "name" -> "line0",
-        "addressline1" -> "",
-        "addressline2" -> "",
-        "addressline3" -> "",
-        "addressline4" -> "",
-        "postcode" -> "",
+        "companyName" -> "line0",
+        "companyAddressline1" -> "",
+        "companyAddressline2" -> "",
+        "companyAddressline3" -> "",
+        "companyAddressline4" -> "",
+        "companyPostcode" -> "",
         "countryCode" -> "JP")
       )
       "raise form error" in {
@@ -190,25 +190,25 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
       }
       "raise 2 form errors" in {
         form.errors.length shouldBe 2
-        form.errors.head.key shouldBe "addressline1"
-        form.errors(1).key shouldBe "addressline2"
+        form.errors.head.key shouldBe "companyAddressline1"
+        form.errors(1).key shouldBe "companyAddressline2"
       }
       "associate the correct error message to the error" in {
-        form.error("addressline1").get.message shouldBe Messages("validation.error.mandatoryaddresssline")
-        form.error("addressline2").get.message shouldBe Messages("validation.error.mandatoryaddresssline")
+        form.error("companyAddressline1").get.message shouldBe Messages("validation.error.mandatoryaddresssline")
+        form.error("companyAddressline2").get.message shouldBe Messages("validation.error.mandatoryaddresssline")
       }
     }
   }
 
   "Creating a form using an invalid post" when {
-    "supplied with no data for addressline2 and country" should {
+    "supplied with no data for companyAddressline2 and country" should {
       lazy val form = companyDetailsForm.bind(Map(
-        "name" -> "line0",
-        "addressline1" -> "line1",
-        "addressline2" -> "",
-        "addressline3" -> "",
-        "addressline4" -> "",
-        "postcode" -> "",
+        "companyName" -> "line0",
+        "companyAddressline1" -> "line1",
+        "companyAddressline2" -> "",
+        "companyAddressline3" -> "",
+        "companyAddressline4" -> "",
+        "companyPostcode" -> "",
         "countryCode" -> "")
       )
       "raise form error" in {
@@ -216,11 +216,11 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
       }
       "raise 2 form errors" in {
         form.errors.length shouldBe 2
-        form.errors.head.key shouldBe "addressline2"
+        form.errors.head.key shouldBe "companyAddressline2"
         form.errors(1).key shouldBe "countryCode"
       }
       "associate the correct error message to the error" in {
-        form.error("addressline2").get.message shouldBe Messages("validation.error.mandatoryaddresssline")
+        form.error("companyAddressline2").get.message shouldBe Messages("validation.error.mandatoryaddresssline")
         form.error("countryCode").get.message shouldBe Messages("validation.error.countryCode")
       }
     }
@@ -228,14 +228,14 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
 
   "Creating a form using an invalid post" when {
-    "supplied with no data for name, addressline1 or addressline2" should {
+    "supplied with no data for companyName, companyAddressline1 or companyAddressline2" should {
       lazy val form = companyDetailsForm.bind(Map(
-        "name" -> "",
-        "addressline1" -> "",
-        "addressline2" -> "",
-        "addressline3" -> "",
-        "addressline4" -> "",
-        "postcode" -> "",
+        "companyName" -> "",
+        "companyAddressline1" -> "",
+        "companyAddressline2" -> "",
+        "companyAddressline3" -> "",
+        "companyAddressline4" -> "",
+        "companyPostcode" -> "",
         "countryCode" -> "JP")
       )
       "raise form error" in {
@@ -243,28 +243,28 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
       }
       "raise 3 form errors" in {
         form.errors.length shouldBe 3
-        form.errors.head.key shouldBe "name"
-        form.errors(1).key shouldBe "addressline1"
-        form.errors(2).key shouldBe "addressline2"
+        form.errors.head.key shouldBe "companyName"
+        form.errors(1).key shouldBe "companyAddressline1"
+        form.errors(2).key shouldBe "companyAddressline2"
       }
       "associate the correct error message to the error" in {
-        Messages(form.error("name").get.message) shouldBe Messages("error.required")
-        form.error("addressline1").get.message shouldBe Messages("validation.error.mandatoryaddresssline")
-        form.error("addressline2").get.message shouldBe Messages("validation.error.mandatoryaddresssline")
+        Messages(form.error("companyName").get.message) shouldBe Messages("error.required")
+        form.error("companyAddressline1").get.message shouldBe Messages("validation.error.mandatoryaddresssline")
+        form.error("companyAddressline2").get.message shouldBe Messages("validation.error.mandatoryaddresssline")
       }
     }
   }
 
 
   "Creating a form using an invalid post" when {
-    "supplied with no data for addressline1, addressline2 or country" should {
+    "supplied with no data for companyAddressline1, companyAddressline2 or country" should {
       lazy val form = companyDetailsForm.bind(Map(
-        "name" -> "line0",
-        "addressline1" -> "",
-        "addressline2" -> "",
-        "addressline3" -> "",
-        "addressline4" -> "",
-        "postcode" -> "",
+        "companyName" -> "line0",
+        "companyAddressline1" -> "",
+        "companyAddressline2" -> "",
+        "companyAddressline3" -> "",
+        "companyAddressline4" -> "",
+        "companyPostcode" -> "",
         "countryCode" -> "")
       )
       "raise form error" in {
@@ -272,27 +272,27 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
       }
       "raise 3 form errors" in {
         form.errors.length shouldBe 3
-        form.errors.head.key shouldBe "addressline1"
-        form.errors(1).key shouldBe "addressline2"
+        form.errors.head.key shouldBe "companyAddressline1"
+        form.errors(1).key shouldBe "companyAddressline2"
         form.errors(2).key shouldBe "countryCode"
       }
       "associate the correct error message to the error" in {
-        form.error("addressline1").get.message shouldBe Messages("validation.error.mandatoryaddresssline")
-        form.error("addressline2").get.message shouldBe Messages("validation.error.mandatoryaddresssline")
+        form.error("companyAddressline1").get.message shouldBe Messages("validation.error.mandatoryaddresssline")
+        form.error("companyAddressline2").get.message shouldBe Messages("validation.error.mandatoryaddresssline")
         form.error("countryCode").get.message shouldBe Messages("validation.error.countryCode")
       }
     }
   }
 
   "Creating a form using an invalid post" when {
-    "supplied with no data for name, addressline1, addressline2 or country" should {
+    "supplied with no data for companyName, companyAddressline1, companyAddressline2 or country" should {
       lazy val form = companyDetailsForm.bind(Map(
-        "name" -> "",
-        "addressline1" -> "",
-        "addressline2" -> "",
-        "addressline3" -> "",
-        "addressline4" -> "",
-        "postcode" -> "",
+        "companyName" -> "",
+        "companyAddressline1" -> "",
+        "companyAddressline2" -> "",
+        "companyAddressline3" -> "",
+        "companyAddressline4" -> "",
+        "companyPostcode" -> "",
         "countryCode" -> "")
       )
       "raise form error" in {
@@ -300,28 +300,28 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
       }
       "raise 4 form errors" in {
         form.errors.length shouldBe 4
-        form.errors.head.key shouldBe "name"
-        form.errors(1).key shouldBe "addressline1"
-        form.errors(2).key shouldBe "addressline2"
+        form.errors.head.key shouldBe "companyName"
+        form.errors(1).key shouldBe "companyAddressline1"
+        form.errors(2).key shouldBe "companyAddressline2"
         form.errors(3).key shouldBe "countryCode"
       }
       "associate the correct error message to the error" in {
-        Messages(form.error("name").get.message) shouldBe Messages("error.required")
-        form.error("addressline1").get.message shouldBe Messages("validation.error.mandatoryaddresssline")
-        form.error("addressline2").get.message shouldBe Messages("validation.error.mandatoryaddresssline")
+        Messages(form.error("companyName").get.message) shouldBe Messages("error.required")
+        form.error("companyAddressline1").get.message shouldBe Messages("validation.error.mandatoryaddresssline")
+        form.error("companyAddressline2").get.message shouldBe Messages("validation.error.mandatoryaddresssline")
         form.error("countryCode").get.message shouldBe Messages("validation.error.countryCode")
       }
     }
   }
 
-  "supplied with empty space for name" should {
+  "supplied with empty space for companyName" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "name" -> "   ",
-      "addressline1" -> "line1",
-      "addressline2" -> "line2",
-      "addressline3" -> "",
-      "addressline4" -> "",
-      "postcode" -> "",
+      "companyName" -> "   ",
+      "companyAddressline1" -> "line1",
+      "companyAddressline2" -> "line2",
+      "companyAddressline3" -> "",
+      "companyAddressline4" -> "",
+      "companyPostcode" -> "",
       "countryCode" -> "JP")
     )
     "raise form error" in {
@@ -329,22 +329,22 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
     }
     "raise 1 form error" in {
       form.errors.length shouldBe 1
-      form.errors.head.key shouldBe "name"
+      form.errors.head.key shouldBe "companyName"
     }
     "associate the correct error message to the error " in {
-      Messages(form.error("name").get.message) shouldBe Messages("error.required")
+      Messages(form.error("companyName").get.message) shouldBe Messages("error.required")
     }
   }
 
 
-  "supplied with empty space for addressline1" should {
+  "supplied with empty space for companyAddressline1" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "name" -> "line0",
-      "addressline1" -> "   ",
-      "addressline2" -> "line2",
-      "addressline3" -> "",
-      "addressline4" -> "",
-      "postcode" -> "",
+      "companyName" -> "line0",
+      "companyAddressline1" -> "   ",
+      "companyAddressline2" -> "line2",
+      "companyAddressline3" -> "",
+      "companyAddressline4" -> "",
+      "companyPostcode" -> "",
       "countryCode" -> "JP")
     )
     "raise form error" in {
@@ -352,21 +352,21 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
     }
     "raise 1 form error" in {
       form.errors.length shouldBe 1
-      form.errors.head.key shouldBe "addressline1"
+      form.errors.head.key shouldBe "companyAddressline1"
     }
     "associate the correct error message to the error " in {
-      form.error("addressline1").get.message shouldBe Messages("validation.error.mandatoryaddresssline")
+      form.error("companyAddressline1").get.message shouldBe Messages("validation.error.mandatoryaddresssline")
     }
   }
 
-  "supplied with empty space for addressline2" should {
+  "supplied with empty space for companyAddressline2" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "name" -> "line0",
-      "addressline1" -> "line1",
-      "addressline2" -> "   ",
-      "addressline3" -> "",
-      "addressline4" -> "",
-      "postcode" -> "",
+      "companyName" -> "line0",
+      "companyAddressline1" -> "line1",
+      "companyAddressline2" -> "   ",
+      "companyAddressline3" -> "",
+      "companyAddressline4" -> "",
+      "companyPostcode" -> "",
       "countryCode" -> "JP")
     )
     "raise form error" in {
@@ -374,21 +374,21 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
     }
     "raise 1 form error" in {
       form.errors.length shouldBe 1
-      form.errors.head.key shouldBe "addressline2"
+      form.errors.head.key shouldBe "companyAddressline2"
     }
     "associate the correct error message to the error " in {
-      form.error("addressline2").get.message shouldBe Messages("validation.error.mandatoryaddresssline")
+      form.error("companyAddressline2").get.message shouldBe Messages("validation.error.mandatoryaddresssline")
     }
   }
 
-  "supplied with empty space for addressline3" should {
+  "supplied with empty space for companyAddressline3" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "name" -> "line0",
-      "addressline1" -> "line1",
-      "addressline2" -> "line2",
-      "addressline3" -> "   ",
-      "addressline4" -> "",
-      "postcode" -> "",
+      "companyName" -> "line0",
+      "companyAddressline1" -> "line1",
+      "companyAddressline2" -> "line2",
+      "companyAddressline3" -> "   ",
+      "companyAddressline4" -> "",
+      "companyPostcode" -> "",
       "countryCode" -> "JP")
     )
     "raise form error" in {
@@ -396,21 +396,21 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
     }
     "raise 1 form error" in {
       form.errors.length shouldBe 1
-      form.errors.head.key shouldBe "addressline3"
+      form.errors.head.key shouldBe "companyAddressline3"
     }
     "associate the correct error message to the error " in {
-      form.error("addressline3").get.message shouldBe Messages("validation.error.optionaladdresssline")
+      form.error("companyAddressline3").get.message shouldBe Messages("validation.error.optionaladdresssline")
     }
   }
 
-  "supplied with empty space for addressline4" should {
+  "supplied with empty space for companyAddressline4" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "name" -> "line0",
-      "addressline1" -> "line1",
-      "addressline2" -> "line2",
-      "addressline3" -> "",
-      "addressline4" -> "   ",
-      "postcode" -> "",
+      "companyName" -> "line0",
+      "companyAddressline1" -> "line1",
+      "companyAddressline2" -> "line2",
+      "companyAddressline3" -> "",
+      "companyAddressline4" -> "   ",
+      "companyPostcode" -> "",
       "countryCode" -> "JP")
     )
     "raise form error" in {
@@ -418,21 +418,21 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
     }
     "raise 1 form error" in {
       form.errors.length shouldBe 1
-      form.errors.head.key shouldBe "addressline4"
+      form.errors.head.key shouldBe "companyAddressline4"
     }
     "associate the correct error message to the error " in {
-      form.error("addressline4").get.message shouldBe Messages("validation.error.linefouraddresssline")
+      form.error("companyAddressline4").get.message shouldBe Messages("validation.error.linefouraddresssline")
     }
   }
 
   "supplied with empty space for country" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "name" -> "line0",
-      "addressline1" -> "line1",
-      "addressline2" -> "line2",
-      "addressline3" -> "",
-      "addressline4" -> "",
-      "postcode" -> "",
+      "companyName" -> "line0",
+      "companyAddressline1" -> "line1",
+      "companyAddressline2" -> "line2",
+      "companyAddressline3" -> "",
+      "companyAddressline4" -> "",
+      "companyPostcode" -> "",
       "countryCode" -> "   ")
     )
     "raise form error" in {
@@ -446,14 +446,14 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
     }
   }
 
-  "supplied with empty space for postcode" should {
+  "supplied with empty space for companyPostcode" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "name" -> "line0",
-      "addressline1" -> "line1",
-      "addressline2" -> "line2",
-      "addressline3" -> "",
-      "addressline4" -> "",
-      "postcode" -> "   ",
+      "companyName" -> "line0",
+      "companyAddressline1" -> "line1",
+      "companyAddressline2" -> "line2",
+      "companyAddressline3" -> "",
+      "companyAddressline4" -> "",
+      "companyPostcode" -> "   ",
       "countryCode" -> "GB")
     )
     "raise form error" in {
@@ -463,18 +463,18 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
       form.errors.length shouldBe 1
     }
     "associate the correct error message to the error" in {
-      form.error("postcode").get.message shouldBe Messages("validation.error.postcode")
+      form.error("companyPostcode").get.message shouldBe Messages("validation.error.postcode")
     }
   }
 
-  "supplied with numeric input for name" should {
+  "supplied with numeric input for companyName" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "name" -> "line0 260",
-      "addressline1" -> "line1",
-      "addressline2" -> "line2",
-      "addressline3" -> "",
-      "addressline4" -> "",
-      "postcode" -> "",
+      "companyName" -> "line0 260",
+      "companyAddressline1" -> "line1",
+      "companyAddressline2" -> "line2",
+      "companyAddressline3" -> "",
+      "companyAddressline4" -> "",
+      "companyPostcode" -> "",
       "countryCode" -> "JP")
     )
     "raise form error" in {
@@ -486,14 +486,14 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
   }
 
 
-  "supplied with numeric input for addressline1" should {
+  "supplied with numeric input for companyAddressline1" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "name" -> "line0",
-      "addressline1" -> "line1 86",
-      "addressline2" -> "line2",
-      "addressline3" -> "",
-      "addressline4" -> "",
-      "postcode" -> "",
+      "companyName" -> "line0",
+      "companyAddressline1" -> "line1 86",
+      "companyAddressline2" -> "line2",
+      "companyAddressline3" -> "",
+      "companyAddressline4" -> "",
+      "companyPostcode" -> "",
       "countryCode" -> "JP")
     )
     "raise form error" in {
@@ -504,14 +504,14 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
     }
   }
 
-  "supplied with numeric input for addressline2" should {
+  "supplied with numeric input for companyAddressline2" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "name" -> "line0",
-      "addressline1" -> "line1",
-      "addressline2" -> "line2 86",
-      "addressline3" -> "",
-      "addressline4" -> "",
-      "postcode" -> "",
+      "companyName" -> "line0",
+      "companyAddressline1" -> "line1",
+      "companyAddressline2" -> "line2 86",
+      "companyAddressline3" -> "",
+      "companyAddressline4" -> "",
+      "companyPostcode" -> "",
       "countryCode" -> "JP")
     )
     "raise form error" in {
@@ -522,14 +522,14 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
     }
   }
 
-  "supplied with numeric input for addressline3" should {
+  "supplied with numeric input for companyAddressline3" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "name" -> "line0",
-      "addressline1" -> "line1",
-      "addressline2" -> "line2",
-      "addressline3" -> "86",
-      "addressline4" -> "",
-      "postcode" -> "",
+      "companyName" -> "line0",
+      "companyAddressline1" -> "line1",
+      "companyAddressline2" -> "line2",
+      "companyAddressline3" -> "86",
+      "companyAddressline4" -> "",
+      "companyPostcode" -> "",
       "countryCode" -> "JP")
     )
     "raise form error" in {
@@ -540,14 +540,14 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
     }
   }
 
-  "supplied with numeric input for addressline4" should {
+  "supplied with numeric input for companyAddressline4" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "name" -> "line0",
-      "addressline1" -> "line1",
-      "addressline2" -> "line2",
-      "addressline3" -> "",
-      "addressline4" -> "86",
-      "postcode" -> "",
+      "companyName" -> "line0",
+      "companyAddressline1" -> "line1",
+      "companyAddressline2" -> "line2",
+      "companyAddressline3" -> "",
+      "companyAddressline4" -> "86",
+      "companyPostcode" -> "",
       "countryCode" -> "JP")
     )
     "raise form error" in {
@@ -558,14 +558,14 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
     }
   }
 
-  "supplied with numeric input for postcode" should {
+  "supplied with numeric input for companyPostcode" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "name" -> "line0",
-      "addressline1" -> "line1",
-      "addressline2" -> "line2",
-      "addressline3" -> "",
-      "addressline4" -> "",
-      "postcode" -> "86",
+      "companyName" -> "line0",
+      "companyAddressline1" -> "line1",
+      "companyAddressline2" -> "line2",
+      "companyAddressline3" -> "",
+      "companyAddressline4" -> "",
+      "companyPostcode" -> "86",
       "countryCode" -> "GB")
     )
     "raise form error" in {
@@ -573,21 +573,21 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
     }
     "raise 1 form error" in {
       form.errors.length shouldBe 1
-      form.errors.head.key shouldBe "postcode"
+      form.errors.head.key shouldBe "companyPostcode"
     }
     "associate the correct error message to the error" in {
-      form.error("postcode").get.message shouldBe Messages("validation.error.postcode")
+      form.error("companyPostcode").get.message shouldBe Messages("validation.error.postcode")
     }
   }
 
   "supplied with alphanumeric input for country" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "name" -> "line0",
-      "addressline1" -> "line1",
-      "addressline2" -> "line2",
-      "addressline3" -> "",
-      "addressline4" -> "",
-      "postcode" -> "",
+      "companyName" -> "line0",
+      "companyAddressline1" -> "line1",
+      "companyAddressline2" -> "line2",
+      "companyAddressline3" -> "",
+      "companyAddressline4" -> "",
+      "companyPostcode" -> "",
       "countryCode" -> "J4pan")
     )
     "raise form error" in {
@@ -605,14 +605,14 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
   //  BVA
 
 
-  "name value supplied with the minimum allowed" should {
+  "companyName value supplied with the minimum allowed" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "name" -> "A",
-      "addressline1" -> "line1",
-      "addressline2" -> "line2",
-      "addressline3" -> "",
-      "addressline4" -> "",
-      "postcode" -> "",
+      "companyName" -> "A",
+      "companyAddressline1" -> "line1",
+      "companyAddressline2" -> "line2",
+      "companyAddressline3" -> "",
+      "companyAddressline4" -> "",
+      "companyPostcode" -> "",
       "countryCode" -> "JP")
     )
     "raise form error" in {
@@ -623,14 +623,14 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
     }
   }
 
-  "addressline1 value supplied with the minimum allowed" should {
+  "companyAddressline1 value supplied with the minimum allowed" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "name" -> "line0",
-      "addressline1" -> "A",
-      "addressline2" -> "line2",
-      "addressline3" -> "",
-      "addressline4" -> "",
-      "postcode" -> "",
+      "companyName" -> "line0",
+      "companyAddressline1" -> "A",
+      "companyAddressline2" -> "line2",
+      "companyAddressline3" -> "",
+      "companyAddressline4" -> "",
+      "companyPostcode" -> "",
       "countryCode" -> "JP")
     )
     "raise form error" in {
@@ -641,14 +641,14 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
     }
   }
 
-  "addressline2 value supplied with the minimum allowed" should {
+  "companyAddressline2 value supplied with the minimum allowed" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "name" -> "line0",
-      "addressline1" -> "line1",
-      "addressline2" -> "M",
-      "addressline3" -> "",
-      "addressline4" -> "",
-      "postcode" -> "",
+      "companyName" -> "line0",
+      "companyAddressline1" -> "line1",
+      "companyAddressline2" -> "M",
+      "companyAddressline3" -> "",
+      "companyAddressline4" -> "",
+      "companyPostcode" -> "",
       "countryCode" -> "JP")
     )
     "raise form error" in {
@@ -659,14 +659,14 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
     }
   }
 
-  "addressline3 value supplied with the minimum allowed" should {
+  "companyAddressline3 value supplied with the minimum allowed" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "name" -> "line0",
-      "addressline1" -> "line1",
-      "addressline2" -> "line2",
-      "addressline3" -> "A",
-      "addressline4" -> "",
-      "postcode" -> "",
+      "companyName" -> "line0",
+      "companyAddressline1" -> "line1",
+      "companyAddressline2" -> "line2",
+      "companyAddressline3" -> "A",
+      "companyAddressline4" -> "",
+      "companyPostcode" -> "",
       "countryCode" -> "JP")
     )
     "raise form error" in {
@@ -677,14 +677,14 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
     }
   }
 
-  "addressline4 value supplied with the minimum allowed" should {
+  "companyAddressline4 value supplied with the minimum allowed" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "name" -> "line0",
-      "addressline1" -> "line1",
-      "addressline2" -> "line2",
-      "addressline3" -> "",
-      "addressline4" -> "A",
-      "postcode" -> "",
+      "companyName" -> "line0",
+      "companyAddressline1" -> "line1",
+      "companyAddressline2" -> "line2",
+      "companyAddressline3" -> "",
+      "companyAddressline4" -> "A",
+      "companyPostcode" -> "",
       "countryCode" -> "JP")
     )
     "raise form error" in {
@@ -697,12 +697,12 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "country value supplied with the minimum allowed" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "name" -> "line0",
-      "addressline1" -> "line1",
-      "addressline2" -> "line2",
-      "addressline3" -> "",
-      "addressline4" -> "",
-      "postcode" -> "",
+      "companyName" -> "line0",
+      "companyAddressline1" -> "line1",
+      "companyAddressline2" -> "line2",
+      "companyAddressline3" -> "",
+      "companyAddressline4" -> "",
+      "companyPostcode" -> "",
       "countryCode" -> "JP")
     )
     "raise form error" in {
@@ -714,14 +714,14 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
   }
 
 
-  "name value supplied with the maximum allowed (on the boundary)" should {
+  "companyName value supplied with the maximum allowed (on the boundary)" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "name" -> "line0                                                   ",
-      "addressline1" -> "line1",
-      "addressline2" -> "line2",
-      "addressline3" -> "",
-      "addressline4" -> "",
-      "postcode" -> "",
+      "companyName" -> "line0                                                   ",
+      "companyAddressline1" -> "line1",
+      "companyAddressline2" -> "line2",
+      "companyAddressline3" -> "",
+      "companyAddressline4" -> "",
+      "companyPostcode" -> "",
       "countryCode" -> "JP")
     )
     "raise form error" in {
@@ -733,14 +733,14 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
   }
 
 
-  "addressline1 value supplied with the maximum allowed (on the boundary)" should {
+  "companyAddressline1 value supplied with the maximum allowed (on the boundary)" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "name" -> "line0",
-      "addressline1" -> "line1          ",
-      "addressline2" -> "line2",
-      "addressline3" -> "",
-      "addressline4" -> "",
-      "postcode" -> "",
+      "companyName" -> "line0",
+      "companyAddressline1" -> "line1          ",
+      "companyAddressline2" -> "line2",
+      "companyAddressline3" -> "",
+      "companyAddressline4" -> "",
+      "companyPostcode" -> "",
       "countryCode" -> "JP")
     )
     "raise form error" in {
@@ -751,14 +751,14 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
     }
   }
 
-  "addressline2 value supplied with the maximum allowed (on the boundary)" should {
+  "companyAddressline2 value supplied with the maximum allowed (on the boundary)" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "name" -> "line0",
-      "addressline1" -> "line1",
-      "addressline2" -> "line2                  ",
-      "addressline3" -> "",
-      "addressline4" -> "",
-      "postcode" -> "",
+      "companyName" -> "line0",
+      "companyAddressline1" -> "line1",
+      "companyAddressline2" -> "line2                  ",
+      "companyAddressline3" -> "",
+      "companyAddressline4" -> "",
+      "companyPostcode" -> "",
       "countryCode" -> "JP")
     )
     "raise form error" in {
@@ -769,14 +769,14 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
     }
   }
 
-  "addressline3 value supplied with the maximum allowed (on the boundary)" should {
+  "companyAddressline3 value supplied with the maximum allowed (on the boundary)" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "name" -> "line0",
-      "addressline1" -> "line1",
-      "addressline2" -> "line2",
-      "addressline3" -> "A                          ",
-      "addressline4" -> "",
-      "postcode" -> "",
+      "companyName" -> "line0",
+      "companyAddressline1" -> "line1",
+      "companyAddressline2" -> "line2",
+      "companyAddressline3" -> "A                          ",
+      "companyAddressline4" -> "",
+      "companyPostcode" -> "",
       "countryCode" -> "JP")
     )
     "raise form error" in {
@@ -787,14 +787,14 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
     }
   }
 
-  "addressline4 value supplied with the maximum allowed (on the boundary)" should {
+  "companyAddressline4 value supplied with the maximum allowed (on the boundary)" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "name" -> "line0",
-      "addressline1" -> "line1",
-      "addressline2" -> "line2",
-      "addressline3" -> "",
-      "addressline4" -> "A                 ",
-      "postcode" -> "",
+      "companyName" -> "line0",
+      "companyAddressline1" -> "line1",
+      "companyAddressline2" -> "line2",
+      "companyAddressline3" -> "",
+      "companyAddressline4" -> "A                 ",
+      "companyPostcode" -> "",
       "countryCode" -> "JP")
     )
     "raise form error" in {
@@ -805,14 +805,14 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
     }
   }
 
-  "postcode value supplied with the maximum allowed (on the boundary)" should {
+  "companyPostcode value supplied with the maximum allowed (on the boundary)" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "name" -> "line0",
-      "addressline1" -> "line1",
-      "addressline2" -> "line2",
-      "addressline3" -> "",
-      "addressline4" -> "",
-      "postcode" -> "BS98 1TL",
+      "companyName" -> "line0",
+      "companyAddressline1" -> "line1",
+      "companyAddressline2" -> "line2",
+      "companyAddressline3" -> "",
+      "companyAddressline4" -> "",
+      "companyPostcode" -> "BS98 1TL",
       "countryCode" -> "GB")
     )
     "raise form error" in {
@@ -825,12 +825,12 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "country value supplied with the maximum allowed (on the boundary)" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "name" -> "line0",
-      "addressline1" -> "line1",
-      "addressline2" -> "line2",
-      "addressline3" -> "",
-      "addressline4" -> "",
-      "postcode" -> "",
+      "companyName" -> "line0",
+      "companyAddressline1" -> "line1",
+      "companyAddressline2" -> "line2",
+      "companyAddressline3" -> "",
+      "companyAddressline4" -> "",
+      "companyPostcode" -> "",
       "countryCode" -> "TB")
     )
     "raise form error" in {
@@ -843,12 +843,12 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "country value supplied over the maximum allowed (over the boundary)" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "name" -> "line0",
-      "addressline1" -> "line1",
-      "addressline2" -> "line2",
-      "addressline3" -> "",
-      "addressline4" -> "",
-      "postcode" -> "",
+      "companyName" -> "line0",
+      "companyAddressline1" -> "line1",
+      "companyAddressline2" -> "line2",
+      "companyAddressline3" -> "",
+      "companyAddressline4" -> "",
+      "companyPostcode" -> "",
       "countryCode" -> "Trinidad and Tobagooo")
     )
     "raise form error" in {
@@ -863,14 +863,14 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
     }
   }
 
-  "name value supplied over the maximum allowed (over the boundary)" should {
+  "companyName value supplied over the maximum allowed (over the boundary)" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "name" -> "123456789012345678901234567890123456789012345678932095703932",
-      "addressline1" -> "line1",
-      "addressline2" -> "line2",
-      "addressline3" -> "",
-      "addressline4" -> "",
-      "postcode" -> "",
+      "companyName" -> "123456789012345678901234567890123456789012345678932095703932",
+      "companyAddressline1" -> "line1",
+      "companyAddressline2" -> "line2",
+      "companyAddressline3" -> "",
+      "companyAddressline4" -> "",
+      "companyPostcode" -> "",
       "countryCode" -> "JP")
     )
     "raise form error" in {
@@ -878,21 +878,21 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
     }
     "raise 1 form error" in {
       form.errors.length shouldBe 1
-      form.errors.head.key shouldBe "name"
+      form.errors.head.key shouldBe "companyName"
     }
     "associate the correct error message to the error" in {
-      Messages(form.error("name").get.message) shouldBe Messages("error.maxLength")
+      Messages(form.error("companyName").get.message) shouldBe Messages("error.maxLength")
     }
   }
 
-  "addressline1 value supplied over the maximum allowed (over the boundary)" should {
+  "companyAddressline1 value supplied over the maximum allowed (over the boundary)" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "name" -> "line0",
-      "addressline1" -> "1234567890123456789012345678901234567890",
-      "addressline2" -> "line2",
-      "addressline3" -> "",
-      "addressline4" -> "",
-      "postcode" -> "",
+      "companyName" -> "line0",
+      "companyAddressline1" -> "1234567890123456789012345678901234567890",
+      "companyAddressline2" -> "line2",
+      "companyAddressline3" -> "",
+      "companyAddressline4" -> "",
+      "companyPostcode" -> "",
       "countryCode" -> "JP")
     )
     "raise form error" in {
@@ -900,21 +900,21 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
     }
     "raise 1 form error" in {
       form.errors.length shouldBe 1
-      form.errors.head.key shouldBe "addressline1"
+      form.errors.head.key shouldBe "companyAddressline1"
     }
     "associate the correct error message to the error" in {
-      form.error("addressline1").get.message shouldBe Messages("validation.error.mandatoryaddresssline")
+      form.error("companyAddressline1").get.message shouldBe Messages("validation.error.mandatoryaddresssline")
     }
   }
 
-  "addressline2 value supplied over the maximum allowed (over the boundary)" should {
+  "companyAddressline2 value supplied over the maximum allowed (over the boundary)" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "name" -> "line0",
-      "addressline1" -> "line1",
-      "addressline2" -> "1234567890123456789012345678901234567890",
-      "addressline3" -> "",
-      "addressline4" -> "",
-      "postcode" -> "",
+      "companyName" -> "line0",
+      "companyAddressline1" -> "line1",
+      "companyAddressline2" -> "1234567890123456789012345678901234567890",
+      "companyAddressline3" -> "",
+      "companyAddressline4" -> "",
+      "companyPostcode" -> "",
       "countryCode" -> "JP")
     )
     "raise form error" in {
@@ -922,21 +922,21 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
     }
     "raise 1 form error" in {
       form.errors.length shouldBe 1
-      form.errors.head.key shouldBe "addressline2"
+      form.errors.head.key shouldBe "companyAddressline2"
     }
     "associate the correct error message to the error" in {
-      form.error("addressline2").get.message shouldBe Messages("validation.error.mandatoryaddresssline")
+      form.error("companyAddressline2").get.message shouldBe Messages("validation.error.mandatoryaddresssline")
     }
   }
 
-  "addressline3 value supplied over the maximum allowed (over the boundary)" should {
+  "companyAddressline3 value supplied over the maximum allowed (over the boundary)" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "name" -> "line0",
-      "addressline1" -> "line1",
-      "addressline2" -> "line2",
-      "addressline3" -> "1234567890123456789012345678901234567890",
-      "addressline4" -> "",
-      "postcode" -> "",
+      "companyName" -> "line0",
+      "companyAddressline1" -> "line1",
+      "companyAddressline2" -> "line2",
+      "companyAddressline3" -> "1234567890123456789012345678901234567890",
+      "companyAddressline4" -> "",
+      "companyPostcode" -> "",
       "countryCode" -> "JP")
     )
     "raise form error" in {
@@ -944,21 +944,21 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
     }
     "raise 1 form error" in {
       form.errors.length shouldBe 1
-      form.errors.head.key shouldBe "addressline3"
+      form.errors.head.key shouldBe "companyAddressline3"
     }
     "associate the correct error message to the error" in {
-      form.error("addressline3").get.message shouldBe Messages("validation.error.optionaladdresssline")
+      form.error("companyAddressline3").get.message shouldBe Messages("validation.error.optionaladdresssline")
     }
   }
 
-  "addressline4 value supplied over the maximum allowed (over the boundary)" should {
+  "companyAddressline4 value supplied over the maximum allowed (over the boundary)" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "name" -> "line0",
-      "addressline1" -> "line1",
-      "addressline2" -> "line2",
-      "addressline3" -> "",
-      "addressline4" -> "1234567890123456789012345678901234567890",
-      "postcode" -> "",
+      "companyName" -> "line0",
+      "companyAddressline1" -> "line1",
+      "companyAddressline2" -> "line2",
+      "companyAddressline3" -> "",
+      "companyAddressline4" -> "1234567890123456789012345678901234567890",
+      "companyPostcode" -> "",
       "countryCode" -> "JP")
     )
     "raise form error" in {
@@ -966,21 +966,21 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
     }
     "raise 1 form error" in {
       form.errors.length shouldBe 1
-      form.errors.head.key shouldBe "addressline4"
+      form.errors.head.key shouldBe "companyAddressline4"
     }
     "associate the correct error message to the error" in {
-      form.error("addressline4").get.message shouldBe Messages("validation.error.linefouraddresssline")
+      form.error("companyAddressline4").get.message shouldBe Messages("validation.error.linefouraddresssline")
     }
   }
 
-  "postcode value supplied over the maximum allowed (over the boundary) incluses whitespace in the count" should {
+  "companyPostcode value supplied over the maximum allowed (over the boundary) incluses whitespace in the count" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "name" -> "line0",
-      "addressline1" -> "line1",
-      "addressline2" -> "line2",
-      "addressline3" -> "",
-      "addressline4" -> "",
-      "postcode" -> "BS98 1TL ",
+      "companyName" -> "line0",
+      "companyAddressline1" -> "line1",
+      "companyAddressline2" -> "line2",
+      "companyAddressline3" -> "",
+      "companyAddressline4" -> "",
+      "companyPostcode" -> "BS98 1TL ",
       "countryCode" -> "GB")
     )
     "raise form error" in {
@@ -988,21 +988,21 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
     }
     "raise 1 form error" in {
       form.errors.length shouldBe 1
-      form.errors.head.key shouldBe "postcode"
+      form.errors.head.key shouldBe "companyPostcode"
     }
     "associate the correct error message to the error" in {
-      form.error("postcode").get.message shouldBe Messages("validation.error.postcode")
+      form.error("companyPostcode").get.message shouldBe Messages("validation.error.postcode")
     }
   }
 
   "country value supplied over the maximum allowed (over the boundary) includes whitespace in the count" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "name" -> "line0",
-      "addressline1" -> "line1",
-      "addressline2" -> "line2",
-      "addressline3" -> "",
-      "addressline4" -> "",
-      "postcode" -> "",
+      "companyName" -> "line0",
+      "companyAddressline1" -> "line1",
+      "companyAddressline2" -> "line2",
+      "companyAddressline3" -> "",
+      "companyAddressline4" -> "",
+      "companyPostcode" -> "",
       "countryCode" -> "United Republic of Tanzania")
     )
     "raise form error" in {
@@ -1019,14 +1019,14 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   //Postcode Regex
 
-  "postcode value supplied with multiple white space" should {
+  "companyPostcode value supplied with multiple white space" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "name" -> "line0",
-      "addressline1" -> "line1",
-      "addressline2" -> "line2",
-      "addressline3" -> "",
-      "addressline4" -> "",
-      "postcode" -> "BS98  1TL",
+      "companyName" -> "line0",
+      "companyAddressline1" -> "line1",
+      "companyAddressline2" -> "line2",
+      "companyAddressline3" -> "",
+      "companyAddressline4" -> "",
+      "companyPostcode" -> "BS98  1TL",
       "countryCode" -> "GB")
     )
     "raise form error" in {
@@ -1034,21 +1034,21 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
     }
     "raise 1 form error" in {
       form.errors.length shouldBe 1
-      form.errors.head.key shouldBe "postcode"
+      form.errors.head.key shouldBe "companyPostcode"
     }
     "associate the correct error message to the error" in {
-      form.error("postcode").get.message shouldBe Messages("validation.error.postcode")
+      form.error("companyPostcode").get.message shouldBe Messages("validation.error.postcode")
     }
   }
 
-  "postcode value supplied with brackets" should {
+  "companyPostcode value supplied with brackets" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "name" -> "line0",
-      "addressline1" -> "line1",
-      "addressline2" -> "line2",
-      "addressline3" -> "",
-      "addressline4" -> "",
-      "postcode" -> "BS98 (1TL)",
+      "companyName" -> "line0",
+      "companyAddressline1" -> "line1",
+      "companyAddressline2" -> "line2",
+      "companyAddressline3" -> "",
+      "companyAddressline4" -> "",
+      "companyPostcode" -> "BS98 (1TL)",
       "countryCode" -> "GB")
     )
     "raise form error" in {
@@ -1056,21 +1056,21 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
     }
     "raise 1 form error" in {
       form.errors.length shouldBe 1
-      form.errors.head.key shouldBe "postcode"
+      form.errors.head.key shouldBe "companyPostcode"
     }
     "associate the correct error message to the error" in {
-      form.error("postcode").get.message shouldBe Messages("validation.error.postcode")
+      form.error("companyPostcode").get.message shouldBe Messages("validation.error.postcode")
     }
   }
 
-  "postcode value supplied with /" should {
+  "companyPostcode value supplied with /" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "name" -> "line0",
-      "addressline1" -> "line1",
-      "addressline2" -> "line2",
-      "addressline3" -> "",
-      "addressline4" -> "",
-      "postcode" -> "BS98/9 1TL",
+      "companyName" -> "line0",
+      "companyAddressline1" -> "line1",
+      "companyAddressline2" -> "line2",
+      "companyAddressline3" -> "",
+      "companyAddressline4" -> "",
+      "companyPostcode" -> "BS98/9 1TL",
       "countryCode" -> "GB")
     )
     "raise form error" in {
@@ -1078,21 +1078,21 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
     }
     "raise 1 form error" in {
       form.errors.length shouldBe 1
-      form.errors.head.key shouldBe "postcode"
+      form.errors.head.key shouldBe "companyPostcode"
     }
     "associate the correct error message to the error" in {
-      form.error("postcode").get.message shouldBe Messages("validation.error.postcode")
+      form.error("companyPostcode").get.message shouldBe Messages("validation.error.postcode")
     }
   }
 
-  "postcode value supplied with lowercase" should {
+  "companyPostcode value supplied with lowercase" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "name" -> "line0",
-      "addressline1" -> "line1",
-      "addressline2" -> "line2",
-      "addressline3" -> "",
-      "addressline4" -> "",
-      "postcode" -> "bs98 1tl",
+      "companyName" -> "line0",
+      "companyAddressline1" -> "line1",
+      "companyAddressline2" -> "line2",
+      "companyAddressline3" -> "",
+      "companyAddressline4" -> "",
+      "companyPostcode" -> "bs98 1tl",
       "countryCode" -> "GB")
     )
     "raise no form error" in {
@@ -1103,14 +1103,14 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
     }
   }
 
-  "postcode value supplied with no spaces" should {
+  "companyPostcode value supplied with no spaces" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "name" -> "line0",
-      "addressline1" -> "line1",
-      "addressline2" -> "line2",
-      "addressline3" -> "",
-      "addressline4" -> "",
-      "postcode" -> "BS981TL",
+      "companyName" -> "line0",
+      "companyAddressline1" -> "line1",
+      "companyAddressline2" -> "line2",
+      "companyAddressline3" -> "",
+      "companyAddressline4" -> "",
+      "companyPostcode" -> "BS981TL",
       "countryCode" -> "GB")
     )
     "raise form error" in {
@@ -1118,21 +1118,21 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
     }
     "raise 1 form error" in {
       form.errors.length shouldBe 1
-      form.errors.head.key shouldBe "postcode"
+      form.errors.head.key shouldBe "companyPostcode"
     }
     "associate the correct error message to the error" in {
-      form.error("postcode").get.message shouldBe Messages("validation.error.postcode")
+      form.error("companyPostcode").get.message shouldBe Messages("validation.error.postcode")
     }
   }
 
   "country value supplied with '" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "name" -> "line0",
-      "addressline1" -> "line1",
-      "addressline2" -> "line2",
-      "addressline3" -> "",
-      "addressline4" -> "",
-      "postcode" -> "",
+      "companyName" -> "line0",
+      "companyAddressline1" -> "line1",
+      "companyAddressline2" -> "line2",
+      "companyAddressline3" -> "",
+      "companyAddressline4" -> "",
+      "companyPostcode" -> "",
       "countryCode" -> "Cote d'Ivoire")
     )
     "raise form error" in {
@@ -1149,12 +1149,12 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "country value supplied with -" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "name" -> "line0",
-      "addressline1" -> "line1",
-      "addressline2" -> "line2",
-      "addressline3" -> "",
-      "addressline4" -> "",
-      "postcode" -> "",
+      "companyName" -> "line0",
+      "companyAddressline1" -> "line1",
+      "companyAddressline2" -> "line2",
+      "companyAddressline3" -> "",
+      "companyAddressline4" -> "",
+      "companyPostcode" -> "",
       "countryCode" -> "Timor-Leste")
     )
     "raise form error" in {
@@ -1171,12 +1171,12 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "country value supplied with ." should {
     lazy val form = companyDetailsForm.bind(Map(
-      "name" -> "line0",
-      "addressline1" -> "line1",
-      "addressline2" -> "line2",
-      "addressline3" -> "",
-      "addressline4" -> "",
-      "postcode" -> "",
+      "companyName" -> "line0",
+      "companyAddressline1" -> "line1",
+      "companyAddressline2" -> "line2",
+      "companyAddressline3" -> "",
+      "companyAddressline4" -> "",
+      "companyPostcode" -> "",
       "countryCode" -> "St. Lucia")
     )
     "raise form error" in {
@@ -1193,12 +1193,12 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "country value supplied with a trailing space" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "name" -> "line0",
-      "addressline1" -> "line1",
-      "addressline2" -> "line2",
-      "addressline3" -> "",
-      "addressline4" -> "",
-      "postcode" -> "",
+      "companyName" -> "line0",
+      "companyAddressline1" -> "line1",
+      "companyAddressline2" -> "line2",
+      "companyAddressline3" -> "",
+      "companyAddressline4" -> "",
+      "companyPostcode" -> "",
       "countryCode" -> "JP ")
     )
     "raise form error" in {
@@ -1211,12 +1211,12 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "country value supplied with #" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "name" -> "line0",
-      "addressline1" -> "line1",
-      "addressline2" -> "line2",
-      "addressline3" -> "",
-      "addressline4" -> "",
-      "postcode" -> "",
+      "companyName" -> "line0",
+      "companyAddressline1" -> "line1",
+      "companyAddressline2" -> "line2",
+      "companyAddressline3" -> "",
+      "companyAddressline4" -> "",
+      "companyPostcode" -> "",
       "countryCode" -> "#JP")
     )
     "raise form error" in {

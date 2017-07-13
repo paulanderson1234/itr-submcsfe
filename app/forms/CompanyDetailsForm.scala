@@ -26,12 +26,12 @@ import play.api.data.Forms._
 object CompanyDetailsForm  {
   val companyDetailsForm = Form(
     mapping(
-      "name"  -> nonEmptyText(maxLength = Constants.CompanyDetailsMaxLength),
-      "addressline1" -> mandatoryAddressLineCheck,
-      "addressline2" -> mandatoryAddressLineCheck,
-      "addressline3" -> optional(optionalAddressLineCheck),
-      "addressline4" -> optional(addressLineFourCheck),
-      "postcode" -> optional(postcodeCheck),
+      "companyName"  -> nonEmptyText(maxLength = Constants.CompanyDetailsMaxLength),
+      "companyAddressline1" -> mandatoryAddressLineCheck,
+      "companyAddressline2" -> mandatoryAddressLineCheck,
+      "companyAddressline3" -> optional(optionalAddressLineCheck),
+      "companyAddressline4" -> optional(addressLineFourCheck),
+      "companyPostcode" -> optional(postcodeCheck),
       "countryCode" -> countryCodeCheck
     )(CompanyDetailsModel.apply)(CompanyDetailsModel.unapply).verifying(postcodeCountryCheckConstraint)
   )

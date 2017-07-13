@@ -79,12 +79,12 @@ class CompanyDetailsControllerSpec extends BaseSpec {
     "redirect to the Company Details Controller page" in {
       mockEnrolledRequest(seisSchemeTypesModel)
       val formInput =
-        Seq("name" -> "Line 0",
-          "addressline1" -> "Line 1",
-          "addressline2" -> "Line 2",
-          "addressline3" -> "Line 3",
-          "addressline4" -> "line 4",
-          "postcode" -> "AA1 1AA",
+        Seq("companyName" -> "Line 0",
+          "companyAddressline1" -> "Line 1",
+          "companyAddressline2" -> "Line 2",
+          "companyAddressline3" -> "Line 3",
+          "companyAddressline4" -> "line 4",
+          "companyPostcode" -> "AA1 1AA",
           "countryCode" -> "GB")
 
       submitWithSessionAndAuth(TestController.submit, formInput: _*)(
@@ -99,8 +99,8 @@ class CompanyDetailsControllerSpec extends BaseSpec {
   "Sending an invalid form submission with validation errors to the CompanyDetailsController when authenticated and enrolled" should {
     "redirect to itself" in {
       mockEnrolledRequest(seisSchemeTypesModel)
-      val formInput = Seq("name" -> "", "addressLine1" -> "", "addressLine1" -> "", "addressLine3" -> "Line3",
-        "addressLine4" -> "Line4", "postCode" -> "AA1 1AA", "countryCode" -> "GB")
+      val formInput = Seq("companyName" -> "", "companyAddressLine1" -> "", "companyAddressline1" -> "", "companyAddressline3" -> "Line3",
+        "companyAddressline4" -> "Line4", "companyPostCode" -> "AA1 1AA", "countryCode" -> "GB")
       submitWithSessionAndAuth(TestController.submit, formInput: _*)(
         result => {
           status(result) shouldBe BAD_REQUEST
