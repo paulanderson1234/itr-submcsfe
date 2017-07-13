@@ -75,13 +75,7 @@ trait AddInvestorOrNomineeController extends FrontendController with AuthorisedA
           },
           validFormData => {
             s4lConnector.saveFormData[AddInvestorOrNomineeModel](KeystoreKeys.addInvestor, validFormData)
-
-            if(validFormData.addInvestorOrNominee == Constants.investor) {
-              Future.successful(Redirect(routes.CompanyDetailsController.show()))
-            }else
-            {
-              Future.successful(Redirect(routes.IndividualDetailsController.show()))
-            }
+             Future.successful(Redirect(routes.AddInvestorOrNomineeController.show()))
           }
         )
     }

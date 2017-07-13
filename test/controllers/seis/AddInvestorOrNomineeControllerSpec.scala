@@ -97,7 +97,7 @@ class AddInvestorOrNomineeControllerSpec extends BaseSpec {
       submitWithSessionAndAuth(TestController.submit,formInput)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(controllers.seis.routes.CompanyDetailsController.show().url)
+          redirectLocation(result) shouldBe Some(controllers.seis.routes.AddInvestorOrNomineeController.show().url)
         }
       )
     }
@@ -111,12 +111,12 @@ class AddInvestorOrNomineeControllerSpec extends BaseSpec {
       submitWithSessionAndAuth(TestController.submit,formInput)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(controllers.seis.routes.IndividualDetailsController.show().url)
+          redirectLocation(result) shouldBe Some(controllers.seis.routes.AddInvestorOrNomineeController.show().url)
         }
       )
     }
   }
-  
+
 
   "Sending an invalid form submission with validation errors to the AddInvestorOrNomineeController when authenticated and enrolled" should {
     "redirect to itself" in {
