@@ -148,27 +148,43 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
         numberOfSharesForm <- fillForm[NumberOfSharesModel](KeystoreKeys.numberOfShares, NumberOfSharesForm.numberOfSharesForm)
         nominalValueOfSharesForm <- fillForm[NominalValueOfSharesModel](KeystoreKeys.nominalValueOfShares, NominalValueOfSharesForm.nominalValueOfSharesForm)
         individualDetailsForm <- fillForm[IndividualDetailsModel](KeystoreKeys.individualDetails, IndividualDetailsForm.individualDetailsForm)
-
+        shareDescription <- fillForm[ShareDescriptionModel](KeystoreKeys.shareDescription, ShareDescriptionForm.shareDescriptionForm)
+        totalAmountRaisedForm <- fillForm[TotalAmountRaisedModel](KeystoreKeys.totalAmountRaised, TotalAmountRaisedForm.totalAmountRaisedForm)
+        totalAmountSpentForm <- fillForm[TotalAmountSpentModel](KeystoreKeys.totalAmountSpent, TotalAmountSpentForm.totalAmountSpentForm)
+        addInvestorOrNomineeForm <- fillForm[AddInvestorOrNomineeModel](KeystoreKeys.addInvestor, AddInvestorOrNomineeForm.addInvestorOrNomineeForm)
       } yield Ok(
           testOnly.views.html.seis.testEndpointSEISPageTwo(
           numberOfSharesForm,
           nominalValueOfSharesForm,
-          individualDetailsForm
+          individualDetailsForm,
+          shareDescription,
+          totalAmountRaisedForm,
+          totalAmountSpentForm,
+          addInvestorOrNomineeForm
         )
       )
+
   }
 
   def submitPageTwo: Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user => implicit request =>
     val numberOfShares = bindForm[NumberOfSharesModel](KeystoreKeys.numberOfShares, NumberOfSharesForm.numberOfSharesForm)
     val nominalValueOfShares = bindForm[NominalValueOfSharesModel](KeystoreKeys.nominalValueOfShares, NominalValueOfSharesForm.nominalValueOfSharesForm)
     val individualDetailsForm = bindForm[IndividualDetailsModel](KeystoreKeys.individualDetails, IndividualDetailsForm.individualDetailsForm)
+    val shareDescription = bindForm[ShareDescriptionModel](KeystoreKeys.shareDescription, ShareDescriptionForm.shareDescriptionForm)
+    val totalAmountRaised = bindForm[TotalAmountRaisedModel](KeystoreKeys.totalAmountRaised, TotalAmountRaisedForm.totalAmountRaisedForm)
+    val totalAmountSpent = bindForm[TotalAmountSpentModel](KeystoreKeys.totalAmountSpent, TotalAmountSpentForm.totalAmountSpentForm)
+    val addInvestorOrNomineeForm = bindForm[AddInvestorOrNomineeModel](KeystoreKeys.addInvestor, AddInvestorOrNomineeForm.addInvestorOrNomineeForm)
     saveBackLinks()
     saveSchemeType()
     Future.successful(Ok(
       testOnly.views.html.seis.testEndpointSEISPageTwo(
         numberOfShares,
         nominalValueOfShares,
-        individualDetailsForm
+        individualDetailsForm,
+        shareDescription,
+        totalAmountRaised,
+        totalAmountSpent,
+        addInvestorOrNomineeForm
       )
     ))
   }

@@ -28,7 +28,7 @@ import views.html.seis.companyDetails.QualifyBusinessActivity_Scope0.QualifyBusi
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-object ControllerHelpers extends ControllerHelpers {
+object  ControllerHelpers extends ControllerHelpers {
 
 }
 
@@ -48,8 +48,8 @@ trait ControllerHelpers {
     *
     * @param s4lConnector An instance of the Save4Later Connector.
     */
-  def getTradeStartDate(s4lConnector: connectors.S4LConnector)
-                       (implicit hc: HeaderCarrier, user: TAVCUser): Future[Option[HasInvestmentTradeStartedModel]] = {
+  def getTradeStartDateForBusinessActivity(s4lConnector: connectors.S4LConnector)
+                                          (implicit hc: HeaderCarrier, user: TAVCUser): Future[Option[HasInvestmentTradeStartedModel]] = {
 
     def getDate(businessActivity:Option[QualifyBusinessActivityModel],
                 researchDateStarted: Option[ResearchStartDateModel],

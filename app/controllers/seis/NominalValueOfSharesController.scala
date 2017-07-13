@@ -60,7 +60,7 @@ trait NominalValueOfSharesController extends FrontendController with AuthorisedA
         implicit request =>
           val success: NominalValueOfSharesModel => Future[Result] = { model =>
             s4lConnector.saveFormData(KeystoreKeys.nominalValueOfShares, model).map(_ =>
-              Redirect(controllers.seis.routes.NominalValueOfSharesController.show())
+              Redirect(controllers.seis.routes.TotalAmountRaisedController.show())
             )
           }
 

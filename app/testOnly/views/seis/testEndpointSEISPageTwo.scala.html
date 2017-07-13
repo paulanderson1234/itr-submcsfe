@@ -1,4 +1,5 @@
 @import models._
+@import forms._
 @import testOnly.models.TestPreviousSchemesModel
 @import uk.gov.hmrc.play.views.html.helpers.form
 @import common.Constants
@@ -6,9 +7,12 @@
 @import views.html.helpers.{externalLink,formHint, formInputRadioGroup, backButtonWithProgress, input, inputWithCurrencySymbol, formInlineDateInput, hiddenField, errorSummary, formShowYesNoRadioContent, textArea, dropdown}
 
 @(numberOfSharesForm:Form[NumberOfSharesModel], nominalValueOfSharesForm: Form[NominalValueOfSharesModel],
-individualDetailsForm :Form[IndividualDetailsModel])(implicit request: Request[_], messages: Messages)
+individualDetailsForm: Form[IndividualDetailsModel], shareDescriptionForm: Form[ShareDescriptionModel],
+totalAmountRaisedForm:Form[TotalAmountRaisedModel], totalAmountSpentForm:Form[TotalAmountSpentModel],
+addInvestorOrNomineeForm: Form[AddInvestorOrNomineeModel])(implicit request: Request[_], messages: Messages)
 
 @main_template(Messages("page.test.page-two.title")) {
+
 <div class="grid-row">
 
     @form(action = testOnly.controllers.seis.routes.TestEndpointSEISController.submitPageTwo()) {
@@ -28,7 +32,7 @@ individualDetailsForm :Form[IndividualDetailsModel])(implicit request: Request[_
         <h2>Nominal Value of Shares</h2>
         <div class="form-group">
             <p>@Messages("page.seis.nominalValueOfShares.hint")</p>
-            @input(
+            @inputWithCurrencySymbol(
                 nominalValueOfSharesForm("nominalValueOfShares"),
                 '_divClass -> "form-label",
                 '_label -> Messages("page.seis.nominalValueOfShares.title"),
@@ -130,8 +134,63 @@ individualDetailsForm :Form[IndividualDetailsModel])(implicit request: Request[_
         </div>
     </div>
 
-
+        <h2>Share Description</h2>
         <div class="form-group">
+            <span class = "form-hint" id="desc-one">@Messages("page.shares.shareDescription.question.hint")</span>
+            @textArea(
+            shareDescriptionForm("shareDescription"),
+            '_cols -> "45",
+            '_rows -> "2",
+            '_maxLength-> Constants.ShareDescriptionMaxLength,
+            '_label-> Messages("page.shares.shareDescription.heading"),
+            '_labelTextClass-> "visuallyhidden"
+            )
+        </div>
+
+        <h2>Total Amount Spent</h2>
+        <div class="form-group">
+            @inputWithCurrencySymbol(
+            totalAmountRaisedForm("amount"),
+            '_divClass -> "form-label",
+            '_labelId -> "label-amount",
+            '_label -> Messages("page.shareDetails.totalAmountRaised.heading"),
+            '_labelTextClass -> "visuallyhidden",
+            '_inputClass -> "input--normal input--no-spinner input--left-padding",
+            '_type -> "text",
+            '_maxlength -> "9",
+            'id -> "amount"
+            )
+        </div>
+
+        <h2>Total Amount Spent</h2>
+        <div class="form-group">
+            @inputWithCurrencySymbol(
+            totalAmountSpentForm("totalAmountSpent"),
+            '_divClass -> "form-label",
+            '_labelId -> "label-totalAmountSpent",
+            '_label -> Messages("page.seis.shareDetails.totalAmountSpent.heading=Total amount spent"),
+            '_labelTextClass -> "visuallyhidden",
+            '_inputClass -> "input--fullwidth"
+            )
+        </div>
+
+        <h2>Add each investor or nominee</h2>
+        <div class="form-group">
+            @formInputRadioGroup(
+            field = addInvestorOrNomineeForm("addInvestorOrNominee"),
+            Seq(
+            Constants.investor -> Messages("page.seis.investors.AddInvestorOrNominee.radioButton.one"),
+            Constants.nominee -> Messages("page.seis.investors.AddInvestorOrNominee.radioButton.two")),
+            '_legend -> Messages("page.seis.investors.AddInvestorOrNominee.heading"),
+            '_legendClass -> "visuallyhidden",
+            '_labelAfter -> true,
+            '_labelClass -> "block-label",
+            '_legendID -> "addInvestorOrNominee",
+            '_groupClass -> "inline"
+            )
+        </div>
+
+    <div class="form-group">
             <button class="btn button" type="submit" id="next">
                 @Messages("page.test.submit-form.button")
             </button>
@@ -142,7 +201,6 @@ individualDetailsForm :Form[IndividualDetailsModel])(implicit request: Request[_
         </div>
 
     }
-
 
 </div>
 }

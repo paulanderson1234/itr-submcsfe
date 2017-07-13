@@ -16,6 +16,7 @@
 
 package models
 
+import common.Constants
 import play.api.libs.json.Json
 
 case class HasInvestmentTradeStartedModel(hasInvestmentTradeStarted : String, hasInvestmentTradeStartedDay: Option[Int],
@@ -23,6 +24,12 @@ case class HasInvestmentTradeStartedModel(hasInvestmentTradeStarted : String, ha
                                             val toDate = if(hasInvestmentTradeStartedDay.isDefined && hasInvestmentTradeStartedMonth.isDefined &&
                                               hasInvestmentTradeStartedYear.isDefined) s"${hasInvestmentTradeStartedDay.get}-${hasInvestmentTradeStartedMonth.get}-${hasInvestmentTradeStartedYear.get}"
                                             else ""
+
+  val hasDate = {
+    hasInvestmentTradeStarted == Constants.StandardRadioButtonYesValue && hasInvestmentTradeStartedDay.isDefined && hasInvestmentTradeStartedMonth.isDefined &&
+      hasInvestmentTradeStartedYear.isDefined
+  }
+
                                           }
 
 object HasInvestmentTradeStartedModel {

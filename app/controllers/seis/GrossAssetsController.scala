@@ -69,6 +69,7 @@ trait GrossAssetsController extends FrontendController with AuthorisedAndEnrolle
         }
         else {
           // no expected true/false from service returned
+          Logger.warn("[GrossAssetsController][submit] - API call to checkGrossAssetsAmountExceeded did not return expected true/false answer")
           Future.successful(InternalServerError(internalServerErrorTemplate))
         }
       }

@@ -292,6 +292,7 @@ object Validation {
       })
     text().verifying(addressLineFourCheckConstraint)
   }
+
   def postcodeCheck: Mapping[String] = {
     val validPostcodeLine = "^[A-Z]{1,2}[0-9][0-9A-Z]? [0-9][A-Z]{2}$".r
     val postcodeCheckConstraint: Constraint[String] =
@@ -305,6 +306,7 @@ object Validation {
       })
     text().verifying(postcodeCheckConstraint)
   }
+
   def countryCodeCheck: Mapping[String] = {
     val countryCode = """[A-Z]{2}""".r
     val countryCodeCheckConstraint: Constraint[String] =
@@ -347,7 +349,7 @@ object Validation {
     text().verifying(countryCheckConstraint)
   }
 
-  def emailCheck(maxLength:Option[Int] = Some(EmailThresholdLength)): Mapping[String] = {
+  def emailCheck(maxLength: Option[Int] = Some(EmailThresholdLength)): Mapping[String] = {
     val validEmailLine = """^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$""".r
     val emailCheckConstraint: Constraint[String] =
       Constraint("constraints.email")({
@@ -378,7 +380,7 @@ object Validation {
   def postcodeCountryCheckConstraint: Constraint[AddressModel] = {
     Constraint("constraints.postcodeCountryCheck")({
       addressForm: AddressModel =>
-        if (addressForm.countryCode == "GB" && addressForm.postcode.fold(true)( _.isEmpty)) {
+        if (addressForm.countryCode == "GB" && addressForm.postcode.fold(true)(_.isEmpty)) {
           Invalid(Seq(ValidationError(Messages("validation.error.countrypostcode"))))
         } else {
           Valid
@@ -389,7 +391,7 @@ object Validation {
   def schemeTypesConstraint: Constraint[SchemeTypesModel] = {
     Constraint("constraints.schemeSelection")({
       schemeTypeForm =>
-        if (schemeTypeForm.equals(SchemeTypesModel(false,false,false,false))) {
+        if (schemeTypeForm.equals(SchemeTypesModel(false, false, false, false))) {
           Invalid(Seq(ValidationError(Messages("validation.error.schemeSelection"))))
         } else {
           Valid
@@ -506,7 +508,7 @@ object Validation {
     }
   }
 
-  def isSameDate(dateFirst: Date, dateSecond:Date): Boolean = {
+  def isSameDate(dateFirst: Date, dateSecond: Date): Boolean = {
     Try {
       val fmt = new SimpleDateFormat("dd/MM/yyyy")
       fmt.setLenient(false)
@@ -518,7 +520,7 @@ object Validation {
     }
   }
 
-  def isNotSameDate(dateFirst: Date, dateSecond:Date): Boolean = {
+  def isNotSameDate(dateFirst: Date, dateSecond: Date): Boolean = {
     Try {
       val fmt = new SimpleDateFormat("dd/MM/yyyy")
       fmt.setLenient(false)
@@ -530,7 +532,7 @@ object Validation {
     }
   }
 
-  def dateSinceOtherDate(day: Int, month: Int, year: Int, otherDate:Date): Boolean = {
+  def dateSinceOtherDate(day: Int, month: Int, year: Int, otherDate: Date): Boolean = {
     constructDate(day, month, year).compareTo(otherDate) >= 0
   }
 
@@ -627,10 +629,12 @@ object Validation {
     text().verifying(yearCheckConstraint)
   }
 
-  def genericDecimalCheck(formValueMessageKey: String, minimumValue: Int) : Constraint[String] = {
-    Constraint("constraint.numberOfSharesCheck") {
+  def genericDecimalCheck(formValueMessageKey: String, minimumValue: Int): Constraint[String] = {
+    Constraint("constraint. genericDecimalCheck") {
       employees =>
-        val error = Try {BigDecimal(employees)} match {
+        val error = Try {
+          BigDecimal(employees)
+        } match {
           case Success(result) =>
             val sizeError = if (result < minimumValue || result > 9999999999999.0) Seq(ValidationError(Messages(s"validation.error.$formValueMessageKey.size", minimumValue))) else Seq()
             sizeError
@@ -652,10 +656,32 @@ object Validation {
     })
   }
 
+  def totalAmountSpentCheck: Constraint[String] = {
+    Constraint("constraint.totalAmountSpent") {
+      value =>
+        val errors = Try {
+          BigDecimal(value)
+        } match {
+          case Success(result) =>
+            val decimal = if (!(result.scale == 0)) Seq(ValidationError(Messages("validation.error.totalAmountSpent.decimalPlaces"))) else Seq()
+            val size = if (result.precision > 13) Seq(ValidationError(Messages("validation.error.totalAmountSpent.size"))) else Seq()
+            val negative = if (result < 0) Seq(ValidationError(Messages("validation.error.totalAmountSpent.negative"))) else Seq()
+
+            decimal ++ size ++ negative
+          case Failure(_) if value.trim.nonEmpty => Seq(ValidationError(Messages("validation.error.totalAmountSpent.notANumber")))
+          case _ => Seq()
+        }
+
+        if (errors.isEmpty) Valid else Invalid(errors)
+    }
+  }
+
   def nominalValueOfSharesCheck: Constraint[String] = {
     Constraint("constraint.nominalValueOfShares") {
       value =>
-        val errors = Try {BigDecimal(value)} match {
+        val errors = Try {
+          BigDecimal(value)
+        } match {
           case Success(result) =>
             val decimal = if (!(result.scale == 0)) Seq(ValidationError(Messages("validation.error.nominalValueOfShares.decimalPlaces"))) else Seq()
             val size = if (result.precision > 13) Seq(ValidationError(Messages("validation.error.nominalValueOfShares.size"))) else Seq()
@@ -663,6 +689,7 @@ object Validation {
 
             decimal ++ size ++ negative
           case Failure(_) if value.trim.nonEmpty => Seq(ValidationError(Messages("validation.error.nominalValueOfShares.notANumber")))
+
           case _ => Seq()
         }
 
