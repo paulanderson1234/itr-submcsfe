@@ -808,10 +808,8 @@ page.seis.companyDetails.fullTimeEmployeeCount.guidance.two = The number of hour
 page.seis.companyDetails.fullTimeEmployeeCount.guidance.three = For example, someone working 21 hours a week would count as 60% of a full-time employee and someone working 14 hours a week would count as 40% of a full-time employee. Together they would count as one full-time employee.
 
 #SEIS Total Amount Spent
-page.seis.shareDetails.totalAmountSpent.heading=Total amount spent
-page.seis.shareDetails.totalAmountSpent.title=Total amount spent
-page.seis.shareDetails.totalAmountSpent.guidance.one=...
-page.seis.shareDetails.totalAmountSpent.guidance.two=...
+page.seis.shareDetails.totalAmountSpent.heading=How much of the investment from this share issue has been spent?
+page.seis.shareDetails.totalAmountSpent.title=How much of the investment from this share issue has been spent?
 
 # SEIS Proposed Investment page
 page.seis.investment.proposedInvestment.amount.title=How much investment do you want to raise?
