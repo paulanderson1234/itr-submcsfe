@@ -73,7 +73,6 @@ class CompanyOrIndividualControllerSpec extends BaseSpec {
       )
     }
 
-  /*todo*/
     "redirect to the AddInvestorOrNomineePage when no InvestorOrNominee model is found to use in heading" in {
       mockEnrolledRequest(seisSchemeTypesModel)
       setupMocks(Some(CompanyOrIndividualModel(Constants.typeCompany)), None)
@@ -86,29 +85,27 @@ class CompanyOrIndividualControllerSpec extends BaseSpec {
     }
   }
 
-  /*todo*/
   "Sending a valid 'Company' form submit to the CompanyOrIndividualController when authenticated and enrolled" should {
-    "redirect to the ApplicationHub page" in {
+    "redirect to the company details page" in {
       mockEnrolledRequest(seisSchemeTypesModel)
       val formInput = "companyOrIndividual" -> Constants.typeCompany
       submitWithSessionAndAuth(TestController.submit,formInput)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(controllers.seis.routes.CompanyOrIndividualController.show().url)
+          redirectLocation(result) shouldBe Some(controllers.seis.routes.CompanyDetailsController.show().url)
         }
       )
     }
   }
 
-  /*todo*/
   "Sending a valid 'Individual' form submit to the CompanyOrIndividualController when authenticated and enrolled for SEIS" should {
-    "redirect to the commercial sale page" in {
+    "redirect to the individual details page" in {
       mockEnrolledRequest(seisSchemeTypesModel)
       val formInput = "companyOrIndividual" -> Constants.typeIndividual
       submitWithSessionAndAuth(TestController.submit,formInput)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(controllers.seis.routes.CompanyOrIndividualController.show().url)
+          redirectLocation(result) shouldBe Some(controllers.seis.routes.IndividualDetailsController.show().url)
         }
       )
     }

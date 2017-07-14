@@ -26,7 +26,7 @@ import models.CompanyDetailsModel
 import play.api.i18n.Messages
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import utils.CountriesHelper
-import views.html.seis.investment.CompanyDetails
+import views.html.seis.investors.CompanyDetails
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
 import services.SubscriptionService

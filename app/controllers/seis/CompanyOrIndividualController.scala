@@ -17,7 +17,7 @@
 package controllers.seis
 
 import auth.{AuthorisedAndEnrolledForTAVC, SEIS}
-import common.KeystoreKeys
+import common.{Constants, KeystoreKeys}
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.Helpers.ControllerHelpers
@@ -71,7 +71,11 @@ trait CompanyOrIndividualController extends FrontendController with AuthorisedAn
       },
       validFormData => {
         s4lConnector.saveFormData(KeystoreKeys.companyOrIndividual, validFormData)
-        Future.successful(Redirect(controllers.seis.routes.CompanyOrIndividualController.show()))
+        validFormData.companyOrIndividual match {
+          case Constants.typeCompany => Future.successful(Redirect(routes.CompanyDetailsController.show()))
+          case Constants.typeIndividual => Future.successful(Redirect(routes.IndividualDetailsController.show()))
+        }
+        Future.successful(Redirect(routes.CompanyOrIndividualController.show()))
       }
     )
   }
