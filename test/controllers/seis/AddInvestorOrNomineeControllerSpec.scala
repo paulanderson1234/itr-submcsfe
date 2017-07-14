@@ -25,6 +25,7 @@ import models._
 import org.mockito.Matchers
 import org.mockito.Mockito._
 import play.api.test.Helpers.{redirectLocation, _}
+import uk.gov.hmrc.http.cache.client.CacheMap
 
 import scala.concurrent.Future
 
@@ -91,13 +92,16 @@ class AddInvestorOrNomineeControllerSpec extends BaseSpec {
 
   "By selecting the investor submission to the AddInvestorOrNomineeController when authenticated and enrolled" should {
     "redirect to the correct page if an investor" in {
+      when(TestController.s4lConnector.saveFormData[AddInvestorOrNomineeModel](Matchers.eq(KeystoreKeys.addInvestor), Matchers.any())
+        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(CacheMap("",Map()))
+
       val formInput = "addInvestorOrNominee" -> Constants.investor
       setupMocks(None, Some(validBackLink))
       mockEnrolledRequest(seisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,formInput)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(controllers.seis.routes.AddInvestorOrNomineeController.show().url)
+          redirectLocation(result) shouldBe Some(controllers.seis.routes.CompanyOrIndividualController.show().url)
         }
       )
     }
@@ -105,13 +109,16 @@ class AddInvestorOrNomineeControllerSpec extends BaseSpec {
 
   "By selecting the investor submission to the AddInvestorOrNomineeController when authenticated and enrolled" should {
     "redirect to the correct page if a nominee" in {
+      when(TestController.s4lConnector.saveFormData[AddInvestorOrNomineeModel](Matchers.eq(KeystoreKeys.addInvestor), Matchers.any())
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(CacheMap("",Map()))
+
       val formInput = "addInvestorOrNominee" -> Constants.nominee
       setupMocks(None, Some(validBackLink))
       mockEnrolledRequest(seisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,formInput)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(controllers.seis.routes.AddInvestorOrNomineeController.show().url)
+          redirectLocation(result) shouldBe Some(controllers.seis.routes.CompanyOrIndividualController.show().url)
         }
       )
     }

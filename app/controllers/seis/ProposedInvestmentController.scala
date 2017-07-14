@@ -30,7 +30,7 @@ import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
 
 import scala.concurrent.Future
-import views.html.seis.investment.ProposedInvestment
+import views.html.seis.ProposedInvestment
 
 object ProposedInvestmentController extends ProposedInvestmentController {
   override lazy val s4lConnector = S4LConnector

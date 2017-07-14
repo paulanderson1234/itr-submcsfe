@@ -81,4 +81,7 @@ trait Constants {
   val investor = "Investor"
   val nominee = "Nominee"
 
+  val typeCompany = "Company"
+  val typeIndividual = "Individual"
+
 }

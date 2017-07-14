@@ -9,10 +9,9 @@
 
 @(numberOfSharesForm:Form[NumberOfSharesModel], nominalValueOfSharesForm: Form[NominalValueOfSharesModel],
 individualDetailsForm: Form[IndividualDetailsModel], shareDescriptionForm: Form[ShareDescriptionModel],
-totalAmountRaisedForm:Form[TotalAmountRaisedModel],
-totalAmountSpentForm:Form[TotalAmountSpentModel], addInvestorOrNomineeForm: Form[AddInvestorOrNomineeModel],
+totalAmountRaisedForm:Form[TotalAmountRaisedModel], totalAmountSpentForm:Form[TotalAmountSpentModel],
+addInvestorOrNomineeForm: Form[AddInvestorOrNomineeModel], companyOrIndividualForm: Form[CompanyOrIndividualModel],
 companyDetailsForm: Form[CompanyDetailsModel])(implicit request: Request[_], messages: Messages)
-
 
 @main_template(Messages("page.test.page-two.title")) {
 
@@ -274,6 +273,22 @@ companyDetailsForm: Form[CompanyDetailsModel])(implicit request: Request[_], mes
             '_label -> Html(Messages("page.investment.companyDetails.country.label")))
         </div>
     </div>
+
+        <h2>Company or Individual</h2>
+        <div class="form-group">
+            @formInputRadioGroup(
+            field = companyOrIndividualForm("companyOrIndividual"),
+            Seq(
+            Constants.typeCompany -> Messages("page.investors.companyOrIndividual.company"),
+            Constants.typeIndividual -> Messages("page.investors.companyOrIndividual.individual")),
+            '_legend -> Messages("page.investors.companyOrIndividual.heading"),
+            '_legendClass -> "visuallyhidden",
+            '_labelAfter -> true,
+            '_labelClass -> "block-label",
+            '_legendID -> "companyOrIndividual",
+            '_groupClass -> "block"
+            )
+        </div>
 
     <div class="form-group">
         <button class="btn button" type="submit" id="next">

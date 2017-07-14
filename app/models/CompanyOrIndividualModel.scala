@@ -18,8 +18,8 @@ package models
 
 import play.api.libs.json.Json
 
-case class AddInvestorOrNomineeModel (addInvestorOrNominee : String)
+case class CompanyOrIndividualModel(companyOrIndividual: String)
 
-object AddInvestorOrNomineeModel {
-  implicit val format = Json.format[AddInvestorOrNomineeModel]
+object CompanyOrIndividualModel{
+  implicit val formats = Json.format[CompanyOrIndividualModel]
 }

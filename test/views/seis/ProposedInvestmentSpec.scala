@@ -24,7 +24,7 @@ import play.api.data.Form
 import play.api.i18n.Messages
 import views.helpers.ViewSpec
 import play.api.i18n.Messages.Implicits._
-import views.html.seis.investment.ProposedInvestment
+import views.html.seis.ProposedInvestment
 
 class ProposedInvestmentSpec extends ViewSpec {
 
