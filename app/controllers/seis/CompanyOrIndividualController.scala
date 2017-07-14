@@ -75,7 +75,6 @@ trait CompanyOrIndividualController extends FrontendController with AuthorisedAn
           case Constants.typeCompany => Future.successful(Redirect(routes.CompanyDetailsController.show()))
           case Constants.typeIndividual => Future.successful(Redirect(routes.IndividualDetailsController.show()))
         }
-        Future.successful(Redirect(routes.CompanyOrIndividualController.show()))
       }
     )
   }
