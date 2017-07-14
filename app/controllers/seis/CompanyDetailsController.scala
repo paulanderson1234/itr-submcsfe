@@ -16,64 +16,60 @@
 
 package controllers.seis
 
-import controllers.Helpers.ControllerHelpers
-import play.api.Play.current
-import play.api.i18n.Messages.Implicits._
 import auth.{AuthorisedAndEnrolledForTAVC, SEIS}
 import common.KeystoreKeys
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.predicates.FeatureSwitch
-import forms.ShareDescriptionForm._
-import models.ShareDescriptionModel
+import forms.CompanyDetailsForm._
+import models.CompanyDetailsModel
+import play.api.i18n.Messages
 import uk.gov.hmrc.play.frontend.controller.FrontendController
-import views.html.seis.shareDetails.ShareDescription
+import utils.CountriesHelper
+import views.html.seis.investment.CompanyDetails
+import play.api.i18n.Messages.Implicits._
+import play.api.Play.current
+import services.SubscriptionService
 
 import scala.concurrent.Future
 
-object ShareDescriptionController extends ShareDescriptionController {
+object CompanyDetailsController extends CompanyDetailsController with AuthorisedAndEnrolledForTAVC with FeatureSwitch {
+
+  val subscriptionService = SubscriptionService
   override lazy val s4lConnector = S4LConnector
   override lazy val applicationConfig = FrontendAppConfig
   override lazy val authConnector = FrontendAuthConnector
   override lazy val enrolmentConnector = EnrolmentConnector
-
 }
 
-trait ShareDescriptionController extends FrontendController with AuthorisedAndEnrolledForTAVC with FeatureSwitch {
+trait CompanyDetailsController extends FrontendController with AuthorisedAndEnrolledForTAVC with FeatureSwitch {
 
   override val acceptedFlows = Seq(Seq(SEIS))
 
+  val subscriptionService: SubscriptionService
+
+  lazy val countriesList = CountriesHelper.getIsoCodeTupleList
+
   val show = featureSwitch(applicationConfig.seisFlowEnabled) {
     AuthorisedAndEnrolled.async { implicit user => implicit request =>
-      def routeRequest(backUrl: Option[String]) = {
-        if (backUrl.isDefined) {
-          s4lConnector.fetchAndGetFormData[ShareDescriptionModel](KeystoreKeys.shareDescription).map {
-            case Some(data) => Ok(ShareDescription(shareDescriptionForm.fill(data), backUrl.get))
-            case None => Ok(ShareDescription(shareDescriptionForm, backUrl.get))
-          }
-        }
-        else {
-          Future.successful(Redirect(controllers.seis.routes.HadOtherInvestmentsController.show()))
-        }
+      s4lConnector.fetchAndGetFormData[CompanyDetailsModel](KeystoreKeys.companyDetails).map {
+        case Some(data) => Ok(CompanyDetails(companyDetailsForm.fill(data), countriesList))
+        case None => Ok(CompanyDetails(companyDetailsForm, countriesList))
       }
-
-      for {
-        link <- ControllerHelpers.getSavedBackLink(KeystoreKeys.backLinkShareDescription, s4lConnector)
-        route <- routeRequest(link)
-      } yield route
     }
   }
 
   val submit = featureSwitch(applicationConfig.seisFlowEnabled) {
     AuthorisedAndEnrolled.async { implicit user => implicit request =>
-      shareDescriptionForm.bindFromRequest().fold(
+      companyDetailsForm.bindFromRequest().fold(
         formWithErrors => {
-          ControllerHelpers.getSavedBackLink(KeystoreKeys.backLinkShareDescription, s4lConnector).flatMap(url =>
-            Future.successful(BadRequest(ShareDescription(formWithErrors,url.get))))
+          Future.successful(BadRequest(CompanyDetails(if (formWithErrors.hasGlobalErrors)
+            formWithErrors.discardingErrors.withError("companyPostcode", Messages("validation.error.countrypostcode"))
+          else formWithErrors, countriesList)))
         },
         validFormData => {
-          s4lConnector.saveFormData(KeystoreKeys.shareDescription, validFormData)
-          Future.successful(Redirect(controllers.seis.routes.NumberOfSharesController.show()))
+          s4lConnector.saveFormData(KeystoreKeys.companyDetails, validFormData)
+          Future.successful(Redirect(routes.CompanyDetailsController.show()))
         }
       )
     }

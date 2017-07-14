@@ -9,7 +9,7 @@
 
 @main_template(Messages("page.shareDetails.numberOfShares.title")) {
 
-    @backButtonWithProgress(controllers.seis.routes.NumberOfSharesController.show().url, Messages("common.section.progress.share.details.three"))
+    @backButtonWithProgress(controllers.seis.routes.ShareDescriptionController.show().url, Messages("common.section.progress.share.details.three"))
 
     @errorSummary(numberOfSharesForm, "full-time-employee-count", "numberOfShares")
 
@@ -25,6 +25,7 @@
                 '_labelId -> "label-numberOfShares",
                 '_label -> Messages("page.shareDetails.numberOfShares.heading"),
                 '_labelTextClass -> "visuallyhidden",
+                '_maxlength -> "25",
                 '_inputClass -> "input--fullwidth"
                 )
             </div>

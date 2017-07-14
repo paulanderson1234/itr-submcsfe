@@ -72,7 +72,7 @@ trait SubmissionConnector {
                                     (implicit hc: HeaderCarrier): Future[Option[Boolean]] = {
 
     http.GET[Option[Boolean]](s"$serviceUrl/investment-tax-relief/gross-assets/gross-assets-checker/check-total/gross-amount/" +
-      s"${grossAssetAmount.grossAmount}")
+      s"${grossAssetAmount.grossAmount.toIntExact}")
 
   }
 

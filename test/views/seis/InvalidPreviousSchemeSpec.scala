@@ -82,14 +82,14 @@ class InvalidPreviousSchemeSpec extends ViewSpec with FakeRequestHelper {
     }
 
     "contain a continue button" which {
-      lazy val button = document.select("a.button")
+      lazy val button = document.getElementById("submit")
 
       "contains the correct message" in {
         button.text() shouldBe Messages("common.button.continue")
       }
 
-      "contains a forward link to the previous schemes page" in {
-        button.attr("href") shouldBe routes.ReviewPreviousSchemesController.show().url
+      "have a form posting to the correct route" in {
+        document.select("form").attr("action") shouldBe controllers.seis.routes.InvalidPreviousSchemeController.submit().url
       }
     }
   }

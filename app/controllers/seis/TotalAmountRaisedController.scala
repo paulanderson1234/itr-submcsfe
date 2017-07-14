@@ -67,7 +67,10 @@ trait TotalAmountRaisedController extends FrontendController with AuthorisedAndE
             submissionConnector.validateHasInvestmentTradeStartedCondition(dateForActivity.get.hasInvestmentTradeStartedDay.get,
               dateForActivity.get.hasInvestmentTradeStartedMonth.get, dateForActivity.get.hasInvestmentTradeStartedYear.get).map {
               case Some(valid) if valid => Redirect(routes.TotalAmountSpentController.show())
-              case Some(valid) if !valid => Redirect(routes.GrossAssetsController.show()) // TODO: to Investor Nominee Page when done
+              case Some(valid) if !valid => {
+                s4lConnector.saveFormData(KeystoreKeys.backLinkAddInvestorOrNominee, routes.TotalAmountRaisedController.show().url)
+                Redirect(routes.AddInvestorOrNomineeController.show())
+              }
               case None =>
                 Logger.warn("[TotalAmountRaisedController][submit] - validateHasInvestmentTradeStartedCondition did not return expected true/false answer")
                 InternalServerError(internalServerErrorTemplate)

@@ -97,7 +97,7 @@ class ShareDescriptionControllerSpec extends BaseSpec {
       submitWithSessionAndAuth(TestController.submit,formInput)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(routes.ShareDescriptionController.show().url)
+          redirectLocation(result) shouldBe Some(routes.NumberOfSharesController.show().url)
         }
       )
     }

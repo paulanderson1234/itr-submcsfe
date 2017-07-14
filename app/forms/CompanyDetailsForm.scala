@@ -16,21 +16,23 @@
 
 package forms
 
-import models.NominalValueOfSharesModel
+import common.Constants
+import models.CompanyDetailsModel
 import play.api.data.Form
+import utils.Validation._
 import play.api.data.Forms._
-import utils.Validation
 
-object NominalValueOfSharesForm {
 
-  val messageKey = "nominalValueOfShares"
-  val minimumAmount = 0
-
-  val nominalValueOfSharesForm = Form(
+object CompanyDetailsForm  {
+  val companyDetailsForm = Form(
     mapping(
-      "nominalValueOfShares" -> nonEmptyText
-        .verifying(Validation.genericWholeAmountCheck(messageKey, minimumAmount))
-        .transform[BigDecimal](value => BigDecimal(value), _.toString())
-    )(NominalValueOfSharesModel.apply)(NominalValueOfSharesModel.unapply)
+      "companyName"  -> nonEmptyText(maxLength = Constants.CompanyDetailsMaxLength),
+      "companyAddressline1" -> mandatoryAddressLineCheck,
+      "companyAddressline2" -> mandatoryAddressLineCheck,
+      "companyAddressline3" -> optional(optionalAddressLineCheck),
+      "companyAddressline4" -> optional(addressLineFourCheck),
+      "companyPostcode" -> optional(postcodeCheck),
+      "countryCode" -> countryCodeCheck
+    )(CompanyDetailsModel.apply)(CompanyDetailsModel.unapply).verifying(postcodeCountryCheckConstraint)
   )
 }

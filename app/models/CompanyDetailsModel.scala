@@ -16,13 +16,16 @@
 
 package models
 
-import play.api.libs.json.Json
-import utils.CostFormatter
+import play.api.libs.json.{Json, OFormat}
 
-case class GrossAssetsModel(grossAmount : BigDecimal)
+case class CompanyDetailsModel(companyName : String,
+                               companyAddressline1 : String,
+                               companyAddressline2 : String,
+                               companyAddressline3 : Option[String],
+                               companyAddressline4 : Option[String],
+                               companyPostcode : Option[String],
+                               countryCode : String)
 
-object GrossAssetsModel extends CostFormatter{
-
-  implicit val format = Json.format[GrossAssetsModel]
-  implicit val writes = Json.writes[GrossAssetsModel]
+object CompanyDetailsModel {
+  implicit val format: OFormat[CompanyDetailsModel] = Json.format[CompanyDetailsModel]
 }

@@ -16,7 +16,7 @@
 
         <h1 id="main-heading" class="form-title heading-xlarge">@Messages("page.investors.companyOrIndividual.heading", investorOrNominee)</h1>
 
-        @form(action = controllers.seis.routes.DateOfIncorporationController.submit()) {
+        @form(action = controllers.seis.routes.CompanyOrIndividualController.submit()) {
         <div class="form-group">
             @formInputRadioGroup(
             field = companyOrIndividualForm("companyOrIndividual"),

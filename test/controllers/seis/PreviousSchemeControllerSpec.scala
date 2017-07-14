@@ -48,11 +48,14 @@ class PreviousSchemeControllerSpec extends BaseSpec {
       (Matchers.any(), Matchers.any(),Matchers.any())).thenReturn(Future.successful(backLink))
   }
 
-  def setupVectorMocks(backLink: Option[String] = None, previousSchemeVectorList: Option[Vector[PreviousSchemeModel]] = None): Unit = {
+  def setupVectorMocks(backLink: Option[String] = None, previousSchemeVectorList: Option[Vector[PreviousSchemeModel]] = None,
+                       tempPreviousScheme: Option[PreviousSchemeModel] = None): Unit = {
     when(mockS4lConnector.fetchAndGetFormData[Vector[PreviousSchemeModel]](Matchers.eq(KeystoreKeys.previousSchemes))
       (Matchers.any(), Matchers.any(),Matchers.any())).thenReturn(Future.successful(previousSchemeVectorList))
     when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.backLinkPreviousScheme))
       (Matchers.any(), Matchers.any(),Matchers.any())).thenReturn(Future.successful(backLink))
+    when(mockS4lConnector.fetchAndGetFormData[PreviousSchemeModel](Matchers.eq(KeystoreKeys.tempPreviousSchemes))
+      (Matchers.any(), Matchers.any(),Matchers.any())).thenReturn(Future.successful(tempPreviousScheme))
   }
 
   "PreviousSchemeController" should {
@@ -151,7 +154,8 @@ class PreviousSchemeControllerSpec extends BaseSpec {
 
   "Sending a new form submit to the PreviousSchemeController when authenticated and enrolled" should {
     "redirect to the invalid previous scheme error page if the scheme type is VCT" in {
-      setupVectorMocks(Some(routes.ReviewPreviousSchemesController.show().url), Some(previousSchemeVectorList))
+      setupVectorMocks(Some(routes.ReviewPreviousSchemesController.show().url), Some(previousSchemeVectorList),
+        Some(previousSchemeModel1))
       when(mockS4lConnector.saveFormData(Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(),Matchers.any()))
         .thenReturn(cacheMap)
       mockEnrolledRequest(seisSchemeTypesModel)
@@ -176,7 +180,8 @@ class PreviousSchemeControllerSpec extends BaseSpec {
 
   "Sending a new form submit to the PreviousSchemeController when authenticated and enrolled" should {
     "redirect to the invalid previous scheme error page if the scheme type is EIS" in {
-      setupVectorMocks(Some(routes.ReviewPreviousSchemesController.show().url), Some(previousSchemeVectorList))
+      setupVectorMocks(Some(routes.ReviewPreviousSchemesController.show().url), Some(previousSchemeVectorList),
+        Some(previousSchemeModel1))
       when(mockS4lConnector.saveFormData(Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(),Matchers.any()))
         .thenReturn(cacheMap)
       mockEnrolledRequest(seisSchemeTypesModel)
