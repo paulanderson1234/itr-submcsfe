@@ -14,7 +14,7 @@
 
         @errorSummary(companyOrIndividualForm, "company-or-individual", "companyOrIndividual")
 
-        <h1 id="main-heading" class="form-title heading-xlarge">@Messages("page.investors.companyOrIndividual.heading", investorOrNominee)</h1>
+        <h1 id="main-heading" class="form-title heading-xlarge">@Messages("page.investors.companyOrIndividual.heading", investorOrNominee.toLowerCase())</h1>
 
         @form(action = controllers.seis.routes.CompanyOrIndividualController.submit()) {
         <div class="form-group">

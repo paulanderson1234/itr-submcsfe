@@ -48,9 +48,9 @@ trait CompanyOrIndividualController extends FrontendController with AuthorisedAn
       def routeRequest(investorOrNominee: Option[AddInvestorOrNomineeModel]) = {
         if (investorOrNominee.isDefined) {
           s4lConnector.fetchAndGetFormData[CompanyOrIndividualModel](KeystoreKeys.companyOrIndividual).map {
-            case Some(data) => Ok(CompanyOrIndividual(useInvestorOrNomineeValueAsHeadingText(investorOrNominee.get),
+            case Some(data) => Ok(CompanyOrIndividual(investorOrNominee.get.addInvestorOrNominee,
               companyOrIndividualForm.fill(data)))
-            case None => Ok(CompanyOrIndividual(useInvestorOrNomineeValueAsHeadingText(investorOrNominee.get), companyOrIndividualForm))
+            case None => Ok(CompanyOrIndividual(investorOrNominee.get.addInvestorOrNominee, companyOrIndividualForm))
           }
         } else Future.successful(Redirect(routes.AddInvestorOrNomineeController.show()))
       }
@@ -66,7 +66,7 @@ trait CompanyOrIndividualController extends FrontendController with AuthorisedAn
     companyOrIndividualForm.bindFromRequest().fold(
       formWithErrors => {
         s4lConnector.fetchAndGetFormData[AddInvestorOrNomineeModel](KeystoreKeys.addInvestor).map {
-          data => BadRequest(CompanyOrIndividual(useInvestorOrNomineeValueAsHeadingText(data.get), formWithErrors))
+          data => BadRequest(CompanyOrIndividual(data.get.addInvestorOrNominee, formWithErrors))
         }
       },
       validFormData => {

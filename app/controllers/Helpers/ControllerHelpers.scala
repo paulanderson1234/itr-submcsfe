@@ -123,6 +123,4 @@ trait ControllerHelpers {
     }
   }
 
-  def useInvestorOrNomineeValueAsHeadingText(investorOrNominee: AddInvestorOrNomineeModel): String =  investorOrNominee.addInvestorOrNominee.toLowerCase
-
 }
