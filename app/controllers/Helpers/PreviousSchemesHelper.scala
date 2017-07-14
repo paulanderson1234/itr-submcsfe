@@ -196,4 +196,26 @@ trait PreviousSchemesHelper {
     previousSchemes.flatMap(newVectorList => s4lConnector.saveFormData(KeystoreKeys.previousSchemes, newVectorList))
 
   }
+
+  def addPreviousInvestmentToKeystoreById(s4lConnector: connectors.S4LConnector,
+                                      previousSchemeModelToAdd: PreviousSchemeModel)
+                                     (implicit hc: HeaderCarrier, user: TAVCUser): Future[PreviousSchemeModel] = {
+    val defaultId: Int = 1
+
+    val result = s4lConnector.fetchAndGetFormData[Vector[PreviousSchemeModel]](KeystoreKeys.previousSchemes).map {
+      case Some(data) => {
+        val newId = data.last.processingId.get + 1
+        data :+ previousSchemeModelToAdd.copy(processingId = Some(newId))
+      }
+      case None => Vector.empty :+ previousSchemeModelToAdd.copy(processingId = Some(defaultId))
+    }.recover { case _ => Vector.empty :+ previousSchemeModelToAdd.copy(processingId = Some(defaultId)) }
+
+    result.flatMap(newVectorList => s4lConnector.saveFormData(KeystoreKeys.previousSchemes, newVectorList))
+
+    val model = for {
+      x <- result
+    } yield x.last
+
+    model
+  }
 }

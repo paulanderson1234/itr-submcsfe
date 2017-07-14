@@ -17,14 +17,12 @@
 package controllers.seis
 
 import auth.{AuthorisedAndEnrolledForTAVC, SEIS}
-import common.KeystoreKeys
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
-import controllers.Helpers.PreviousSchemesHelper
 import controllers.predicates.FeatureSwitch
-import models.PreviousSchemeModel
 import play.api.Play.current
 import play.api.i18n.Messages.Implicits._
+import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import views.html.seis.previousInvestment.InvalidPreviousScheme
 
@@ -41,15 +39,20 @@ trait InvalidPreviousSchemeController extends FrontendController with Authorised
 
   override val acceptedFlows = Seq(Seq(SEIS))
 
-  val show = featureSwitch(applicationConfig.seisFlowEnabled) {
+  def show(schemeId: Int): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
     AuthorisedAndEnrolled.async { implicit user => implicit request =>
-      Future.successful(Ok(InvalidPreviousScheme()))
+      Future.successful(Ok(InvalidPreviousScheme(schemeId)))
     }
   }
 
   val submit = featureSwitch(applicationConfig.seisFlowEnabled) {
     AuthorisedAndEnrolled.async { implicit user => implicit request =>
-      PreviousSchemesHelper.addTempPreviousInvestmentToKeystore(s4lConnector)
+      Future.successful(Redirect(routes.ReviewPreviousSchemesController.show()))
+    }
+  }
+
+  def change(schemeId: Int): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
+    AuthorisedAndEnrolled.async { implicit user => implicit request =>
       Future.successful(Redirect(routes.ReviewPreviousSchemesController.show()))
     }
   }

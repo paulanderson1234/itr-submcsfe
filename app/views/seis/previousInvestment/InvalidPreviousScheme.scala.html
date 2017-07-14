@@ -1,7 +1,7 @@
 @import uk.gov.hmrc.play.views.html.helpers.{form}
 @import helpers.{externalLink, backButton}
 
-@()(implicit request: Request[_], messages: Messages)
+@(schemeId : Int)(implicit request: Request[_], messages: Messages)
 
 @import config.FrontendAppConfig
 
@@ -33,7 +33,7 @@
             <p>
                 @Messages("page.previousInvestment.InvalidPreviousScheme.change-text")
                 <a id="change-answers-link" class="link"
-                  href="@controllers.seis.routes.PreviousSchemeController.show().url">@Messages("page.previousInvestment.InvalidPreviousScheme.change-link")</a>.
+                  href="@controllers.seis.routes.ReviewPreviousSchemesController.change(schemeId).url">@Messages("page.previousInvestment.InvalidPreviousScheme.change-link")</a>.
             </p>
         </div>
     </div>
