@@ -211,6 +211,7 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
     s4lConnector.saveFormData[String](KeystoreKeys.backLinkShareIssueDate, routes.TestEndpointSEISController.showPageOne(None).url)
     s4lConnector.saveFormData[String](KeystoreKeys.backLinkSeventyPercentSpent, routes.TestEndpointSEISController.showPageOne(None).url)
     s4lConnector.saveFormData[String](KeystoreKeys.backLinkShareDescription, routes.TestEndpointSEISController.showPageOne(None).url)
+    s4lConnector.saveFormData[String](KeystoreKeys.backLinkAddInvestorOrNominee, routes.TestEndpointSEISController.showPageOne(None).url)
   }
 
   private def saveSchemeType()(implicit hc: HeaderCarrier, user: TAVCUser) = {
