@@ -25,8 +25,11 @@ import play.api.i18n.Messages.Implicits._
 
 class TotalAmountRaisedFormSpec extends UnitSpec with OneAppPerSuite{
 
-  val maxAmount = 999999999
-  val minAmount = 1
+  val maxAmount:BigDecimal = BigDecimal("99999999999")
+  val mimAmount = 0
+  val invalidAmount = 12.12
+  val negativeAmount = -1
+  val largeNegativeAmount =  BigDecimal("-123.3485684756875346876538743")
 
   "Creating a form using an empty model" should {
     lazy val form = totalAmountRaisedForm
@@ -37,9 +40,9 @@ class TotalAmountRaisedFormSpec extends UnitSpec with OneAppPerSuite{
 
   "Creating a form using a valid model" should {
     "return a form with the data specified in the model" in {
-      val model = TotalAmountRaisedModel(15)
+      val model = TotalAmountRaisedModel(maxAmount)
       val form = totalAmountRaisedForm.fill(model)
-      form.data("amount") shouldBe "15"
+      form.data("amount") shouldBe s"$maxAmount"
       form.errors.length shouldBe 0
     }
   }
@@ -55,7 +58,7 @@ class TotalAmountRaisedFormSpec extends UnitSpec with OneAppPerSuite{
         form.errors.head.key shouldBe "amount"
       }
       "associate the correct error message to the error" in {
-        form.error("amount").get.message shouldBe Messages("validation.common.error.fieldRequired")
+        form.errors.head.message shouldBe "error.required"
       }
     }
 
@@ -69,7 +72,7 @@ class TotalAmountRaisedFormSpec extends UnitSpec with OneAppPerSuite{
         form.errors.head.key shouldBe "amount"
       }
       "associate the correct error message to the error" in {
-        form.error("amount").get.message shouldBe Messages("validation.common.error.fieldRequired")
+        form.errors.head.message shouldBe "error.required"
       }
     }
 
@@ -83,7 +86,7 @@ class TotalAmountRaisedFormSpec extends UnitSpec with OneAppPerSuite{
         form.errors.head.key shouldBe "amount"
       }
       "associate the correct error message to the error" in {
-        form.error("amount").get.message shouldBe Messages("page.shareDetails.totalAmountRaised.invalidAmount")
+        form.error("amount").get.message shouldBe Messages("validation.error.totalAmountRaised.notANumber")
       }
     }
 
@@ -97,7 +100,7 @@ class TotalAmountRaisedFormSpec extends UnitSpec with OneAppPerSuite{
         form.errors.head.key shouldBe "amount"
       }
       "associate the correct error message to the error" in {
-        form.error("amount").get.message shouldBe Messages("page.shareDetails.totalAmountRaised.invalidAmount")
+        form.error("amount").get.message shouldBe Messages("validation.error.totalAmountRaised.decimalPlaces")
       }
     }
 
@@ -111,26 +114,27 @@ class TotalAmountRaisedFormSpec extends UnitSpec with OneAppPerSuite{
         form.errors.head.key shouldBe "amount"
       }
       "associate the correct error message to the error" in {
-        form.error("amount").get.message shouldBe Messages("page.shareDetails.totalAmountRaised.OutOfRange")
+        form.errors.head.message shouldBe Messages("validation.error.totalAmountRaised.size")
       }
     }
 
     "supplied with an amount that's lower than the min" should {
-      lazy val form = totalAmountRaisedForm.bind(Map("amount" -> s"${minAmount -1}"))
+      lazy val form = totalAmountRaisedForm.bind(Map("amount" -> s"${mimAmount - 1}"))
       "raise form error" in {
         form.hasErrors shouldBe true
       }
-      "raise 1 form error" in {
-        form.errors.length shouldBe 1
+      "raise 2 form error" in {
+        form.errors.length shouldBe 2
         form.errors.head.key shouldBe "amount"
       }
       "associate the correct error message to the error" in {
-        form.error("amount").get.message shouldBe Messages("page.shareDetails.totalAmountRaised.OutOfRange")
+        form.errors.head.message shouldBe  Messages("validation.error.totalAmountRaised.negative")
       }
     }
   }
 
   "Creating a form using a valid post" when {
+
     "supplied with valid amount at the maximum allowed" should {
       "not raise form error" in {
         val form = totalAmountRaisedForm.bind(Map("amount" -> s"$maxAmount"))
@@ -140,7 +144,7 @@ class TotalAmountRaisedFormSpec extends UnitSpec with OneAppPerSuite{
 
     "supplied with valid amount at the minimum allowed" should {
       "not raise form error" in {
-        val form = totalAmountRaisedForm.bind(Map("amount" -> s"$minAmount"))
+        val form = totalAmountRaisedForm.bind(Map("amount" -> s"$mimAmount"))
         form.hasErrors shouldBe false
       }
     }

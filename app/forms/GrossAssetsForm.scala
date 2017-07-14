@@ -24,20 +24,19 @@ import play.api.data.Forms._
 import play.api.i18n.Messages
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
+import utils.Validation
 
 object GrossAssetsForm {
 
-  val maxAllowableAmount: Int = 999999999
+  val messageKey = "grossAssets"
   val minAllowableAmount: Int = 0
+  val maxLength: Int = 9
 
   val grossAssetsForm = Form(
     mapping(
-      "grossAmount" -> text
-        .verifying(Messages("validation.common.error.fieldRequired"), mandatoryCheck)
-        .verifying(Messages("page.grossAssets.amount.invalidAmount"), integerCheck)
-        .transform[Int](stringToInteger, _.toString())
-        .verifying(Messages("page.grossAssets.amount.OutOfRange"), minIntCheck(minAllowableAmount))
-        .verifying(Messages("page.grossAssets.amount.OutOfRange"), maxIntCheck(maxAllowableAmount))
+      "grossAmount" -> nonEmptyText
+        .verifying(Validation.genericWholeAmountCheck(messageKey, minAllowableAmount, maxLength))
+        .transform[BigDecimal](value => BigDecimal(value), _.toString())
     )(GrossAssetsModel.apply)(GrossAssetsModel.unapply)
   )
 }

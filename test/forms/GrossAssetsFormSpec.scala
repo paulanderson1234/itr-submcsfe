@@ -56,7 +56,7 @@ class GrossAssetsFormSpec extends UnitSpec with OneAppPerSuite{
         form.errors.head.key shouldBe "grossAmount"
       }
       "associate the correct error message to the error" in {
-        form.error("grossAmount").get.message shouldBe Messages("validation.common.error.fieldRequired")
+        form.errors.head.message shouldBe "error.required"
       }
     }
 
@@ -70,7 +70,7 @@ class GrossAssetsFormSpec extends UnitSpec with OneAppPerSuite{
         form.errors.head.key shouldBe "grossAmount"
       }
       "associate the correct error message to the error" in {
-        form.error("grossAmount").get.message shouldBe Messages("validation.common.error.fieldRequired")
+        form.errors.head.message shouldBe "error.required"
       }
     }
 
@@ -84,7 +84,7 @@ class GrossAssetsFormSpec extends UnitSpec with OneAppPerSuite{
         form.errors.head.key shouldBe "grossAmount"
       }
       "associate the correct error message to the error" in {
-        form.error("grossAmount").get.message shouldBe Messages("page.grossAssets.amount.invalidAmount")
+        form.error("grossAmount").get.message shouldBe Messages("validation.error.grossAssets.notANumber")
       }
     }
 
@@ -98,7 +98,7 @@ class GrossAssetsFormSpec extends UnitSpec with OneAppPerSuite{
         form.errors.head.key shouldBe "grossAmount"
       }
       "associate the correct error message to the error" in {
-        form.error("grossAmount").get.message shouldBe Messages("page.grossAssets.amount.invalidAmount")
+        form.error("grossAmount").get.message shouldBe Messages("validation.error.grossAssets.decimalPlaces")
       }
     }
 
@@ -112,7 +112,7 @@ class GrossAssetsFormSpec extends UnitSpec with OneAppPerSuite{
         form.errors.head.key shouldBe "grossAmount"
       }
       "associate the correct error message to the error" in {
-        form.error("grossAmount").get.message shouldBe Messages("page.grossAssets.amount.OutOfRange")
+        form.errors.head.message shouldBe Messages("validation.error.grossAssets.size")
       }
     }
 
@@ -121,12 +121,12 @@ class GrossAssetsFormSpec extends UnitSpec with OneAppPerSuite{
       "raise form error" in {
         form.hasErrors shouldBe true
       }
-      "raise 1 form error" in {
-        form.errors.length shouldBe 1
+      "raise 2 form error" in {
+        form.errors.length shouldBe 2
         form.errors.head.key shouldBe "grossAmount"
       }
       "associate the correct error message to the error" in {
-        form.error("grossAmount").get.message shouldBe Messages("page.grossAssets.amount.OutOfRange")
+        form.errors.head.message shouldBe  Messages("validation.error.grossAssets.negative")
       }
     }
   }

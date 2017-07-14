@@ -27,7 +27,7 @@ import scala.collection.immutable.Range
 
 class TotalAmountSpentFormSpec extends UnitSpec with OneAppPerSuite {
 
-  val maxAmount:BigDecimal = BigDecimal("9999999999999")
+  val maxAmount:BigDecimal = BigDecimal("99999999999")
   val mimAmount = 0
   val invalidAmount = 12.12
   val negativeAmount = -1
@@ -112,7 +112,7 @@ class TotalAmountSpentFormSpec extends UnitSpec with OneAppPerSuite {
         lazy val form = totalAmountSpentForm.bind(map)
 
         "contain one error" in {
-          form.errors.size shouldBe 1
+          form.hasErrors shouldBe true
         }
 
         "contain the negative number error message" in {
@@ -125,7 +125,7 @@ class TotalAmountSpentFormSpec extends UnitSpec with OneAppPerSuite {
         lazy val form = totalAmountSpentForm.bind(map)
 
         "contain three errors" in {
-          form.errors.size shouldBe 3
+          form.errors.size shouldBe 4
         }
 
       }

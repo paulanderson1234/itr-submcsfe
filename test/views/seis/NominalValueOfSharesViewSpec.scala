@@ -41,7 +41,16 @@ class NominalValueOfSharesViewSpec extends ViewSpec with FakeRequestHelper {
       }
 
       "have a link to the number of shares page" in {
-        doc.select("article a").first().attr("href") shouldBe controllers.seis.routes.NominalValueOfSharesController.show().url
+        doc.select("article a").first().attr("href") shouldBe controllers.seis.routes.NumberOfSharesController.show().url
+      }
+
+
+      "have the correct back link text" in {
+        doc.select("a.back-link").text() shouldBe Messages("common.button.back")
+      }
+
+      "have the correct back link url" in {
+        doc.select("a.back-link").attr("href") shouldBe "/investment-tax-relief-cs/seis/number-of-shares"
       }
 
       "have a header with the correct question" in {

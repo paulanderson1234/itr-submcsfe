@@ -35,6 +35,7 @@ import scala.util.{Failure, Success, Try}
 object Validation {
 
   val EmailThresholdLength = 132
+  val financialMaxAmountLength = 11
 
   // use new Date() to get the date now
   lazy val sf = new SimpleDateFormat("dd/MM/yyyy")
@@ -573,9 +574,9 @@ object Validation {
 
   def dateMinusMonths(date: Option[Date], months: Int): String = {
     date match {
-      case Some(date) =>
+      case Some(dateAmount) =>
         val cal = Calendar.getInstance()
-        cal.setTime(date)
+        cal.setTime(dateAmount)
         cal.add(Calendar.MONTH, months * -1)
         new SimpleDateFormat("dd/MM/yyyy").format(cal.getTime)
       case _ => ""
@@ -584,9 +585,9 @@ object Validation {
 
   def dateMinusYears(date: Option[Date], years: Int): String = {
     date match {
-      case Some(date) =>
+      case Some(dateAmount) =>
         val cal = Calendar.getInstance()
-        cal.setTime(date)
+        cal.setTime(dateAmount)
         cal.add(Calendar.YEAR, years * -1)
         new SimpleDateFormat("dd/MM/yyyy").format(cal.getTime)
       case _ => ""
@@ -595,9 +596,9 @@ object Validation {
 
   def dateAddMonths(date: Option[Date], months: Int): String = {
     date match {
-      case Some(date) =>
+      case Some(dateAmount) =>
         val cal = Calendar.getInstance()
-        cal.setTime(date)
+        cal.setTime(dateAmount)
         cal.add(Calendar.MONTH, months)
         new SimpleDateFormat("dd/MM/yyyy").format(cal.getTime)
       case _ => ""
@@ -606,9 +607,9 @@ object Validation {
 
   def dateAddYears(date: Option[Date], years: Int): String = {
     date match {
-      case Some(date) =>
+      case Some(dateAmount) =>
         val cal = Calendar.getInstance()
-        cal.setTime(date)
+        cal.setTime(dateAmount)
         cal.add(Calendar.YEAR, years)
         new SimpleDateFormat("dd/MM/yyyy").format(cal.getTime)
       case _ => ""
@@ -620,9 +621,7 @@ object Validation {
       desReverseDateFormat.format(sf.parse(s"$day/$month/$year"))
     } match {
       case Success(result) => result
-      case Failure(_) => {
-        ""
-      }
+      case Failure(_) => ""
     }
   }
 
@@ -647,7 +646,8 @@ object Validation {
           BigDecimal(employees)
         } match {
           case Success(result) =>
-            val sizeError = if (result < minimumValue || result > 9999999999999.0) Seq(ValidationError(Messages(s"validation.error.$formValueMessageKey.size", minimumValue))) else Seq()
+            val sizeError = if (result < minimumValue || result > 9999999999999.0)
+              Seq(ValidationError(Messages(s"validation.error.$formValueMessageKey.size", minimumValue))) else Seq()
             sizeError
           case Failure(_) if employees.trim.nonEmpty => Seq(ValidationError(Messages(s"validation.error.$formValueMessageKey.notANumber")))
           case _ => Seq()
@@ -667,19 +667,20 @@ object Validation {
     })
   }
 
-  def totalAmountSpentCheck: Constraint[String] = {
-    Constraint("constraint.totalAmountSpent") {
+  def genericWholeAmountCheck(formValueMessageKey: String, minimumAmount:Int, maxLength:Int = financialMaxAmountLength): Constraint[String] = {
+    Constraint("constraint.genericWholeAmountCheck") {
       value =>
         val errors = Try {
           BigDecimal(value)
         } match {
           case Success(result) =>
-            val decimal = if (!(result.scale == 0)) Seq(ValidationError(Messages("validation.error.totalAmountSpent.decimalPlaces"))) else Seq()
-            val size = if (result.precision > 13) Seq(ValidationError(Messages("validation.error.totalAmountSpent.size"))) else Seq()
-            val negative = if (result < 0) Seq(ValidationError(Messages("validation.error.totalAmountSpent.negative"))) else Seq()
+            val decimal = if (!(result.scale == 0)) Seq(ValidationError(Messages(s"validation.error.$formValueMessageKey.decimalPlaces"))) else Seq()
+            val size = if (result.precision > maxLength) Seq(ValidationError(Messages(s"validation.error.$formValueMessageKey.size"))) else Seq()
+            val negative = if (result < 0) Seq(ValidationError(Messages(s"validation.error.$formValueMessageKey.negative"))) else Seq()
+            val minCheck = if (result < minimumAmount) Seq(ValidationError(Messages(s"validation.error.$formValueMessageKey.size", minimumAmount))) else Seq()
 
-            decimal ++ size ++ negative
-          case Failure(_) if value.trim.nonEmpty => Seq(ValidationError(Messages("validation.error.totalAmountSpent.notANumber")))
+            decimal ++ size ++ negative ++ minCheck
+          case Failure(_) if value.trim.nonEmpty => Seq(ValidationError(Messages(s"validation.error.$formValueMessageKey.notANumber")))
           case _ => Seq()
         }
 
@@ -687,25 +688,5 @@ object Validation {
     }
   }
 
-  def nominalValueOfSharesCheck: Constraint[String] = {
-    Constraint("constraint.nominalValueOfShares") {
-      value =>
-        val errors = Try {
-          BigDecimal(value)
-        } match {
-          case Success(result) =>
-            val decimal = if (!(result.scale == 0)) Seq(ValidationError(Messages("validation.error.nominalValueOfShares.decimalPlaces"))) else Seq()
-            val size = if (result.precision > 13) Seq(ValidationError(Messages("validation.error.nominalValueOfShares.size"))) else Seq()
-            val negative = if (result < 0) Seq(ValidationError(Messages("validation.error.nominalValueOfShares.negative"))) else Seq()
-
-            decimal ++ size ++ negative
-          case Failure(_) if value.trim.nonEmpty => Seq(ValidationError(Messages("validation.error.nominalValueOfShares.notANumber")))
-
-          case _ => Seq()
-        }
-
-        if (errors.isEmpty) Valid else Invalid(errors)
-    }
-  }
 }
 

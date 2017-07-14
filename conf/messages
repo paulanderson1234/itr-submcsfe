@@ -88,10 +88,20 @@ validation.error.employeeCount.notANumber = Enter a valid number for your employ
 validation.error.employeeCount.size = The employee count should be between {0} and 9999999999999
 validation.error.employeeCount.precision = Enter a value with fewer than 13 decimal places for your employee count
 
-validation.error.totalAmountSpent.size = The total amount spent should be between 0 and 9999999999999
+validation.error.totalAmountSpent.size = The total amount spent should be between 0 and 99999999999
 validation.error.totalAmountSpent.notANumber = Enter a valid number for the total amount spent
 validation.error.totalAmountSpent.decimalPlaces = The total amount spent should not contain decimal places
 validation.error.totalAmountSpent.negative = The total amount spent should not be negative
+
+validation.error.grossAssets.size =The gross assets amount should be between 0 and 99999999
+validation.error.grossAssets.notANumber =Enter a valid number for the gross assets amount
+validation.error.grossAssets.decimalPlaces =The gross assets amount should not contain decimal places
+validation.error.grossAssets.negative = The gross assets amount should not be negative
+
+validation.error.totalAmountRaised.size = The total amount raised should be between 0 and 99999999999
+validation.error.totalAmountRaised.notANumber = Enter a valid number for the total amount raised
+validation.error.totalAmountRaised.decimalPlaces = The total amount raised should not contain decimal places
+validation.error.totalAmountRaised.negative = The total amount raised should not be negative
 
 validation.error.nominalValueOfShares.decimalPlaces = The share value should not contain decimal places
 validation.error.nominalValueOfShares.size =  The share value should be between 0 and 9999999999999

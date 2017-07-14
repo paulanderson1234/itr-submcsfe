@@ -62,8 +62,7 @@ trait NumberOfSharesController extends FrontendController with AuthorisedAndEnro
         },
         validFormData => {
           s4lConnector.saveFormData(KeystoreKeys.numberOfShares, validFormData)
-          //TODO: route to nominal value of shares
-          Future.successful(Redirect(routes.NumberOfSharesController.show()))
+          Future.successful(Redirect(routes.NominalValueOfSharesController.show()))
         }
       )
     }
