@@ -121,7 +121,7 @@ class TotalAmountRaisedControllerSpec extends BaseSpec {
         "amount" -> "1")(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(routes.TotalAmountSpentController.show().url)
+          redirectLocation(result) shouldBe Some(routes.AddInvestorOrNomineeController.show().url)
         }
       )
     }
@@ -137,7 +137,7 @@ class TotalAmountRaisedControllerSpec extends BaseSpec {
         "amount" -> "1")(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(routes.AddInvestorOrNomineeController.show().url)
+          redirectLocation(result) shouldBe Some(routes.TotalAmountSpentController.show().url)
         }
       )
     }
@@ -152,7 +152,7 @@ class TotalAmountRaisedControllerSpec extends BaseSpec {
         "amount" -> "1")(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(routes.TotalAmountSpentController.show().url)
+          redirectLocation(result) shouldBe Some(routes.AddInvestorOrNomineeController.show().url)
         }
       )
     }
@@ -167,7 +167,7 @@ class TotalAmountRaisedControllerSpec extends BaseSpec {
         "amount" -> "1")(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(routes.AddInvestorOrNomineeController.show().url)
+          redirectLocation(result) shouldBe Some(routes.TotalAmountSpentController.show().url)
         }
       )
     }
