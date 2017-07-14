@@ -30,6 +30,7 @@ import scala.concurrent.Future
 
 class InvalidPreviousSchemeControllerSpec extends BaseSpec {
 
+  val schemeId = 1
   object TestController extends InvalidPreviousSchemeController{
     override lazy val applicationConfig = MockConfig
     override lazy val authConnector = MockAuthConnector
@@ -56,7 +57,7 @@ class InvalidPreviousSchemeControllerSpec extends BaseSpec {
   "Sending a GET request to InvalidPreviousSchemeController when authenticated and enrolled" should {
     "return a 200" in {
       mockEnrolledRequest(seisSchemeTypesModel)
-      showWithSessionAndAuth(TestController.show)(
+      showWithSessionAndAuth(TestController.show(schemeId))(
         result => status(result) shouldBe OK
       )
     }

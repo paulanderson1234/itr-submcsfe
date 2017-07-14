@@ -81,14 +81,12 @@ POST      /check-your-answers                       controllers.seis.CheckAnswer
 GET       /acknowledgement                          controllers.seis.AcknowledgementController.show
 POST      /acknowledgement                          controllers.seis.AcknowledgementController.submit
 
-GET       /invalid-scheme-type                      controllers.seis.InvalidPreviousSchemeController.show
-
 GET       /not-first-trade                          controllers.seis.NotFirstTradeController.show
 
 GET       /attachments-acknowledgement             controllers.seis.AttachmentsAcknowledgementController.show
 POST      /attachments-acknowledgement             controllers.seis.AttachmentsAcknowledgementController.submit
 
-GET       /invalid-scheme-type                     controllers.seis.InvalidPreviousSchemeController.show
+GET       /invalid-scheme-type/:Id                 controllers.seis.InvalidPreviousSchemeController.show(Id: Int)
 POST      /invalid-scheme-type                     controllers.seis.InvalidPreviousSchemeController.submit
 
 GET        /had-other-investments-before           controllers.seis.HadOtherInvestmentsController.show

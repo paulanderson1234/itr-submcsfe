@@ -29,7 +29,7 @@ class InvalidPreviousSchemeSpec extends ViewSpec with FakeRequestHelper {
   implicit val request = fakeRequest
 
   "The Invalid Previous Scheme error page" should {
-    lazy val view = views.html.seis.previousInvestment.InvalidPreviousScheme()
+    lazy val view = views.html.seis.previousInvestment.InvalidPreviousScheme(1)
     lazy val document: Document = Jsoup.parse(view.body)
 
     "contain the correct title" in {
@@ -76,8 +76,8 @@ class InvalidPreviousSchemeSpec extends ViewSpec with FakeRequestHelper {
         changeLink.select("a").text() shouldBe Messages("page.previousInvestment.InvalidPreviousScheme.change-link")
       }
 
-      "contains a link to the previous schemes page" in {
-        changeLink.select("a").attr("href") shouldBe routes.PreviousSchemeController.show().url
+      "contains a link to the review-previous-schemes-change page" in {
+        changeLink.select("a").attr("href") shouldBe routes.ReviewPreviousSchemesController.change(1).url
       }
     }
 
