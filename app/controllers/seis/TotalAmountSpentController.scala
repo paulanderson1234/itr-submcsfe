@@ -59,8 +59,10 @@ trait TotalAmountSpentController extends FrontendController with AuthorisedAndEn
       implicit user =>
         implicit request =>
           val success: TotalAmountSpentModel => Future[Result] = { model =>
-            s4lConnector.saveFormData(KeystoreKeys.totalAmountSpent, model).map(_ =>
-              Redirect(controllers.seis.routes.TotalAmountSpentController.show())
+            s4lConnector.saveFormData(KeystoreKeys.totalAmountSpent, model).map(_ => {
+              s4lConnector.saveFormData(KeystoreKeys.backLinkAddInvestorOrNominee, routes.TotalAmountSpentController.show().url)
+              Redirect(controllers.seis.routes.AddInvestorOrNomineeController.show())
+            }
             )
           }
 

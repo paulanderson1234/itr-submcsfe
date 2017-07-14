@@ -38,7 +38,9 @@ class TotalAmountSpentControllerSpec extends BaseSpec {
     override lazy val enrolmentConnector = mockEnrolmentConnector
   }
 
-  val totalAmountSpent = TotalAmountSpentModel(12345)
+  val validTotalAmountSpent = 12345
+  val validTotalAmountSpentModel = TotalAmountSpentModel(12345)
+  val invalidTotalAmountSpent = BigDecimal(9999999999999.1)
 
 
   def setupMocks(model: Option[TotalAmountSpentModel]): Unit = {
@@ -51,7 +53,6 @@ class TotalAmountSpentControllerSpec extends BaseSpec {
     when(mockS4lConnector.saveFormData(Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
       .thenReturn(Future.successful(mock[CacheMap]))
   }
-
 
   "TotalAmountSpentController" should {
     "use the correct keystore connector" in {
@@ -69,7 +70,6 @@ class TotalAmountSpentControllerSpec extends BaseSpec {
     }
   }
 
-
   "return a 200 on a GET request" when {
 
     "no data is already stored" in {
@@ -80,7 +80,7 @@ class TotalAmountSpentControllerSpec extends BaseSpec {
     }
 
     "data is already stored" in {
-      setupMocks(Some(TotalAmountSpentModel(20)))
+      setupMocks(Some(validTotalAmountSpentModel))
       showWithSessionAndAuth(controller.show)(
         result => status(result) shouldBe 200
       )
@@ -89,11 +89,11 @@ class TotalAmountSpentControllerSpec extends BaseSpec {
 
   "return a 303 on a successful POST request" in {
     setupMocks(None)
-    val form = Seq("totalAmountSpent" -> "1000")
+    val form = Seq("totalAmountSpent" -> s"$validTotalAmountSpent")
     submitWithSessionAndAuth(controller.submit, form: _*) (
       result => {
         status(result) shouldBe 303
-        redirectLocation(result) shouldBe Some(controllers.seis.routes.TotalAmountSpentController.show().url)
+        redirectLocation(result) shouldBe Some(controllers.seis.routes.AddInvestorOrNomineeController.show().url)
       }
     )
   }

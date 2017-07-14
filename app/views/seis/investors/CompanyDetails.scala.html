@@ -1,0 +1,108 @@
+@import models.CompanyDetailsModel
+@import common.Constants
+@import utils.CountriesHelper
+@import uk.gov.hmrc.play.views.html.helpers.form
+@import views.html.helpers.{errorSummary, textWithConstErrors, backButtonWithProgress, hiddenField, input, dropdown}
+
+
+@(companyDetailsForm: Form[CompanyDetailsModel], listOfIsoCode:List[(String, String)])(implicit request: Request[_], messages: Messages)
+
+
+@main_template(Messages("page.investment.companyDetails.title")) {
+
+@backButtonWithProgress(controllers.seis.routes.CompanyOrIndividualController.show().url, Messages("common.section.progress.company.details.four"))
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+
+        @errorSummary(companyDetailsForm, "company-details", "companyDetails")
+
+        <h1 id="main-heading" class="form-title heading-xlarge">@Messages("page.investment.companyDetails.heading")</h1>
+
+        @form(action = controllers.seis.routes.CompanyDetailsController.submit()) {
+        <div class="form-group">
+            @input(
+            companyDetailsForm("companyName"),
+            '_divClass -> "form-label",
+            '_labelId -> "label-companyName",
+            '_label -> Messages("page.investment.companyDetails.companyname.label"),
+            '_maxlength -> "56",
+            '_inputClass -> "input--medium input--cleared",
+            'id -> "companyName"
+            )
+        </div>
+        <div class="form-group">
+            @input(
+            companyDetailsForm("companyAddressline1"),
+            '_divClass -> "form-label",
+            '_labelId -> "label-companyAddressline1",
+            '_label -> Messages("page.investment.companyDetails.addressline1.label"),
+            '_maxlength -> "35",
+            '_inputClass -> "input--medium input--cleared",
+            'id -> "companyAddressline1"
+            )
+        </div>
+        <div class="form-group">
+            @input(
+            companyDetailsForm("companyAddressline2"),
+            '_divClass -> "form-label",
+            '_labelId -> "label-companyAddressline2",
+            '_label -> Messages("page.investment.companyDetails.addressline2.label"),
+            '_maxlength -> "35",
+            '_inputClass -> "input--medium input--cleared",
+            'id -> "companyAddressline2"
+            )
+        </div>
+        <div class="form-group">
+            @input(
+            companyDetailsForm("companyAddressline3"),
+            '_divClass -> "form-label",
+            '_labelId -> "label-companyAddressline3",
+            '_label -> Messages("page.investment.companyDetails.addressline3.label"),
+            '_maxlength -> "35",
+            '_inputClass -> "input--medium input--cleared",
+            'id -> "companyAddressline3"
+            )
+        </div>
+        <div class="form-group">
+            @input(
+            companyDetailsForm("companyAddressline4"),
+            '_divClass -> "form-label",
+            '_labelId -> "label-companyAddressline4",
+            '_label -> Messages("page.investment.companyDetails.addressline4.label"),
+            '_maxlength -> "35",
+            '_inputClass -> "input--medium input--cleared",
+            'id -> "companyAddressline4"
+            )
+        </div>
+        <div class="form-group">
+            @input(
+            companyDetailsForm("companyPostcode"),
+            '_divClass -> "form-label",
+            '_labelId -> "label-companyPostcode",
+            '_label -> Messages("page.investment.companyDetails.postcode.label"),
+            '_maxlength -> "10",
+            '_inputClass -> "input--small input--cleared",
+            'id -> "companyPostcode"
+            )
+        </div>
+
+        <div class="form-group">
+            @dropdown(companyDetailsForm("countryCode"),
+            elementOptions = listOfIsoCode,
+            displayEmptyValue = true,
+            '_emptyValueText -> Messages("page.address.country.select"),
+            '_labelId -> "label-country",
+            '_id -> "countryCode",
+            '_inputClass -> "input--medium input--cleared",
+            '_label -> Html(Messages("page.investment.companyDetails.country.label")))
+        </div>
+
+        <div class="form-group" id="companyDetailsButtonDiv">
+            <button class="btn button" id="next" type="submit">@Messages("common.button.snc")</button>
+        </div>
+        }
+
+    </div>
+</div>
+}

@@ -16,28 +16,25 @@
 
 package forms
 
-import utils.Transformers._
-import utils.Validation._
 import models.TotalAmountRaisedModel
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.i18n.Messages
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
+import utils.Validation
 
 object TotalAmountRaisedForm {
 
-  val maxAllowableAmount: Int = 999999999
-  val minAllowableAmount: Int = 1
+  val messageKey = "totalAmountRaised"
+  val minAllowableAmount: Int = 0
 
   val totalAmountRaisedForm = Form(
     mapping(
-      "amount" -> text
-        .verifying(Messages("validation.common.error.fieldRequired"), mandatoryCheck)
-        .verifying(Messages("page.shareDetails.totalAmountRaised.invalidAmount"), integerCheck)
-        .transform[Int](stringToInteger, _.toString())
-        .verifying(Messages("page.shareDetails.totalAmountRaised.OutOfRange"), minIntCheck(minAllowableAmount))
-        .verifying(Messages("page.shareDetails.totalAmountRaised.OutOfRange"), maxIntCheck(maxAllowableAmount))
+      "amount" -> nonEmptyText
+        .verifying(Validation.genericWholeAmountCheck(messageKey, minAllowableAmount))
+        .transform[BigDecimal](value => BigDecimal(value), _.toString())
     )(TotalAmountRaisedModel.apply)(TotalAmountRaisedModel.unapply)
   )
+
 }

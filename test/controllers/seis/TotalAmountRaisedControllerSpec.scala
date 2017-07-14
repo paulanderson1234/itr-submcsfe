@@ -74,6 +74,9 @@ class TotalAmountRaisedControllerSpec extends BaseSpec {
       Matchers.any(), Matchers.any(), Matchers.any())
     (Matchers.any())).thenReturn(tradingConditionLessThanFourMonths)
 
+    when(mockS4lConnector.saveFormData(Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(CacheMap("", Map())))
+
   }
 
   "TotalAmountRaisedController" should {
@@ -118,7 +121,7 @@ class TotalAmountRaisedControllerSpec extends BaseSpec {
         "amount" -> "1")(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(routes.TotalAmountSpentController.show().url)
+          redirectLocation(result) shouldBe Some(routes.AddInvestorOrNomineeController.show().url)
         }
       )
     }
@@ -134,8 +137,7 @@ class TotalAmountRaisedControllerSpec extends BaseSpec {
         "amount" -> "1")(
         result => {
           status(result) shouldBe SEE_OTHER
-          //TODO: navigate to Investor Nominee Page when page when available
-          redirectLocation(result) shouldBe Some(routes.GrossAssetsController.show().url)
+          redirectLocation(result) shouldBe Some(routes.TotalAmountSpentController.show().url)
         }
       )
     }
@@ -150,7 +152,7 @@ class TotalAmountRaisedControllerSpec extends BaseSpec {
         "amount" -> "1")(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(routes.TotalAmountSpentController.show().url)
+          redirectLocation(result) shouldBe Some(routes.AddInvestorOrNomineeController.show().url)
         }
       )
     }
@@ -165,8 +167,7 @@ class TotalAmountRaisedControllerSpec extends BaseSpec {
         "amount" -> "1")(
         result => {
           status(result) shouldBe SEE_OTHER
-          //TODO: navigate to Investor Nominee Page when page when available
-          redirectLocation(result) shouldBe Some(routes.GrossAssetsController.show().url)
+          redirectLocation(result) shouldBe Some(routes.TotalAmountSpentController.show().url)
         }
       )
     }

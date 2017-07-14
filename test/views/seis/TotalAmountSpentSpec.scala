@@ -58,14 +58,6 @@ class TotalAmountSpentSpec extends ViewSpec {
         document.select("h1").text() shouldBe Messages("page.seis.shareDetails.totalAmountSpent.heading")
       }
 
-      "have a first paragraph of disclosed text" in {
-        document.getElementById("p1").text() shouldBe Messages("page.seis.shareDetails.totalAmountSpent.guidance.one")
-      }
-
-      "have a second paragraph of disclosed text" in {
-        document.getElementById("p2").text() shouldBe Messages("page.seis.shareDetails.totalAmountSpent.guidance.two")
-      }
-
       "have a form posting to the correct route" in {
         document.select("form").attr("action") shouldBe controllers.seis.routes.TotalAmountSpentController.submit().url
       }
@@ -108,14 +100,6 @@ class TotalAmountSpentSpec extends ViewSpec {
 
       "have the correct heading" in {
         document.select("h1").text() shouldBe Messages("page.seis.shareDetails.totalAmountSpent.heading")
-      }
-
-      "have a first paragraph of disclosed text" in {
-        document.getElementById("p1").text() shouldBe Messages("page.seis.shareDetails.totalAmountSpent.guidance.one")
-      }
-
-      "have a second paragraph of disclosed text" in {
-        document.getElementById("p2").text() shouldBe Messages("page.seis.shareDetails.totalAmountSpent.guidance.two")
       }
 
       "have a form posting to the correct route" in {

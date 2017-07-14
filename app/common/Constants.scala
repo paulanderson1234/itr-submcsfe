@@ -27,6 +27,7 @@ trait Constants {
   val SuggestedTextMaxLengthLower: Int = 1024
   val SuggestedNatureOfBusinessLength: Int = 250
   val ShareDescriptionMaxLength: Int = 250
+  val CompanyDetailsMaxLength: Int = 56
 
   val businessActivityPreparation = "Preparing To Trade"
   val businessActivityRAndD = "Research And Development"
@@ -79,5 +80,8 @@ trait Constants {
 
   val investor = "Investor"
   val nominee = "Nominee"
+
+  val typeCompany = "Company"
+  val typeIndividual = "Individual"
 
 }

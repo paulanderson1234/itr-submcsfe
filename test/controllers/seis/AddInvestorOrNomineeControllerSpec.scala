@@ -25,6 +25,7 @@ import models._
 import org.mockito.Matchers
 import org.mockito.Mockito._
 import play.api.test.Helpers.{redirectLocation, _}
+import uk.gov.hmrc.http.cache.client.CacheMap
 
 import scala.concurrent.Future
 
@@ -90,46 +91,39 @@ class AddInvestorOrNomineeControllerSpec extends BaseSpec {
   }
 
   "By selecting the investor submission to the AddInvestorOrNomineeController when authenticated and enrolled" should {
-    "redirect to the AddInvestorOrNominee page" in {
+    "redirect to the correct page if an investor" in {
+      when(TestController.s4lConnector.saveFormData[AddInvestorOrNomineeModel](Matchers.eq(KeystoreKeys.addInvestor), Matchers.any())
+        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(CacheMap("",Map()))
+
       val formInput = "addInvestorOrNominee" -> Constants.investor
       setupMocks(None, Some(validBackLink))
       mockEnrolledRequest(seisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,formInput)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(controllers.seis.routes.AddInvestorOrNomineeController.show().url)
+          redirectLocation(result) shouldBe Some(controllers.seis.routes.CompanyOrIndividualController.show().url)
         }
       )
     }
   }
 
-  "By selecting the nominee submission to the AddInvestorOrNomineeController when authenticated and enrolled" should {
-    "redirect to the beginning of the flow if no backlink is present in s4l even if a model is retrieved" in {
+  "By selecting the investor submission to the AddInvestorOrNomineeController when authenticated and enrolled" should {
+    "redirect to the correct page if a nominee" in {
+      when(TestController.s4lConnector.saveFormData[AddInvestorOrNomineeModel](Matchers.eq(KeystoreKeys.addInvestor), Matchers.any())
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(CacheMap("",Map()))
+
       val formInput = "addInvestorOrNominee" -> Constants.nominee
-      setupMocks(Some(investor), None)
+      setupMocks(None, Some(validBackLink))
       mockEnrolledRequest(seisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,formInput)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(controllers.seis.routes.AddInvestorOrNomineeController.show().url)
+          redirectLocation(result) shouldBe Some(controllers.seis.routes.CompanyOrIndividualController.show().url)
         }
       )
     }
   }
 
-  "By selecting the nominee submission to the AddInvestorOrNomineeController when authenticated and enrolled" should {
-  "redirect to the beginning of the flow if no backlink or model is present in s4l" in {
-    val formInput = "addInvestorOrNominee" -> Constants.nominee
-    setupMocks(None, None)
-    mockEnrolledRequest(seisSchemeTypesModel)
-    submitWithSessionAndAuth(TestController.submit,formInput)(
-      result => {
-        status(result) shouldBe SEE_OTHER
-        redirectLocation(result) shouldBe Some(controllers.seis.routes.AddInvestorOrNomineeController.show().url)
-      }
-    )
-  }
-}
 
   "Sending an invalid form submission with validation errors to the AddInvestorOrNomineeController when authenticated and enrolled" should {
     "redirect to itself" in {

@@ -54,7 +54,7 @@ common.date.error.invalidDate=Date must have a valid day, month and a year with 
 common.section.progress.company.details.one=Section 1 of 6: Company details
 common.section.progress.company.details.two=Section 2 of 6: Previous schemes
 common.section.progress.company.details.three=Section 3 of 6: Shares
-common.section.progress.company.details.four=Section 4 of 6: This investment
+common.section.progress.company.details.four=Section 4 of 6: Investors
 common.section.progress.company.details.five=Section 5 of 6: Contact details
 common.section.progress.company.details.six=Section 6 of 6: Supporting documents
 common.section.progress.share.details.three=Section 3 of 6: Shares
@@ -75,6 +75,7 @@ validation.error.DateNotEntered=You must enter a valid day, month and year
 validation.error.enterDate=Please enter a date
 validation.error.operatingCosts=Please enter a value into
 validation.error.fourDigitYear=Enter a valid year
+validation.error.mandatoryname=Enter a valid company name
 validation.error.optionaladdresssline=Use fewer than 28 characters in the address line
 validation.error.mandatoryaddresssline=Address line must be entered
 validation.error.telephoneNumber=Enter a valid telephone number
@@ -87,10 +88,20 @@ validation.error.employeeCount.notANumber = Enter a valid number for your employ
 validation.error.employeeCount.size = The employee count should be between {0} and 9999999999999
 validation.error.employeeCount.precision = Enter a value with fewer than 13 decimal places for your employee count
 
-validation.error.totalAmountSpent.size = The total amount spent should be between 0 and 9999999999999
+validation.error.totalAmountSpent.size = The total amount spent should be between 0 and 99999999999
 validation.error.totalAmountSpent.notANumber = Enter a valid number for the total amount spent
 validation.error.totalAmountSpent.decimalPlaces = The total amount spent should not contain decimal places
 validation.error.totalAmountSpent.negative = The total amount spent should not be negative
+
+validation.error.grossAssets.size =The gross assets amount should be between 0 and 99999999
+validation.error.grossAssets.notANumber =Enter a valid number for the gross assets amount
+validation.error.grossAssets.decimalPlaces =The gross assets amount should not contain decimal places
+validation.error.grossAssets.negative = The gross assets amount should not be negative
+
+validation.error.totalAmountRaised.size = The total amount raised should be between 0 and 99999999999
+validation.error.totalAmountRaised.notANumber = Enter a valid number for the total amount raised
+validation.error.totalAmountRaised.decimalPlaces = The total amount raised should not contain decimal places
+validation.error.totalAmountRaised.negative = The total amount raised should not be negative
 
 validation.error.nominalValueOfShares.decimalPlaces = The share value should not contain decimal places
 validation.error.nominalValueOfShares.size =  The share value should be between 0 and 9999999999999
@@ -643,8 +654,8 @@ page.previousInvestment.schemeType.other=Other
 page.previousInvestment.amountSpent.label=Investment amount spent
 
 #Invalid previous scheme SEIS
-page.previousInvestment.InvalidPreviousScheme.title=You don''t qualify for the scheme
-page.previousInvestment.InvalidPreviousScheme.heading=You don''t qualify for the scheme
+page.previousInvestment.InvalidPreviousScheme.title=You don''t appear to qualify for this scheme
+page.previousInvestment.InvalidPreviousScheme.heading=You don''t appear to qualify for this scheme
 page.previousInvestment.InvalidPreviousScheme.reason=This is because your company has already raised investment through the Enterprise Investment Scheme or received investment from a Venture Capital Trust.
 page.previousInvestment.InvalidPreviousScheme.change-text=If this information is incorrect you can
 page.previousInvestment.InvalidPreviousScheme.change-link=change your answers
@@ -721,8 +732,8 @@ page.PreviouslySubmitted.heading=Previously submitted applications
 page.introduction.hub.viewPrevious.AdvancedAssurance=View all of your Advance Assurance applications
 
 # SEIS Research Start Date
-page.seis.companyDetails.researchStartDate.title = Have you started research and development to do with the trade you want to raise investment for?
-page.seis.companyDetails.researchStartDate.heading = Have you started research and development to do with the trade you want to raise investment for?
+page.seis.companyDetails.researchStartDate.title = Have you started research and development to do with the business activity you got investment for?
+page.seis.companyDetails.researchStartDate.heading = Have you started research and development to do with the business activity you got investment for?
 page.seis.companyDetails.researchStartDate.question = When did this research and development start?
 
 # SEIS trade start date
@@ -730,6 +741,18 @@ page.seis.companyDetails.tradeStartDate.title=Has the trade you want investment 
 page.seis.companyDetails.tradeStartDate.heading=Has the trade you want investment in started?
 page.seis.companyDetails.text=The trade has started if your goods or services are available to the public. You may not have made a sale yet.
 page.seis.companyDetails.TradeStartDate.question.hint=When did this trade start?
+
+# SEIS Company Details
+page.investment.companyDetails.heading=What are this company’s details?
+page.investment.companyDetails.title=What are this company’s details?
+page.investment.companyDetails.companyname.label=Company name
+page.investment.companyDetails.addressline1.label=Address line 1
+page.investment.companyDetails.addressline2.label=Address line 2
+page.investment.companyDetails.addressline3.label=Address line 3 (optional)
+page.investment.companyDetails.addressline4.label=Address line 4 (optional)
+page.investment.companyDetails.postcode.label=Postcode
+page.investment.companyDetails.country.label=Country
+page.address.country.select = Select one country
 
 # EISSEIS trade start date
 page.eisseis.companyDetails.tradeStartDate.title=Has the trade you want investment in started?
@@ -785,10 +808,8 @@ page.seis.companyDetails.fullTimeEmployeeCount.guidance.two = The number of hour
 page.seis.companyDetails.fullTimeEmployeeCount.guidance.three = For example, someone working 21 hours a week would count as 60% of a full-time employee and someone working 14 hours a week would count as 40% of a full-time employee. Together they would count as one full-time employee.
 
 #SEIS Total Amount Spent
-page.seis.shareDetails.totalAmountSpent.heading=Total amount spent
-page.seis.shareDetails.totalAmountSpent.title=Total amount spent
-page.seis.shareDetails.totalAmountSpent.guidance.one=...
-page.seis.shareDetails.totalAmountSpent.guidance.two=...
+page.seis.shareDetails.totalAmountSpent.heading=How much of the investment from this share issue has been spent?
+page.seis.shareDetails.totalAmountSpent.title=How much of the investment from this share issue has been spent?
 
 # SEIS Proposed Investment page
 page.seis.investment.proposedInvestment.amount.title=How much investment do you want to raise?
@@ -810,6 +831,17 @@ page.seis.companyDetails.fullTimeEmployeeCountError.incorrect.link = change your
 # SEIS Nominal Value of Shares
 page.seis.nominalValueOfShares.title = What was the nominal value of each share when they were issued?
 page.seis.nominalValueOfShares.hint = The nominal value is the amount shown on the share certificate.
+
+# SEIS Individual Details Page
+page.seis.individualDetails.title =What are this individual’s details?
+page.seis.individualDetails.forename.label= First Name
+page.seis.individualDetails.surname.label= Last Name
+page.seis.individualDetails.addressline1.label= Address line 1
+page.seis.individualDetails.addressline2.label= Address line 2
+page.seis.individualDetails.addressline3.label= Address line 3 (optional)
+page.seis.individualDetails.addressline4.label= Address line 4 (optional)
+page.seis.individualDetails.postcode.label= Postcode
+page.seis.individualDetails.country.label= Country
 
 # SEIS Check Answers
 page.seis.checkAndSubmit.checkAnswers.description.one=You''re applying for Advance Assurance for the Seed Enterprise Investment Scheme.
@@ -1029,10 +1061,10 @@ page.companyDetails.qualifyBusinessActivity.help.text.five=renting an office
 page.companyDetails.qualifyBusinessActivity.help.text.six=Research and development is work you do to improve existing products and create new products.
 
 #Has Investment Trade Started
-page.companyDetails.HasInvestmentTradeStarted.title=Has the trade you want to raise investment for started?
-page.companyDetails.HasInvestmentTradeStarted.heading=Has the trade you want to raise investment for started?
-page.companyDetails.HasInvestmentTradeStarted.question.hint=When did this trade start?
-page.companyDetails.HasInvestmentTradeStarted.descriptionOne.text=The trade has started if your goods or services are available to the public. You may not have made a sale yet.
+page.companyDetails.HasInvestmentTradeStarted.title=Has the business activity you got investment for started?
+page.companyDetails.HasInvestmentTradeStarted.heading=Has the business activity you got investment for started?
+page.companyDetails.HasInvestmentTradeStarted.question.hint=When did this business activity start?
+page.companyDetails.HasInvestmentTradeStarted.descriptionOne.text=The business activity has started if your goods or services are available to the public. You may not have made a sale yet.
 
 # number of shares
 page.shareDetails.numberOfShares.title=How many of these shares did your company issue?
@@ -1046,3 +1078,8 @@ page.seis.investors.AddInvestorOrNominee.info.two=A nominee is someone who acts 
 page.seis.investors.AddInvestorOrNominee.radioButton.one=Investor
 page.seis.investors.AddInvestorOrNominee.radioButton.two=Nominee
 
+#Company or Individual
+page.investors.companyOrIndividual.title = Is this {0} a company or an individual?
+page.investors.companyOrIndividual.heading = Is this {0} a company or an individual?
+page.investors.companyOrIndividual.company=Company
+page.investors.companyOrIndividual.individual=Individual

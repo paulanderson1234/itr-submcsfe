@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 
-package models
+package forms
 
-import play.api.libs.json.Json
-import utils.CostFormatter
+import models.CompanyOrIndividualModel
+import play.api.data.Form
+import play.api.data.Forms._
 
-case class GrossAssetsModel(grossAmount : BigDecimal)
 
-object GrossAssetsModel extends CostFormatter{
-
-  implicit val format = Json.format[GrossAssetsModel]
-  implicit val writes = Json.writes[GrossAssetsModel]
+object CompanyOrIndividualForm {
+  val companyOrIndividualForm = Form(
+    mapping(
+    "companyOrIndividual" -> nonEmptyText)
+    (CompanyOrIndividualModel.apply)(CompanyOrIndividualModel.unapply))
 }

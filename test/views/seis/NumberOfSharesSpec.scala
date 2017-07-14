@@ -46,7 +46,7 @@ class NumberOfSharesSpec extends ViewSpec {
       }
 
       "have the correct back link url" in {
-        document.select("a.back-link").attr("href") shouldBe "/investment-tax-relief-cs/seis/number-of-shares"
+        document.select("a.back-link").attr("href") shouldBe "/investment-tax-relief-cs/seis/share-description"
       }
 
       "have the progress details" in {
@@ -94,7 +94,7 @@ class NumberOfSharesSpec extends ViewSpec {
       }
 
       "have the correct back link url" in {
-        document.select("a.back-link").attr("href") shouldBe "/investment-tax-relief-cs/seis/number-of-shares"
+        document.select("a.back-link").attr("href") shouldBe "/investment-tax-relief-cs/seis/share-description"
       }
 
       "have the progress details" in {

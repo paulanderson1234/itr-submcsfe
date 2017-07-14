@@ -18,7 +18,7 @@ package controllers.Helpers
 
 import auth.TAVCUser
 import common.{Constants, KeystoreKeys}
-import models.{HasInvestmentTradeStartedModel, QualifyBusinessActivityModel, ResearchStartDateModel, TradeStartDateModel}
+import models._
 import models.submission.SchemeTypesModel
 import uk.gov.hmrc.play.http.HeaderCarrier
 import play.api.i18n.Messages
@@ -122,5 +122,7 @@ trait ControllerHelpers {
       case None =>  Messages("page.introduction.hub.existing.advanced.assurance.type")
     }
   }
+
+  def useInvestorOrNomineeValueAsHeadingText(investorOrNominee: AddInvestorOrNomineeModel): String =  investorOrNominee.addInvestorOrNominee.toLowerCase
 
 }

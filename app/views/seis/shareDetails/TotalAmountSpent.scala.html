@@ -13,14 +13,6 @@
 
 <h1 class="heading-xlarge" id="main-heading">@Messages("page.seis.shareDetails.totalAmountSpent.heading")</h1>
 
-<div>
-    <p id="p1"> @Messages("page.seis.shareDetails.totalAmountSpent.guidance.one")</p>
-</div>
-
-<div>
-    <p id="p2">@Messages("page.seis.shareDetails.totalAmountSpent.guidance.two")</p>
-</div>
-
 @form(action = controllers.seis.routes.TotalAmountSpentController.submit()) {
 <fieldset>
     <legend class="visuallyhidden">@Messages("page.seis.shareDetails.totalAmountSpent.heading")</legend>
@@ -33,7 +25,7 @@
         '_labelTextClass -> "visuallyhidden",
         '_inputClass -> "input--no-spinner input--left-padding",
         '_type -> "text",
-        '_maxlength -> "25",
+        '_maxlength -> "11",
         'id -> "totalAmountSpent"
         )
     </div>

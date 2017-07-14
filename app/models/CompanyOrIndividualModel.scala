@@ -17,12 +17,9 @@
 package models
 
 import play.api.libs.json.Json
-import utils.CostFormatter
 
-case class GrossAssetsModel(grossAmount : BigDecimal)
+case class CompanyOrIndividualModel(companyOrIndividual: String)
 
-object GrossAssetsModel extends CostFormatter{
-
-  implicit val format = Json.format[GrossAssetsModel]
-  implicit val writes = Json.writes[GrossAssetsModel]
+object CompanyOrIndividualModel{
+  implicit val formats = Json.format[CompanyOrIndividualModel]
 }

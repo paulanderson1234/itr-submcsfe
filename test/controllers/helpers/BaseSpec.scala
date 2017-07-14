@@ -76,6 +76,7 @@ trait BaseSpec extends UnitSpec with OneAppPerSuite with MockitoSugar with FakeR
 
   val addressModel = AddressModel("Line 1", "Line 2", Some("Line 3"), Some("Line 4"), Some("AB1 1AB"), "GB")
   val subscriptionDetailsModel = SubscriptionDetailsModel("",contactDetailsModel,contactAddressModel)
+  val companyDetailsModel = CompanyDetailsModel("Line 0", "Line 1", "Line 2", Some("Line 3"), Some("Line 4"), Some("AB1 1AB"), countryCode = "JP")
 
   val contactDetailsModel = ContactDetailsModel("Test", "Name", Some("01111 111111"), Some("0872552488"), "test@test.com")
   val contactDetailsOneNumberModel = ContactDetailsModel("Test", "Name", None, Some("0872552488"), "test@test.com")
@@ -233,4 +234,7 @@ trait BaseSpec extends UnitSpec with OneAppPerSuite with MockitoSugar with FakeR
 
   val investor = AddInvestorOrNomineeModel(Constants.investor)
   val nominee = AddInvestorOrNomineeModel(Constants.nominee)
+
+  val companyOrIndividualModel = CompanyOrIndividualModel(Constants.typeCompany)
+
 }
