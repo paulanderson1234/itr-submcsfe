@@ -175,26 +175,31 @@ trait PreviousSchemesHelper {
     s4lConnector.saveFormData(KeystoreKeys.previousSchemes, Vector[PreviousSchemeModel]())
   }
 
-  def addTempPreviousInvestmentToKeystore(s4lConnector: connectors.S4LConnector)
-                                     (implicit hc: HeaderCarrier, user: TAVCUser): Future[CacheMap] = {
-    val defaultId: Int = 1
+  def updateKeystorePreviousInvestmentById(s4lConnector: connectors.S4LConnector,
+                                       previousSchemeModelToUpdate: PreviousSchemeModel)
+                                      (implicit hc: HeaderCarrier, user: TAVCUser): Future[PreviousSchemeModel] = {
+    val idNotFound: Int = -1
 
-    val result = for {
-      tempPreviousScheme <- s4lConnector.fetchAndGetFormData[PreviousSchemeModel](KeystoreKeys.tempPreviousSchemes)
-      currentPreviousScheme <- s4lConnector.fetchAndGetFormData[Vector[PreviousSchemeModel]](KeystoreKeys.previousSchemes)
-    } yield (tempPreviousScheme, currentPreviousScheme)
+    require(previousSchemeModelToUpdate.processingId.getOrElse(0) > 0,
+      "The item to update processingId must be an integer > 0")
 
-    val previousSchemes = result.map {
-      case (Some(data1), Some(data2)) => {
-        val newId = data2.last.processingId.get + 1
-        data2 :+ data1.copy(processingId = Some(newId))
+    val result = s4lConnector.fetchAndGetFormData[Vector[PreviousSchemeModel]](KeystoreKeys.previousSchemes).map {
+      case Some(data) => {
+        val itemToUpdateIndex = data.indexWhere(_.processingId.getOrElse(0) ==
+          previousSchemeModelToUpdate.processingId.getOrElse(0))
+        if (itemToUpdateIndex != idNotFound) {
+          data.updated(itemToUpdateIndex, previousSchemeModelToUpdate)
+        }
+        else data
       }
-      case (None, Some(data2))  => data2
-      case (Some(data), None) => Vector.empty :+ data.copy(processingId = Some(defaultId))
-    }.recover { case _ => Vector[PreviousSchemeModel]() }
+      case None => Vector[PreviousSchemeModel]()
+    }
+    result.flatMap(updatedVectorList => s4lConnector.saveFormData(KeystoreKeys.previousSchemes, updatedVectorList))
+    val model = for {
+      x <- result
+    } yield x.last
 
-    previousSchemes.flatMap(newVectorList => s4lConnector.saveFormData(KeystoreKeys.previousSchemes, newVectorList))
-
+    model
   }
 
   def addPreviousInvestmentToKeystoreById(s4lConnector: connectors.S4LConnector,
