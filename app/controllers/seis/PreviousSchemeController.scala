@@ -84,8 +84,8 @@ trait PreviousSchemeController extends FrontendController with AuthorisedAndEnro
 
           if (validFormData.schemeTypeDesc == Constants.schemeTypeVct || validFormData.schemeTypeDesc == Constants.schemeTypeEis) {
             validFormData.processingId match {
-              case Some(_) => PreviousSchemesHelper.updateKeystorePreviousInvestment(s4lConnector, validFormData).map {
-                _ => Redirect(routes.ReviewPreviousSchemesController.show())
+              case Some(_) => PreviousSchemesHelper.updateKeystorePreviousInvestmentById(s4lConnector, validFormData).map {
+                schemeModel => Redirect(routes.InvalidPreviousSchemeController.show(schemeModel.processingId.get))
               }
               case None => PreviousSchemesHelper.addPreviousInvestmentToKeystoreById(s4lConnector, validFormData).map {
                 schemeModel => Redirect(routes.InvalidPreviousSchemeController.show(schemeModel.processingId.get))
