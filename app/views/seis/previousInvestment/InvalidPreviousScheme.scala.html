@@ -7,7 +7,7 @@
 
 @main_template(title = Messages("page.previousInvestment.InvalidPreviousScheme.title"), bodyClasses = None) {
 
-@backButton(controllers.seis.routes.ReviewPreviousSchemesController.show().url)
+@backButton(controllers.seis.routes.ReviewPreviousSchemesController.change(schemeId).url)
 
 <div class="grid-row">
     <div class="column-two-thirds">
