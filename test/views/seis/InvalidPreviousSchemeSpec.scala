@@ -44,7 +44,7 @@ class InvalidPreviousSchemeSpec extends ViewSpec with FakeRequestHelper {
       }
 
       "has the correct link" in {
-        backLink.attr("href") shouldBe routes.ReviewPreviousSchemesController.show().url
+        backLink.attr("href") shouldBe routes.ReviewPreviousSchemesController.change(1).url
       }
     }
 
