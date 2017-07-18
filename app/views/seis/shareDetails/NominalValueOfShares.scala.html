@@ -12,10 +12,12 @@
 
     <h1 class="heading-xlarge">@Messages("page.seis.nominalValueOfShares.title")</h1>
 
+    <div class = "form-group">
+        <p>@Messages("page.seis.nominalValueOfShares.hint")</p>
+    </div>
+
     @form(action = controllers.seis.routes.NominalValueOfSharesController.submit()) {
         <div class="form-group">
-            <p>@Messages("page.seis.nominalValueOfShares.hint")</p>
-
             @inputWithCurrencySymbol(
             nominalValueOfSharesForm("nominalValueOfShares"),
             '_divClass -> "form-label",
