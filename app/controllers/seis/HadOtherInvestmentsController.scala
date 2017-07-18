@@ -94,7 +94,6 @@ trait HadOtherInvestmentsController extends FrontendController with AuthorisedAn
         getAllInvestmentFromKeystore(s4lConnector).flatMap {
           previousSchemes =>
             if (previousSchemes.nonEmpty) {
-              s4lConnector.saveFormData(KeystoreKeys.backLinkReviewPreviousSchemes, routes.HadOtherInvestmentsController.show().url)
               Future.successful(Redirect(routes.ReviewPreviousSchemesController.show()))
             }
             else {
@@ -109,7 +108,6 @@ trait HadOtherInvestmentsController extends FrontendController with AuthorisedAn
           getAllInvestmentFromKeystore(s4lConnector).flatMap {
             previousSchemes =>
               if (previousSchemes.nonEmpty) {
-                s4lConnector.saveFormData(KeystoreKeys.backLinkReviewPreviousSchemes, routes.HadOtherInvestmentsController.show().url)
                 Future.successful(Redirect(routes.ReviewPreviousSchemesController.show()))
               }
               else {
