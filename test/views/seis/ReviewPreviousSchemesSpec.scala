@@ -63,7 +63,7 @@ class ReviewPreviousSchemesSpec extends ViewSpec {
 
       document.title shouldBe Messages("page.previousInvestment.reviewPreviousSchemes.title")
       document.getElementById("main-heading").text() shouldBe Messages("page.previousInvestment.reviewPreviousSchemes.heading")
-      document.body.getElementById("back-link").attr("href") shouldEqual routes.HadOtherInvestmentsController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual routes.HadPreviousRFIController.show().url
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.company.details.two")
 
       lazy val reviewSchemesTableHead = document.getElementById("previous-schemes-table").select("thead")
