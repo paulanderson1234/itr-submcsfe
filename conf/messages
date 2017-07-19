@@ -1078,6 +1078,9 @@ page.seis.investors.AddInvestorOrNominee.info.two=A nominee is someone who acts 
 page.seis.investors.AddInvestorOrNominee.radioButton.one=Investor
 page.seis.investors.AddInvestorOrNominee.radioButton.two=Nominee
 
+#How Much Spent On Shares
+page.seis.investors.howMuchSpentOnShares.title=How much did this {0} pay in total for these shares?
+
 #Company or Individual
 page.investors.companyOrIndividual.title = Is this {0} a company or an individual?
 page.investors.companyOrIndividual.heading = Is this {0} a company or an individual?
