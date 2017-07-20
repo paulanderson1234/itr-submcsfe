@@ -67,7 +67,7 @@ case class InvestorDetailsModel(investorOrNomineeModel: Option[AddInvestorOrNomi
                                 companyOrIndividualModel: Option[CompanyOrIndividualModel] = None,
                                 companyDetailsModel: Option[CompanyDetailsModel] = None,
                                 individualDetailsModel: Option[IndividualDetailsModel] = None,
-                                numberOfSharesPurchasedModel: Option[NumberOfSharesPurchasedModel],
+                                numberOfSharesPurchasedModel: Option[NumberOfSharesPurchasedModel] = None,
                                 amountSpentModel: Option[AmountSpentModel] = None,
                                 isExistingShareHolderModel: Option[IsExistingShareHolderModel] = None,
                                 previousShareHoldingModels: Option[Vector[PreviousShareHoldingModel]] = None) {
