@@ -52,8 +52,8 @@ trait HowMuchSpentOnSharesController extends FrontendController with AuthorisedA
 
           def routeRequest(companyOrIndividual: Option[CompanyOrIndividualModel]) = if (companyOrIndividual.isDefined) {
             s4lConnector.fetchAndGetFormData[HowMuchSpentOnSharesModel](KeystoreKeys.howMuchSpentOnShares).map {
-              case Some(data) => Ok(HowMuchSpentOnShares(useCompanyOrIndividualAsHeadingText(companyOrIndividual.get), howMuchSpentOnSharesForm.fill(data)))
-              case None => Ok(HowMuchSpentOnShares(useCompanyOrIndividualAsHeadingText(companyOrIndividual.get), howMuchSpentOnSharesForm))
+              case Some(data) => Ok(HowMuchSpentOnShares(companyOrIndividual.get.companyOrIndividual, howMuchSpentOnSharesForm.fill(data)))
+              case None => Ok(HowMuchSpentOnShares(companyOrIndividual.get.companyOrIndividual, howMuchSpentOnSharesForm))
             }
           }
 
@@ -81,7 +81,7 @@ trait HowMuchSpentOnSharesController extends FrontendController with AuthorisedA
 
             val failure: Form[HowMuchSpentOnSharesModel] => Future[Result] = { formWithErrors =>
               s4lConnector.fetchAndGetFormData[CompanyOrIndividualModel](KeystoreKeys.companyOrIndividual).map {
-               data =>  BadRequest(HowMuchSpentOnShares(useCompanyOrIndividualAsHeadingText(data.get), formWithErrors))
+               data =>  BadRequest(HowMuchSpentOnShares(data.get.companyOrIndividual, formWithErrors))
               }
             }
 
@@ -102,7 +102,7 @@ trait HowMuchSpentOnSharesController extends FrontendController with AuthorisedA
               //                  }
               //
 
-
+//(HowMuchSpentOnShares(useCompanyOrIndividualAsHeadingText(companyOrIndividual.get)
       }
     }
   }

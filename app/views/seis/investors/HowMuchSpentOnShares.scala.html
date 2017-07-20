@@ -12,7 +12,7 @@
 
 @errorSummary(howMuchSpentOnSharesForm, "how-much-spent-on-shares", "howMuchSpentOnShares")
 
-<h1 class="heading-xlarge">@Messages("page.seis.investors.howMuchSpentOnShares.title", howMuchSpentOnShares)</h1>
+<h1 class="heading-xlarge">@Messages("page.seis.investors.howMuchSpentOnShares.title", howMuchSpentOnShares.toLowerCase())</h1>
 
 @form(action = controllers.seis.routes.HowMuchSpentOnSharesController.submit()) {
 <div class="form-group">

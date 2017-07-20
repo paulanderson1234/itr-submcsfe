@@ -89,7 +89,7 @@
 //
 //    "supplied with form errors" should {
 //      lazy val document: Document = {
-//        val map = Map("employeeCount" -> "")
+//        val map = Map("howMuchSpentOnShares" -> "")
 //        val result = HowMuchSpentOnShares(howMuchSpentOnSharesForm.bind(map))
 //        Jsoup.parse(contentAsString(result))
 //      }
