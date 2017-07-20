@@ -35,9 +35,9 @@ object IsExistingShareHolderModel{
   implicit val formats = Json.format[IsExistingShareHolderModel]
 }
 
-case class DateOfIssueModel(dateOfIssueDay: Int, dateOfIssueMonth: Int, dateOfIssueYear: Int)
-object DateOfIssueModel{
-  implicit val formats = Json.format[DateOfIssueModel]
+case class InvestorShareIssueDateModel(dateOfIssueDay: Int, dateOfIssueMonth: Int, dateOfIssueYear: Int)
+object InvestorShareIssueDateModel{
+  implicit val formats = Json.format[InvestorShareIssueDateModel]
 }
 case class NumberOfPreviouslyIssuedSharesModel(previouslyIssuedShares: BigDecimal)
 object NumberOfPreviouslyIssuedSharesModel{
@@ -53,7 +53,7 @@ object PreviousShareHoldingDescriptionModel{
 }
 
 
-case class PreviousShareHoldingModel(dateOfIssueModel: Option[DateOfIssueModel] = None,
+case class PreviousShareHoldingModel(investorShareIssueDateModel: Option[InvestorShareIssueDateModel] = None,
                                      numberOfPreviouslyIssuedSharesModel: Option[NumberOfPreviouslyIssuedSharesModel] = None,
                                      previousShareHoldingNominalValueModel: Option[PreviousShareHoldingNominalValueModel] = None,
                                      previousShareHoldingDescriptionModel: Option[PreviousShareHoldingDescriptionModel] = None)
