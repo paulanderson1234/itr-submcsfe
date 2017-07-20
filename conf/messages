@@ -1083,3 +1083,7 @@ page.investors.companyOrIndividual.title = Is this {0} a company or an individua
 page.investors.companyOrIndividual.heading = Is this {0} a company or an individual?
 page.investors.companyOrIndividual.company=Company
 page.investors.companyOrIndividual.individual=Individual
+
+#Investor Share Issue Date
+page.investors.investorShareIssueDate.title = When were these previous shares issued?
+page.investors.investorShareIssueDate.heading = When were these previous shares issued?

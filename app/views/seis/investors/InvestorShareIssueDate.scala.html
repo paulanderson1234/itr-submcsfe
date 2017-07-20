@@ -1,0 +1,25 @@
+@import models.InvestorShareIssueDateModel
+@import uk.gov.hmrc.play.views.html.helpers.form
+@import views.html.helpers.{externalLink, backButtonWithProgress, errorSummary, formInlineDateInput}
+
+@(investorShareIssueDateForm: Form[InvestorShareIssueDateModel],backLink:String)(implicit request: Request[_], messages: Messages)
+
+@main_template(Messages("page.investors.investorShareIssueDate.title")) {
+
+    @backButtonWithProgress(backLink, Messages("common.section.progress.company.details.one"))
+
+    @errorSummary(investorShareIssueDateForm, "investor-share-issue-date", "investorShareIssueDateDay")
+
+    <h1 class="heading-xlarge" id="main-heading">@Messages("page.investors.investorShareIssueDate.heading")</h1>
+
+    @form(action = controllers.seis.routes.InvestorShareIssueDateController.submit()) {
+
+        @formInlineDateInput(investorShareIssueDateForm, "InvestorShareIssue", Some(Messages("page.investors.investorShareIssueDate.heading")),
+          true, Some(Messages("common.date.hint.example")), None)
+
+        <div class="form-group">
+            <button class="btn button" type="submit" id="next">@Messages("common.button.snc")</button>
+        </div>
+
+    }
+}
