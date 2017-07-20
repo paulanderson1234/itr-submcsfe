@@ -60,7 +60,7 @@ trait HowMuchSpentOnSharesController extends FrontendController with AuthorisedA
           else Future.successful(Redirect(routes.CompanyOrIndividualController.show()))
 
               for {
-                companyOrIndividual <- s4lConnector.fetchAndGetFormData[CompanyOrIndividualModel](KeystoreKeys.howMuchSpentOnShares)
+                companyOrIndividual <- s4lConnector.fetchAndGetFormData[CompanyOrIndividualModel](KeystoreKeys.companyOrIndividual)
                 route <- routeRequest(companyOrIndividual)
               }
                 yield route
@@ -79,9 +79,9 @@ trait HowMuchSpentOnSharesController extends FrontendController with AuthorisedA
               )
             }
 
-            val failure: Form[HowMuchSpentOnSharesModel] => Future[Result] = { form =>
-              s4lConnector.fetchAndGetFormData[CompanyOrIndividualModel](KeystoreKeys.addInvestor).map {
-               data =>  BadRequest(HowMuchSpentOnShares(useCompanyOrIndividualAsHeadingText(data.get), form))
+            val failure: Form[HowMuchSpentOnSharesModel] => Future[Result] = { formWithErrors =>
+              s4lConnector.fetchAndGetFormData[CompanyOrIndividualModel](KeystoreKeys.companyOrIndividual).map {
+               data =>  BadRequest(HowMuchSpentOnShares(useCompanyOrIndividualAsHeadingText(data.get), formWithErrors))
               }
             }
 
