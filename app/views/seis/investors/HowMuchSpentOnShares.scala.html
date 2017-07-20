@@ -2,15 +2,17 @@
 @import uk.gov.hmrc.play.views.html.helpers.form
 @import views.html.helpers.inputWithCurrencySymbol
 @import views.html.helpers.errorSummary
+@import models.HowMuchSpentOnSharesModel
 
-@(howMuchSpentOnSharesForm: Form[HowMuchSpentOnSharesModel])(implicit request: Request[_], messages: Messages)
+@(howMuchSpentOnShares: String, howMuchSpentOnSharesForm: Form[HowMuchSpentOnSharesModel])(implicit request: Request[_], messages: Messages)
 
-@main_template(Messages("page.seis.investors.howMuchSpentOnShares.title")) {
+@main_template(Messages("page.seis.investors.howMuchSpentOnShares.title", howMuchSpentOnShares)) {
+
 @backButtonWithProgress(controllers.seis.routes.HowMuchSpentOnSharesController.show().url, Messages("common.section.progress.company.details.four"))
 
 @errorSummary(howMuchSpentOnSharesForm, "how-much-spent-on-shares", "howMuchSpentOnShares")
 
-<h1 class="heading-xlarge">@Messages("page.seis.investors.howMuchSpentOnShares.title")</h1>
+<h1 class="heading-xlarge">@Messages("page.seis.investors.howMuchSpentOnShares.title", howMuchSpentOnShares)</h1>
 
 @form(action = controllers.seis.routes.HowMuchSpentOnSharesController.submit()) {
 <div class="form-group">
