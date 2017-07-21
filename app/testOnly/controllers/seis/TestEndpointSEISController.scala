@@ -154,6 +154,7 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
         totalAmountSpentForm <- fillForm[TotalAmountSpentModel](KeystoreKeys.totalAmountSpent, TotalAmountSpentForm.totalAmountSpentForm)
         addInvestorOrNomineeForm <- fillForm[AddInvestorOrNomineeModel](KeystoreKeys.addInvestor, AddInvestorOrNomineeForm.addInvestorOrNomineeForm)
         companyOrIndividualForm <- fillForm[CompanyOrIndividualModel](KeystoreKeys.companyOrIndividual, CompanyOrIndividualForm.companyOrIndividualForm)
+        howMuchSpentOnSharesForm <- fillForm[HowMuchSpentOnSharesModel](KeystoreKeys.howMuchSpentOnShares, HowMuchSpentOnSharesForm.howMuchSpentOnSharesForm)
 
       } yield Ok(
         testOnly.views.html.seis.testEndpointSEISPageTwo(
@@ -165,7 +166,8 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
           totalAmountSpentForm,
           addInvestorOrNomineeForm,
           companyOrIndividualForm,
-          companyDetails
+          companyDetails,
+          howMuchSpentOnSharesForm
 
         )
       )
@@ -182,6 +184,7 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
     val totalAmountSpent = bindForm[TotalAmountSpentModel](KeystoreKeys.totalAmountSpent, TotalAmountSpentForm.totalAmountSpentForm)
     val addInvestorOrNomineeForm = bindForm[AddInvestorOrNomineeModel](KeystoreKeys.addInvestor, AddInvestorOrNomineeForm.addInvestorOrNomineeForm)
     val companyOrIndividual = bindForm[CompanyOrIndividualModel](KeystoreKeys.companyOrIndividual, CompanyOrIndividualForm.companyOrIndividualForm)
+    val howMuchSpentOnSharesForm = bindForm[HowMuchSpentOnSharesModel](KeystoreKeys.howMuchSpentOnShares, HowMuchSpentOnSharesForm.howMuchSpentOnSharesForm)
 
     saveBackLinks()
     saveSchemeType()
@@ -195,7 +198,8 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
         totalAmountSpent,
         addInvestorOrNomineeForm,
         companyOrIndividual,
-        companyDetails
+        companyDetails,
+        howMuchSpentOnSharesForm
       )
     ))
   }
