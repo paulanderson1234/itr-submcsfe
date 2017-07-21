@@ -49,8 +49,7 @@ object PreviousShareHoldingDescriptionModel{
 }
 
 
-case class PreviousShareHoldingModel(InvestorShareIssueDateModel: Option[InvestorShareIssueDateModel] = None,
-                                     numberOfPreviouslyIssuedSharesModel: Option[NumberOfPreviouslyIssuedSharesModel] = None,
+case class PreviousShareHoldingModel(numberOfPreviouslyIssuedSharesModel: Option[NumberOfPreviouslyIssuedSharesModel] = None,
                                      previousShareHoldingNominalValueModel: Option[PreviousShareHoldingNominalValueModel] = None,
                                      previousShareHoldingDescriptionModel: Option[PreviousShareHoldingDescriptionModel] = None)
 

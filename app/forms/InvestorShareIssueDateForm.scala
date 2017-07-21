@@ -17,12 +17,12 @@
 package forms
 
 import models.InvestorShareIssueDateModel
-import play.api.Play.current
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.i18n.Messages
-import play.api.i18n.Messages.Implicits._
 import utils.Validation._
+import play.api.i18n.Messages.Implicits._
+import play.api.Play.current
 
 object InvestorShareIssueDateForm {
 
@@ -32,11 +32,11 @@ object InvestorShareIssueDateForm {
       "investorShareIssueDateMonth" -> optional(number),
       "investorShareIssueDateYear" -> optional(number)
     )(InvestorShareIssueDateModel.apply)(InvestorShareIssueDateModel.unapply)
-      .verifying(Messages("validation.error.DateNotEntered"), fields =>
-        validateNonEmptyDateOptions(fields.day, fields.month, fields.year))
+      .verifying(Messages("validation.error.DateNotEntered"), x =>
+        validateNonEmptyDateOptions(x.investorShareIssueDateDay, x.investorShareIssueDateMonth, x.investorShareIssueDateYear))
       .verifying(Messages("common.date.error.invalidDate"), fields =>
-        isValidDateOptions(fields.day, fields.month, fields.year))
+        isValidDateOptions(fields.investorShareIssueDateDay, fields.investorShareIssueDateMonth, fields.investorShareIssueDateYear))
       .verifying(Messages("validation.error.ShareIssueDate.Future"), fields =>
-        dateNotInFutureOptions(fields.day, fields.month, fields.year))
+        dateNotInFutureOptions(fields.investorShareIssueDateDay, fields.investorShareIssueDateMonth, fields.investorShareIssueDateYear))
   )
 }

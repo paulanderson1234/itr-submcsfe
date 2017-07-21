@@ -68,21 +68,14 @@ trait InvestorShareIssueDateController extends FrontendController with Authorise
     AuthorisedAndEnrolled.async { implicit user => implicit request =>
       investorShareIssueDateForm.bindFromRequest().fold(
         formWithErrors => {
-print("******************************************************************************************************")
           ControllerHelpers.getSavedBackLink(KeystoreKeys.backLinkAddInvestorOrNominee, s4lConnector).flatMap {
-            case Some(data) => {
-              print("***********************************************11111111************************************")
-              Future.successful(BadRequest(InvestorShareIssueDate(formWithErrors, data)))
-            }
-            case None => {
-              print("***********************************************2222222222222222222************************************")
-              Future.successful(Redirect(routes.AddInvestorOrNomineeController.show()))
-            }
+            case Some(data) => Future.successful(BadRequest(InvestorShareIssueDate(formWithErrors, data)))
+            case None => Future.successful(Redirect(routes.AddInvestorOrNomineeController.show()))
             //TODO route should be "Existing Shareholder?" page
           }
         },
         validFormData => {
-          //s4lConnector.saveFormData(KeystoreKeys.investorShareIssueDate, validFormData)
+          s4lConnector.saveFormData(KeystoreKeys.investorShareIssueDate, validFormData)
           Future.successful(Redirect(routes.AddInvestorOrNomineeController.show()))
           //TODO Successful route should be "How many shares were bought" page
         }

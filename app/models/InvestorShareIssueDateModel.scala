@@ -17,9 +17,13 @@
 package models
 
 import play.api.libs.json.Json
+import utils.DateFormatter
 
-case class InvestorShareIssueDateModel(day:Option[Int], month:Option[Int], year:Option[Int])
-object InvestorShareIssueDateModel {
+case class InvestorShareIssueDateModel(investorShareIssueDateDay:Option[Int],
+                                       investorShareIssueDateMonth:Option[Int],
+                                       investorShareIssueDateYear:Option[Int])
+
+object InvestorShareIssueDateModel extends DateFormatter {
   implicit val formats = Json.format[InvestorShareIssueDateModel]
-  implicit val writes = Json.writes[InvestorShareIssueDateModel]
+  implicit val writes =  Json.writes[InvestorShareIssueDateModel]
 }

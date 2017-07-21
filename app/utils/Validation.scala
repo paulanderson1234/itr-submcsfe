@@ -217,7 +217,7 @@ object Validation {
   }
 
   def validateNonEmptyDateOptions(day: Option[Int], month: Option[Int], year: Option[Int]): Boolean = {
-    if (day.isEmpty || month.isEmpty || year.isEmpty) {
+    if (day.isDefined || month.isEmpty || year.isEmpty) {
       false
     } else {
       true
