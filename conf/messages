@@ -1094,8 +1094,9 @@ page.investors.companyOrIndividual.company=Company
 page.investors.companyOrIndividual.individual=Individual
 
 #PreviousShareHoldings
-page.investors.previousShareHoldings.title = Did this {0} already own shares in your company?
-page.investors.previousShareHoldings.heading = Did this {0} already own shares in your company?
+page.seis.investors.isExistingShareHolder.title = Did this {0} already own shares in your company?
+page.seis.investors.isExistingShareHolder.heading = Did this {0} already own shares in your company?
+page.seis.investors.isExistingShareHolder.legend = Did this {0} already own shares in your company?
 
 #Investor Share Issue Date
 page.investors.investorShareIssueDate.title = When were these previous shares issued?

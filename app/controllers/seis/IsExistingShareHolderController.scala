@@ -22,17 +22,18 @@ import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.Helpers.ControllerHelpers
 import controllers.predicates.FeatureSwitch
-import models.{CompanyOrIndividualModel, PreviousShareHoldingsModel}
+import models.CompanyOrIndividualModel
+import models.investorDetails.IsExistingShareHolderModel
 import forms.CompanyOrIndividualForm._
-import forms.PreviousShareHoldingsForm._
+import forms.IsExistingShareHolderForm._
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
-import views.html.seis.investors.PreviousShareHoldings
+import views.html.seis.investors.IsExistingShareHolder
 
 import scala.concurrent.Future
 
-object PreviousShareHoldingsController extends PreviousShareHoldingsController
+object IsExistingShareHolderController extends IsExistingShareHolderController
 {
   override lazy val s4lConnector = S4LConnector
   override lazy val applicationConfig = FrontendAppConfig
@@ -40,7 +41,7 @@ object PreviousShareHoldingsController extends PreviousShareHoldingsController
   override lazy val enrolmentConnector = EnrolmentConnector
 }
 
-trait PreviousShareHoldingsController extends FrontendController with AuthorisedAndEnrolledForTAVC with FeatureSwitch with ControllerHelpers{
+trait IsExistingShareHolderController extends FrontendController with AuthorisedAndEnrolledForTAVC with FeatureSwitch with ControllerHelpers{
 
   override val acceptedFlows = Seq(Seq(SEIS))
 
@@ -49,9 +50,9 @@ trait PreviousShareHoldingsController extends FrontendController with Authorised
       implicit request =>
 
     def routeRequest(companyOrIndividual: Option[CompanyOrIndividualModel]) = if (companyOrIndividual.isDefined) {
-      s4lConnector.fetchAndGetFormData[PreviousShareHoldingsModel](KeystoreKeys.previousShareHoldings).map {
-          case Some(data) => Ok(PreviousShareHoldings(companyOrIndividual.get.companyOrIndividual, previousShareHoldingsForm.fill(data)))
-          case None => Ok(PreviousShareHoldings(companyOrIndividual.get.companyOrIndividual, previousShareHoldingsForm))
+      s4lConnector.fetchAndGetFormData[IsExistingShareHolderModel](KeystoreKeys.isExistingShareHolder).map {
+          case Some(data) => Ok(IsExistingShareHolder(companyOrIndividual.get.companyOrIndividual, isExistingShareHolderForm.fill(data)))
+          case None => Ok(IsExistingShareHolder(companyOrIndividual.get.companyOrIndividual, isExistingShareHolderForm))
         }
       }
       else Future.successful(Redirect(routes.AddInvestorOrNomineeController.show()))
@@ -65,17 +66,21 @@ trait PreviousShareHoldingsController extends FrontendController with Authorised
   }
 
   val submit = featureSwitch(applicationConfig.seisFlowEnabled) { AuthorisedAndEnrolled.async { implicit user => implicit request =>
-    previousShareHoldingsForm.bindFromRequest().fold(
+    isExistingShareHolderForm.bindFromRequest().fold(
       formWithErrors => {
-        s4lConnector.fetchAndGetFormData[PreviousShareHoldingsModel](KeystoreKeys.previousShareHoldings).map {
-          data => BadRequest(PreviousShareHoldings(data.get., formWithErrors))
+        s4lConnector.fetchAndGetFormData[CompanyOrIndividualModel](KeystoreKeys.isExistingShareHolder).map {
+          data => BadRequest(IsExistingShareHolder(data.get.companyOrIndividual, formWithErrors))
         }
       },
       validFormData => {
-        s4lConnector.saveFormData(KeystoreKeys.companyOrIndividual, validFormData)
-        validFormData.companyOrIndividual match {
-          case Constants.typeCompany => Future.successful(Redirect(routes.CompanyDetailsController.show()))
-          case Constants.typeIndividual => Future.successful(Redirect(routes.IndividualDetailsController.show()))
+        s4lConnector.saveFormData(KeystoreKeys.isExistingShareHolder, validFormData)
+        validFormData.isExistingShareHolder match {
+
+          case Constants.StandardRadioButtonYesValue =>
+            Future.successful(Redirect(routes.InvestorShareIssueDateController.show()))
+
+          case Constants.StandardRadioButtonNoValue =>
+            Future.successful(Redirect(routes.IsExistingShareHolderController.show()))
         }
       }
     )

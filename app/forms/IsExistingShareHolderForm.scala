@@ -14,12 +14,17 @@
  * limitations under the License.
  */
 
-package models
+package forms
 
-import play.api.libs.json.Json
 
-case class IsExistingShareHolderModel(isExistingShareHolder: String)
-object IsExistingShareHolderModel{
+import models.investorDetails.IsExistingShareHolderModel
+import play.api.data.Form
+import play.api.data.Forms._
 
-  implicit val formats = Json.format[IsExistingShareHolderModel]
+object IsExistingShareHolderForm {
+  val isExistingShareHolderForm = Form(
+    mapping(
+      "isExistingShareHolder" -> nonEmptyText
+    )(IsExistingShareHolderModel.apply)(IsExistingShareHolderModel.unapply)
+  )
 }

@@ -30,6 +30,11 @@ object AmountSpentModel{
   implicit val formats = Json.format[AmountSpentModel]
 }
 
+case class IsExistingShareHolderModel(isExistingShareHolder: String)
+object IsExistingShareHolderModel{
+  implicit val formats = Json.format[IsExistingShareHolderModel]
+}
+
 case class NumberOfPreviouslyIssuedSharesModel(previouslyIssuedShares: BigDecimal)
 object NumberOfPreviouslyIssuedSharesModel{
   implicit val formats = Json.format[NumberOfPreviouslyIssuedSharesModel]
