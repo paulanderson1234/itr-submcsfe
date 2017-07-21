@@ -59,7 +59,7 @@ class CompanyOrIndividualControllerSpec extends BaseSpec {
   "Sending a GET request to CompanyOrIndividualController when authenticated and enrolled for SEIS" should {
     "return a 200 when something is fetched from keystore" in {
       mockEnrolledRequest(seisSchemeTypesModel)
-      setupMocks(Some(CompanyOrIndividualModel(Constants.typeCompany)), Some(investor))
+      setupMocks(Some(CompanyOrIndividualModel(Constants.typeCompany)), Some(investorModel))
       showWithSessionAndAuth(TestController.show())(
         result => status(result) shouldBe OK
       )
@@ -67,7 +67,7 @@ class CompanyOrIndividualControllerSpec extends BaseSpec {
 
     "provide an empty model and return a 200 when nothing is fetched using keystore for SEIS" in {
       mockEnrolledRequest(seisSchemeTypesModel)
-      setupMocks(None,  Some(investor))
+      setupMocks(None,  Some(investorModel))
       showWithSessionAndAuth(TestController.show())(
         result => status(result) shouldBe OK
       )
@@ -114,7 +114,7 @@ class CompanyOrIndividualControllerSpec extends BaseSpec {
 
   "Sending an invalid form submission with validation errors to the CompanyOrIndividualController when authenticated" should {
     "redirect to itself" in {
-      setupMocks(None,  Some(investor))
+      setupMocks(None,  Some(investorModel))
       mockEnrolledRequest(seisSchemeTypesModel)
       val formInput = "companyOrIndividual" -> ""
       submitWithSessionAndAuth(TestController.submit,formInput)(

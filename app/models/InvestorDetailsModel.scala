@@ -48,11 +48,15 @@ object PreviousShareHoldingDescriptionModel{
   implicit val formats = Json.format[PreviousShareHoldingDescriptionModel]
 }
 
-
-case class PreviousShareHoldingModel(InvestorShareIssueDateModel: Option[InvestorShareIssueDateModel] = None,
+case class PreviousShareHoldingModel(investorShareIssueDateModel: Option[InvestorShareIssueDateModel] = None,
                                      numberOfPreviouslyIssuedSharesModel: Option[NumberOfPreviouslyIssuedSharesModel] = None,
                                      previousShareHoldingNominalValueModel: Option[PreviousShareHoldingNominalValueModel] = None,
-                                     previousShareHoldingDescriptionModel: Option[PreviousShareHoldingDescriptionModel] = None)
+                                     previousShareHoldingDescriptionModel: Option[PreviousShareHoldingDescriptionModel] = None){
+
+  /** Validates that all PreviousShareHolding fields exist**/
+  def validate: Boolean = investorShareIssueDateModel.isDefined && numberOfPreviouslyIssuedSharesModel.isDefined &&
+    previousShareHoldingNominalValueModel.isDefined  && previousShareHoldingDescriptionModel.isDefined
+}
 
 object PreviousShareHoldingModel{
   implicit val formats = Json.format[PreviousShareHoldingModel]
@@ -63,14 +67,23 @@ case class InvestorDetailsModel(investorOrNomineeModel: Option[AddInvestorOrNomi
                                 companyOrIndividualModel: Option[CompanyOrIndividualModel] = None,
                                 companyDetailsModel: Option[CompanyDetailsModel] = None,
                                 individualDetailsModel: Option[IndividualDetailsModel] = None,
-                                numberOfSharesPurchasedModel: Option[NumberOfSharesPurchasedModel],
+                                numberOfSharesPurchasedModel: Option[NumberOfSharesPurchasedModel] = None,
                                 amountSpentModel: Option[AmountSpentModel] = None,
                                 isExistingShareHolderModel: Option[IsExistingShareHolderModel] = None,
                                 previousShareHoldingModels: Option[Vector[PreviousShareHoldingModel]] = None) {
 
-    def validate: Boolean = investorOrNomineeModel.isDefined && companyOrIndividualModel.isDefined &&
-      (companyDetailsModel.isDefined ^ individualDetailsModel.isDefined) && numberOfSharesPurchasedModel.isDefined &&
-      amountSpentModel.isDefined && isExistingShareHolderModel.isDefined && previousShareHoldingModels.isDefined
+  def validate: Boolean = {
+
+    /*** Validates shareholdings by mapping over each shareholding and reducing the result to either true or false using 'forall'**/
+    lazy val validateShareHoldings = {
+      if(previousShareHoldingModels.isDefined) previousShareHoldingModels.get.forall(_.validate) else false
+    }
+
+    investorOrNomineeModel.isDefined && companyOrIndividualModel.isDefined &&
+    (companyDetailsModel.isDefined ^ individualDetailsModel.isDefined) && numberOfSharesPurchasedModel.isDefined &&
+    amountSpentModel.isDefined && isExistingShareHolderModel.isDefined && validateShareHoldings
+  }
+
 }
 
 object InvestorDetailsModel{
