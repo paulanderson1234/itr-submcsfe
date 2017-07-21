@@ -6,7 +6,7 @@
 
 @(howMuchSpentOnShares: String, howMuchSpentOnSharesForm: Form[HowMuchSpentOnSharesModel])(implicit request: Request[_], messages: Messages)
 
-@main_template(Messages("page.seis.investors.howMuchSpentOnShares.title", howMuchSpentOnShares)) {
+@main_template(Messages("page.seis.investors.howMuchSpentOnShares.title", howMuchSpentOnShares.toLowerCase)) {
 
 @backButtonWithProgress(controllers.seis.routes.HowMuchSpentOnSharesController.show().url, Messages("common.section.progress.company.details.four"))
 
@@ -20,7 +20,7 @@
     howMuchSpentOnSharesForm("howMuchSpentOnShares"),
     '_divClass -> "form-label",
     '_labelId -> "label-howMuchSpentOnShares",
-    '_label -> Messages("page.seis.investors.howMuchSpentOnShares.title"),
+    '_label -> Messages("page.seis.investors.howMuchSpentOnShares.title", howMuchSpentOnShares.toLowerCase()),
     '_labelTextClass -> "visuallyhidden",
     '_inputClass -> "input--no-spinner input--left-padding",
     '_type -> "text",

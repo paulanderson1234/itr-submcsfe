@@ -87,22 +87,6 @@ trait HowMuchSpentOnSharesController extends FrontendController with AuthorisedA
 
               howMuchSpentOnSharesForm.bindFromRequest().fold(failure, success)
 
-              //            val submit = featureSwitch(applicationConfig.seisFlowEnabled) { AuthorisedAndEnrolled.async { implicit user => implicit request =>
-              //              companyOrIndividualForm.bindFromRequest().fold(
-              //                formWithErrors => {
-              //                  s4lConnector.fetchAndGetFormData[AddInvestorOrNomineeModel](KeystoreKeys.addInvestor).map {
-              //                    data => BadRequest(CompanyOrIndividual(useInvestorOrNomineeValueAsHeadingText(data.get), formWithErrors))
-              //                  }
-              //                },
-              //                validFormData => {
-              //                  s4lConnector.saveFormData(KeystoreKeys.companyOrIndividual, validFormData)
-              //                  validFormData.companyOrIndividual match {
-              //                    case Constants.typeCompany => Future.successful(Redirect(routes.CompanyDetailsController.show()))
-              //                    case Constants.typeIndividual => Future.successful(Redirect(routes.IndividualDetailsController.show()))
-              //                  }
-              //
-
-//(HowMuchSpentOnShares(useCompanyOrIndividualAsHeadingText(companyOrIndividual.get)
       }
     }
   }
