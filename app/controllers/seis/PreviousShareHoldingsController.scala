@@ -22,12 +22,13 @@ import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.Helpers.ControllerHelpers
 import controllers.predicates.FeatureSwitch
-import models.{PreviousShareHoldingsModel, CompanyOrIndividualModel}
+import models.{CompanyOrIndividualModel, PreviousShareHoldingsModel}
 import forms.CompanyOrIndividualForm._
+import forms.PreviousShareHoldingsForm._
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
-import views.html.seis.investors.CompanyOrIndividual
+import views.html.seis.investors.PreviousShareHoldings
 
 import scala.concurrent.Future
 
@@ -43,30 +44,31 @@ trait PreviousShareHoldingsController extends FrontendController with Authorised
 
   override val acceptedFlows = Seq(Seq(SEIS))
 
-  val show = featureSwitch(applicationConfig.seisFlowEnabled) { AuthorisedAndEnrolled.async { implicit user => implicit request =>
+  val show = featureSwitch(applicationConfig.seisFlowEnabled) { AuthorisedAndEnrolled.async {
+    implicit user =>
+      implicit request =>
 
-    def routeRequest(previousShareHoldings: Option[PreviousShareHoldingsModel]) = {
-      if (previousShareHoldings.isDefined) {
-        s4lConnector.fetchAndGetFormData[CompanyOrIndividualModel](KeystoreKeys.companyOrIndividual).map {
-          case Some(data) => Ok(CompanyOrIndividual(useInvestorOrNomineeValueAsHeadingText(previousShareHoldings.get),
-            companyOrIndividualForm.fill(data)))
-          case None => Ok(CompanyOrIndividual(useInvestorOrNomineeValueAsHeadingText(previousShareholdings.get), companyOrIndividualForm))
+    def routeRequest(companyOrIndividual: Option[CompanyOrIndividualModel]) = if (companyOrIndividual.isDefined) {
+      s4lConnector.fetchAndGetFormData[PreviousShareHoldingsModel](KeystoreKeys.previousShareHoldings).map {
+          case Some(data) => Ok(PreviousShareHoldings(companyOrIndividual.get.companyOrIndividual, previousShareHoldingsForm.fill(data)))
+          case None => Ok(PreviousShareHoldings(companyOrIndividual.get.companyOrIndividual, previousShareHoldingsForm))
         }
-      } else Future.successful(Redirect(routes.AddInvestorOrNomineeController.show()))
-    }
+      }
+      else Future.successful(Redirect(routes.AddInvestorOrNomineeController.show()))
+
 
     for {
-      previousShareHoldings <- s4lConnector.fetchAndGetFormData[PreviousShareHoldingsModel](KeystoreKeys.addInvestor)
-      route <- routeRequest(previousShareHoldings)
+      companyOrIndividual <- s4lConnector.fetchAndGetFormData[CompanyOrIndividualModel](KeystoreKeys.companyOrIndividual)
+      route <- routeRequest(companyOrIndividual)
     } yield route
   }
   }
 
   val submit = featureSwitch(applicationConfig.seisFlowEnabled) { AuthorisedAndEnrolled.async { implicit user => implicit request =>
-    companyOrIndividualForm.bindFromRequest().fold(
+    previousShareHoldingsForm.bindFromRequest().fold(
       formWithErrors => {
-        s4lConnector.fetchAndGetFormData[PreviousShareHoldingsModel](KeystoreKeys.addInvestor).map {
-          data => BadRequest(PreviousShareHoldings(useInvestorOrNomineeValueAsHeadingText(data.get), formWithErrors))
+        s4lConnector.fetchAndGetFormData[PreviousShareHoldingsModel](KeystoreKeys.previousShareHoldings).map {
+          data => BadRequest(PreviousShareHoldings(data.get., formWithErrors))
         }
       },
       validFormData => {

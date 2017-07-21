@@ -14,48 +14,10 @@
  * limitations under the License.
  */
 
-package models
+package models.investorDetails
 
+import models.{AddInvestorOrNomineeModel, CompanyDetailsModel, CompanyOrIndividualModel, IndividualDetailsModel}
 import play.api.libs.json.Json
-
-
-case class NumberOfSharesPurchasedModel(sharesPurchased: BigDecimal)
-object NumberOfSharesPurchasedModel{
-  implicit val formats = Json.format[NumberOfSharesPurchasedModel]
-}
-
-
-case class AmountSpentModel(amount: BigDecimal)
-object AmountSpentModel{
-  implicit val formats = Json.format[AmountSpentModel]
-}
-
-case class NumberOfPreviouslyIssuedSharesModel(previouslyIssuedShares: BigDecimal)
-object NumberOfPreviouslyIssuedSharesModel{
-  implicit val formats = Json.format[NumberOfPreviouslyIssuedSharesModel]
-}
-case class PreviousShareHoldingNominalValueModel(nominalValue: BigDecimal)
-object PreviousShareHoldingNominalValueModel{
-  implicit val formats = Json.format[PreviousShareHoldingNominalValueModel]
-}
-case class PreviousShareHoldingDescriptionModel(description: String)
-object PreviousShareHoldingDescriptionModel{
-  implicit val formats = Json.format[PreviousShareHoldingDescriptionModel]
-}
-
-case class PreviousShareHoldingModel(investorShareIssueDateModel: Option[InvestorShareIssueDateModel] = None,
-                                     numberOfPreviouslyIssuedSharesModel: Option[NumberOfPreviouslyIssuedSharesModel] = None,
-                                     previousShareHoldingNominalValueModel: Option[PreviousShareHoldingNominalValueModel] = None,
-                                     previousShareHoldingDescriptionModel: Option[PreviousShareHoldingDescriptionModel] = None){
-
-  /** Validates that all PreviousShareHolding fields exist**/
-  def validate: Boolean = investorShareIssueDateModel.isDefined && numberOfPreviouslyIssuedSharesModel.isDefined &&
-    previousShareHoldingNominalValueModel.isDefined  && previousShareHoldingDescriptionModel.isDefined
-}
-
-object PreviousShareHoldingModel{
-  implicit val formats = Json.format[PreviousShareHoldingModel]
-}
 
 
 case class InvestorDetailsModel(investorOrNomineeModel: Option[AddInvestorOrNomineeModel] = None,

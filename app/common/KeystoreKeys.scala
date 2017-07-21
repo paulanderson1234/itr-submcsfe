@@ -72,6 +72,7 @@ trait KeystoreKeys {
   val investorShareIssueDate: String = "investors: InvestorShareIssueDate"
   val tempPreviousSchemes: String = "previousInvestmentScheme:tempPreviousInvestmentSchemes"
   val howMuchSpentOnShares: String = "investors:howMuchSpentOnShares"
+  val previousShareHoldings: String = "investors:previousShareHoldings"
 
   // processing Keys
   val eisSeisProcessingModel: String = "processing:EisSeisProcessingModel"
