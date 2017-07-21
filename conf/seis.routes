@@ -134,5 +134,8 @@ POST       /total-amount-raised                   controllers.seis.TotalAmountRa
 GET        /add-investor-or-nominee               controllers.seis.AddInvestorOrNomineeController.show
 POST       /add-investor-or-nominee               controllers.seis.AddInvestorOrNomineeController.submit
 
+GET        /previous-share-holdings               controllers.seis.PreviousShareHoldingsController.show
+POST       /previous-share-holdings               controllers.seis.PreviousShareHoldingsController.submit
+
 GET        /investor-share-issue-date             controllers.seis.InvestorShareIssueDateController.show
 POST       /investor-share-issue-date             controllers.seis.InvestorShareIssueDateController.submit
