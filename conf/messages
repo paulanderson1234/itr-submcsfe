@@ -1085,6 +1085,7 @@ page.seis.investors.AddInvestorOrNominee.radioButton.two=Nominee
 
 #How Much Spent On Shares
 page.seis.investors.howMuchSpentOnShares.title=How much did this {0} pay in total for these shares?
+page.seis.investors.howMuchSpentOnShares.heading=How much did this {0} pay in total for these shares?
 
 #Company or Individual
 page.investors.companyOrIndividual.title = Is this {0} a company or an individual?
