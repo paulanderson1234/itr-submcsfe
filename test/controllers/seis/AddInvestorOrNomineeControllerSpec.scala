@@ -63,7 +63,7 @@ class AddInvestorOrNomineeControllerSpec extends BaseSpec {
 
   "Sending a GET request to AddInvestorOrNomineeController when authenticated and enrolled" should {
     "return a 200 when something is fetched from keystore" in {
-      setupMocks(Some(investor), Some(validBackLink))
+      setupMocks(Some(investorModel), Some(validBackLink))
       mockEnrolledRequest(seisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show())(
         result => status(result) shouldBe OK

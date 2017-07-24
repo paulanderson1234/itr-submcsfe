@@ -21,6 +21,7 @@ import common.{Constants, KeystoreKeys}
 import connectors.{EnrolmentConnector, S4LConnector, SubmissionConnector}
 import fixtures.SubmissionFixture
 import models.submission.SchemeTypesModel
+import models.investorDetails._
 import models.{UsedInvestmentReasonBeforeModel, YourCompanyNeedModel, _}
 import org.mockito.Matchers
 import org.mockito.Mockito._
@@ -232,9 +233,20 @@ trait BaseSpec extends UnitSpec with OneAppPerSuite with MockitoSugar with FakeR
 
   val numberOfSharesModel= NumberOfSharesModel(9999999999999.00)
 
-  val investor = AddInvestorOrNomineeModel(Constants.investor)
-  val nominee = AddInvestorOrNomineeModel(Constants.nominee)
-
+  //investor details
+  val investorModel = AddInvestorOrNomineeModel(Constants.investor)
+  val nomineeModel = AddInvestorOrNomineeModel(Constants.nominee)
   val companyOrIndividualModel = CompanyOrIndividualModel(Constants.typeCompany)
+  val individualDetailsModel = IndividualDetailsModel("Joe", "Bloggs", "Line 1", "Line 2", Some("Line 3"), Some("AB1 1AB"), countryCode = "JP")
+  val numberOfSharesPurchasedModel = NumberOfSharesPurchasedModel(1000)
+  val amountSpentModel = AmountSpentModel(1000)
+  val isExistingShareHolderModelNo = IsExistingShareHolderModel("No")
+  val isExistingShareHolderModelYes = IsExistingShareHolderModel("Yes")
+
+  //share holdings
+  val investorShareIssueDateModel = InvestorShareIssueDateModel(1,1,1980)
+  val numberOfPreviouslyIssuedSharesModel = NumberOfPreviouslyIssuedSharesModel(1000)
+  val previousShareHoldingNominalValueModel = PreviousShareHoldingNominalValueModel(1000)
+  val previousShareHoldingDescriptionModel = PreviousShareHoldingDescriptionModel("A previous shareholding")
 
 }
