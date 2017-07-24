@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package models
+package models.investorDetails
 
 import play.api.libs.json.Json
 
-case class NumberOfSharesPurchasedModel(numberOfSharesPurchased: BigDecimal)
-
-object NumberOfSharesPurchasedModel{
-  implicit val formats = Json.format[NumberOfSharesPurchasedModel]
+case class InvestorShareIssueDateModel(dateOfIssueDay: Int, dateOfIssueMonth: Int, dateOfIssueYear: Int)
+object InvestorShareIssueDateModel{
+  implicit val formats = Json.format[InvestorShareIssueDateModel]
 }

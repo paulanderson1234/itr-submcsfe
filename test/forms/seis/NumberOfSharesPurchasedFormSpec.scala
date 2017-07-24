@@ -16,7 +16,7 @@
 
 package forms
 
-import models.NumberOfSharesPurchasedModel
+import models.investorDetails.NumberOfSharesPurchasedModel
 import org.scalatestplus.play.OneAppPerSuite
 import uk.gov.hmrc.play.test.UnitSpec
 import forms.NumberOfSharesPurchasedForm._

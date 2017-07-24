@@ -20,13 +20,15 @@ import common.KeystoreKeys
 import config.{AppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
-import models.{CompanyOrIndividualModel, NumberOfSharesPurchasedModel}
+import models.CompanyOrIndividualModel
 import org.mockito.Matchers
 import uk.gov.hmrc.play.frontend.auth.connectors.AuthConnector
 import org.mockito.Mockito._
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.cache.client.CacheMap
 import scala.concurrent.Future
+import models.investorDetails.NumberOfSharesPurchasedModel
+
 
 class NumberOfSharesPurchasedControllerSpec extends BaseSpec {
 

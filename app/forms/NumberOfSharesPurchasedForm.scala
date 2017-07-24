@@ -16,10 +16,10 @@
 
 package forms
 
-import models.NumberOfSharesPurchasedModel
 import play.api.data.Form
 import play.api.data.Forms._
 import utils.Validation._
+import models.investorDetails.NumberOfSharesPurchasedModel
 
 object NumberOfSharesPurchasedForm {
 

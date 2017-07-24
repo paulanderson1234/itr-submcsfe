@@ -23,6 +23,7 @@ import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.Helpers.PreviousSchemesHelper
 import models._
 import forms._
+import models.investorDetails.NumberOfSharesPurchasedModel
 import models.submission.SchemeTypesModel
 import play.api.data.Form
 import play.api.libs.json.Format

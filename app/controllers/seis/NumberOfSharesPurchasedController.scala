@@ -22,12 +22,13 @@ import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.Helpers.ControllerHelpers
 import controllers.predicates.FeatureSwitch
-import models.{CompanyOrIndividualModel, NumberOfSharesPurchasedModel}
+import models.{CompanyOrIndividualModel}
 import forms.NumberOfSharesPurchasedForm._
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
 import views.html.seis.investors.NumberOfSharesPurchased
+import models.investorDetails.NumberOfSharesPurchasedModel
 import scala.concurrent.Future
 
 object NumberOfSharesPurchasedController extends NumberOfSharesPurchasedController
