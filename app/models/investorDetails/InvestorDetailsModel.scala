@@ -27,7 +27,8 @@ case class InvestorDetailsModel(investorOrNomineeModel: Option[AddInvestorOrNomi
                                 numberOfSharesPurchasedModel: Option[NumberOfSharesPurchasedModel] = None,
                                 amountSpentModel: Option[HowMuchSpentOnSharesModel] = None,
                                 isExistingShareHolderModel: Option[IsExistingShareHolderModel] = None,
-                                previousShareHoldingModels: Option[Vector[PreviousShareHoldingModel]] = None) {
+                                previousShareHoldingModels: Option[Vector[PreviousShareHoldingModel]] = None,
+                                processingId: Option[Int] = None) {
 
   def validate: Boolean = {
 
