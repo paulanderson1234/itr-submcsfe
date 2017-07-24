@@ -1,3 +1,4 @@
+@import models.investorDetails._
 @import models._
 @import models.investorDetails._
 @import forms._
@@ -12,8 +13,8 @@
 individualDetailsForm: Form[IndividualDetailsModel], shareDescriptionForm: Form[ShareDescriptionModel],
 totalAmountRaisedForm:Form[TotalAmountRaisedModel], totalAmountSpentForm:Form[TotalAmountSpentModel],
 addInvestorOrNomineeForm: Form[AddInvestorOrNomineeModel], companyOrIndividualForm: Form[CompanyOrIndividualModel],
-companyDetailsForm: Form[CompanyDetailsModel], howMuchSpentOnSharesForm : Form[HowMuchSpentOnSharesModel]
-)(implicit request: Request[_], messages: Messages)
+companyDetailsForm: Form[CompanyDetailsModel], numberOfSharesPurchasedForm: Form[NumberOfSharesPurchasedModel], howMuchSpentOnSharesForm : Form[HowMuchSpentOnSharesModel])(implicit request: Request[_], messages: Messages)
+
 
 @main_template(Messages("page.test.page-two.title")) {
 
@@ -306,6 +307,19 @@ companyDetailsForm: Form[CompanyDetailsModel], howMuchSpentOnSharesForm : Form[H
             'id -> "howMuchSpent"
             )
         </div>
+
+        <h2>Number of Shares Purchased</h2>
+    <div class="form-group">
+        @input(
+        numberOfSharesPurchasedForm("numberOfSharesPurchased"),
+        '_divClass -> "form-label",
+        '_labelId -> "label-numberOfSharesPurchased",
+        '_label -> Messages("page.seis.investors.numberOfSharesPurchased.heading", "company", "99-99-9999"),
+        '_labelTextClass -> "visuallyhidden",
+        '_maxlength -> "9",
+        '_inputClass -> "input--normal"
+        )
+    </div>
 
     <div class="form-group">
         <button class="btn button" type="submit" id="next">

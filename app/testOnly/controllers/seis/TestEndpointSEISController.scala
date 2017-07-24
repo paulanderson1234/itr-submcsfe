@@ -24,6 +24,7 @@ import controllers.Helpers.PreviousSchemesHelper
 import models._
 import models.investorDetails._
 import forms._
+import models.investorDetails.NumberOfSharesPurchasedModel
 import models.submission.SchemeTypesModel
 import play.api.data.Form
 import play.api.libs.json.Format
@@ -156,6 +157,7 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
         companyOrIndividualForm <- fillForm[CompanyOrIndividualModel](KeystoreKeys.companyOrIndividual, CompanyOrIndividualForm.companyOrIndividualForm)
         companyDetails <- fillForm[CompanyDetailsModel](KeystoreKeys.companyDetails, CompanyDetailsForm.companyDetailsForm)
         howMuchSpentOnSharesForm <- fillForm[HowMuchSpentOnSharesModel](KeystoreKeys.howMuchSpentOnShares, HowMuchSpentOnSharesForm.howMuchSpentOnSharesForm)
+        numberOfSharesPurchasedForm <- fillForm[NumberOfSharesPurchasedModel](KeystoreKeys.numberOfSharesPurchased, NumberOfSharesPurchasedForm.numberOfSharesPurchasedForm)
 
       } yield Ok(
         testOnly.views.html.seis.testEndpointSEISPageTwo(
@@ -168,8 +170,8 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
           addInvestorOrNomineeForm,
           companyOrIndividualForm,
           companyDetails,
+          numberOfSharesPurchasedForm,
           howMuchSpentOnSharesForm
-
         )
       )
 
@@ -186,6 +188,7 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
     val addInvestorOrNomineeForm = bindForm[AddInvestorOrNomineeModel](KeystoreKeys.addInvestor, AddInvestorOrNomineeForm.addInvestorOrNomineeForm)
     val companyOrIndividual = bindForm[CompanyOrIndividualModel](KeystoreKeys.companyOrIndividual, CompanyOrIndividualForm.companyOrIndividualForm)
     val howMuchSpentOnSharesForm = bindForm[HowMuchSpentOnSharesModel](KeystoreKeys.howMuchSpentOnShares, HowMuchSpentOnSharesForm.howMuchSpentOnSharesForm)
+    val numberOfSharesPurchased = bindForm[NumberOfSharesPurchasedModel](KeystoreKeys.numberOfSharesPurchased, NumberOfSharesPurchasedForm.numberOfSharesPurchasedForm)
 
     saveBackLinks()
     saveSchemeType()
@@ -200,6 +203,7 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
         addInvestorOrNomineeForm,
         companyOrIndividual,
         companyDetails,
+        numberOfSharesPurchased,
         howMuchSpentOnSharesForm
       )
     ))

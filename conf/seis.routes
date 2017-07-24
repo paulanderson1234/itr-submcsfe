@@ -137,3 +137,5 @@ POST       /add-investor-or-nominee               controllers.seis.AddInvestorOr
 GET        /how-much-spent-on-shares              controllers.seis.HowMuchSpentOnSharesController.show
 POST       /how-much-spent-on-shares              controllers.seis.HowMuchSpentOnSharesController.submit
 
+GET        /number-of-shares-purchased            controllers.seis.NumberOfSharesPurchasedController.show
+POST       /number-of-shares-purchased            controllers.seis.NumberOfSharesPurchasedController.submit
