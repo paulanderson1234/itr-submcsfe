@@ -291,20 +291,20 @@ companyDetailsForm: Form[CompanyDetailsModel], howMuchSpentOnSharesForm : Form[H
             )
         </div>
 
-    <h2>How much spent on shares</h2>
-    <div class="form-group">
-        @inputWithCurrencySymbol(
-        howMuchSpentOnSharesForm("howMuchSpentOnShares"),
-        '_divClass -> "form-label",
-        '_labelId -> "label-howMuchSpentOnShares",
-        '_label -> Messages("page.seis.investors.howMuchSpentOnShares.title"),
-        '_labelTextClass -> "visuallyhidden",
-        '_inputClass -> "input--no-spinner input--left-padding",
-        '_type -> "text",
-        '_maxlength -> "11",
-        'id -> "howMuchSpent"
-        )
-    </div>
+        <h2>How much spent on shares</h2>
+        <div class="form-group">
+            @inputWithCurrencySymbol(
+            howMuchSpentOnSharesForm("howMuchSpentOnShares" ),
+            '_divClass -> "form-label",
+            '_labelId -> "label-howMuchSpentOnShares",
+            '_label -> Messages("page.seis.investors.howMuchSpentOnShares.title"),
+            '_labelTextClass -> "visuallyhidden",
+            '_inputClass -> "input--no-spinner input--left-padding",
+            '_type -> "text",
+            '_maxlength -> "11",
+            'id -> "howMuchSpent"
+            )
+        </div>
 
     <div class="form-group">
         <button class="btn button" type="submit" id="next">

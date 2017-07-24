@@ -16,7 +16,7 @@
 
 package testOnly.controllers.seis
 
-import auth.{MockAuthConnector, TAVCUser, ggUser, _}
+import auth.{MockAuthConnector, TAVCUser, _}
 import common.{Constants, KeystoreKeys}
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}

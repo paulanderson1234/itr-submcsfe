@@ -21,7 +21,6 @@ import common.KeystoreKeys
 import config.{AppConfig, FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.predicates.FeatureSwitch
-import controllers.Helpers.ControllerHelpers._
 import forms.HowMuchSpentOnSharesForm._
 import models.{CompanyOrIndividualModel, HowMuchSpentOnSharesModel}
 import play.api.Play.current
