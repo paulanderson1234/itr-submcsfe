@@ -21,7 +21,7 @@ import common.KeystoreKeys
 import config.{AppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
-import models.HowMuchSpentOnSharesModel
+import models.{CompanyOrIndividualModel, HowMuchSpentOnSharesModel}
 import org.mockito.Matchers
 import org.mockito.Mockito._
 import play.api.test.Helpers._
@@ -30,7 +30,7 @@ import uk.gov.hmrc.play.frontend.auth.connectors.AuthConnector
 
 import scala.concurrent.Future
 
-class HowMuchSpentOnSharesControllerSpec extends BaseSpec {
+class HowMuchSpentOnSharesControllerSpec extends BaseSpec  {
 
   lazy val controller = new HowMuchSpentOnSharesController {
     override lazy val s4lConnector: S4LConnector = mockS4lConnector
@@ -39,12 +39,16 @@ class HowMuchSpentOnSharesControllerSpec extends BaseSpec {
     override lazy val authConnector: AuthConnector = MockAuthConnector
   }
 
-  def setupMocks(model: Option[HowMuchSpentOnSharesModel]): Unit = {
+  def setupMocks(howMuchSpentOnSharesModel: Option[HowMuchSpentOnSharesModel], companyOrIndividualModel: Option[CompanyOrIndividualModel]): Unit = {
     mockEnrolledRequest(seisSchemeTypesModel)
 
     when(mockS4lConnector.fetchAndGetFormData[HowMuchSpentOnSharesModel](Matchers.eq(KeystoreKeys.howMuchSpentOnShares))(Matchers.any(),
       Matchers.any(), Matchers.any()))
-      .thenReturn(Future.successful(model))
+      .thenReturn(Future.successful(howMuchSpentOnSharesModel))
+
+    when(mockS4lConnector.fetchAndGetFormData[CompanyOrIndividualModel](Matchers.eq(KeystoreKeys.companyOrIndividual))(Matchers.any(),
+      Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(companyOrIndividualModel))
 
     when(mockS4lConnector.saveFormData(Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
       .thenReturn(Future.successful(mock[CacheMap]))
@@ -67,14 +71,16 @@ class HowMuchSpentOnSharesControllerSpec extends BaseSpec {
     "return a 200 on a GET request" when {
 
       "no data is already stored" in {
-        setupMocks(None)
+        setupMocks(None, Some(companyOrIndividualModel))
+        mockEnrolledRequest(seisSchemeTypesModel)
         showWithSessionAndAuth(controller.show)(
           result => status(result) shouldBe 200
         )
       }
 
       "data is already stored" in {
-        setupMocks(Some(HowMuchSpentOnSharesModel(20.0)))
+        setupMocks(Some(howMuchSpentOnSharesModel), Some(companyOrIndividualModel))
+        mockEnrolledRequest(seisSchemeTypesModel)
         showWithSessionAndAuth(controller.show)(
           result => status(result) shouldBe 200
         )
@@ -82,7 +88,8 @@ class HowMuchSpentOnSharesControllerSpec extends BaseSpec {
     }
 
     "return a 303 on a successful POST request" in {
-      setupMocks(None)
+      setupMocks(None, Some(companyOrIndividualModel))
+      mockEnrolledRequest(seisSchemeTypesModel)
       val form = Seq("howMuchSpentOnShares" -> "1000")
       submitWithSessionAndAuth(controller.submit, form: _*) (
         result => {
@@ -93,7 +100,8 @@ class HowMuchSpentOnSharesControllerSpec extends BaseSpec {
     }
 
     "return a 400 on a form validation failure" in {
-      setupMocks(None)
+      setupMocks(None, Some(companyOrIndividualModel))
+      mockEnrolledRequest(seisSchemeTypesModel)
       val form = Seq("howMuchSpentOnShares" -> "")
       submitWithSessionAndAuth(controller.submit, form: _*) (
         result => status(result) shouldBe 400

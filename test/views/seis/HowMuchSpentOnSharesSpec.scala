@@ -34,12 +34,12 @@ class HowMuchSpentOnSharesSpec extends ViewSpec {
 
     "not supplied with form errors" should {
       lazy val document: Document = {
-        val result = HowMuchSpentOnShares("", howMuchSpentOnSharesForm)
+        val result = HowMuchSpentOnShares("companyOrIndividual", howMuchSpentOnSharesForm)
         Jsoup.parse(contentAsString(result))
       }
 
       "have the correct title" in {
-        document.title() shouldBe Messages("page.seis.investors.howMuchSpentOnShares.title")
+        document.title() shouldBe Messages("page.seis.investors.howMuchSpentOnShares.title", "companyorindividual")
       }
 
       "have the correct back link text" in {
@@ -55,15 +55,11 @@ class HowMuchSpentOnSharesSpec extends ViewSpec {
       }
 
       "have the correct heading" in {
-        document.select("h1").text() shouldBe Messages("page.seis.investors.howMuchSpentOnShares.heading")
+        document.select("h1").text() shouldBe Messages("page.seis.investors.howMuchSpentOnShares.heading", "companyorindividual")
       }
 
       "have a form posting to the correct route" in {
         document.select("form").attr("action") shouldBe controllers.seis.routes.HowMuchSpentOnSharesController.submit().url
-      }
-
-      "have the correct question in a label" in {
-        document.select("fieldset label").text() shouldBe Messages("page.seis.investors.howMuchSpentOnShares.heading")
       }
 
       "have a next button" in {
@@ -74,7 +70,7 @@ class HowMuchSpentOnSharesSpec extends ViewSpec {
     "supplied with form errors" should {
       lazy val document: Document = {
         val map = Map("howMuchSpentOnShares" -> "")
-        val result = HowMuchSpentOnShares("", howMuchSpentOnSharesForm.bind(map))
+        val result = HowMuchSpentOnShares("companyOrIndividual", howMuchSpentOnSharesForm.bind(map))
         Jsoup.parse(contentAsString(result))
       }
 
@@ -83,7 +79,7 @@ class HowMuchSpentOnSharesSpec extends ViewSpec {
       }
 
       "have the correct title" in {
-        document.title() shouldBe Messages("page.seis.investors.howMuchSpentOnShares.title")
+        document.title() shouldBe Messages("page.seis.investors.howMuchSpentOnShares.title", "companyorindividual")
       }
 
       "have the correct back link text" in {
@@ -99,7 +95,7 @@ class HowMuchSpentOnSharesSpec extends ViewSpec {
       }
 
       "have the correct heading" in {
-        document.select("h1").text() should include ("page.seis.investors.howMuchSpentOnShares.heading")
+        document.select("h1").text() shouldBe Messages("page.seis.investors.howMuchSpentOnShares.heading", "companyorindividual")
       }
 
       "have a form posting to the correct route" in {
