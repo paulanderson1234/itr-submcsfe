@@ -84,7 +84,7 @@ class IsExistingShareHolderFormSpec extends UnitSpec with OneAppPerSuite{
   "The Is Existing Share Holder Form" should {
     "not return an error if the 'No' option is selected" in {
       val request = FakeRequest("GET", "/").withFormUrlEncodedBody(
-        "companyOrIndividual" -> Constants.StandardRadioButtonNoValue
+        "isExistingShareHolder" -> Constants.StandardRadioButtonNoValue
       )
       bindWithError(request) match {
         case Some(err) => {

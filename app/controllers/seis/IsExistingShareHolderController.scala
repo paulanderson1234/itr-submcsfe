@@ -49,13 +49,14 @@ trait IsExistingShareHolderController extends FrontendController with Authorised
     implicit user =>
       implicit request =>
 
-    def routeRequest(companyOrIndividual: Option[CompanyOrIndividualModel]) = if (companyOrIndividual.isDefined) {
+    def routeRequest(companyOrIndividual: Option[CompanyOrIndividualModel]) =
+      if (companyOrIndividual.isDefined) {
       s4lConnector.fetchAndGetFormData[IsExistingShareHolderModel](KeystoreKeys.isExistingShareHolder).map {
           case Some(data) => Ok(IsExistingShareHolder(companyOrIndividual.get.companyOrIndividual, isExistingShareHolderForm.fill(data)))
           case None => Ok(IsExistingShareHolder(companyOrIndividual.get.companyOrIndividual, isExistingShareHolderForm))
         }
       }
-      else Future.successful(Redirect(routes.AddInvestorOrNomineeController.show()))
+      else Future.successful(Redirect(routes.CompanyOrIndividualController.show()))
 
 
     for {
@@ -78,10 +79,13 @@ trait IsExistingShareHolderController extends FrontendController with Authorised
         validFormData.isExistingShareHolder match {
 
           case Constants.StandardRadioButtonYesValue =>
-            Future.successful(Redirect(routes.InvestorShareIssueDateController.show()))
+            Future.successful(Redirect(routes.IsExistingShareHolderController.show()))
+            //TODO - Use the below route when available
+//            Future.successful(Redirect(routes.InvestorShareIssueDateController.show()))
 
           case Constants.StandardRadioButtonNoValue =>
             Future.successful(Redirect(routes.IsExistingShareHolderController.show()))
+          //TODO - Navigates to the REVIEW INVESTOR page when available
         }
       }
     )
