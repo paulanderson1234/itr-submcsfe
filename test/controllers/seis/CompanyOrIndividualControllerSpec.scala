@@ -111,7 +111,6 @@ class CompanyOrIndividualControllerSpec extends BaseSpec {
     }
   }
 
-
   "Sending an invalid form submission with validation errors to the CompanyOrIndividualController when authenticated" should {
     "redirect to itself" in {
       setupMocks(None,  Some(investorModel))
