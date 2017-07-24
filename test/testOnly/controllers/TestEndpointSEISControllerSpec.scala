@@ -23,6 +23,7 @@ import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
 import forms.NatureOfBusinessForm
 import models._
+import models.investorDetails.HowMuchSpentOnSharesModel
 import org.mockito.Matchers
 import org.mockito.Mockito._
 import play.api.test.Helpers._

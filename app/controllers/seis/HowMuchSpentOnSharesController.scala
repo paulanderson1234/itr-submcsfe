@@ -22,7 +22,8 @@ import config.{AppConfig, FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.predicates.FeatureSwitch
 import forms.HowMuchSpentOnSharesForm._
-import models.{CompanyOrIndividualModel, HowMuchSpentOnSharesModel}
+import models.CompanyOrIndividualModel
+import models.investorDetails.HowMuchSpentOnSharesModel
 import play.api.Play.current
 import play.api.data.Form
 import play.api.i18n.Messages.Implicits._

@@ -21,7 +21,8 @@ import common.KeystoreKeys
 import config.{AppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
-import models.{CompanyOrIndividualModel, HowMuchSpentOnSharesModel}
+import models.CompanyOrIndividualModel
+import models.investorDetails._
 import org.mockito.Matchers
 import org.mockito.Mockito._
 import play.api.test.Helpers._

@@ -22,6 +22,7 @@ import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.Helpers.PreviousSchemesHelper
 import models._
+import models.investorDetails._
 import forms._
 import models.submission.SchemeTypesModel
 import play.api.data.Form

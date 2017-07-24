@@ -16,7 +16,7 @@
 
 package forms
 
-import models.HowMuchSpentOnSharesModel
+import models.investorDetails.HowMuchSpentOnSharesModel
 import play.api.data.Form
 import play.api.data.Forms._
 import utils.Validation
