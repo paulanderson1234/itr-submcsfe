@@ -19,12 +19,6 @@ package models
 import play.api.libs.json.Json
 
 
-case class NumberOfSharesPurchasedModel(sharesPurchased: BigDecimal)
-object NumberOfSharesPurchasedModel{
-  implicit val formats = Json.format[NumberOfSharesPurchasedModel]
-}
-
-
 case class AmountSpentModel(amount: BigDecimal)
 object AmountSpentModel{
   implicit val formats = Json.format[AmountSpentModel]
@@ -61,7 +55,6 @@ case class PreviousShareHoldingModel(investorShareIssueDateModel: Option[Investo
 object PreviousShareHoldingModel{
   implicit val formats = Json.format[PreviousShareHoldingModel]
 }
-
 
 case class InvestorDetailsModel(investorOrNomineeModel: Option[AddInvestorOrNomineeModel] = None,
                                 companyOrIndividualModel: Option[CompanyOrIndividualModel] = None,

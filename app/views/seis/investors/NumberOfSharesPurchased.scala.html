@@ -1,0 +1,40 @@
+@import models.NumberOfSharesPurchasedModel
+@import uk.gov.hmrc.play.views.html.helpers.form
+@import common.Constants
+@import views.html.helpers.{backButtonWithProgress, input, errorSummary}
+
+@(companyOrIndividual: String, shareIssueDate: String, numberOfSharesPurchasedForm: Form[NumberOfSharesPurchasedModel])(implicit request: Request[_], messages: Messages)
+
+@main_template(Messages("page.seis.investors.numberOfSharesPurchased.title", companyOrIndividual.toLowerCase(), shareIssueDate)) {
+
+@backButtonWithProgress(controllers.seis.routes.NumberOfSharesPurchasedController.show().url, Messages("common.section.progress.company.details.four"))
+
+@errorSummary(numberOfSharesPurchasedForm, "number-of-shares-purchased", "numberOfSharesPurchased")
+
+<h1 class="heading-xlarge" id="main-heading">@Messages("page.seis.investors.numberOfSharesPurchased.heading", companyOrIndividual.toLowerCase() , shareIssueDate)</h1>
+
+<div>
+
+    @form(action = controllers.seis.routes.NumberOfSharesPurchasedController.submit()) {
+    <fieldset>
+        <legend class="visuallyhidden">@Messages("page.seis.investors.numberOfSharesPurchased.heading", companyOrIndividual.toLowerCase(), shareIssueDate)</legend>
+        <div class="form-group">
+            @input(
+            numberOfSharesPurchasedForm("numberOfSharesPurchased"),
+            '_divClass -> "form-label",
+            '_labelId -> "label-numberOfSharesPurchased",
+            '_label -> Messages("page.seis.investors.numberOfSharesPurchased.heading", companyOrIndividual.toLowerCase(), shareIssueDate),
+            '_labelTextClass -> "visuallyhidden",
+            '_maxlength -> "9",
+            '_inputClass -> "input--normal"
+            )
+        </div>
+    </fieldset>
+    <div class="form-group">
+        <button class="btn button" type="submit" id="next">@Messages("common.button.snc")</button>
+    </div>
+
+</div>
+
+    }
+}
