@@ -68,8 +68,9 @@ trait IsExistingShareHolderController extends FrontendController with Authorised
   val submit = featureSwitch(applicationConfig.seisFlowEnabled) { AuthorisedAndEnrolled.async { implicit user => implicit request =>
     isExistingShareHolderForm.bindFromRequest().fold(
       formWithErrors => {
-        s4lConnector.fetchAndGetFormData[CompanyOrIndividualModel](KeystoreKeys.isExistingShareHolder).map {
-          data => BadRequest(IsExistingShareHolder(data.get.companyOrIndividual, formWithErrors))
+        s4lConnector.fetchAndGetFormData[CompanyOrIndividualModel](KeystoreKeys.companyOrIndividual).map {
+          case Some(data) => BadRequest(IsExistingShareHolder(data.companyOrIndividual, formWithErrors))
+          case None => InternalServerError
         }
       },
       validFormData => {
