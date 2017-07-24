@@ -17,6 +17,7 @@
 package models
 
 import controllers.helpers.BaseSpec
+import models.investorDetails._
 
 class InvestorDetailsModelSpec extends BaseSpec{
 
