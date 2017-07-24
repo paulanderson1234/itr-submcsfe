@@ -1,5 +1,6 @@
 @import models.investorDetails._
 @import models._
+@import models.investorDetails._
 @import forms._
 @import testOnly.models.TestPreviousSchemesModel
 @import uk.gov.hmrc.play.views.html.helpers.form
@@ -12,7 +13,8 @@
 individualDetailsForm: Form[IndividualDetailsModel], shareDescriptionForm: Form[ShareDescriptionModel],
 totalAmountRaisedForm:Form[TotalAmountRaisedModel], totalAmountSpentForm:Form[TotalAmountSpentModel],
 addInvestorOrNomineeForm: Form[AddInvestorOrNomineeModel], companyOrIndividualForm: Form[CompanyOrIndividualModel],
-companyDetailsForm: Form[CompanyDetailsModel], numberOfSharesPurchasedForm: Form[NumberOfSharesPurchasedModel])(implicit request: Request[_], messages: Messages)
+companyDetailsForm: Form[CompanyDetailsModel], numberOfSharesPurchasedForm: Form[NumberOfSharesPurchasedModel], howMuchSpentOnSharesForm : Form[HowMuchSpentOnSharesModel])(implicit request: Request[_], messages: Messages)
+
 
 @main_template(Messages("page.test.page-two.title")) {
 
@@ -291,6 +293,21 @@ companyDetailsForm: Form[CompanyDetailsModel], numberOfSharesPurchasedForm: Form
             )
         </div>
 
+        <h2>How much spent on shares</h2>
+        <div class="form-group">
+            @inputWithCurrencySymbol(
+            howMuchSpentOnSharesForm("howMuchSpentOnShares" ),
+            '_divClass -> "form-label",
+            '_labelId -> "label-howMuchSpentOnShares",
+            '_label -> Messages("page.seis.investors.howMuchSpentOnShares.title"),
+            '_labelTextClass -> "visuallyhidden",
+            '_inputClass -> "input--no-spinner input--left-padding",
+            '_type -> "text",
+            '_maxlength -> "11",
+            'id -> "howMuchSpent"
+            )
+        </div>
+
         <h2>Number of Shares Purchased</h2>
     <div class="form-group">
         @input(
@@ -317,4 +334,5 @@ companyDetailsForm: Form[CompanyDetailsModel], numberOfSharesPurchasedForm: Form
     }
 
 </div>
+
 }

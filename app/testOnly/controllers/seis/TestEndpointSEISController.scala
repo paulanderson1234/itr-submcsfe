@@ -22,6 +22,7 @@ import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.Helpers.PreviousSchemesHelper
 import models._
+import models.investorDetails._
 import forms._
 import models.investorDetails.NumberOfSharesPurchasedModel
 import models.submission.SchemeTypesModel
@@ -150,11 +151,12 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
         nominalValueOfSharesForm <- fillForm[NominalValueOfSharesModel](KeystoreKeys.nominalValueOfShares, NominalValueOfSharesForm.nominalValueOfSharesForm)
         individualDetailsForm <- fillForm[IndividualDetailsModel](KeystoreKeys.individualDetails, IndividualDetailsForm.individualDetailsForm)
         shareDescription <- fillForm[ShareDescriptionModel](KeystoreKeys.shareDescription, ShareDescriptionForm.shareDescriptionForm)
-        companyDetails <- fillForm[CompanyDetailsModel](KeystoreKeys.companyDetails, CompanyDetailsForm.companyDetailsForm)
         totalAmountRaisedForm <- fillForm[TotalAmountRaisedModel](KeystoreKeys.totalAmountRaised, TotalAmountRaisedForm.totalAmountRaisedForm)
         totalAmountSpentForm <- fillForm[TotalAmountSpentModel](KeystoreKeys.totalAmountSpent, TotalAmountSpentForm.totalAmountSpentForm)
         addInvestorOrNomineeForm <- fillForm[AddInvestorOrNomineeModel](KeystoreKeys.addInvestor, AddInvestorOrNomineeForm.addInvestorOrNomineeForm)
         companyOrIndividualForm <- fillForm[CompanyOrIndividualModel](KeystoreKeys.companyOrIndividual, CompanyOrIndividualForm.companyOrIndividualForm)
+        companyDetails <- fillForm[CompanyDetailsModel](KeystoreKeys.companyDetails, CompanyDetailsForm.companyDetailsForm)
+        howMuchSpentOnSharesForm <- fillForm[HowMuchSpentOnSharesModel](KeystoreKeys.howMuchSpentOnShares, HowMuchSpentOnSharesForm.howMuchSpentOnSharesForm)
         numberOfSharesPurchasedForm <- fillForm[NumberOfSharesPurchasedModel](KeystoreKeys.numberOfSharesPurchased, NumberOfSharesPurchasedForm.numberOfSharesPurchasedForm)
 
       } yield Ok(
@@ -168,8 +170,8 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
           addInvestorOrNomineeForm,
           companyOrIndividualForm,
           companyDetails,
-          numberOfSharesPurchasedForm
-
+          numberOfSharesPurchasedForm,
+          howMuchSpentOnSharesForm
         )
       )
 
@@ -185,6 +187,7 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
     val totalAmountSpent = bindForm[TotalAmountSpentModel](KeystoreKeys.totalAmountSpent, TotalAmountSpentForm.totalAmountSpentForm)
     val addInvestorOrNomineeForm = bindForm[AddInvestorOrNomineeModel](KeystoreKeys.addInvestor, AddInvestorOrNomineeForm.addInvestorOrNomineeForm)
     val companyOrIndividual = bindForm[CompanyOrIndividualModel](KeystoreKeys.companyOrIndividual, CompanyOrIndividualForm.companyOrIndividualForm)
+    val howMuchSpentOnSharesForm = bindForm[HowMuchSpentOnSharesModel](KeystoreKeys.howMuchSpentOnShares, HowMuchSpentOnSharesForm.howMuchSpentOnSharesForm)
     val numberOfSharesPurchased = bindForm[NumberOfSharesPurchasedModel](KeystoreKeys.numberOfSharesPurchased, NumberOfSharesPurchasedForm.numberOfSharesPurchasedForm)
 
     saveBackLinks()
@@ -200,8 +203,8 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
         addInvestorOrNomineeForm,
         companyOrIndividual,
         companyDetails,
-        numberOfSharesPurchased
-
+        numberOfSharesPurchased,
+        howMuchSpentOnSharesForm
       )
     ))
   }

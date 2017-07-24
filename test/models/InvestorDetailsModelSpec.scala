@@ -24,55 +24,55 @@ class InvestorDetailsModelSpec extends BaseSpec{
   val invalidModelEmpty = InvestorDetailsModel()
 
   val invalidModelCompanyAndIndividualDetailsPresent = InvestorDetailsModel(Some(investorModel), Some(companyOrIndividualModel), Some(companyDetailsModel),
-    Some(individualDetailsModel), Some(numberOfSharesPurchasedModel), Some(amountSpentModel), Some(isExistingShareHolderModelNo), Some(Vector()))
+    Some(individualDetailsModel), Some(numberOfSharesPurchasedModel), Some(howMuchSpentOnSharesModel), Some(isExistingShareHolderModelNo), Some(Vector()))
   val invalidInvestorOrNomineeMissing = InvestorDetailsModel(None, Some(companyOrIndividualModel), Some(companyDetailsModel), None,
-    Some(numberOfSharesPurchasedModel), Some(amountSpentModel), Some(isExistingShareHolderModelNo), Some(Vector()))
+    Some(numberOfSharesPurchasedModel), Some(howMuchSpentOnSharesModel), Some(isExistingShareHolderModelNo), Some(Vector()))
     val invalidCompanyOrIndividualMissing = InvestorDetailsModel(Some(investorModel), None, Some(companyDetailsModel), None,
-    Some(numberOfSharesPurchasedModel), Some(amountSpentModel), Some(isExistingShareHolderModelNo), Some(Vector()))
+    Some(numberOfSharesPurchasedModel), Some(howMuchSpentOnSharesModel), Some(isExistingShareHolderModelNo), Some(Vector()))
   val invalidCompanyAndIndividualDetailsMissing = InvestorDetailsModel(Some(investorModel), Some(companyOrIndividualModel), None, None,
-    Some(numberOfSharesPurchasedModel), Some(amountSpentModel), Some(isExistingShareHolderModelNo), Some(Vector()))
+    Some(numberOfSharesPurchasedModel), Some(howMuchSpentOnSharesModel), Some(isExistingShareHolderModelNo), Some(Vector()))
   val invalidNumberOfSharesPurchasedMissing = InvestorDetailsModel(Some(investorModel), Some(companyOrIndividualModel), Some(companyDetailsModel), None,
-    None, Some(amountSpentModel), Some(isExistingShareHolderModelNo), Some(Vector()))
+    None, Some(howMuchSpentOnSharesModel), Some(isExistingShareHolderModelNo), Some(Vector()))
   val invalidAmountSpentMissing = InvestorDetailsModel(Some(investorModel), Some(companyOrIndividualModel), Some(companyDetailsModel), None,
     Some(numberOfSharesPurchasedModel), None, Some(isExistingShareHolderModelNo), Some(Vector()))
   val invalidIsExistingShareHolderMissing = InvestorDetailsModel(Some(investorModel), Some(companyOrIndividualModel), Some(companyDetailsModel), None,
-    Some(numberOfSharesPurchasedModel), Some(amountSpentModel), None, Some(Vector()))
+    Some(numberOfSharesPurchasedModel), Some(howMuchSpentOnSharesModel), None, Some(Vector()))
   val invalidPreviousShareHoldingsMissing = InvestorDetailsModel(Some(investorModel), Some(companyOrIndividualModel), Some(companyDetailsModel), None,
-    Some(numberOfSharesPurchasedModel), Some(amountSpentModel), Some(isExistingShareHolderModelNo), None)
+    Some(numberOfSharesPurchasedModel), Some(howMuchSpentOnSharesModel), Some(isExistingShareHolderModelNo), None)
   val invalidMissingValidPreviousShareHoldingsModel = InvestorDetailsModel(Some(investorModel), Some(companyOrIndividualModel), Some(companyDetailsModel), None,
-    Some(numberOfSharesPurchasedModel), Some(amountSpentModel), Some(isExistingShareHolderModelYes), Some(Vector(PreviousShareHoldingModel())))
+    Some(numberOfSharesPurchasedModel), Some(howMuchSpentOnSharesModel), Some(isExistingShareHolderModelYes), Some(Vector(PreviousShareHoldingModel())))
 
 
   val invalidMissingShareIssueDate = InvestorDetailsModel(Some(investorModel), Some(companyOrIndividualModel), Some(companyDetailsModel), None,
-    Some(numberOfSharesPurchasedModel), Some(amountSpentModel), Some(isExistingShareHolderModelYes),
+    Some(numberOfSharesPurchasedModel), Some(howMuchSpentOnSharesModel), Some(isExistingShareHolderModelYes),
     Some(Vector(PreviousShareHoldingModel(None, Some(numberOfPreviouslyIssuedSharesModel),
       Some(previousShareHoldingNominalValueModel), Some(previousShareHoldingDescriptionModel)))))
 
   val invalidMissingNumberOfPreviouslyIssuedShares = InvestorDetailsModel(Some(investorModel), Some(companyOrIndividualModel), Some(companyDetailsModel), None,
-    Some(numberOfSharesPurchasedModel), Some(amountSpentModel), Some(isExistingShareHolderModelYes),
+    Some(numberOfSharesPurchasedModel), Some(howMuchSpentOnSharesModel), Some(isExistingShareHolderModelYes),
     Some(Vector(PreviousShareHoldingModel(Some(investorShareIssueDateModel), None,
       Some(previousShareHoldingNominalValueModel), Some(previousShareHoldingDescriptionModel)))))
 
   val invalidMissingNominalValue = InvestorDetailsModel(Some(investorModel), Some(companyOrIndividualModel), Some(companyDetailsModel), None,
-    Some(numberOfSharesPurchasedModel), Some(amountSpentModel), Some(isExistingShareHolderModelYes),
+    Some(numberOfSharesPurchasedModel), Some(howMuchSpentOnSharesModel), Some(isExistingShareHolderModelYes),
     Some(Vector(PreviousShareHoldingModel(Some(investorShareIssueDateModel), Some(numberOfPreviouslyIssuedSharesModel),
       None, Some(previousShareHoldingDescriptionModel)))))
 
   val invalidMissingShareDescription = InvestorDetailsModel(Some(investorModel), Some(companyOrIndividualModel), Some(companyDetailsModel), None,
-    Some(numberOfSharesPurchasedModel), Some(amountSpentModel), Some(isExistingShareHolderModelYes),
+    Some(numberOfSharesPurchasedModel), Some(howMuchSpentOnSharesModel), Some(isExistingShareHolderModelYes),
     Some(Vector(PreviousShareHoldingModel(Some(investorShareIssueDateModel), Some(numberOfPreviouslyIssuedSharesModel),
       Some(previousShareHoldingNominalValueModel), None))))
 
   val invalidAndValidShareHoldings = InvestorDetailsModel(Some(investorModel), Some(companyOrIndividualModel), Some(companyDetailsModel), None,
-    Some(numberOfSharesPurchasedModel), Some(amountSpentModel), Some(isExistingShareHolderModelYes),
+    Some(numberOfSharesPurchasedModel), Some(howMuchSpentOnSharesModel), Some(isExistingShareHolderModelYes),
     Some(Vector(PreviousShareHoldingModel(Some(investorShareIssueDateModel), Some(numberOfPreviouslyIssuedSharesModel),
       Some(previousShareHoldingNominalValueModel), Some(previousShareHoldingDescriptionModel)), PreviousShareHoldingModel())))
 
 
   val validModelNoPrevShareHoldings = InvestorDetailsModel(Some(investorModel), Some(companyOrIndividualModel), Some(companyDetailsModel), None,
-    Some(numberOfSharesPurchasedModel), Some(amountSpentModel), Some(isExistingShareHolderModelNo), Some(Vector()))
+    Some(numberOfSharesPurchasedModel), Some(howMuchSpentOnSharesModel), Some(isExistingShareHolderModelNo), Some(Vector()))
   val validModelWithPrevShareHoldings = InvestorDetailsModel(Some(investorModel), Some(companyOrIndividualModel), Some(companyDetailsModel), None,
-    Some(numberOfSharesPurchasedModel), Some(amountSpentModel), Some(isExistingShareHolderModelYes),
+    Some(numberOfSharesPurchasedModel), Some(howMuchSpentOnSharesModel), Some(isExistingShareHolderModelYes),
     Some(Vector(PreviousShareHoldingModel(Some(investorShareIssueDateModel), Some(numberOfPreviouslyIssuedSharesModel),
       Some(previousShareHoldingNominalValueModel), Some(previousShareHoldingDescriptionModel)))))
 

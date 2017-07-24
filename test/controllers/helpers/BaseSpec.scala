@@ -239,7 +239,7 @@ trait BaseSpec extends UnitSpec with OneAppPerSuite with MockitoSugar with FakeR
   val companyOrIndividualModel = CompanyOrIndividualModel(Constants.typeCompany)
   val individualDetailsModel = IndividualDetailsModel("Joe", "Bloggs", "Line 1", "Line 2", Some("Line 3"), Some("AB1 1AB"), countryCode = "JP")
   val numberOfSharesPurchasedModel = NumberOfSharesPurchasedModel(1000)
-  val amountSpentModel = AmountSpentModel(1000)
+  val howMuchSpentOnSharesModel = HowMuchSpentOnSharesModel(1000)
   val isExistingShareHolderModelNo = IsExistingShareHolderModel("No")
   val isExistingShareHolderModelYes = IsExistingShareHolderModel("Yes")
 
