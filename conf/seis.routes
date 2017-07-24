@@ -119,10 +119,10 @@ POST       /company-details                       controllers.seis.CompanyDetail
 GET       /total-amount-raised                    controllers.seis.TotalAmountRaisedController.show
 POST      /total-amount-raised                    controllers.seis.TotalAmountRaisedController.submit
 
-GET        /add-investor-or-nominee               controllers.seis.AddInvestorOrNomineeController.show
+GET        /add-investor-or-nominee               controllers.seis.AddInvestorOrNomineeController.show(id: Option[Int]?=None)
 POST       /add-investor-or-nominee               controllers.seis.AddInvestorOrNomineeController.submit
 
-GET        /company-or-individual                 controllers.seis.CompanyOrIndividualController.show
+GET        /company-or-individual                 controllers.seis.CompanyOrIndividualController.show(id: Option[Int]?=None)
 POST       /company-or-individual                 controllers.seis.CompanyOrIndividualController.submit
 
 GET        /individuals-details                   controllers.seis.IndividualDetailsController.show
@@ -131,5 +131,3 @@ POST       /individuals-details                   controllers.seis.IndividualDet
 GET        /total-amount-raised                   controllers.seis.TotalAmountRaisedController.show
 POST       /total-amount-raised                   controllers.seis.TotalAmountRaisedController.submit
 
-GET        /add-investor-or-nominee               controllers.seis.AddInvestorOrNomineeController.show
-POST       /add-investor-or-nominee               controllers.seis.AddInvestorOrNomineeController.submit

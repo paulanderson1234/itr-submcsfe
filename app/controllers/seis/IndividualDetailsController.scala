@@ -22,7 +22,7 @@ import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.predicates.FeatureSwitch
 import forms.IndividualDetailsForm.individualDetailsForm
-import models.IndividualDetailsModel
+import models.InvestorDetailsModel
 import play.api.Play.current
 import play.api.i18n.Messages
 import play.api.i18n.Messages.Implicits._
@@ -49,9 +49,12 @@ trait IndividualDetailsController extends FrontendController with AuthorisedAndE
   val show: Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
     AuthorisedAndEnrolled.async { implicit user =>
       implicit request =>
-        s4lConnector.fetchAndGetFormData[IndividualDetailsModel](KeystoreKeys.individualDetails).map {
-          case Some(data) => Ok(IndividualDetails(individualDetailsForm.fill(data), countriesList))
-          case None => Ok(IndividualDetails(individualDetailsForm, countriesList))
+        s4lConnector.fetchAndGetFormData[InvestorDetailsModel](KeystoreKeys.investorDetails).map {
+          case Some(data) if data.individualDetailsModel.isDefined =>
+            Ok(IndividualDetails(individualDetailsForm.fill(data.individualDetailsModel.get), countriesList))
+          case Some(data) if data.individualDetailsModel.isEmpty =>
+            Ok(IndividualDetails(individualDetailsForm, countriesList))
+          case None => Redirect(routes.AddInvestorOrNomineeController.show())
         }
     }
   }
@@ -66,7 +69,12 @@ trait IndividualDetailsController extends FrontendController with AuthorisedAndE
             else formWithErrors, countriesList)))
           },
           validFormData => {
-            s4lConnector.saveFormData(KeystoreKeys.individualDetails, validFormData)
+            s4lConnector.fetchAndGetFormData[InvestorDetailsModel](KeystoreKeys.investorDetails).map {
+              case Some(investorDetailsModel) => {
+                s4lConnector.saveFormData[InvestorDetailsModel](KeystoreKeys.investorDetails,
+                  investorDetailsModel.copy(individualDetailsModel = Some(validFormData)))
+              }
+            }
             Future.successful(Redirect(routes.IndividualDetailsController.show()))
           }
         )

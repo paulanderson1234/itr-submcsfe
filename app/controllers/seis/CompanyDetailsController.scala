@@ -22,14 +22,14 @@ import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.predicates.FeatureSwitch
 import forms.CompanyDetailsForm._
-import models.CompanyDetailsModel
+import models.InvestorDetailsModel
+import play.api.Play.current
 import play.api.i18n.Messages
+import play.api.i18n.Messages.Implicits._
+import services.SubscriptionService
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import utils.CountriesHelper
 import views.html.seis.investors.CompanyDetails
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
-import services.SubscriptionService
 
 import scala.concurrent.Future
 
@@ -52,9 +52,12 @@ trait CompanyDetailsController extends FrontendController with AuthorisedAndEnro
 
   val show = featureSwitch(applicationConfig.seisFlowEnabled) {
     AuthorisedAndEnrolled.async { implicit user => implicit request =>
-      s4lConnector.fetchAndGetFormData[CompanyDetailsModel](KeystoreKeys.companyDetails).map {
-        case Some(data) => Ok(CompanyDetails(companyDetailsForm.fill(data), countriesList))
-        case None => Ok(CompanyDetails(companyDetailsForm, countriesList))
+      s4lConnector.fetchAndGetFormData[InvestorDetailsModel](KeystoreKeys.investorDetails).map {
+        case Some(data) if data.companyDetailsModel.isDefined =>
+          Ok(CompanyDetails(companyDetailsForm.fill(data.companyDetailsModel.get), countriesList))
+        case Some(data) if data.companyDetailsModel.isEmpty =>
+          Ok(CompanyDetails(companyDetailsForm, countriesList))
+        case None => Redirect(routes.AddInvestorOrNomineeController.show())
       }
     }
   }
@@ -68,7 +71,12 @@ trait CompanyDetailsController extends FrontendController with AuthorisedAndEnro
           else formWithErrors, countriesList)))
         },
         validFormData => {
-          s4lConnector.saveFormData(KeystoreKeys.companyDetails, validFormData)
+          s4lConnector.fetchAndGetFormData[InvestorDetailsModel](KeystoreKeys.investorDetails).map {
+            case Some(investorDetailsModel) => {
+              s4lConnector.saveFormData[InvestorDetailsModel](KeystoreKeys.investorDetails,
+                investorDetailsModel.copy(companyDetailsModel = Some(validFormData)))
+            }
+          }
           Future.successful(Redirect(routes.CompanyDetailsController.show()))
         }
       )

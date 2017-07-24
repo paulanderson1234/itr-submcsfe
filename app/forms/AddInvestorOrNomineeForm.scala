@@ -23,7 +23,8 @@ import play.api.data.Forms._
 object AddInvestorOrNomineeForm {
   val addInvestorOrNomineeForm = Form(
     mapping(
-      "addInvestorOrNominee" -> nonEmptyText
+      "addInvestorOrNominee" -> nonEmptyText,
+      "processingId" -> optional(number)
     )(AddInvestorOrNomineeModel.apply)(AddInvestorOrNomineeModel.unapply)
   )
 }

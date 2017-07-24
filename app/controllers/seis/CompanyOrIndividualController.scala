@@ -22,11 +22,13 @@ import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.Helpers.ControllerHelpers
 import controllers.predicates.FeatureSwitch
-import models.{AddInvestorOrNomineeModel, CompanyOrIndividualModel}
+import forms.AddInvestorOrNomineeForm.addInvestorOrNomineeForm
 import forms.CompanyOrIndividualForm._
-import uk.gov.hmrc.play.frontend.controller.FrontendController
-import play.api.i18n.Messages.Implicits._
+import models.{AddInvestorOrNomineeModel, InvestorDetailsModel}
 import play.api.Play.current
+import play.api.i18n.Messages.Implicits._
+import play.api.mvc.{Action, AnyContent}
+import uk.gov.hmrc.play.frontend.controller.FrontendController
 import views.html.seis.investors.CompanyOrIndividual
 
 import scala.concurrent.Future
@@ -39,26 +41,49 @@ object CompanyOrIndividualController extends CompanyOrIndividualController
   override lazy val enrolmentConnector = EnrolmentConnector
 }
 
-trait CompanyOrIndividualController extends FrontendController with AuthorisedAndEnrolledForTAVC with FeatureSwitch with ControllerHelpers{
+trait CompanyOrIndividualController extends FrontendController with AuthorisedAndEnrolledForTAVC with FeatureSwitch with ControllerHelpers {
 
   override val acceptedFlows = Seq(Seq(SEIS))
 
-  val show = featureSwitch(applicationConfig.seisFlowEnabled) { AuthorisedAndEnrolled.async { implicit user => implicit request =>
+  def show(id: Option[Int]): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
+    AuthorisedAndEnrolled.async { implicit user =>
+      implicit request =>
 
-      def routeRequest(investorOrNominee: Option[AddInvestorOrNomineeModel]) = {
-        if (investorOrNominee.isDefined) {
-          s4lConnector.fetchAndGetFormData[CompanyOrIndividualModel](KeystoreKeys.companyOrIndividual).map {
-            case Some(data) => Ok(CompanyOrIndividual(useInvestorOrNomineeValueAsHeadingText(investorOrNominee.get),
-              companyOrIndividualForm.fill(data)))
-            case None => Ok(CompanyOrIndividual(useInvestorOrNomineeValueAsHeadingText(investorOrNominee.get), companyOrIndividualForm))
+        s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
+          case Some(data) => {
+            id match {
+              case Some(idVal) => {
+                val itemToUpdateIndex = data.indexWhere(_.processingId.getOrElse(0) == idVal)
+                if (itemToUpdateIndex != -1) {
+                  val model = data.lift(itemToUpdateIndex)
+                  Ok(CompanyOrIndividual(useInvestorOrNomineeValueAsHeadingText(model.get.investorOrNomineeModel.get),
+                    companyOrIndividualForm.fill(model.get.companyOrIndividualModel.get)))
+                }
+                else {
+                  // Set to the review screen
+                  val investorDetailsModel = data.last
+                  val itemToUpdateIndex = data.indexWhere(_.processingId.getOrElse(0) ==
+                    investorDetailsModel.processingId.getOrElse(0))
+                  val model = data.lift(itemToUpdateIndex)
+                  Ok(CompanyOrIndividual(useInvestorOrNomineeValueAsHeadingText(model.get.investorOrNomineeModel.get),
+                    companyOrIndividualForm.fill(model.get.companyOrIndividualModel.get)))
+                }
+              }
+              case None => {
+                val investorDetailsModel = data.last
+                val itemToUpdateIndex = data.indexWhere(_.processingId.getOrElse(0) ==
+                  investorDetailsModel.processingId.getOrElse(0))
+                val model = data.lift(itemToUpdateIndex)
+                Ok(CompanyOrIndividual(useInvestorOrNomineeValueAsHeadingText(model.get.investorOrNomineeModel.get),
+                  companyOrIndividualForm))
+              }
+            }
           }
-        } else Future.successful(Redirect(routes.AddInvestorOrNomineeController.show()))
-      }
-
-      for {
-        investorOrNominee <- s4lConnector.fetchAndGetFormData[AddInvestorOrNomineeModel](KeystoreKeys.addInvestor)
-        route <- routeRequest(investorOrNominee)
-      } yield route
+          case None => {
+            // Set back to the review later
+            Redirect(routes.AddInvestorOrNomineeController.show())
+          }
+        }
     }
   }
 
@@ -70,7 +95,12 @@ trait CompanyOrIndividualController extends FrontendController with AuthorisedAn
         }
       },
       validFormData => {
-        s4lConnector.saveFormData(KeystoreKeys.companyOrIndividual, validFormData)
+        s4lConnector.fetchAndGetFormData[InvestorDetailsModel](KeystoreKeys.investorDetails).map {
+          case Some(investorDetailsModel) => {
+            s4lConnector.saveFormData[InvestorDetailsModel](KeystoreKeys.investorDetails,
+              investorDetailsModel.copy(companyOrIndividualModel = Some(validFormData)))
+          }
+        }
         validFormData.companyOrIndividual match {
           case Constants.typeCompany => Future.successful(Redirect(routes.CompanyDetailsController.show()))
           case Constants.typeIndividual => Future.successful(Redirect(routes.IndividualDetailsController.show()))
