@@ -23,7 +23,7 @@ import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.Helpers.ControllerHelpers
 import controllers.predicates.FeatureSwitch
 import forms.InvestorShareIssueDateForm._
-import models.InvestorShareIssueDateModel
+import models.investorDetails.InvestorShareIssueDateModel
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import views.html.seis.investors.InvestorShareIssueDate
 import play.api.i18n.Messages.Implicits._

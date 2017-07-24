@@ -16,7 +16,8 @@
 
 package forms
 
-import models.InvestorShareIssueDateModel
+
+import models.investorDetails._
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.i18n.Messages
