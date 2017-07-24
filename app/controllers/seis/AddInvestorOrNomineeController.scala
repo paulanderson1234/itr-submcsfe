@@ -23,7 +23,7 @@ import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.Helpers.{ControllerHelpers, PreviousInvestorsHelper}
 import controllers.predicates.FeatureSwitch
 import forms.AddInvestorOrNomineeForm._
-import models.InvestorDetailsModel
+import models.investorDetails.InvestorDetailsModel
 import play.api.Play.current
 import play.api.i18n.Messages.Implicits._
 import play.api.mvc.{Action, AnyContent}
@@ -62,13 +62,11 @@ trait AddInvestorOrNomineeController extends FrontendController with AuthorisedA
                       }
                       case None => {
                         val investorDetailsModel = data.last
-                        val itemToUpdateIndex = data.indexWhere(_.processingId.getOrElse(0) ==
-                          investorDetailsModel.processingId.getOrElse(0))
-                        val model = data.lift(itemToUpdateIndex)
-                        Ok(AddInvestorOrNominee(addInvestorOrNomineeForm.fill(model.get.investorOrNomineeModel.get), backUrl.get))
+                        if (investorDetailsModel.validate) Ok(AddInvestorOrNominee(addInvestorOrNomineeForm, backUrl.get))
+                        else Ok(AddInvestorOrNominee(addInvestorOrNomineeForm.fill(investorDetailsModel.investorOrNomineeModel.get),
+                            backUrl.get))
                       }
                     }
-
                   }
                   case None => Ok(AddInvestorOrNominee(addInvestorOrNomineeForm, backUrl.get))
                 }
@@ -96,11 +94,15 @@ trait AddInvestorOrNomineeController extends FrontendController with AuthorisedA
           },
           validFormData => {
             validFormData.processingId match {
-              case Some(_) => PreviousInvestorsHelper.updateInfoToInvestorById(s4lConnector, validFormData).map {
-                investorDetailsModel => Redirect(routes.CompanyOrIndividualController.show())
+              case Some(_) => PreviousInvestorsHelper.updateInvestorOrNominee(s4lConnector, validFormData).map {
+                investorDetailsModel => {
+                  Redirect(routes.CompanyOrIndividualController.show(investorDetailsModel.processingId.get))
+                }
               }
-              case None => PreviousInvestorsHelper.addInfoToInvestorById(s4lConnector, validFormData).map {
-                investorDetailsModel => Redirect(routes.CompanyOrIndividualController.show())
+              case None => PreviousInvestorsHelper.addInvestorOrNominee(s4lConnector, validFormData).map {
+                investorDetailsModel => {
+                  Redirect(routes.CompanyOrIndividualController.show(investorDetailsModel.processingId.get))
+                }
               }
             }
           }

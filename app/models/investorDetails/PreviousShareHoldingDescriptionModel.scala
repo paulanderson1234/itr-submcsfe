@@ -14,13 +14,11 @@
  * limitations under the License.
  */
 
-package models
+package models.investorDetails
 
 import play.api.libs.json.Json
 
-case class CompanyOrIndividualModel(companyOrIndividual: String,
-                                    processingId: Option[Int])
-
-object CompanyOrIndividualModel{
-  implicit val formats = Json.format[CompanyOrIndividualModel]
+case class PreviousShareHoldingDescriptionModel(description: String)
+object PreviousShareHoldingDescriptionModel{
+  implicit val formats = Json.format[PreviousShareHoldingDescriptionModel]
 }

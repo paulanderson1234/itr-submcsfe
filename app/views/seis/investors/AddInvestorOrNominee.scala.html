@@ -4,7 +4,7 @@
 @import views.html.helpers.input
 @import uk.gov.hmrc.play.views.html.helpers.form
 @import common.Constants
-@import views.html.helpers.{backButtonWithProgress, formInputRadioGroup, errorSummary, formHint}
+@import views.html.helpers.{backButtonWithProgress, formInputRadioGroup, errorSummary, formHint, hiddenField}
 
 @(addInvestorOrNomineeForm: Form[AddInvestorOrNomineeModel], backUrl: String)(implicit request: Request[_], messages: Messages)
 
@@ -35,6 +35,13 @@
             '_labelClass -> "block-label",
             '_legendID -> "addInvestorOrNominee",
             '_groupClass -> "block"
+            )
+        </div>
+
+        <div>
+            @hiddenField(
+            addInvestorOrNomineeForm("processingId"),
+            'id -> "processingId"
             )
         </div>
 

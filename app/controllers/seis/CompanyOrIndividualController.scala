@@ -20,18 +20,16 @@ import auth.{AuthorisedAndEnrolledForTAVC, SEIS}
 import common.{Constants, KeystoreKeys}
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
-import controllers.Helpers.ControllerHelpers
+import controllers.Helpers.{ControllerHelpers, PreviousInvestorsHelper}
 import controllers.predicates.FeatureSwitch
-import forms.AddInvestorOrNomineeForm.addInvestorOrNomineeForm
 import forms.CompanyOrIndividualForm._
-import models.{AddInvestorOrNomineeModel, InvestorDetailsModel}
+import models.AddInvestorOrNomineeModel
+import models.investorDetails.InvestorDetailsModel
 import play.api.Play.current
 import play.api.i18n.Messages.Implicits._
 import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import views.html.seis.investors.CompanyOrIndividual
-
-import scala.concurrent.Future
 
 object CompanyOrIndividualController extends CompanyOrIndividualController
 {
@@ -45,68 +43,63 @@ trait CompanyOrIndividualController extends FrontendController with AuthorisedAn
 
   override val acceptedFlows = Seq(Seq(SEIS))
 
-  def show(id: Option[Int]): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
+  def show(id: Int): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
     AuthorisedAndEnrolled.async { implicit user =>
       implicit request =>
-
         s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
           case Some(data) => {
-            id match {
-              case Some(idVal) => {
-                val itemToUpdateIndex = data.indexWhere(_.processingId.getOrElse(0) == idVal)
-                if (itemToUpdateIndex != -1) {
-                  val model = data.lift(itemToUpdateIndex)
-                  Ok(CompanyOrIndividual(useInvestorOrNomineeValueAsHeadingText(model.get.investorOrNomineeModel.get),
-                    companyOrIndividualForm.fill(model.get.companyOrIndividualModel.get)))
-                }
-                else {
-                  // Set to the review screen
-                  val investorDetailsModel = data.last
-                  val itemToUpdateIndex = data.indexWhere(_.processingId.getOrElse(0) ==
-                    investorDetailsModel.processingId.getOrElse(0))
-                  val model = data.lift(itemToUpdateIndex)
-                  Ok(CompanyOrIndividual(useInvestorOrNomineeValueAsHeadingText(model.get.investorOrNomineeModel.get),
-                    companyOrIndividualForm.fill(model.get.companyOrIndividualModel.get)))
-                }
-              }
-              case None => {
-                val investorDetailsModel = data.last
-                val itemToUpdateIndex = data.indexWhere(_.processingId.getOrElse(0) ==
-                  investorDetailsModel.processingId.getOrElse(0))
-                val model = data.lift(itemToUpdateIndex)
+            val itemToUpdateIndex = data.indexWhere(_.processingId.getOrElse(0) == id)
+            if (itemToUpdateIndex != -1) {
+              val model = data.lift(itemToUpdateIndex)
+              if (model.get.companyOrIndividualModel.isDefined)
+                Ok(CompanyOrIndividual(useInvestorOrNomineeValueAsHeadingText(model.get.investorOrNomineeModel.get),
+                  companyOrIndividualForm.fill(model.get.companyOrIndividualModel.get)))
+              else
                 Ok(CompanyOrIndividual(useInvestorOrNomineeValueAsHeadingText(model.get.investorOrNomineeModel.get),
                   companyOrIndividualForm))
-              }
+            }
+            else {
+              // Set back to the review page later
+              Redirect(routes.AddInvestorOrNomineeController.show())
             }
           }
           case None => {
-            // Set back to the review later
-            Redirect(routes.AddInvestorOrNomineeController.show())
+            Redirect(controllers.seis.routes.ShareDescriptionController.show())
           }
         }
     }
   }
 
-  val submit = featureSwitch(applicationConfig.seisFlowEnabled) { AuthorisedAndEnrolled.async { implicit user => implicit request =>
-    companyOrIndividualForm.bindFromRequest().fold(
-      formWithErrors => {
-        s4lConnector.fetchAndGetFormData[AddInvestorOrNomineeModel](KeystoreKeys.addInvestor).map {
-          data => BadRequest(CompanyOrIndividual(useInvestorOrNomineeValueAsHeadingText(data.get), formWithErrors))
-        }
-      },
-      validFormData => {
-        s4lConnector.fetchAndGetFormData[InvestorDetailsModel](KeystoreKeys.investorDetails).map {
-          case Some(investorDetailsModel) => {
-            s4lConnector.saveFormData[InvestorDetailsModel](KeystoreKeys.investorDetails,
-              investorDetailsModel.copy(companyOrIndividualModel = Some(validFormData)))
+  val submit = featureSwitch(applicationConfig.seisFlowEnabled) {
+    AuthorisedAndEnrolled.async { implicit user =>
+      implicit request =>
+        companyOrIndividualForm.bindFromRequest().fold(
+          formWithErrors => {
+            s4lConnector.fetchAndGetFormData[AddInvestorOrNomineeModel](KeystoreKeys.addInvestor).map {
+              data => BadRequest(CompanyOrIndividual(useInvestorOrNomineeValueAsHeadingText(data.get), formWithErrors))
+            }
+          },
+          validFormData => {
+            validFormData.processingId match {
+              case Some(_) => PreviousInvestorsHelper.updateCompanyOrIndividual(s4lConnector, validFormData).map {
+                investorDetailsModel => {
+                  validFormData.companyOrIndividual match {
+                    case Constants.typeCompany => Redirect(routes.CompanyDetailsController.show(investorDetailsModel.processingId.get))
+                    case Constants.typeIndividual => Redirect(routes.IndividualDetailsController.show(investorDetailsModel.processingId.get))
+                  }
+                }
+              }
+              case None => PreviousInvestorsHelper.addCompanyOrIndividual(s4lConnector, validFormData).map {
+                investorDetailsModel => {
+                  validFormData.companyOrIndividual match {
+                    case Constants.typeCompany => Redirect(routes.CompanyDetailsController.show(investorDetailsModel.processingId.get))
+                    case Constants.typeIndividual => Redirect(routes.IndividualDetailsController.show(investorDetailsModel.processingId.get))
+                  }
+                }
+              }
+            }
           }
-        }
-        validFormData.companyOrIndividual match {
-          case Constants.typeCompany => Future.successful(Redirect(routes.CompanyDetailsController.show()))
-          case Constants.typeIndividual => Future.successful(Redirect(routes.IndividualDetailsController.show()))
-        }
-      }
-    )
-  }
+        )
+    }
   }
 }

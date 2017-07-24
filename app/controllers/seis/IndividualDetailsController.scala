@@ -20,9 +20,10 @@ import auth.{AuthorisedAndEnrolledForTAVC, SEIS}
 import common.KeystoreKeys
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
+import controllers.Helpers.PreviousInvestorsHelper
 import controllers.predicates.FeatureSwitch
 import forms.IndividualDetailsForm.individualDetailsForm
-import models.InvestorDetailsModel
+import models.investorDetails.InvestorDetailsModel
 import play.api.Play.current
 import play.api.i18n.Messages
 import play.api.i18n.Messages.Implicits._
@@ -46,15 +47,29 @@ trait IndividualDetailsController extends FrontendController with AuthorisedAndE
 
   lazy val countriesList: List[(String, String)] = CountriesHelper.getIsoCodeTupleList
 
-  val show: Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
+  def show(id: Int): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
     AuthorisedAndEnrolled.async { implicit user =>
       implicit request =>
-        s4lConnector.fetchAndGetFormData[InvestorDetailsModel](KeystoreKeys.investorDetails).map {
-          case Some(data) if data.individualDetailsModel.isDefined =>
-            Ok(IndividualDetails(individualDetailsForm.fill(data.individualDetailsModel.get), countriesList))
-          case Some(data) if data.individualDetailsModel.isEmpty =>
-            Ok(IndividualDetails(individualDetailsForm, countriesList))
-          case None => Redirect(routes.AddInvestorOrNomineeController.show())
+
+        s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
+          case Some(data) => {
+            val itemToUpdateIndex = data.indexWhere(_.processingId.getOrElse(0) == id)
+            if (itemToUpdateIndex != -1) {
+              val model = data.lift(itemToUpdateIndex)
+              if (model.get.individualDetailsModel.isDefined) {
+                Ok(IndividualDetails(individualDetailsForm.fill(model.get.individualDetailsModel.get), countriesList))
+              }
+              else
+                Ok(IndividualDetails(individualDetailsForm, countriesList))
+            }
+            else {
+              // Set back to the review page later
+              Redirect(routes.AddInvestorOrNomineeController.show())
+            }
+          }
+          case None => {
+            Redirect(controllers.seis.routes.ShareDescriptionController.show())
+          }
         }
     }
   }
@@ -69,13 +84,14 @@ trait IndividualDetailsController extends FrontendController with AuthorisedAndE
             else formWithErrors, countriesList)))
           },
           validFormData => {
-            s4lConnector.fetchAndGetFormData[InvestorDetailsModel](KeystoreKeys.investorDetails).map {
-              case Some(investorDetailsModel) => {
-                s4lConnector.saveFormData[InvestorDetailsModel](KeystoreKeys.investorDetails,
-                  investorDetailsModel.copy(individualDetailsModel = Some(validFormData)))
+            validFormData.processingId match {
+              case Some(_) => PreviousInvestorsHelper.updateIndividualDetails(s4lConnector, validFormData).map {
+                investorDetailsModel => Redirect(routes.IndividualDetailsController.show(investorDetailsModel.processingId.get))
+              }
+              case None => PreviousInvestorsHelper.addIndividualDetails(s4lConnector, validFormData).map {
+                investorDetailsModel => Redirect(routes.IndividualDetailsController.show(investorDetailsModel.processingId.get))
               }
             }
-            Future.successful(Redirect(routes.IndividualDetailsController.show()))
           }
         )
     }

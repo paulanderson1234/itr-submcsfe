@@ -14,13 +14,11 @@
  * limitations under the License.
  */
 
-package models
+package models.investorDetails
 
 import play.api.libs.json.Json
 
-case class CompanyOrIndividualModel(companyOrIndividual: String,
-                                    processingId: Option[Int])
-
-object CompanyOrIndividualModel{
-  implicit val formats = Json.format[CompanyOrIndividualModel]
+case class InvestorShareIssueDateModel(dateOfIssueDay: Int, dateOfIssueMonth: Int, dateOfIssueYear: Int)
+object InvestorShareIssueDateModel{
+  implicit val formats = Json.format[InvestorShareIssueDateModel]
 }

@@ -10,7 +10,7 @@
 
 @main_template(Messages("page.investment.companyDetails.title")) {
 
-@backButtonWithProgress(controllers.seis.routes.CompanyOrIndividualController.show().url, Messages("common.section.progress.company.details.four"))
+@backButtonWithProgress(controllers.seis.routes.CompanyOrIndividualController.show(1).url, Messages("common.section.progress.company.details.four"))
 
 <div class="grid-row">
     <div class="column-two-thirds">
@@ -96,6 +96,13 @@
             '_id -> "countryCode",
             '_inputClass -> "input--medium input--cleared",
             '_label -> Html(Messages("page.investment.companyDetails.country.label")))
+        </div>
+
+        <div>
+            @hiddenField(
+            companyDetailsForm("processingId"),
+            'id -> "processingId"
+            )
         </div>
 
         <div class="form-group" id="companyDetailsButtonDiv">
