@@ -18,7 +18,7 @@ package models.investorDetails
 
 import play.api.libs.json.Json
 
-case class InvestorShareIssueDateModel(dateOfIssueDay: Int, dateOfIssueMonth: Int, dateOfIssueYear: Int)
+case class InvestorShareIssueDateModel(dateOfIssueDay: Int, dateOfIssueMonth: Int, dateOfIssueYear: Int, processingId: Option[Int])
 object InvestorShareIssueDateModel{
   implicit val formats = Json.format[InvestorShareIssueDateModel]
 }
