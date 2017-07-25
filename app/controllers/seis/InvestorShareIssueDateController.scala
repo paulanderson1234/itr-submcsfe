@@ -44,23 +44,10 @@ trait InvestorShareIssueDateController extends FrontendController with Authorise
 
   val show = featureSwitch(applicationConfig.seisFlowEnabled) {
     AuthorisedAndEnrolled.async { implicit user => implicit request =>
-
-      def routeRequest(backUrl: Option[String]) = {
-        if (backUrl.isDefined) {
-          s4lConnector.fetchAndGetFormData[InvestorShareIssueDateModel](KeystoreKeys.investorShareIssueDate).map {
-            case Some(data) => Ok(InvestorShareIssueDate(investorShareIssueDateForm.fill(data), backUrl.getOrElse("")))
-            case None => Ok(InvestorShareIssueDate(investorShareIssueDateForm, backUrl.getOrElse("")))
-          }
+        s4lConnector.fetchAndGetFormData[InvestorShareIssueDateModel](KeystoreKeys.investorShareIssueDate).map {
+          case Some(data) => Ok(InvestorShareIssueDate(investorShareIssueDateForm.fill(data)))
+          case None => Ok(InvestorShareIssueDate(investorShareIssueDateForm))
         }
-        else Future.successful(Redirect(routes.AddInvestorOrNomineeController.show()))
-        //TODO route should be "Existing Shareholder?" page
-
-      }
-      for {
-        // change the back link to previous Share investor page once it is build
-        link <- ControllerHelpers.getSavedBackLink(KeystoreKeys.backLinkAddInvestorOrNominee, s4lConnector)
-        route <- routeRequest(link)
-      } yield route
     }
   }
 
@@ -68,11 +55,8 @@ trait InvestorShareIssueDateController extends FrontendController with Authorise
     AuthorisedAndEnrolled.async { implicit user => implicit request =>
       investorShareIssueDateForm.bindFromRequest().fold(
         formWithErrors => {
-          ControllerHelpers.getSavedBackLink(KeystoreKeys.backLinkAddInvestorOrNominee, s4lConnector).flatMap {
-            case Some(data) => Future.successful(BadRequest(InvestorShareIssueDate(formWithErrors, data)))
-            case None => Future.successful(Redirect(routes.AddInvestorOrNomineeController.show()))
-            //TODO route should be "Existing Shareholder?" page
-          }
+           Future.successful(BadRequest(InvestorShareIssueDate(formWithErrors)))
+          //TODO route should be "Existing Shareholder?" page
         },
         validFormData => {
           s4lConnector.saveFormData(KeystoreKeys.investorShareIssueDate, validFormData)

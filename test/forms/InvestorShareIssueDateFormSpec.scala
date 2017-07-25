@@ -48,7 +48,7 @@ class InvestorShareIssueDateFormSpec extends UnitSpec with OneAppPerSuite{
     "return a Some if a model with valid inputs is supplied using .bind" in {
       val map = Map(("investorShareIssueDateDay", "10"), ("investorShareIssueDateMonth", "3"), ("investorShareIssueDateYear", "2016"))
       val form = investorShareIssueDateForm.bind(map)
-      form.value shouldBe Some(ShareIssueDateModel(Some(10), Some(3), Some(2016)))
+      form.value shouldBe Some(InvestorShareIssueDateModel(Some(10), Some(3), Some(2016)))
     }
 
     "return a None if a model with non-numeric inputs is supplied using .bind" in {

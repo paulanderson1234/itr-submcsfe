@@ -88,6 +88,11 @@ validation.error.employeeCount.notANumber = Enter a valid number for your employ
 validation.error.employeeCount.size = The employee count should be between {0} and 9999999999999
 validation.error.employeeCount.precision = Enter a value with fewer than 13 decimal places for your employee count
 
+validation.error.howMuchSpentOnShares.size = The amount spent should be between 0 and 99999999999
+validation.error.howMuchSpentOnShares.notANumber = Enter a valid number for the amount spent
+validation.error.howMuchSpentOnShares.decimalPlaces = The amount spent should not contain decimal places
+validation.error.howMuchSpentOnShares.negative = The amount spent should not be negative
+
 validation.error.totalAmountSpent.size = The total amount spent should be between 0 and 99999999999
 validation.error.totalAmountSpent.notANumber = Enter a valid number for the total amount spent
 validation.error.totalAmountSpent.decimalPlaces = The total amount spent should not contain decimal places
@@ -1081,6 +1086,10 @@ page.seis.investors.AddInvestorOrNominee.info.one=Only add the investors or nomi
 page.seis.investors.AddInvestorOrNominee.info.two=A nominee is someone who acts on behalf of an individual investor.
 page.seis.investors.AddInvestorOrNominee.radioButton.one=Investor
 page.seis.investors.AddInvestorOrNominee.radioButton.two=Nominee
+
+#How Much Spent On Shares
+page.seis.investors.howMuchSpentOnShares.title=How much did this {0} pay in total for these shares?
+page.seis.investors.howMuchSpentOnShares.heading=How much did this {0} pay in total for these shares?
 
 #Company or Individual
 page.investors.companyOrIndividual.title = Is this {0} a company or an individual?

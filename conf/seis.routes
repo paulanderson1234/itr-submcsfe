@@ -137,6 +137,9 @@ POST       /add-investor-or-nominee               controllers.seis.AddInvestorOr
 GET        /investor-share-issue-date             controllers.seis.InvestorShareIssueDateController.show
 POST       /investor-share-issue-date             controllers.seis.InvestorShareIssueDateController.submit
 
+GET        /how-much-spent-on-shares              controllers.seis.HowMuchSpentOnSharesController.show
+POST       /how-much-spent-on-shares              controllers.seis.HowMuchSpentOnSharesController.submit
+
 GET        /number-of-shares-purchased            controllers.seis.NumberOfSharesPurchasedController.show
 POST       /number-of-shares-purchased            controllers.seis.NumberOfSharesPurchasedController.submit
 

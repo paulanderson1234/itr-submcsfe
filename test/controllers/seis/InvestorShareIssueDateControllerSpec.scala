@@ -51,7 +51,7 @@ class InvestorShareIssueDateControllerSpec extends BaseSpec {
     }
   }
 
-  def setupMocks(investorShareIssueDateModel: Option[InvestorShareIssueDateModel] = None, backLink: Option[String] = None): Unit = {
+  def setupMocks(investorShareIssueDateModel: Option[InvestorShareIssueDateModel] = None): Unit = {
     when(mockS4lConnector.fetchAndGetFormData[InvestorShareIssueDateModel](Matchers.eq(KeystoreKeys.investorShareIssueDate))
       (Matchers.any(), Matchers.any(), Matchers.any()))
       .thenReturn(Future.successful(investorShareIssueDateModel))
@@ -59,37 +59,19 @@ class InvestorShareIssueDateControllerSpec extends BaseSpec {
     when(mockS4lConnector.saveFormData(Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
       .thenReturn(Future.successful(CacheMap("", Map())))
 
-    when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.backLinkInvestorShareIssueDate))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(backLink))
-
-    when(mockS4lConnector.saveFormData(Matchers.eq(KeystoreKeys.backLinkInvestorShareIssueDate),
-      Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
-      .thenReturn(Future.successful(CacheMap("", Map())))
-
   }
 
   "Sending a GET request to InvestorShareIssueDateController when authenticated and enrolled" should {
     "return a 200 when something is fetched from keystore and back link returned" in {
-      setupMocks(Some(investorShareIssueDateModel), Some("/test/test"))
+      setupMocks(Some(investorShareIssueDateModel))
       mockEnrolledRequest(seisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show())(
         result => status(result) shouldBe OK
       )
     }
 
-    "return a 200 when something is fetched from keystore and back link is None" in {
-      setupMocks(Some(investorShareIssueDateModel), None)
-      mockEnrolledRequest(seisSchemeTypesModel)
-      showWithSessionAndAuth(TestController.show())(
-        result => {
-          status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(controllers.seis.routes.QualifyBusinessActivityController.show().url)
-        }
-      )
-    }
-
     "provide an empty model and return a 200 when nothing is fetched using keystore" in {
-      setupMocks(None, Some("/test/test/"))
+      setupMocks(None)
       mockEnrolledRequest(seisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show())(
         result => status(result) shouldBe OK
@@ -98,19 +80,20 @@ class InvestorShareIssueDateControllerSpec extends BaseSpec {
   }
 
   "Sending a valid form submit to the InvestorShareIssueDateController when authenticated and enrolled" should {
-    "redirect to first trade start date page" in {
+    "redirect to How many shares purchased previously page" in {
       setupMocks(Some(investorShareIssueDateModel))
       mockEnrolledRequest(seisSchemeTypesModel)
 
       val formInput = Seq(
-        "shareIssueDay" -> "23",
-        "shareIssueMonth" -> "11",
-        "shareIssueYear" -> "1993")
+        "investorShareIssueDateDay" -> "23",
+        "investorShareIssueDateMonth" -> "11",
+        "investorShareIssueDateYear" -> "1993")
 
       submitWithSessionAndAuth(TestController.submit,formInput:_*)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(routes.GrossAssetsController.show().url)
+          redirectLocation(result) shouldBe Some(routes.AddInvestorOrNomineeController.show().url)
+          //Should be changed to How many shares purchased previously
         }
       )
     }
@@ -118,7 +101,7 @@ class InvestorShareIssueDateControllerSpec extends BaseSpec {
 
   "Sending an invalid form submission with validation errors to the InvestorShareIssueDateController when authenticated and enrolled" should {
     "return a bad request" in {
-      setupMocks(None, Some("/test/test"))
+      setupMocks(None)
       mockEnrolledRequest(seisSchemeTypesModel)
       val formInput = Seq(
         "investorShareIssueDateDay" -> "",
