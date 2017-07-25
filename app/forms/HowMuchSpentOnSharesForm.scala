@@ -14,11 +14,23 @@
  * limitations under the License.
  */
 
-package models.investorDetails
+package forms
 
-import play.api.libs.json.Json
+import models.investorDetails.HowMuchSpentOnSharesModel
+import play.api.data.Form
+import play.api.data.Forms._
+import utils.Validation
 
-case class AmountSpentModel(amount: BigDecimal)
-object AmountSpentModel{
-  implicit val formats = Json.format[AmountSpentModel]
+object HowMuchSpentOnSharesForm {
+
+  val messageKey = "howMuchSpentOnShares"
+  val minimumAmount = 0
+
+  val howMuchSpentOnSharesForm = Form(
+    mapping(
+      "howMuchSpentOnShares" -> nonEmptyText
+        .verifying(Validation.genericWholeAmountCheck(messageKey, minimumAmount))
+        .transform[BigDecimal](value => BigDecimal(value), _.toString())
+    )(HowMuchSpentOnSharesModel.apply)(HowMuchSpentOnSharesModel.unapply)
+  )
 }
