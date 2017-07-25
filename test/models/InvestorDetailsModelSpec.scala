@@ -26,8 +26,6 @@ class InvestorDetailsModelSpec extends BaseSpec {
 
   val invalidModelEmpty = InvestorDetailsModel()
 
-  val invalidModelCompanyAndIndividualDetailsPresent = InvestorDetailsModel(Some(investorModel), Some(companyOrIndividualModel), Some(companyDetailsModel),
-    Some(individualDetailsModel), Some(numberOfSharesPurchasedModel), Some(howMuchSpentOnSharesModel), Some(isExistingShareHolderModelNo), Some(Vector()))
   val invalidInvestorOrNomineeMissing = InvestorDetailsModel(None, Some(companyOrIndividualModel), Some(companyDetailsModel), None,
     Some(numberOfSharesPurchasedModel), Some(howMuchSpentOnSharesModel), Some(isExistingShareHolderModelNo), Some(Vector()))
     val invalidCompanyOrIndividualMissing = InvestorDetailsModel(Some(investorModel), None, Some(companyDetailsModel), None,
@@ -70,14 +68,6 @@ class InvestorDetailsModelSpec extends BaseSpec {
     Some(numberOfSharesPurchasedModel), Some(howMuchSpentOnSharesModel), Some(isExistingShareHolderModelYes),
     Some(Vector(PreviousShareHoldingModel(Some(investorShareIssueDateModel), Some(numberOfPreviouslyIssuedSharesModel),
       Some(previousShareHoldingNominalValueModel), Some(previousShareHoldingDescriptionModel)), PreviousShareHoldingModel())))
-
-
-  val validModelNoPrevShareHoldings = InvestorDetailsModel(Some(investorModel), Some(companyOrIndividualModel), Some(companyDetailsModel), None,
-    Some(numberOfSharesPurchasedModel), Some(howMuchSpentOnSharesModel), Some(isExistingShareHolderModelNo), Some(Vector()))
-  val validModelWithPrevShareHoldings = InvestorDetailsModel(Some(investorModel), Some(companyOrIndividualModel), Some(companyDetailsModel), None,
-    Some(numberOfSharesPurchasedModel), Some(howMuchSpentOnSharesModel), Some(isExistingShareHolderModelYes),
-    Some(Vector(PreviousShareHoldingModel(Some(investorShareIssueDateModel), Some(numberOfPreviouslyIssuedSharesModel),
-      Some(previousShareHoldingNominalValueModel), Some(previousShareHoldingDescriptionModel)))))
 
   "Calling validate" should {
     "return false" when {

@@ -19,7 +19,8 @@ package models.investorDetails
 import play.api.libs.json.Json
 
 
-case class NumberOfSharesPurchasedModel(numberOfSharesPurchased: BigDecimal)
+case class NumberOfSharesPurchasedModel(numberOfSharesPurchased: BigDecimal,
+                                        processingId: Option[Int])
 object NumberOfSharesPurchasedModel{
   implicit val formats = Json.format[NumberOfSharesPurchasedModel]
 }

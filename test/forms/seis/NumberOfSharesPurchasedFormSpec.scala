@@ -30,16 +30,16 @@ class NumberOfSharesPurchasedFormSpec extends UnitSpec with OneAppPerSuite {
   "The NumberOfSharesForm" when {
 
     "provided with a model" should {
-      val model = NumberOfSharesPurchasedModel(12.3)
+      val model = NumberOfSharesPurchasedModel(12.3, Some(1))
       lazy val form = numberOfSharesPurchasedForm.fill(model)
 
       "return a valid map" in {
-        form.data shouldBe Map("numberOfSharesPurchased" -> "12.3")
+        form.data shouldBe Map("numberOfSharesPurchased" -> "12.3", "processingId" -> "1")
       }
     }
 
     "provided with a valid map with the maximum number of decimal places" should {
-      val map = Map("numberOfSharesPurchased" -> "1.1111111111111")
+      val map = Map("numberOfSharesPurchased" -> "1.1111111111111", "processingId" -> "1")
       lazy val form = numberOfSharesPurchasedForm.bind(map)
 
       "contain no errors" in {
@@ -47,12 +47,12 @@ class NumberOfSharesPurchasedFormSpec extends UnitSpec with OneAppPerSuite {
       }
 
       "contain the correct model limited to 5 decimal places" in {
-        form.value shouldBe Some(NumberOfSharesPurchasedModel(1.11111))
+        form.value shouldBe Some(NumberOfSharesPurchasedModel(1.11111, Some(1)))
       }
     }
 
     "provided with a valid map with the minimum amount" should {
-      val map = Map("numberOfSharesPurchased" -> "1.00000000000")
+      val map = Map("numberOfSharesPurchased" -> "1.00000000000", "processingId" -> "2")
       lazy val form = numberOfSharesPurchasedForm.bind(map)
 
       "contain no errors" in {
@@ -60,12 +60,12 @@ class NumberOfSharesPurchasedFormSpec extends UnitSpec with OneAppPerSuite {
       }
 
       "contain the correct model limited to 5 decimal places" in {
-        form.value shouldBe Some(NumberOfSharesPurchasedModel(1.00000))
+        form.value shouldBe Some(NumberOfSharesPurchasedModel(1.00000, Some(2)))
       }
     }
 
     "provided with a valid map with the maximum size" should {
-      val map = Map("numberOfSharesPurchased" -> "9999999999999")
+      val map = Map("numberOfSharesPurchased" -> "9999999999999", "processingId" -> "1")
       lazy val form = numberOfSharesPurchasedForm.bind(map)
 
       "contain no errors" in {
@@ -73,7 +73,7 @@ class NumberOfSharesPurchasedFormSpec extends UnitSpec with OneAppPerSuite {
       }
 
       "contain the correct model" in {
-        form.value shouldBe Some(NumberOfSharesPurchasedModel(9999999999999.0))
+        form.value shouldBe Some(NumberOfSharesPurchasedModel(9999999999999.0, Some(1)))
       }
     }
 

@@ -17,15 +17,16 @@
 package controllers.seis
 
 import auth.{AuthorisedAndEnrolledForTAVC, SEIS}
-import common.{Constants, KeystoreKeys}
+import common.KeystoreKeys
 import config.{AppConfig, FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
-import controllers.Helpers.ControllerHelpers
+import controllers.Helpers.{ControllerHelpers, PreviousInvestorsHelper}
 import controllers.predicates.FeatureSwitch
 import forms.AddInvestorOrNomineeForm._
-import models.AddInvestorOrNomineeModel
+import models.investorDetails.InvestorDetailsModel
 import play.api.Play.current
 import play.api.i18n.Messages.Implicits._
+import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.play.frontend.auth.connectors.AuthConnector
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import views.html.seis.investors.AddInvestorOrNominee
@@ -42,13 +43,31 @@ object AddInvestorOrNomineeController extends AddInvestorOrNomineeController {
 trait AddInvestorOrNomineeController extends FrontendController with AuthorisedAndEnrolledForTAVC with FeatureSwitch {
   override val acceptedFlows = Seq(Seq(SEIS))
 
-  val show = featureSwitch(applicationConfig.seisFlowEnabled) {
+  def show(id: Option[Int]): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
     AuthorisedAndEnrolled.async { implicit user =>
       implicit request =>
         def routeRequest(backUrl: Option[String]) = {
           if (backUrl.isDefined) {
-            s4lConnector.fetchAndGetFormData[AddInvestorOrNomineeModel](KeystoreKeys.addInvestor).map {
-              case Some(data) => Ok(AddInvestorOrNominee(addInvestorOrNomineeForm.fill(data), backUrl.get))
+            s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
+              case Some(data) => {
+                id match {
+                  case Some(idVal) => {
+                    val itemToUpdateIndex = data.indexWhere(_.processingId.getOrElse(0) == idVal)
+                    if (itemToUpdateIndex != -1) {
+                      val model = data.lift(itemToUpdateIndex)
+                      Ok(AddInvestorOrNominee(addInvestorOrNomineeForm.fill(model.get.investorOrNomineeModel.get), backUrl.get))
+                    }
+                    // Redirect to the REVIEW INVESTOR PAGE
+                    else Ok(AddInvestorOrNominee(addInvestorOrNomineeForm, backUrl.get))
+                  }
+                  case None => {
+                    val investorDetailsModel = data.last
+                    if (investorDetailsModel.validate) Ok(AddInvestorOrNominee(addInvestorOrNomineeForm, backUrl.get))
+                    else Ok(AddInvestorOrNominee(addInvestorOrNomineeForm.fill(investorDetailsModel.investorOrNomineeModel.get),
+                      backUrl.get))
+                  }
+                }
+              }
               case None => Ok(AddInvestorOrNominee(addInvestorOrNomineeForm, backUrl.get))
             }
           }
@@ -74,8 +93,17 @@ trait AddInvestorOrNomineeController extends FrontendController with AuthorisedA
               Future.successful(BadRequest(AddInvestorOrNominee(formWithErrors, url.get))))
           },
           validFormData => {
-            s4lConnector.saveFormData[AddInvestorOrNomineeModel](KeystoreKeys.addInvestor, validFormData) map {
-             _ => Redirect(routes.CompanyOrIndividualController.show())
+            validFormData.processingId match {
+              case Some(_) => PreviousInvestorsHelper.updateInvestorOrNominee(s4lConnector, validFormData).map {
+                investorDetailsModel => {
+                  Redirect(routes.CompanyOrIndividualController.show(investorDetailsModel.processingId.get))
+                }
+              }
+              case None => PreviousInvestorsHelper.addInvestorOrNominee(s4lConnector, validFormData).map {
+                investorDetailsModel => {
+                  Redirect(routes.CompanyOrIndividualController.show(investorDetailsModel.processingId.get))
+                }
+              }
             }
           }
         )

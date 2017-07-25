@@ -71,6 +71,7 @@ trait KeystoreKeys {
   val companyOrIndividual: String = "investors: companyOrIndividual"
   val investorShareIssueDate: String = "investors: InvestorShareIssueDate"
   val tempPreviousSchemes: String = "previousInvestmentScheme:tempPreviousInvestmentSchemes"
+  val investorDetails: String = "investors:investorDetails"
   val howMuchSpentOnShares: String = "investors:howMuchSpentOnShares"
   val numberOfSharesPurchased: String = "investors:numberOfSharesPurchased"
 

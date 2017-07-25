@@ -28,7 +28,7 @@ import views.html.seis.investors.CompanyDetails
 
 class CompanyDetailsSpec extends ViewSpec {
 
-  val emptyCompanyDetailsModel = new CompanyDetailsModel("", "", "", None, None, None, countryCode = "")
+  val emptyCompanyDetailsModel = new CompanyDetailsModel("", "", "", None, None, None, countryCode = "", Some(1))
 
   lazy val form = companyDetailsForm.bind(Map("companyName" -> "Line 0",
     "companyAddressline1" -> "Line 1",
@@ -70,7 +70,7 @@ class CompanyDetailsSpec extends ViewSpec {
       document.title() shouldBe Messages("page.investment.companyDetails.title")
       document.getElementById("main-heading").text() shouldBe Messages("page.investment.companyDetails.heading")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
-      document.body.getElementById("back-link").attr("href") shouldEqual routes.CompanyOrIndividualController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual routes.CompanyOrIndividualController.show(1).url
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.company.details.four")
       document.body.getElementById("companyName").`val`() shouldBe companyDetailsModel.companyName
       document.body.getElementById("companyAddressline1").`val`() shouldBe companyDetailsModel.companyAddressline1
@@ -92,7 +92,7 @@ class CompanyDetailsSpec extends ViewSpec {
       document.title() shouldBe Messages("page.investment.companyDetails.title")
       document.getElementById("main-heading").text() shouldBe Messages("page.investment.companyDetails.heading")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
-      document.body.getElementById("back-link").attr("href") shouldEqual routes.CompanyOrIndividualController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual routes.CompanyOrIndividualController.show(1).url
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.company.details.four")
       document.body.getElementById("get-help-action").text shouldBe Messages("common.error.help.text")
       document.getElementById("error-summary-display").hasClass("error-summary--show")
@@ -110,7 +110,7 @@ class CompanyDetailsSpec extends ViewSpec {
       document.title() shouldBe Messages("page.investment.companyDetails.title")
       document.getElementById("main-heading").text() shouldBe Messages("page.investment.companyDetails.heading")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
-      document.body.getElementById("back-link").attr("href") shouldEqual routes.CompanyOrIndividualController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual routes.CompanyOrIndividualController.show(1).url
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.company.details.four")
       document.body.getElementById("get-help-action").text shouldBe Messages("common.error.help.text")
       document.getElementById("error-summary-display").hasClass("error-summary--show")

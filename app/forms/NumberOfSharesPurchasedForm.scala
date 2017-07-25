@@ -30,7 +30,8 @@ object NumberOfSharesPurchasedForm {
     mapping(
       "numberOfSharesPurchased" -> nonEmptyText
         .verifying(genericDecimalCheck(formValueMessageKey, minimumValue))
-        .transform[BigDecimal](input => BigDecimal(input).setScale(5, BigDecimal.RoundingMode.HALF_UP), _.toString)
+        .transform[BigDecimal](input => BigDecimal(input).setScale(5, BigDecimal.RoundingMode.HALF_UP), _.toString),
+        "processingId" -> optional(number)
     )(NumberOfSharesPurchasedModel.apply)(NumberOfSharesPurchasedModel.unapply)
   )
 }

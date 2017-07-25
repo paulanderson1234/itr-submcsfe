@@ -20,6 +20,7 @@ import auth.{MockAuthConnector, MockConfigSingleFlow}
 import common.{Constants, KeystoreKeys}
 import controllers.seis.AddInvestorOrNomineeController
 import models.AddInvestorOrNomineeModel
+import models.investorDetails.InvestorDetailsModel
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.mockito.Matchers
@@ -36,7 +37,7 @@ class AddInvestorOrNomineeSpec extends ViewSpec {
 
   val testUrl = "/test/test"
   val testUrlOther = "/test/test/testanother"
-  val validModel = AddInvestorOrNomineeModel(Constants.investor)
+  val validModel = AddInvestorOrNomineeModel(Constants.investor, Some(1))
 
   object TestController extends AddInvestorOrNomineeController {
     override lazy val applicationConfig = MockConfigSingleFlow
@@ -45,10 +46,10 @@ class AddInvestorOrNomineeSpec extends ViewSpec {
     override lazy val enrolmentConnector = mockEnrolmentConnector
   }
 
-  def setupMocks(addInvestorOrNomineeModel: Option[AddInvestorOrNomineeModel] = None, backLink: Option[String] = None): Unit = {
-    when(mockS4lConnector.fetchAndGetFormData[AddInvestorOrNomineeModel](Matchers.eq(KeystoreKeys.addInvestor))
+  def setupMocks(individualDetailsModels: Option[Vector[InvestorDetailsModel]], backLink: Option[String] = None): Unit = {
+    when(mockS4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](Matchers.eq(KeystoreKeys.investorDetails))
       (Matchers.any(), Matchers.any(), Matchers.any()))
-      .thenReturn(Future.successful(addInvestorOrNomineeModel))
+      .thenReturn(Future.successful(individualDetailsModels))
 
     when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.backLinkAddInvestorOrNominee))
       (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(backLink))
@@ -61,8 +62,8 @@ class AddInvestorOrNomineeSpec extends ViewSpec {
   "AddInvestorOrNominee view" should {
       "Verify that the page contains the correct elements when a valid model is passed from keystore with expected url" in new SEISSetup {
         val document: Document = {
-          setupMocks(Some(validModel), Some(testUrl))
-          val result = TestController.show.apply(authorisedFakeRequest)
+          setupMocks(Some(onlyInvestorOrNomineeVectorList), Some(testUrl))
+          val result = TestController.show(None).apply(authorisedFakeRequest)
           Jsoup.parse(contentAsString(result))
         }
         document.title() shouldBe Messages("page.seis.investors.AddInvestorOrNominee.title")
@@ -86,8 +87,8 @@ class AddInvestorOrNomineeSpec extends ViewSpec {
 
     "Verify that page contains the correct elements when a valid model is passed from keystore with alternate url" in new SEISSetup {
       val document: Document = {
-        setupMocks(Some(validModel), Some(testUrlOther))
-        val result = TestController.show.apply(authorisedFakeRequest)
+        setupMocks(Some(onlyInvestorOrNomineeVectorList), Some(testUrlOther))
+        val result = TestController.show(Some(1)).apply(authorisedFakeRequest)
         Jsoup.parse(contentAsString(result))
       }
       document.title() shouldBe Messages("page.seis.investors.AddInvestorOrNominee.title")

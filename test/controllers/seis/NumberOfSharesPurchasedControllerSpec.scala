@@ -26,8 +26,9 @@ import uk.gov.hmrc.play.frontend.auth.connectors.AuthConnector
 import org.mockito.Mockito._
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.cache.client.CacheMap
+
 import scala.concurrent.Future
-import models.investorDetails.NumberOfSharesPurchasedModel
+import models.investorDetails.{InvestorDetailsModel, NumberOfSharesPurchasedModel}
 
 
 class NumberOfSharesPurchasedControllerSpec extends BaseSpec {
@@ -39,16 +40,12 @@ class NumberOfSharesPurchasedControllerSpec extends BaseSpec {
     override lazy val authConnector: AuthConnector = MockAuthConnector
   }
 
-  def setupMocks(model: Option[NumberOfSharesPurchasedModel], companyOrIndividualModel: Option[CompanyOrIndividualModel]): Unit = {
+  def setupMocks(individualDetailsModels: Option[Vector[InvestorDetailsModel]]): Unit = {
     mockEnrolledRequest(seisSchemeTypesModel)
 
-    when(mockS4lConnector.fetchAndGetFormData[NumberOfSharesPurchasedModel](Matchers.eq(KeystoreKeys.numberOfSharesPurchased))(Matchers.any(),
-      Matchers.any(), Matchers.any()))
-      .thenReturn(Future.successful(model))
-
-    when(mockS4lConnector.fetchAndGetFormData[CompanyOrIndividualModel](Matchers.eq(KeystoreKeys.companyOrIndividual))(Matchers.any(),
-      Matchers.any(), Matchers.any()))
-      .thenReturn(Future.successful(companyOrIndividualModel))
+    when(mockS4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](Matchers.eq(KeystoreKeys.investorDetails))
+      (Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(individualDetailsModels))
 
     when(mockS4lConnector.saveFormData(Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
       .thenReturn(Future.successful(mock[CacheMap]))
@@ -71,31 +68,31 @@ class NumberOfSharesPurchasedControllerSpec extends BaseSpec {
     "return a 200 on a GET request" when {
 
       "no data is already stored" in {
-        setupMocks(None, Some(companyOrIndividualModel))
-        showWithSessionAndAuth(controller.show)(
+        setupMocks(Some(onlyInvestorOrNomineeVectorList))
+        showWithSessionAndAuth(controller.show(1))(
           result => status(result) shouldBe 200
         )
       }
 
       "data is already stored" in {
-        setupMocks(Some(NumberOfSharesPurchasedModel(20)),Some(companyOrIndividualModel))
-        showWithSessionAndAuth(controller.show)(
+        setupMocks(Some(onlyInvestorOrNomineeVectorList))
+        showWithSessionAndAuth(controller.show(1))(
           result => status(result) shouldBe 200
         )
       }
     }
     "return a 303 on a successful POST request" in {
-      setupMocks(None, Some(companyOrIndividualModel))
-      val form = Seq("numberOfSharesPurchased" -> "20")
+      setupMocks(Some(onlyInvestorOrNomineeVectorList))
+      val form = Seq("numberOfSharesPurchased" -> "20", "processingId" -> "1")
       submitWithSessionAndAuth(controller.submit, form: _*) (
         result => {
           status(result) shouldBe 303
-          redirectLocation(result) shouldBe Some(controllers.seis.routes.NumberOfSharesPurchasedController.show().url)
+          redirectLocation(result) shouldBe Some(controllers.seis.routes.HowMuchSpentOnSharesController.show(1).url)
         }
       )
     }
     "return a 400 on a form validation failure" in {
-      setupMocks(None, Some(companyOrIndividualModel))
+      setupMocks(Some(onlyInvestorOrNomineeVectorList))
       val form = Seq("numberOfSharesPurchased" -> "")
       submitWithSessionAndAuth(controller.submit, form: _*) (
         result => status(result) shouldBe 400
