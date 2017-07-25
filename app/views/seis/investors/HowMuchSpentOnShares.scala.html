@@ -8,7 +8,7 @@
 
 @main_template(Messages("page.seis.investors.howMuchSpentOnShares.title", howMuchSpentOnShares.toLowerCase)) {
 
-@backButtonWithProgress(controllers.seis.routes.HowMuchSpentOnSharesController.show().url, Messages("common.section.progress.company.details.four"))
+@backButtonWithProgress(controllers.seis.routes.HowMuchSpentOnSharesController.show(1).url, Messages("common.section.progress.company.details.four"))
 
 @errorSummary(howMuchSpentOnSharesForm, "how-much-spent-on-shares", "howMuchSpentOnShares")
 

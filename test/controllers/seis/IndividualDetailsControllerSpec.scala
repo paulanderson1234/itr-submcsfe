@@ -100,7 +100,7 @@ class IndividualDetailsControllerSpec extends BaseSpec with FakeRequestHelper{
       submitWithSessionAndAuth(controller.submit, formInput: _*)(
         result => {
           status(result) shouldBe 303
-          redirectLocation(result) shouldBe Some(controllers.seis.routes.IndividualDetailsController.show(1).url)
+          redirectLocation(result) shouldBe Some(controllers.seis.routes.NumberOfSharesPurchasedController.show(1).url)
         }
       )
     }

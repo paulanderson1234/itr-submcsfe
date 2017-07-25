@@ -91,7 +91,7 @@ class CompanyDetailsControllerSpec extends BaseSpec {
       submitWithSessionAndAuth(TestController.submit, formInput: _*)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some("/investment-tax-relief-cs/seis/company-details/1")
+          redirectLocation(result) shouldBe Some(controllers.seis.routes.NumberOfSharesPurchasedController.show(1).url)
         }
       )
     }

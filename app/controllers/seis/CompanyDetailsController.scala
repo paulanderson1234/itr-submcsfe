@@ -90,10 +90,10 @@ trait CompanyDetailsController extends FrontendController with AuthorisedAndEnro
         validFormData => {
           validFormData.processingId match {
             case Some(_) => PreviousInvestorsHelper.updateCompanyDetails(s4lConnector, validFormData).map {
-              investorDetailsModel => Redirect(routes.CompanyDetailsController.show(investorDetailsModel.processingId.get))
+              investorDetailsModel => Redirect(routes.NumberOfSharesPurchasedController.show(investorDetailsModel.processingId.get))
             }
             case None => PreviousInvestorsHelper.addCompanyDetails(s4lConnector, validFormData).map {
-              investorDetailsModel => Redirect(routes.CompanyDetailsController.show(investorDetailsModel.processingId.get))
+              investorDetailsModel => Redirect(routes.NumberOfSharesPurchasedController.show(investorDetailsModel.processingId.get))
             }
           }
         }

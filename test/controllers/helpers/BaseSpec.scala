@@ -257,8 +257,14 @@ trait BaseSpec extends UnitSpec with OneAppPerSuite with MockitoSugar with FakeR
     IndividualDetailsModel("Joe", "Bloggs", "Line 1", "Line 2", Some("Line 3"), Some("AB1 1AB"), None, countryCode = "JP", Some(2))
   val individualDetailsModel3 =
     IndividualDetailsModel("Joe", "Bloggs", "Line 1", "Line 2", Some("Line 3"), Some("AB1 1AB"), None, countryCode = "JP", Some(3))
-  val numberOfSharesPurchasedModel = NumberOfSharesPurchasedModel(1000)
-  val howMuchSpentOnSharesModel = HowMuchSpentOnSharesModel(1000)
+  val numberOfSharesPurchasedModel = NumberOfSharesPurchasedModel(1000, Some(1))
+  val numberOfSharesPurchasedModel1 = NumberOfSharesPurchasedModel(1000, Some(1))
+  val numberOfSharesPurchasedModel2 = NumberOfSharesPurchasedModel(1000, Some(2))
+  val numberOfSharesPurchasedModel3 = NumberOfSharesPurchasedModel(1000, Some(3))
+  val howMuchSpentOnSharesModel = HowMuchSpentOnSharesModel(1000, Some(1))
+  val howMuchSpentOnSharesModel1 = HowMuchSpentOnSharesModel(1000, Some(1))
+  val howMuchSpentOnSharesModel2 = HowMuchSpentOnSharesModel(1000, Some(2))
+  val howMuchSpentOnSharesModel3 = HowMuchSpentOnSharesModel(1000, Some(3))
   val isExistingShareHolderModelNo = IsExistingShareHolderModel("No")
   val isExistingShareHolderModelYes = IsExistingShareHolderModel("Yes")
 
@@ -269,14 +275,14 @@ trait BaseSpec extends UnitSpec with OneAppPerSuite with MockitoSugar with FakeR
   val previousShareHoldingDescriptionModel = PreviousShareHoldingDescriptionModel("A previous shareholding")
 
   val validModelWithPrevShareHoldings = InvestorDetailsModel(Some(investorModel2), Some(companyOrIndividualModel2), Some(companyDetailsModel2), None,
-    Some(numberOfSharesPurchasedModel), Some(amountSpentModel), Some(isExistingShareHolderModelYes),
+    Some(numberOfSharesPurchasedModel2), Some(howMuchSpentOnSharesModel2), Some(isExistingShareHolderModelYes),
     Some(Vector(PreviousShareHoldingModel(Some(investorShareIssueDateModel), Some(numberOfPreviouslyIssuedSharesModel),
       Some(previousShareHoldingNominalValueModel), Some(previousShareHoldingDescriptionModel)))), Some(2))
   val validModelNoPrevShareHoldings = InvestorDetailsModel(Some(investorModel1), Some(companyOrIndividualModel1), Some(companyDetailsModel1), None,
-    Some(numberOfSharesPurchasedModel), Some(amountSpentModel), Some(isExistingShareHolderModelNo), Some(Vector()), Some(1))
+    Some(numberOfSharesPurchasedModel1), Some(howMuchSpentOnSharesModel1), Some(isExistingShareHolderModelNo), Some(Vector()), Some(1))
 
   val invalidModelCompanyAndIndividualDetailsPresent = InvestorDetailsModel(Some(investorModel3), Some(companyOrIndividualModel3), Some(companyDetailsModel3),
-    Some(individualDetailsModel3), Some(numberOfSharesPurchasedModel), Some(amountSpentModel), None, Some(Vector()), Some(3))
+    Some(individualDetailsModel3), Some(numberOfSharesPurchasedModel3), Some(howMuchSpentOnSharesModel3), None, Some(Vector()), Some(3))
 
   val previousInvestorVectorList = Vector(validModelNoPrevShareHoldings, validModelWithPrevShareHoldings, invalidModelCompanyAndIndividualDetailsPresent)
   val onlyInvestorOrNomineeVectorList = Vector(validModelNoPrevShareHoldings)

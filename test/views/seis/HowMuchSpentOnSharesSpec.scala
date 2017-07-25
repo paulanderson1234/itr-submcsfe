@@ -47,7 +47,7 @@ class HowMuchSpentOnSharesSpec extends ViewSpec {
       }
 
       "have the correct back link url" in {
-        document.select("a.back-link").attr("href") shouldBe "/investment-tax-relief-cs/seis/how-much-spent-on-shares"
+        document.select("a.back-link").attr("href") shouldBe "/investment-tax-relief-cs/seis/how-much-spent-on-shares/1"
       }
 
       "have the progress details" in {
@@ -87,7 +87,7 @@ class HowMuchSpentOnSharesSpec extends ViewSpec {
       }
 
       "have the correct back link url" in {
-        document.select("a.back-link").attr("href") shouldBe "/investment-tax-relief-cs/seis/how-much-spent-on-shares"
+        document.select("a.back-link").attr("href") shouldBe "/investment-tax-relief-cs/seis/how-much-spent-on-shares/1"
       }
 
       "have the progress details" in {

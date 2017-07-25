@@ -131,9 +131,9 @@ POST       /individuals-details                   controllers.seis.IndividualDet
 GET        /total-amount-raised                   controllers.seis.TotalAmountRaisedController.show
 POST       /total-amount-raised                   controllers.seis.TotalAmountRaisedController.submit
 
-GET        /how-much-spent-on-shares              controllers.seis.HowMuchSpentOnSharesController.show
+GET        /how-much-spent-on-shares/:Id              controllers.seis.HowMuchSpentOnSharesController.show(Id: Int)
 POST       /how-much-spent-on-shares              controllers.seis.HowMuchSpentOnSharesController.submit
 
-GET        /number-of-shares-purchased            controllers.seis.NumberOfSharesPurchasedController.show
+GET        /number-of-shares-purchased/:Id        controllers.seis.NumberOfSharesPurchasedController.show(Id: Int)
 POST       /number-of-shares-purchased            controllers.seis.NumberOfSharesPurchasedController.submit
 
