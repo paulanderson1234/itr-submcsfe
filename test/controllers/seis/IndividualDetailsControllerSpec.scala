@@ -21,6 +21,7 @@ import common.KeystoreKeys
 import config.{AppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.{BaseSpec, FakeRequestHelper}
+import models.investorDetails.InvestorDetailsModel
 import models.{IndividualDetailsModel, NominalValueOfSharesModel}
 import org.mockito.Matchers
 import org.mockito.Mockito._
@@ -39,9 +40,12 @@ class IndividualDetailsControllerSpec extends BaseSpec with FakeRequestHelper{
     override lazy val authConnector: AuthConnector = MockAuthConnector
   }
 
-  def setupMocks(model: Option[IndividualDetailsModel]): Unit = {
+  def setupMocks(model: Option[IndividualDetailsModel], individualDetailsModels: Option[Vector[InvestorDetailsModel]]): Unit = {
     mockEnrolledRequest(seisSchemeTypesModel)
 
+    when(mockS4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](Matchers.eq(KeystoreKeys.investorDetails))
+      (Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(individualDetailsModels))
     when(mockS4lConnector.fetchAndGetFormData[IndividualDetailsModel](Matchers.eq(KeystoreKeys.individualDetails))(Matchers.any(),
       Matchers.any(), Matchers.any()))
       .thenReturn(Future.successful(model))
@@ -67,22 +71,22 @@ class IndividualDetailsControllerSpec extends BaseSpec with FakeRequestHelper{
     "return a 200 on a GET request" when {
 
       "no data is already stored" in {
-        setupMocks(None)
-        showWithSessionAndAuth(controller.show)(
+        setupMocks(None, Some(onlyInvestorOrNomineeVectorList))
+        showWithSessionAndAuth(controller.show(1))(
           result => status(result) shouldBe 200
         )
       }
 
       "data is already stored" in {
-        setupMocks(Some(IndividualDetailsModel("", "", "", "", Some(""), Some(""), Some(""), "")))
-        showWithSessionAndAuth(controller.show)(
+        setupMocks(None, Some(onlyInvestorOrNomineeVectorList))
+        showWithSessionAndAuth(controller.show(1))(
           result => status(result) shouldBe 200
         )
       }
     }
 
     "return a 303 on a successful POST request" in {
-      setupMocks(None)
+      setupMocks(None, Some(onlyInvestorOrNomineeVectorList))
       val formInput = Seq(
         "forename" -> "TEST",
         "surname" -> "TESTING",
@@ -96,13 +100,13 @@ class IndividualDetailsControllerSpec extends BaseSpec with FakeRequestHelper{
       submitWithSessionAndAuth(controller.submit, formInput: _*)(
         result => {
           status(result) shouldBe 303
-          redirectLocation(result) shouldBe Some(controllers.seis.routes.IndividualDetailsController.show().url)
+          redirectLocation(result) shouldBe Some(controllers.seis.routes.IndividualDetailsController.show(1).url)
         }
       )
     }
 
     "return a 400 on a form validation failure" in {
-      setupMocks(None)
+      setupMocks(None, Some(onlyInvestorOrNomineeVectorList))
       val form = Seq(
         "forename" -> "",
         "surname" -> "",

@@ -43,8 +43,8 @@ class CompanyOrIndividualFormSpec extends UnitSpec with OneAppPerSuite{
     )
   }
 
-  val companyOrIndividualJson = """{"companyOrIndividual":"Company"}"""
-  val companyOrIndividualModel = CompanyOrIndividualModel("Company")
+  val companyOrIndividualJson = """{"companyOrIndividual":"Company","processingId":1}"""
+  val companyOrIndividualModel = CompanyOrIndividualModel("Company",Some(1))
 
   // address line 1 validation
   "The Had Previous RFI Form" should {

@@ -22,6 +22,7 @@ import config.FrontendAuthConnector
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
 import models._
+import models.investorDetails.InvestorDetailsModel
 import org.mockito.Matchers
 import org.mockito.Mockito._
 import play.api.test.Helpers._
@@ -49,34 +50,33 @@ class CompanyOrIndividualControllerSpec extends BaseSpec {
     }
   }
 
-  def setupMocks(companyOrIndividualModel: Option[CompanyOrIndividualModel], addInvestorOrNomineeModel: Option[AddInvestorOrNomineeModel]): Unit = {
-    when(TestController.s4lConnector.fetchAndGetFormData[CompanyOrIndividualModel](Matchers.eq(KeystoreKeys.companyOrIndividual))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(companyOrIndividualModel))
-    when(TestController.s4lConnector.fetchAndGetFormData[AddInvestorOrNomineeModel](Matchers.eq(KeystoreKeys.addInvestor))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(addInvestorOrNomineeModel))
+  def setupMocks(individualDetailsModels: Option[Vector[InvestorDetailsModel]]): Unit = {
+    when(mockS4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](Matchers.eq(KeystoreKeys.investorDetails))
+      (Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(individualDetailsModels))
   }
 
   "Sending a GET request to CompanyOrIndividualController when authenticated and enrolled for SEIS" should {
     "return a 200 when something is fetched from keystore" in {
       mockEnrolledRequest(seisSchemeTypesModel)
-      setupMocks(Some(CompanyOrIndividualModel(Constants.typeCompany)), Some(investorModel))
-      showWithSessionAndAuth(TestController.show())(
+      setupMocks(Some(onlyInvestorOrNomineeVectorList))
+      showWithSessionAndAuth(TestController.show(1))(
         result => status(result) shouldBe OK
       )
     }
 
     "provide an empty model and return a 200 when nothing is fetched using keystore for SEIS" in {
       mockEnrolledRequest(seisSchemeTypesModel)
-      setupMocks(None,  Some(investorModel))
-      showWithSessionAndAuth(TestController.show())(
+      setupMocks(Some(onlyInvestorOrNomineeVectorList))
+      showWithSessionAndAuth(TestController.show(1))(
         result => status(result) shouldBe OK
       )
     }
 
     "redirect to the AddInvestorOrNomineePage when no InvestorOrNominee model is found to use in heading" in {
       mockEnrolledRequest(seisSchemeTypesModel)
-      setupMocks(Some(CompanyOrIndividualModel(Constants.typeCompany)), None)
-      showWithSessionAndAuth(TestController.show())(
+      setupMocks(Some(onlyInvestorOrNomineeVectorList))
+      showWithSessionAndAuth(TestController.show(4))(
         result => {
           status(result) shouldBe SEE_OTHER
           redirectLocation(result) shouldBe Some(routes.AddInvestorOrNomineeController.show().url)
@@ -88,11 +88,12 @@ class CompanyOrIndividualControllerSpec extends BaseSpec {
   "Sending a valid 'Company' form submit to the CompanyOrIndividualController when authenticated and enrolled" should {
     "redirect to the company details page" in {
       mockEnrolledRequest(seisSchemeTypesModel)
-      val formInput = "companyOrIndividual" -> Constants.typeCompany
-      submitWithSessionAndAuth(TestController.submit,formInput)(
+      setupMocks(Some(onlyInvestorOrNomineeVectorList))
+      val formInput = Seq("companyOrIndividual" -> Constants.typeCompany, "processingId" -> "1")
+      submitWithSessionAndAuth(TestController.submit, formInput: _*)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(controllers.seis.routes.CompanyDetailsController.show().url)
+          redirectLocation(result) shouldBe Some(controllers.seis.routes.CompanyDetailsController.show(1).url)
         }
       )
     }
@@ -101,11 +102,12 @@ class CompanyOrIndividualControllerSpec extends BaseSpec {
   "Sending a valid 'Individual' form submit to the CompanyOrIndividualController when authenticated and enrolled for SEIS" should {
     "redirect to the individual details page" in {
       mockEnrolledRequest(seisSchemeTypesModel)
-      val formInput = "companyOrIndividual" -> Constants.typeIndividual
-      submitWithSessionAndAuth(TestController.submit,formInput)(
+      setupMocks(Some(onlyInvestorOrNomineeVectorList))
+      val formInput = Seq("companyOrIndividual" -> Constants.typeIndividual, "processingId" -> "1")
+      submitWithSessionAndAuth(TestController.submit,formInput: _*)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(controllers.seis.routes.IndividualDetailsController.show().url)
+          redirectLocation(result) shouldBe Some(controllers.seis.routes.IndividualDetailsController.show(1).url)
         }
       )
     }
@@ -114,7 +116,7 @@ class CompanyOrIndividualControllerSpec extends BaseSpec {
 
   "Sending an invalid form submission with validation errors to the CompanyOrIndividualController when authenticated" should {
     "redirect to itself" in {
-      setupMocks(None,  Some(investorModel))
+      setupMocks(Some(onlyInvestorOrNomineeVectorList))
       mockEnrolledRequest(seisSchemeTypesModel)
       val formInput = "companyOrIndividual" -> ""
       submitWithSessionAndAuth(TestController.submit,formInput)(

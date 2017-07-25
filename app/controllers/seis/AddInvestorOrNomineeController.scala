@@ -49,28 +49,28 @@ trait AddInvestorOrNomineeController extends FrontendController with AuthorisedA
         def routeRequest(backUrl: Option[String]) = {
           if (backUrl.isDefined) {
             s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
-                  case Some(data) => {
-                    id match {
-                      case Some(idVal) => {
-                        val itemToUpdateIndex = data.indexWhere(_.processingId.getOrElse(0) == idVal)
-                        if (itemToUpdateIndex != -1) {
-                          val model = data.lift(itemToUpdateIndex)
-                          Ok(AddInvestorOrNominee(addInvestorOrNomineeForm.fill(model.get.investorOrNomineeModel.get), backUrl.get))
-                        }
-                        // Redirect to the REVIEW INVESTOR PAGE
-                        else Ok(AddInvestorOrNominee(addInvestorOrNomineeForm, backUrl.get))
-                      }
-                      case None => {
-                        val investorDetailsModel = data.last
-                        if (investorDetailsModel.validate) Ok(AddInvestorOrNominee(addInvestorOrNomineeForm, backUrl.get))
-                        else Ok(AddInvestorOrNominee(addInvestorOrNomineeForm.fill(investorDetailsModel.investorOrNomineeModel.get),
-                            backUrl.get))
-                      }
+              case Some(data) => {
+                id match {
+                  case Some(idVal) => {
+                    val itemToUpdateIndex = data.indexWhere(_.processingId.getOrElse(0) == idVal)
+                    if (itemToUpdateIndex != -1) {
+                      val model = data.lift(itemToUpdateIndex)
+                      Ok(AddInvestorOrNominee(addInvestorOrNomineeForm.fill(model.get.investorOrNomineeModel.get), backUrl.get))
                     }
+                    // Redirect to the REVIEW INVESTOR PAGE
+                    else Ok(AddInvestorOrNominee(addInvestorOrNomineeForm, backUrl.get))
                   }
-                  case None => Ok(AddInvestorOrNominee(addInvestorOrNomineeForm, backUrl.get))
+                  case None => {
+                    val investorDetailsModel = data.last
+                    if (investorDetailsModel.validate) Ok(AddInvestorOrNominee(addInvestorOrNomineeForm, backUrl.get))
+                    else Ok(AddInvestorOrNominee(addInvestorOrNomineeForm.fill(investorDetailsModel.investorOrNomineeModel.get),
+                      backUrl.get))
+                  }
                 }
               }
+              case None => Ok(AddInvestorOrNominee(addInvestorOrNomineeForm, backUrl.get))
+            }
+          }
           // inconsistent data navigate to beginning of flow
           else {
             Future.successful(Redirect(controllers.seis.routes.ShareDescriptionController.show()))

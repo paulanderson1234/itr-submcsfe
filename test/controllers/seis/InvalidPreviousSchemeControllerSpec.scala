@@ -39,8 +39,6 @@ class InvalidPreviousSchemeControllerSpec extends BaseSpec {
   }
 
   def setupMocks(previousSchemeVectorList: Option[Vector[PreviousSchemeModel]] = None, previousScheme: Option[PreviousSchemeModel] = None): Unit = {
-    when(mockS4lConnector.fetchAndGetFormData[PreviousSchemeModel](Matchers.eq(KeystoreKeys.tempPreviousSchemes))
-      (Matchers.any(), Matchers.any(),Matchers.any())).thenReturn(Future.successful(previousScheme))
     when(mockS4lConnector.fetchAndGetFormData[Vector[PreviousSchemeModel]](Matchers.eq(KeystoreKeys.previousSchemes))
       (Matchers.any(), Matchers.any(),Matchers.any())).thenReturn(Future.successful(previousSchemeVectorList))
   }

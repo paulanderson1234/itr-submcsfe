@@ -29,6 +29,7 @@ import play.api.Play.current
 import play.api.i18n.Messages.Implicits._
 import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
+import uk.gov.hmrc.play.http.InternalServerException
 import views.html.seis.investors.CompanyOrIndividual
 
 object CompanyOrIndividualController extends CompanyOrIndividualController
@@ -75,8 +76,11 @@ trait CompanyOrIndividualController extends FrontendController with AuthorisedAn
       implicit request =>
         companyOrIndividualForm.bindFromRequest().fold(
           formWithErrors => {
-            s4lConnector.fetchAndGetFormData[AddInvestorOrNomineeModel](KeystoreKeys.addInvestor).map {
-              data => BadRequest(CompanyOrIndividual(useInvestorOrNomineeValueAsHeadingText(data.get), formWithErrors))
+            s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
+              case Some(data) => {
+                val investorDetailsModel = data.last
+                BadRequest(CompanyOrIndividual(useInvestorOrNomineeValueAsHeadingText(investorDetailsModel.investorOrNomineeModel.get), formWithErrors))
+              }
             }
           },
           validFormData => {
