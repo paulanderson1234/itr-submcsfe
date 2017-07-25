@@ -140,3 +140,5 @@ POST       /how-much-spent-on-shares              controllers.seis.HowMuchSpentO
 GET        /is-existing-share-holder               controllers.seis.IsExistingShareHolderController.show
 POST       /is-existing-share-holder               controllers.seis.IsExistingShareHolderController.submit
 
+GET        /number-of-shares-purchased            controllers.seis.NumberOfSharesPurchasedController.show
+POST       /number-of-shares-purchased            controllers.seis.NumberOfSharesPurchasedController.submit

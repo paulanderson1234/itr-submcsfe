@@ -16,21 +16,21 @@
 
 package forms
 
-import models.investorDetails.HowMuchSpentOnSharesModel
 import play.api.data.Form
 import play.api.data.Forms._
-import utils.Validation
+import utils.Validation._
+import models.investorDetails.NumberOfSharesPurchasedModel
 
-object HowMuchSpentOnSharesForm {
+object NumberOfSharesPurchasedForm {
 
-  val messageKey = "howMuchSpentOnShares"
-  val minimumAmount = 0
+  val formValueMessageKey = "numberOfSharesPurchased"
+  val minimumValue = 1
 
-  val howMuchSpentOnSharesForm = Form(
+  val numberOfSharesPurchasedForm = Form(
     mapping(
-      "howMuchSpentOnShares" -> nonEmptyText
-        .verifying(Validation.genericWholeAmountCheck(messageKey, minimumAmount))
-        .transform[BigDecimal](value => BigDecimal(value), _.toString())
-    )(HowMuchSpentOnSharesModel.apply)(HowMuchSpentOnSharesModel.unapply)
+      "numberOfSharesPurchased" -> nonEmptyText
+        .verifying(genericDecimalCheck(formValueMessageKey, minimumValue))
+        .transform[BigDecimal](input => BigDecimal(input).setScale(5, BigDecimal.RoundingMode.HALF_UP), _.toString)
+    )(NumberOfSharesPurchasedModel.apply)(NumberOfSharesPurchasedModel.unapply)
   )
 }

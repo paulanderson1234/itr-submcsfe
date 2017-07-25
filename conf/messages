@@ -118,6 +118,10 @@ validation.error.nominalValueOfShares.notANumber = Enter a valid number for the 
 validation.error.numberOfShares.size = The number of shares count should be between {0} and 9999999999999
 validation.error.numberOfShares.notANumber=Enter a valid number for your number of shares
 
+# number of shares purchased validation
+validation.error.numberOfSharesPurchased.size = The number of shares count should be between {0} and 9999999999999
+validation.error.numberOfSharesPurchased.notANumber=Enter a valid number for your number of shares
+
 ## Session Timeout message ##
 session.timeout.message=Your session has ended
 session.timeout.startAgain=Start again
@@ -1101,3 +1105,7 @@ page.seis.investors.isExistingShareHolder.legend = Did this {0} already own shar
 #Investor Share Issue Date
 page.investors.investorShareIssueDate.title = When were these previous shares issued?
 page.investors.investorShareIssueDate.heading = When were these previous shares issued?
+
+#Number of shares purchased
+page.seis.investors.numberOfSharesPurchased.title = How many shares were issued to this {0} on {1}?
+page.seis.investors.numberOfSharesPurchased.heading = How many shares were issued to this {0} on {1}?

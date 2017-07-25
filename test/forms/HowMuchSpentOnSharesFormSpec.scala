@@ -17,7 +17,7 @@
 package forms
 
 import forms.HowMuchSpentOnSharesForm._
-import models.HowMuchSpentOnSharesModel
+import models.investorDetails._
 import org.scalatestplus.play.OneAppPerSuite
 import play.api.i18n.Messages
 import play.api.i18n.Messages.Implicits._
