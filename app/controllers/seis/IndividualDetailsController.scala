@@ -86,10 +86,18 @@ trait IndividualDetailsController extends FrontendController with AuthorisedAndE
           validFormData => {
             validFormData.processingId match {
               case Some(_) => PreviousInvestorsHelper.updateIndividualDetails(s4lConnector, validFormData).map {
-                investorDetailsModel => Redirect(routes.NumberOfSharesPurchasedController.show(investorDetailsModel.processingId.get))
+                investorDetailsModel => {
+                  s4lConnector.saveFormData(KeystoreKeys.backLinkNumberOfSharesPurchased,
+                    routes.IndividualDetailsController.show(investorDetailsModel.processingId.get).url)
+                  Redirect(routes.NumberOfSharesPurchasedController.show(investorDetailsModel.processingId.get))
+                }
               }
               case None => PreviousInvestorsHelper.addIndividualDetails(s4lConnector, validFormData).map {
-                investorDetailsModel => Redirect(routes.NumberOfSharesPurchasedController.show(investorDetailsModel.processingId.get))
+                investorDetailsModel => {
+                  s4lConnector.saveFormData(KeystoreKeys.backLinkNumberOfSharesPurchased,
+                    routes.IndividualDetailsController.show(investorDetailsModel.processingId.get).url)
+                  Redirect(routes.NumberOfSharesPurchasedController.show(investorDetailsModel.processingId.get))
+                }
               }
             }
           }

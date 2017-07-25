@@ -54,4 +54,24 @@ trait DateFormatter {
       }
     }
   }
+
+  def dateToStringWithNoZeroDay(day: Int, month: Int, year:Int ): String = {
+    Try {
+      val inFormat= new SimpleDateFormat("d/MM/yyyy")
+      val outFormat = new SimpleDateFormat("d MMMM yyyy")
+      outFormat.setLenient(false)
+      inFormat.setLenient(false)
+      val formattedDate = outFormat.format(inFormat.parse(s"$day/$month/$year"))
+      formattedDate
+
+    } match {
+      case Success(result) => result
+
+      // just return an empty string in implementation
+      case Failure(_) => {
+        ""
+      }
+    }
+
+  }
 }

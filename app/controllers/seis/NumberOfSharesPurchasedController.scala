@@ -17,19 +17,20 @@
 package controllers.seis
 
 import auth.{AuthorisedAndEnrolledForTAVC, SEIS}
-import common.{Constants, KeystoreKeys}
+import common.KeystoreKeys
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.Helpers.{ControllerHelpers, PreviousInvestorsHelper}
 import controllers.predicates.FeatureSwitch
-import models.CompanyOrIndividualModel
 import forms.NumberOfSharesPurchasedForm._
-import uk.gov.hmrc.play.frontend.controller.FrontendController
-import play.api.i18n.Messages.Implicits._
+import models.ShareIssueDateModel
+import models.investorDetails.InvestorDetailsModel
 import play.api.Play.current
-import views.html.seis.investors.NumberOfSharesPurchased
-import models.investorDetails.{InvestorDetailsModel, NumberOfSharesPurchasedModel}
+import play.api.i18n.Messages.Implicits._
 import play.api.mvc.{Action, AnyContent}
+import uk.gov.hmrc.play.frontend.controller.FrontendController
+import utils.DateFormatter
+import views.html.seis.investors.NumberOfSharesPurchased
 
 import scala.concurrent.Future
 
@@ -41,38 +42,59 @@ object NumberOfSharesPurchasedController extends NumberOfSharesPurchasedControll
   override lazy val enrolmentConnector = EnrolmentConnector
 }
 
-trait NumberOfSharesPurchasedController extends FrontendController with AuthorisedAndEnrolledForTAVC with FeatureSwitch with ControllerHelpers {
+trait NumberOfSharesPurchasedController extends FrontendController with AuthorisedAndEnrolledForTAVC with FeatureSwitch
+  with ControllerHelpers with DateFormatter{
 
   override val acceptedFlows = Seq(Seq(SEIS))
 
   def show(id: Int): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
     AuthorisedAndEnrolled.async { implicit user => implicit request =>
 
-      s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
-        case Some(data) => {
-          val itemToUpdateIndex = data.indexWhere(_.processingId.getOrElse(0) == id)
-          if (itemToUpdateIndex != -1) {
-            val model = data.lift(itemToUpdateIndex)
-            if (model.get.numberOfSharesPurchasedModel.isDefined) {
-              Ok(NumberOfSharesPurchased(model.get.companyOrIndividualModel.get.companyOrIndividual, "TODO",
-                numberOfSharesPurchasedForm.fill(model.get.numberOfSharesPurchasedModel.get)))
+      def process(shareIssueDate: Option[ShareIssueDateModel], backUrl: Option[String]) ={
+        if(backUrl.isDefined) {
+          s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
+            case Some(data) => {
+              val itemToUpdateIndex = data.indexWhere(_.processingId.getOrElse(0) == id)
+              if (itemToUpdateIndex != -1) {
+                val model = data.lift(itemToUpdateIndex)
+                if (model.get.numberOfSharesPurchasedModel.isDefined && shareIssueDate.isDefined) {
+                  Ok(NumberOfSharesPurchased(model.get.companyOrIndividualModel.get.companyOrIndividual,
+                    dateToStringWithNoZeroDay(shareIssueDate.get.day.get, shareIssueDate.get.month.get, shareIssueDate.get.year.get),
+                    numberOfSharesPurchasedForm.fill(model.get.numberOfSharesPurchasedModel.get), backUrl.get))
+                }
+                else if (shareIssueDate.isDefined)
+                  Ok(NumberOfSharesPurchased(model.get.companyOrIndividualModel.get.companyOrIndividual,
+                    dateToStringWithNoZeroDay(shareIssueDate.get.day.get, shareIssueDate.get.month.get, shareIssueDate.get.year.get),
+                    numberOfSharesPurchasedForm, backUrl.get))
+                else
+                  Redirect(controllers.seis.routes.ShareDescriptionController.show())
+              }
+              else {
+                // Set back to the review or Share description (starting) page later
+                Redirect(routes.AddInvestorOrNomineeController.show())
+              }
             }
-            else
-              Ok(NumberOfSharesPurchased(model.get.companyOrIndividualModel.get.companyOrIndividual, "TODO", numberOfSharesPurchasedForm))
-          }
-          else {
-            // Set back to the review page later
-            Redirect(routes.AddInvestorOrNomineeController.show())
+            case None => {
+              Redirect(controllers.seis.routes.ShareDescriptionController.show())
+            }
           }
         }
-        case None => {
-          Redirect(controllers.seis.routes.ShareDescriptionController.show())
+        else {
+          // No back URL so send them back to any page as per the requirement
+          Future.successful(Redirect(controllers.seis.routes.ShareDescriptionController.show()))
         }
       }
+
+      for {
+        shareIssueDate   <- s4lConnector.fetchAndGetFormData[ShareIssueDateModel](KeystoreKeys.shareIssueDate)
+        backUrl <- s4lConnector.fetchAndGetFormData[String](KeystoreKeys.backLinkNumberOfSharesPurchased)
+        route <- process(shareIssueDate, backUrl)
+      } yield route
+
     }
   }
 
-  val submit = featureSwitch(applicationConfig.seisFlowEnabled) {
+  def submit(shareIssueDate: Option[String], backUrl: Option[String]): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
     AuthorisedAndEnrolled.async { implicit user =>
       implicit request =>
         numberOfSharesPurchasedForm.bindFromRequest().fold(
@@ -80,7 +102,8 @@ trait NumberOfSharesPurchasedController extends FrontendController with Authoris
             s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
               case Some(data) => {
                 val investorDetailsModel = data.last
-                BadRequest(NumberOfSharesPurchased(investorDetailsModel.companyOrIndividualModel.get.companyOrIndividual, "TODO", formWithErrors))
+                BadRequest(NumberOfSharesPurchased(investorDetailsModel.companyOrIndividualModel.get.companyOrIndividual,
+                  shareIssueDate.get, formWithErrors, backUrl.get))
               }
             }
           },
