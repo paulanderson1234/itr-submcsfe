@@ -18,7 +18,8 @@ package models.investorDetails
 
 import play.api.libs.json.Json
 
-case class PreviousShareHoldingDescriptionModel(description: String)
+case class PreviousShareHoldingDescriptionModel(description: String,
+                                                processingId: Option[Int])
 object PreviousShareHoldingDescriptionModel{
   implicit val formats = Json.format[PreviousShareHoldingDescriptionModel]
 }

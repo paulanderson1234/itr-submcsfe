@@ -36,7 +36,7 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "Creating a form using a valid model" should {
     "return a form with the data specified in the model" in {
-      val model = CompanyDetailsModel("line0","line1","line2",None,None,None,"JP")
+      val model = CompanyDetailsModel("line0","line1","line2",None,None,None,"JP", Some(1))
       val form = companyDetailsForm.fill(model)
 
       form.data("companyName") shouldBe "line0"
@@ -44,7 +44,7 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
       form.data("companyAddressline2") shouldBe "line2"
       form.data("countryCode") shouldBe "JP"
       form.errors.length shouldBe 0
-      form.data.size shouldBe 4
+      form.data.size shouldBe 5
     }
   }
 

@@ -7,7 +7,7 @@
 
 @main_template(Messages("page.seis.investors.numberOfSharesPurchased.title", companyOrIndividual.toLowerCase(), shareIssueDate)) {
 
-@backButtonWithProgress(controllers.seis.routes.NumberOfSharesPurchasedController.show().url, Messages("common.section.progress.company.details.four"))
+@backButtonWithProgress(controllers.seis.routes.NumberOfSharesPurchasedController.show(1).url, Messages("common.section.progress.company.details.four"))
 
 @errorSummary(numberOfSharesPurchasedForm, "number-of-shares-purchased", "numberOfSharesPurchased")
 

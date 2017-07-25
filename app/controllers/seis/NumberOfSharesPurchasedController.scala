@@ -20,15 +20,17 @@ import auth.{AuthorisedAndEnrolledForTAVC, SEIS}
 import common.{Constants, KeystoreKeys}
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
-import controllers.Helpers.ControllerHelpers
+import controllers.Helpers.{ControllerHelpers, PreviousInvestorsHelper}
 import controllers.predicates.FeatureSwitch
-import models.{CompanyOrIndividualModel}
+import models.CompanyOrIndividualModel
 import forms.NumberOfSharesPurchasedForm._
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
 import views.html.seis.investors.NumberOfSharesPurchased
-import models.investorDetails.NumberOfSharesPurchasedModel
+import models.investorDetails.{InvestorDetailsModel, NumberOfSharesPurchasedModel}
+import play.api.mvc.{Action, AnyContent}
+
 import scala.concurrent.Future
 
 object NumberOfSharesPurchasedController extends NumberOfSharesPurchasedController
@@ -43,24 +45,30 @@ trait NumberOfSharesPurchasedController extends FrontendController with Authoris
 
   override val acceptedFlows = Seq(Seq(SEIS))
 
-  val show = featureSwitch(applicationConfig.seisFlowEnabled) {
-    AuthorisedAndEnrolled.async { implicit user =>
-      implicit request =>
+  def show(id: Int): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
+    AuthorisedAndEnrolled.async { implicit user => implicit request =>
 
-        def routeRequest(companyOrIndividual: Option[CompanyOrIndividualModel]) = {
-          if (companyOrIndividual.isDefined) {
-            s4lConnector.fetchAndGetFormData[NumberOfSharesPurchasedModel](KeystoreKeys.numberOfSharesPurchased).map {
-              case Some(data) => Ok(NumberOfSharesPurchased(companyOrIndividual.get.companyOrIndividual, "TODO",
-                numberOfSharesPurchasedForm.fill(data)))
-              case None => Ok(NumberOfSharesPurchased(companyOrIndividual.get.companyOrIndividual, "TODO", numberOfSharesPurchasedForm))
+      s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
+        case Some(data) => {
+          val itemToUpdateIndex = data.indexWhere(_.processingId.getOrElse(0) == id)
+          if (itemToUpdateIndex != -1) {
+            val model = data.lift(itemToUpdateIndex)
+            if (model.get.numberOfSharesPurchasedModel.isDefined) {
+              Ok(NumberOfSharesPurchased(model.get.companyOrIndividualModel.get.companyOrIndividual, "TODO",
+                numberOfSharesPurchasedForm.fill(model.get.numberOfSharesPurchasedModel.get)))
             }
-          } else Future.successful(Redirect(routes.AddInvestorOrNomineeController.show()))
+            else
+              Ok(NumberOfSharesPurchased(model.get.companyOrIndividualModel.get.companyOrIndividual, "TODO", numberOfSharesPurchasedForm))
+          }
+          else {
+            // Set back to the review page later
+            Redirect(routes.AddInvestorOrNomineeController.show())
+          }
         }
-
-        for {
-          companyOrIndividual <- s4lConnector.fetchAndGetFormData[CompanyOrIndividualModel](KeystoreKeys.companyOrIndividual)
-          route <- routeRequest(companyOrIndividual)
-        } yield route
+        case None => {
+          Redirect(controllers.seis.routes.ShareDescriptionController.show())
+        }
+      }
     }
   }
 
@@ -69,13 +77,22 @@ trait NumberOfSharesPurchasedController extends FrontendController with Authoris
       implicit request =>
         numberOfSharesPurchasedForm.bindFromRequest().fold(
           formWithErrors => {
-            s4lConnector.fetchAndGetFormData[CompanyOrIndividualModel](KeystoreKeys.companyOrIndividual).map {
-              data => BadRequest(NumberOfSharesPurchased(data.get.companyOrIndividual, "TODO", formWithErrors))
+            s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
+              case Some(data) => {
+                val investorDetailsModel = data.last
+                BadRequest(NumberOfSharesPurchased(investorDetailsModel.companyOrIndividualModel.get.companyOrIndividual, "TODO", formWithErrors))
+              }
             }
           },
           validFormData => {
-            s4lConnector.saveFormData(KeystoreKeys.numberOfSharesPurchased, validFormData)
-            Future.successful(Redirect(routes.NumberOfSharesPurchasedController.show()))
+            validFormData.processingId match {
+              case Some(_) => PreviousInvestorsHelper.updateNumOfSharesPurchasedDetails(s4lConnector, validFormData).map {
+                investorDetailsModel => Redirect(routes.HowMuchSpentOnSharesController.show(investorDetailsModel.processingId.get))
+              }
+              case None => PreviousInvestorsHelper.addNumOfSharesPurchasedDetails(s4lConnector, validFormData).map {
+                investorDetailsModel => Redirect(routes.HowMuchSpentOnSharesController.show(investorDetailsModel.processingId.get))
+              }
+            }
           }
         )
     }

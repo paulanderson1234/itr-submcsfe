@@ -20,16 +20,18 @@ import auth.{AuthorisedAndEnrolledForTAVC, SEIS}
 import common.KeystoreKeys
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
+import controllers.Helpers.PreviousInvestorsHelper
 import controllers.predicates.FeatureSwitch
 import forms.CompanyDetailsForm._
-import models.CompanyDetailsModel
+import models.investorDetails.InvestorDetailsModel
+import play.api.Play.current
 import play.api.i18n.Messages
+import play.api.i18n.Messages.Implicits._
+import play.api.mvc.{Action, AnyContent}
+import services.SubscriptionService
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import utils.CountriesHelper
 import views.html.seis.investors.CompanyDetails
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
-import services.SubscriptionService
 
 import scala.concurrent.Future
 
@@ -50,14 +52,32 @@ trait CompanyDetailsController extends FrontendController with AuthorisedAndEnro
 
   lazy val countriesList = CountriesHelper.getIsoCodeTupleList
 
-  val show = featureSwitch(applicationConfig.seisFlowEnabled) {
+  def show(id: Int): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
     AuthorisedAndEnrolled.async { implicit user => implicit request =>
-      s4lConnector.fetchAndGetFormData[CompanyDetailsModel](KeystoreKeys.companyDetails).map {
-        case Some(data) => Ok(CompanyDetails(companyDetailsForm.fill(data), countriesList))
-        case None => Ok(CompanyDetails(companyDetailsForm, countriesList))
+
+      s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
+        case Some(data) => {
+          val itemToUpdateIndex = data.indexWhere(_.processingId.getOrElse(0) == id)
+          if (itemToUpdateIndex != -1) {
+            val model = data.lift(itemToUpdateIndex)
+            if (model.get.companyDetailsModel.isDefined) {
+              Ok(CompanyDetails(companyDetailsForm.fill(model.get.companyDetailsModel.get), countriesList))
+            }
+            else
+              Ok(CompanyDetails(companyDetailsForm, countriesList))
+          }
+          else {
+            // Set back to the review page later
+            Redirect(routes.AddInvestorOrNomineeController.show())
+          }
+        }
+        case None => {
+          Redirect(controllers.seis.routes.ShareDescriptionController.show())
+        }
       }
     }
   }
+
 
   val submit = featureSwitch(applicationConfig.seisFlowEnabled) {
     AuthorisedAndEnrolled.async { implicit user => implicit request =>
@@ -68,8 +88,14 @@ trait CompanyDetailsController extends FrontendController with AuthorisedAndEnro
           else formWithErrors, countriesList)))
         },
         validFormData => {
-          s4lConnector.saveFormData(KeystoreKeys.companyDetails, validFormData)
-          Future.successful(Redirect(routes.CompanyDetailsController.show()))
+          validFormData.processingId match {
+            case Some(_) => PreviousInvestorsHelper.updateCompanyDetails(s4lConnector, validFormData).map {
+              investorDetailsModel => Redirect(routes.NumberOfSharesPurchasedController.show(investorDetailsModel.processingId.get))
+            }
+            case None => PreviousInvestorsHelper.addCompanyDetails(s4lConnector, validFormData).map {
+              investorDetailsModel => Redirect(routes.NumberOfSharesPurchasedController.show(investorDetailsModel.processingId.get))
+            }
+          }
         }
       )
     }

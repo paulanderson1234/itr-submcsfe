@@ -18,7 +18,8 @@ package models
 
 import play.api.libs.json.Json
 
-case class CompanyOrIndividualModel(companyOrIndividual: String)
+case class CompanyOrIndividualModel(companyOrIndividual: String,
+                                    processingId: Option[Int])
 
 object CompanyOrIndividualModel{
   implicit val formats = Json.format[CompanyOrIndividualModel]

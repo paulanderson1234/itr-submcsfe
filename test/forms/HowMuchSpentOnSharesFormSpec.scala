@@ -34,17 +34,17 @@ class HowMuchSpentOnSharesFormSpec extends UnitSpec with OneAppPerSuite {
   "The HowMuchSpentOnSharesForm" when {
 
     "provided with a model" should {
-      val model = HowMuchSpentOnSharesModel(123)
+      val model = HowMuchSpentOnSharesModel(123, Some(1))
       lazy val form = howMuchSpentOnSharesForm.fill(model)
 
       "return a valid map" in {
-        form.data shouldBe Map("howMuchSpentOnShares" -> "123")
+        form.data shouldBe Map("howMuchSpentOnShares" -> "123", "processingId" -> "1")
       }
     }
 
 
     "provided with a valid map with the minimum amount" should {
-      val map = Map("howMuchSpentOnShares" -> "0")
+      val map = Map("howMuchSpentOnShares" -> "0", "processingId" -> "1")
       lazy val form = howMuchSpentOnSharesForm.bind(map)
 
       "contain no errors" in {
@@ -54,7 +54,7 @@ class HowMuchSpentOnSharesFormSpec extends UnitSpec with OneAppPerSuite {
     }
 
     "provided with a valid map with the maximum size" should {
-      val map = Map("howMuchSpentOnShares" -> s"$maxAmount")
+      val map = Map("howMuchSpentOnShares" -> s"$maxAmount", "processingId" -> "1")
       lazy val form = howMuchSpentOnSharesForm.bind(map)
 
       "contain no errors" in {
@@ -62,12 +62,12 @@ class HowMuchSpentOnSharesFormSpec extends UnitSpec with OneAppPerSuite {
       }
 
       "contain the correct model" in {
-        form.value shouldBe Some(HowMuchSpentOnSharesModel(maxAmount))
+        form.value shouldBe Some(HowMuchSpentOnSharesModel(maxAmount, Some(1)))
       }
     }
 
     "provided with an invalid map which is too large" should {
-      val map = Map("howMuchSpentOnShares" -> s"${maxAmount + 1}")
+      val map = Map("howMuchSpentOnShares" -> s"${maxAmount + 1}", "processingId" -> "1")
       lazy val form = howMuchSpentOnSharesForm.bind(map)
 
       "contain one error" in {
@@ -80,7 +80,7 @@ class HowMuchSpentOnSharesFormSpec extends UnitSpec with OneAppPerSuite {
     }
 
     "provided with an invalid map with a non-numeric value" should {
-      val map = Map("howMuchSpentOnShares" -> "a")
+      val map = Map("howMuchSpentOnShares" -> "a", "processingId" -> "1")
       lazy val form = howMuchSpentOnSharesForm.bind(map)
 
       "contain one error" in {
@@ -93,7 +93,7 @@ class HowMuchSpentOnSharesFormSpec extends UnitSpec with OneAppPerSuite {
     }
 
     "provided with an invalid map with a decimal value" should {
-      val map = Map("howMuchSpentOnShares" -> s"$invalidAmount")
+      val map = Map("howMuchSpentOnShares" -> s"$invalidAmount", "processingId" -> "1")
       lazy val form = howMuchSpentOnSharesForm.bind(map)
 
       "contain one error" in {
@@ -106,7 +106,7 @@ class HowMuchSpentOnSharesFormSpec extends UnitSpec with OneAppPerSuite {
     }
 
     "provided with an invalid map with a negative value" should {
-      val map = Map("howMuchSpentOnShares" -> s"$negativeAmount")
+      val map = Map("howMuchSpentOnShares" -> s"$negativeAmount", "processingId" -> "1")
       lazy val form = howMuchSpentOnSharesForm.bind(map)
 
       "contain one error" in {
@@ -119,7 +119,7 @@ class HowMuchSpentOnSharesFormSpec extends UnitSpec with OneAppPerSuite {
     }
 
     "provided with an invalid map with a negative decimal large value " should {
-      val map = Map("howMuchSpentOnShares" -> s"$largeNegativeAmount")
+      val map = Map("howMuchSpentOnShares" -> s"$largeNegativeAmount", "processingId" -> "1")
       lazy val form = howMuchSpentOnSharesForm.bind(map)
 
       "contain three errors" in {
@@ -129,7 +129,7 @@ class HowMuchSpentOnSharesFormSpec extends UnitSpec with OneAppPerSuite {
     }
 
     "provided with an invalid map with an empty value" should {
-      val map = Map("howMuchSpentOnShares" -> " ")
+      val map = Map("howMuchSpentOnShares" -> " ", "processingId" -> "1")
       lazy val form = howMuchSpentOnSharesForm.bind(map)
 
       "contain one error" in {
