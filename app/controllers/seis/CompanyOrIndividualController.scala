@@ -53,10 +53,10 @@ trait CompanyOrIndividualController extends FrontendController with AuthorisedAn
             if (itemToUpdateIndex != -1) {
               val model = data.lift(itemToUpdateIndex)
               if (model.get.companyOrIndividualModel.isDefined)
-                Ok(CompanyOrIndividual(useInvestorOrNomineeValueAsHeadingText(model.get.investorOrNomineeModel.get),
+                Ok(CompanyOrIndividual(model.get.investorOrNomineeModel.get.addInvestorOrNominee,
                   companyOrIndividualForm.fill(model.get.companyOrIndividualModel.get)))
               else
-                Ok(CompanyOrIndividual(useInvestorOrNomineeValueAsHeadingText(model.get.investorOrNomineeModel.get),
+                Ok(CompanyOrIndividual(model.get.investorOrNomineeModel.get.addInvestorOrNominee,
                   companyOrIndividualForm))
             }
             else {
@@ -79,7 +79,7 @@ trait CompanyOrIndividualController extends FrontendController with AuthorisedAn
             s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
               case Some(data) => {
                 val investorDetailsModel = data.last
-                BadRequest(CompanyOrIndividual(useInvestorOrNomineeValueAsHeadingText(investorDetailsModel.investorOrNomineeModel.get), formWithErrors))
+                BadRequest(CompanyOrIndividual(investorDetailsModel.investorOrNomineeModel.get.addInvestorOrNominee, formWithErrors))
               }
             }
           },

@@ -122,8 +122,4 @@ trait ControllerHelpers {
       case None =>  Messages("page.introduction.hub.existing.advanced.assurance.type")
     }
   }
-
-  def useInvestorOrNomineeValueAsHeadingText(investorOrNominee: AddInvestorOrNomineeModel): String =  investorOrNominee.addInvestorOrNominee.toLowerCase
-
-
 }

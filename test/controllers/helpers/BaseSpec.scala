@@ -267,6 +267,7 @@ trait BaseSpec extends UnitSpec with OneAppPerSuite with MockitoSugar with FakeR
   val howMuchSpentOnSharesModel3 = HowMuchSpentOnSharesModel(1000, Some(3))
   val isExistingShareHolderModelNo = IsExistingShareHolderModel("No")
   val isExistingShareHolderModelYes = IsExistingShareHolderModel("Yes")
+  val numberOfPreviouslyIssuedShares = NumberOfPreviouslyIssuedSharesModel(1,Some(1))
 
   //share holdings
   val investorShareIssueDateModel = InvestorShareIssueDateModel(1,1,1980, Some(1))

@@ -137,3 +137,5 @@ POST       /how-much-spent-on-shares              controllers.seis.HowMuchSpentO
 GET        /number-of-shares-purchased/:Id        controllers.seis.NumberOfSharesPurchasedController.show(Id: Int)
 POST       /number-of-shares-purchased            controllers.seis.NumberOfSharesPurchasedController.submit
 
+GET        /number-of-previously-issued-shares/:Id       controllers.seis.NumberOfPreviouslyIssuedSharesController.show(Id: Int)
+POST       /number-of-previously-issued-shares           controllers.seis.NumberOfPreviouslyIssuedSharesController.submit
