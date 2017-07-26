@@ -84,4 +84,5 @@ trait Constants {
   val typeCompany = "Company"
   val typeIndividual = "Individual"
 
+
 }

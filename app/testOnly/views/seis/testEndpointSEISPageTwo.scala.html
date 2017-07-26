@@ -13,7 +13,9 @@
 individualDetailsForm: Form[IndividualDetailsModel], shareDescriptionForm: Form[ShareDescriptionModel],
 totalAmountRaisedForm:Form[TotalAmountRaisedModel], totalAmountSpentForm:Form[TotalAmountSpentModel],
 addInvestorOrNomineeForm: Form[AddInvestorOrNomineeModel], companyOrIndividualForm: Form[CompanyOrIndividualModel],
-companyDetailsForm: Form[CompanyDetailsModel], numberOfSharesPurchasedForm: Form[NumberOfSharesPurchasedModel], howMuchSpentOnSharesForm : Form[HowMuchSpentOnSharesModel])(implicit request: Request[_], messages: Messages)
+companyDetailsForm: Form[CompanyDetailsModel], numberOfSharesPurchasedForm: Form[NumberOfSharesPurchasedModel],
+howMuchSpentOnSharesForm : Form[HowMuchSpentOnSharesModel], isExistingShareHolderForm: Form[IsExistingShareHolderModel])(implicit request: Request[_], messages: Messages)
+
 
 
 @main_template(Messages("page.test.page-two.title")) {
@@ -316,8 +318,25 @@ companyDetailsForm: Form[CompanyDetailsModel], numberOfSharesPurchasedForm: Form
         '_labelId -> "label-numberOfSharesPurchased",
         '_label -> Messages("page.seis.investors.numberOfSharesPurchased.heading", "company", "99-99-9999"),
         '_labelTextClass -> "visuallyhidden",
-        '_maxlength -> "9",
-        '_inputClass -> "input--normal"
+        '_maxlength -> "25",
+        '_inputClass -> "input--fullwidth"
+        )
+    </div>
+
+    <h2>Did this Company/Individual already own shares in your company?</h2>
+    <div class="form-group">
+        @formInputRadioGroup(
+        field = isExistingShareHolderForm
+        ("isExistingShareHolder"),
+        Seq(
+        Constants.StandardRadioButtonYesValue -> Messages("common.radioYesLabel"),
+        Constants.StandardRadioButtonNoValue -> Messages("common.radioNoLabel")),
+        '_legend -> Messages("page.seis.investors.isExistingShareHolder.legend",""),
+        '_legendClass -> "visuallyhidden",
+        '_labelAfter -> true,
+        '_labelClass -> "block-label",
+        '_legendID -> "isExistingShareHolder",
+        '_groupClass -> "inline"
         )
     </div>
 

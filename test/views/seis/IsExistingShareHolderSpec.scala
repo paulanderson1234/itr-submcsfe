@@ -17,41 +17,41 @@
 package views.seis
 
 import controllers.seis.routes
-import forms.CompanyOrIndividualForm._
+import forms.IsExistingShareHolderForm._
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.data.FormError
 import play.api.i18n.Messages
 import views.helpers.ViewSpec
 import play.api.i18n.Messages.Implicits._
-import views.html.seis.investors.CompanyOrIndividual
+import views.html.seis.investors.IsExistingShareHolder
 
-class CompanyOrIndividualSpec extends ViewSpec{
+class IsExistingShareHolderSpec extends ViewSpec {
 
   def commonTests(document: Document, templateText: String): Unit = {
-    document.title() shouldBe Messages("page.investors.companyOrIndividual.title", templateText)
-    document.getElementById("main-heading").text() shouldBe Messages("page.investors.companyOrIndividual.title", templateText)
+    document.title() shouldBe Messages("page.seis.investors.isExistingShareHolder.title", templateText)
+    document.getElementById("main-heading").text() shouldBe Messages("page.seis.investors.isExistingShareHolder.heading", templateText)
     document.getElementById("next").text() shouldBe Messages("common.button.snc")
-    document.body.getElementById("back-link").attr("href") shouldEqual controllers.seis.routes.AddInvestorOrNomineeController.show(Some(1)).url
+    document.body.getElementById("back-link").attr("href") shouldEqual controllers.seis.routes.HowMuchSpentOnSharesController.show(1).url
     document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.company.details.four")
-    document.getElementById("companyOrIndividual-companyLabel").text() shouldBe Messages("page.investors.companyOrIndividual.company")
-    document.getElementById("companyOrIndividual-individualLabel").text() shouldBe Messages("page.investors.companyOrIndividual.individual")
+    document.getElementById("isExistingShareHolder-yesLabel").text() shouldBe Messages("common.radioYesLabel")
+    document.getElementById("isExistingShareHolder-noLabel").text() shouldBe Messages("common.radioNoLabel")
   }
 
-  val backUrl = controllers.seis.routes.AddInvestorOrNomineeController.show(Some(1)).url
+  val backUrl = controllers.seis.routes.HowMuchSpentOnSharesController.show(1).url
 
-  "The CompanyOrIndividual page" should {
+  "The Is Existing Share Holder page" should {
     val templateText = "individual"
     "show the correct elements" when{
       "a form with an empty model is passed to the template" in {
-        lazy val page = CompanyOrIndividual(templateText, companyOrIndividualForm, backUrl)(fakeRequest, applicationMessages)
+        lazy val page = IsExistingShareHolder(templateText, isExistingShareHolderForm, backUrl)(fakeRequest, applicationMessages)
         lazy val document = Jsoup.parse(page.body)
 
         commonTests(document, templateText)
       }
       "a form with errors is passed to the template" in {
-        val formWithErrors = companyOrIndividualForm.bind(Map(""->""))
-        lazy val page = CompanyOrIndividual(templateText, formWithErrors, backUrl)(fakeRequest, applicationMessages)
+        val formWithErrors = isExistingShareHolderForm.bind(Map(""->""))
+        lazy val page = IsExistingShareHolder(templateText, formWithErrors, backUrl)(fakeRequest, applicationMessages)
         lazy val document = Jsoup.parse(page.body)
 
         commonTests(document, templateText)

@@ -30,6 +30,8 @@ class CompanyDetailsSpec extends ViewSpec {
 
   val emptyCompanyDetailsModel = new CompanyDetailsModel("", "", "", None, None, None, countryCode = "", Some(1))
 
+  val backUrl = controllers.seis.routes.CompanyOrIndividualController.show(1).url
+
   lazy val form = companyDetailsForm.bind(Map("companyName" -> "Line 0",
     "companyAddressline1" -> "Line 1",
     "companyAddressline2" -> "Line 2",
@@ -55,9 +57,9 @@ class CompanyDetailsSpec extends ViewSpec {
     "countryCode" -> ""))
 
   val countriesList: List[(String, String)] = List(("JP", "Japan"), ("GB", "United Kingdom"))
-  lazy val page = CompanyDetails(form, countriesList)(authorisedFakeRequest,applicationMessages)
-  lazy val emptyPage = CompanyDetails(emptyForm, countriesList)(authorisedFakeRequest, applicationMessages)
-  lazy val errorPage = CompanyDetails(errorForm, countriesList)(authorisedFakeRequest, applicationMessages)
+  lazy val page = CompanyDetails(form, countriesList, backUrl)(authorisedFakeRequest,applicationMessages)
+  lazy val emptyPage = CompanyDetails(emptyForm, countriesList, backUrl)(authorisedFakeRequest, applicationMessages)
+  lazy val errorPage = CompanyDetails(errorForm, countriesList, backUrl)(authorisedFakeRequest, applicationMessages)
 
   "The Company Details page" should {
 

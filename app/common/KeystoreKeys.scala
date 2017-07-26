@@ -69,8 +69,12 @@ trait KeystoreKeys {
   val individualDetails: String = "investors:individualDetails"
   val totalAmountRaised: String = "shares:totalAmountRaised"
   val companyOrIndividual: String = "investors: companyOrIndividual"
+  val investorShareIssueDate: String = "investors: InvestorShareIssueDate"
+  val tempPreviousSchemes: String = "previousInvestmentScheme:tempPreviousInvestmentSchemes"
   val investorDetails: String = "investors:investorDetails"
   val howMuchSpentOnShares: String = "investors:howMuchSpentOnShares"
+
+  val isExistingShareHolder: String = "investors:previousShareHoldings"
   val numberOfSharesPurchased: String = "investors:numberOfSharesPurchased"
 
   // processing Keys
@@ -101,6 +105,12 @@ trait KeystoreKeys {
   val backLinkHadRFI: String = "backLink:backLinkHadRFI"
   val backLinkShareDescription: String = "backLink:shareDescription"
   val backLinkAddInvestorOrNominee: String = "backLink:AddInvestorOrNominee"
+  val backLinkNumberOfSharesPurchased: String = "backLink:backLinkNumberOfSharesPurchased"
+  val backLinkCompanyOrIndividual: String = "backLink:backLinkCompanyOrIndividual"
+  val backLinkCompanyAndIndividualBoth: String = "backLink:backLinkCompanyAndIndividualBoth"
+  val backLinkHowMuchSpentOnShares: String = "backLink:backLinkHowMuchSpentOnShares"
+  val backLinkInvestorShareIssueDate: String = "backLink:InvestorShareIssueDate"
+  val backLinkIsExistingShareHolder: String = "backLink:IsExistingShareHolder"
 
   //application in progress key
   val applicationInProgress: String = "applicationInProgress"
