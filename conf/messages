@@ -203,8 +203,8 @@ page.examples.Confirmation.heading=Confirmation
 
 #Scheme selection page
 validation.error.schemeSelection=Please select at least one scheme.
-page.schemeSelection.SchemeSelection.title=Which schemes are you applying for?'
-page.schemeSelection.SchemeSelection.heading=Which schemes are you applying for?'
+page.schemeSelection.SchemeSelection.title=Which schemes are you applying for?
+page.schemeSelection.SchemeSelection.heading=Which schemes are you applying for?
 page.schemeSelection.SchemeSelction.hint=You can apply for up to 3 schemes
 page.schemeSelection.SchemeSelection.checkbox.seis=Seed Enterprise Investment Scheme
 page.schemeSelection.SchemeSelection.checkbox.eis=Enterprise Investment Scheme
@@ -227,8 +227,8 @@ page.schemeSelection.SchemeSelection.help.vct.findOutMore=Find out more about th
 page.schemeSelection.SchemeSelection.help.vct.link=Venture Capital Trust scheme
 
 #single scheme selection page
-page.schemeSelection.SchemeSelection.singlescheme.title=Which scheme are you applying for?'
-page.schemeSelection.SchemeSelection.singlescheme.heading=Which scheme are you applying for?'
+page.schemeSelection.SchemeSelection.singlescheme.title=Which scheme are you applying for?
+page.schemeSelection.SchemeSelection.singlescheme.heading=Which scheme are you applying for?
 page.schemeSelection.SchemeSelection.radiobutton.seis=Seed Enterprise Investment Scheme
 page.schemeSelection.SchemeSelection.radiobutton.eis=Enterprise Investment Scheme
 page.schemeSelection.SchemeSelection.radiobutton.vct=Venture Capital Trust
@@ -426,8 +426,8 @@ page.investment.NewGeographicalMarket.hint=It''s sometimes called launching in a
 page.investment.NewGeographicalMarket.hint.link=new geographic market
 
 #ten year plan page
-page.knowledgeIntensive.TenYearPlan.title = Does your company plan to develop a product that you’ll own the rights to?
-page.knowledgeIntensive.TenYearPlan.heading = Does your company plan to develop a product that you’ll own the rights to?
+page.knowledgeIntensive.TenYearPlan.title = Does your company plan to develop a product that you''ll own the rights to?
+page.knowledgeIntensive.TenYearPlan.heading = Does your company plan to develop a product that you''ll own the rights to?
 page.knowledgeIntensive.TenYearPlan.question.hint.one = This might be goods or a service that you''ve created in the past 3 years or that you will create in the future.
 page.knowledgeIntensive.TenYearPlan.question.hint.two = Your company could own the intellectual property rights by using copyright, a patent or a design.
 page.knowledgeIntensive.TenYearPlan.question.hint.three = Within 10 years of the investment, most of your company''s business activities must use, or make money from what you''ve developed.
@@ -478,7 +478,7 @@ page.investment.InvestmentGrow.example.text=For example you may be planning to:
 page.investment.InvestmentGrow.bullet.one=hire more employees
 page.investment.InvestmentGrow.bullet.two=attract new customers
 page.investment.InvestmentGrow.bullet.three=develop a new product
-page.investment.InvestmentGrow.description.two=Make sure you explain how you’ll use the investment:
+page.investment.InvestmentGrow.description.two=Make sure you explain how you''ll use the investment:
 page.investment.InvestmentGrow.bullet.geographicalMarket=to launch your product somewhere new
 page.investment.InvestmentGrow.bullet.productMarket=to enter a new product market
 page.investment.InvestmentGrow.description.three=You should also send a copy of your business plan with your supporting documents.
@@ -631,7 +631,7 @@ page.checkAndSubmit.acknowledgement.emailTo=You can email your documents to
 page.checkAndSubmit.acknowledgement.email.include=The subject line must include:
 page.checkAndSubmit.acknowledgement.email.one=your company name
 page.checkAndSubmit.acknowledgement.email.two=your company''s Unique Taxpayer Reference Number (UTR)
-page.checkAndSubmit.acknowledgement.email.three=the word ‘WHITELISTER’
+page.checkAndSubmit.acknowledgement.email.three=the word ''WHITELISTER''
 page.checkAndSubmit.acknowledgement.email.size=We can''t accept emails that are larger than 10MB.
 page.checkAndSubmit.acknowledgement.post.docs.heading=Send by post
 page.checkAndSubmit.acknowledgement.post.to=If you need to send by post, call the Small Companies Enterprise Centre (SCEC) on 0300 123 1083.
@@ -752,8 +752,8 @@ page.seis.companyDetails.text=The trade has started if your goods or services ar
 page.seis.companyDetails.TradeStartDate.question.hint=When did this trade start?
 
 # SEIS Company Details
-page.investment.companyDetails.heading=What are this company’s details?
-page.investment.companyDetails.title=What are this company’s details?
+page.investment.companyDetails.heading=What are this company''s details?
+page.investment.companyDetails.title=What are this company''s details?
 page.investment.companyDetails.companyname.label=Company name
 page.investment.companyDetails.addressline1.label=Address line 1
 page.investment.companyDetails.addressline2.label=Address line 2
@@ -842,7 +842,7 @@ page.seis.nominalValueOfShares.title = What was the nominal value of each share 
 page.seis.nominalValueOfShares.hint = The nominal value is the amount shown on the share certificate.
 
 # SEIS Individual Details Page
-page.seis.individualDetails.title =What are this individual’s details?
+page.seis.individualDetails.title =What are this individual''s details?
 page.seis.individualDetails.forename.label= First Name
 page.seis.individualDetails.surname.label= Last Name
 page.seis.individualDetails.addressline1.label= Address line 1
@@ -872,7 +872,7 @@ page.seis.checkAndSubmit.acknowledgement.emailTo=You can email your documents to
 page.seis.checkAndSubmit.acknowledgement.email.include=The subject line must include:
 page.seis.checkAndSubmit.acknowledgement.email.one=your company name
 page.seis.checkAndSubmit.acknowledgement.email.two=your company''s Unique Taxpayer Reference Number (UTR)
-page.seis.checkAndSubmit.acknowledgement.email.three=the word ‘WHITELISTER’
+page.seis.checkAndSubmit.acknowledgement.email.three=the word ''WHITELISTER''
 page.seis.checkAndSubmit.acknowledgement.email.size=We can''t accept emails that are larger than 10MB.
 page.seis.checkAndSubmit.acknowledgement.post.docs.heading=Send by post
 page.seis.checkAndSubmit.acknowledgement.post.to=If you need to send by post, call the Small Companies Enterprise Centre (SCEC) on 0300 123 1083.
@@ -993,7 +993,7 @@ page.companyDetails.seventyPercentSpent.legend=Have you spent at least 70% of th
 # Seventy Percent Error Page
 page.companyDetails.SeventyPercentError.title=You can''t use this service yet
 page.companyDetails.SeventyPercentError.heading=You can''t use this service yet
-page.companyDetails.SeventyPercentError.reason=This is because you haven't spent enough of the SEIS Investment.
+page.companyDetails.SeventyPercentError.reason=This is because you haven''t spent enough of the SEIS Investment.
 page.companyDetails.SeventyPercentError.incorrect.info=If this information is incorrect you can
 page.companyDetails.SeventyPercentError.change.link.changeAnswers=change your answers
 

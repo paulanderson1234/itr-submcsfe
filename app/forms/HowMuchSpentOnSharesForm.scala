@@ -30,7 +30,8 @@ object HowMuchSpentOnSharesForm {
     mapping(
       "howMuchSpentOnShares" -> nonEmptyText
         .verifying(Validation.genericWholeAmountCheck(messageKey, minimumAmount))
-        .transform[BigDecimal](value => BigDecimal(value), _.toString())
+        .transform[BigDecimal](value => BigDecimal(value), _.toString()),
+      "processingId" -> optional(number)
     )(HowMuchSpentOnSharesModel.apply)(HowMuchSpentOnSharesModel.unapply)
   )
 }

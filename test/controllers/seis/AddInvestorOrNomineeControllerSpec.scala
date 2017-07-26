@@ -22,6 +22,7 @@ import config.FrontendAuthConnector
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
 import models._
+import models.investorDetails.{InvestorDetailsModel, PreviousShareHoldingModel}
 import org.mockito.Matchers
 import org.mockito.Mockito._
 import play.api.test.Helpers.{redirectLocation, _}
@@ -52,10 +53,10 @@ class AddInvestorOrNomineeControllerSpec extends BaseSpec {
     }
   }
 
-  def setupMocks(addInvestorOrNomineeModel : Option[AddInvestorOrNomineeModel] = None, backUrl: Option[String] = None): Unit = {
-    when(mockS4lConnector.fetchAndGetFormData[AddInvestorOrNomineeModel](Matchers.eq(KeystoreKeys.addInvestor))
+  def setupMocks(individualDetailsModels: Option[Vector[InvestorDetailsModel]], backUrl: Option[String] = None): Unit = {
+    when(mockS4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](Matchers.eq(KeystoreKeys.investorDetails))
       (Matchers.any(), Matchers.any(), Matchers.any()))
-        .thenReturn(Future.successful(addInvestorOrNomineeModel))
+        .thenReturn(Future.successful(individualDetailsModels))
     when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.backLinkAddInvestorOrNominee))
       (Matchers.any(), Matchers.any(), Matchers.any()))
       .thenReturn(Future.successful(backUrl))
@@ -63,9 +64,9 @@ class AddInvestorOrNomineeControllerSpec extends BaseSpec {
 
   "Sending a GET request to AddInvestorOrNomineeController when authenticated and enrolled" should {
     "return a 200 when something is fetched from keystore" in {
-      setupMocks(Some(investorModel), Some(validBackLink))
+      setupMocks(Some(onlyInvestorOrNomineeVectorList), Some(validBackLink))
       mockEnrolledRequest(seisSchemeTypesModel)
-      showWithSessionAndAuth(TestController.show())(
+      showWithSessionAndAuth(TestController.show(validModelNoPrevShareHoldings.processingId))(
         result => status(result) shouldBe OK
       )
     }
@@ -73,7 +74,7 @@ class AddInvestorOrNomineeControllerSpec extends BaseSpec {
     "provide an empty model and return a 200 when nothing is fetched using keystore" in {
       setupMocks(None, Some(validBackLink))
       mockEnrolledRequest(seisSchemeTypesModel)
-      showWithSessionAndAuth(TestController.show())(
+      showWithSessionAndAuth(TestController.show(None))(
         result => status(result) shouldBe OK
       )
     }
@@ -81,7 +82,7 @@ class AddInvestorOrNomineeControllerSpec extends BaseSpec {
     "provide an empty model and no back url return a 200 and redirect to Share Description details page" in {
       setupMocks(None, None)
       mockEnrolledRequest(seisSchemeTypesModel)
-      showWithSessionAndAuth(TestController.show())(
+      showWithSessionAndAuth(TestController.show(None))(
         result => {
           status(result) shouldBe SEE_OTHER
           redirectLocation(result) shouldBe Some(controllers.seis.routes.ShareDescriptionController.show().url)
@@ -92,16 +93,17 @@ class AddInvestorOrNomineeControllerSpec extends BaseSpec {
 
   "By selecting the investor submission to the AddInvestorOrNomineeController when authenticated and enrolled" should {
     "redirect to the correct page if an investor" in {
-      when(TestController.s4lConnector.saveFormData[AddInvestorOrNomineeModel](Matchers.eq(KeystoreKeys.addInvestor), Matchers.any())
+      when(TestController.s4lConnector.saveFormData[Vector[IndividualDetailsModel]](Matchers.eq(KeystoreKeys.addInvestor), Matchers.any())
         (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(CacheMap("",Map()))
 
       val formInput = "addInvestorOrNominee" -> Constants.investor
-      setupMocks(None, Some(validBackLink))
+      setupMocks(Some(onlyInvestorOrNomineeVectorList), Some(validBackLink))
       mockEnrolledRequest(seisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,formInput)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(controllers.seis.routes.CompanyOrIndividualController.show().url)
+          redirectLocation(result) shouldBe
+            Some(controllers.seis.routes.CompanyOrIndividualController.show(validModelWithPrevShareHoldings.processingId.get).url)
         }
       )
     }
@@ -109,16 +111,17 @@ class AddInvestorOrNomineeControllerSpec extends BaseSpec {
 
   "By selecting the investor submission to the AddInvestorOrNomineeController when authenticated and enrolled" should {
     "redirect to the correct page if a nominee" in {
-      when(TestController.s4lConnector.saveFormData[AddInvestorOrNomineeModel](Matchers.eq(KeystoreKeys.addInvestor), Matchers.any())
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(CacheMap("",Map()))
+      when(TestController.s4lConnector.saveFormData[Vector[IndividualDetailsModel]](Matchers.eq(KeystoreKeys.addInvestor), Matchers.any())
+        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(CacheMap("",Map()))
 
       val formInput = "addInvestorOrNominee" -> Constants.nominee
-      setupMocks(None, Some(validBackLink))
+      setupMocks(Some(onlyInvestorOrNomineeVectorList), Some(validBackLink))
       mockEnrolledRequest(seisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,formInput)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(controllers.seis.routes.CompanyOrIndividualController.show().url)
+          redirectLocation(result) shouldBe
+            Some(controllers.seis.routes.CompanyOrIndividualController.show(validModelWithPrevShareHoldings.processingId.get).url)
         }
       )
     }

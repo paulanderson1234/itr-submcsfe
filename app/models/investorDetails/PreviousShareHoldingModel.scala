@@ -21,7 +21,8 @@ import play.api.libs.json.Json
 case class PreviousShareHoldingModel(investorShareIssueDateModel: Option[InvestorShareIssueDateModel] = None,
                                      numberOfPreviouslyIssuedSharesModel: Option[NumberOfPreviouslyIssuedSharesModel] = None,
                                      previousShareHoldingNominalValueModel: Option[PreviousShareHoldingNominalValueModel] = None,
-                                     previousShareHoldingDescriptionModel: Option[PreviousShareHoldingDescriptionModel] = None){
+                                     previousShareHoldingDescriptionModel: Option[PreviousShareHoldingDescriptionModel] = None,
+                                     processingId: Option[Int] = None, investorProcessingId: Option[Int] = None){
 
   /** Validates that all PreviousShareHolding fields exist**/
   def validate: Boolean = investorShareIssueDateModel.isDefined && numberOfPreviouslyIssuedSharesModel.isDefined &&
