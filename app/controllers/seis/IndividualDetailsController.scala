@@ -78,12 +78,10 @@ trait IndividualDetailsController extends FrontendController with AuthorisedAndE
             Future.successful(Redirect(controllers.seis.routes.AddInvestorOrNomineeController.show()))
           }
         }
-
         for {
           backUrl <- s4lConnector.fetchAndGetFormData[String](KeystoreKeys.backLinkCompanyAndIndividualBoth)
           route <- process(backUrl)
         } yield route
-
     }
   }
 

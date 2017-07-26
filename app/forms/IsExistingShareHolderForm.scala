@@ -14,13 +14,18 @@
  * limitations under the License.
  */
 
-package models.investorDetails
+package forms
 
-import play.api.libs.json.Json
 
-case class PreviousShareHoldingNominalValueModel(nominalValue: BigDecimal,
-                                                 processingId: Option[Int],
-                                                 investorProcessingId: Option[Int] = None)
-object PreviousShareHoldingNominalValueModel{
-  implicit val formats = Json.format[PreviousShareHoldingNominalValueModel]
+import models.investorDetails.IsExistingShareHolderModel
+import play.api.data.Form
+import play.api.data.Forms._
+
+object IsExistingShareHolderForm {
+  val isExistingShareHolderForm = Form(
+    mapping(
+      "isExistingShareHolder" -> nonEmptyText,
+      "processingId" -> optional(number)
+    )(IsExistingShareHolderModel.apply)(IsExistingShareHolderModel.unapply)
+  )
 }

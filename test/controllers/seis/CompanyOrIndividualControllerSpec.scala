@@ -26,6 +26,7 @@ import models.investorDetails.InvestorDetailsModel
 import org.mockito.Matchers
 import org.mockito.Mockito._
 import play.api.test.Helpers._
+import uk.gov.hmrc.http.cache.client.CacheMap
 
 import scala.concurrent.Future
 
@@ -37,6 +38,8 @@ class CompanyOrIndividualControllerSpec extends BaseSpec {
     override lazy val s4lConnector = mockS4lConnector
     override lazy val enrolmentConnector = mockEnrolmentConnector
   }
+
+  val backUrl = Some(controllers.seis.routes.AddInvestorOrNomineeController.show(Some(1)).url)
 
   "CompanyOrIndividualController" should {
     "use the correct keystore connector" in {
@@ -54,6 +57,12 @@ class CompanyOrIndividualControllerSpec extends BaseSpec {
     when(mockS4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](Matchers.eq(KeystoreKeys.investorDetails))
       (Matchers.any(), Matchers.any(), Matchers.any()))
       .thenReturn(Future.successful(individualDetailsModels))
+
+    when(mockS4lConnector.saveFormData(Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(mock[CacheMap]))
+    when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.backLinkCompanyOrIndividual))
+      (Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(backUrl))
   }
 
   "Sending a GET request to CompanyOrIndividualController when authenticated and enrolled for SEIS" should {
@@ -90,7 +99,7 @@ class CompanyOrIndividualControllerSpec extends BaseSpec {
       mockEnrolledRequest(seisSchemeTypesModel)
       setupMocks(Some(onlyInvestorOrNomineeVectorList))
       val formInput = Seq("companyOrIndividual" -> Constants.typeCompany, "processingId" -> "1")
-      submitWithSessionAndAuth(TestController.submit, formInput: _*)(
+      submitWithSessionAndAuth(TestController.submit(backUrl), formInput: _*)(
         result => {
           status(result) shouldBe SEE_OTHER
           redirectLocation(result) shouldBe Some(controllers.seis.routes.CompanyDetailsController.show(1).url)
@@ -104,7 +113,7 @@ class CompanyOrIndividualControllerSpec extends BaseSpec {
       mockEnrolledRequest(seisSchemeTypesModel)
       setupMocks(Some(onlyInvestorOrNomineeVectorList))
       val formInput = Seq("companyOrIndividual" -> Constants.typeIndividual, "processingId" -> "1")
-      submitWithSessionAndAuth(TestController.submit,formInput: _*)(
+      submitWithSessionAndAuth(TestController.submit(backUrl),formInput: _*)(
         result => {
           status(result) shouldBe SEE_OTHER
           redirectLocation(result) shouldBe Some(controllers.seis.routes.IndividualDetailsController.show(1).url)
@@ -118,7 +127,7 @@ class CompanyOrIndividualControllerSpec extends BaseSpec {
       setupMocks(Some(onlyInvestorOrNomineeVectorList))
       mockEnrolledRequest(seisSchemeTypesModel)
       val formInput = "companyOrIndividual" -> ""
-      submitWithSessionAndAuth(TestController.submit,formInput)(
+      submitWithSessionAndAuth(TestController.submit(backUrl),formInput)(
         result => {
           status(result) shouldBe BAD_REQUEST
         }

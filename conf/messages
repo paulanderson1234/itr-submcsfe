@@ -1097,7 +1097,15 @@ page.investors.companyOrIndividual.heading = Is this {0} a company or an individ
 page.investors.companyOrIndividual.company=Company
 page.investors.companyOrIndividual.individual=Individual
 
+#PreviousShareHoldings
+page.seis.investors.isExistingShareHolder.title = Did this {0} already own shares in your company?
+page.seis.investors.isExistingShareHolder.heading = Did this {0} already own shares in your company?
+page.seis.investors.isExistingShareHolder.legend = Did this {0} already own shares in your company?
+
+#Investor Share Issue Date
+page.investors.investorShareIssueDate.title = When were these previous shares issued?
+page.investors.investorShareIssueDate.heading = When were these previous shares issued?
+
 #Number of shares purchased
 page.seis.investors.numberOfSharesPurchased.title = How many shares were issued to this {0} on {1}?
-page.seis.investors.numberOfSharesPurchased.heading = How many shares were issued to this {0} on {1}?
-
+page.seis.investors.numberOfSharesPurchased.heading = How many shares were issued to this {0} on <br/> {1}?

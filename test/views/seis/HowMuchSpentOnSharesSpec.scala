@@ -29,12 +29,14 @@ import play.api.test.Helpers._
 
 class HowMuchSpentOnSharesSpec extends ViewSpec {
 
+  val backUrl = controllers.seis.routes.NumberOfSharesPurchasedController.show(1).url
   "HowMuchSpentOnShares view" when {
     implicit lazy val request = FakeRequest("GET", "")
 
     "not supplied with form errors" should {
       lazy val document: Document = {
-        val result = HowMuchSpentOnShares("companyOrIndividual", howMuchSpentOnSharesForm)
+        val result = HowMuchSpentOnShares("companyOrIndividual", howMuchSpentOnSharesForm,
+          backUrl)
         Jsoup.parse(contentAsString(result))
       }
 
@@ -47,7 +49,7 @@ class HowMuchSpentOnSharesSpec extends ViewSpec {
       }
 
       "have the correct back link url" in {
-        document.select("a.back-link").attr("href") shouldBe "/investment-tax-relief-cs/seis/how-much-spent-on-shares/1"
+        document.select("a.back-link").attr("href") shouldBe "/investment-tax-relief-cs/seis/number-of-shares-purchased/1"
       }
 
       "have the progress details" in {
@@ -59,7 +61,7 @@ class HowMuchSpentOnSharesSpec extends ViewSpec {
       }
 
       "have a form posting to the correct route" in {
-        document.select("form").attr("action") shouldBe controllers.seis.routes.HowMuchSpentOnSharesController.submit().url
+        document.select("form").attr("action") shouldBe controllers.seis.routes.HowMuchSpentOnSharesController.submit(Some(backUrl)).url
       }
 
       "have a next button" in {
@@ -70,7 +72,8 @@ class HowMuchSpentOnSharesSpec extends ViewSpec {
     "supplied with form errors" should {
       lazy val document: Document = {
         val map = Map("howMuchSpentOnShares" -> "")
-        val result = HowMuchSpentOnShares("companyOrIndividual", howMuchSpentOnSharesForm.bind(map))
+        val result = HowMuchSpentOnShares("companyOrIndividual", howMuchSpentOnSharesForm.bind(map),
+          controllers.seis.routes.NumberOfSharesPurchasedController.show(1).url)
         Jsoup.parse(contentAsString(result))
       }
 
@@ -87,7 +90,7 @@ class HowMuchSpentOnSharesSpec extends ViewSpec {
       }
 
       "have the correct back link url" in {
-        document.select("a.back-link").attr("href") shouldBe "/investment-tax-relief-cs/seis/how-much-spent-on-shares/1"
+        document.select("a.back-link").attr("href") shouldBe "/investment-tax-relief-cs/seis/number-of-shares-purchased/1"
       }
 
       "have the progress details" in {
@@ -99,7 +102,7 @@ class HowMuchSpentOnSharesSpec extends ViewSpec {
       }
 
       "have a form posting to the correct route" in {
-        document.select("form").attr("action") shouldBe controllers.seis.routes.HowMuchSpentOnSharesController.submit().url
+        document.select("form").attr("action") shouldBe controllers.seis.routes.HowMuchSpentOnSharesController.submit(Some(backUrl)).url
       }
 
       "have a next button" in {

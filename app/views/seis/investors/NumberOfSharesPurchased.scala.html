@@ -11,7 +11,7 @@
 
 @errorSummary(numberOfSharesPurchasedForm, "number-of-shares-purchased", "numberOfSharesPurchased")
 
-<h1 class="heading-xlarge" id="main-heading">@Messages("page.seis.investors.numberOfSharesPurchased.heading", companyOrIndividual.toLowerCase() , shareIssueDate)</h1>
+<h1 class="heading-xlarge" id="main-heading">@Html(Messages("page.seis.investors.numberOfSharesPurchased.heading", companyOrIndividual.toLowerCase() , shareIssueDate))</h1>
 
     @form(action = controllers.seis.routes.NumberOfSharesPurchasedController.submit(Some(shareIssueDate), Some(backUrl))) {
     <fieldset>

@@ -134,6 +134,9 @@ POST       /total-amount-raised                   controllers.seis.TotalAmountRa
 GET        /how-much-spent-on-shares/:Id          controllers.seis.HowMuchSpentOnSharesController.show(Id: Int)
 POST       /how-much-spent-on-shares              controllers.seis.HowMuchSpentOnSharesController.submit(backUrl: Option[String]?=None)
 
+GET        /is-existing-shareholder/:Id            controllers.seis.IsExistingShareHolderController.show(Id: Int)
+POST       /is-existing-shareholder               controllers.seis.IsExistingShareHolderController.submit(companyOrIndividual: Option[String]?=None, backUrl: Option[String]?=None)
+
 GET        /number-of-shares-purchased/:Id        controllers.seis.NumberOfSharesPurchasedController.show(Id: Int)
 POST       /number-of-shares-purchased            controllers.seis.NumberOfSharesPurchasedController.submit(shareIssueDate: Option[String]?=None, backUrl: Option[String]?=None)
 

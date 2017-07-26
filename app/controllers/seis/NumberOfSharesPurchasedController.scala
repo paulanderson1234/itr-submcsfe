@@ -112,14 +112,14 @@ trait NumberOfSharesPurchasedController extends FrontendController with Authoris
               case Some(_) => PreviousInvestorsHelper.updateNumOfSharesPurchasedDetails(s4lConnector, validFormData).map {
                 investorDetailsModel => {
                   s4lConnector.saveFormData(KeystoreKeys.backLinkHowMuchSpentOnShares,
-                    routes.HowMuchSpentOnSharesController.show(investorDetailsModel.processingId.get).url)
+                    routes.NumberOfSharesPurchasedController.show(investorDetailsModel.processingId.get).url)
                   Redirect(routes.HowMuchSpentOnSharesController.show(investorDetailsModel.processingId.get))
                 }
               }
               case None => PreviousInvestorsHelper.addNumOfSharesPurchasedDetails(s4lConnector, validFormData).map {
                 investorDetailsModel => {
                   s4lConnector.saveFormData(KeystoreKeys.backLinkHowMuchSpentOnShares,
-                    routes.HowMuchSpentOnSharesController.show(investorDetailsModel.processingId.get).url)
+                    routes.NumberOfSharesPurchasedController.show(investorDetailsModel.processingId.get).url)
                   Redirect(routes.HowMuchSpentOnSharesController.show(investorDetailsModel.processingId.get))
                 }
               }

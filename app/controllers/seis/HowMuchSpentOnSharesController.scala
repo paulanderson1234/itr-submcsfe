@@ -83,7 +83,7 @@ trait HowMuchSpentOnSharesController extends FrontendController with AuthorisedA
     }
 
     for {
-      backUrl <- s4lConnector.fetchAndGetFormData[String](KeystoreKeys.backLinkNumberOfSharesPurchased)
+      backUrl <- s4lConnector.fetchAndGetFormData[String](KeystoreKeys.backLinkHowMuchSpentOnShares)
       route <- process(backUrl)
     } yield route
 
@@ -98,11 +98,17 @@ trait HowMuchSpentOnSharesController extends FrontendController with AuthorisedA
             validFormData.processingId match {
               case Some(_) => PreviousInvestorsHelper.updateAmountSpentOnSharesDetails(s4lConnector, validFormData).map {
                 investorDetailsModel => {
-                  Redirect(routes.HowMuchSpentOnSharesController.show(investorDetailsModel.processingId.get))
+                  s4lConnector.saveFormData(KeystoreKeys.backLinkIsExistingShareHolder,
+                    routes.HowMuchSpentOnSharesController.show(investorDetailsModel.processingId.get).url)
+                  Redirect(routes.IsExistingShareHolderController.show(investorDetailsModel.processingId.get))
                 }
               }
               case None => PreviousInvestorsHelper.addAmountSpentOnSharesDetails(s4lConnector, validFormData).map {
-                investorDetailsModel => Redirect(routes.HowMuchSpentOnSharesController.show(investorDetailsModel.processingId.get))
+                investorDetailsModel => {
+                  s4lConnector.saveFormData(KeystoreKeys.backLinkIsExistingShareHolder,
+                    routes.HowMuchSpentOnSharesController.show(investorDetailsModel.processingId.get).url)
+                  Redirect(routes.IsExistingShareHolderController.show(investorDetailsModel.processingId.get))
+                }
               }
             }
           }
