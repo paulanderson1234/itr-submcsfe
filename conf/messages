@@ -89,7 +89,7 @@ validation.error.employeeCount.size = The employee count should be between {0} a
 validation.error.employeeCount.precision = Enter a value with fewer than 13 decimal places for your employee count
 
 validation.error.howMuchSpentOnShares.size = The amount spent should be between 0 and 99999999999
-validation.error.howMuchSpentOnShares.notANumber = Enter a valid number for the the amount spent
+validation.error.howMuchSpentOnShares.notANumber = Enter a valid number for the amount spent
 validation.error.howMuchSpentOnShares.decimalPlaces = The amount spent should not contain decimal places
 validation.error.howMuchSpentOnShares.negative = The amount spent should not be negative
 
