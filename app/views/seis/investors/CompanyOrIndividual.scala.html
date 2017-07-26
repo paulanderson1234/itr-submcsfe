@@ -3,11 +3,11 @@
 @import common.Constants
 @import views.html.helpers.{backButtonWithProgress, formInputRadioGroup, errorSummary, hiddenField}
 
-@(investorOrNominee: String, companyOrIndividualForm: Form[CompanyOrIndividualModel])(implicit request: Request[_], messages: Messages)
+@(investorOrNominee: String, companyOrIndividualForm: Form[CompanyOrIndividualModel], backUrl: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(Messages("page.investors.companyOrIndividual.title", investorOrNominee)) {
 
-@backButtonWithProgress(controllers.seis.routes.AddInvestorOrNomineeController.show().url, Messages("common.section.progress.company.details.four"))
+@backButtonWithProgress(backUrl, Messages("common.section.progress.company.details.four"))
 
 <div class="grid-row">
     <div class="column-two-thirds">
@@ -16,7 +16,7 @@
 
         <h1 id="main-heading" class="form-title heading-xlarge">@Messages("page.investors.companyOrIndividual.heading", investorOrNominee)</h1>
 
-        @form(action = controllers.seis.routes.CompanyOrIndividualController.submit()) {
+        @form(action = controllers.seis.routes.CompanyOrIndividualController.submit(Some(backUrl))) {
         <div class="form-group">
             @formInputRadioGroup(
             field = companyOrIndividualForm("companyOrIndividual"),

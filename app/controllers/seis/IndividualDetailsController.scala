@@ -50,38 +50,51 @@ trait IndividualDetailsController extends FrontendController with AuthorisedAndE
   def show(id: Int): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
     AuthorisedAndEnrolled.async { implicit user =>
       implicit request =>
-
-        s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
-          case Some(data) => {
-            val itemToUpdateIndex = data.indexWhere(_.processingId.getOrElse(0) == id)
-            if (itemToUpdateIndex != -1) {
-              val model = data.lift(itemToUpdateIndex)
-              if (model.get.individualDetailsModel.isDefined) {
-                Ok(IndividualDetails(individualDetailsForm.fill(model.get.individualDetailsModel.get), countriesList))
+        def process(backUrl: Option[String]) = {
+          if (backUrl.isDefined) {
+            s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
+              case Some(data) => {
+                val itemToUpdateIndex = data.indexWhere(_.processingId.getOrElse(0) == id)
+                if (itemToUpdateIndex != -1) {
+                  val model = data.lift(itemToUpdateIndex)
+                  if (model.get.individualDetailsModel.isDefined) {
+                    Ok(IndividualDetails(individualDetailsForm.fill(model.get.individualDetailsModel.get), countriesList, backUrl.get))
+                  }
+                  else
+                    Ok(IndividualDetails(individualDetailsForm, countriesList, backUrl.get))
+                }
+                else {
+                  // Set back to the review page later
+                  Redirect(routes.AddInvestorOrNomineeController.show())
+                }
               }
-              else
-                Ok(IndividualDetails(individualDetailsForm, countriesList))
-            }
-            else {
-              // Set back to the review page later
-              Redirect(routes.AddInvestorOrNomineeController.show())
+              case None => {
+                Redirect(controllers.seis.routes.ShareDescriptionController.show())
+              }
             }
           }
-          case None => {
-            Redirect(controllers.seis.routes.ShareDescriptionController.show())
+          else {
+            // No back URL so send them back to any page as per the requirement
+            Future.successful(Redirect(controllers.seis.routes.AddInvestorOrNomineeController.show()))
           }
         }
+
+        for {
+          backUrl <- s4lConnector.fetchAndGetFormData[String](KeystoreKeys.backLinkCompanyAndIndividualBoth)
+          route <- process(backUrl)
+        } yield route
+
     }
   }
 
-  val submit: Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
+  def submit(backUrl: Option[String]): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
     AuthorisedAndEnrolled.async { implicit user =>
       implicit request =>
         individualDetailsForm.bindFromRequest().fold(
           formWithErrors => {
             Future.successful(BadRequest(IndividualDetails(if (formWithErrors.hasGlobalErrors)
               formWithErrors.discardingErrors.withError("postcode", Messages("validation.error.countrypostcode"))
-            else formWithErrors, countriesList)))
+            else formWithErrors, countriesList, backUrl.get)))
           },
           validFormData => {
             validFormData.processingId match {
