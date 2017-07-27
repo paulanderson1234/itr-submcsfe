@@ -24,7 +24,8 @@ import play.api.data.Forms._
 object IsExistingShareHolderForm {
   val isExistingShareHolderForm = Form(
     mapping(
-      "isExistingShareHolder" -> nonEmptyText
+      "isExistingShareHolder" -> nonEmptyText,
+      "processingId" -> optional(number)
     )(IsExistingShareHolderModel.apply)(IsExistingShareHolderModel.unapply)
   )
 }

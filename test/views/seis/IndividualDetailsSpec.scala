@@ -28,11 +28,13 @@ import views.html.seis.investors.IndividualDetails
 
 class IndividualDetailsSpec extends ViewSpec with FakeRequestHelper {
 
+  val backUrl = controllers.seis.routes.CompanyOrIndividualController.show(1).url
+
   "IndividualDetailsView" when {
     val countriesList: List[(String, String)] = List(("JP", "Japan"), ("GB", "United Kingdom"))
 
     "Supplied with no errors" should {
-      lazy val page = IndividualDetails(individualDetailsForm, countriesList)(authorisedFakeRequest, applicationMessages)
+      lazy val page = IndividualDetails(individualDetailsForm, countriesList, backUrl)(authorisedFakeRequest, applicationMessages)
 
       lazy val document = {
         Jsoup.parse(contentAsString(page))
@@ -62,7 +64,7 @@ class IndividualDetailsSpec extends ViewSpec with FakeRequestHelper {
         }
 
         "has an action to the correct route" in {
-          form.attr("action") shouldBe controllers.seis.routes.IndividualDetailsController.submit().url
+          form.attr("action") shouldBe controllers.seis.routes.IndividualDetailsController.submit(Some(backUrl)).url
         }
 
         "has a label forename with the correct text" in {
@@ -93,7 +95,7 @@ class IndividualDetailsSpec extends ViewSpec with FakeRequestHelper {
 
     "supplied with some errors"  should {
           lazy val view = views.html.seis.investors.IndividualDetails(
-            individualDetailsForm.bind(Map("value" -> "")), countriesList)(authorisedFakeRequest, applicationMessages)
+            individualDetailsForm.bind(Map("value" -> "")), countriesList, backUrl)(authorisedFakeRequest, applicationMessages)
 
       lazy val doc = Jsoup.parse(view.body)
 

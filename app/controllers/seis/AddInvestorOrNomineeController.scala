@@ -96,11 +96,15 @@ trait AddInvestorOrNomineeController extends FrontendController with AuthorisedA
             validFormData.processingId match {
               case Some(_) => PreviousInvestorsHelper.updateInvestorOrNominee(s4lConnector, validFormData).map {
                 investorDetailsModel => {
+                  s4lConnector.saveFormData(KeystoreKeys.backLinkCompanyOrIndividual,
+                    routes.AddInvestorOrNomineeController.show(investorDetailsModel.processingId).url)
                   Redirect(routes.CompanyOrIndividualController.show(investorDetailsModel.processingId.get))
                 }
               }
               case None => PreviousInvestorsHelper.addInvestorOrNominee(s4lConnector, validFormData).map {
                 investorDetailsModel => {
+                  s4lConnector.saveFormData(KeystoreKeys.backLinkCompanyOrIndividual,
+                    routes.AddInvestorOrNomineeController.show(investorDetailsModel.processingId).url)
                   Redirect(routes.CompanyOrIndividualController.show(investorDetailsModel.processingId.get))
                 }
               }

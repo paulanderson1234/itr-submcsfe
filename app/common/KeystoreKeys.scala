@@ -105,6 +105,10 @@ trait KeystoreKeys {
   val backLinkHadRFI: String = "backLink:backLinkHadRFI"
   val backLinkShareDescription: String = "backLink:shareDescription"
   val backLinkAddInvestorOrNominee: String = "backLink:AddInvestorOrNominee"
+  val backLinkNumberOfSharesPurchased: String = "backLink:backLinkNumberOfSharesPurchased"
+  val backLinkCompanyOrIndividual: String = "backLink:backLinkCompanyOrIndividual"
+  val backLinkCompanyAndIndividualBoth: String = "backLink:backLinkCompanyAndIndividualBoth"
+  val backLinkHowMuchSpentOnShares: String = "backLink:backLinkHowMuchSpentOnShares"
   val backLinkInvestorShareIssueDate: String = "backLink:InvestorShareIssueDate"
   val backLinkIsExistingShareHolder: String = "backLink:IsExistingShareHolder"
 

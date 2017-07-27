@@ -39,6 +39,8 @@ class CompanyDetailsControllerSpec extends BaseSpec {
     val subscriptionService = SubscriptionService
   }
 
+  val backUrl = Some(controllers.seis.routes.CompanyOrIndividualController.show(1).url)
+
   "CompanyDetailsController" should {
     "use the correct auth connector" in {
       CompanyDetailsController.authConnector shouldBe FrontendAuthConnector
@@ -55,6 +57,9 @@ class CompanyDetailsControllerSpec extends BaseSpec {
     when(mockS4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](Matchers.eq(KeystoreKeys.investorDetails))
       (Matchers.any(), Matchers.any(), Matchers.any()))
       .thenReturn(Future.successful(individualDetailsModels))
+    when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.backLinkCompanyAndIndividualBoth))
+      (Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(backUrl))
   }
 
   "Sending a GET request to CompanyDetailsController when authenticated and enrolled" should {
@@ -88,7 +93,7 @@ class CompanyDetailsControllerSpec extends BaseSpec {
           "companyPostcode" -> "AA1 1AA",
           "countryCode" -> "GB")
 
-      submitWithSessionAndAuth(TestController.submit, formInput: _*)(
+      submitWithSessionAndAuth(TestController.submit(backUrl), formInput: _*)(
         result => {
           status(result) shouldBe SEE_OTHER
           redirectLocation(result) shouldBe Some(controllers.seis.routes.NumberOfSharesPurchasedController.show(1).url)
@@ -103,7 +108,7 @@ class CompanyDetailsControllerSpec extends BaseSpec {
       setupMocks(Some(onlyInvestorOrNomineeVectorList))
       val formInput = Seq("companyName" -> "", "companyAddressLine1" -> "", "companyAddressline1" -> "", "companyAddressline3" -> "Line3",
         "companyAddressline4" -> "Line4", "companyPostCode" -> "AA1 1AA", "countryCode" -> "GB")
-      submitWithSessionAndAuth(TestController.submit, formInput: _*)(
+      submitWithSessionAndAuth(TestController.submit(backUrl), formInput: _*)(
         result => {
           status(result) shouldBe BAD_REQUEST
         }

@@ -53,51 +53,71 @@ trait CompanyDetailsController extends FrontendController with AuthorisedAndEnro
   lazy val countriesList = CountriesHelper.getIsoCodeTupleList
 
   def show(id: Int): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
-    AuthorisedAndEnrolled.async { implicit user => implicit request =>
-
-      s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
-        case Some(data) => {
-          val itemToUpdateIndex = data.indexWhere(_.processingId.getOrElse(0) == id)
-          if (itemToUpdateIndex != -1) {
-            val model = data.lift(itemToUpdateIndex)
-            if (model.get.companyDetailsModel.isDefined) {
-              Ok(CompanyDetails(companyDetailsForm.fill(model.get.companyDetailsModel.get), countriesList))
+    AuthorisedAndEnrolled.async { implicit user =>
+      implicit request =>
+        def process(backUrl: Option[String]) = {
+          if (backUrl.isDefined) {
+            s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
+              case Some(data) => {
+                val itemToUpdateIndex = data.indexWhere(_.processingId.getOrElse(0) == id)
+                if (itemToUpdateIndex != -1) {
+                  val model = data.lift(itemToUpdateIndex)
+                  if (model.get.companyDetailsModel.isDefined) {
+                    Ok(CompanyDetails(companyDetailsForm.fill(model.get.companyDetailsModel.get), countriesList, backUrl.get))
+                  }
+                  else
+                    Ok(CompanyDetails(companyDetailsForm, countriesList, backUrl.get))
+                }
+                else {
+                  // Set back to the review page later
+                  Redirect(routes.AddInvestorOrNomineeController.show())
+                }
+              }
+              case None => {
+                Redirect(controllers.seis.routes.ShareDescriptionController.show())
+              }
             }
-            else
-              Ok(CompanyDetails(companyDetailsForm, countriesList))
           }
           else {
-            // Set back to the review page later
-            Redirect(routes.AddInvestorOrNomineeController.show())
+            // No back URL so send them back to any page as per the requirement
+            Future.successful(Redirect(controllers.seis.routes.AddInvestorOrNomineeController.show()))
           }
         }
-        case None => {
-          Redirect(controllers.seis.routes.ShareDescriptionController.show())
-        }
-      }
+        for {
+          backUrl <- s4lConnector.fetchAndGetFormData[String](KeystoreKeys.backLinkCompanyAndIndividualBoth)
+          route <- process(backUrl)
+        } yield route
     }
   }
 
-
-  val submit = featureSwitch(applicationConfig.seisFlowEnabled) {
-    AuthorisedAndEnrolled.async { implicit user => implicit request =>
-      companyDetailsForm.bindFromRequest().fold(
-        formWithErrors => {
-          Future.successful(BadRequest(CompanyDetails(if (formWithErrors.hasGlobalErrors)
-            formWithErrors.discardingErrors.withError("companyPostcode", Messages("validation.error.countrypostcode"))
-          else formWithErrors, countriesList)))
-        },
-        validFormData => {
-          validFormData.processingId match {
-            case Some(_) => PreviousInvestorsHelper.updateCompanyDetails(s4lConnector, validFormData).map {
-              investorDetailsModel => Redirect(routes.NumberOfSharesPurchasedController.show(investorDetailsModel.processingId.get))
-            }
-            case None => PreviousInvestorsHelper.addCompanyDetails(s4lConnector, validFormData).map {
-              investorDetailsModel => Redirect(routes.NumberOfSharesPurchasedController.show(investorDetailsModel.processingId.get))
+  def submit(backUrl: Option[String]): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
+    AuthorisedAndEnrolled.async { implicit user =>
+      implicit request =>
+        companyDetailsForm.bindFromRequest().fold(
+          formWithErrors => {
+            Future.successful(BadRequest(CompanyDetails(if (formWithErrors.hasGlobalErrors)
+              formWithErrors.discardingErrors.withError("companyPostcode", Messages("validation.error.countrypostcode"))
+            else formWithErrors, countriesList, backUrl.get)))
+          },
+          validFormData => {
+            validFormData.processingId match {
+              case Some(_) => PreviousInvestorsHelper.updateCompanyDetails(s4lConnector, validFormData).map {
+                investorDetailsModel => {
+                  s4lConnector.saveFormData(KeystoreKeys.backLinkNumberOfSharesPurchased,
+                    routes.CompanyDetailsController.show(investorDetailsModel.processingId.get).url)
+                  Redirect(routes.NumberOfSharesPurchasedController.show(investorDetailsModel.processingId.get))
+                }
+              }
+              case None => PreviousInvestorsHelper.addCompanyDetails(s4lConnector, validFormData).map {
+                investorDetailsModel => {
+                  s4lConnector.saveFormData(KeystoreKeys.backLinkNumberOfSharesPurchased,
+                    routes.CompanyDetailsController.show(investorDetailsModel.processingId.get).url)
+                  Redirect(routes.NumberOfSharesPurchasedController.show(investorDetailsModel.processingId.get))
+                }
+              }
             }
           }
-        }
-      )
+        )
     }
   }
 }

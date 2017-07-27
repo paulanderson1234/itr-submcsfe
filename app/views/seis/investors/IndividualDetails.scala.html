@@ -1,11 +1,11 @@
 @import models.IndividualDetailsModel
 @import uk.gov.hmrc.play.views.html.helpers.form
 @import views.html.helpers.{backButtonWithProgress, input, errorSummary, dropdown, hiddenField}
-@(individualDetailsForm: Form[IndividualDetailsModel], listOfIsoCode: List[(String, String)])(implicit request: Request[_], messages: Messages)
+@(individualDetailsForm: Form[IndividualDetailsModel], listOfIsoCode: List[(String, String)], backUrl: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(Messages("page.seis.individualDetails.title")) {
 
-@backButtonWithProgress(controllers.seis.routes.CompanyOrIndividualController.show(1).url, Messages("common.section.progress.company.details.four"))
+@backButtonWithProgress(backUrl, Messages("common.section.progress.company.details.four"))
 
 <div class="grid-row">
     <div class="column-two-thirds">
@@ -14,7 +14,7 @@
 
         <h1 id="main-heading" class="form-title heading-xlarge">@Messages("page.seis.individualDetails.title")</h1>
 
-        @form(action = controllers.seis.routes.IndividualDetailsController.submit()) {
+        @form(action = controllers.seis.routes.IndividualDetailsController.submit(Some(backUrl))) {
         <div class="form-group">
 
             @input(

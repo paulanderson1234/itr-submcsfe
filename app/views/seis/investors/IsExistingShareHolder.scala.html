@@ -1,20 +1,20 @@
 @import views.html.helpers.errorSummary
 @import uk.gov.hmrc.play.views.html.helpers.form
 @import common.Constants
-@import views.html.helpers.{backButtonWithProgress, formInputRadioGroup}
+@import views.html.helpers.{backButtonWithProgress, formInputRadioGroup, hiddenField}
 @import models.investorDetails.IsExistingShareHolderModel
 
-@(companyOrIndividual: String, IsExistingShareHolderForm: Form[IsExistingShareHolderModel])(implicit request: Request[_], messages: Messages)
+@(companyOrIndividual: String, IsExistingShareHolderForm: Form[IsExistingShareHolderModel], backUrl: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(Messages("page.seis.investors.isExistingShareHolder.title", companyOrIndividual.toLowerCase)) {
 
-    @backButtonWithProgress(controllers.seis.routes.IsExistingShareHolderController.show().url, Messages("common.section.progress.company.details.four"))
+    @backButtonWithProgress(backUrl, Messages("common.section.progress.company.details.four"))
 
     @errorSummary(IsExistingShareHolderForm, "is-existing-share-holder", "isExistingShareHolder")
 
     <h1 class="heading-xlarge" id="main-heading">@Messages("page.seis.investors.isExistingShareHolder.heading", companyOrIndividual.toLowerCase)</h1>
 
-    @form(action = controllers.seis.routes.IsExistingShareHolderController.submit()) {
+    @form(action = controllers.seis.routes.IsExistingShareHolderController.submit(Some(companyOrIndividual), Some(backUrl))) {
         <div class="form-group">
         @formInputRadioGroup(
             field = IsExistingShareHolderForm("isExistingShareHolder"),
@@ -28,6 +28,13 @@
             '_legendID -> "isExistingShareHolder",
             '_groupClass -> "inline"
         )
+        </div>
+
+        <div>
+            @hiddenField(
+            IsExistingShareHolderForm("processingId"),
+            'id -> "processingId"
+            )
         </div>
 
         <div class="form-group">

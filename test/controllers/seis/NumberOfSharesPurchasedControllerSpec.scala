@@ -15,23 +15,25 @@
  */
 
 package controllers.seis
+
 import auth.{MockAuthConnector, MockConfig}
 import common.KeystoreKeys
 import config.{AppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
-import models.CompanyOrIndividualModel
+import models.ShareIssueDateModel
+import models.investorDetails.InvestorDetailsModel
 import org.mockito.Matchers
-import uk.gov.hmrc.play.frontend.auth.connectors.AuthConnector
 import org.mockito.Mockito._
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.cache.client.CacheMap
+import uk.gov.hmrc.play.frontend.auth.connectors.AuthConnector
+import utils.DateFormatter
 
 import scala.concurrent.Future
-import models.investorDetails.{InvestorDetailsModel, NumberOfSharesPurchasedModel}
 
 
-class NumberOfSharesPurchasedControllerSpec extends BaseSpec {
+class NumberOfSharesPurchasedControllerSpec extends BaseSpec with DateFormatter{
 
   lazy val controller = new NumberOfSharesPurchasedController {
     override lazy val s4lConnector: S4LConnector = mockS4lConnector
@@ -39,6 +41,9 @@ class NumberOfSharesPurchasedControllerSpec extends BaseSpec {
     override lazy val applicationConfig: AppConfig = MockConfig
     override lazy val authConnector: AuthConnector = MockAuthConnector
   }
+
+  val backUrl = Some(controllers.seis.routes.CompanyDetailsController.show(1).url)
+  val shareIssueDate = Some(dateToStringWithNoZeroDay(shareIssuetDateModel.day.get, shareIssuetDateModel.month.get, shareIssuetDateModel.year.get))
 
   def setupMocks(individualDetailsModels: Option[Vector[InvestorDetailsModel]]): Unit = {
     mockEnrolledRequest(seisSchemeTypesModel)
@@ -49,6 +54,12 @@ class NumberOfSharesPurchasedControllerSpec extends BaseSpec {
 
     when(mockS4lConnector.saveFormData(Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
       .thenReturn(Future.successful(mock[CacheMap]))
+    when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.backLinkNumberOfSharesPurchased))
+      (Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(backUrl))
+    when(mockS4lConnector.fetchAndGetFormData[ShareIssueDateModel](Matchers.eq(KeystoreKeys.shareIssueDate))
+      (Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(Some(shareIssuetDateModel)))
   }
 
   "The Number of Shares Purchased controller" should {
@@ -84,7 +95,7 @@ class NumberOfSharesPurchasedControllerSpec extends BaseSpec {
     "return a 303 on a successful POST request" in {
       setupMocks(Some(onlyInvestorOrNomineeVectorList))
       val form = Seq("numberOfSharesPurchased" -> "20", "processingId" -> "1")
-      submitWithSessionAndAuth(controller.submit, form: _*) (
+      submitWithSessionAndAuth(controller.submit(shareIssueDate, backUrl), form: _*) (
         result => {
           status(result) shouldBe 303
           redirectLocation(result) shouldBe Some(controllers.seis.routes.HowMuchSpentOnSharesController.show(1).url)
@@ -94,7 +105,7 @@ class NumberOfSharesPurchasedControllerSpec extends BaseSpec {
     "return a 400 on a form validation failure" in {
       setupMocks(Some(onlyInvestorOrNomineeVectorList))
       val form = Seq("numberOfSharesPurchased" -> "")
-      submitWithSessionAndAuth(controller.submit, form: _*) (
+      submitWithSessionAndAuth(controller.submit(shareIssueDate, backUrl), form: _*) (
         result => status(result) shouldBe 400
       )
     }

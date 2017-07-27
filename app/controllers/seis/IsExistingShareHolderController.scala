@@ -17,18 +17,17 @@
 package controllers.seis
 
 import auth.{AuthorisedAndEnrolledForTAVC, SEIS}
-import common.{Constants, KeystoreKeys}
+import common.KeystoreKeys
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
-import controllers.Helpers.ControllerHelpers
+import controllers.Helpers.{ControllerHelpers, PreviousInvestorsHelper}
 import controllers.predicates.FeatureSwitch
-import models.CompanyOrIndividualModel
-import models.investorDetails.IsExistingShareHolderModel
-import forms.CompanyOrIndividualForm._
 import forms.IsExistingShareHolderForm._
-import uk.gov.hmrc.play.frontend.controller.FrontendController
-import play.api.i18n.Messages.Implicits._
+import models.investorDetails.InvestorDetailsModel
 import play.api.Play.current
+import play.api.i18n.Messages.Implicits._
+import play.api.mvc.{Action, AnyContent}
+import uk.gov.hmrc.play.frontend.controller.FrontendController
 import views.html.seis.investors.IsExistingShareHolder
 
 import scala.concurrent.Future
@@ -41,54 +40,73 @@ object IsExistingShareHolderController extends IsExistingShareHolderController
   override lazy val enrolmentConnector = EnrolmentConnector
 }
 
-trait IsExistingShareHolderController extends FrontendController with AuthorisedAndEnrolledForTAVC with FeatureSwitch with ControllerHelpers{
+trait IsExistingShareHolderController extends FrontendController with AuthorisedAndEnrolledForTAVC with FeatureSwitch with ControllerHelpers {
 
   override val acceptedFlows = Seq(Seq(SEIS))
 
-  val show = featureSwitch(applicationConfig.seisFlowEnabled) { AuthorisedAndEnrolled.async {
-    implicit user =>
+  def show(id: Int): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
+    AuthorisedAndEnrolled.async { implicit user =>
       implicit request =>
-
-    def routeRequest(companyOrIndividual: Option[CompanyOrIndividualModel]) =
-      if (companyOrIndividual.isDefined) {
-      s4lConnector.fetchAndGetFormData[IsExistingShareHolderModel](KeystoreKeys.isExistingShareHolder).map {
-          case Some(data) => Ok(IsExistingShareHolder(companyOrIndividual.get.companyOrIndividual, isExistingShareHolderForm.fill(data)))
-          case None => Ok(IsExistingShareHolder(companyOrIndividual.get.companyOrIndividual, isExistingShareHolderForm))
+        def process(backUrl: Option[String]) = {
+          if (backUrl.isDefined) {
+            s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
+              case Some(data) => {
+                val itemToUpdateIndex = data.indexWhere(_.processingId.getOrElse(0) == id)
+                if (itemToUpdateIndex != -1) {
+                  val model = data.lift(itemToUpdateIndex)
+                  if (model.get.isExistingShareHolderModel.isDefined) {
+                    Ok(IsExistingShareHolder(model.get.companyOrIndividualModel.get.companyOrIndividual,
+                      isExistingShareHolderForm.fill(model.get.isExistingShareHolderModel.get), backUrl.get))
+                  }
+                  else if (model.get.companyOrIndividualModel.isDefined) {
+                    Ok(IsExistingShareHolder(model.get.companyOrIndividualModel.get.companyOrIndividual, isExistingShareHolderForm, backUrl.get))
+                  }
+                  else Redirect(routes.AddInvestorOrNomineeController.show())
+                }
+                else {
+                  // Set back to the review page later
+                  Redirect(routes.AddInvestorOrNomineeController.show())
+                }
+              }
+              case None => {
+                Redirect(controllers.seis.routes.ShareDescriptionController.show())
+              }
+            }
+          }
+          else {
+            // No back URL so send them back to any page as per the requirement
+            Future.successful(Redirect(controllers.seis.routes.AddInvestorOrNomineeController.show()))
+          }
         }
-      }
-      else Future.successful(Redirect(routes.CompanyOrIndividualController.show()))
-
-
-    for {
-      companyOrIndividual <- s4lConnector.fetchAndGetFormData[CompanyOrIndividualModel](KeystoreKeys.companyOrIndividual)
-      route <- routeRequest(companyOrIndividual)
-    } yield route
-  }
+        for {
+          backUrl <- s4lConnector.fetchAndGetFormData[String](KeystoreKeys.backLinkIsExistingShareHolder)
+          route <- process(backUrl)
+        } yield route
+    }
   }
 
-  val submit = featureSwitch(applicationConfig.seisFlowEnabled) { AuthorisedAndEnrolled.async { implicit user => implicit request =>
-    isExistingShareHolderForm.bindFromRequest().fold(
-      formWithErrors => {
-        s4lConnector.fetchAndGetFormData[CompanyOrIndividualModel](KeystoreKeys.companyOrIndividual).map {
-          case Some(data) => BadRequest(IsExistingShareHolder(data.companyOrIndividual, formWithErrors))
-          case None => InternalServerError
-        }
-      },
-      validFormData => {
-        s4lConnector.saveFormData(KeystoreKeys.isExistingShareHolder, validFormData)
-        validFormData.isExistingShareHolder match {
-
-          case Constants.StandardRadioButtonYesValue =>
-            Future.successful(Redirect(routes.IsExistingShareHolderController.show()))
-            //TODO - Use the below route when available
-//            Future.successful(Redirect(routes.InvestorShareIssueDateController.show()))
-
-          case Constants.StandardRadioButtonNoValue =>
-            Future.successful(Redirect(routes.IsExistingShareHolderController.show()))
-          //TODO - Navigates to the REVIEW INVESTOR page when available
-        }
-      }
-    )
-  }
+  def submit(companyOrIndividual: Option[String], backUrl: Option[String]): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
+    AuthorisedAndEnrolled.async { implicit user =>
+      implicit request =>
+        isExistingShareHolderForm.bindFromRequest().fold(
+          formWithErrors => {
+            Future.successful(BadRequest(IsExistingShareHolder(companyOrIndividual.get, formWithErrors, backUrl.get)))
+          },
+          validFormData => {
+            validFormData.processingId match {
+              case Some(_) => PreviousInvestorsHelper.updateIsExistingShareHoldersDetails(s4lConnector, validFormData).map {
+                investorDetailsModel => {
+                  Redirect(routes.IsExistingShareHolderController.show(investorDetailsModel.processingId.get))
+                }
+              }
+              case None => PreviousInvestorsHelper.addIsExistingShareHoldersDetails(s4lConnector, validFormData).map {
+                investorDetailsModel => {
+                  Redirect(routes.IsExistingShareHolderController.show(investorDetailsModel.processingId.get))
+                }
+              }
+            }
+          }
+        )
+    }
   }
 }

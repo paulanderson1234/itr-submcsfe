@@ -40,6 +40,8 @@ class IndividualDetailsControllerSpec extends BaseSpec with FakeRequestHelper{
     override lazy val authConnector: AuthConnector = MockAuthConnector
   }
 
+  val backUrl = Some(controllers.seis.routes.CompanyOrIndividualController.show(1).url)
+
   def setupMocks(model: Option[IndividualDetailsModel], individualDetailsModels: Option[Vector[InvestorDetailsModel]]): Unit = {
     mockEnrolledRequest(seisSchemeTypesModel)
 
@@ -52,6 +54,9 @@ class IndividualDetailsControllerSpec extends BaseSpec with FakeRequestHelper{
 
     when(mockS4lConnector.saveFormData(Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
       .thenReturn(Future.successful(mock[CacheMap]))
+    when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.backLinkCompanyAndIndividualBoth))
+      (Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(backUrl))
   }
 
   "The IndividualDetails controller" should {
@@ -97,7 +102,7 @@ class IndividualDetailsControllerSpec extends BaseSpec with FakeRequestHelper{
         "postcode" -> "AA1 1AA",
         "countryCode" -> "GB")
 
-      submitWithSessionAndAuth(controller.submit, formInput: _*)(
+      submitWithSessionAndAuth(controller.submit(backUrl), formInput: _*)(
         result => {
           status(result) shouldBe 303
           redirectLocation(result) shouldBe Some(controllers.seis.routes.NumberOfSharesPurchasedController.show(1).url)
@@ -116,7 +121,7 @@ class IndividualDetailsControllerSpec extends BaseSpec with FakeRequestHelper{
         "addressline4" -> "line 4",
         "postcode" -> "",
         "countryCode" -> "GB")
-      submitWithSessionAndAuth(controller.submit, form: _*) (
+      submitWithSessionAndAuth(controller.submit(backUrl), form: _*) (
         result => status(result) shouldBe 400
       )
     }

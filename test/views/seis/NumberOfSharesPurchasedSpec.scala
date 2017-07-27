@@ -25,15 +25,19 @@ import org.jsoup.nodes.Document
 import play.api.i18n.Messages
 import play.api.i18n.Messages.Implicits._
 import play.api.test.Helpers._
+import play.twirl.api.Html
+import utils.DateFormatter
 
-class NumberOfSharesPurchasedSpec extends ViewSpec {
+class NumberOfSharesPurchasedSpec extends ViewSpec with DateFormatter{
 
+  val backUrl = controllers.seis.routes.CompanyDetailsController.show(1).url
+  val shareIssueDate = Some(dateToStringWithNoZeroDay(shareIssuetDateModel.day.get, shareIssuetDateModel.month.get, shareIssuetDateModel.year.get))
   "NumberOfSharesPurchased view" when {
     implicit lazy val request = FakeRequest("GET", "")
 
     "not supplied with form errors" should {
       lazy val document: Document = {
-        val result = NumberOfSharesPurchased("Company", "TODO", numberOfSharesPurchasedForm)
+        val result = NumberOfSharesPurchased("Company", "TODO", numberOfSharesPurchasedForm, backUrl)
         Jsoup.parse(contentAsString(result))
       }
 
@@ -46,15 +50,15 @@ class NumberOfSharesPurchasedSpec extends ViewSpec {
       }
 
       "have the correct back link url" in {
-        document.select("a.back-link").attr("href") shouldBe "/investment-tax-relief-cs/seis/number-of-shares-purchased/1"
+        document.select("a.back-link").attr("href") shouldBe backUrl
       }
 
      "have the correct heading" in {
-        document.select("h1").text() shouldBe Messages("page.seis.investors.numberOfSharesPurchased.title", "company", "TODO")
+        document.select("h1").text() shouldBe Html(Messages("page.seis.investors.numberOfSharesPurchased.title", "company", "TODO")).toString()
       }
 
       "have a form posting to the correct route" in {
-        document.select("form").attr("action") shouldBe controllers.seis.routes.NumberOfSharesPurchasedController.submit().url
+        document.select("form").attr("action") shouldBe controllers.seis.routes.NumberOfSharesPurchasedController.submit(Some("TODO"), Some(backUrl)).url
       }
 
       "have the correct question in a label" in {
@@ -71,8 +75,8 @@ class NumberOfSharesPurchasedSpec extends ViewSpec {
 
     "supplied with form errors" should {
       lazy val document: Document = {
-        val map = Map("numberOfSharesPurchased" -> "")
-        val result = NumberOfSharesPurchased("Company","TODO", numberOfSharesPurchasedForm.bind(map))
+        val map = Map("numberOfSharesPurchased" -> "", "processingId" -> "1")
+        val result = NumberOfSharesPurchased("Company","TODO", numberOfSharesPurchasedForm.bind(map), backUrl)
         Jsoup.parse(contentAsString(result))
       }
 
@@ -88,15 +92,11 @@ class NumberOfSharesPurchasedSpec extends ViewSpec {
       }
 
       "have the correct back link url" in {
-        document.select("a.back-link").attr("href") shouldBe "/investment-tax-relief-cs/seis/number-of-shares-purchased/1"
-      }
-
-      "have the correct heading" in {
-        document.select("h1").text() shouldBe Messages("page.seis.investors.numberOfSharesPurchased.heading", "company", "TODO")
+        document.select("a.back-link").attr("href") shouldBe backUrl
       }
 
       "have a form posting to the correct route" in {
-        document.select("form").attr("action") shouldBe controllers.seis.routes.NumberOfSharesPurchasedController.submit().url
+        document.select("form").attr("action") shouldBe controllers.seis.routes.NumberOfSharesPurchasedController.submit(Some("TODO"), Some(backUrl)).url
       }
 
       "have the correct question in a label" in {

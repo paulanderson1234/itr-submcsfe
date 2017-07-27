@@ -40,6 +40,8 @@ class HowMuchSpentOnSharesControllerSpec extends BaseSpec  {
     override lazy val authConnector: AuthConnector = MockAuthConnector
   }
 
+  val backUrl = Some(controllers.seis.routes.NumberOfSharesPurchasedController.show(1).url)
+
   def setupMocks(individualDetailsModels: Option[Vector[InvestorDetailsModel]]): Unit = {
     mockEnrolledRequest(seisSchemeTypesModel)
 
@@ -49,6 +51,9 @@ class HowMuchSpentOnSharesControllerSpec extends BaseSpec  {
 
     when(mockS4lConnector.saveFormData(Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
       .thenReturn(Future.successful(mock[CacheMap]))
+    when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.backLinkHowMuchSpentOnShares))
+      (Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(backUrl))
   }
 
   "The HowMuchSpentOnShares controller" should {
@@ -88,10 +93,10 @@ class HowMuchSpentOnSharesControllerSpec extends BaseSpec  {
       setupMocks(Some(onlyInvestorOrNomineeVectorList))
       mockEnrolledRequest(seisSchemeTypesModel)
       val form = Seq("howMuchSpentOnShares" -> "1000", "processingId" -> "1")
-      submitWithSessionAndAuth(controller.submit, form: _*) (
+      submitWithSessionAndAuth(controller.submit(backUrl), form: _*) (
         result => {
           status(result) shouldBe 303
-          redirectLocation(result) shouldBe Some(controllers.seis.routes.HowMuchSpentOnSharesController.show(1).url)
+          redirectLocation(result) shouldBe Some(controllers.seis.routes.IsExistingShareHolderController.show(1).url)
         }
       )
     }
@@ -100,7 +105,7 @@ class HowMuchSpentOnSharesControllerSpec extends BaseSpec  {
       setupMocks(Some(onlyInvestorOrNomineeVectorList))
       mockEnrolledRequest(seisSchemeTypesModel)
       val form = Seq("howMuchSpentOnShares" -> "")
-      submitWithSessionAndAuth(controller.submit, form: _*) (
+      submitWithSessionAndAuth(controller.submit(backUrl), form: _*) (
         result => status(result) shouldBe 400
       )
     }

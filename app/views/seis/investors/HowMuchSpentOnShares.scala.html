@@ -1,20 +1,18 @@
-@import views.html.helpers.backButtonWithProgress
 @import uk.gov.hmrc.play.views.html.helpers.form
-@import views.html.helpers.inputWithCurrencySymbol
-@import views.html.helpers.errorSummary
+@import views.html.helpers.{backButtonWithProgress, inputWithCurrencySymbol, errorSummary, hiddenField}
 @import models.investorDetails.HowMuchSpentOnSharesModel
 
-@(howMuchSpentOnShares: String, howMuchSpentOnSharesForm: Form[HowMuchSpentOnSharesModel])(implicit request: Request[_], messages: Messages)
+@(howMuchSpentOnShares: String, howMuchSpentOnSharesForm: Form[HowMuchSpentOnSharesModel], backUrl: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(Messages("page.seis.investors.howMuchSpentOnShares.title", howMuchSpentOnShares.toLowerCase)) {
 
-@backButtonWithProgress(controllers.seis.routes.HowMuchSpentOnSharesController.show(1).url, Messages("common.section.progress.company.details.four"))
+@backButtonWithProgress(backUrl, Messages("common.section.progress.company.details.four"))
 
 @errorSummary(howMuchSpentOnSharesForm, "how-much-spent-on-shares", "howMuchSpentOnShares")
 
 <h1 class="heading-xlarge">@Messages("page.seis.investors.howMuchSpentOnShares.title", howMuchSpentOnShares.toLowerCase())</h1>
 
-@form(action = controllers.seis.routes.HowMuchSpentOnSharesController.submit()) {
+@form(action = controllers.seis.routes.HowMuchSpentOnSharesController.submit(Some(backUrl))) {
 <div class="form-group">
     @inputWithCurrencySymbol(
     howMuchSpentOnSharesForm("howMuchSpentOnShares"),
@@ -28,6 +26,13 @@
     'id -> "howMuchSpent"
     )
 
+</div>
+
+<div>
+    @hiddenField(
+    howMuchSpentOnSharesForm("processingId"),
+    'id -> "processingId"
+    )
 </div>
 
 <div>
