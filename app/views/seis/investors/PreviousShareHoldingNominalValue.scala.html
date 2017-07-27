@@ -1,0 +1,44 @@
+@import views.html.helpers.backButtonWithProgress
+@import uk.gov.hmrc.play.views.html.helpers.form
+@import views.html.helpers.inputWithCurrencySymbol
+@import views.html.helpers.errorSummary
+@import models.investorDetails.PreviousShareHoldingNominalValueModel
+
+@(previousShareHoldingNominalValue: Form[PreviousShareHoldingNominalValueModel])(implicit request: Request[_], messages: Messages)
+
+@main_template(Messages("page.seis.previousShareHoldingNominalValue.title")) {
+@backButtonWithProgress(controllers.seis.routes.PreviousShareHoldingNominalValueController.show(1).url, Messages("common.section.progress.company.details.four"))
+
+                    //TODO - Back link navigates to the Share Class / Description Page when available
+
+    @errorSummary(previousShareHoldingNominalValueForm, "previous-share-holding-nominal-value", "previousShareHoldingNominalValue")
+
+    <h1 id="main-heading" class="heading-xlarge">@Messages("page.seis.previousShareHoldingNominalValue.heading")</h1>
+
+    <div id="nominal-value-info" class = "form-group">
+        <p>@Messages("page.seis.investors.previousShareHoldingNominalValue.info")</p>
+    </div>
+
+    @form(action = controllers.seis.routes.PreviousShareHoldingNominalValueController.submit()) {
+        <div class="form-group">
+            @inputWithCurrencySymbol(
+            previousShareHoldingNominalValueForm("previousShareHoldingNominalValue"),
+            '_divClass -> "form-label",
+            '_labelId -> "label-previousShareholdingNominalValue",
+            '_label -> Messages("page.seis.previousShareHoldingNominalValue.title"),
+            '_labelTextClass -> "visuallyhidden",
+            '_inputClass -> "input--no-spinner input--left-padding",
+            '_type -> "text",
+            '_maxlength -> "11",
+            '_hintId -> "label-nominal-value-hint",
+            '_inputHint -> Messages("page.seis.previousShareHoldingNominalValue.whereToFind"),
+            'id -> "nominalValue"
+            )
+
+        </div>
+
+        <div>
+            <button class="btn button" type="submit" id="next">@Messages("common.button.snc")</button>
+        </div>
+    }
+}
