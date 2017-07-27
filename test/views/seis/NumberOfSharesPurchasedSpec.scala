@@ -50,7 +50,7 @@ class NumberOfSharesPurchasedSpec extends ViewSpec with DateFormatter{
       }
 
       "have the correct back link url" in {
-        document.select("a.back-link").attr("href") shouldBe "/company-details/1"
+        document.select("a.back-link").attr("href") shouldBe backUrl
       }
 
      "have the correct heading" in {
@@ -92,7 +92,7 @@ class NumberOfSharesPurchasedSpec extends ViewSpec with DateFormatter{
       }
 
       "have the correct back link url" in {
-        document.select("a.back-link").attr("href") shouldBe "/company-details/1"
+        document.select("a.back-link").attr("href") shouldBe backUrl
       }
 
       "have a form posting to the correct route" in {
