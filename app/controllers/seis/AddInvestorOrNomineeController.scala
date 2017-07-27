@@ -58,7 +58,7 @@ trait AddInvestorOrNomineeController extends FrontendController with AuthorisedA
                       Ok(AddInvestorOrNominee(addInvestorOrNomineeForm.fill(model.get.investorOrNomineeModel.get), backUrl.get))
                     }
                     // Redirect to the REVIEW INVESTOR PAGE
-                    else Ok(AddInvestorOrNominee(addInvestorOrNomineeForm, backUrl.get))
+                    else Redirect("")//(AddInvestorOrNominee(addInvestorOrNomineeForm, backUrl.get))
                   }
                   case None => {
                     val investorDetailsModel = data.last
