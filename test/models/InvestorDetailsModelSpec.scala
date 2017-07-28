@@ -66,13 +66,13 @@ class InvestorDetailsModelSpec extends BaseSpec{
     Some(Vector(PreviousShareHoldingModel(Some(investorShareIssueDateModel), Some(numberOfPreviouslyIssuedSharesModel),
       Some(previousShareHoldingNominalValueModel), Some(previousShareHoldingDescriptionModel)), PreviousShareHoldingModel())))
 
+  val invalidModelCompanyAndIndividualDetailsExist = InvestorDetailsModel(Some(investorModel3), Some(companyOrIndividualModel3), Some(companyDetailsModel3),
+    Some(individualDetailsModel3), Some(numberOfSharesPurchasedModel3), Some(howMuchSpentOnSharesModel3), Some(isExistingShareHolderModelNo), Some(Vector()), Some(3))
+
   "Calling validate" should {
     "return false" when {
       "the investor details model is empty" in {
         invalidModelEmpty.validate shouldBe false
-      }
-      "the investor details contains both company details and individual details" in {
-        invalidModelCompanyAndIndividualDetailsPresent.validate shouldBe false
       }
       "the investor details is missing investor or nominee model" in {
         invalidInvestorOrNomineeMissing.validate shouldBe false
@@ -121,6 +121,10 @@ class InvestorDetailsModelSpec extends BaseSpec{
 
       "the investor details model is fully populated with a list of previous share holdings" in {
         validModelWithPrevShareHoldings.validate shouldBe true
+      }
+
+      "the investor details contains both company details and individual details" in {
+        invalidModelCompanyAndIndividualDetailsExist.validate shouldBe true
       }
     }
   }

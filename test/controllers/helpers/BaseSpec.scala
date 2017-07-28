@@ -306,4 +306,6 @@ trait BaseSpec extends UnitSpec with OneAppPerSuite with MockitoSugar with FakeR
   val previousInvestorVectorList = Vector(validModelNoPrevShareHoldings, validModelWithPrevShareHoldings, invalidModelCompanyAndIndividualDetailsPresent)
   val onlyInvestorOrNomineeVectorList = Vector(validModelNoPrevShareHoldings)
 
+  val listOfInvestorsComplete = Vector(validModelWithPrevShareHoldings)
+  val listOfInvestorsIncomplete = Vector(validModelWithPrevShareHoldings.copy(companyOrIndividualModel = None))
 }
