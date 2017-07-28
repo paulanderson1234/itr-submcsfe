@@ -79,24 +79,7 @@ class NumberOfSharesPurchasedControllerSpec extends BaseSpec with DateFormatter{
       NumberOfSharesPurchasedController.enrolmentConnector shouldBe EnrolmentConnector
     }
 
-//    "return a 200 on a GET request" when {
-//
-//      "no data is already stored" in {
-//        setupMocks(Some(onlyInvestorOrNomineeVectorList))
-//        showWithSessionAndAuth(controller.show(1))(
-//          result => status(result) shouldBe 200
-//        )
-//      }
-//
-//      "data is already stored" in {
-//        setupMocks(Some(onlyInvestorOrNomineeVectorList))
-//        showWithSessionAndAuth(controller.show(1))(
-//          result => status(result) shouldBe 200
-//        )
-//      }
-//    }
-
-    "Sending a GET request to CompanyDetailsController when authenticated and enrolled" should {
+    "Sending a GET request to NumberOfSharesPurchased Controller when authenticated and enrolled" should {
 
       "'REDIRECT' to AddInvestorOrNominee page" when {
         "there is no 'back link' present" in {
@@ -153,7 +136,7 @@ class NumberOfSharesPurchasedControllerSpec extends BaseSpec with DateFormatter{
 
       "return an 'OK' and load the page with a empty form" when {
         "a 'backlink' is defined, an 'investor details list' is retrieved, a 'share issue date' is retrieved with " +
-          "an defined companyDetails model at position 'id'" in {
+          "an defined 'NumberOfSharesPurchased' model at position 'id'" in {
           mockEnrolledRequest(seisSchemeTypesModel)
           setupMocks(Some(listOfInvestorsComplete), Some(shareIssuetDateModel),  backUrl)
           showWithSessionAndAuth(controller.show(2))(
@@ -166,7 +149,7 @@ class NumberOfSharesPurchasedControllerSpec extends BaseSpec with DateFormatter{
 
       "return an 'OK' and load the page with a populated form" when {
         "a 'backlink' is defined, an 'investor details list' is retrieved, a 'share issue date' is retrieved with " +
-          "an undefined companyDetails model at position 'id'" in {
+          "an undefined 'NumberOfSharesPurchased' model at position 'id'" in {
           mockEnrolledRequest(seisSchemeTypesModel)
           setupMocks(Some(listOfInvestorsIncompleteNumberOfSharesPurchased), Some(shareIssuetDateModel), backUrl)
           showWithSessionAndAuth(controller.show(2))(
@@ -197,7 +180,7 @@ class NumberOfSharesPurchasedControllerSpec extends BaseSpec with DateFormatter{
 
 
     "Submitting to the NumberOfSharesPurchasedController when authenticated and enrolled" should {
-      "redirect to the correct page if a company and the form 'was' previously populated and had a processing id" in {
+      "redirect to the correct page if the form 'was' previously populated and had a processing id" in {
 
         val formInput = Seq("numberOfSharesPurchased" -> "10000000", "processingId" -> "2")
         setupMocks(Some(listOfInvestorsComplete), None, None)

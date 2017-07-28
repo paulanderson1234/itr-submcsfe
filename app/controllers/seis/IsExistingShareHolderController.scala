@@ -64,12 +64,11 @@ trait IsExistingShareHolderController extends FrontendController with Authorised
                   else Redirect(routes.AddInvestorOrNomineeController.show())
                 }
                 else {
-                  // Set back to the review page later
                   Redirect(routes.AddInvestorOrNomineeController.show())
                 }
               }
               case None => {
-                Redirect(controllers.seis.routes.ShareDescriptionController.show())
+                Redirect(controllers.seis.routes.AddInvestorOrNomineeController.show())
               }
             }
           }
