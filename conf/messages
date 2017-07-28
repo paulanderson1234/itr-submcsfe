@@ -113,6 +113,10 @@ validation.error.nominalValueOfShares.size =  The share value should be between 
 validation.error.nominalValueOfShares.negative = The share value should not be negative
 validation.error.nominalValueOfShares.notANumber = Enter a valid number for the share value
 
+validation.error.previousShareHoldingNominalValue.decimalPlaces = The share value should not contain decimal places
+validation.error.previousShareHoldingNominalValue.size =  The share value should be between 0 and 9999999999999
+validation.error.previousShareHoldingNominalValue.negative = The share value should not be negative
+validation.error.previousShareHoldingNominalValue.notANumber = Enter a valid number for the share value
 
 # number of shares validation
 validation.error.numberOfShares.size = The number of shares count should be between {0} and 9999999999999
@@ -1109,3 +1113,9 @@ page.investors.investorShareIssueDate.heading = When were these previous shares 
 #Number of shares purchased
 page.seis.investors.numberOfSharesPurchased.title = How many shares were issued to this {0} on {1}?
 page.seis.investors.numberOfSharesPurchased.heading = How many shares were issued to this {0} on {1}?
+
+#Previous ShareHolding Nominal Value
+page.seis.investors.previousShareHoldingNominalValue.title = What was the nominal value of each share when they were issued?
+page.seis.investors.previousShareHoldingNominalValue.heading = What was the nominal value of each share when they were issued?
+page.seis.investors.previousShareHoldingNominalValue.whereToFind = The nominal value is the amount shown on the share certificate.
+page.seis.investors.previousShareHoldingNominalValue.hint = For example, 0.70

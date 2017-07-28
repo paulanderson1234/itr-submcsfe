@@ -140,3 +140,6 @@ POST       /is-existing-shareholder               controllers.seis.IsExistingSha
 GET        /number-of-shares-purchased/:Id        controllers.seis.NumberOfSharesPurchasedController.show(Id: Int)
 POST       /number-of-shares-purchased            controllers.seis.NumberOfSharesPurchasedController.submit(shareIssueDate: Option[String]?=None, backUrl: Option[String]?=None)
 
+GET        /previous-shareholding-nominal-value      controllers.seis.PreviousShareHoldingNominalValueController.show
+POST       /previous-shareholding-nominal-value           controllers.seis.PreviousShareHoldingNominalValueController.submit
+
