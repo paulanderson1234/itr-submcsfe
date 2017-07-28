@@ -1108,7 +1108,7 @@ page.investors.investorShareIssueDate.heading = When were these previous shares 
 
 #Number of shares purchased
 page.seis.investors.numberOfSharesPurchased.title = How many shares were issued to this {0} on {1}?
-page.seis.investors.numberOfSharesPurchased.heading = How many shares were issued to this {0} on <br/> {1}?
+page.seis.investors.numberOfSharesPurchased.heading = How many shares were issued to this {0} on {1}?
 
 #Previous ShareHolding Nominal Value
 page.seis.investors.previousShareHoldingNominalValue.title = What was the nominal value of each share when they were issued?
