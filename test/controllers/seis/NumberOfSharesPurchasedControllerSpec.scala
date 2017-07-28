@@ -43,23 +43,26 @@ class NumberOfSharesPurchasedControllerSpec extends BaseSpec with DateFormatter{
   }
 
   val backUrl = Some(controllers.seis.routes.CompanyDetailsController.show(1).url)
+  val obviouslyInvalidId = 9999
+
+  val listOfInvestorsIncompleteNumberOfSharesPurchased =  Vector(validModelWithPrevShareHoldings.copy(numberOfSharesPurchasedModel = None))
   val shareIssueDate = Some(dateToStringWithNoZeroDay(shareIssuetDateModel.day.get, shareIssuetDateModel.month.get, shareIssuetDateModel.year.get))
 
-  def setupMocks(individualDetailsModels: Option[Vector[InvestorDetailsModel]]): Unit = {
+  def setupMocks(investorDetailsModel: Option[Vector[InvestorDetailsModel]], shareIssueDateModel: Option[ShareIssueDateModel],
+                 backURL : Option[String]): Unit = {
     mockEnrolledRequest(seisSchemeTypesModel)
 
     when(mockS4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](Matchers.eq(KeystoreKeys.investorDetails))
       (Matchers.any(), Matchers.any(), Matchers.any()))
-      .thenReturn(Future.successful(individualDetailsModels))
+      .thenReturn(Future.successful(investorDetailsModel))
 
-    when(mockS4lConnector.saveFormData(Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
-      .thenReturn(Future.successful(mock[CacheMap]))
-    when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.backLinkNumberOfSharesPurchased))
-      (Matchers.any(), Matchers.any(), Matchers.any()))
-      .thenReturn(Future.successful(backUrl))
     when(mockS4lConnector.fetchAndGetFormData[ShareIssueDateModel](Matchers.eq(KeystoreKeys.shareIssueDate))
       (Matchers.any(), Matchers.any(), Matchers.any()))
-      .thenReturn(Future.successful(Some(shareIssuetDateModel)))
+      .thenReturn(Future.successful(shareIssueDateModel))
+
+    when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.backLinkNumberOfSharesPurchased))
+      (Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(backURL))
   }
 
   "The Number of Shares Purchased controller" should {
@@ -76,38 +79,152 @@ class NumberOfSharesPurchasedControllerSpec extends BaseSpec with DateFormatter{
       NumberOfSharesPurchasedController.enrolmentConnector shouldBe EnrolmentConnector
     }
 
-    "return a 200 on a GET request" when {
+//    "return a 200 on a GET request" when {
+//
+//      "no data is already stored" in {
+//        setupMocks(Some(onlyInvestorOrNomineeVectorList))
+//        showWithSessionAndAuth(controller.show(1))(
+//          result => status(result) shouldBe 200
+//        )
+//      }
+//
+//      "data is already stored" in {
+//        setupMocks(Some(onlyInvestorOrNomineeVectorList))
+//        showWithSessionAndAuth(controller.show(1))(
+//          result => status(result) shouldBe 200
+//        )
+//      }
+//    }
 
-      "no data is already stored" in {
-        setupMocks(Some(onlyInvestorOrNomineeVectorList))
-        showWithSessionAndAuth(controller.show(1))(
-          result => status(result) shouldBe 200
-        )
-      }
+    "Sending a GET request to CompanyDetailsController when authenticated and enrolled" should {
 
-      "data is already stored" in {
-        setupMocks(Some(onlyInvestorOrNomineeVectorList))
-        showWithSessionAndAuth(controller.show(1))(
-          result => status(result) shouldBe 200
-        )
-      }
-    }
-    "return a 303 on a successful POST request" in {
-      setupMocks(Some(onlyInvestorOrNomineeVectorList))
-      val form = Seq("numberOfSharesPurchased" -> "20", "processingId" -> "1")
-      submitWithSessionAndAuth(controller.submit(shareIssueDate, backUrl), form: _*) (
-        result => {
-          status(result) shouldBe 303
-          redirectLocation(result) shouldBe Some(controllers.seis.routes.HowMuchSpentOnSharesController.show(1).url)
+      "'REDIRECT' to AddInvestorOrNominee page" when {
+        "there is no 'back link' present" in {
+          mockEnrolledRequest(seisSchemeTypesModel)
+          setupMocks(None,None, None)
+          showWithSessionAndAuth(controller.show(1))(
+            result => {
+              status(result) shouldBe SEE_OTHER
+              redirectLocation(result) shouldBe Some(routes.AddInvestorOrNomineeController.show(None).url)
+            }
+          )
         }
-      )
+      }
+
+      /* Invalid scenario as list must exist if INT in query string, redirect to AddNomineeOrInvestor */
+      "Redirect to 'AddNomineeOrInvestor' page" when {
+        "a 'backlink' is defined but no 'investor details list' is retrieved" in {
+          mockEnrolledRequest(seisSchemeTypesModel)
+          setupMocks(None, None, backUrl)
+          showWithSessionAndAuth(controller.show(1))(
+            result => {
+              status(result) shouldBe SEE_OTHER
+              redirectLocation(result) shouldBe Some(controllers.seis.routes.AddInvestorOrNomineeController.show(None).url)
+            }
+          )
+        }
+      }
+
+      "Redirect to the AddInvestorOrNominee page" when {
+        "a 'backlink' is defined, an 'investor details list' is retrieved and an INVALID 'id' is defined" in {
+          mockEnrolledRequest(seisSchemeTypesModel)
+          setupMocks(Some(listOfInvestorsComplete), None, backUrl)
+          showWithSessionAndAuth(controller.show(obviouslyInvalidId))(
+            result => {
+              status(result) shouldBe SEE_OTHER
+              redirectLocation(result) shouldBe Some(controllers.seis.routes.AddInvestorOrNomineeController.show(None).url)
+            }
+          )
+        }
+      }
+
+      "redirect to the 'ShareIssueDate' page" when {
+        "a 'backlink' is defined, an 'investor details list' is retrieved but a 'share issue date' is not provided" in {
+          mockEnrolledRequest(seisSchemeTypesModel)
+          setupMocks(Some(listOfInvestorsComplete), None,  backUrl)
+          showWithSessionAndAuth(controller.show(2))(
+            result => {
+              status(result) shouldBe SEE_OTHER
+              redirectLocation(result) shouldBe Some(controllers.seis.routes.ShareIssueDateController.show().url)
+            }
+          )
+        }
+      }
+
+      "return an 'OK' and load the page with a empty form" when {
+        "a 'backlink' is defined, an 'investor details list' is retrieved, a 'share issue date' is retrieved with " +
+          "an defined companyDetails model at position 'id'" in {
+          mockEnrolledRequest(seisSchemeTypesModel)
+          setupMocks(Some(listOfInvestorsComplete), Some(shareIssuetDateModel),  backUrl)
+          showWithSessionAndAuth(controller.show(2))(
+            result => {
+              status(result) shouldBe OK
+            }
+          )
+        }
+      }
+
+      "return an 'OK' and load the page with a populated form" when {
+        "a 'backlink' is defined, an 'investor details list' is retrieved, a 'share issue date' is retrieved with " +
+          "an undefined companyDetails model at position 'id'" in {
+          mockEnrolledRequest(seisSchemeTypesModel)
+          setupMocks(Some(listOfInvestorsIncompleteNumberOfSharesPurchased), Some(shareIssuetDateModel), backUrl)
+          showWithSessionAndAuth(controller.show(2))(
+            result => {
+              status(result) shouldBe OK
+            }
+          )
+        }
+      }
     }
-    "return a 400 on a form validation failure" in {
-      setupMocks(Some(onlyInvestorOrNomineeVectorList))
-      val form = Seq("numberOfSharesPurchased" -> "")
-      submitWithSessionAndAuth(controller.submit(shareIssueDate, backUrl), form: _*) (
-        result => status(result) shouldBe 400
-      )
+
+    "Submitting to the NumberOfSharesPurchasedController when authenticated and enrolled" should {
+      "redirect to the correct page if the form 'was not' previously populated" in {
+
+        val formInput = "numberOfSharesPurchased" -> "10000000"
+        setupMocks(Some(listOfInvestorsComplete), None, None)
+        mockEnrolledRequest(seisSchemeTypesModel)
+        submitWithSessionAndAuth(controller.submit(shareIssueDate,backUrl),formInput)(
+          result => {
+            status(result) shouldBe SEE_OTHER
+            redirectLocation(result) shouldBe
+              Some(controllers.seis.routes.HowMuchSpentOnSharesController.show(listOfInvestorsComplete.head.processingId.get).url)
+          }
+        )
+      }
     }
+
+
+
+    "Submitting to the NumberOfSharesPurchasedController when authenticated and enrolled" should {
+      "redirect to the correct page if a company and the form 'was' previously populated and had a processing id" in {
+
+        val formInput = Seq("numberOfSharesPurchased" -> "10000000", "processingId" -> "2")
+        setupMocks(Some(listOfInvestorsComplete), None, None)
+        mockEnrolledRequest(seisSchemeTypesModel)
+        submitWithSessionAndAuth(controller.submit(shareIssueDate,backUrl),formInput:_*)(
+          result => {
+            status(result) shouldBe SEE_OTHER
+            redirectLocation(result) shouldBe
+              Some(controllers.seis.routes.HowMuchSpentOnSharesController.show(listOfInvestorsComplete.head.processingId.get).url)
+          }
+        )
+      }
+    }
+
+
+    "Sending an invalid form submission with validation errors to the NumberOfSharesPurchasedController when authenticated and enrolled" should {
+      "redirect to itself" in {
+        setupMocks(Some(listOfInvestorsComplete), None, None)
+        mockEnrolledRequest(seisSchemeTypesModel)
+        val formInput = "numberOfSharesPurchased" -> ""
+        submitWithSessionAndAuth(controller.submit(shareIssueDate,backUrl), formInput)(
+          result => {
+            status(result) shouldBe BAD_REQUEST
+          }
+        )
+      }
+    }
+
   }
 }
