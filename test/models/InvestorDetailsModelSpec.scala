@@ -16,6 +16,7 @@
 
 package models
 
+import common.Constants
 import controllers.helpers.BaseSpec
 import models.investorDetails._
 
@@ -66,7 +67,7 @@ class InvestorDetailsModelSpec extends BaseSpec{
     Some(Vector(PreviousShareHoldingModel(Some(investorShareIssueDateModel), Some(numberOfPreviouslyIssuedSharesModel),
       Some(previousShareHoldingNominalValueModel), Some(previousShareHoldingDescriptionModel)), PreviousShareHoldingModel())))
 
-  val invalidModelCompanyAndIndividualDetailsExist = InvestorDetailsModel(Some(investorModel3), Some(companyOrIndividualModel3), Some(companyDetailsModel3),
+  val validModelCompanyAndIndividualDetailsExist = InvestorDetailsModel(Some(investorModel3), Some(companyOrIndividualModel3), Some(companyDetailsModel3),
     Some(individualDetailsModel3), Some(numberOfSharesPurchasedModel3), Some(howMuchSpentOnSharesModel3), Some(isExistingShareHolderModelNo), Some(Vector()), Some(3))
 
   "Calling validate" should {
@@ -82,6 +83,14 @@ class InvestorDetailsModelSpec extends BaseSpec{
       }
       "the investor details is missing both company and individual details" in {
         invalidCompanyAndIndividualDetailsMissing.validate shouldBe false
+      }
+      "the investor details is missing company details as a company" in {
+        validModelCompanyAndIndividualDetailsExist.copy(companyDetailsModel = None).validate shouldBe false
+      }
+      "the investor details is missing individual details as an individual" in {
+        validModelCompanyAndIndividualDetailsExist.copy(individualDetailsModel = None,
+          companyOrIndividualModel = Some(CompanyOrIndividualModel(Constants.typeIndividual, None)))
+          .validate shouldBe false
       }
       "the investor details is missing number of shares purchased model" in {
         invalidNumberOfSharesPurchasedMissing.validate shouldBe false
@@ -124,7 +133,17 @@ class InvestorDetailsModelSpec extends BaseSpec{
       }
 
       "the investor details contains both company details and individual details" in {
-        invalidModelCompanyAndIndividualDetailsExist.validate shouldBe true
+        validModelCompanyAndIndividualDetailsExist.validate shouldBe true
+      }
+
+      "the investor details contains company details only as a company" in {
+        validModelCompanyAndIndividualDetailsExist.copy(individualDetailsModel = None).validate shouldBe true
+      }
+
+      "the investor details contains individual details only as an individual" in {
+        validModelCompanyAndIndividualDetailsExist.copy(companyDetailsModel = None,
+          companyOrIndividualModel = Some(CompanyOrIndividualModel(Constants.typeIndividual, None)))
+          .validate shouldBe true
       }
     }
   }

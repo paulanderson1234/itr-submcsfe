@@ -16,6 +16,7 @@
 
 package models.investorDetails
 
+import common.Constants
 import models.{AddInvestorOrNomineeModel, CompanyDetailsModel, CompanyOrIndividualModel, IndividualDetailsModel}
 import play.api.libs.json.Json
 
@@ -37,8 +38,13 @@ case class InvestorDetailsModel(investorOrNomineeModel: Option[AddInvestorOrNomi
       if(previousShareHoldingModels.isDefined) previousShareHoldingModels.get.forall(_.validate) else false
     }
 
+    val areDetailsPresent = companyOrIndividualModel match {
+      case Some(CompanyOrIndividualModel(Constants.typeCompany, _)) => companyDetailsModel.isDefined
+      case _ => individualDetailsModel.isDefined
+    }
+
     investorOrNomineeModel.isDefined && companyOrIndividualModel.isDefined &&
-    (companyDetailsModel.isDefined || individualDetailsModel.isDefined) && numberOfSharesPurchasedModel.isDefined &&
+    areDetailsPresent && numberOfSharesPurchasedModel.isDefined &&
     amountSpentModel.isDefined && isExistingShareHolderModel.isDefined && validateShareHoldings
   }
 
