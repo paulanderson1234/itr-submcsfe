@@ -53,7 +53,7 @@ class AddInvestorOrNomineeControllerSpec extends BaseSpec {
     }
   }
 
-  def setupMocks(individualDetailsModels: Option[Vector[InvestorDetailsModel]], backUrl: Option[String] = None): Unit = {
+  def setupMocks(individualDetailsModels: Option[Vector[InvestorDetailsModel]], backUrl: Option[String]): Unit = {
     when(mockS4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](Matchers.eq(KeystoreKeys.investorDetails))
       (Matchers.any(), Matchers.any(), Matchers.any()))
         .thenReturn(Future.successful(individualDetailsModels))
@@ -63,65 +63,145 @@ class AddInvestorOrNomineeControllerSpec extends BaseSpec {
   }
 
   "Sending a GET request to AddInvestorOrNomineeController when authenticated and enrolled" should {
-    "return a 200 when something is fetched from keystore" in {
-      setupMocks(Some(onlyInvestorOrNomineeVectorList), Some(validBackLink))
-      mockEnrolledRequest(seisSchemeTypesModel)
-      showWithSessionAndAuth(TestController.show(validModelNoPrevShareHoldings.processingId))(
-        result => status(result) shouldBe OK
-      )
+
+    "'REDIRECT' to the 'ShareDescription' page" when {
+      "there is no 'back link' present" in {
+        mockEnrolledRequest(seisSchemeTypesModel)
+        setupMocks(None,None)
+        showWithSessionAndAuth(TestController.show(None))(
+          result => {
+            status(result) shouldBe SEE_OTHER
+            redirectLocation(result) shouldBe Some(controllers.seis.routes.ShareDescriptionController.show().url)
+          }
+        )
+      }
     }
 
-    "provide an empty model and return a 200 when nothing is fetched using keystore" in {
-      setupMocks(None, Some(validBackLink))
-      mockEnrolledRequest(seisSchemeTypesModel)
-      showWithSessionAndAuth(TestController.show(None))(
-        result => status(result) shouldBe OK
-      )
+    "return an 'OK' and load the page with an empty form" when {
+      "a 'backlink' is defined but no 'investor details list' is retrieved" in {
+        mockEnrolledRequest(seisSchemeTypesModel)
+        setupMocks(None, Some(validBackLink))
+        showWithSessionAndAuth(TestController.show(None))(
+          result => {
+            status(result) shouldBe OK
+          }
+        )
+      }
     }
 
-    "provide an empty model and no back url return a 200 and redirect to Share Description details page" in {
-      setupMocks(None, None)
-      mockEnrolledRequest(seisSchemeTypesModel)
-      showWithSessionAndAuth(TestController.show(None))(
-        result => {
-          status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(controllers.seis.routes.ShareDescriptionController.show().url)
-        }
-      )
+    "return an 'OK' and load the page with a populated form" when {
+      "a 'backlink' is defined, an 'investor details list' is retrieved and VALID 'id' is defined" in {
+        mockEnrolledRequest(seisSchemeTypesModel)
+        setupMocks(Some(listOfInvestorsComplete), Some(validBackLink))
+        showWithSessionAndAuth(TestController.show(Some(2)))(
+          result => {
+            status(result) shouldBe OK
+          }
+        )
+      }
     }
+
+    /* TODO redirect to review investor details page when the id does not exist  */
+    "Redirect to the Investor Details Review page" when {
+      "a 'backlink' is defined, an 'investor details list' is retrieved and an INVALID 'id' is defined" in {
+        mockEnrolledRequest(seisSchemeTypesModel)
+        setupMocks(Some(listOfInvestorsComplete), Some(validBackLink))
+        showWithSessionAndAuth(TestController.show(Some(3)))(
+          result => {
+            status(result) shouldBe OK
+          }
+        )
+      }
+    }
+
+    "return an 'OK' and load the page with a empty form" when {
+      "a 'backlink' is defined, an 'investor details list' is retrieved with all 'COMPLETE' investor details and no 'ID' is passed" in {
+        mockEnrolledRequest(seisSchemeTypesModel)
+        setupMocks(Some(listOfInvestorsComplete), Some(validBackLink))
+        showWithSessionAndAuth(TestController.show(None))(
+          result => {
+            status(result) shouldBe OK
+          }
+        )
+      }
+    }
+
+    "return an 'OK' and load the page with a populated form" when {
+      "a 'backlink' is defined, an 'investor details list' is retrieved with an 'INCOMPLETE' investor detail and no 'ID' is passed" in {
+        mockEnrolledRequest(seisSchemeTypesModel)
+        setupMocks(Some(listOfInvestorsIncomplete), Some(validBackLink))
+        showWithSessionAndAuth(TestController.show(None))(
+          result => {
+            status(result) shouldBe OK
+          }
+        )
+      }
+    }
+
   }
 
+
   "By selecting the investor submission to the AddInvestorOrNomineeController when authenticated and enrolled" should {
-    "redirect to the correct page if an investor" in {
-      when(TestController.s4lConnector.saveFormData[Vector[IndividualDetailsModel]](Matchers.eq(KeystoreKeys.addInvestor), Matchers.any())
-        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(CacheMap("",Map()))
+    "redirect to the correct page if an investor and the form 'was not' previously populated" in {
 
       val formInput = "addInvestorOrNominee" -> Constants.investor
-      setupMocks(Some(onlyInvestorOrNomineeVectorList), Some(validBackLink))
+      setupMocks(Some(listOfInvestorsComplete), Some(validBackLink))
       mockEnrolledRequest(seisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,formInput)(
         result => {
           status(result) shouldBe SEE_OTHER
           redirectLocation(result) shouldBe
-            Some(controllers.seis.routes.CompanyOrIndividualController.show(validModelWithPrevShareHoldings.processingId.get).url)
+            Some(controllers.seis.routes.CompanyOrIndividualController.show(listOfInvestorsComplete.head.processingId.get + 1).url)
         }
       )
     }
   }
 
   "By selecting the investor submission to the AddInvestorOrNomineeController when authenticated and enrolled" should {
-    "redirect to the correct page if a nominee" in {
-      when(TestController.s4lConnector.saveFormData[Vector[IndividualDetailsModel]](Matchers.eq(KeystoreKeys.addInvestor), Matchers.any())
-        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(CacheMap("",Map()))
+    "redirect to the CompanyOrIndividual page if a nominee and the form 'was not' previously populated" in {
 
-      val formInput = "addInvestorOrNominee" -> Constants.nominee
-      setupMocks(Some(onlyInvestorOrNomineeVectorList), Some(validBackLink))
+      val formInput = "addInvestorOrNominee" -> Constants.investor
+      setupMocks(Some(listOfInvestorsComplete), Some(validBackLink))
       mockEnrolledRequest(seisSchemeTypesModel)
-      submitWithSessionAndAuth(TestController.submit,formInput)(
+      submitWithSessionAndAuth(TestController.submit, formInput)(
         result => {
           status(result) shouldBe SEE_OTHER
           redirectLocation(result) shouldBe
-            Some(controllers.seis.routes.CompanyOrIndividualController.show(validModelWithPrevShareHoldings.processingId.get).url)
+            Some(controllers.seis.routes.CompanyOrIndividualController.show(listOfInvestorsComplete.head.processingId.get + 1).url)
+        }
+      )
+    }
+  }
+
+  "By selecting the investor submission to the AddInvestorOrNomineeController when authenticated and enrolled" should {
+    "redirect to the correct page if an investor and the form 'was' previously populated and had a processing id" in {
+
+      val formInput = Seq("addInvestorOrNominee" -> Constants.investor, "processingId" -> "2")
+      setupMocks(Some(listOfInvestorsComplete), Some(validBackLink))
+      mockEnrolledRequest(seisSchemeTypesModel)
+      submitWithSessionAndAuth(TestController.submit,formInput:_*)(
+        result => {
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe
+            Some(controllers.seis.routes.CompanyOrIndividualController.show(listOfInvestorsComplete.head.processingId.get).url)
+        }
+      )
+    }
+  }
+
+  "By selecting the investor submission to the AddInvestorOrNomineeController when authenticated and enrolled" should {
+    "redirect to the correct page if a nominee and the form 'was' previously populated and had a processing id" in {
+      when(TestController.s4lConnector.saveFormData[Vector[IndividualDetailsModel]](Matchers.eq(KeystoreKeys.addInvestor), Matchers.any())
+        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(CacheMap("",Map()))
+
+      val formInput = Seq("addInvestorOrNominee" -> Constants.nominee, "processingId" -> "2")
+      setupMocks(Some(listOfInvestorsComplete), Some(validBackLink))
+      mockEnrolledRequest(seisSchemeTypesModel)
+      submitWithSessionAndAuth(TestController.submit,formInput:_*)(
+        result => {
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe
+            Some(controllers.seis.routes.CompanyOrIndividualController.show(listOfInvestorsComplete.head.processingId.get).url)
         }
       )
     }

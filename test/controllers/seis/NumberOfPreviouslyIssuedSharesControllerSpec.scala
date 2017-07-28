@@ -40,15 +40,18 @@ class NumberOfPreviouslyIssuedSharesControllerSpec extends BaseSpec {
     override lazy val authConnector: AuthConnector = MockAuthConnector
   }
 
-  def setupMocks(numberOfPreviouslyIssuedSharesModel: Option[NumberOfPreviouslyIssuedSharesModel]): Unit = {
+  val backUrl = Some(controllers.seis.routes.PreviousShareHoldingDescriptionController.show(1, Some(1)).url)
+
+  def setupMocks(investorDetailsModel: Option[Vector[InvestorDetailsModel]]): Unit = {
     mockEnrolledRequest(seisSchemeTypesModel)
 
-    when(mockS4lConnector.fetchAndGetFormData[CompanyOrIndividualModel](Matchers.eq(KeystoreKeys.companyOrIndividual))
+    when(mockS4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](Matchers.eq(KeystoreKeys.investorDetails))
       (Matchers.any(), Matchers.any(), Matchers.any()))
-      .thenReturn(Future.successful(Some(companyOrIndividualModel)))
-    when(mockS4lConnector.fetchAndGetFormData[NumberOfPreviouslyIssuedSharesModel](Matchers.eq(KeystoreKeys.numberOfPreviouslyIssuedShares))
+      .thenReturn(Future.successful(investorDetailsModel))
+
+    when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.backLinkNumberOfPreviouslyIssuedShares))
       (Matchers.any(), Matchers.any(), Matchers.any()))
-      .thenReturn(Future.successful(numberOfPreviouslyIssuedSharesModel))
+      .thenReturn(Future.successful(backUrl))
   }
 
   "The Number of Previously Issued Shares controller" should {
@@ -68,15 +71,15 @@ class NumberOfPreviouslyIssuedSharesControllerSpec extends BaseSpec {
     "return a 200 on a GET request" when {
 
       "no data is already stored" in {
-        setupMocks(None)
-        showWithSessionAndAuth(controller.show(1))(
+        setupMocks(Some(listOfInvestorsCompleteOption1))
+        showWithSessionAndAuth(controller.show(1, 1))(
           result => status(result) shouldBe 200
         )
       }
 
       "data is already stored" in {
-        setupMocks(Some(numberOfPreviouslyIssuedSharesModel))
-        showWithSessionAndAuth(controller.show(1))(
+        setupMocks(Some(listOfInvestorsCompleteOption1))
+        showWithSessionAndAuth(controller.show(1, 1))(
           result => status(result) shouldBe 200
         )
       }
@@ -84,19 +87,19 @@ class NumberOfPreviouslyIssuedSharesControllerSpec extends BaseSpec {
 
     /* TODO Back logic with looping logic */
     "return a 303 on a successful POST request" in {
-      setupMocks(Some(numberOfPreviouslyIssuedSharesModel))
-      val form = Seq("numberOfPreviouslyIssuedShares" -> "20", "processingId" -> "1")
-      submitWithSessionAndAuth(controller.submit, form: _*) (
+      setupMocks(Some(listOfInvestorsCompleteOption1))
+      val form = Seq("numberOfPreviouslyIssuedShares" -> "20", "processingId" -> "1", "investorProcessingId" -> "1")
+      submitWithSessionAndAuth(controller.submit(Some(""), Some("")), form: _*) (
         result => {
           status(result) shouldBe 303
-          redirectLocation(result) shouldBe Some(controllers.seis.routes.DateOfIncorporationController.show.url)
+          redirectLocation(result) shouldBe Some(controllers.seis.routes.NumberOfPreviouslyIssuedSharesController.show(1, 1).url)
         }
       )
     }
     "return a 400 on a form validation failure" in {
-      setupMocks(Some(numberOfPreviouslyIssuedSharesModel))
+      setupMocks(Some(listOfInvestorsCompleteOption1))
       val form = Seq("numberOfSharesPurchased" -> "")
-      submitWithSessionAndAuth(controller.submit, form: _*) (
+      submitWithSessionAndAuth(controller.submit(Some(""), Some("")), form: _*) (
         result => status(result) shouldBe 400
       )
     }

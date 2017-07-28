@@ -28,12 +28,14 @@ import play.api.test.Helpers._
 
 class NumberOfPreviouslyIssuedSharesSpec extends ViewSpec {
 
+  val backUrl = controllers.seis.routes.PreviousShareHoldingDescriptionController.show(1, Some(1)).url
+
   "NumberOfPreviouslyIssuedShares view" when {
     implicit lazy val request = FakeRequest("GET", "")
 
     "not supplied with form errors" should {
       lazy val document: Document = {
-        val result = NumberOfPreviouslyIssuedShares("Company", numberOfPreviouslyIssuedSharesForm)
+        val result = NumberOfPreviouslyIssuedShares("Company", numberOfPreviouslyIssuedSharesForm, backUrl)
         Jsoup.parse(contentAsString(result))
       }
 
@@ -46,7 +48,7 @@ class NumberOfPreviouslyIssuedSharesSpec extends ViewSpec {
       }
       /*TODO update back link for looping logic*/
       "have the correct back link url" in {
-        document.select("a.back-link").attr("href") shouldBe "/investment-tax-relief-cs/seis/date-of-incorporation"
+        document.select("a.back-link").attr("href") shouldBe backUrl
       }
 
       "have the correct heading" in {
@@ -54,7 +56,8 @@ class NumberOfPreviouslyIssuedSharesSpec extends ViewSpec {
       }
 
       "have a form posting to the correct route" in {
-        document.select("form").attr("action") shouldBe controllers.seis.routes.NumberOfPreviouslyIssuedSharesController.submit().url
+        document.select("form").attr("action") shouldBe
+          controllers.seis.routes.NumberOfPreviouslyIssuedSharesController.submit(Some("Company"), Some(backUrl)).url
       }
 
       "have the correct question in a label" in {
@@ -72,7 +75,7 @@ class NumberOfPreviouslyIssuedSharesSpec extends ViewSpec {
     "supplied with form errors" should {
       lazy val document: Document = {
         val map = Map("numberOfPreviouslyIssuedShares" -> "")
-        val result = NumberOfPreviouslyIssuedShares("Company", numberOfPreviouslyIssuedSharesForm.bind(map))
+        val result = NumberOfPreviouslyIssuedShares("Company", numberOfPreviouslyIssuedSharesForm.bind(map), backUrl)
         Jsoup.parse(contentAsString(result))
       }
 
@@ -86,7 +89,7 @@ class NumberOfPreviouslyIssuedSharesSpec extends ViewSpec {
 
       /*TODO update back link for looping logic*/
       "have the correct back link url" in {
-        document.select("a.back-link").attr("href") shouldBe "/investment-tax-relief-cs/seis/date-of-incorporation"
+        document.select("a.back-link").attr("href") shouldBe backUrl
       }
 
       "have the correct heading" in {
@@ -94,7 +97,8 @@ class NumberOfPreviouslyIssuedSharesSpec extends ViewSpec {
       }
 
       "have a form posting to the correct route" in {
-        document.select("form").attr("action") shouldBe controllers.seis.routes.NumberOfPreviouslyIssuedSharesController.submit().url
+        document.select("form").attr("action") shouldBe
+          controllers.seis.routes.NumberOfPreviouslyIssuedSharesController.submit(Some("Company"), Some(backUrl)).url
       }
 
       "have the correct question in a label" in {

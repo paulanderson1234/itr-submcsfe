@@ -33,7 +33,7 @@ import scala.concurrent.Future
 
 class IndividualDetailsControllerSpec extends BaseSpec with FakeRequestHelper{
 
-    lazy val controller = new IndividualDetailsController{
+    lazy val TestController = new IndividualDetailsController{
     override lazy val s4lConnector: S4LConnector = mockS4lConnector
     override lazy val enrolmentConnector: EnrolmentConnector = mockEnrolmentConnector
     override lazy val applicationConfig: AppConfig = MockConfig
@@ -41,22 +41,21 @@ class IndividualDetailsControllerSpec extends BaseSpec with FakeRequestHelper{
   }
 
   val backUrl = Some(controllers.seis.routes.CompanyOrIndividualController.show(1).url)
+  val listOfInvestorsCompleteIndividualDetails = Vector(validModelWithPrevShareHoldings.copy(companyDetailsModel = None,
+    individualDetailsModel = Some(individualDetailsModel)))
+  val listOfInvestorsIncompleteIndividualDetails = Vector(validModelWithPrevShareHoldings.copy(individualDetailsModel = None))
 
-  def setupMocks(model: Option[IndividualDetailsModel], individualDetailsModels: Option[Vector[InvestorDetailsModel]]): Unit = {
+  def setupMocks(individualDetailsModels: Option[Vector[InvestorDetailsModel]], backURL: Option[String]): Unit = {
     mockEnrolledRequest(seisSchemeTypesModel)
-
     when(mockS4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](Matchers.eq(KeystoreKeys.investorDetails))
       (Matchers.any(), Matchers.any(), Matchers.any()))
       .thenReturn(Future.successful(individualDetailsModels))
-    when(mockS4lConnector.fetchAndGetFormData[IndividualDetailsModel](Matchers.eq(KeystoreKeys.individualDetails))(Matchers.any(),
-      Matchers.any(), Matchers.any()))
-      .thenReturn(Future.successful(model))
 
     when(mockS4lConnector.saveFormData(Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
       .thenReturn(Future.successful(mock[CacheMap]))
     when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.backLinkCompanyAndIndividualBoth))
       (Matchers.any(), Matchers.any(), Matchers.any()))
-      .thenReturn(Future.successful(backUrl))
+      .thenReturn(Future.successful(backURL))
   }
 
   "The IndividualDetails controller" should {
@@ -73,57 +72,145 @@ class IndividualDetailsControllerSpec extends BaseSpec with FakeRequestHelper{
       IndividualDetailsController.enrolmentConnector shouldBe EnrolmentConnector
     }
 
-    "return a 200 on a GET request" when {
+    "Sending a GET request to IndividualDEtails Controller when authenticated and enrolled" should {
 
-      "no data is already stored" in {
-        setupMocks(None, Some(onlyInvestorOrNomineeVectorList))
-        showWithSessionAndAuth(controller.show(1))(
-          result => status(result) shouldBe 200
-        )
-      }
-
-      "data is already stored" in {
-        setupMocks(None, Some(onlyInvestorOrNomineeVectorList))
-        showWithSessionAndAuth(controller.show(1))(
-          result => status(result) shouldBe 200
-        )
-      }
-    }
-
-    "return a 303 on a successful POST request" in {
-      setupMocks(None, Some(onlyInvestorOrNomineeVectorList))
-      val formInput = Seq(
-        "forename" -> "TEST",
-        "surname" -> "TESTING",
-        "addressline1" -> "Line 1",
-        "addressline2" -> "Line 2",
-        "addressline3" -> "Line 3",
-        "addressline4" -> "line 4",
-        "postcode" -> "AA1 1AA",
-        "countryCode" -> "GB")
-
-      submitWithSessionAndAuth(controller.submit(backUrl), formInput: _*)(
-        result => {
-          status(result) shouldBe 303
-          redirectLocation(result) shouldBe Some(controllers.seis.routes.NumberOfSharesPurchasedController.show(1).url)
+      "'REDIRECT' to TBD page" when {
+        "there is no 'back link' present" in {
+          mockEnrolledRequest(seisSchemeTypesModel)
+          setupMocks(None, None)
+          showWithSessionAndAuth(TestController.show(99999))(
+            result => {
+              status(result) shouldBe SEE_OTHER
+              redirectLocation(result) shouldBe Some(controllers.seis.routes.AddInvestorOrNomineeController.show().url)
+            }
+          )
         }
-      )
+      }
+
+      /* Invalid scenario as list must exist if INT in query string, redirect to AddNomineeOrInvestor */
+      "Redirect to 'AddNomineeOrInvestor' page" when {
+        "a 'backlink' is defined but no 'investor details list' is retrieved" in {
+          mockEnrolledRequest(seisSchemeTypesModel)
+          setupMocks(None, backUrl)
+          showWithSessionAndAuth(TestController.show(99999))(
+            result => {
+              status(result) shouldBe SEE_OTHER
+              redirectLocation(result) shouldBe Some(controllers.seis.routes.AddInvestorOrNomineeController.show(None).url)
+            }
+          )
+        }
+      }
+
+      /* TODO redirect to review investor details page when the id does not exist  */
+      "Redirect to the Investor Details Review page" when {
+        "a 'backlink' is defined, an 'investor details list' is retrieved and an INVALID 'id' is defined" in {
+          mockEnrolledRequest(seisSchemeTypesModel)
+          setupMocks(Some(listOfInvestorsComplete), backUrl)
+          showWithSessionAndAuth(TestController.show(3))(
+            result => {
+              status(result) shouldBe SEE_OTHER
+              redirectLocation(result) shouldBe Some(controllers.seis.routes.AddInvestorOrNomineeController.show().url)
+            }
+          )
+        }
+      }
+
+      "return an 'OK' and load the page with a empty form" when {
+        "a 'backlink' is defined, an 'investor details list' is retrieved with a defined individualDetails model at position 'id'" in {
+          mockEnrolledRequest(seisSchemeTypesModel)
+          setupMocks(Some(listOfInvestorsCompleteIndividualDetails), backUrl)
+          showWithSessionAndAuth(TestController.show(2))(
+            result => {
+              status(result) shouldBe OK
+            }
+          )
+        }
+      }
+
+      "return an 'OK' and load the page with a populated form" when {
+        "a 'backlink' is defined, an 'investor details list' is retrieved with an undefined individualDetails model at position 'id'" in {
+          mockEnrolledRequest(seisSchemeTypesModel)
+          setupMocks(Some(listOfInvestorsIncompleteIndividualDetails), backUrl)
+          showWithSessionAndAuth(TestController.show(2))(
+            result => {
+              status(result) shouldBe OK
+            }
+          )
+        }
+      }
     }
 
-    "return a 400 on a form validation failure" in {
-      setupMocks(None, Some(onlyInvestorOrNomineeVectorList))
-      val form = Seq(
-        "forename" -> "",
-        "surname" -> "",
-        "addressline1" -> "Line 1",
-        "addressline2" -> "Line 2",
-        "addressline3" -> "Line 3",
-        "addressline4" -> "line 4",
-        "postcode" -> "",
-        "countryCode" -> "GB")
-      submitWithSessionAndAuth(controller.submit(backUrl), form: _*) (
-        result => status(result) shouldBe 400
-      )
+    "Submitting to the CompanyDetailsController when authenticated and enrolled" should {
+      "redirect to the correct page if the form 'was not' previously populated" in {
+
+              val formInput = Seq(
+                "forename" -> "TEST",
+                "surname" -> "TESTING",
+                "addressline1" -> "Line 1",
+                "addressline2" -> "Line 2",
+                "addressline3" -> "Line 3",
+                "addressline4" -> "line 4",
+                "postcode" -> "AA1 1AA",
+                "countryCode" -> "GB")
+        setupMocks(Some(listOfInvestorsComplete), backUrl)
+        mockEnrolledRequest(seisSchemeTypesModel)
+        submitWithSessionAndAuth(TestController.submit(Some(routes.CompanyOrIndividualController.show(2).url)), formInput: _*)(
+          result => {
+            status(result) shouldBe SEE_OTHER
+            redirectLocation(result) shouldBe
+              Some(controllers.seis.routes.NumberOfSharesPurchasedController.show(listOfInvestorsComplete.head.processingId.get).url)
+          }
+        )
+      }
+    }
+
+
+
+    "Submitting to the CompanyDetailsController when authenticated and enrolled" should {
+      "redirect to the correct page and the form 'was' previously populated and had a processing id" in {
+
+              val formInput = Seq(
+                "forename" -> "TEST",
+                "surname" -> "TESTING",
+                "addressline1" -> "Line 1",
+                "addressline2" -> "Line 2",
+                "addressline3" -> "Line 3",
+                "addressline4" -> "line 4",
+                "postcode" -> "AA1 1AA",
+                "countryCode" -> "GB",
+                "processingId" -> "2")
+        setupMocks(Some(listOfInvestorsComplete), backUrl)
+        mockEnrolledRequest(seisSchemeTypesModel)
+        submitWithSessionAndAuth(TestController.submit(Some(routes.CompanyOrIndividualController.show(2).url)), formInput: _*)(
+          result => {
+            status(result) shouldBe SEE_OTHER
+            redirectLocation(result) shouldBe
+              Some(controllers.seis.routes.NumberOfSharesPurchasedController.show(listOfInvestorsComplete.head.processingId.get).url)
+          }
+        )
+      }
+    }
+
+
+    "Sending an invalid form submission with validation errors to the CompanyDetailsController when authenticated and enrolled" should {
+      "redirect to itself" in {
+        setupMocks(Some(listOfInvestorsComplete), backUrl)
+        mockEnrolledRequest(seisSchemeTypesModel)
+        val formInput = Seq(
+                  "forename" -> "",
+                  "surname" -> "",
+                  "addressline1" -> "Line 1",
+                  "addressline2" -> "Line 2",
+                  "addressline3" -> "Line 3",
+                  "addressline4" -> "line 4",
+                  "postcode" -> "",
+                  "countryCode" -> "GB")
+        submitWithSessionAndAuth(TestController.submit(Some(routes.CompanyOrIndividualController.show(2).url)), formInput:_*)(
+          result => {
+            status(result) shouldBe BAD_REQUEST
+          }
+        )
+      }
     }
   }
 }

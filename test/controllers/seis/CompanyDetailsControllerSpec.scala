@@ -17,7 +17,7 @@
 package controllers.seis
 
 import auth.{MockAuthConnector, MockConfig}
-import common.KeystoreKeys
+import common.{Constants, KeystoreKeys}
 import config.FrontendAuthConnector
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
@@ -39,7 +39,8 @@ class CompanyDetailsControllerSpec extends BaseSpec {
     val subscriptionService = SubscriptionService
   }
 
-  val backUrl = Some(controllers.seis.routes.CompanyOrIndividualController.show(1).url)
+  val backUrl = Some(controllers.seis.routes.CompanyDetailsController.show(1).url)
+  val listOfInvestorsIncompleteCompanyDetails =  Vector(validModelWithPrevShareHoldings.copy(companyDetailsModel = None))
 
   "CompanyDetailsController" should {
     "use the correct auth connector" in {
@@ -53,37 +54,110 @@ class CompanyDetailsControllerSpec extends BaseSpec {
     }
   }
 
-  def setupMocks(individualDetailsModels: Option[Vector[InvestorDetailsModel]]): Unit = {
+  def setupMocks(individualDetailsModels: Option[Vector[InvestorDetailsModel]], backURL: Option[String] = None): Unit = {
     when(mockS4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](Matchers.eq(KeystoreKeys.investorDetails))
       (Matchers.any(), Matchers.any(), Matchers.any()))
       .thenReturn(Future.successful(individualDetailsModels))
     when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.backLinkCompanyAndIndividualBoth))
       (Matchers.any(), Matchers.any(), Matchers.any()))
-      .thenReturn(Future.successful(backUrl))
+      .thenReturn(Future.successful(backURL))
   }
 
   "Sending a GET request to CompanyDetailsController when authenticated and enrolled" should {
-    "return a 200 OK when something is fetched from keystore" in {
-      setupMocks(Some(onlyInvestorOrNomineeVectorList))
-      mockEnrolledRequest(seisSchemeTypesModel)
-      showWithSessionAndAuth(TestController.show(1))(
-        result => status(result) shouldBe OK
-      )
+
+    "'REDIRECT' to TBD page" when {
+      "there is no 'back link' present" in {
+        mockEnrolledRequest(seisSchemeTypesModel)
+        setupMocks(None,None)
+        showWithSessionAndAuth(TestController.show(99999))(
+          result => {
+            status(result) shouldBe SEE_OTHER
+            redirectLocation(result) shouldBe Some(controllers.seis.routes.AddInvestorOrNomineeController.show(None).url)
+          }
+        )
+      }
     }
 
-    "provide an empty model and return a 200 when nothing is fetched using keystore" in {
-      setupMocks(Some(onlyInvestorOrNomineeVectorList))
+    /* Invalid scenario as list must exist if INT in query string, redirect to AddNomineeOrInvestor */
+    "Redirect to 'AddNomineeOrInvestor' page" when {
+      "a 'backlink' is defined but no 'investor details list' is retrieved" in {
+        mockEnrolledRequest(seisSchemeTypesModel)
+        setupMocks(None, backUrl)
+        showWithSessionAndAuth(TestController.show(99999))(
+          result => {
+            status(result) shouldBe SEE_OTHER
+            redirectLocation(result) shouldBe Some(controllers.seis.routes.AddInvestorOrNomineeController.show(None).url)
+          }
+        )
+      }
+    }
+
+    "Redirect to the Investor Details Review page" when {
+      "a 'backlink' is defined, an 'investor details list' is retrieved and an INVALID 'id' is defined" in {
+        mockEnrolledRequest(seisSchemeTypesModel)
+        setupMocks(Some(listOfInvestorsComplete), backUrl)
+        showWithSessionAndAuth(TestController.show(3))(
+          result => {
+            status(result) shouldBe SEE_OTHER
+            redirectLocation(result) shouldBe Some(controllers.seis.routes.AddInvestorOrNomineeController.show(None).url)
+          }
+        )
+      }
+    }
+
+    "return an 'OK' and load the page with a empty form" when {
+      "a 'backlink' is defined, an 'investor details list' is retrieved with a defined companyDetails model at position 'id'" in {
+        mockEnrolledRequest(seisSchemeTypesModel)
+        setupMocks(Some(listOfInvestorsComplete), backUrl)
+        showWithSessionAndAuth(TestController.show(2))(
+          result => {
+            status(result) shouldBe OK
+          }
+        )
+      }
+    }
+
+    "return an 'OK' and load the page with a populated form" when {
+      "a 'backlink' is defined, an 'investor details list' is retrieved with an undefined companyDetails model at position 'id'" in {
+        mockEnrolledRequest(seisSchemeTypesModel)
+        setupMocks(Some(listOfInvestorsIncompleteCompanyDetails), backUrl)
+        showWithSessionAndAuth(TestController.show(2))(
+          result => {
+            status(result) shouldBe OK
+          }
+        )
+      }
+    }
+  }
+
+  "Submitting to the CompanyDetailsController when authenticated and enrolled" should {
+    "redirect to the correct page if the form 'was not' previously populated" in {
+
+      val formInput =
+              Seq("companyName" -> "Line 0",
+                "companyAddressline1" -> "Line 1",
+                "companyAddressline2" -> "Line 2",
+                "companyAddressline3" -> "Line 3",
+                "companyAddressline4" -> "line 4",
+                "companyPostcode" -> "AA1 1AA",
+                "countryCode" -> "GB")
+      setupMocks(Some(listOfInvestorsComplete), backUrl)
       mockEnrolledRequest(seisSchemeTypesModel)
-      showWithSessionAndAuth(TestController.show(1))(
-        result => status(result) shouldBe OK
+      submitWithSessionAndAuth(TestController.submit(Some(routes.CompanyOrIndividualController.show(2).url)),formInput:_*)(
+        result => {
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe
+            Some(controllers.seis.routes.NumberOfSharesPurchasedController.show(listOfInvestorsComplete.head.processingId.get).url)
+        }
       )
     }
   }
 
-  "Sending a valid form submit to the CompanyDetailsController when authenticated and enrolled" should {
-    "redirect to the Company Details Controller page" in {
-      mockEnrolledRequest(seisSchemeTypesModel)
-      setupMocks(Some(onlyInvestorOrNomineeVectorList))
+
+
+  "Submitting to the CompanyDetailsController when authenticated and enrolled" should {
+    "redirect to the correct page if the form 'was' previously populated and had a processing id" in {
+
       val formInput =
         Seq("companyName" -> "Line 0",
           "companyAddressline1" -> "Line 1",
@@ -91,29 +165,32 @@ class CompanyDetailsControllerSpec extends BaseSpec {
           "companyAddressline3" -> "Line 3",
           "companyAddressline4" -> "line 4",
           "companyPostcode" -> "AA1 1AA",
-          "countryCode" -> "GB")
-
-      submitWithSessionAndAuth(TestController.submit(backUrl), formInput: _*)(
+          "countryCode" -> "GB", "processingId" -> "2")
+      setupMocks(Some(listOfInvestorsComplete), backUrl)
+      mockEnrolledRequest(seisSchemeTypesModel)
+      submitWithSessionAndAuth(TestController.submit(Some(routes.CompanyOrIndividualController.show(2).url)),formInput:_*)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(controllers.seis.routes.NumberOfSharesPurchasedController.show(1).url)
+          redirectLocation(result) shouldBe
+            Some(controllers.seis.routes.NumberOfSharesPurchasedController.show(listOfInvestorsComplete.head.processingId.get).url)
         }
       )
     }
   }
 
+
   "Sending an invalid form submission with validation errors to the CompanyDetailsController when authenticated and enrolled" should {
     "redirect to itself" in {
+      setupMocks(Some(listOfInvestorsComplete), backUrl)
       mockEnrolledRequest(seisSchemeTypesModel)
-      setupMocks(Some(onlyInvestorOrNomineeVectorList))
-      val formInput = Seq("companyName" -> "", "companyAddressLine1" -> "", "companyAddressline1" -> "", "companyAddressline3" -> "Line3",
-        "companyAddressline4" -> "Line4", "companyPostCode" -> "AA1 1AA", "countryCode" -> "GB")
-      submitWithSessionAndAuth(TestController.submit(backUrl), formInput: _*)(
+      val formInput = "companyAddressline1" -> ""
+      submitWithSessionAndAuth(TestController.submit(Some(routes.CompanyOrIndividualController.show(2).url)), formInput)(
         result => {
           status(result) shouldBe BAD_REQUEST
         }
       )
     }
   }
+
 
 }

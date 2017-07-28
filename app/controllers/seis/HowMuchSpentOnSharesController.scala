@@ -52,7 +52,6 @@ trait HowMuchSpentOnSharesController extends FrontendController with AuthorisedA
       implicit request =>
         def process(backUrl: Option[String]) = {
           if (backUrl.isDefined) {
-
             s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
               case Some(data) => {
                 val itemToUpdateIndex = data.indexWhere(_.processingId.getOrElse(0) == id)
@@ -71,15 +70,13 @@ trait HowMuchSpentOnSharesController extends FrontendController with AuthorisedA
               case None => Redirect(routes.AddInvestorOrNomineeController.show())
             }
           }
-          else {
-            // No back URL so send them back to any page as per the requirement
-            Future.successful(Redirect(routes.AddInvestorOrNomineeController.show()))
-          }
+          else Future.successful(Redirect(routes.AddInvestorOrNomineeController.show()))
         }
         for {
           backUrl <- s4lConnector.fetchAndGetFormData[String](KeystoreKeys.backLinkHowMuchSpentOnShares)
           route <- process(backUrl)
         } yield route
+
     }
   }
 

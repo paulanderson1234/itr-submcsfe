@@ -68,10 +68,7 @@ trait IsExistingShareHolderController extends FrontendController with Authorised
               case None => Redirect(routes.AddInvestorOrNomineeController.show())
             }
           }
-          else {
-            // No back URL so send them back to any page as per the requirement
-            Future.successful(Redirect(controllers.seis.routes.AddInvestorOrNomineeController.show()))
-          }
+          else Future.successful(Redirect(controllers.seis.routes.AddInvestorOrNomineeController.show()))
         }
         for {
           backUrl <- s4lConnector.fetchAndGetFormData[String](KeystoreKeys.backLinkIsExistingShareHolder)

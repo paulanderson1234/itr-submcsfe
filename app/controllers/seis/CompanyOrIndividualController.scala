@@ -47,6 +47,7 @@ trait CompanyOrIndividualController extends FrontendController with AuthorisedAn
   def show(id: Int): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
     AuthorisedAndEnrolled.async { implicit user =>
       implicit request =>
+
         def process(backUrl: Option[String]) = {
           if (backUrl.isDefined) {
             s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
@@ -66,10 +67,7 @@ trait CompanyOrIndividualController extends FrontendController with AuthorisedAn
               case None => Redirect(controllers.seis.routes.AddInvestorOrNomineeController.show())
             }
           }
-          else {
-            // No back URL so send them back to any page as per the requirement
-            Future.successful(Redirect(controllers.seis.routes.AddInvestorOrNomineeController.show()))
-          }
+          else Future.successful(Redirect(controllers.seis.routes.AddInvestorOrNomineeController.show()))
         }
 
         for {
