@@ -68,14 +68,9 @@ trait CompanyDetailsController extends FrontendController with AuthorisedAndEnro
                   else
                     Ok(CompanyDetails(companyDetailsForm, countriesList, backUrl.get))
                 }
-                else {
-                  // Set back to the review page later
-                  Redirect(routes.AddInvestorOrNomineeController.show())
-                }
+                else Redirect(routes.AddInvestorOrNomineeController.show())
               }
-              case None => {
-                Redirect(controllers.seis.routes.ShareDescriptionController.show())
-              }
+              case None => Redirect(routes.AddInvestorOrNomineeController.show())
             }
           }
           else {

@@ -123,7 +123,7 @@ GET        /add-investor-or-nominee               controllers.seis.AddInvestorOr
 POST       /add-investor-or-nominee               controllers.seis.AddInvestorOrNomineeController.submit
 
 GET        /company-or-individual/:Id             controllers.seis.CompanyOrIndividualController.show(Id: Int)
-POST       /company-or-individual                 controllers.seis.CompanyOrIndividualController.submit(backUrl: Option[String]?=None)
+POST       /company-or-individual                 controllers.seis.CompanyOrIndividualController.submit(investorOrNominee: Option[String]?=None, backUrl: Option[String]?=None)
 
 GET        /individuals-details/:Id               controllers.seis.IndividualDetailsController.show(Id: Int)
 POST       /individuals-details                   controllers.seis.IndividualDetailsController.submit(backUrl: Option[String]?=None)
@@ -140,3 +140,8 @@ POST       /is-existing-shareholder               controllers.seis.IsExistingSha
 GET        /number-of-shares-purchased/:Id        controllers.seis.NumberOfSharesPurchasedController.show(Id: Int)
 POST       /number-of-shares-purchased            controllers.seis.NumberOfSharesPurchasedController.submit(shareIssueDate: Option[String]?=None, backUrl: Option[String]?=None)
 
+GET        /number-of-previously-issued-shares/:InvestorId/:Id       controllers.seis.NumberOfPreviouslyIssuedSharesController.show(InvestorId: Int, Id: Int)
+POST       /number-of-previously-issued-shares                   controllers.seis.NumberOfPreviouslyIssuedSharesController.submit(companyOrIndividual: Option[String]?=None, backUrl: Option[String]?=None)
+
+GET        /share-class-description/:InvestorId       controllers.seis.ShareClassAndDescriptionController.show(InvestorId: Int, Id: Option[Int]?=None)
+POST       /share-class-description                   controllers.seis.ShareClassAndDescriptionController.submit(companyOrIndividual: Option[String]?=None, backUrl: Option[String]?=None)

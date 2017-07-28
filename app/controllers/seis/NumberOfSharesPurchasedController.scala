@@ -67,22 +67,14 @@ trait NumberOfSharesPurchasedController extends FrontendController with Authoris
                     dateToStringWithNoZeroDay(shareIssueDate.get.day.get, shareIssueDate.get.month.get, shareIssueDate.get.year.get),
                     numberOfSharesPurchasedForm, backUrl.get))
                 else
-                  Redirect(controllers.seis.routes.ShareDescriptionController.show())
+                  Redirect(controllers.seis.routes.ShareIssueDateController.show())
               }
-              else {
-                // Set back to the review or Share description (starting) page later
-                Redirect(routes.AddInvestorOrNomineeController.show())
-              }
+              else Redirect(routes.AddInvestorOrNomineeController.show())
             }
-            case None => {
-              Redirect(controllers.seis.routes.ShareDescriptionController.show())
-            }
+            case None => Redirect(routes.AddInvestorOrNomineeController.show())
           }
         }
-        else {
-          // No back URL so send them back to any page as per the requirement
-          Future.successful(Redirect(controllers.seis.routes.ShareDescriptionController.show()))
-        }
+        else Future.successful(Redirect(routes.AddInvestorOrNomineeController.show()))
       }
 
       for {

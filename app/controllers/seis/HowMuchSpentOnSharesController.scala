@@ -50,44 +50,37 @@ trait HowMuchSpentOnSharesController extends FrontendController with AuthorisedA
   def show(id: Int): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
     AuthorisedAndEnrolled.async { implicit user =>
       implicit request =>
-        def process(backUrl: Option[String]) ={
-          if(backUrl.isDefined) {
+        def process(backUrl: Option[String]) = {
+          if (backUrl.isDefined) {
 
             s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
-          case Some(data) => {
-            val itemToUpdateIndex = data.indexWhere(_.processingId.getOrElse(0) == id)
-            if (itemToUpdateIndex != -1) {
-              val model = data.lift(itemToUpdateIndex)
-              if (model.get.amountSpentModel.isDefined) {
-                Ok(HowMuchSpentOnShares(model.get.companyOrIndividualModel.get.companyOrIndividual,
-                  howMuchSpentOnSharesForm.fill(model.get.amountSpentModel.get), backUrl.get))
+              case Some(data) => {
+                val itemToUpdateIndex = data.indexWhere(_.processingId.getOrElse(0) == id)
+                if (itemToUpdateIndex != -1) {
+                  val model = data.lift(itemToUpdateIndex)
+                  if (model.get.amountSpentModel.isDefined) {
+                    Ok(HowMuchSpentOnShares(model.get.companyOrIndividualModel.get.companyOrIndividual,
+                      howMuchSpentOnSharesForm.fill(model.get.amountSpentModel.get), backUrl.get))
+                  }
+                  else
+                    Ok(HowMuchSpentOnShares(model.get.companyOrIndividualModel.get.companyOrIndividual,
+                      howMuchSpentOnSharesForm, backUrl.get))
+                }
+                else Redirect(routes.AddInvestorOrNomineeController.show())
               }
-              else
-                Ok(HowMuchSpentOnShares(model.get.companyOrIndividualModel.get.companyOrIndividual,
-                  howMuchSpentOnSharesForm, backUrl.get))
-            }
-            else {
-              // Set back to the review page later
-              Redirect(routes.AddInvestorOrNomineeController.show())
+              case None => Redirect(routes.AddInvestorOrNomineeController.show())
             }
           }
-          case None => {
-            Redirect(controllers.seis.routes.ShareDescriptionController.show())
+          else {
+            // No back URL so send them back to any page as per the requirement
+            Future.successful(Redirect(routes.AddInvestorOrNomineeController.show()))
           }
         }
-          }
-      else {
-        // No back URL so send them back to any page as per the requirement
-        Future.successful(Redirect(controllers.seis.routes.ShareDescriptionController.show()))
-      }
+        for {
+          backUrl <- s4lConnector.fetchAndGetFormData[String](KeystoreKeys.backLinkHowMuchSpentOnShares)
+          route <- process(backUrl)
+        } yield route
     }
-
-    for {
-      backUrl <- s4lConnector.fetchAndGetFormData[String](KeystoreKeys.backLinkHowMuchSpentOnShares)
-      route <- process(backUrl)
-    } yield route
-
-  }
   }
 
   def submit(backUrl: Option[String]): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {

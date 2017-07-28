@@ -1,0 +1,45 @@
+@import models.investorDetails.NumberOfPreviouslyIssuedSharesModel
+@import uk.gov.hmrc.play.views.html.helpers.form
+@import views.html.helpers.{backButtonWithProgress, input, errorSummary, hiddenField}
+
+@(companyOrIndividual: String, numberOfPreviouslyIssuedSharesForm: Form[NumberOfPreviouslyIssuedSharesModel], backUrl: String)(implicit request: Request[_], messages: Messages)
+
+@main_template(Messages("page.seis.investors.numberOfPreviouslyIssuedShares.title", companyOrIndividual.toLowerCase())) {
+<!- TODO -->
+@backButtonWithProgress(backUrl, Messages("common.section.progress.company.details.four"))
+
+@errorSummary(numberOfPreviouslyIssuedSharesForm, "number-of-previously-issued-shares", "numberOfPreviouslyIssuedShares")
+
+<h1 class="heading-xlarge" id="main-heading">@Messages("page.seis.investors.numberOfPreviouslyIssuedShares.heading", companyOrIndividual.toLowerCase())</h1>
+
+<div>
+    @form(action = controllers.seis.routes.NumberOfPreviouslyIssuedSharesController.submit(Some(companyOrIndividual), Some(backUrl))) {
+    <fieldset>
+        <legend class="visuallyhidden">@Messages("page.seis.investors.numberOfPreviouslyIssuedShares.heading", companyOrIndividual.toLowerCase())</legend>
+        <div class="form-group">
+            @input(
+            numberOfPreviouslyIssuedSharesForm("numberOfPreviouslyIssuedShares"),
+            '_divClass -> "form-label",
+            '_labelId -> "label-numberOfPreviouslyIssuedShares",
+            '_label -> Messages("page.seis.investors.numberOfPreviouslyIssuedShares.heading", companyOrIndividual.toLowerCase()),
+            '_labelTextClass -> "visuallyhidden",
+            '_maxlength -> "25",
+            '_inputClass -> "input--fullwidth"
+            )
+        </div>
+    </fieldset>
+
+    <div>
+        @hiddenField(
+            numberOfPreviouslyIssuedSharesForm("processingId"),
+        'id -> "processingId"
+        )
+    </div>
+
+    <div class="form-group">
+        <button class="btn button" type="submit" id="next">@Messages("common.button.snc")</button>
+    </div>
+
+    }
+</div>
+}

@@ -63,14 +63,9 @@ trait IsExistingShareHolderController extends FrontendController with Authorised
                   }
                   else Redirect(routes.AddInvestorOrNomineeController.show())
                 }
-                else {
-                  // Set back to the review page later
-                  Redirect(routes.AddInvestorOrNomineeController.show())
-                }
+                else Redirect(routes.AddInvestorOrNomineeController.show())
               }
-              case None => {
-                Redirect(controllers.seis.routes.ShareDescriptionController.show())
-              }
+              case None => Redirect(routes.AddInvestorOrNomineeController.show())
             }
           }
           else {
@@ -96,12 +91,16 @@ trait IsExistingShareHolderController extends FrontendController with Authorised
             validFormData.processingId match {
               case Some(_) => PreviousInvestorsHelper.updateIsExistingShareHoldersDetails(s4lConnector, validFormData).map {
                 investorDetailsModel => {
-                  Redirect(routes.IsExistingShareHolderController.show(investorDetailsModel.processingId.get))
+                  s4lConnector.saveFormData(KeystoreKeys.backLinkShareClassAndDescription,
+                    routes.IsExistingShareHolderController.show(investorDetailsModel.processingId.get).url)
+                  Redirect(routes.ShareClassAndDescriptionController.show(investorDetailsModel.processingId.get))
                 }
               }
               case None => PreviousInvestorsHelper.addIsExistingShareHoldersDetails(s4lConnector, validFormData).map {
                 investorDetailsModel => {
-                  Redirect(routes.IsExistingShareHolderController.show(investorDetailsModel.processingId.get))
+                  s4lConnector.saveFormData(KeystoreKeys.backLinkShareClassAndDescription,
+                    routes.IsExistingShareHolderController.show(investorDetailsModel.processingId.get).url)
+                  Redirect(routes.ShareClassAndDescriptionController.show(investorDetailsModel.processingId.get))
                 }
               }
             }
