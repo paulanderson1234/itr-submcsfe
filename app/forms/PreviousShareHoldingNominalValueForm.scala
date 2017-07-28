@@ -31,7 +31,8 @@ object PreviousShareHoldingNominalValueForm {
       "previousShareHoldingNominalValue" -> nonEmptyText
         .verifying(Validation.genericWholeAmountCheck(messageKey, minimumAmount))
         .transform[BigDecimal](value => BigDecimal(value), _.toString()),
-      "processingId" -> optional(number)
+      "processingId" -> optional(number),
+      "investorProcessingId" -> optional(number)
   )(PreviousShareHoldingNominalValueModel.apply)(PreviousShareHoldingNominalValueModel.unapply)
   )
 }

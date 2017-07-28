@@ -4,16 +4,16 @@
 @import views.html.helpers.errorSummary
 @import models.investorDetails.PreviousShareHoldingNominalValueModel
 
-@(previousShareHoldingNominalValue: Form[PreviousShareHoldingNominalValueModel])(implicit request: Request[_], messages: Messages)
+@(previousShareHoldingNominalValueForm: Form[PreviousShareHoldingNominalValueModel])(implicit request: Request[_], messages: Messages)
 
-@main_template(Messages("page.seis.previousShareHoldingNominalValue.title")) {
-@backButtonWithProgress(controllers.seis.routes.PreviousShareHoldingNominalValueController.show(1).url, Messages("common.section.progress.company.details.four"))
+@main_template(Messages("page.seis.investors.previousShareHoldingNominalValue.title")) {
+@backButtonWithProgress(controllers.seis.routes.PreviousShareHoldingNominalValueController.show().url, Messages("common.section.progress.company.details.four"))
 
                     //TODO - Back link navigates to the Share Class / Description Page when available
 
     @errorSummary(previousShareHoldingNominalValueForm, "previous-share-holding-nominal-value", "previousShareHoldingNominalValue")
 
-    <h1 id="main-heading" class="heading-xlarge">@Messages("page.seis.previousShareHoldingNominalValue.heading")</h1>
+    <h1 id="main-heading" class="heading-xlarge">@Messages("page.seis.investors.previousShareHoldingNominalValue.heading")</h1>
 
     <div id="nominal-value-info" class = "form-group">
         <p>@Messages("page.seis.investors.previousShareHoldingNominalValue.info")</p>
@@ -31,7 +31,7 @@
             '_type -> "text",
             '_maxlength -> "11",
             '_hintId -> "label-nominal-value-hint",
-            '_inputHint -> Messages("page.seis.previousShareHoldingNominalValue.whereToFind"),
+            '_inputHint -> Messages("page.seis.investors.previousShareHoldingNominalValue.whereToFind"),
             'id -> "nominalValue"
             )
 
