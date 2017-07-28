@@ -67,18 +67,17 @@ trait HowMuchSpentOnSharesController extends FrontendController with AuthorisedA
                   howMuchSpentOnSharesForm, backUrl.get))
             }
             else {
-              // Set back to the review page later
               Redirect(routes.AddInvestorOrNomineeController.show())
             }
           }
           case None => {
-            Redirect(controllers.seis.routes.ShareDescriptionController.show())
+            Redirect(controllers.seis.routes.AddInvestorOrNomineeController.show())
           }
         }
           }
       else {
         // No back URL so send them back to any page as per the requirement
-        Future.successful(Redirect(controllers.seis.routes.ShareDescriptionController.show()))
+        Future.successful(Redirect(controllers.seis.routes.AddInvestorOrNomineeController.show()))
       }
     }
 

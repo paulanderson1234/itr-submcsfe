@@ -158,7 +158,7 @@ class CompanyDetailsControllerSpec extends BaseSpec {
 
 
   "Submitting to the CompanyDetailsController when authenticated and enrolled" should {
-    "redirect to the correct page if a company and the form 'was' previously populated and had a processing id" in {
+    "redirect to the correct page if the form 'was' previously populated and had a processing id" in {
 
       val formInput =
         Seq("companyName" -> "Line 0",

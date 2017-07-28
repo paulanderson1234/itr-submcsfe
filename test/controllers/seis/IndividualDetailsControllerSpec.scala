@@ -72,7 +72,7 @@ class IndividualDetailsControllerSpec extends BaseSpec with FakeRequestHelper{
       IndividualDetailsController.enrolmentConnector shouldBe EnrolmentConnector
     }
 
-    "return a 200 on a GET request" when {
+    "Sending a GET request to IndividualDEtails Controller when authenticated and enrolled" should {
 
       /* TODO route tbd */
       "'REDIRECT' to TBD page" when {
@@ -168,7 +168,7 @@ class IndividualDetailsControllerSpec extends BaseSpec with FakeRequestHelper{
 
 
     "Submitting to the CompanyDetailsController when authenticated and enrolled" should {
-      "redirect to the correct page if a company and the form 'was' previously populated and had a processing id" in {
+      "redirect to the correct page and the form 'was' previously populated and had a processing id" in {
 
               val formInput = Seq(
                 "forename" -> "TEST",
