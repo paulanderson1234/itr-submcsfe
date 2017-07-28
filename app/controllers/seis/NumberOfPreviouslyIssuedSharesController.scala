@@ -56,14 +56,10 @@ trait NumberOfPreviouslyIssuedSharesController extends FrontendController with A
                 val itemToUpdateIndex = data.indexWhere(_.processingId.getOrElse(0) == investorProcessingId)
                 if (itemToUpdateIndex != -1) {
                   val model = data.lift(itemToUpdateIndex)
-                  println(s" 8******************************* itemToUpdateIndex ------------- ${investorProcessingId} :::::::  ${model.get.processingId}")
                   if (model.get.previousShareHoldingModels.isDefined && model.get.previousShareHoldingModels.get.size > 0) {
                     val shareHoldingsIndex = model.get.previousShareHoldingModels.get.indexWhere(_.processingId.getOrElse(0) == id)
                     if (shareHoldingsIndex != -1) {
                       val shareHolderModel = model.get.previousShareHoldingModels.get.lift(shareHoldingsIndex)
-                      println(s" 8******************************* itemToUpdateIndex ------------- ${id} :::::::  ${shareHolderModel.get.processingId}")
-                      println(s" 8******************************* shareHolderModel.get.numberOfPreviouslyIssuedSharesModel.isDefined ----::: " +
-                        s" ${shareHolderModel.get.numberOfPreviouslyIssuedSharesModel.isDefined}")
                       if(shareHolderModel.get.numberOfPreviouslyIssuedSharesModel.isDefined) {
                         Ok(NumberOfPreviouslyIssuedShares(model.get.companyOrIndividualModel.get.companyOrIndividual,
                           numberOfPreviouslyIssuedSharesForm.fill(shareHolderModel.get.numberOfPreviouslyIssuedSharesModel.get), backUrl.get))
@@ -102,15 +98,11 @@ trait NumberOfPreviouslyIssuedSharesController extends FrontendController with A
             validFormData.processingId match {
               case Some(_) => PreviousInvestorShareHoldersHelper.updateNumberOfPreviouslyIssuedShares(s4lConnector, validFormData).map {
                 data => {
-                  println(s" 8******************************* update None ---------data.investorProcessingId.get---- ${data.investorProcessingId.get} " +
-                    s"::::::: data.processingId.get ::::  ${data.processingId.get}")
                   Redirect(routes.NumberOfPreviouslyIssuedSharesController.show(data.investorProcessingId.get, data.processingId.get))
                 }
               }
               case None => PreviousInvestorShareHoldersHelper.addNumberOfPreviouslyIssuedShares(s4lConnector, validFormData).map {
                 data => {
-                  println(s" 8******************************* add None ---------data.investorProcessingId.get---- ${data.investorProcessingId.get} " +
-                    s"::::::: data.processingId.get ::::  ${data.numberOfPreviouslyIssuedSharesModel.get.processingId}")
                   Redirect(routes.NumberOfPreviouslyIssuedSharesController.show(data.investorProcessingId.get, data.processingId.get))
                 }
               }

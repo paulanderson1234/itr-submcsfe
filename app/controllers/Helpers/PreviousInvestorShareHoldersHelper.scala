@@ -141,21 +141,14 @@ trait PreviousInvestorShareHoldersHelper {
     val result = s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
       case Some(data) => {
         val investorDetailsModel = data.last
-        println(s" 8******************************* addNumberOfPreviouslyIssuedShares investorDetailsModel------------- " +
-          s"${investorDetailsModel.processingId}")
         if (investorDetailsModel.previousShareHoldingModels.isDefined
           && investorDetailsModel.previousShareHoldingModels.size > 0) {
-
           val previousShareHoldingModelObj = investorDetailsModel.previousShareHoldingModels.get.last
-          println(s" 8******************************* addNumberOfPreviouslyIssuedShares previousShareHoldingModelObj------------- " +
-            s"${previousShareHoldingModelObj.processingId}    :::::: ${previousShareHoldingModelObj.investorProcessingId}")
-
           data.updated(data.size - 1, investorDetailsModel.copy(previousShareHoldingModels =
             Some(investorDetailsModel.previousShareHoldingModels.get.updated(investorDetailsModel.previousShareHoldingModels.get.size - defaultId,
               previousShareHoldingModelObj.copy(numberOfPreviouslyIssuedSharesModel =
                 Some(numberOfPreviouslyIssuedSharesModel.copy(processingId = previousShareHoldingModelObj.processingId,
                   investorProcessingId = previousShareHoldingModelObj.investorProcessingId)))))))
-
         }
         else throw new InternalServerException("No valid Investor information passed")
       }
@@ -175,9 +168,6 @@ trait PreviousInvestorShareHoldersHelper {
   def updateNumberOfPreviouslyIssuedShares(s4lConnector: connectors.S4LConnector,
                                            numberOfPreviouslyIssuedSharesModel: NumberOfPreviouslyIssuedSharesModel)
                                           (implicit hc: HeaderCarrier, user: TAVCUser): Future[PreviousShareHoldingModel] = {
-
-    println(s" 8******************************* updateNumberOfPreviouslyIssuedShares ------------- " +
-      s"${numberOfPreviouslyIssuedSharesModel.investorProcessingId} :::::::  ${numberOfPreviouslyIssuedSharesModel.processingId}")
 
     val result = s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
       case Some(data) => {
