@@ -143,5 +143,5 @@ POST       /number-of-shares-purchased            controllers.seis.NumberOfShare
 GET        /number-of-previously-issued-shares/:InvestorId/:Id       controllers.seis.NumberOfPreviouslyIssuedSharesController.show(InvestorId: Int, Id: Int)
 POST       /number-of-previously-issued-shares                   controllers.seis.NumberOfPreviouslyIssuedSharesController.submit(companyOrIndividual: Option[String]?=None, backUrl: Option[String]?=None)
 
-GET        /share-class-description/:InvestorId       controllers.seis.ShareClassAndDescriptionController.show(InvestorId: Int, Id: Option[Int]?=None)
-POST       /share-class-description                   controllers.seis.ShareClassAndDescriptionController.submit(companyOrIndividual: Option[String]?=None, backUrl: Option[String]?=None)
+GET        /previous-shareholding-description/:InvestorId       controllers.seis.PreviousShareHoldingDescriptionController.show(InvestorId: Int, Id: Option[Int]?=None)
+POST       /previous-shareholding-description                   controllers.seis.PreviousShareHoldingDescriptionController.submit(companyOrIndividual: Option[String]?=None, backUrl: Option[String]?=None)

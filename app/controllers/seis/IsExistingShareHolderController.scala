@@ -93,14 +93,14 @@ trait IsExistingShareHolderController extends FrontendController with Authorised
                 investorDetailsModel => {
                   s4lConnector.saveFormData(KeystoreKeys.backLinkShareClassAndDescription,
                     routes.IsExistingShareHolderController.show(investorDetailsModel.processingId.get).url)
-                  Redirect(routes.ShareClassAndDescriptionController.show(investorDetailsModel.processingId.get))
+                  Redirect(routes.PreviousShareHoldingDescriptionController.show(investorDetailsModel.processingId.get))
                 }
               }
               case None => PreviousInvestorsHelper.addIsExistingShareHoldersDetails(s4lConnector, validFormData).map {
                 investorDetailsModel => {
                   s4lConnector.saveFormData(KeystoreKeys.backLinkShareClassAndDescription,
                     routes.IsExistingShareHolderController.show(investorDetailsModel.processingId.get).url)
-                  Redirect(routes.ShareClassAndDescriptionController.show(investorDetailsModel.processingId.get))
+                  Redirect(routes.PreviousShareHoldingDescriptionController.show(investorDetailsModel.processingId.get))
                 }
               }
             }

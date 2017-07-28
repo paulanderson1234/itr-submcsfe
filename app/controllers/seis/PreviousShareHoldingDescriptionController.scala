@@ -22,17 +22,17 @@ import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.Helpers.{ControllerHelpers, PreviousInvestorShareHoldersHelper}
 import controllers.predicates.FeatureSwitch
-import forms.ShareClassAndDescriptionForm._
+import forms.PreviousShareHoldingDescriptionForm._
 import models.investorDetails.InvestorDetailsModel
 import play.api.Play.current
 import play.api.i18n.Messages.Implicits._
 import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
-import views.html.seis.investors.ShareClassAndDescription
+import views.html.seis.investors.PreviousShareHoldingDescription
 
 import scala.concurrent.Future
 
-object ShareClassAndDescriptionController extends ShareClassAndDescriptionController
+object PreviousShareHoldingDescriptionController extends PreviousShareHoldingDescriptionController
 {
   override lazy val s4lConnector = S4LConnector
   override lazy val applicationConfig = FrontendAppConfig
@@ -40,7 +40,7 @@ object ShareClassAndDescriptionController extends ShareClassAndDescriptionContro
   override lazy val enrolmentConnector = EnrolmentConnector
 }
 
-trait ShareClassAndDescriptionController extends FrontendController with AuthorisedAndEnrolledForTAVC with FeatureSwitch with ControllerHelpers {
+trait PreviousShareHoldingDescriptionController extends FrontendController with AuthorisedAndEnrolledForTAVC with FeatureSwitch with ControllerHelpers {
 
   override val acceptedFlows = Seq(Seq(SEIS))
 
@@ -62,24 +62,24 @@ trait ShareClassAndDescriptionController extends FrontendController with Authori
                         val shareHoldingsIndex = model.get.previousShareHoldingModels.get.indexWhere(_.processingId.getOrElse(0) == idVal)
                         if (shareHoldingsIndex != -1) {
                           val shareHolderModel = model.get.previousShareHoldingModels.get.lift(shareHoldingsIndex)
-                          Ok(ShareClassAndDescription(model.get.companyOrIndividualModel.get.companyOrIndividual,
-                            shareClassAndDescriptionForm.fill(shareHolderModel.get.shareClassAndDescriptionModel.get), backUrl.get))
+                          Ok(PreviousShareHoldingDescription(model.get.companyOrIndividualModel.get.companyOrIndividual,
+                            previousShareHoldingDescriptionForm.fill(shareHolderModel.get.previousShareHoldingDescriptionModel.get), backUrl.get))
                         } else {
                           val shareHolderModel = model.get.previousShareHoldingModels.get.last
-                          Ok(ShareClassAndDescription(model.get.companyOrIndividualModel.get.companyOrIndividual,
-                            shareClassAndDescriptionForm.fill(shareHolderModel.shareClassAndDescriptionModel.get), backUrl.get))
+                          Ok(PreviousShareHoldingDescription(model.get.companyOrIndividualModel.get.companyOrIndividual,
+                            previousShareHoldingDescriptionForm.fill(shareHolderModel.previousShareHoldingDescriptionModel.get), backUrl.get))
                         }
                       }
                       case None => {
                         val shareHolderModel = model.get.previousShareHoldingModels.get.last
-                        Ok(ShareClassAndDescription(model.get.companyOrIndividualModel.get.companyOrIndividual,
-                          shareClassAndDescriptionForm.fill(shareHolderModel.shareClassAndDescriptionModel.get), backUrl.get))
+                        Ok(PreviousShareHoldingDescription(model.get.companyOrIndividualModel.get.companyOrIndividual,
+                          previousShareHoldingDescriptionForm.fill(shareHolderModel.previousShareHoldingDescriptionModel.get), backUrl.get))
                       }
                     }
                   }
                   // Redirect to thE APPROPRIATE PAGE
-                  else Ok(ShareClassAndDescription(model.get.companyOrIndividualModel.get.companyOrIndividual,
-                    shareClassAndDescriptionForm, backUrl.get))
+                  else Ok(PreviousShareHoldingDescription(model.get.companyOrIndividualModel.get.companyOrIndividual,
+                    previousShareHoldingDescriptionForm, backUrl.get))
                 }
                 else Redirect(routes.AddInvestorOrNomineeController.show())
               }
@@ -99,23 +99,23 @@ trait ShareClassAndDescriptionController extends FrontendController with Authori
   def submit(companyOrIndividual: Option[String], backUrl: Option[String]): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
     AuthorisedAndEnrolled.async { implicit user =>
       implicit request =>
-        shareClassAndDescriptionForm.bindFromRequest().fold(
+        previousShareHoldingDescriptionForm.bindFromRequest().fold(
           formWithErrors => {
-            Future.successful(BadRequest(ShareClassAndDescription(companyOrIndividual.get, formWithErrors, backUrl.get)))
+            Future.successful(BadRequest(PreviousShareHoldingDescription(companyOrIndividual.get, formWithErrors, backUrl.get)))
           },
           validFormData => {
             validFormData.processingId match {
               case Some(_) => PreviousInvestorShareHoldersHelper.updateShareClassAndDescription(s4lConnector, validFormData).map {
                 data => {
                   s4lConnector.saveFormData(KeystoreKeys.backLinkNumberOfPreviouslyIssuedShares,
-                    routes.ShareClassAndDescriptionController.show(data.investorProcessingId.get, data.processingId).url)
+                    routes.PreviousShareHoldingDescriptionController.show(data.investorProcessingId.get, data.processingId).url)
                   Redirect(routes.NumberOfPreviouslyIssuedSharesController.show(data.investorProcessingId.get, data.processingId.get))
                 }
               }
               case None => PreviousInvestorShareHoldersHelper.addShareClassAndDescription(s4lConnector, validFormData).map {
                 data => {
                   s4lConnector.saveFormData(KeystoreKeys.backLinkNumberOfPreviouslyIssuedShares,
-                    routes.ShareClassAndDescriptionController.show(data.investorProcessingId.get, data.processingId).url)
+                    routes.PreviousShareHoldingDescriptionController.show(data.investorProcessingId.get, data.processingId).url)
                   Redirect(routes.NumberOfPreviouslyIssuedSharesController.show(data.investorProcessingId.get, data.processingId.get))
                 }
               }

@@ -14,14 +14,20 @@
  * limitations under the License.
  */
 
-package models.investorDetails
+package forms
 
-import play.api.libs.json.Json
+import common.Constants
+import models.investorDetails.PreviousShareHoldingDescriptionModel
+import play.api.data.Form
+import play.api.data.Forms._
 
-case class ShareClassAndDescriptionModel(previouslyIssuedShares: BigDecimal,
-                                               processingId: Option[Int],
-                                               investorProcessingId: Option[Int])
+object PreviousShareHoldingDescriptionForm {
 
-object ShareClassAndDescriptionModel{
-  implicit val formats = Json.format[ShareClassAndDescriptionModel]
+  val previousShareHoldingDescriptionForm = Form(
+    mapping(
+      "previousShareHoldingDescription" -> nonEmptyText(maxLength = Constants.PreviousShareHoldingDescriptionMaxLength),
+      "processingId" -> optional(number),
+      "investorProcessingId" -> optional(number)
+    )(PreviousShareHoldingDescriptionModel.apply)(PreviousShareHoldingDescriptionModel.unapply)
+  )
 }

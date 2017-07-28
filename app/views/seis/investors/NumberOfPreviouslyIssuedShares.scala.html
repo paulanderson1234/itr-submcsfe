@@ -5,7 +5,7 @@
 @(companyOrIndividual: String, numberOfPreviouslyIssuedSharesForm: Form[NumberOfPreviouslyIssuedSharesModel], backUrl: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(Messages("page.seis.investors.numberOfPreviouslyIssuedShares.title", companyOrIndividual.toLowerCase())) {
-<!- TODO -->
+
 @backButtonWithProgress(backUrl, Messages("common.section.progress.company.details.four"))
 
 @errorSummary(numberOfPreviouslyIssuedSharesForm, "number-of-previously-issued-shares", "numberOfPreviouslyIssuedShares")
@@ -33,6 +33,13 @@
         @hiddenField(
             numberOfPreviouslyIssuedSharesForm("processingId"),
         'id -> "processingId"
+        )
+    </div>
+
+    <div>
+        @hiddenField(
+        numberOfPreviouslyIssuedSharesForm("investorProcessingId"),
+        'id -> "investorProcessingId"
         )
     </div>
 
