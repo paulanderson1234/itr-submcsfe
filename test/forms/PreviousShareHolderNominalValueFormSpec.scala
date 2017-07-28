@@ -38,7 +38,7 @@ class PreviousShareHolderNominalValueFormSpec extends UnitSpec with OneAppPerSui
       lazy val form = previousShareHoldingNominalValueForm.fill(model)
 
       "return a valid map" in {
-        form.data shouldBe Map("nominalValueOfShares" -> "123", "processingId" -> "1")
+        form.data shouldBe Map("previousShareHoldingNominalValue" -> "123", "processingId" -> "1")
       }
     }
 
@@ -54,7 +54,7 @@ class PreviousShareHolderNominalValueFormSpec extends UnitSpec with OneAppPerSui
     }
 
     "provided with a valid map with the maximum size" should {
-      val map = Map("nominalValueOfShares" -> s"$maxAmount", "processingId" -> "1")
+      val map = Map("previousShareHoldingNominalValue" -> s"$maxAmount", "processingId" -> "1")
       lazy val form = previousShareHoldingNominalValueForm.bind(map)
 
       "contain no errors" in {
@@ -119,7 +119,7 @@ class PreviousShareHolderNominalValueFormSpec extends UnitSpec with OneAppPerSui
     }
 
     "provided with an invalid map with a negative decimal large value " should {
-      val map = Map("nominalValueOfShares" -> s"$largeNegativeAmount", "processingId" -> "1")
+      val map = Map("previousShareHoldingNominalValue" -> s"$largeNegativeAmount", "processingId" -> "1")
       lazy val form = previousShareHoldingNominalValueForm.bind(map)
 
       "contain three errors" in {
@@ -129,7 +129,7 @@ class PreviousShareHolderNominalValueFormSpec extends UnitSpec with OneAppPerSui
     }
 
     "provided with an invalid map with an empty value" should {
-      val map = Map("nominalValueOfShares" -> " ", "processingId" -> "1")
+      val map = Map("previousShareHoldingNominalValue" -> " ", "processingId" -> "1")
       lazy val form = previousShareHoldingNominalValueForm.bind(map)
 
       "contain one error" in {
