@@ -33,8 +33,6 @@ import scala.concurrent.Future
 class AddInvestorOrNomineeControllerSpec extends BaseSpec {
 
   val validBackLink = controllers.seis.routes.TotalAmountSpentController.show().toString
-  val listOfInvestorsComplete = Vector(validModelWithPrevShareHoldings.copy(processingId = Some(1)))
-  val listOfInvestorsIncomplete = Vector(validModelWithPrevShareHoldings.copy(companyOrIndividualModel = None))
 
   object TestController extends AddInvestorOrNomineeController {
     override lazy val applicationConfig = MockConfig
@@ -95,7 +93,7 @@ class AddInvestorOrNomineeControllerSpec extends BaseSpec {
       "a 'backlink' is defined, an 'investor details list' is retrieved and VALID 'id' is defined" in {
         mockEnrolledRequest(seisSchemeTypesModel)
         setupMocks(Some(listOfInvestorsComplete), Some(validBackLink))
-        showWithSessionAndAuth(TestController.show(Some(1)))(
+        showWithSessionAndAuth(TestController.show(Some(2)))(
           result => {
             status(result) shouldBe OK
           }
@@ -108,7 +106,7 @@ class AddInvestorOrNomineeControllerSpec extends BaseSpec {
       "a 'backlink' is defined, an 'investor details list' is retrieved and an INVALID 'id' is defined" in {
         mockEnrolledRequest(seisSchemeTypesModel)
         setupMocks(Some(listOfInvestorsComplete), Some(validBackLink))
-        showWithSessionAndAuth(TestController.show(Some(2)))(
+        showWithSessionAndAuth(TestController.show(Some(3)))(
           result => {
             status(result) shouldBe SEE_OTHER
             redirectLocation(result) shouldBe Some("")
@@ -146,8 +144,6 @@ class AddInvestorOrNomineeControllerSpec extends BaseSpec {
 
   "By selecting the investor submission to the AddInvestorOrNomineeController when authenticated and enrolled" should {
     "redirect to the correct page if an investor and the form 'was not' previously populated" in {
-      when(TestController.s4lConnector.saveFormData[Vector[IndividualDetailsModel]](Matchers.eq(KeystoreKeys.addInvestor), Matchers.any())
-        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(CacheMap("",Map()))
 
       val formInput = "addInvestorOrNominee" -> Constants.investor
       setupMocks(Some(listOfInvestorsComplete), Some(validBackLink))
@@ -164,8 +160,6 @@ class AddInvestorOrNomineeControllerSpec extends BaseSpec {
 
   "By selecting the investor submission to the AddInvestorOrNomineeController when authenticated and enrolled" should {
     "redirect to the CompanyOrIndividual page if a nominee and the form 'was not' previously populated" in {
-      when(TestController.s4lConnector.saveFormData[Vector[IndividualDetailsModel]](Matchers.eq(KeystoreKeys.addInvestor), Matchers.any())
-        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(CacheMap("",Map()))
 
       val formInput = "addInvestorOrNominee" -> Constants.investor
       setupMocks(Some(listOfInvestorsComplete), Some(validBackLink))
@@ -182,10 +176,8 @@ class AddInvestorOrNomineeControllerSpec extends BaseSpec {
 
   "By selecting the investor submission to the AddInvestorOrNomineeController when authenticated and enrolled" should {
     "redirect to the correct page if an investor and the form 'was' previously populated and had a processing id" in {
-      when(TestController.s4lConnector.saveFormData[Vector[IndividualDetailsModel]](Matchers.eq(KeystoreKeys.addInvestor), Matchers.any())
-        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(CacheMap("",Map()))
 
-      val formInput = Seq("addInvestorOrNominee" -> Constants.investor, "processingId" -> "1")
+      val formInput = Seq("addInvestorOrNominee" -> Constants.investor, "processingId" -> "2")
       setupMocks(Some(listOfInvestorsComplete), Some(validBackLink))
       mockEnrolledRequest(seisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,formInput:_*)(
@@ -203,7 +195,7 @@ class AddInvestorOrNomineeControllerSpec extends BaseSpec {
       when(TestController.s4lConnector.saveFormData[Vector[IndividualDetailsModel]](Matchers.eq(KeystoreKeys.addInvestor), Matchers.any())
         (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(CacheMap("",Map()))
 
-      val formInput = Seq("addInvestorOrNominee" -> Constants.nominee, "processingId" -> "1")
+      val formInput = Seq("addInvestorOrNominee" -> Constants.nominee, "processingId" -> "2")
       setupMocks(Some(listOfInvestorsComplete), Some(validBackLink))
       mockEnrolledRequest(seisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,formInput:_*)(
