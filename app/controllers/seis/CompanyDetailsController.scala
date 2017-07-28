@@ -70,17 +70,17 @@ trait CompanyDetailsController extends FrontendController with AuthorisedAndEnro
                 }
                 else {
                   // Set back to the review page later
-                  Redirect(routes.AddInvestorOrNomineeController.show())
+                  Redirect("")
                 }
               }
               case None => {
-                Redirect(controllers.seis.routes.ShareDescriptionController.show())
+                Redirect(controllers.seis.routes.AddInvestorOrNomineeController.show())
               }
             }
           }
           else {
             // No back URL so send them back to any page as per the requirement
-            Future.successful(Redirect(controllers.seis.routes.AddInvestorOrNomineeController.show()))
+            Future.successful(Redirect(""))
           }
         }
         for {

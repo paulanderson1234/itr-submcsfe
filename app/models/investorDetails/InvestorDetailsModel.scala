@@ -38,7 +38,7 @@ case class InvestorDetailsModel(investorOrNomineeModel: Option[AddInvestorOrNomi
     }
 
     investorOrNomineeModel.isDefined && companyOrIndividualModel.isDefined &&
-    (companyDetailsModel.isDefined ^ individualDetailsModel.isDefined) && numberOfSharesPurchasedModel.isDefined &&
+    (companyDetailsModel.isDefined || individualDetailsModel.isDefined) && numberOfSharesPurchasedModel.isDefined &&
     amountSpentModel.isDefined && isExistingShareHolderModel.isDefined && validateShareHoldings
   }
 
