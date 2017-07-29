@@ -111,8 +111,9 @@ trait PreviousInvestorShareHoldersHelper {
             val shareHoldingsModel = investorDetailsModel.previousShareHoldingModels.get.lift(shareHoldingsIndex).get
 
             data.updated(itemToUpdateIndex, investorDetailsModel.copy(previousShareHoldingModels =
-              Some(investorDetailsModel.previousShareHoldingModels.get :+ shareHoldingsModel.copy(previousShareHoldingDescriptionModel =
-                Some(previousShareHoldingDescriptionModel)))))
+              Some(investorDetailsModel.previousShareHoldingModels.get.updated(shareHoldingsIndex,
+                shareHoldingsModel.copy(previousShareHoldingDescriptionModel =
+                Some(previousShareHoldingDescriptionModel))))))
 
           }
           else throw new InternalServerException("No valid Investor information passed")
@@ -135,20 +136,25 @@ trait PreviousInvestorShareHoldersHelper {
 
   // add logic for the middle flow
   def addNumberOfPreviouslyIssuedShares(s4lConnector: connectors.S4LConnector,
-                                        numberOfPreviouslyIssuedSharesModel: NumberOfPreviouslyIssuedSharesModel)
+                                        numberOfPreviouslyIssuedShares: NumberOfPreviouslyIssuedSharesModel)
                                        (implicit hc: HeaderCarrier, user: TAVCUser): Future[PreviousShareHoldingModel] = {
     val defaultId: Int = 1
     val result = s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
       case Some(data) => {
         val investorDetailsModel = data.last
         if (investorDetailsModel.previousShareHoldingModels.isDefined
-          && investorDetailsModel.previousShareHoldingModels.size > 0) {
+          && investorDetailsModel.previousShareHoldingModels.get.size > 0) {
           val previousShareHoldingModelObj = investorDetailsModel.previousShareHoldingModels.get.last
+          val numberOfPreviouslyIssuedShare = Some(numberOfPreviouslyIssuedShares.copy(processingId = previousShareHoldingModelObj.processingId,
+            investorProcessingId = previousShareHoldingModelObj.investorProcessingId))
+           val previousShareHoldingModelObj1 = previousShareHoldingModelObj.copy(numberOfPreviouslyIssuedSharesModel = numberOfPreviouslyIssuedShare)
+          val vectorPSI = investorDetailsModel.previousShareHoldingModels.get
+          val updatedVector = vectorPSI.updated(vectorPSI.size -1, previousShareHoldingModelObj1)
           data.updated(data.size - 1, investorDetailsModel.copy(previousShareHoldingModels =
-            Some(investorDetailsModel.previousShareHoldingModels.get.updated(investorDetailsModel.previousShareHoldingModels.get.size - defaultId,
+            Some(investorDetailsModel.previousShareHoldingModels.get.updated(investorDetailsModel.previousShareHoldingModels.get.size - 1,
               previousShareHoldingModelObj.copy(numberOfPreviouslyIssuedSharesModel =
-                Some(numberOfPreviouslyIssuedSharesModel.copy(processingId = previousShareHoldingModelObj.processingId,
-                  investorProcessingId = previousShareHoldingModelObj.investorProcessingId)))))))
+                Some(numberOfPreviouslyIssuedShares.copy(processingId = previousShareHoldingModelObj.processingId,
+                investorProcessingId = previousShareHoldingModelObj.investorProcessingId)))))))
         }
         else throw new InternalServerException("No valid Investor information passed")
       }
@@ -176,7 +182,7 @@ trait PreviousInvestorShareHoldersHelper {
         if (itemToUpdateIndex != -1) {
           val investorDetailsModel = data.lift(itemToUpdateIndex).get
           if (investorDetailsModel.previousShareHoldingModels.isDefined
-            && investorDetailsModel.previousShareHoldingModels.size > 0) {
+            && investorDetailsModel.previousShareHoldingModels.get.size > 0) {
             val shareHoldingsIndex = investorDetailsModel.previousShareHoldingModels.get.indexWhere(_.processingId.getOrElse(0) ==
               numberOfPreviouslyIssuedSharesModel.processingId.getOrElse(0))
             if (shareHoldingsIndex != -1) {
