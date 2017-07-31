@@ -108,8 +108,7 @@ class AddInvestorOrNomineeControllerSpec extends BaseSpec {
         setupMocks(Some(listOfInvestorsComplete), Some(validBackLink))
         showWithSessionAndAuth(TestController.show(Some(3)))(
           result => {
-            status(result) shouldBe SEE_OTHER
-            redirectLocation(result) shouldBe Some("")
+            status(result) shouldBe OK
           }
         )
       }

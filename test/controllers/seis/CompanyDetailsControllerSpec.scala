@@ -65,7 +65,6 @@ class CompanyDetailsControllerSpec extends BaseSpec {
 
   "Sending a GET request to CompanyDetailsController when authenticated and enrolled" should {
 
-    /* TODO route tbd */
     "'REDIRECT' to TBD page" when {
       "there is no 'back link' present" in {
         mockEnrolledRequest(seisSchemeTypesModel)
@@ -73,7 +72,7 @@ class CompanyDetailsControllerSpec extends BaseSpec {
         showWithSessionAndAuth(TestController.show(99999))(
           result => {
             status(result) shouldBe SEE_OTHER
-            redirectLocation(result) shouldBe Some("")
+            redirectLocation(result) shouldBe Some(controllers.seis.routes.AddInvestorOrNomineeController.show(None).url)
           }
         )
       }
@@ -93,7 +92,6 @@ class CompanyDetailsControllerSpec extends BaseSpec {
       }
     }
 
-    /* TODO redirect to review investor details page when the id does not exist  */
     "Redirect to the Investor Details Review page" when {
       "a 'backlink' is defined, an 'investor details list' is retrieved and an INVALID 'id' is defined" in {
         mockEnrolledRequest(seisSchemeTypesModel)
@@ -101,7 +99,7 @@ class CompanyDetailsControllerSpec extends BaseSpec {
         showWithSessionAndAuth(TestController.show(3))(
           result => {
             status(result) shouldBe SEE_OTHER
-            redirectLocation(result) shouldBe Some("")
+            redirectLocation(result) shouldBe Some(controllers.seis.routes.AddInvestorOrNomineeController.show(None).url)
           }
         )
       }

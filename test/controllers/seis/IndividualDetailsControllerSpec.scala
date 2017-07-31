@@ -74,7 +74,6 @@ class IndividualDetailsControllerSpec extends BaseSpec with FakeRequestHelper{
 
     "Sending a GET request to IndividualDEtails Controller when authenticated and enrolled" should {
 
-      /* TODO route tbd */
       "'REDIRECT' to TBD page" when {
         "there is no 'back link' present" in {
           mockEnrolledRequest(seisSchemeTypesModel)
@@ -82,7 +81,7 @@ class IndividualDetailsControllerSpec extends BaseSpec with FakeRequestHelper{
           showWithSessionAndAuth(TestController.show(99999))(
             result => {
               status(result) shouldBe SEE_OTHER
-              redirectLocation(result) shouldBe Some("")
+              redirectLocation(result) shouldBe Some(controllers.seis.routes.AddInvestorOrNomineeController.show().url)
             }
           )
         }
@@ -110,7 +109,7 @@ class IndividualDetailsControllerSpec extends BaseSpec with FakeRequestHelper{
           showWithSessionAndAuth(TestController.show(3))(
             result => {
               status(result) shouldBe SEE_OTHER
-              redirectLocation(result) shouldBe Some("")
+              redirectLocation(result) shouldBe Some(controllers.seis.routes.AddInvestorOrNomineeController.show().url)
             }
           )
         }

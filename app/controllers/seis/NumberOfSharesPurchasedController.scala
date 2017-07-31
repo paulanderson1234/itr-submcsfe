@@ -69,20 +69,12 @@ trait NumberOfSharesPurchasedController extends FrontendController with Authoris
                 else
                   Redirect(controllers.seis.routes.ShareIssueDateController.show())
               }
-              else {
-                // Set back to the review or Share description (starting) page later
-                Redirect(routes.AddInvestorOrNomineeController.show())
-              }
+              else Redirect(routes.AddInvestorOrNomineeController.show())
             }
-            case None => {
-              Redirect(controllers.seis.routes.AddInvestorOrNomineeController.show())
-            }
+            case None => Redirect(routes.AddInvestorOrNomineeController.show())
           }
         }
-        else {
-          // No back URL so send them back to any page as per the requirement
-          Future.successful(Redirect(controllers.seis.routes.AddInvestorOrNomineeController.show()))
-        }
+        else Future.successful(Redirect(routes.AddInvestorOrNomineeController.show()))
       }
 
       for {

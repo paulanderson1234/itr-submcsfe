@@ -26,7 +26,7 @@ case class PreviousShareHoldingModel(investorShareIssueDateModel: Option[Investo
 
   /** Validates that all PreviousShareHolding fields exist**/
   def validate: Boolean = investorShareIssueDateModel.isDefined && numberOfPreviouslyIssuedSharesModel.isDefined &&
-    previousShareHoldingNominalValueModel.isDefined  && previousShareHoldingDescriptionModel.isDefined
+                          previousShareHoldingNominalValueModel.isDefined && previousShareHoldingDescriptionModel.isDefined
 }
 
 object PreviousShareHoldingModel{
