@@ -156,7 +156,7 @@ class PreviousShareHoldingDescriptionControllerSpec extends BaseSpec{
     }
 
 
-    "Load an empty ShareHoldingDescription page" when {
+    "Load a populated ShareHoldingDescription page" when {
       "a 'backlink' is defined, an 'investor details list' is retrieved, a VALID investor details " +
         "ID is defined and a VALID share holding Id is provided" in {
         mockEnrolledRequest(seisSchemeTypesModel)
