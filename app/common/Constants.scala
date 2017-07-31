@@ -85,5 +85,5 @@ trait Constants {
   val typeCompany = "Company"
   val typeIndividual = "Individual"
 
-
+  val notFound = -1
 }

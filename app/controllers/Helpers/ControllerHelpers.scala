@@ -18,12 +18,18 @@ package controllers.Helpers
 
 import auth.TAVCUser
 import common.{Constants, KeystoreKeys}
+import forms.CompanyOrIndividualForm._
 import models._
+import models.investorDetails.InvestorDetailsModel
 import models.submission.SchemeTypesModel
+import play.api.data.Form
 import uk.gov.hmrc.play.http.HeaderCarrier
 import play.api.i18n.Messages
-import play.api.mvc.{AnyContent, Request}
+import play.api.mvc.{AnyContent, Request, Result}
 import views.html.seis.companyDetails.QualifyBusinessActivity_Scope0.QualifyBusinessActivity_Scope1.QualifyBusinessActivity
+import common.Constants._
+import controllers.seis.routes
+import play.api.mvc.Results._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -125,5 +131,33 @@ trait ControllerHelpers {
 
   def useInvestorOrNomineeValueAsHeadingText(investorOrNominee: AddInvestorOrNomineeModel): String =  investorOrNominee.addInvestorOrNominee.toLowerCase
 
+  def redirectNoInvestors(vector: Option[Vector[InvestorDetailsModel]])(f: Vector[InvestorDetailsModel] => Result): Result = {
+    vector match {
+      case Some(data) => f(data)
+      case _ => Redirect(controllers.seis.routes.AddInvestorOrNomineeController.show())
+    }
+  }
 
+  def getInvestorIndex(targetIndex: Int, data: Vector[InvestorDetailsModel]): Int = {
+    data.indexWhere(_.processingId.getOrElse(Constants.notFound) == targetIndex)
+  }
+
+  def redirectInvalidInvestor(index: Int)(f: Int => Result): Result = {
+    if (index != Constants.notFound) {
+      f(index)
+    } else {
+      Redirect(routes.AddInvestorOrNomineeController.show())
+    }
+  }
+
+  def retrieveInvestorData[T](index: Int, investors: Vector[InvestorDetailsModel])(f: InvestorDetailsModel => Option[T]): Option[T] = {
+    investors.lift(index).flatMap(f)
+  }
+
+  def fillForm[T](form: Form[T], data: Option[T]): Form[T] = {
+    data match {
+      case Some(model) => form.fill(model)
+      case _ => form
+    }
+  }
 }
