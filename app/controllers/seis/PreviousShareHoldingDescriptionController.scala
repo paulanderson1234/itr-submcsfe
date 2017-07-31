@@ -65,19 +65,16 @@ trait PreviousShareHoldingDescriptionController extends FrontendController with 
                           Ok(PreviousShareHoldingDescription(model.get.companyOrIndividualModel.get.companyOrIndividual,
                             previousShareHoldingDescriptionForm.fill(shareHolderModel.get.previousShareHoldingDescriptionModel.get), backUrl.get))
                         } else {
-                          val shareHolderModel = model.get.previousShareHoldingModels.get.last
                           Ok(PreviousShareHoldingDescription(model.get.companyOrIndividualModel.get.companyOrIndividual,
-                            previousShareHoldingDescriptionForm.fill(shareHolderModel.previousShareHoldingDescriptionModel.get), backUrl.get))
+                            previousShareHoldingDescriptionForm, backUrl.get))
                         }
                       }
                       case None => {
-                        val shareHolderModel = model.get.previousShareHoldingModels.get.last
                         Ok(PreviousShareHoldingDescription(model.get.companyOrIndividualModel.get.companyOrIndividual,
-                          previousShareHoldingDescriptionForm.fill(shareHolderModel.previousShareHoldingDescriptionModel.get), backUrl.get))
+                          previousShareHoldingDescriptionForm, backUrl.get))
                       }
                     }
                   }
-                  // Redirect to thE APPROPRIATE PAGE
                   else Ok(PreviousShareHoldingDescription(model.get.companyOrIndividualModel.get.companyOrIndividual,
                     previousShareHoldingDescriptionForm, backUrl.get))
                 }
