@@ -20,7 +20,7 @@ import auth.{AuthorisedAndEnrolledForTAVC, SEIS}
 import common.KeystoreKeys
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
-import controllers.Helpers.PreviousInvestorsHelper
+import controllers.Helpers.{ControllerHelpers, PreviousInvestorsHelper}
 import controllers.predicates.FeatureSwitch
 import forms.CompanyDetailsForm._
 import models.investorDetails.InvestorDetailsModel
@@ -44,7 +44,7 @@ object CompanyDetailsController extends CompanyDetailsController with Authorised
   override lazy val enrolmentConnector = EnrolmentConnector
 }
 
-trait CompanyDetailsController extends FrontendController with AuthorisedAndEnrolledForTAVC with FeatureSwitch {
+trait CompanyDetailsController extends FrontendController with AuthorisedAndEnrolledForTAVC with FeatureSwitch with ControllerHelpers{
 
   override val acceptedFlows = Seq(Seq(SEIS))
 
@@ -57,20 +57,14 @@ trait CompanyDetailsController extends FrontendController with AuthorisedAndEnro
       implicit request =>
         def process(backUrl: Option[String]) = {
           if (backUrl.isDefined) {
-            s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
-              case Some(data) => {
-                val itemToUpdateIndex = data.indexWhere(_.processingId.getOrElse(0) == id)
-                if (itemToUpdateIndex != -1) {
-                  val model = data.lift(itemToUpdateIndex)
-                  if (model.get.companyDetailsModel.isDefined) {
-                    Ok(CompanyDetails(companyDetailsForm.fill(model.get.companyDetailsModel.get), countriesList, backUrl.get))
-                  }
-                  else
-                    Ok(CompanyDetails(companyDetailsForm, countriesList, backUrl.get))
-                }
-                else Redirect(routes.AddInvestorOrNomineeController.show())
+            s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map { vector =>
+               redirectNoInvestors(vector) { data =>
+                 val itemToUpdateIndex = getInvestorIndex(id, data)
+                 redirectInvalidInvestor(itemToUpdateIndex) { id =>
+                   val form = fillForm(companyDetailsForm, retrieveInvestorData(id, data)(_.companyDetailsModel))
+                   Ok(CompanyDetails(form, countriesList, backUrl.get))
+                 }
               }
-              case None => Redirect(routes.AddInvestorOrNomineeController.show())
             }
           }
           else Future.successful(Redirect(routes.AddInvestorOrNomineeController.show()))

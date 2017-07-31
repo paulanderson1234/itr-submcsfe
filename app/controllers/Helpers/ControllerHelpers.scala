@@ -139,7 +139,7 @@ trait ControllerHelpers {
   }
 
   def getInvestorIndex(targetIndex: Int, data: Vector[InvestorDetailsModel]): Int = {
-    data.indexWhere(_.processingId.getOrElse(Constants.notFound) == targetIndex)
+    data.indexWhere(_.processingId.getOrElse(0) == targetIndex)
   }
 
   def redirectInvalidInvestor(index: Int)(f: Int => Result): Result = {
