@@ -145,11 +145,6 @@ trait PreviousInvestorShareHoldersHelper {
         if (investorDetailsModel.previousShareHoldingModels.isDefined
           && investorDetailsModel.previousShareHoldingModels.get.size > 0) {
           val previousShareHoldingModelObj = investorDetailsModel.previousShareHoldingModels.get.last
-          val numberOfPreviouslyIssuedShare = Some(numberOfPreviouslyIssuedShares.copy(processingId = previousShareHoldingModelObj.processingId,
-            investorProcessingId = previousShareHoldingModelObj.investorProcessingId))
-           val previousShareHoldingModelObj1 = previousShareHoldingModelObj.copy(numberOfPreviouslyIssuedSharesModel = numberOfPreviouslyIssuedShare)
-          val vectorPSI = investorDetailsModel.previousShareHoldingModels.get
-          val updatedVector = vectorPSI.updated(vectorPSI.size -1, previousShareHoldingModelObj1)
           data.updated(data.size - 1, investorDetailsModel.copy(previousShareHoldingModels =
             Some(investorDetailsModel.previousShareHoldingModels.get.updated(investorDetailsModel.previousShareHoldingModels.get.size - 1,
               previousShareHoldingModelObj.copy(numberOfPreviouslyIssuedSharesModel =
