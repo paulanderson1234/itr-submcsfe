@@ -181,7 +181,7 @@ class PreviousShareHoldingDescriptionControllerSpec extends BaseSpec{
         result => {
           status(result) shouldBe SEE_OTHER
           redirectLocation(result) shouldBe
-            Some(controllers.seis.routes.NumberOfPreviouslyIssuedSharesController.show(listOfInvestorsComplete.head.processingId.get,
+            Some(controllers.seis.routes.PreviousShareHoldingNominalValueController.show(listOfInvestorsComplete.head.processingId.get,
               listOfInvestorsComplete.head.previousShareHoldingModels.get.head.processingId.get + 1).url)
         }
       )
@@ -201,7 +201,7 @@ class PreviousShareHoldingDescriptionControllerSpec extends BaseSpec{
         result => {
           status(result) shouldBe SEE_OTHER
           redirectLocation(result) shouldBe
-            Some(controllers.seis.routes.NumberOfPreviouslyIssuedSharesController.show(listOfInvestorsComplete.head.processingId.get,
+            Some(controllers.seis.routes.PreviousShareHoldingNominalValueController.show(listOfInvestorsComplete.head.processingId.get,
               listOfInvestorsComplete.head.previousShareHoldingModels.get.head.processingId.get).url)
         }
       )

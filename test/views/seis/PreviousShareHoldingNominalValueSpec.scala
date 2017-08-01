@@ -28,12 +28,14 @@ import views.html.seis.investors.PreviousShareHoldingNominalValue
 
 class PreviousShareHoldingNominalValueSpec extends ViewSpec {
 
+  val backUrl = controllers.seis.routes.PreviousShareHoldingDescriptionController.show(1, Some(1)).url
+
   "PreviousShareHoldingNominalValue view" when {
     implicit lazy val request = FakeRequest("GET", "")
 
       "not supplied with form errors" should {
         lazy val document: Document = {
-          val result = PreviousShareHoldingNominalValue(previousShareHoldingNominalValueForm)
+          val result = PreviousShareHoldingNominalValue(previousShareHoldingNominalValueForm, backUrl)
           Jsoup.parse(contentAsString(result))
 
         }
@@ -47,7 +49,7 @@ class PreviousShareHoldingNominalValueSpec extends ViewSpec {
       }
 
       "have the correct back link url" in {
-        document.select("a.back-link").attr("href") shouldBe "/investment-tax-relief-cs/seis/previous-shareholding-nominal-value"
+        document.select("a.back-link").attr("href") shouldBe backUrl
         //TODO change route to Previous Shareholdings Share Description page
       }
 
@@ -64,7 +66,7 @@ class PreviousShareHoldingNominalValueSpec extends ViewSpec {
       }
 
       "have a form posting to the correct route" in {
-        document.select("form").attr("action") shouldBe controllers.seis.routes.PreviousShareHoldingNominalValueController.submit().url
+        document.select("form").attr("action") shouldBe controllers.seis.routes.PreviousShareHoldingNominalValueController.submit(Some(backUrl)).url
       }
 
       "have the correct hint" in {
@@ -79,7 +81,7 @@ class PreviousShareHoldingNominalValueSpec extends ViewSpec {
     "supplied with form errors" should {
       lazy val document: Document = {
         val map = Map("previousShareHoldingNominalValue" -> "")
-        val result = PreviousShareHoldingNominalValue(previousShareHoldingNominalValueForm.bind(map))
+        val result = PreviousShareHoldingNominalValue(previousShareHoldingNominalValueForm.bind(map), backUrl)
         Jsoup.parse(contentAsString(result))
       }
 
@@ -96,7 +98,7 @@ class PreviousShareHoldingNominalValueSpec extends ViewSpec {
       }
 
       "have the correct back link url" in {
-        document.select("a.back-link").attr("href") shouldBe "/investment-tax-relief-cs/seis/previous-shareholding-nominal-value"
+        document.select("a.back-link").attr("href") shouldBe backUrl
         //TODO change route to Previous Shareholdings Share Description page
       }
 
@@ -113,7 +115,7 @@ class PreviousShareHoldingNominalValueSpec extends ViewSpec {
       }
 
       "have a form posting to the correct route" in {
-        document.select("form").attr("action") shouldBe controllers.seis.routes.PreviousShareHoldingNominalValueController.submit().url
+        document.select("form").attr("action") shouldBe controllers.seis.routes.PreviousShareHoldingNominalValueController.submit(Some(backUrl)).url
       }
 
       "have the correct hint" in {

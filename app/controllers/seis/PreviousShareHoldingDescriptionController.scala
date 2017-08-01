@@ -70,8 +70,9 @@ trait PreviousShareHoldingDescriptionController extends FrontendController with 
                         }
                       }
                       case None => {
+                        val shareHolderModel = model.get.previousShareHoldingModels.get.last
                         Ok(PreviousShareHoldingDescription(model.get.companyOrIndividualModel.get.companyOrIndividual,
-                          previousShareHoldingDescriptionForm, backUrl.get))
+                          previousShareHoldingDescriptionForm.fill(shareHolderModel.previousShareHoldingDescriptionModel.get), backUrl.get))
                       }
                     }
                   }
@@ -104,16 +105,16 @@ trait PreviousShareHoldingDescriptionController extends FrontendController with 
             validFormData.processingId match {
               case Some(_) => PreviousInvestorShareHoldersHelper.updateShareClassAndDescription(s4lConnector, validFormData).map {
                 data => {
-                  s4lConnector.saveFormData(KeystoreKeys.backLinkNumberOfPreviouslyIssuedShares,
+                  s4lConnector.saveFormData(KeystoreKeys.backLinkIsPreviousShareHoldingNominalValue,
                     routes.PreviousShareHoldingDescriptionController.show(data.investorProcessingId.get, data.processingId).url)
-                  Redirect(routes.NumberOfPreviouslyIssuedSharesController.show(data.investorProcessingId.get, data.processingId.get))
+                  Redirect(routes.PreviousShareHoldingNominalValueController.show(data.investorProcessingId.get, data.processingId.get))
                 }
               }
               case None => PreviousInvestorShareHoldersHelper.addShareClassAndDescription(s4lConnector, validFormData).map {
                 data => {
-                  s4lConnector.saveFormData(KeystoreKeys.backLinkNumberOfPreviouslyIssuedShares,
+                  s4lConnector.saveFormData(KeystoreKeys.backLinkIsPreviousShareHoldingNominalValue,
                     routes.PreviousShareHoldingDescriptionController.show(data.investorProcessingId.get, data.processingId).url)
-                  Redirect(routes.NumberOfPreviouslyIssuedSharesController.show(data.investorProcessingId.get, data.processingId.get))
+                  Redirect(routes.PreviousShareHoldingNominalValueController.show(data.investorProcessingId.get, data.processingId.get))
                 }
               }
             }
