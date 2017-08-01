@@ -43,7 +43,6 @@ class PreviousShareHoldingDescriptionControllerSpec extends BaseSpec{
   }
 
   val backUrl = Some(controllers.seis.routes.IsExistingShareHolderController.show(2).url)
-  val obviouslyInvalidId = 9999
 
   val listOfInvestorsEmptyShareHoldings =  Vector(validModelWithPrevShareHoldings.copy(previousShareHoldingModels = Some(Vector())))
   val listOfInvestorsWithShareHoldings =  Vector(validModelWithPrevShareHoldings)
@@ -107,7 +106,7 @@ class PreviousShareHoldingDescriptionControllerSpec extends BaseSpec{
       "a 'backlink' is defined, an 'investor details list' is retrieved and an INVALID investor details ID is passed" in {
         mockEnrolledRequest(seisSchemeTypesModel)
         setupMocks(Some(listOfInvestorsComplete), backUrl)
-        showWithSessionAndAuth(controller.show(obviouslyInvalidId, None))(
+        showWithSessionAndAuth(controller.show(Constants.obviouslyInvalidId, None))(
           result => {
             status(result) shouldBe SEE_OTHER
             redirectLocation(result) shouldBe Some(controllers.seis.routes.AddInvestorOrNomineeController.show(None).url)
@@ -147,7 +146,7 @@ class PreviousShareHoldingDescriptionControllerSpec extends BaseSpec{
         "ID is passed and an INVALID share holding Id is provided" in {
         mockEnrolledRequest(seisSchemeTypesModel)
         setupMocks(Some(listOfInvestorsWithShareHoldings), backUrl)
-        showWithSessionAndAuth(controller.show(2, Some(obviouslyInvalidId)))(
+        showWithSessionAndAuth(controller.show(2, Some(Constants.obviouslyInvalidId)))(
           result => {
             status(result) shouldBe OK
           }

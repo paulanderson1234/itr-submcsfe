@@ -86,4 +86,5 @@ trait Constants {
   val typeIndividual = "Individual"
 
   val notFound = -1
+  val obviouslyInvalidId = 9999999
 }

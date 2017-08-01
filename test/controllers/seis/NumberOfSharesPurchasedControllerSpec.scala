@@ -17,7 +17,7 @@
 package controllers.seis
 
 import auth.{MockAuthConnector, MockConfig}
-import common.KeystoreKeys
+import common.{Constants, KeystoreKeys}
 import config.{AppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
@@ -43,8 +43,6 @@ class NumberOfSharesPurchasedControllerSpec extends BaseSpec with DateFormatter{
   }
 
   val backUrl = Some(controllers.seis.routes.CompanyDetailsController.show(1).url)
-  val obviouslyInvalidId = 9999
-
   val listOfInvestorsIncompleteNumberOfSharesPurchased =  Vector(validModelWithPrevShareHoldings.copy(numberOfSharesPurchasedModel = None))
   val shareIssueDate = Some(dateToStringWithNoZeroDay(shareIssuetDateModel.day.get, shareIssuetDateModel.month.get, shareIssuetDateModel.year.get))
 
@@ -112,7 +110,7 @@ class NumberOfSharesPurchasedControllerSpec extends BaseSpec with DateFormatter{
         "a 'backlink' is defined, an 'investor details list' is retrieved and an INVALID 'id' is defined" in {
           mockEnrolledRequest(seisSchemeTypesModel)
           setupMocks(Some(listOfInvestorsComplete), None, backUrl)
-          showWithSessionAndAuth(controller.show(obviouslyInvalidId))(
+          showWithSessionAndAuth(controller.show(Constants.obviouslyInvalidId))(
             result => {
               status(result) shouldBe SEE_OTHER
               redirectLocation(result) shouldBe Some(controllers.seis.routes.AddInvestorOrNomineeController.show(None).url)

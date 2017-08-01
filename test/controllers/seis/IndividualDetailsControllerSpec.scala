@@ -17,7 +17,7 @@
 package controllers.seis
 
 import auth.{MockAuthConnector, MockConfig}
-import common.KeystoreKeys
+import common.{Constants, KeystoreKeys}
 import config.{AppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.{BaseSpec, FakeRequestHelper}
@@ -78,7 +78,7 @@ class IndividualDetailsControllerSpec extends BaseSpec with FakeRequestHelper{
         "there is no 'back link' present" in {
           mockEnrolledRequest(seisSchemeTypesModel)
           setupMocks(None, None)
-          showWithSessionAndAuth(TestController.show(99999))(
+          showWithSessionAndAuth(TestController.show(Constants.obviouslyInvalidId))(
             result => {
               status(result) shouldBe SEE_OTHER
               redirectLocation(result) shouldBe Some(controllers.seis.routes.AddInvestorOrNomineeController.show().url)
@@ -92,7 +92,7 @@ class IndividualDetailsControllerSpec extends BaseSpec with FakeRequestHelper{
         "a 'backlink' is defined but no 'investor details list' is retrieved" in {
           mockEnrolledRequest(seisSchemeTypesModel)
           setupMocks(None, backUrl)
-          showWithSessionAndAuth(TestController.show(99999))(
+          showWithSessionAndAuth(TestController.show(Constants.obviouslyInvalidId))(
             result => {
               status(result) shouldBe SEE_OTHER
               redirectLocation(result) shouldBe Some(controllers.seis.routes.AddInvestorOrNomineeController.show(None).url)

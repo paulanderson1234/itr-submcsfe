@@ -68,7 +68,7 @@ class CompanyOrIndividualControllerSpec extends BaseSpec {
       "there is no 'back link' present" in {
         mockEnrolledRequest(seisSchemeTypesModel)
         setupMocks(None,None)
-        showWithSessionAndAuth(TestController.show(99999))(
+        showWithSessionAndAuth(TestController.show(Constants.obviouslyInvalidId))(
           result => {
             status(result) shouldBe SEE_OTHER
             redirectLocation(result) shouldBe Some(validBackLink)
@@ -82,7 +82,7 @@ class CompanyOrIndividualControllerSpec extends BaseSpec {
       "a 'backlink' is defined but no 'investor details list' is retrieved" in {
         mockEnrolledRequest(seisSchemeTypesModel)
         setupMocks(None, Some(validBackLink))
-        showWithSessionAndAuth(TestController.show(99999))(
+        showWithSessionAndAuth(TestController.show(Constants.obviouslyInvalidId))(
           result => {
             status(result) shouldBe SEE_OTHER
             redirectLocation(result) shouldBe Some(controllers.seis.routes.AddInvestorOrNomineeController.show(None).url)
