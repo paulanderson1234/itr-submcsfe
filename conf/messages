@@ -1115,10 +1115,10 @@ page.seis.investors.numberOfSharesPurchased.title = How many shares were issued 
 page.seis.investors.numberOfSharesPurchased.heading = How many shares were issued to this {0} on {1}?
 
 #Previous ShareHolding Nominal Value
-page.seis.investors.previousShareHoldingNominalValue.title = What was the nominal value of each share when they were issued?
-page.seis.investors.previousShareHoldingNominalValue.heading = What was the nominal value of each share when they were issued?
+page.seis.investors.previousShareHoldingNominalValue.title = What was the nominal value for each share in this previous issue?
+page.seis.investors.previousShareHoldingNominalValue.heading = What was the nominal value for each share in this previous issue?
 page.seis.investors.previousShareHoldingNominalValue.whereToFind = The nominal value is the amount shown on the share certificate.
-page.seis.investors.previousShareHoldingNominalValue.hint = For example, 0.70
+page.seis.investors.previousShareHoldingNominalValue.hint = For example if the nominal value was 0.70, round it up to 1
 page.seis.investors.numberOfSharesPurchased.heading = How many shares were issued to this {0} on <br/> {1}?
 
 #Number of previously issued shares
