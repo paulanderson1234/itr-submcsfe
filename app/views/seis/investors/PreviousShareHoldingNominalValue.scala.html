@@ -8,6 +8,7 @@
 
 @main_template(Messages("page.seis.investors.previousShareHoldingNominalValue.title")) {
 @backButtonWithProgress(controllers.seis.routes.PreviousShareHoldingNominalValueController.show().url, Messages("common.section.progress.company.details.four"))
+<!--TODO - Change back link to route to Previous Shareholdings Share Description-->
 
     @errorSummary(previousShareHoldingNominalValueForm, "previous-share-holding-nominal-value", "previousShareHoldingNominalValue")
 

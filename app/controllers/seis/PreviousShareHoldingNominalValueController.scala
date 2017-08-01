@@ -62,7 +62,7 @@ trait PreviousShareHoldingNominalValueController extends FrontendController with
           val success: PreviousShareHoldingNominalValueModel => Future[Result] = { model =>
             s4lConnector.saveFormData(KeystoreKeys.previousShareHoldingNominalValue, model).map(_ =>
               Redirect(controllers.seis.routes.PreviousShareHoldingNominalValueController.show())
-              //TODO - Navigates to the Share Issue Date page when available
+              //TODO - navigates to the When were they bought screen
             )
           }
 
