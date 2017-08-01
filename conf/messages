@@ -838,7 +838,7 @@ page.seis.companyDetails.fullTimeEmployeeCountError.title = You don''t appear to
 page.seis.companyDetails.fullTimeEmployeeCountError.error = This is because your company had 25 or more full-time equivalent employees on the share issue date.
 page.seis.companyDetails.fullTimeEmployeeCountError.whatNext = What happens next
 page.seis.companyDetails.fullTimeEmployeeCountError.guidance = You can continue with your application if you think that you should qualify.
-page.seis.companyDetails.fullTimeEmployeeCountError.incorrect = If this information is incorrect you can 
+page.seis.companyDetails.fullTimeEmployeeCountError.incorrect = If this information is incorrect you can
 page.seis.companyDetails.fullTimeEmployeeCountError.incorrect.link = change your answers
 
 # SEIS Nominal Value of Shares
@@ -1119,3 +1119,16 @@ page.seis.investors.previousShareHoldingNominalValue.title = What was the nomina
 page.seis.investors.previousShareHoldingNominalValue.heading = What was the nominal value of each share when they were issued?
 page.seis.investors.previousShareHoldingNominalValue.whereToFind = The nominal value is the amount shown on the share certificate.
 page.seis.investors.previousShareHoldingNominalValue.hint = For example, 0.70
+page.seis.investors.numberOfSharesPurchased.heading = How many shares were issued to this {0} on <br/> {1}?
+
+#Number of previously issued shares
+page.seis.investors.numberOfPreviouslyIssuedShares.heading=How many shares were previously issued to this {0}?
+page.seis.investors.numberOfPreviouslyIssuedShares.title=How many shares were previously issued to this {0}?
+
+#PreviousShareHoldingsDescription
+page.seis.investors.previousShareHoldingDescription.title = What were the shares called that were issued to this {0}?
+page.seis.investors.previousShareHoldingDescription.heading = What were the shares called that were issued to this {0}?
+page.seis.investors.previousShareHoldingDescription.example.text = Add one type of share at a time.
+page.seis.investors.previousShareHoldingDescription.question.hint = Suggested limit: 20 words
+page.seis.investors.previousShareHoldingDescription.whereToFind = Where can I find this?
+page.seis.investors.previousShareHoldingDescription.location = It''s on your company''s Register of Members.

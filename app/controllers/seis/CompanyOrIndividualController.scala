@@ -62,20 +62,12 @@ trait CompanyOrIndividualController extends FrontendController with AuthorisedAn
                     Ok(CompanyOrIndividual(useInvestorOrNomineeValueAsHeadingText(model.get.investorOrNomineeModel.get),
                       companyOrIndividualForm, backUrl.get))
                 }
-                else {
-                  // Set back to the review page later
-                  Redirect("")
-                }
+                else Redirect(routes.AddInvestorOrNomineeController.show())
               }
-              case None => {
-                Redirect(controllers.seis.routes.AddInvestorOrNomineeController.show())
-              }
+              case None => Redirect(controllers.seis.routes.AddInvestorOrNomineeController.show())
             }
           }
-          else {
-            /*TODO define logic where to go*/
-            Future.successful(Redirect(""))
-          }
+          else Future.successful(Redirect(controllers.seis.routes.AddInvestorOrNomineeController.show()))
         }
 
         for {
@@ -86,18 +78,12 @@ trait CompanyOrIndividualController extends FrontendController with AuthorisedAn
   }
 
 
-  def submit(backUrl: Option[String]): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
+  def submit(investorOrNominee: Option[String], backUrl: Option[String]): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
     AuthorisedAndEnrolled.async { implicit user =>
       implicit request =>
         companyOrIndividualForm.bindFromRequest().fold(
           formWithErrors => {
-            s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
-              case Some(data) => {
-                val investorDetailsModel = data.last
-                BadRequest(CompanyOrIndividual(useInvestorOrNomineeValueAsHeadingText(investorDetailsModel.investorOrNomineeModel.get),
-                  formWithErrors, backUrl.get))
-              }
-            }
+            Future.successful(BadRequest(CompanyOrIndividual(investorOrNominee.get, formWithErrors, backUrl.get)))
           },
           validFormData => {
             validFormData.processingId match {

@@ -169,7 +169,7 @@ trait PreviousInvestorsHelper {
           val investorDetailsModel = data.lift(itemToUpdateIndex)
           data.updated(itemToUpdateIndex, investorDetailsModel.get.copy(companyOrIndividualModel = Some(companyOrIndividualModel)))
         }
-        else data
+        else throw new InternalServerException("No valid Investor information passed")
       }
       case None => throw throw new InternalServerException("No valid Investor information passed")
     }
@@ -221,7 +221,7 @@ trait PreviousInvestorsHelper {
           val investorDetailsModel = data.lift(itemToUpdateIndex)
           data.updated(itemToUpdateIndex, investorDetailsModel.get.copy(companyDetailsModel = Some(companyDetailsModel)))
         }
-        else data
+        else throw new InternalServerException("No valid Investor information passed")
       }
       case None => throw throw new InternalServerException("No valid Investor information passed")
     }
@@ -273,7 +273,7 @@ trait PreviousInvestorsHelper {
           val investorDetailsModel = data.lift(itemToUpdateIndex)
           data.updated(itemToUpdateIndex, investorDetailsModel.get.copy(individualDetailsModel = Some(individualDetailsModel)))
         }
-        else data
+        else throw new InternalServerException("No valid Investor information passed")
       }
       case None => throw new InternalServerException("No valid Investor information passed")
     }
@@ -325,7 +325,7 @@ trait PreviousInvestorsHelper {
           val investorDetailsModel = data.lift(itemToUpdateIndex)
           data.updated(itemToUpdateIndex, investorDetailsModel.get.copy(numberOfSharesPurchasedModel = Some(numberOfSharesPurchasedModel)))
         }
-        else data
+        else throw new InternalServerException("No valid Investor information passed")
       }
       case None => throw new InternalServerException("No valid Investor information passed")
     }
@@ -377,7 +377,7 @@ trait PreviousInvestorsHelper {
           val investorDetailsModel = data.lift(itemToUpdateIndex)
           data.updated(itemToUpdateIndex, investorDetailsModel.get.copy(amountSpentModel = Some(howMuchSpentOnSharesModel)))
         }
-        else data
+        else throw new InternalServerException("No valid Investor information passed")
       }
       case None => throw new InternalServerException("No valid Investor information passed")
     }
@@ -429,7 +429,7 @@ trait PreviousInvestorsHelper {
           val investorDetailsModel = data.lift(itemToUpdateIndex)
           data.updated(itemToUpdateIndex, investorDetailsModel.get.copy(isExistingShareHolderModel = Some(isExistingShareHolderModel)))
         }
-        else data
+        else throw new InternalServerException("No valid Investor information passed")
       }
       case None => throw new InternalServerException("No valid Investor information passed")
     }

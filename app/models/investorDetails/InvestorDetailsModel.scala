@@ -16,6 +16,7 @@
 
 package models.investorDetails
 
+import common.Constants
 import models.{AddInvestorOrNomineeModel, CompanyDetailsModel, CompanyOrIndividualModel, IndividualDetailsModel}
 import play.api.libs.json.Json
 
@@ -32,16 +33,25 @@ case class InvestorDetailsModel(investorOrNomineeModel: Option[AddInvestorOrNomi
 
   def validate: Boolean = {
 
+    val areDetailsPresent = companyOrIndividualModel match {
+          case Some(CompanyOrIndividualModel(Constants.typeCompany, _)) => companyDetailsModel.isDefined
+          case _ => individualDetailsModel.isDefined
+        }
+
     /*** Validates shareholdings by mapping over each shareholding and reducing the result to either true or false using 'forall'**/
-    lazy val validateShareHoldings = {
-      if(previousShareHoldingModels.isDefined) previousShareHoldingModels.get.forall(_.validate) else false
+    def validateShareHoldings : Boolean = {
+      if(isExistingShareHolderModel.isDefined && isExistingShareHolderModel.get.isExistingShareHolder == Constants.StandardRadioButtonNoValue) true
+      else if(isExistingShareHolderModel.isDefined && isExistingShareHolderModel.get.isExistingShareHolder == Constants.StandardRadioButtonYesValue){
+        if(previousShareHoldingModels.isDefined && !previousShareHoldingModels.isEmpty) previousShareHoldingModels.get.forall(_.validate)
+        else false
+      }
+      else false
     }
 
     investorOrNomineeModel.isDefined && companyOrIndividualModel.isDefined &&
-    (companyDetailsModel.isDefined || individualDetailsModel.isDefined) && numberOfSharesPurchasedModel.isDefined &&
-    amountSpentModel.isDefined && isExistingShareHolderModel.isDefined && validateShareHoldings
+      areDetailsPresent && numberOfSharesPurchasedModel.isDefined &&
+    amountSpentModel.isDefined && validateShareHoldings
   }
-
 }
 
 object InvestorDetailsModel{

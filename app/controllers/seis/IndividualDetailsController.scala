@@ -63,20 +63,12 @@ trait IndividualDetailsController extends FrontendController with AuthorisedAndE
                   else
                     Ok(IndividualDetails(individualDetailsForm, countriesList, backUrl.get))
                 }
-                else {
-                  // Set back to the review page later
-                  Redirect("")
-                }
+                else Redirect(routes.AddInvestorOrNomineeController.show())
               }
-              case None => {
-                Redirect(controllers.seis.routes.AddInvestorOrNomineeController.show())
-              }
+              case None => Redirect(routes.AddInvestorOrNomineeController.show())
             }
           }
-          else {
-            // No back URL so send them back to any page as per the requirement
-            Future.successful(Redirect(""))
-          }
+          else Future.successful(Redirect(controllers.seis.routes.AddInvestorOrNomineeController.show()))
         }
         for {
           backUrl <- s4lConnector.fetchAndGetFormData[String](KeystoreKeys.backLinkCompanyAndIndividualBoth)

@@ -57,8 +57,7 @@ trait AddInvestorOrNomineeController extends FrontendController with AuthorisedA
                       val model = data.lift(itemToUpdateIndex)
                       Ok(AddInvestorOrNominee(addInvestorOrNomineeForm.fill(model.get.investorOrNomineeModel.get), backUrl.get))
                     }
-                    // Redirect to the REVIEW INVESTOR PAGE
-                    else Redirect("")//(AddInvestorOrNominee(addInvestorOrNomineeForm, backUrl.get))
+                    else Ok(AddInvestorOrNominee(addInvestorOrNomineeForm, backUrl.get))
                   }
                   case None => {
                     val investorDetailsModel = data.last
@@ -71,10 +70,7 @@ trait AddInvestorOrNomineeController extends FrontendController with AuthorisedA
               case None => Ok(AddInvestorOrNominee(addInvestorOrNomineeForm, backUrl.get))
             }
           }
-          // inconsistent data navigate to beginning of flow
-          else {
-            Future.successful(Redirect(controllers.seis.routes.ShareDescriptionController.show()))
-          }
+          else Future.successful(Redirect(controllers.seis.routes.ShareDescriptionController.show()))
         }
 
         for {

@@ -93,7 +93,7 @@ class InvestorDetailsModelSpec extends BaseSpec{
         invalidIsExistingShareHolderMissing.validate shouldBe false
       }
       "the investor details is missing previous share holdings model" in {
-        invalidPreviousShareHoldingsMissing.validate shouldBe false
+        invalidPreviousShareHoldingsMissing.validate shouldBe true
       }
       "the investor details model is missing a valid list of previous share holdings" in {
         invalidMissingValidPreviousShareHoldingsModel.validate shouldBe false
