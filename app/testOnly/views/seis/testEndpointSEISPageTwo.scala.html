@@ -1,4 +1,3 @@
-@import models.investorDetails._
 @import models._
 @import models.investorDetails._
 @import forms._
@@ -14,7 +13,8 @@ individualDetailsForm: Form[IndividualDetailsModel], shareDescriptionForm: Form[
 totalAmountRaisedForm:Form[TotalAmountRaisedModel], totalAmountSpentForm:Form[TotalAmountSpentModel],
 addInvestorOrNomineeForm: Form[AddInvestorOrNomineeModel], companyOrIndividualForm: Form[CompanyOrIndividualModel],
 companyDetailsForm: Form[CompanyDetailsModel], numberOfSharesPurchasedForm: Form[NumberOfSharesPurchasedModel],
-howMuchSpentOnSharesForm : Form[HowMuchSpentOnSharesModel], isExistingShareHolderForm: Form[IsExistingShareHolderModel])(implicit request: Request[_], messages: Messages)
+howMuchSpentOnSharesForm : Form[HowMuchSpentOnSharesModel], isExistingShareHolderForm: Form[IsExistingShareHolderModel],
+previousShareHoldingNominalValueForm: Form[PreviousShareHoldingNominalValueModel])(implicit request: Request[_], messages: Messages)
 
 
 
@@ -337,6 +337,22 @@ howMuchSpentOnSharesForm : Form[HowMuchSpentOnSharesModel], isExistingShareHolde
         '_labelClass -> "block-label",
         '_legendID -> "isExistingShareHolder",
         '_groupClass -> "inline"
+        )
+    </div>
+
+    <h2>Previous Share Holding Nominal Value</h2>
+    <div class="form-group">
+        @inputWithCurrencySymbol(
+        previousShareHoldingNominalValueForm("previousShareHoldingNominalValue"),
+        '_divClass -> "form-label",
+        '_labelId -> "label-previousShareholdingNominalValue",
+        '_label -> Messages("page.seis.previousShareHoldingNominalValue.title"),
+        '_labelTextClass -> "visuallyhidden",
+        '_inputClass -> "input--no-spinner input--left-padding",
+        '_type -> "text",
+        '_maxlength -> "11",
+        '_hintId -> "label-nominal-value-hint",
+        '_inputHint -> Messages("page.seis.investors.previousShareHoldingNominalValue.hint")
         )
     </div>
 

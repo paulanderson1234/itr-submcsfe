@@ -73,9 +73,9 @@ trait KeystoreKeys {
   val tempPreviousSchemes: String = "previousInvestmentScheme:tempPreviousInvestmentSchemes"
   val investorDetails: String = "investors:investorDetails"
   val howMuchSpentOnShares: String = "investors:howMuchSpentOnShares"
-
   val isExistingShareHolder: String = "investors:previousShareHoldings"
   val numberOfSharesPurchased: String = "investors:numberOfSharesPurchased"
+  val previousShareHoldingNominalValue: String = "investors:previousShareHoldingNominalValue"
   val numberOfPreviouslyIssuedShares: String = "investors:numberOfPreviouslyIssuedShares"
 
   // processing Keys
@@ -112,6 +112,7 @@ trait KeystoreKeys {
   val backLinkHowMuchSpentOnShares: String = "backLink:backLinkHowMuchSpentOnShares"
   val backLinkInvestorShareIssueDate: String = "backLink:InvestorShareIssueDate"
   val backLinkIsExistingShareHolder: String = "backLink:IsExistingShareHolder"
+  val backLinkIsPreviousShareHoldingNominalValue: String = "backLink:IsPreviousShareHoldingNominalValue"
   val backLinkNumberOfPreviouslyIssuedShares: String = "backLink:NumberOfPreviouslyIssuedShares"
   val backLinkShareClassAndDescription: String = "backLink:ShareClassAndDescription"
 
