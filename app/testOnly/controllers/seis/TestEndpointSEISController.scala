@@ -159,6 +159,7 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
         howMuchSpentOnSharesForm <- fillForm[HowMuchSpentOnSharesModel](KeystoreKeys.howMuchSpentOnShares, HowMuchSpentOnSharesForm.howMuchSpentOnSharesForm)
         numberOfSharesPurchasedForm <- fillForm[NumberOfSharesPurchasedModel](KeystoreKeys.numberOfSharesPurchased, NumberOfSharesPurchasedForm.numberOfSharesPurchasedForm)
         isExistingShareHolder <- fillForm[IsExistingShareHolderModel](KeystoreKeys.isExistingShareHolder, IsExistingShareHolderForm.isExistingShareHolderForm)
+        previousShareHoldingNominalValue <- fillForm[PreviousShareHoldingNominalValueModel](KeystoreKeys.previousShareHoldingNominalValue, PreviousShareHoldingNominalValueForm.previousShareHoldingNominalValueForm)
 
       } yield Ok(
         testOnly.views.html.seis.testEndpointSEISPageTwo(
@@ -173,7 +174,8 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
           companyDetails,
           numberOfSharesPurchasedForm,
           howMuchSpentOnSharesForm,
-          isExistingShareHolder
+          isExistingShareHolder,
+          previousShareHoldingNominalValue
         )
       )
 
@@ -192,6 +194,7 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
     val howMuchSpentOnSharesForm = bindForm[HowMuchSpentOnSharesModel](KeystoreKeys.howMuchSpentOnShares, HowMuchSpentOnSharesForm.howMuchSpentOnSharesForm)
     val numberOfSharesPurchased = bindForm[NumberOfSharesPurchasedModel](KeystoreKeys.numberOfSharesPurchased, NumberOfSharesPurchasedForm.numberOfSharesPurchasedForm)
     val isExistingShareHolder = bindForm[IsExistingShareHolderModel](KeystoreKeys.isExistingShareHolder, IsExistingShareHolderForm.isExistingShareHolderForm)
+    val previousShareHoldingNominalValue = bindForm[PreviousShareHoldingNominalValueModel](KeystoreKeys.previousShareHoldingNominalValue, PreviousShareHoldingNominalValueForm.previousShareHoldingNominalValueForm)
 
     saveBackLinks()
     saveSchemeType()
@@ -208,7 +211,8 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
         companyDetails,
         numberOfSharesPurchased,
         howMuchSpentOnSharesForm,
-        isExistingShareHolder
+        isExistingShareHolder,
+        previousShareHoldingNominalValue
       )
     ))
   }
@@ -225,6 +229,7 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
     s4lConnector.saveFormData[String](KeystoreKeys.backLinkShareDescription, routes.TestEndpointSEISController.showPageOne(None).url)
     s4lConnector.saveFormData[String](KeystoreKeys.backLinkAddInvestorOrNominee, routes.TestEndpointSEISController.showPageOne(None).url)
     s4lConnector.saveFormData[String](KeystoreKeys.backLinkIsExistingShareHolder, routes.TestEndpointSEISController.showPageOne(None).url)
+    s4lConnector.saveFormData[String](KeystoreKeys.backLinkIsPreviousShareHoldingNominalValue, routes.TestEndpointSEISController.showPageOne(None).url)
   }
 
   private def saveSchemeType()(implicit hc: HeaderCarrier, user: TAVCUser) = {
