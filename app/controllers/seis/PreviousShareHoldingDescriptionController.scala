@@ -23,7 +23,7 @@ import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.Helpers.{ControllerHelpers, PreviousInvestorShareHoldersHelper}
 import controllers.predicates.FeatureSwitch
 import forms.PreviousShareHoldingDescriptionForm._
-import models.investorDetails.InvestorDetailsModel
+import models.investorDetails.{InvestorDetailsModel, PreviousShareHoldingDescriptionModel}
 import play.api.Play.current
 import play.api.i18n.Messages.Implicits._
 import play.api.mvc.{Action, AnyContent}
@@ -32,8 +32,7 @@ import views.html.seis.investors.PreviousShareHoldingDescription
 
 import scala.concurrent.Future
 
-object PreviousShareHoldingDescriptionController extends PreviousShareHoldingDescriptionController
-{
+object PreviousShareHoldingDescriptionController extends PreviousShareHoldingDescriptionController {
   override lazy val s4lConnector = S4LConnector
   override lazy val applicationConfig = FrontendAppConfig
   override lazy val authConnector = FrontendAuthConnector
@@ -51,36 +50,18 @@ trait PreviousShareHoldingDescriptionController extends FrontendController with 
 
         def process(backUrl: Option[String]) = {
           if (backUrl.isDefined) {
-            s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
-              case Some(data) => {
-                val itemToUpdateIndex = data.indexWhere(_.processingId.getOrElse(0) == investorProcessingId)
-                if (itemToUpdateIndex != -1) {
-                  val model = data.lift(itemToUpdateIndex)
-                  if (model.get.previousShareHoldingModels.isDefined && model.get.previousShareHoldingModels.get.size > 0) {
-                    id match {
-                      case Some(idVal) => {
-                        val shareHoldingsIndex = model.get.previousShareHoldingModels.get.indexWhere(_.processingId.getOrElse(0) == idVal)
-                        if (shareHoldingsIndex != -1) {
-                          val shareHolderModel = model.get.previousShareHoldingModels.get.lift(shareHoldingsIndex)
-                          Ok(PreviousShareHoldingDescription(model.get.companyOrIndividualModel.get.companyOrIndividual,
-                            previousShareHoldingDescriptionForm.fill(shareHolderModel.get.previousShareHoldingDescriptionModel.get), backUrl.get))
-                        } else {
-                          Ok(PreviousShareHoldingDescription(model.get.companyOrIndividualModel.get.companyOrIndividual,
-                            previousShareHoldingDescriptionForm, backUrl.get))
-                        }
-                      }
-                      case None => {
-                        Ok(PreviousShareHoldingDescription(model.get.companyOrIndividualModel.get.companyOrIndividual,
-                          previousShareHoldingDescriptionForm, backUrl.get))
-                      }
-                    }
-                  }
-                  else Ok(PreviousShareHoldingDescription(model.get.companyOrIndividualModel.get.companyOrIndividual,
-                    previousShareHoldingDescriptionForm, backUrl.get))
+            s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map { vector =>
+              redirectNoInvestors(vector) { data =>
+                redirectInvalidInvestor(getInvestorIndex(investorProcessingId, data)) { investorIdVal =>
+                  val previousShares = retrieveInvestorData(investorIdVal,data)(_.previousShareHoldingModels)
+                  val form = fillForm[PreviousShareHoldingDescriptionModel](previousShareHoldingDescriptionForm,
+                    id.flatMap (idVal => retrieveShareData(getShareIndex(idVal, previousShares.getOrElse(Vector.empty)),
+                      previousShares)(_.previousShareHoldingDescriptionModel)))
+                  Ok(PreviousShareHoldingDescription(retrieveInvestorData(investorIdVal,
+                    data)(_.companyOrIndividualModel.map(_.companyOrIndividual)).get,
+                    form, backUrl.get))
                 }
-                else Redirect(routes.AddInvestorOrNomineeController.show())
               }
-              case None => Redirect(controllers.seis.routes.AddInvestorOrNomineeController.show())
             }
           }
           else Future.successful(Redirect(controllers.seis.routes.AddInvestorOrNomineeController.show()))

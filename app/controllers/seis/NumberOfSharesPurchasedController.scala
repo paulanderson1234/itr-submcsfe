@@ -34,8 +34,7 @@ import views.html.seis.investors.NumberOfSharesPurchased
 
 import scala.concurrent.Future
 
-object NumberOfSharesPurchasedController extends NumberOfSharesPurchasedController
-{
+object NumberOfSharesPurchasedController extends NumberOfSharesPurchasedController {
   override lazy val s4lConnector = S4LConnector
   override lazy val applicationConfig = FrontendAppConfig
   override lazy val authConnector = FrontendAuthConnector
@@ -43,42 +42,35 @@ object NumberOfSharesPurchasedController extends NumberOfSharesPurchasedControll
 }
 
 trait NumberOfSharesPurchasedController extends FrontendController with AuthorisedAndEnrolledForTAVC with FeatureSwitch
-  with ControllerHelpers with DateFormatter{
+  with ControllerHelpers with DateFormatter {
 
   override val acceptedFlows = Seq(Seq(SEIS))
 
   def show(id: Int): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
     AuthorisedAndEnrolled.async { implicit user => implicit request =>
 
-      def process(shareIssueDate: Option[ShareIssueDateModel], backUrl: Option[String]) ={
-        if(backUrl.isDefined) {
-          s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
-            case Some(data) => {
-              val itemToUpdateIndex = data.indexWhere(_.processingId.getOrElse(0) == id)
-              if (itemToUpdateIndex != -1) {
-                val model = data.lift(itemToUpdateIndex)
-                if (model.get.numberOfSharesPurchasedModel.isDefined && shareIssueDate.isDefined) {
-                  Ok(NumberOfSharesPurchased(model.get.companyOrIndividualModel.get.companyOrIndividual,
+      def process(shareIssueDate: Option[ShareIssueDateModel], backUrl: Option[String]) = {
+        if (backUrl.isDefined) {
+          s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map { vector =>
+            redirectNoInvestors(vector) { data =>
+              val itemToUpdateIndex = getInvestorIndex(id, data)
+              redirectInvalidInvestor(itemToUpdateIndex) { id =>
+                val form = fillForm(numberOfSharesPurchasedForm, retrieveInvestorData(id, data)(_.numberOfSharesPurchasedModel))
+                if (shareIssueDate.isDefined)
+                  Ok(NumberOfSharesPurchased(retrieveInvestorData(id, data)(_.companyOrIndividualModel.map(_.companyOrIndividual)).get,
                     dateToStringWithNoZeroDay(shareIssueDate.get.day.get, shareIssueDate.get.month.get, shareIssueDate.get.year.get),
-                    numberOfSharesPurchasedForm.fill(model.get.numberOfSharesPurchasedModel.get), backUrl.get))
-                }
-                else if (shareIssueDate.isDefined)
-                  Ok(NumberOfSharesPurchased(model.get.companyOrIndividualModel.get.companyOrIndividual,
-                    dateToStringWithNoZeroDay(shareIssueDate.get.day.get, shareIssueDate.get.month.get, shareIssueDate.get.year.get),
-                    numberOfSharesPurchasedForm, backUrl.get))
+                    form, backUrl.get))
                 else
                   Redirect(controllers.seis.routes.ShareIssueDateController.show())
               }
-              else Redirect(routes.AddInvestorOrNomineeController.show())
             }
-            case None => Redirect(routes.AddInvestorOrNomineeController.show())
           }
         }
         else Future.successful(Redirect(routes.AddInvestorOrNomineeController.show()))
       }
 
       for {
-        shareIssueDate   <- s4lConnector.fetchAndGetFormData[ShareIssueDateModel](KeystoreKeys.shareIssueDate)
+        shareIssueDate <- s4lConnector.fetchAndGetFormData[ShareIssueDateModel](KeystoreKeys.shareIssueDate)
         backUrl <- s4lConnector.fetchAndGetFormData[String](KeystoreKeys.backLinkNumberOfSharesPurchased)
         route <- process(shareIssueDate, backUrl)
       } yield route
