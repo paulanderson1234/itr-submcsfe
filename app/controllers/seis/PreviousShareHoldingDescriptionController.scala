@@ -53,9 +53,10 @@ trait PreviousShareHoldingDescriptionController extends FrontendController with 
             s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map { vector =>
               redirectNoInvestors(vector) { data =>
                 redirectInvalidInvestor(getInvestorIndex(investorProcessingId, data)) { investorIdVal =>
+                  val previousShares = retrieveInvestorData(investorIdVal,data)(_.previousShareHoldingModels)
                   val form = fillForm[PreviousShareHoldingDescriptionModel](previousShareHoldingDescriptionForm,
-                    id.flatMap (idVal => retrieveShareData(idVal,
-                        retrieveInvestorData(investorIdVal,data)(_.previousShareHoldingModels))(_.previousShareHoldingDescriptionModel)))
+                    id.flatMap (idVal => retrieveShareData(getShareIndex(idVal, previousShares.getOrElse(Vector.empty)),
+                      previousShares)(_.previousShareHoldingDescriptionModel)))
                   Ok(PreviousShareHoldingDescription(retrieveInvestorData(investorIdVal,
                     data)(_.companyOrIndividualModel.map(_.companyOrIndividual)).get,
                     form, backUrl.get))
