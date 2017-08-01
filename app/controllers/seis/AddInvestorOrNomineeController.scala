@@ -40,7 +40,7 @@ object AddInvestorOrNomineeController extends AddInvestorOrNomineeController {
   override lazy val authConnector: AuthConnector = FrontendAuthConnector
 }
 
-trait AddInvestorOrNomineeController extends FrontendController with AuthorisedAndEnrolledForTAVC with FeatureSwitch {
+trait AddInvestorOrNomineeController extends FrontendController with AuthorisedAndEnrolledForTAVC with FeatureSwitch with ControllerHelpers {
   override val acceptedFlows = Seq(Seq(SEIS))
 
   def show(id: Option[Int]): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
@@ -49,15 +49,13 @@ trait AddInvestorOrNomineeController extends FrontendController with AuthorisedA
         def routeRequest(backUrl: Option[String]) = {
           if (backUrl.isDefined) {
             s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
-              case Some(data) => {
+              case Some(data) =>
                 id match {
                   case Some(idVal) => {
-                    val itemToUpdateIndex = data.indexWhere(_.processingId.getOrElse(0) == idVal)
-                    if (itemToUpdateIndex != -1) {
-                      val model = data.lift(itemToUpdateIndex)
-                      Ok(AddInvestorOrNominee(addInvestorOrNomineeForm.fill(model.get.investorOrNomineeModel.get), backUrl.get))
+                    redirectInvalidInvestor(getInvestorIndex(idVal, data)) { id =>
+                      val form = fillForm(addInvestorOrNomineeForm, retrieveInvestorData(id, data)(_.investorOrNomineeModel))
+                      Ok(AddInvestorOrNominee(form, backUrl.get))
                     }
-                    else Ok(AddInvestorOrNominee(addInvestorOrNomineeForm, backUrl.get))
                   }
                   case None => {
                     val investorDetailsModel = data.last
@@ -66,8 +64,7 @@ trait AddInvestorOrNomineeController extends FrontendController with AuthorisedA
                       backUrl.get))
                   }
                 }
-              }
-              case None => Ok(AddInvestorOrNominee(addInvestorOrNomineeForm, backUrl.get))
+              case _ => Ok(AddInvestorOrNominee(addInvestorOrNomineeForm, backUrl.get))
             }
           }
           else Future.successful(Redirect(controllers.seis.routes.ShareDescriptionController.show()))

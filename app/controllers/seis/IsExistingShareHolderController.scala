@@ -49,23 +49,18 @@ trait IsExistingShareHolderController extends FrontendController with Authorised
       implicit request =>
         def process(backUrl: Option[String]) = {
           if (backUrl.isDefined) {
-            s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
-              case Some(data) => {
-                val itemToUpdateIndex = data.indexWhere(_.processingId.getOrElse(0) == id)
-                if (itemToUpdateIndex != -1) {
-                  val model = data.lift(itemToUpdateIndex)
-                  if (model.get.isExistingShareHolderModel.isDefined) {
-                    Ok(IsExistingShareHolder(model.get.companyOrIndividualModel.get.companyOrIndividual,
-                      isExistingShareHolderForm.fill(model.get.isExistingShareHolderModel.get), backUrl.get))
-                  }
-                  else if (model.get.companyOrIndividualModel.isDefined) {
-                    Ok(IsExistingShareHolder(model.get.companyOrIndividualModel.get.companyOrIndividual, isExistingShareHolderForm, backUrl.get))
+            s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map { vector =>
+              redirectNoInvestors(vector) { data =>
+                val itemToUpdateIndex = getInvestorIndex(id, data)
+                redirectInvalidInvestor(itemToUpdateIndex) { id =>
+                  val companyModel = retrieveInvestorData(id, data)(_.companyOrIndividualModel)
+                  if (companyModel.isDefined) {
+                    val form = fillForm(isExistingShareHolderForm, retrieveInvestorData(id, data)(_.isExistingShareHolderModel))
+                    Ok(IsExistingShareHolder(companyModel.get.companyOrIndividual, form, backUrl.get))
                   }
                   else Redirect(routes.AddInvestorOrNomineeController.show())
                 }
-                else Redirect(routes.AddInvestorOrNomineeController.show())
               }
-              case None => Redirect(routes.AddInvestorOrNomineeController.show())
             }
           }
           else Future.successful(Redirect(controllers.seis.routes.AddInvestorOrNomineeController.show()))

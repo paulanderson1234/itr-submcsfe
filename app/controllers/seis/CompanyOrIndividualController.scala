@@ -50,21 +50,15 @@ trait CompanyOrIndividualController extends FrontendController with AuthorisedAn
 
         def process(backUrl: Option[String]) = {
           if (backUrl.isDefined) {
-            s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
-              case Some(data) => {
-                val itemToUpdateIndex = data.indexWhere(_.processingId.getOrElse(0) == id)
-                if (itemToUpdateIndex != -1) {
-                  val model = data.lift(itemToUpdateIndex)
-                  if (model.get.companyOrIndividualModel.isDefined)
-                    Ok(CompanyOrIndividual(useInvestorOrNomineeValueAsHeadingText(model.get.investorOrNomineeModel.get),
-                      companyOrIndividualForm.fill(model.get.companyOrIndividualModel.get), backUrl.get))
-                  else
-                    Ok(CompanyOrIndividual(useInvestorOrNomineeValueAsHeadingText(model.get.investorOrNomineeModel.get),
-                      companyOrIndividualForm, backUrl.get))
+            s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map { vector =>
+              redirectNoInvestors(vector) { data =>
+                val itemToUpdateIndex = getInvestorIndex(id, data)
+                redirectInvalidInvestor(itemToUpdateIndex) { id =>
+                  val form = fillForm(companyOrIndividualForm, retrieveInvestorData(id, data)(_.companyOrIndividualModel))
+                  Ok(CompanyOrIndividual(useInvestorOrNomineeValueAsHeadingText(retrieveInvestorData(id, data)(_.investorOrNomineeModel).get),
+                    form, backUrl.get))
                 }
-                else Redirect(routes.AddInvestorOrNomineeController.show())
               }
-              case None => Redirect(controllers.seis.routes.AddInvestorOrNomineeController.show())
             }
           }
           else Future.successful(Redirect(controllers.seis.routes.AddInvestorOrNomineeController.show()))
