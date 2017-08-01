@@ -22,7 +22,7 @@ import config.{AppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
 import models.{CompanyOrIndividualModel, ShareIssueDateModel}
-import models.investorDetails.InvestorDetailsModel
+import models.investorDetails.{PreviousShareHoldingModel, InvestorDetailsModel}
 import org.mockito.Matchers
 import org.mockito.Mockito._
 import play.api.test.Helpers._
@@ -46,6 +46,8 @@ class NumberOfPreviouslyIssuedSharesControllerSpec extends BaseSpec{
 
   val listOfInvestorsEmptyShareHoldings =  Vector(validModelWithPrevShareHoldings.copy(previousShareHoldingModels = Some(Vector())))
   val listOfInvestorsWithShareHoldings =  Vector(validModelWithPrevShareHoldings)
+  val listOfInvestorsMissingNumberOfPreviouslyIssuedShares =  Vector(validModelWithPrevShareHoldings.copy(previousShareHoldingModels =
+    Some(Vector(PreviousShareHoldingModel(previousShareHoldingDescriptionModel = Some(previousShareHoldingDescriptionModel1), processingId = Some(1))))))
 
   def setupMocks(investorDetailsModel: Option[Vector[InvestorDetailsModel]], backURL : Option[String]): Unit = {
     mockEnrolledRequest(seisSchemeTypesModel)
@@ -141,7 +143,20 @@ class NumberOfPreviouslyIssuedSharesControllerSpec extends BaseSpec{
 
     "Load a populated ShareHoldingDescription page" when {
       "a 'backlink' is defined, an 'investor details list' is retrieved, a VALID investor details " +
-        "ID is defined and a VALID share holding Id is provided" in {
+        "ID is defined and a VALID share holding Id is provided and the page model does not exist" in {
+        mockEnrolledRequest(seisSchemeTypesModel)
+        setupMocks(Some(listOfInvestorsMissingNumberOfPreviouslyIssuedShares), backUrl)
+        showWithSessionAndAuth(controller.show(2, 1))(
+          result => {
+            status(result) shouldBe OK
+          }
+        )
+      }
+    }
+
+    "Load a populated ShareHoldingDescription page" when {
+      "a 'backlink' is defined, an 'investor details list' is retrieved, a VALID investor details " +
+        "ID is defined and a VALID share holding Id is provided and the page model exists" in {
         mockEnrolledRequest(seisSchemeTypesModel)
         setupMocks(Some(listOfInvestorsWithShareHoldings), backUrl)
         showWithSessionAndAuth(controller.show(2, 1))(
