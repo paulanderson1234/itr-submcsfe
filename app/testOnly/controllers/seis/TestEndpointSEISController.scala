@@ -208,6 +208,15 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
     s4lConnector.saveFormData[String](KeystoreKeys.backLinkShareDescription, routes.TestEndpointSEISController.showPageOne(None).url)
     s4lConnector.saveFormData[String](KeystoreKeys.backLinkAddInvestorOrNominee, routes.TestEndpointSEISController.showPageOne(None).url)
     s4lConnector.saveFormData[String](KeystoreKeys.backLinkIsExistingShareHolder, routes.TestEndpointSEISController.showPageOne(None).url)
+    //Investor Details
+    s4lConnector.saveFormData[String](KeystoreKeys.backLinkAddInvestorOrNominee, routes.TestEndpointSEISController.showPageTwo().url)
+    s4lConnector.saveFormData[String](KeystoreKeys.backLinkCompanyOrIndividual, routes.TestEndpointSEISController.showPageTwo().url)
+    s4lConnector.saveFormData[String](KeystoreKeys.backLinkCompanyAndIndividualBoth, routes.TestEndpointSEISController.showPageTwo().url)
+    s4lConnector.saveFormData[String](KeystoreKeys.backLinkNumberOfSharesPurchased, routes.TestEndpointSEISController.showPageTwo().url)
+    s4lConnector.saveFormData[String](KeystoreKeys.backLinkHowMuchSpentOnShares, routes.TestEndpointSEISController.showPageTwo().url)
+    s4lConnector.saveFormData[String](KeystoreKeys.backLinkIsExistingShareHolder, routes.TestEndpointSEISController.showPageTwo().url)
+    s4lConnector.saveFormData[String](KeystoreKeys.backLinkShareClassAndDescription, routes.TestEndpointSEISController.showPageTwo().url)
+    s4lConnector.saveFormData[String](KeystoreKeys.backLinkNumberOfPreviouslyIssuedShares, routes.TestEndpointSEISController.showPageTwo().url)
   }
 
   private def saveSchemeType()(implicit hc: HeaderCarrier, user: TAVCUser) = {
