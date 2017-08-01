@@ -38,7 +38,7 @@ import play.api.Play.current
 
 import scala.concurrent.Future
 
-trait TestEndpointSEISController extends FrontendController with AuthorisedAndEnrolledForTAVC {
+trait TestEndpointSEISController extends FrontendController with AuthorisedAndEnrolledForTAVC{
 
   override val acceptedFlows = Seq()
 
@@ -153,12 +153,6 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
         shareDescription <- fillForm[ShareDescriptionModel](KeystoreKeys.shareDescription, ShareDescriptionForm.shareDescriptionForm)
         totalAmountRaisedForm <- fillForm[TotalAmountRaisedModel](KeystoreKeys.totalAmountRaised, TotalAmountRaisedForm.totalAmountRaisedForm)
         totalAmountSpentForm <- fillForm[TotalAmountSpentModel](KeystoreKeys.totalAmountSpent, TotalAmountSpentForm.totalAmountSpentForm)
-        addInvestorOrNomineeForm <- fillForm[AddInvestorOrNomineeModel](KeystoreKeys.addInvestor, AddInvestorOrNomineeForm.addInvestorOrNomineeForm)
-        companyOrIndividualForm <- fillForm[CompanyOrIndividualModel](KeystoreKeys.companyOrIndividual, CompanyOrIndividualForm.companyOrIndividualForm)
-        companyDetails <- fillForm[CompanyDetailsModel](KeystoreKeys.companyDetails, CompanyDetailsForm.companyDetailsForm)
-        howMuchSpentOnSharesForm <- fillForm[HowMuchSpentOnSharesModel](KeystoreKeys.howMuchSpentOnShares, HowMuchSpentOnSharesForm.howMuchSpentOnSharesForm)
-        numberOfSharesPurchasedForm <- fillForm[NumberOfSharesPurchasedModel](KeystoreKeys.numberOfSharesPurchased, NumberOfSharesPurchasedForm.numberOfSharesPurchasedForm)
-        isExistingShareHolder <- fillForm[IsExistingShareHolderModel](KeystoreKeys.isExistingShareHolder, IsExistingShareHolderForm.isExistingShareHolderForm)
 
       } yield Ok(
         testOnly.views.html.seis.testEndpointSEISPageTwo(
@@ -167,13 +161,7 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
           individualDetailsForm,
           shareDescription,
           totalAmountRaisedForm,
-          totalAmountSpentForm,
-          addInvestorOrNomineeForm,
-          companyOrIndividualForm,
-          companyDetails,
-          numberOfSharesPurchasedForm,
-          howMuchSpentOnSharesForm,
-          isExistingShareHolder
+          totalAmountSpentForm
         )
       )
 
@@ -187,12 +175,8 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
     val companyDetails = bindForm[CompanyDetailsModel](KeystoreKeys.companyDetails, CompanyDetailsForm.companyDetailsForm)
     val totalAmountRaised = bindForm[TotalAmountRaisedModel](KeystoreKeys.totalAmountRaised, TotalAmountRaisedForm.totalAmountRaisedForm)
     val totalAmountSpent = bindForm[TotalAmountSpentModel](KeystoreKeys.totalAmountSpent, TotalAmountSpentForm.totalAmountSpentForm)
-    val addInvestorOrNomineeForm = bindForm[AddInvestorOrNomineeModel](KeystoreKeys.addInvestor, AddInvestorOrNomineeForm.addInvestorOrNomineeForm)
-    val companyOrIndividual = bindForm[CompanyOrIndividualModel](KeystoreKeys.companyOrIndividual, CompanyOrIndividualForm.companyOrIndividualForm)
-    val howMuchSpentOnSharesForm = bindForm[HowMuchSpentOnSharesModel](KeystoreKeys.howMuchSpentOnShares, HowMuchSpentOnSharesForm.howMuchSpentOnSharesForm)
-    val numberOfSharesPurchased = bindForm[NumberOfSharesPurchasedModel](KeystoreKeys.numberOfSharesPurchased, NumberOfSharesPurchasedForm.numberOfSharesPurchasedForm)
-    val isExistingShareHolder = bindForm[IsExistingShareHolderModel](KeystoreKeys.isExistingShareHolder, IsExistingShareHolderForm.isExistingShareHolderForm)
 
+    saveInvestorDetails()
     saveBackLinks()
     saveSchemeType()
     Future.successful(Ok(
@@ -202,15 +186,14 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
         individualDetailsForm,
         shareDescription,
         totalAmountRaised,
-        totalAmountSpent,
-        addInvestorOrNomineeForm,
-        companyOrIndividual,
-        companyDetails,
-        numberOfSharesPurchased,
-        howMuchSpentOnSharesForm,
-        isExistingShareHolder
+        totalAmountSpent
       )
     ))
+  }
+
+  private def saveInvestorDetails()(implicit hc: HeaderCarrier, user: TAVCUser) = {
+    s4lConnector.saveFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails, Vector(InvestorDetailsModel(
+      Some(AddInvestorOrNomineeModel(Constants.investor, Some(1))), Some(CompanyOrIndividualModel(Constants.typeCompany, Some(1))))))
   }
 
 

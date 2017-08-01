@@ -17,7 +17,7 @@
 package controllers.seis
 
 import auth.{MockAuthConnector, MockConfig}
-import common.KeystoreKeys
+import common.{Constants, KeystoreKeys}
 import config.{AppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
@@ -41,7 +41,6 @@ class HowMuchSpentOnSharesControllerSpec extends BaseSpec  {
   }
 
   val backUrl = Some(controllers.seis.routes.NumberOfSharesPurchasedController.show(1).url)
-  val obviouslyInvalidId = 9999
   val listOfInvestorsIncompleteHowMuchSpentOnShares =  Vector(validModelWithPrevShareHoldings.copy(amountSpentModel = None))
 
   def setupMocks(investorDetailsModel: Option[Vector[InvestorDetailsModel]], backURL : Option[String]): Unit = {
@@ -70,6 +69,7 @@ class HowMuchSpentOnSharesControllerSpec extends BaseSpec  {
     "use the correct enrolment connector" in {
       HowMuchSpentOnSharesController.enrolmentConnector shouldBe EnrolmentConnector
     }
+  }
 
     "Sending a GET request to 'HowMuchSpentOnShares' Controller when authenticated and enrolled" should {
 
@@ -104,7 +104,7 @@ class HowMuchSpentOnSharesControllerSpec extends BaseSpec  {
         "a 'backlink' is defined, an 'investor details list' is retrieved and an INVALID 'id' is defined" in {
           mockEnrolledRequest(seisSchemeTypesModel)
           setupMocks(Some(listOfInvestorsComplete), None)
-          showWithSessionAndAuth(controller.show(obviouslyInvalidId))(
+          showWithSessionAndAuth(controller.show(Constants.obviouslyInvalidId))(
             result => {
               status(result) shouldBe SEE_OTHER
               redirectLocation(result) shouldBe Some(controllers.seis.routes.AddInvestorOrNomineeController.show(None).url)
@@ -189,7 +189,5 @@ class HowMuchSpentOnSharesControllerSpec extends BaseSpec  {
         )
       }
     }
-  }
-
 
 }

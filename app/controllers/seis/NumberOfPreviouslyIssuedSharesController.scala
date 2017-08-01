@@ -74,10 +74,10 @@ trait NumberOfPreviouslyIssuedSharesController extends FrontendController with A
                 }
                 else Redirect(routes.AddInvestorOrNomineeController.show())
               }
-              case None => Redirect(controllers.seis.routes.ShareDescriptionController.show())
+              case None => Redirect(controllers.seis.routes.AddInvestorOrNomineeController.show())
             }
           }
-          else Future.successful(Redirect(controllers.seis.routes.ShareDescriptionController.show()))
+          else Future.successful(Redirect(controllers.seis.routes.AddInvestorOrNomineeController.show()))
         }
 
         for {

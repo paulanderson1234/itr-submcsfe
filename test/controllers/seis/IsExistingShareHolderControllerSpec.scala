@@ -43,7 +43,6 @@ class IsExistingShareHolderControllerSpec extends BaseSpec with DateFormatter{
   }
 
   val backUrl = Some(controllers.seis.routes.HowMuchSpentOnSharesController.show(1).url)
-  val obviouslyInvalidId = 9999
 
   val listOfInvestorsIncompleteIsExistingShareModelMissing =  Vector(validModelWithPrevShareHoldings.copy(isExistingShareHolderModel = None))
   val listOfInvestorsIncompleteCompanyOrIndividualMissing =  Vector(validModelWithPrevShareHoldings.copy(companyOrIndividualModel = None,
@@ -109,7 +108,7 @@ class IsExistingShareHolderControllerSpec extends BaseSpec with DateFormatter{
         "a 'backlink' is defined, an 'investor details list' is retrieved and an INVALID 'id' is defined" in {
           mockEnrolledRequest(seisSchemeTypesModel)
           setupMocks(Some(listOfInvestorsComplete), backUrl)
-          showWithSessionAndAuth(controller.show(obviouslyInvalidId))(
+          showWithSessionAndAuth(controller.show(Constants.obviouslyInvalidId))(
             result => {
               status(result) shouldBe SEE_OTHER
               redirectLocation(result) shouldBe Some(controllers.seis.routes.AddInvestorOrNomineeController.show(None).url)
