@@ -90,7 +90,7 @@ class HowMuchSpentOnSharesControllerSpec extends BaseSpec  {
       "Redirect to 'AddNomineeOrInvestor' page" when {
         "a 'backlink' is defined but no 'investor details list' is retrieved" in {
           mockEnrolledRequest(seisSchemeTypesModel)
-          setupMocks(None, None)
+          setupMocks(None, backUrl)
           showWithSessionAndAuth(controller.show(1))(
             result => {
               status(result) shouldBe SEE_OTHER
@@ -103,7 +103,7 @@ class HowMuchSpentOnSharesControllerSpec extends BaseSpec  {
       "Redirect to the AddInvestorOrNominee page" when {
         "a 'backlink' is defined, an 'investor details list' is retrieved and an INVALID 'id' is defined" in {
           mockEnrolledRequest(seisSchemeTypesModel)
-          setupMocks(Some(listOfInvestorsComplete), None)
+          setupMocks(Some(listOfInvestorsComplete), backUrl)
           showWithSessionAndAuth(controller.show(Constants.obviouslyInvalidId))(
             result => {
               status(result) shouldBe SEE_OTHER
