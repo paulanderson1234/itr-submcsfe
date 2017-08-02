@@ -55,21 +55,20 @@ trait PreviousInvestorShareHoldersHelper {
                                        (implicit hc: HeaderCarrier, user: TAVCUser): Future[PreviousShareHoldingModel] = {
     val defaultId: Int = 1
     val result = s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
-      case Some(data) => {
-          val investorDetailsModel = data.last
-          if (investorDetailsModel.previousShareHoldingModels.isDefined
-            && investorDetailsModel.previousShareHoldingModels.get.nonEmpty) {
-            addShareClassAndDescriptionToExisting(data, previousShareHoldingDescriptionModel,investorDetailsModel)
-          }
-          else {
-            val newId = defaultId
-            data.updated(data.size -1, investorDetailsModel.copy(previousShareHoldingModels =
-              Some(investorDetailsModel.previousShareHoldingModels.get :+ PreviousShareHoldingModel.apply(previousShareHoldingDescriptionModel =
-                Some(previousShareHoldingDescriptionModel.copy(processingId = Some(newId),
-                  investorProcessingId = investorDetailsModel.processingId)), processingId = Some(newId),
-                investorProcessingId = investorDetailsModel.processingId))))
-          }
-      }
+      case Some(data) =>
+        val investorDetailsModel = data.last
+        if (investorDetailsModel.previousShareHoldingModels.isDefined
+          && investorDetailsModel.previousShareHoldingModels.get.nonEmpty) {
+          addShareClassAndDescriptionToExisting(data, previousShareHoldingDescriptionModel,investorDetailsModel)
+        }
+        else {
+          val newId = defaultId
+          data.updated(data.size -1, investorDetailsModel.copy(previousShareHoldingModels =
+            Some(investorDetailsModel.previousShareHoldingModels.get :+ PreviousShareHoldingModel.apply(previousShareHoldingDescriptionModel =
+              Some(previousShareHoldingDescriptionModel.copy(processingId = Some(newId),
+                investorProcessingId = investorDetailsModel.processingId)), processingId = Some(newId),
+              investorProcessingId = investorDetailsModel.processingId))))
+        }
       case None => throw new InternalServerException("No valid Investor information passed")
     }
     result.flatMap(newVectorList => s4lConnector.saveFormData(KeystoreKeys.investorDetails, newVectorList))
