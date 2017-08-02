@@ -22,7 +22,6 @@ import controllers.seis.routes
 import models._
 import models.investorDetails.{InvestorDetailsModel, PreviousShareHoldingModel}
 import models.submission.SchemeTypesModel
-import play.api.Logger
 import play.api.data.Form
 import play.api.i18n.Messages
 import play.api.mvc.Results._
