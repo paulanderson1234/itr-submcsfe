@@ -17,7 +17,7 @@
 package controllers.Helpers
 
 import auth.TAVCUser
-import common.KeystoreKeys
+import common.{Constants, KeystoreKeys}
 import models._
 import models.investorDetails._
 import uk.gov.hmrc.http.cache.client.CacheMap
@@ -38,10 +38,9 @@ trait PreviousInvestorsHelper {
     val defaultId: Int = 1
 
     val result = s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
-      case Some(data) => {
+      case Some(data) =>
         val newId = data.last.processingId.get + 1
         data :+ investorDetailsModel.copy(processingId = Some(newId))
-      }
       case None => Vector.empty :+ investorDetailsModel.copy(processingId = Some(defaultId))
     }.recover { case _ => Vector.empty :+ investorDetailsModel.copy(processingId = Some(defaultId)) }
 
@@ -52,20 +51,19 @@ trait PreviousInvestorsHelper {
   def updateKeystorePreviousInvestment(s4lConnector: connectors.S4LConnector,
                                            investorDetailsModel: InvestorDetailsModel)
                                           (implicit hc: HeaderCarrier, user: TAVCUser): Future[Vector[InvestorDetailsModel]] = {
-    val idNotFound: Int = -1
+    val idNotFound: Int = Constants.notFound
 
     require(investorDetailsModel.processingId.getOrElse(0) > 0,
       "The item to update processingId must be an integer > 0")
 
     val result = s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
-      case Some(data) => {
+      case Some(data) =>
         val itemToUpdateIndex = data.indexWhere(_.processingId.getOrElse(0) ==
           investorDetailsModel.processingId.getOrElse(0))
         if (itemToUpdateIndex != idNotFound) {
           data.updated(itemToUpdateIndex, investorDetailsModel)
         }
         else data
-      }
       case None => Vector[InvestorDetailsModel]()
     }
     result.flatMap(updatedVectorList => s4lConnector.saveFormData(KeystoreKeys.investorDetails, updatedVectorList))
@@ -96,7 +94,7 @@ trait PreviousInvestorsHelper {
     val defaultId: Int = 1
 
     val result = s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
-      case Some(data) => {
+      case Some(data) =>
         val investorDetailsModel = data.last
         if (investorDetailsModel.validate) {
           // forward to the review page
@@ -105,22 +103,20 @@ trait PreviousInvestorsHelper {
             processingId = Some(newId))
         }
         else{
-          data.updated((data.size -1), investorDetailsModel.copy(investorOrNomineeModel =
+          data.updated(data.size - 1, investorDetailsModel.copy(investorOrNomineeModel =
             Some(addInvestorOrNomineeModel.copy(processingId = investorDetailsModel.processingId))))
         }
-      }
-      case None => {
+      case None =>
         Vector.empty :+ InvestorDetailsModel.apply(investorOrNomineeModel = Some(addInvestorOrNomineeModel.copy(processingId = Some(defaultId))),
         processingId = Some(defaultId))
-      }
     }.recover { case _ => Vector.empty :+ InvestorDetailsModel.apply(investorOrNomineeModel = Some(addInvestorOrNomineeModel.copy(processingId = Some(defaultId))),
       processingId = Some(defaultId)) }
 
     result.flatMap(newVectorList => s4lConnector.saveFormData(KeystoreKeys.investorDetails, newVectorList))
 
     val model = for {
-      x <- result
-    } yield x.last
+      investorDetails <- result
+    } yield investorDetails.last
 
     model
   }
@@ -128,13 +124,13 @@ trait PreviousInvestorsHelper {
   def updateInvestorOrNominee(s4lConnector: connectors.S4LConnector,
                                addInvestorOrNomineeModel : AddInvestorOrNomineeModel)
                                           (implicit hc: HeaderCarrier, user: TAVCUser): Future[InvestorDetailsModel] = {
-    val idNotFound: Int = -1
+    val idNotFound: Int = Constants.notFound
 
     require(addInvestorOrNomineeModel.processingId.getOrElse(0) > 0,
       "The item to update processingId must be an integer > 0")
 
     val result = s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
-      case Some(data) => {
+      case Some(data) =>
         val itemToUpdateIndex = data.indexWhere(_.processingId.getOrElse(0) ==
           addInvestorOrNomineeModel.processingId.getOrElse(0))
         if (itemToUpdateIndex != idNotFound) {
@@ -142,13 +138,12 @@ trait PreviousInvestorsHelper {
           data.updated(itemToUpdateIndex, investorDetailsModel.get.copy(investorOrNomineeModel = Some(addInvestorOrNomineeModel)))
         }
         else data
-      }
       case None => Vector[InvestorDetailsModel]()
     }
     result.flatMap(updatedVectorList => s4lConnector.saveFormData(KeystoreKeys.investorDetails, updatedVectorList))
     val model = for {
-      x <- result
-    } yield x.lift(x.indexWhere(_.processingId.getOrElse(0) == addInvestorOrNomineeModel.processingId.getOrElse(0))).get
+      investorDetails <- result
+    } yield investorDetails.lift(investorDetails.indexWhere(_.processingId.getOrElse(0) == addInvestorOrNomineeModel.processingId.getOrElse(0))).get
 
     model
   }
@@ -156,13 +151,13 @@ trait PreviousInvestorsHelper {
   def updateCompanyOrIndividual(s4lConnector: connectors.S4LConnector,
                                 companyOrIndividualModel: CompanyOrIndividualModel)
                               (implicit hc: HeaderCarrier, user: TAVCUser): Future[InvestorDetailsModel] = {
-    val idNotFound: Int = -1
+    val idNotFound: Int = Constants.notFound
 
     require(companyOrIndividualModel.processingId.getOrElse(0) > 0,
       "The item to update processingId must be an integer > 0")
 
     val result = s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
-      case Some(data) => {
+      case Some(data) =>
         val itemToUpdateIndex = data.indexWhere(_.processingId.getOrElse(0) ==
           companyOrIndividualModel.processingId.getOrElse(0))
         if (itemToUpdateIndex != idNotFound) {
@@ -170,13 +165,12 @@ trait PreviousInvestorsHelper {
           data.updated(itemToUpdateIndex, investorDetailsModel.get.copy(companyOrIndividualModel = Some(companyOrIndividualModel)))
         }
         else throw new InternalServerException("No valid Investor information passed")
-      }
       case None => throw throw new InternalServerException("No valid Investor information passed")
     }
     result.flatMap(updatedVectorList => s4lConnector.saveFormData(KeystoreKeys.investorDetails, updatedVectorList))
     val model = for {
-      x <- result
-    } yield x.lift(x.indexWhere(_.processingId.getOrElse(0) == companyOrIndividualModel.processingId.getOrElse(0))).get
+      investorDetails <- result
+    } yield investorDetails.lift(investorDetails.indexWhere(_.processingId.getOrElse(0) == companyOrIndividualModel.processingId.getOrElse(0))).get
 
     model
   }
@@ -186,21 +180,19 @@ trait PreviousInvestorsHelper {
                            (implicit hc: HeaderCarrier, user: TAVCUser): Future[InvestorDetailsModel] = {
 
     val result = s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
-      case Some(data) => {
+      case Some(data) =>
         val investorDetailsModel = data.last
-        data.updated((data.size -1), investorDetailsModel.copy(companyOrIndividualModel =
+        data.updated(data.size - 1, investorDetailsModel.copy(companyOrIndividualModel =
           Some(companyOrIndividualModel.copy(processingId = Some(data.last.processingId.get)))))
-      }
-      case None => {
+      case None =>
         throw throw new InternalServerException("No valid Investor information passed")
-      }
     }
 
     result.flatMap(newVectorList => s4lConnector.saveFormData(KeystoreKeys.investorDetails, newVectorList))
 
     val model = for {
-      x <- result
-    } yield x.last
+      investors <- result
+    } yield investors.last
 
     model
   }
@@ -208,13 +200,13 @@ trait PreviousInvestorsHelper {
   def updateCompanyDetails(s4lConnector: connectors.S4LConnector,
                                 companyDetailsModel: CompanyDetailsModel)
                                (implicit hc: HeaderCarrier, user: TAVCUser): Future[InvestorDetailsModel] = {
-    val idNotFound: Int = -1
+    val idNotFound: Int = Constants.notFound
 
     require(companyDetailsModel.processingId.getOrElse(0) > 0,
       "The item to update processingId must be an integer > 0")
 
     val result = s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
-      case Some(data) => {
+      case Some(data) =>
         val itemToUpdateIndex = data.indexWhere(_.processingId.getOrElse(0) ==
           companyDetailsModel.processingId.getOrElse(0))
         if (itemToUpdateIndex != idNotFound) {
@@ -222,13 +214,12 @@ trait PreviousInvestorsHelper {
           data.updated(itemToUpdateIndex, investorDetailsModel.get.copy(companyDetailsModel = Some(companyDetailsModel)))
         }
         else throw new InternalServerException("No valid Investor information passed")
-      }
       case None => throw throw new InternalServerException("No valid Investor information passed")
     }
     result.flatMap(updatedVectorList => s4lConnector.saveFormData(KeystoreKeys.investorDetails, updatedVectorList))
     val model = for {
-      x <- result
-    } yield x.lift(x.indexWhere(_.processingId.getOrElse(0) == companyDetailsModel.processingId.getOrElse(0))).get
+      investorDetails <- result
+    } yield investorDetails.lift(investorDetails.indexWhere(_.processingId.getOrElse(0) == companyDetailsModel.processingId.getOrElse(0))).get
 
     model
   }
@@ -238,21 +229,19 @@ trait PreviousInvestorsHelper {
                             (implicit hc: HeaderCarrier, user: TAVCUser): Future[InvestorDetailsModel] = {
 
     val result = s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
-      case Some(data) => {
+      case Some(data) =>
         val investorDetailsModel = data.last
-        data.updated((data.size -1), investorDetailsModel.copy(companyDetailsModel =
+        data.updated(data.size - 1, investorDetailsModel.copy(companyDetailsModel =
           Some(companyDetailsModel.copy(processingId = Some(data.last.processingId.get)))))
-      }
-      case None => {
+      case None =>
         throw throw new InternalServerException("No valid Investor information passed")
-      }
     }
 
     result.flatMap(newVectorList => s4lConnector.saveFormData(KeystoreKeys.investorDetails, newVectorList))
 
     val model = for {
-      x <- result
-    } yield x.last
+      investorDetails <- result
+    } yield investorDetails.last
 
     model
   }
@@ -260,13 +249,13 @@ trait PreviousInvestorsHelper {
   def updateIndividualDetails(s4lConnector: connectors.S4LConnector,
                               individualDetailsModel: IndividualDetailsModel)
                           (implicit hc: HeaderCarrier, user: TAVCUser): Future[InvestorDetailsModel] = {
-    val idNotFound: Int = -1
+    val idNotFound: Int = Constants.notFound
 
     require(individualDetailsModel.processingId.getOrElse(0) > 0,
       "The item to update processingId must be an integer > 0")
 
     val result = s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
-      case Some(data) => {
+      case Some(data) =>
         val itemToUpdateIndex = data.indexWhere(_.processingId.getOrElse(0) ==
           individualDetailsModel.processingId.getOrElse(0))
         if (itemToUpdateIndex != idNotFound) {
@@ -274,13 +263,12 @@ trait PreviousInvestorsHelper {
           data.updated(itemToUpdateIndex, investorDetailsModel.get.copy(individualDetailsModel = Some(individualDetailsModel)))
         }
         else throw new InternalServerException("No valid Investor information passed")
-      }
       case None => throw new InternalServerException("No valid Investor information passed")
     }
     result.flatMap(updatedVectorList => s4lConnector.saveFormData(KeystoreKeys.investorDetails, updatedVectorList))
     val model = for {
-      x <- result
-    } yield x.lift(x.indexWhere(_.processingId.getOrElse(0) == individualDetailsModel.processingId.getOrElse(0))).get
+      investorDetails <- result
+    } yield investorDetails.lift(investorDetails.indexWhere(_.processingId.getOrElse(0) == individualDetailsModel.processingId.getOrElse(0))).get
 
     model
   }
@@ -290,21 +278,19 @@ trait PreviousInvestorsHelper {
                        (implicit hc: HeaderCarrier, user: TAVCUser): Future[InvestorDetailsModel] = {
 
     val result = s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
-      case Some(data) => {
+      case Some(data) =>
         val investorDetailsModel = data.last
-        data.updated((data.size -1), investorDetailsModel.copy(individualDetailsModel =
+        data.updated(data.size - 1, investorDetailsModel.copy(individualDetailsModel =
           Some(individualDetailsModel.copy(processingId = Some(data.last.processingId.get)))))
-      }
-      case None => {
+      case None =>
         throw throw new InternalServerException("No valid Investor information passed")
-      }
     }
 
     result.flatMap(newVectorList => s4lConnector.saveFormData(KeystoreKeys.investorDetails, newVectorList))
 
     val model = for {
-      x <- result
-    } yield x.last
+      investorDetails <- result
+    } yield investorDetails.last
 
     model
   }
@@ -312,13 +298,13 @@ trait PreviousInvestorsHelper {
   def updateNumOfSharesPurchasedDetails(s4lConnector: connectors.S4LConnector,
                                         numberOfSharesPurchasedModel: NumberOfSharesPurchasedModel)
                              (implicit hc: HeaderCarrier, user: TAVCUser): Future[InvestorDetailsModel] = {
-    val idNotFound: Int = -1
+    val idNotFound: Int = Constants.notFound
 
     require(numberOfSharesPurchasedModel.processingId.getOrElse(0) > 0,
       "The item to update processingId must be an integer > 0")
 
     val result = s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
-      case Some(data) => {
+      case Some(data) =>
         val itemToUpdateIndex = data.indexWhere(_.processingId.getOrElse(0) ==
           numberOfSharesPurchasedModel.processingId.getOrElse(0))
         if (itemToUpdateIndex != idNotFound) {
@@ -326,13 +312,12 @@ trait PreviousInvestorsHelper {
           data.updated(itemToUpdateIndex, investorDetailsModel.get.copy(numberOfSharesPurchasedModel = Some(numberOfSharesPurchasedModel)))
         }
         else throw new InternalServerException("No valid Investor information passed")
-      }
       case None => throw new InternalServerException("No valid Investor information passed")
     }
     result.flatMap(updatedVectorList => s4lConnector.saveFormData(KeystoreKeys.investorDetails, updatedVectorList))
     val model = for {
-      x <- result
-    } yield x.lift(x.indexWhere(_.processingId.getOrElse(0) == numberOfSharesPurchasedModel.processingId.getOrElse(0))).get
+      investorDetails <- result
+    } yield investorDetails.lift(investorDetails.indexWhere(_.processingId.getOrElse(0) == numberOfSharesPurchasedModel.processingId.getOrElse(0))).get
 
     model
   }
@@ -342,21 +327,19 @@ trait PreviousInvestorsHelper {
                           (implicit hc: HeaderCarrier, user: TAVCUser): Future[InvestorDetailsModel] = {
 
     val result = s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
-      case Some(data) => {
+      case Some(data) =>
         val investorDetailsModel = data.last
-        data.updated((data.size -1), investorDetailsModel.copy(numberOfSharesPurchasedModel =
+        data.updated(data.size - 1, investorDetailsModel.copy(numberOfSharesPurchasedModel =
           Some(numberOfSharesPurchasedModel.copy(processingId = Some(data.last.processingId.get)))))
-      }
-      case None => {
+      case None =>
         throw throw new InternalServerException("No valid Investor information passed")
-      }
     }
 
     result.flatMap(newVectorList => s4lConnector.saveFormData(KeystoreKeys.investorDetails, newVectorList))
 
     val model = for {
-      x <- result
-    } yield x.last
+      investorDetails <- result
+    } yield investorDetails.last
 
     model
   }
@@ -364,13 +347,13 @@ trait PreviousInvestorsHelper {
   def updateAmountSpentOnSharesDetails(s4lConnector: connectors.S4LConnector,
                                        howMuchSpentOnSharesModel: HowMuchSpentOnSharesModel)
                                        (implicit hc: HeaderCarrier, user: TAVCUser): Future[InvestorDetailsModel] = {
-    val idNotFound: Int = -1
+    val idNotFound: Int = Constants.notFound
 
     require(howMuchSpentOnSharesModel.processingId.getOrElse(0) > 0,
       "The item to update processingId must be an integer > 0")
 
     val result = s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
-      case Some(data) => {
+      case Some(data) =>
         val itemToUpdateIndex = data.indexWhere(_.processingId.getOrElse(0) ==
           howMuchSpentOnSharesModel.processingId.getOrElse(0))
         if (itemToUpdateIndex != idNotFound) {
@@ -378,13 +361,12 @@ trait PreviousInvestorsHelper {
           data.updated(itemToUpdateIndex, investorDetailsModel.get.copy(amountSpentModel = Some(howMuchSpentOnSharesModel)))
         }
         else throw new InternalServerException("No valid Investor information passed")
-      }
       case None => throw new InternalServerException("No valid Investor information passed")
     }
     result.flatMap(updatedVectorList => s4lConnector.saveFormData(KeystoreKeys.investorDetails, updatedVectorList))
     val model = for {
-      x <- result
-    } yield x.lift(x.indexWhere(_.processingId.getOrElse(0) == howMuchSpentOnSharesModel.processingId.getOrElse(0))).get
+      investorDetails <- result
+    } yield investorDetails.lift(investorDetails.indexWhere(_.processingId.getOrElse(0) == howMuchSpentOnSharesModel.processingId.getOrElse(0))).get
 
     model
   }
@@ -394,21 +376,19 @@ trait PreviousInvestorsHelper {
                                     (implicit hc: HeaderCarrier, user: TAVCUser): Future[InvestorDetailsModel] = {
 
     val result = s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
-      case Some(data) => {
+      case Some(data) =>
         val investorDetailsModel = data.last
-        data.updated((data.size -1), investorDetailsModel.copy(amountSpentModel =
+        data.updated(data.size - 1, investorDetailsModel.copy(amountSpentModel =
           Some(howMuchSpentOnSharesModel.copy(processingId = Some(data.last.processingId.get)))))
-      }
-      case None => {
+      case None =>
         throw throw new InternalServerException("No valid Investor information passed")
-      }
     }
 
     result.flatMap(newVectorList => s4lConnector.saveFormData(KeystoreKeys.investorDetails, newVectorList))
 
     val model = for {
-      x <- result
-    } yield x.last
+      investorDetails <- result
+    } yield investorDetails.last
 
     model
   }
@@ -416,13 +396,13 @@ trait PreviousInvestorsHelper {
   def updateIsExistingShareHoldersDetails(s4lConnector: connectors.S4LConnector,
                                           isExistingShareHolderModel: IsExistingShareHolderModel)
                                       (implicit hc: HeaderCarrier, user: TAVCUser): Future[InvestorDetailsModel] = {
-    val idNotFound: Int = -1
+    val idNotFound: Int = Constants.notFound
 
     require(isExistingShareHolderModel.processingId.getOrElse(0) > 0,
       "The item to update processingId must be an integer > 0")
 
     val result = s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
-      case Some(data) => {
+      case Some(data) =>
         val itemToUpdateIndex = data.indexWhere(_.processingId.getOrElse(0) ==
           isExistingShareHolderModel.processingId.getOrElse(0))
         if (itemToUpdateIndex != idNotFound) {
@@ -430,13 +410,12 @@ trait PreviousInvestorsHelper {
           data.updated(itemToUpdateIndex, investorDetailsModel.get.copy(isExistingShareHolderModel = Some(isExistingShareHolderModel)))
         }
         else throw new InternalServerException("No valid Investor information passed")
-      }
       case None => throw new InternalServerException("No valid Investor information passed")
     }
     result.flatMap(updatedVectorList => s4lConnector.saveFormData(KeystoreKeys.investorDetails, updatedVectorList))
     val model = for {
-      x <- result
-    } yield x.lift(x.indexWhere(_.processingId.getOrElse(0) == isExistingShareHolderModel.processingId.getOrElse(0))).get
+      investorDetails <- result
+    } yield investorDetails.lift(investorDetails.indexWhere(_.processingId.getOrElse(0) == isExistingShareHolderModel.processingId.getOrElse(0))).get
 
     model
   }
@@ -446,22 +425,20 @@ trait PreviousInvestorsHelper {
                                    (implicit hc: HeaderCarrier, user: TAVCUser): Future[InvestorDetailsModel] = {
 
     val result = s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
-      case Some(data) => {
+      case Some(data) =>
         val investorDetailsModel = data.last
-        data.updated((data.size -1), investorDetailsModel.copy(isExistingShareHolderModel =
+        data.updated(data.size - 1, investorDetailsModel.copy(isExistingShareHolderModel =
           Some(isExistingShareHolderModel.copy(processingId = Some(data.last.processingId.get))),
           previousShareHoldingModels = Some(Vector[PreviousShareHoldingModel]())))
-      }
-      case None => {
+      case None =>
         throw throw new InternalServerException("No valid Investor information passed")
-      }
     }
 
     result.flatMap(newVectorList => s4lConnector.saveFormData(KeystoreKeys.investorDetails, newVectorList))
 
     val model = for {
-      x <- result
-    } yield x.last
+      investorDetails <- result
+    } yield investorDetails.last
 
     model
   }
