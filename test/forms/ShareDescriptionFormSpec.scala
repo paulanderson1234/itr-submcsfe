@@ -135,7 +135,7 @@ class ShareDescriptionFormSpec extends UnitSpec with OneAppPerSuite{
         case Some(err) => {
           err.key shouldBe "shareDescription"
           Messages(err.message) shouldBe Messages("error.maxLength")
-          err.args shouldBe Array(Constants.ShareDescriptionMaxLength)
+          err.args shouldBe Array(Constants.shortTextLimit)
         }
         case _ => {
           fail("Missing error")
