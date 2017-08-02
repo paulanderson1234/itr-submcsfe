@@ -42,7 +42,7 @@ case class InvestorDetailsModel(investorOrNomineeModel: Option[AddInvestorOrNomi
     def validateShareHoldings : Boolean = {
       if(isExistingShareHolderModel.isDefined && isExistingShareHolderModel.get.isExistingShareHolder == Constants.StandardRadioButtonNoValue) true
       else if(isExistingShareHolderModel.isDefined && isExistingShareHolderModel.get.isExistingShareHolder == Constants.StandardRadioButtonYesValue){
-        if(previousShareHoldingModels.isDefined && !previousShareHoldingModels.isEmpty) previousShareHoldingModels.get.forall(_.validate)
+        if(previousShareHoldingModels.isDefined && previousShareHoldingModels.isDefined) previousShareHoldingModels.get.forall(_.validate)
         else false
       }
       else false

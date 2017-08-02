@@ -58,23 +58,8 @@ trait PreviousInvestorShareHoldersHelper {
       case Some(data) => {
           val investorDetailsModel = data.last
           if (investorDetailsModel.previousShareHoldingModels.isDefined
-            && investorDetailsModel.previousShareHoldingModels.get.size > 0) {
-            if (investorDetailsModel.validate) {
-              val newId = investorDetailsModel.previousShareHoldingModels.get.last.processingId.get + defaultId
-              data.updated(data.size -1, investorDetailsModel.copy(previousShareHoldingModels =
-                Some(investorDetailsModel.previousShareHoldingModels.get :+ PreviousShareHoldingModel.apply(previousShareHoldingDescriptionModel =
-                  Some(previousShareHoldingDescriptionModel.copy(processingId = Some(newId),
-                    investorProcessingId = investorDetailsModel.processingId)), processingId = Some(newId),
-                  investorProcessingId = investorDetailsModel.processingId))))
-            }
-            else {
-              val previousShareHoldingModelObj = investorDetailsModel.previousShareHoldingModels.get.last
-              data.updated(data.size -1, investorDetailsModel.copy(previousShareHoldingModels =
-                Some(investorDetailsModel.previousShareHoldingModels.get.updated(investorDetailsModel.previousShareHoldingModels.get.size - defaultId,
-                  previousShareHoldingModelObj.copy(previousShareHoldingDescriptionModel =
-                    Some(previousShareHoldingDescriptionModel.copy(processingId = previousShareHoldingModelObj.processingId,
-                      investorProcessingId = previousShareHoldingModelObj.investorProcessingId)))))))
-            }
+            && investorDetailsModel.previousShareHoldingModels.get.nonEmpty) {
+            addShareClassAndDescriptionToExisting(data, previousShareHoldingDescriptionModel,investorDetailsModel)
           }
           else {
             val newId = defaultId
@@ -95,31 +80,41 @@ trait PreviousInvestorShareHoldersHelper {
     model
   }
 
+  private def addShareClassAndDescriptionToExisting(data :Vector[InvestorDetailsModel],
+                                                    previousShareHoldingDescriptionModel: PreviousShareHoldingDescriptionModel,
+                                                    investorDetailsModel: InvestorDetailsModel) = {
+    val defaultId: Int = 1
+
+    if (investorDetailsModel.validate) {
+      val newId = investorDetailsModel.previousShareHoldingModels.get.last.processingId.get + defaultId
+      data.updated(data.size -1, investorDetailsModel.copy(previousShareHoldingModels =
+        Some(investorDetailsModel.previousShareHoldingModels.get :+ PreviousShareHoldingModel.apply(previousShareHoldingDescriptionModel =
+          Some(previousShareHoldingDescriptionModel.copy(processingId = Some(newId),
+            investorProcessingId = investorDetailsModel.processingId)), processingId = Some(newId),
+          investorProcessingId = investorDetailsModel.processingId))))
+    }
+    else {
+      val previousShareHoldingModelObj = investorDetailsModel.previousShareHoldingModels.get.last
+      data.updated(data.size -1, investorDetailsModel.copy(previousShareHoldingModels =
+        Some(investorDetailsModel.previousShareHoldingModels.get.updated(investorDetailsModel.previousShareHoldingModels.get.size - defaultId,
+          previousShareHoldingModelObj.copy(previousShareHoldingDescriptionModel =
+            Some(previousShareHoldingDescriptionModel.copy(processingId = previousShareHoldingModelObj.processingId,
+              investorProcessingId = previousShareHoldingModelObj.investorProcessingId)))))))
+    }
+  }
+
   def updateShareClassAndDescription(s4lConnector: connectors.S4LConnector,
                                      previousShareHoldingDescriptionModel: PreviousShareHoldingDescriptionModel)
                                        (implicit hc: HeaderCarrier, user: TAVCUser): Future[PreviousShareHoldingModel] = {
 
     val result = s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
-      case Some(data) => {
+      case Some(data) =>
         val itemToUpdateIndex = data.indexWhere(_.processingId.getOrElse(0) ==
           previousShareHoldingDescriptionModel.investorProcessingId.getOrElse(0))
         if (itemToUpdateIndex != -1) {
-          val investorDetailsModel = data.lift(itemToUpdateIndex).get
-          val shareHoldingsIndex = investorDetailsModel.previousShareHoldingModels.get.indexWhere(_.processingId.getOrElse(0) ==
-            previousShareHoldingDescriptionModel.processingId.getOrElse(0))
-          if (shareHoldingsIndex != -1) {
-            val shareHoldingsModel = investorDetailsModel.previousShareHoldingModels.get.lift(shareHoldingsIndex).get
-
-            data.updated(itemToUpdateIndex, investorDetailsModel.copy(previousShareHoldingModels =
-              Some(investorDetailsModel.previousShareHoldingModels.get.updated(shareHoldingsIndex,
-                shareHoldingsModel.copy(previousShareHoldingDescriptionModel =
-                Some(previousShareHoldingDescriptionModel))))))
-
-          }
-          else throw new InternalServerException("No valid Investor information passed")
+          getUpdatePreviousIssuedShares(data, itemToUpdateIndex, previousShareHoldingDescriptionModel)
         }
         else throw new InternalServerException("No valid Investor information passed")
-      }
       case None => throw new InternalServerException("No valid Investor information passed")
     }
     result.flatMap(newVectorList => s4lConnector.saveFormData(KeystoreKeys.investorDetails, newVectorList))
@@ -134,16 +129,33 @@ trait PreviousInvestorShareHoldersHelper {
     model
   }
 
-  // add logic for the middle flow
+  private def getUpdatePreviousIssuedShares(data :Vector[InvestorDetailsModel],itemToUpdateIndex:Int,
+                                            previousShareHoldingDescriptionModel:PreviousShareHoldingDescriptionModel): Vector[InvestorDetailsModel] = {
+    val investorDetailsModel = data.lift(itemToUpdateIndex).get
+    val shareHoldingsIndex = investorDetailsModel.previousShareHoldingModels.get.indexWhere(_.processingId.getOrElse(0) ==
+      previousShareHoldingDescriptionModel.processingId.getOrElse(0))
+    if (shareHoldingsIndex != -1) {
+      val shareHoldingsModel = investorDetailsModel.previousShareHoldingModels.get.lift(shareHoldingsIndex).get
+
+      data.updated(itemToUpdateIndex, investorDetailsModel.copy(previousShareHoldingModels =
+        Some(investorDetailsModel.previousShareHoldingModels.get.updated(shareHoldingsIndex,
+          shareHoldingsModel.copy(previousShareHoldingDescriptionModel =
+            Some(previousShareHoldingDescriptionModel))))))
+
+    }
+    else throw new InternalServerException("No valid Investor information passed")
+  }
+
+    // add logic for the middle flow
   def addNumberOfPreviouslyIssuedShares(s4lConnector: connectors.S4LConnector,
                                         numberOfPreviouslyIssuedShares: NumberOfPreviouslyIssuedSharesModel)
                                        (implicit hc: HeaderCarrier, user: TAVCUser): Future[PreviousShareHoldingModel] = {
     val defaultId: Int = 1
     val result = s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
-      case Some(data) => {
+      case Some(data) =>
         val investorDetailsModel = data.last
         if (investorDetailsModel.previousShareHoldingModels.isDefined
-          && investorDetailsModel.previousShareHoldingModels.get.size > 0) {
+          && investorDetailsModel.previousShareHoldingModels.get.nonEmpty) {
           val previousShareHoldingModelObj = investorDetailsModel.previousShareHoldingModels.get.last
           data.updated(data.size - 1, investorDetailsModel.copy(previousShareHoldingModels =
             Some(investorDetailsModel.previousShareHoldingModels.get.updated(investorDetailsModel.previousShareHoldingModels.get.size - 1,
@@ -152,7 +164,6 @@ trait PreviousInvestorShareHoldersHelper {
                 investorProcessingId = previousShareHoldingModelObj.investorProcessingId)))))))
         }
         else throw new InternalServerException("No valid Investor information passed")
-      }
       case None => throw new InternalServerException("No valid Investor information passed")
     }
 
@@ -171,29 +182,14 @@ trait PreviousInvestorShareHoldersHelper {
                                           (implicit hc: HeaderCarrier, user: TAVCUser): Future[PreviousShareHoldingModel] = {
 
     val result = s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
-      case Some(data) => {
+      case Some(data) =>
         val itemToUpdateIndex = data.indexWhere(_.processingId.getOrElse(0) ==
           numberOfPreviouslyIssuedSharesModel.investorProcessingId.getOrElse(0))
         if (itemToUpdateIndex != -1) {
-          val investorDetailsModel = data.lift(itemToUpdateIndex).get
-          if (investorDetailsModel.previousShareHoldingModels.isDefined
-            && investorDetailsModel.previousShareHoldingModels.get.size > 0) {
-            val shareHoldingsIndex = investorDetailsModel.previousShareHoldingModels.get.indexWhere(_.processingId.getOrElse(0) ==
-              numberOfPreviouslyIssuedSharesModel.processingId.getOrElse(0))
-            if (shareHoldingsIndex != -1) {
-              val shareHoldingsModel = investorDetailsModel.previousShareHoldingModels.get.lift(shareHoldingsIndex).get
 
-              data.updated(itemToUpdateIndex, investorDetailsModel.copy(previousShareHoldingModels =
-                Some(investorDetailsModel.previousShareHoldingModels.get.updated(shareHoldingsIndex,
-                  shareHoldingsModel.copy(numberOfPreviouslyIssuedSharesModel =
-                  Some(numberOfPreviouslyIssuedSharesModel))))))
-            }
-            else throw new InternalServerException("No valid Investor information passed")
-          }
-          else throw new InternalServerException("No valid Investor information passed")
+          updatePreviousIssuedShares(data, itemToUpdateIndex, numberOfPreviouslyIssuedSharesModel)
         }
         else throw new InternalServerException("No valid Investor information passed")
-      }
       case None => throw new InternalServerException("No valid Investor information passed")
     }
 
@@ -208,5 +204,26 @@ trait PreviousInvestorShareHoldersHelper {
         indexWhere(_.processingId.getOrElse(0) == numberOfPreviouslyIssuedSharesModel.processingId.getOrElse(0))).get
 
     model
+  }
+
+  private def updatePreviousIssuedShares(data :Vector[InvestorDetailsModel],itemToUpdateIndex:Int,
+                                 numberOfPreviouslyIssuedSharesModel:NumberOfPreviouslyIssuedSharesModel): Vector[InvestorDetailsModel] = {
+
+    val investorDetailsModel = data.lift(itemToUpdateIndex).get
+    if (investorDetailsModel.previousShareHoldingModels.isDefined
+      && investorDetailsModel.previousShareHoldingModels.get.nonEmpty) {
+      val shareHoldingsIndex = investorDetailsModel.previousShareHoldingModels.get.indexWhere(_.processingId.getOrElse(0) ==
+        numberOfPreviouslyIssuedSharesModel.processingId.getOrElse(0))
+      if (shareHoldingsIndex != -1) {
+        val shareHoldingsModel = investorDetailsModel.previousShareHoldingModels.get.lift(shareHoldingsIndex).get
+
+        data.updated(itemToUpdateIndex, investorDetailsModel.copy(previousShareHoldingModels =
+          Some(investorDetailsModel.previousShareHoldingModels.get.updated(shareHoldingsIndex,
+            shareHoldingsModel.copy(numberOfPreviouslyIssuedSharesModel =
+              Some(numberOfPreviouslyIssuedSharesModel))))))
+      }
+      else throw new InternalServerException("No valid Investor information passed")
+    }
+    else throw new InternalServerException("No valid Investor information passed")
   }
 }
