@@ -22,6 +22,7 @@ import controllers.seis.routes
 import models._
 import models.investorDetails.{InvestorDetailsModel, PreviousShareHoldingModel}
 import models.submission.SchemeTypesModel
+import play.api.Logger
 import play.api.data.Form
 import play.api.i18n.Messages
 import play.api.mvc.Results._
@@ -140,7 +141,9 @@ trait ControllerHelpers {
   }
 
   def getShareIndex(targetIndex: Int, data: Vector[PreviousShareHoldingModel]): Int = {
-    data.indexWhere(_.processingId.getOrElse(0) == targetIndex)
+    val test = data.indexWhere(_.processingId.getOrElse(0) == targetIndex)
+    Logger.warn(s"##########$test###########")
+    test
   }
 
   def redirectInvalidInvestor(index: Int)(f: Int => Result): Result = {
@@ -166,10 +169,10 @@ trait ControllerHelpers {
     }
   }
 
-  def redirectInvalidPreviousShareHolding(index: Int, shares: Option[Vector[PreviousShareHoldingModel]])(f: Int => Result): Result = {
+  def redirectInvalidPreviousShareHolding(id: Int, index: Int, shares: Option[Vector[PreviousShareHoldingModel]])(f: Int => Result): Result = {
     shares.map { data =>
-      if (data.nonEmpty)
-        f(index)
+      if (data.nonEmpty && id != -1)
+        f(id)
       else None
     } match {
       case Some(result: Result) => result
