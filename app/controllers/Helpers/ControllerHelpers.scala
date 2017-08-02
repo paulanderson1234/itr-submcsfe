@@ -141,9 +141,7 @@ trait ControllerHelpers {
   }
 
   def getShareIndex(targetIndex: Int, data: Vector[PreviousShareHoldingModel]): Int = {
-    val test = data.indexWhere(_.processingId.getOrElse(0) == targetIndex)
-    Logger.warn(s"##########$test###########")
-    test
+    data.indexWhere(_.processingId.getOrElse(0) == targetIndex)
   }
 
   def redirectInvalidInvestor(index: Int)(f: Int => Result): Result = {
