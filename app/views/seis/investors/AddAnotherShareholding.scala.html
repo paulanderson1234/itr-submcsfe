@@ -13,19 +13,21 @@
     <h1 class="heading-xlarge" id="main-heading">@Messages("page.seis.investors.AddAnotherShareholding.title")</h1>
 
     @form(action = controllers.seis.routes.AddAnotherShareholdingController.submit()) {
-        @formInputRadioGroup(
-            field = addAnotherShareholdingForm("addAnotherShareholding"),
-            Seq(
-                Constants.StandardRadioButtonYesValue -> Messages("common.radioYesLabel"),
-                Constants.StandardRadioButtonNoValue -> Messages("common.radioNoLabel")
-            ),
-            '_legend -> Messages("page.seis.investors.AddAnotherShareholding.title"),
-            '_legendClass -> "visuallyhidden",
-            '_labelAfter -> true,
-            '_labelClass -> "block-label",
-            '_legendID -> "isFirstTrade",
-            '_groupClass -> "inline"
-        )
+        <div class="form-group">
+            @formInputRadioGroup(
+                field = addAnotherShareholdingForm("addAnotherShareholding"),
+                Seq(
+                    Constants.StandardRadioButtonYesValue -> Messages("common.radioYesLabel"),
+                    Constants.StandardRadioButtonNoValue -> Messages("common.radioNoLabel")
+                ),
+                '_legend -> Messages("page.seis.investors.AddAnotherShareholding.title"),
+                '_legendClass -> "visuallyhidden",
+                '_labelAfter -> true,
+                '_labelClass -> "block-label",
+                '_legendID -> "isFirstTrade",
+                '_groupClass -> "inline"
+            )
+        </div>
 
         <div class="form-group">
             <button class="btn button" type="submit" id="next">@Messages("common.button.snc")</button>
