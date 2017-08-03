@@ -152,6 +152,8 @@ POST       /previous-shareholding-description                   controllers.seis
 GET        /investor-share-issue-date/:InvestorId/:Id       controllers.seis.InvestorShareIssueDateController.show(InvestorId: Int, Id: Int)
 POST       /investor-share-issue-date                   controllers.seis.InvestorShareIssueDateController.submit(backUrl: Option[String]?=None)
 
+GET        /add-another-shareholding              controllers.seis.AddAnotherShareholdingController.show
+POST       /add-another-shareholding              controllers.seis.AddAnotherShareholdingController.submit
 
 
 
