@@ -149,6 +149,8 @@ POST       /number-of-previously-issued-shares                   controllers.sei
 GET        /previous-shareholding-description/:InvestorId       controllers.seis.PreviousShareHoldingDescriptionController.show(InvestorId: Int, Id: Option[Int]?=None)
 POST       /previous-shareholding-description                   controllers.seis.PreviousShareHoldingDescriptionController.submit(companyOrIndividual: Option[String]?=None, backUrl: Option[String]?=None)
 
+GET        /investor-share-issue-date/:InvestorId/:Id       controllers.seis.InvestorShareIssueDateController.show(InvestorId: Int, Id: Int)
+POST       /investor-share-issue-date                   controllers.seis.InvestorShareIssueDateController.submit(backUrl: Option[String]?=None)
 
 
 

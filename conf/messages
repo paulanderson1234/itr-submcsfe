@@ -1135,3 +1135,7 @@ page.seis.investors.previousShareHoldingDescription.example.text = Add one type 
 page.seis.investors.previousShareHoldingDescription.question.hint = Suggested limit: 20 words
 page.seis.investors.previousShareHoldingDescription.whereToFind = Where can I find this?
 page.seis.investors.previousShareHoldingDescription.location = It''s on your company''s Register of Members.
+
+#InvestorShareIssueDate
+page.seis.investors.investorShareIssueDate.title = When were these previous shares issued?
+page.seis.investors.investorShareIssueDate.heading = When were these previous shares issued?
