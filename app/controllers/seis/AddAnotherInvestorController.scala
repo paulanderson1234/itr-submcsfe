@@ -67,12 +67,12 @@ trait AddAnotherInvestorController extends FrontendController with AuthorisedAnd
           validFormData.addAnotherInvestor match {
 
             case Constants.StandardRadioButtonYesValue => {
-              // to navigate to usedInvestmentSchemeBefore for SEIS only flow
-              Future.successful(Redirect(routes.HadPreviousRFIController.show()))
+              // Needs to navigate to routes.PreviousShareHoldingDescriptionController.show()
+              Future.successful(Redirect(routes.AddAnotherInvestorController.show()))
             }
             case Constants.StandardRadioButtonNoValue => {
-              // to navigate to errorNotFirstTrade for SEIS only flow
-              Future.successful(Redirect(routes.NotFirstTradeController.show()))
+              // Needs to navigate to review previous investor entry
+              Future.successful(Redirect(routes.AddAnotherInvestorController.show()))
             }
           }
         }
