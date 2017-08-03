@@ -140,8 +140,8 @@ POST       /is-existing-shareholder               controllers.seis.IsExistingSha
 GET        /number-of-shares-purchased/:Id        controllers.seis.NumberOfSharesPurchasedController.show(Id: Int)
 POST       /number-of-shares-purchased            controllers.seis.NumberOfSharesPurchasedController.submit(shareIssueDate: Option[String]?=None, backUrl: Option[String]?=None)
 
-GET        /previous-shareholding-nominal-value      controllers.seis.PreviousShareHoldingNominalValueController.show
-POST       /previous-shareholding-nominal-value           controllers.seis.PreviousShareHoldingNominalValueController.submit
+GET        /previous-shareholding-nominal-value/:InvestorId/:Id      controllers.seis.PreviousShareHoldingNominalValueController.show(InvestorId: Int, Id: Int)
+POST       /previous-shareholding-nominal-value                      controllers.seis.PreviousShareHoldingNominalValueController.submit(backUrl: Option[String]?=None)
 
 GET        /number-of-previously-issued-shares/:InvestorId/:Id       controllers.seis.NumberOfPreviouslyIssuedSharesController.show(InvestorId: Int, Id: Int)
 POST       /number-of-previously-issued-shares                   controllers.seis.NumberOfPreviouslyIssuedSharesController.submit(companyOrIndividual: Option[String]?=None, backUrl: Option[String]?=None)

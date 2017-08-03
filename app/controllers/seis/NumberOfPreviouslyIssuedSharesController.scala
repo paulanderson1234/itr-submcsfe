@@ -43,7 +43,6 @@ trait NumberOfPreviouslyIssuedSharesController extends FrontendController with A
 
   override val acceptedFlows = Seq(Seq(SEIS))
 
-  // id: Option[Int] should be changed to Int once the initial pages were implemented
   def show(investorProcessingId: Int, id: Int): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
     AuthorisedAndEnrolled.async { implicit user =>
       implicit request =>

@@ -50,12 +50,17 @@ trait PreviousShareHoldingDescriptionController extends FrontendController with 
 
         def process(backUrl: Option[String]) = {
           if (backUrl.isDefined) {
-            s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map { vector =>
-              redirectNoInvestors(vector) { data =>
-                redirectInvalidInvestor(getInvestorIndex(investorProcessingId, data)) { investorIdVal =>
+
+            s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
+              vector =>
+              redirectNoInvestors(vector) {
+                data =>
+                redirectInvalidInvestor(getInvestorIndex(investorProcessingId, data)) {
+                  investorIdVal =>
                   val previousShares = retrieveInvestorData(investorIdVal,data)(_.previousShareHoldingModels)
                   val form = fillForm[PreviousShareHoldingDescriptionModel](previousShareHoldingDescriptionForm,
-                    id.flatMap (idVal => retrieveShareData(getShareIndex(idVal, previousShares.getOrElse(Vector.empty)),
+                    id.flatMap (idVal =>
+                      retrieveShareData(getShareIndex(idVal, previousShares.getOrElse(Vector.empty)),
                       previousShares)(_.previousShareHoldingDescriptionModel)))
                   Ok(PreviousShareHoldingDescription(retrieveInvestorData(investorIdVal,
                     data)(_.companyOrIndividualModel.map(_.companyOrIndividual)).get,
@@ -85,16 +90,16 @@ trait PreviousShareHoldingDescriptionController extends FrontendController with 
             validFormData.processingId match {
               case Some(_) => PreviousInvestorShareHoldersHelper.updateShareClassAndDescription(s4lConnector, validFormData).map {
                 data => {
-                  s4lConnector.saveFormData(KeystoreKeys.backLinkNumberOfPreviouslyIssuedShares,
+                  s4lConnector.saveFormData(KeystoreKeys.backLinkIsPreviousShareHoldingNominalValue,
                     routes.PreviousShareHoldingDescriptionController.show(data.investorProcessingId.get, data.processingId).url)
-                  Redirect(routes.NumberOfPreviouslyIssuedSharesController.show(data.investorProcessingId.get, data.processingId.get))
+                  Redirect(routes.PreviousShareHoldingNominalValueController.show(data.investorProcessingId.get, data.processingId.get))
                 }
               }
               case None => PreviousInvestorShareHoldersHelper.addShareClassAndDescription(s4lConnector, validFormData).map {
                 data => {
-                  s4lConnector.saveFormData(KeystoreKeys.backLinkNumberOfPreviouslyIssuedShares,
+                  s4lConnector.saveFormData(KeystoreKeys.backLinkIsPreviousShareHoldingNominalValue,
                     routes.PreviousShareHoldingDescriptionController.show(data.investorProcessingId.get, data.processingId).url)
-                  Redirect(routes.NumberOfPreviouslyIssuedSharesController.show(data.investorProcessingId.get, data.processingId.get))
+                  Redirect(routes.PreviousShareHoldingNominalValueController.show(data.investorProcessingId.get, data.processingId.get))
                 }
               }
             }

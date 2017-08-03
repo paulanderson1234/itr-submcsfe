@@ -21,28 +21,26 @@ import common.{Constants, KeystoreKeys}
 import config.{AppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
-import models.{CompanyOrIndividualModel, ShareIssueDateModel}
 import models.investorDetails.InvestorDetailsModel
 import org.mockito.Matchers
 import org.mockito.Mockito._
 import play.api.test.Helpers._
-import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.frontend.auth.connectors.AuthConnector
-import utils.DateFormatter
 
 import scala.concurrent.Future
 
 
-class PreviousShareHoldingDescriptionControllerSpec extends BaseSpec{
+class PreviousShareHoldingNominalValueControllerSpec extends BaseSpec{
 
-  lazy val controller = new PreviousShareHoldingDescriptionController {
+  lazy val controller = new PreviousShareHoldingNominalValueController {
     override lazy val s4lConnector: S4LConnector = mockS4lConnector
     override lazy val enrolmentConnector: EnrolmentConnector = mockEnrolmentConnector
     override lazy val applicationConfig: AppConfig = MockConfig
     override lazy val authConnector: AuthConnector = MockAuthConnector
   }
 
-  val backUrl = Some(controllers.seis.routes.IsExistingShareHolderController.show(2).url)
+  val backUrl = Some(controllers.seis.routes.PreviousShareHoldingDescriptionController.show(2).url)
+  val obviouslyInvalidId = 9999
 
   val listOfInvestorsEmptyShareHoldings =  Vector(validModelWithPrevShareHoldings.copy(previousShareHoldingModels = Some(Vector())))
   val listOfInvestorsWithShareHoldings =  Vector(validModelWithPrevShareHoldings)
@@ -54,7 +52,7 @@ class PreviousShareHoldingDescriptionControllerSpec extends BaseSpec{
       (Matchers.any(), Matchers.any(), Matchers.any()))
       .thenReturn(Future.successful(investorDetailsModel))
 
-    when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.backLinkShareClassAndDescription))
+    when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.backLinkIsPreviousShareHoldingNominalValue))
       (Matchers.any(), Matchers.any(), Matchers.any()))
       .thenReturn(Future.successful(backURL))
   }
@@ -62,25 +60,25 @@ class PreviousShareHoldingDescriptionControllerSpec extends BaseSpec{
   "The Previous Share Holding Description controller" should {
 
     "use the correct auth connector" in {
-      PreviousShareHoldingDescriptionController.authConnector shouldBe FrontendAuthConnector
+      PreviousShareHoldingNominalValueController.authConnector shouldBe FrontendAuthConnector
     }
 
     "use the correct keystore connector" in {
-      PreviousShareHoldingDescriptionController.s4lConnector shouldBe S4LConnector
+      PreviousShareHoldingNominalValueController.s4lConnector shouldBe S4LConnector
     }
 
     "use the correct enrolment connector" in {
-      PreviousShareHoldingDescriptionController.enrolmentConnector shouldBe EnrolmentConnector
+      PreviousShareHoldingNominalValueController.enrolmentConnector shouldBe EnrolmentConnector
     }
   }
 
-  "Sending a GET request to PreviousShareHoldingDescription Controller when authenticated and enrolled" should {
+  "Sending a GET request to PreviousShareHoldingNominalValue Controller when authenticated and enrolled" should {
 
     "'REDIRECT' to AddInvestorOrNominee page" when {
       "there is no 'back link' present" in {
         mockEnrolledRequest(seisSchemeTypesModel)
         setupMocks(None, None)
-        showWithSessionAndAuth(controller.show(2, None))(
+        showWithSessionAndAuth(controller.show(2, 1))(
           result => {
             status(result) shouldBe SEE_OTHER
             redirectLocation(result) shouldBe Some(routes.AddInvestorOrNomineeController.show(None).url)
@@ -93,7 +91,7 @@ class PreviousShareHoldingDescriptionControllerSpec extends BaseSpec{
       "a 'backlink' is defined but no 'investor details list' is retrieved" in {
         mockEnrolledRequest(seisSchemeTypesModel)
         setupMocks(None, backUrl)
-        showWithSessionAndAuth(controller.show(2, None))(
+        showWithSessionAndAuth(controller.show(2, 1))(
           result => {
             status(result) shouldBe SEE_OTHER
             redirectLocation(result) shouldBe Some(controllers.seis.routes.AddInvestorOrNomineeController.show(None).url)
@@ -106,7 +104,7 @@ class PreviousShareHoldingDescriptionControllerSpec extends BaseSpec{
       "a 'backlink' is defined, an 'investor details list' is retrieved and an INVALID investor details ID is passed" in {
         mockEnrolledRequest(seisSchemeTypesModel)
         setupMocks(Some(listOfInvestorsComplete), backUrl)
-        showWithSessionAndAuth(controller.show(Constants.obviouslyInvalidId, None))(
+        showWithSessionAndAuth(controller.show(obviouslyInvalidId, 1))(
           result => {
             status(result) shouldBe SEE_OTHER
             redirectLocation(result) shouldBe Some(controllers.seis.routes.AddInvestorOrNomineeController.show(None).url)
@@ -120,20 +118,20 @@ class PreviousShareHoldingDescriptionControllerSpec extends BaseSpec{
         "ID is passed and the investor details contains an empty list of share holdings" in {
         mockEnrolledRequest(seisSchemeTypesModel)
         setupMocks(Some(listOfInvestorsEmptyShareHoldings), backUrl)
-        showWithSessionAndAuth(controller.show(2, Some(2)))(
+        showWithSessionAndAuth(controller.show(2, 2))(
           result => {
-            status(result) shouldBe OK
+            status(result) shouldBe SEE_OTHER
           }
         )
       }
     }
 
-    "Load an empty ShareHoldingDescription page" when {
+    "Load an empty PreviousShareHoldingNominalValue page" when {
       "a 'backlink' is defined, an 'investor details list' is retrieved, a VALID investor details " +
         "ID is defined but no share holding Id is provided" in {
         mockEnrolledRequest(seisSchemeTypesModel)
         setupMocks(Some(listOfInvestorsWithShareHoldings), backUrl)
-        showWithSessionAndAuth(controller.show(2, None))(
+        showWithSessionAndAuth(controller.show(2, 1))(
           result => {
             status(result) shouldBe OK
           }
@@ -141,26 +139,26 @@ class PreviousShareHoldingDescriptionControllerSpec extends BaseSpec{
       }
     }
 
-    "Load an empty ShareHoldingDescription page" when {
+    "Load an empty PreviousShareHoldingNominalValue page" when {
       "a 'backlink' is defined, an 'investor details list' is retrieved, a VALID investor details " +
         "ID is passed and an INVALID share holding Id is provided" in {
         mockEnrolledRequest(seisSchemeTypesModel)
         setupMocks(Some(listOfInvestorsWithShareHoldings), backUrl)
-        showWithSessionAndAuth(controller.show(2, Some(Constants.obviouslyInvalidId)))(
+        showWithSessionAndAuth(controller.show(2, obviouslyInvalidId))(
           result => {
-            status(result) shouldBe OK
+            status(result) shouldBe SEE_OTHER
           }
         )
       }
     }
 
 
-    "Load a populated ShareHoldingDescription page" when {
+    "Load a populated PreviousShareHoldingNominalValue page" when {
       "a 'backlink' is defined, an 'investor details list' is retrieved, a VALID investor details " +
         "ID is defined and a VALID share holding Id is provided" in {
         mockEnrolledRequest(seisSchemeTypesModel)
         setupMocks(Some(listOfInvestorsWithShareHoldings), backUrl)
-        showWithSessionAndAuth(controller.show(2, Some(1)))(
+        showWithSessionAndAuth(controller.show(2, 1))(
           result => {
             status(result) shouldBe OK
           }
@@ -170,37 +168,17 @@ class PreviousShareHoldingDescriptionControllerSpec extends BaseSpec{
 
   }
 
-  "Submitting to the PreviousShareHoldingDescriptionController when authenticated and enrolled" should {
-    "redirect to the PreviousShareHoldingNominalValue page if the form 'was not' previously populated" in {
+  "Submitting to the PreviousShareHoldingNominalValueController when authenticated and enrolled" should {
+    "redirect to the NumberOfPreviouslyIssuedShares page if the form 'was not' previously populated" in {
 
-      val formInput = "previousShareHoldingDescription" -> "This is a description of a previous share holding"
-      setupMocks(Some(listOfInvestorsComplete), None)
+      val formInput = "previousShareHoldingNominalValue" -> "20"
+      setupMocks(Some(listOfInvestorsComplete), backUrl)
       mockEnrolledRequest(seisSchemeTypesModel)
-      submitWithSessionAndAuth(controller.submit(Some(Constants.typeCompany),backUrl),formInput)(
+      submitWithSessionAndAuth(controller.submit(backUrl),formInput)(
         result => {
           status(result) shouldBe SEE_OTHER
           redirectLocation(result) shouldBe
-            Some(controllers.seis.routes.PreviousShareHoldingNominalValueController.show(listOfInvestorsComplete.head.processingId.get,
-              listOfInvestorsComplete.head.previousShareHoldingModels.get.head.processingId.get + 1).url)
-        }
-      )
-    }
-  }
-
-
-
-  "Submitting to the PreviousShareHoldingDescriptionController when authenticated and enrolled" should {
-    "redirect to the PreviousShareHoldingNominalValue page if the form 'was' previously populated and had a processing id" in {
-
-      val formInput = Seq("previousShareHoldingDescription" -> "This is a description of a previous share holding",
-        "processingId" -> "1", "investorProcessingId" -> "2")
-      setupMocks(Some(listOfInvestorsComplete), None)
-      mockEnrolledRequest(seisSchemeTypesModel)
-      submitWithSessionAndAuth(controller.submit(Some(Constants.typeCompany), backUrl),formInput:_*)(
-        result => {
-          status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe
-            Some(controllers.seis.routes.PreviousShareHoldingNominalValueController.show(listOfInvestorsComplete.head.processingId.get,
+            Some(controllers.seis.routes.NumberOfPreviouslyIssuedSharesController.show(listOfInvestorsComplete.head.processingId.get,
               listOfInvestorsComplete.head.previousShareHoldingModels.get.head.processingId.get).url)
         }
       )
@@ -208,12 +186,33 @@ class PreviousShareHoldingDescriptionControllerSpec extends BaseSpec{
   }
 
 
-  "Sending an invalid form submission with validation errors to the PreviousShareHoldingDescriptionController when authenticated and enrolled" should {
+
+  "Submitting to the PreviousShareHoldingNominalValueController when authenticated and enrolled" should {
+    "redirect to the NumberOfPreviouslyIssuedShares page if the form 'was' previously populated and had a processing id" in {
+
+      val formInput = Seq("previousShareHoldingNominalValue" -> "20",
+        "processingId" -> "1", "investorProcessingId" -> "2")
+      setupMocks(Some(listOfInvestorsComplete), backUrl)
+      mockEnrolledRequest(seisSchemeTypesModel)
+      submitWithSessionAndAuth(controller.submit(backUrl),formInput:_*)(
+        result => {
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe
+            Some(controllers.seis.routes.NumberOfPreviouslyIssuedSharesController.show(listOfInvestorsComplete.head.processingId.get,
+              listOfInvestorsComplete.head.previousShareHoldingModels.get.head.processingId.get).url)
+        }
+      )
+    }
+  }
+
+
+  "Sending an invalid form submission with validation errors to the PreviousShareHoldingNominalValueController" +
+    " when authenticated and enrolled" should {
     "redirect to itself" in {
       setupMocks(Some(listOfInvestorsComplete), None)
       mockEnrolledRequest(seisSchemeTypesModel)
-      val formInput = "previousShareHoldingDescription" -> ""
-      submitWithSessionAndAuth(controller.submit(Some(Constants.typeCompany),backUrl), formInput)(
+      val formInput = "previousShareHoldingNominalValue" -> ""
+      submitWithSessionAndAuth(controller.submit(backUrl), formInput)(
         result => {
           status(result) shouldBe BAD_REQUEST
         }
