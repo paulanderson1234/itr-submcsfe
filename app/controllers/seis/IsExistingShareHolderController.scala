@@ -83,6 +83,7 @@ trait IsExistingShareHolderController extends FrontendController with Authorised
             validFormData.processingId match {
               case Some(_) => PreviousInvestorsHelper.updateIsExistingShareHoldersDetails(s4lConnector, validFormData).map {
                 investorDetailsModel => {
+                  print(s"******************** IsExistingShareHolderController UPDATE -- ${validFormData.processingId}")
                   s4lConnector.saveFormData(KeystoreKeys.backLinkShareClassAndDescription,
                     routes.IsExistingShareHolderController.show(investorDetailsModel.processingId.get).url)
                   Redirect(routes.PreviousShareHoldingDescriptionController.show(investorDetailsModel.processingId.get))
@@ -90,6 +91,7 @@ trait IsExistingShareHolderController extends FrontendController with Authorised
               }
               case None => PreviousInvestorsHelper.addIsExistingShareHoldersDetails(s4lConnector, validFormData).map {
                 investorDetailsModel => {
+                  print(s"******************** IsExistingShareHolderController ADD -- ${validFormData.processingId}")
                   s4lConnector.saveFormData(KeystoreKeys.backLinkShareClassAndDescription,
                     routes.IsExistingShareHolderController.show(investorDetailsModel.processingId.get).url)
                   Redirect(routes.PreviousShareHoldingDescriptionController.show(investorDetailsModel.processingId.get))

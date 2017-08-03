@@ -42,7 +42,7 @@ class NumberOfPreviouslyIssuedSharesControllerSpec extends BaseSpec{
     override lazy val authConnector: AuthConnector = MockAuthConnector
   }
 
-  val backUrl = Some(controllers.seis.routes.PreviousShareHoldingDescriptionController.show(2).url)
+  val backUrl = Some(controllers.seis.routes.PreviousShareHoldingDescriptionController.show(1).url)
 
   val listOfInvestorsEmptyShareHoldings =  Vector(validModelWithPrevShareHoldings.copy(previousShareHoldingModels = Some(Vector())))
   val listOfInvestorsWithShareHoldings =  Vector(validModelWithPrevShareHoldings)
