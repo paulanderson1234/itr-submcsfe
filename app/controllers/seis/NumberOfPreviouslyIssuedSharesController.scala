@@ -53,10 +53,10 @@ trait NumberOfPreviouslyIssuedSharesController extends FrontendController with A
               redirectNoInvestors(vector) { data =>
                 redirectInvalidInvestor(getInvestorIndex(investorProcessingId, data)) { investorIdVal =>
                   val shareHoldings = retrieveInvestorData(investorIdVal, data)(_.previousShareHoldingModels)
-                  redirectInvalidPreviousShareHolding(id, shareHoldings) { shareHoldingsIndex =>
+                  redirectInvalidPreviousShareHolding(getShareIndex(id, shareHoldings.getOrElse(Vector.empty)),
+                    investorProcessingId, shareHoldings) { shareHoldingsIndex =>
                     val form = fillForm(numberOfPreviouslyIssuedSharesForm, retrieveShareData(shareHoldingsIndex,
                       shareHoldings)(_.numberOfPreviouslyIssuedSharesModel))
-
                     Ok(NumberOfPreviouslyIssuedShares(retrieveInvestorData(investorIdVal, data)(_.companyOrIndividualModel.map(_.companyOrIndividual)).get,
                       form, backUrl.get))
                   }
@@ -64,7 +64,7 @@ trait NumberOfPreviouslyIssuedSharesController extends FrontendController with A
               }
             }
           }
-          else Future.successful(Redirect(controllers.seis.routes.ShareDescriptionController.show()))
+          else Future.successful(Redirect(controllers.seis.routes.AddInvestorOrNomineeController.show()))
         }
 
         for {

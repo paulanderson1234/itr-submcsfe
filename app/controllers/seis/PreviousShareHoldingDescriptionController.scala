@@ -59,7 +59,8 @@ trait PreviousShareHoldingDescriptionController extends FrontendController with 
                   investorIdVal =>
                   val previousShares = retrieveInvestorData(investorIdVal,data)(_.previousShareHoldingModels)
                   val form = fillForm[PreviousShareHoldingDescriptionModel](previousShareHoldingDescriptionForm,
-                    id.flatMap (idVal => retrieveShareData(getShareIndex(idVal, previousShares.getOrElse(Vector.empty)),
+                    id.flatMap (idVal =>
+                      retrieveShareData(getShareIndex(idVal, previousShares.getOrElse(Vector.empty)),
                       previousShares)(_.previousShareHoldingDescriptionModel)))
                   Ok(PreviousShareHoldingDescription(retrieveInvestorData(investorIdVal,
                     data)(_.companyOrIndividualModel.map(_.companyOrIndividual)).get,

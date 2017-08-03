@@ -166,10 +166,10 @@ trait ControllerHelpers {
     }
   }
 
-  def redirectInvalidPreviousShareHolding(index: Int, shares: Option[Vector[PreviousShareHoldingModel]])(f: Int => Result): Result = {
+  def redirectInvalidPreviousShareHolding(id: Int, index: Int, shares: Option[Vector[PreviousShareHoldingModel]])(f: Int => Result): Result = {
     shares.map { data =>
-      if (data.nonEmpty)
-        f(index)
+      if (data.nonEmpty && id != -1)
+        f(id)
       else None
     } match {
       case Some(result: Result) => result
