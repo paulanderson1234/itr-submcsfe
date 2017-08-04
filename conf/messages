@@ -1145,3 +1145,6 @@ page.seis.investors.addAnotherInvestor.legend = Do you want to add another inves
 #InvestorShareIssueDate
 page.seis.investors.investorShareIssueDate.title = When were these previous shares issued?
 page.seis.investors.investorShareIssueDate.heading = When were these previous shares issued?
+
+#AddAnotherShareholding
+page.seis.investors.AddAnotherShareholding.title = Do you want to add another previous shareholding?
