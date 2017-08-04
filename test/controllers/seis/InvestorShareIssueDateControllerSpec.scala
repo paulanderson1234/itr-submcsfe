@@ -14,15 +14,8 @@
  * limitations under the License.
  */
 
-package models.investorDetails
+package controllers.seis
 
-import play.api.libs.json.Json
+class InvestorShareIssueDateControllerSpec {
 
-case class InvestorShareIssueDateModel(investorShareIssueDateDay: Option[Int],
-                                       investorShareIssueDateMonth: Option[Int],
-                                       investorShareIssueDateYear: Option[Int],
-                                       processingId: Option[Int] = None,
-                                       investorProcessingId: Option[Int] = None)
-object InvestorShareIssueDateModel{
-  implicit val formats = Json.format[InvestorShareIssueDateModel]
 }

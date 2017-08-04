@@ -273,10 +273,10 @@ trait BaseSpec extends UnitSpec with OneAppPerSuite with MockitoSugar with FakeR
   val numberOfPreviouslyIssuedShares = NumberOfPreviouslyIssuedSharesModel(1,Some(1))
 
   //share holdings
-  val investorShareIssueDateModel = InvestorShareIssueDateModel(1,1,1980, Some(1))
-  val investorShareIssueDateModel1 = InvestorShareIssueDateModel(1,1,1980, Some(1))
-  val investorShareIssueDateModel2 = InvestorShareIssueDateModel(1,1,1980, Some(2))
-  val investorShareIssueDateModel3 = InvestorShareIssueDateModel(1,1,1980, Some(3))
+  val investorShareIssueDateModel = InvestorShareIssueDateModel(Some(1), Some(1), Some(1980), Some(1), Some(1))
+  val investorShareIssueDateModel1 = InvestorShareIssueDateModel(Some(1), Some(1), Some(1980), Some(1), Some(1))
+  val investorShareIssueDateModel2 = InvestorShareIssueDateModel(Some(1), Some(1), Some(1980), Some(2), Some(2))
+  val investorShareIssueDateModel3 = InvestorShareIssueDateModel(Some(1), Some(1), Some(1980), Some(3), Some(3))
   val shareHoldersModel1ForInvestor2 = Vector(PreviousShareHoldingModel(Some(investorShareIssueDateModel1), Some(numberOfPreviouslyIssuedSharesModel1),
     Some(previousShareHoldingNominalValueModel1), Some(previousShareHoldingDescriptionModel1), Some(1), Some(2)))
   val shareHoldersModel2ForInvestor2 = Vector(PreviousShareHoldingModel(Some(investorShareIssueDateModel2), Some(numberOfPreviouslyIssuedSharesModel2),

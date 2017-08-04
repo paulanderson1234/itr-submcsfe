@@ -1112,6 +1112,7 @@ page.seis.investors.isExistingShareHolder.legend = Did this {0} already own shar
 #Investor Share Issue Date
 page.investors.investorShareIssueDate.title = When were these previous shares issued?
 page.investors.investorShareIssueDate.heading = When were these previous shares issued?
+validation.error.InvestorShareIssueDate.Future = Investor previous shares issued date cannot be a future date
 
 #Number of shares purchased
 page.seis.investors.numberOfSharesPurchased.title = How many shares were issued to this {0} on {1}?
@@ -1140,3 +1141,7 @@ page.seis.investors.previousShareHoldingDescription.location = It''s on your com
 page.seis.investors.addAnotherInvestor.title = Do you want to add another investor or nominee?
 page.seis.investors.addAnotherInvestor.heading = Do you want to add another investor or nominee?
 page.seis.investors.addAnotherInvestor.legend = Do you want to add another investor or nominee?
+
+#InvestorShareIssueDate
+page.seis.investors.investorShareIssueDate.title = When were these previous shares issued?
+page.seis.investors.investorShareIssueDate.heading = When were these previous shares issued?
