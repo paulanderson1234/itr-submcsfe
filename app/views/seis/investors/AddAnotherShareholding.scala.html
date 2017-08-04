@@ -1,0 +1,39 @@
+@import models.AddAnotherShareholdingModel
+@import views.html.helpers.backButtonWithProgress
+@import uk.gov.hmrc.play.views.html.helpers.form
+@import common.Constants
+@import views.html.helpers.formInputRadioGroup
+@import views.html.helpers.errorSummary
+
+@(addAnotherShareholdingForm: Form[AddAnotherShareholdingModel], processingId: Int)(implicit request: Request[_], messages: Messages)
+
+@main_template(Messages("page.seis.investors.AddAnotherShareholding.title")) {
+
+    @backButtonWithProgress(controllers.seis.routes.AddAnotherShareholdingController.show(processingId).url, Messages("common.section.progress.company.details.four"))
+
+    @errorSummary(addAnotherShareholdingForm, "add-another-shareholding", "addAnotherShareholding")
+
+    <h1 class="heading-xlarge" id="main-heading">@Messages("page.seis.investors.AddAnotherShareholding.title")</h1>
+
+    @form(action = controllers.seis.routes.AddAnotherShareholdingController.submit(processingId)) {
+        <div class="form-group">
+            @formInputRadioGroup(
+                field = addAnotherShareholdingForm("addAnotherShareholding"),
+                Seq(
+                    Constants.StandardRadioButtonYesValue -> Messages("common.radioYesLabel"),
+                    Constants.StandardRadioButtonNoValue -> Messages("common.radioNoLabel")
+                ),
+                '_legend -> Messages("page.seis.investors.AddAnotherShareholding.title"),
+                '_legendClass -> "visuallyhidden",
+                '_labelAfter -> true,
+                '_labelClass -> "block-label",
+                '_legendID -> "isFirstTrade",
+                '_groupClass -> "inline"
+            )
+        </div>
+
+        <div class="form-group">
+            <button class="btn button" type="submit" id="next">@Messages("common.button.snc")</button>
+        </div>
+    }
+}
