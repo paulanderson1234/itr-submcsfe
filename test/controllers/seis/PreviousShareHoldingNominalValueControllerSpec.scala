@@ -169,7 +169,7 @@ class PreviousShareHoldingNominalValueControllerSpec extends BaseSpec{
   }
 
   "Submitting to the PreviousShareHoldingNominalValueController when authenticated and enrolled" should {
-    "redirect to the NumberOfPreviouslyIssuedShares page if the form 'was not' previously populated" in {
+    "redirect to the InvestorShareIssueDate page if the form 'was not' previously populated" in {
 
       val formInput = "previousShareHoldingNominalValue" -> "20"
       setupMocks(Some(listOfInvestorsComplete), backUrl)
@@ -188,7 +188,7 @@ class PreviousShareHoldingNominalValueControllerSpec extends BaseSpec{
 
 
   "Submitting to the PreviousShareHoldingNominalValueController when authenticated and enrolled" should {
-    "redirect to the NumberOfPreviouslyIssuedShares page if the form 'was' previously populated and had a processing id" in {
+    "redirect to the InvestorShareIssueDate page if the form 'was' previously populated and had a processing id" in {
 
       val formInput = Seq("previousShareHoldingNominalValue" -> "20",
         "processingId" -> "1", "investorProcessingId" -> "2")
