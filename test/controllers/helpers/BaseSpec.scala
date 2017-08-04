@@ -16,6 +16,8 @@
 
 package controllers.helpers
 
+import akka.actor.ActorSystem
+import akka.stream.{ActorMaterializer, Materializer}
 import auth.{Enrolment, Identifier}
 import common.{Constants, KeystoreKeys}
 import connectors.{EnrolmentConnector, S4LConnector, SubmissionConnector}
