@@ -310,8 +310,6 @@ trait PreviousInvestorShareHoldersHelper {
 
   }
 
-
-
   // add logic for the middle flow
   def addInvestorShareIssueDate(s4lConnector: connectors.S4LConnector,
                                 investorShareIssueDateModel: InvestorShareIssueDateModel)

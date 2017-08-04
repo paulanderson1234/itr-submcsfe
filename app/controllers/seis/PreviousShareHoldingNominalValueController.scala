@@ -95,16 +95,16 @@ trait PreviousShareHoldingNominalValueController extends FrontendController with
             model.processingId match {
               case Some(_) => PreviousInvestorShareHoldersHelper.updatePreviousShareHoldingNominalValue(s4lConnector, model).map {
                 data => {
-                  s4lConnector.saveFormData(KeystoreKeys.backLinkNumberOfPreviouslyIssuedShares,
+                  s4lConnector.saveFormData(KeystoreKeys.backLinkInvestorShareIssueDate,
                     routes.PreviousShareHoldingNominalValueController.show(data.investorProcessingId.get, data.processingId.get).url)
-                  Redirect(routes.NumberOfPreviouslyIssuedSharesController.show(data.investorProcessingId.get, data.processingId.get))
+                  Redirect(routes.InvestorShareIssueDateController.show(data.investorProcessingId.get, data.processingId.get))
                 }
               }
               case None => PreviousInvestorShareHoldersHelper.addPreviousShareHoldingNominalValue(s4lConnector, model).map {
                 data => {
-                  s4lConnector.saveFormData(KeystoreKeys.backLinkNumberOfPreviouslyIssuedShares,
+                  s4lConnector.saveFormData(KeystoreKeys.backLinkInvestorShareIssueDate,
                     routes.PreviousShareHoldingNominalValueController.show(data.investorProcessingId.get, data.processingId.get).url)
-                  Redirect(routes.NumberOfPreviouslyIssuedSharesController.show(data.investorProcessingId.get, data.processingId.get))
+                  Redirect(routes.InvestorShareIssueDateController.show(data.investorProcessingId.get, data.processingId.get))
                 }
               }
             }
