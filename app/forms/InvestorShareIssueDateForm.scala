@@ -28,17 +28,17 @@ object InvestorShareIssueDateForm {
 
   val investorShareIssueDateForm = Form(
     mapping(
-      "investorShareIssueDay" -> optional(number),
-      "investorShareIssueMonth" -> optional(number),
-      "investorShareIssueYear" -> optional(number),
+      "investorShareIssueDateDay" -> optional(number),
+      "investorShareIssueDateMonth" -> optional(number),
+      "investorShareIssueDateYear" -> optional(number),
       "processingId" -> optional(number),
       "investorProcessingId" -> optional(number)
     )(InvestorShareIssueDateModel.apply)(InvestorShareIssueDateModel.unapply)
       .verifying(Messages("validation.error.DateNotEntered"), fields =>
-        validateNonEmptyDateOptions(fields.dateOfIssueDay, fields.dateOfIssueMonth, fields.dateOfIssueYear))
+        validateNonEmptyDateOptions(fields.investorShareIssueDateDay, fields.investorShareIssueDateMonth, fields.investorShareIssueDateYear))
       .verifying(Messages("common.date.error.invalidDate"), fields =>
-        isValidDateOptions(fields.dateOfIssueDay, fields.dateOfIssueMonth, fields.dateOfIssueYear))
+        isValidDateOptions(fields.investorShareIssueDateDay, fields.investorShareIssueDateMonth, fields.investorShareIssueDateYear))
       .verifying(Messages("validation.error.InvestorShareIssueDate.Future"), fields =>
-        dateNotInFutureOptions(fields.dateOfIssueDay, fields.dateOfIssueMonth, fields.dateOfIssueYear))
+        dateNotInFutureOptions(fields.investorShareIssueDateDay, fields.investorShareIssueDateMonth, fields.investorShareIssueDateYear))
   )
 }

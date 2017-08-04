@@ -4,26 +4,18 @@
 
 @(investorShareIssueDateForm: Form[InvestorShareIssueDateModel], backLink:String)(implicit request: Request[_], messages: Messages)
 
-@main_template(Messages("page.companyDetails.InvestorShareIssueDate.title")) {
+@main_template(Messages("page.investors.investorShareIssueDate.title")) {
 
-    @backButtonWithProgress(backLink, Messages("common.section.progress.company.details.one"))
+    @backButtonWithProgress(backLink, Messages("common.section.progress.company.details.four"))
 
-    @errorSummary(investorShareIssueDateForm, "share-issue-date", "investorShareIssueDay")
+    @errorSummary(investorShareIssueDateForm, "share-issue-date", "investorShareIssueDateDay")
 
-    <h1 class="heading-xlarge" id="main-heading">@Messages("page.companyDetails.InvestorShareIssueDate.heading")</h1>
+    <h1 class="heading-xlarge" id="main-heading">@Messages("page.investors.investorShareIssueDate.heading")</h1>
 
     @form(action = controllers.seis.routes.InvestorShareIssueDateController.submit(Some(backLink))) {
 
-        @formInlineDateInput(investorShareIssueDateForm, "investorShareIssueDate", Some(Messages("page.companyDetails.InvestorShareIssueDate.heading")),
+        @formInlineDateInput(investorShareIssueDateForm, "investorShareIssueDate", Some(Messages("page.investors.investorShareIssueDate.heading")),
         true, Some(Messages("common.date.hint.example")), None)
-
-        <details>
-            <summary><span id="help" class="summary">@Messages("page.companyDetails.InvestorShareIssueDate.whereToFind")</span></summary>
-            <div class="panel panel-indent panel-border-narrow">
-                <p id = "date-of-shareIssue-where-to-find">@Messages("page.companyDetails.InvestorShareIssueDate.location")</p>
-            </div>
-        </details>
-
 
         <div>
             @hiddenField(
