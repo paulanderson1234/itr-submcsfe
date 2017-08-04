@@ -28,7 +28,7 @@ import models.AddAnotherShareholdingModel
 import play.api.Play.current
 import play.api.data.Form
 import play.api.i18n.Messages.Implicits._
-import play.api.mvc.Result
+import play.api.mvc.{Action, AnyContent, Result}
 
 import scala.concurrent.Future
 
@@ -42,21 +42,21 @@ object AddAnotherShareholdingController extends AddAnotherShareholdingController
 trait AddAnotherShareholdingController extends FrontendController with AuthorisedAndEnrolledForTAVC with FeatureSwitch {
   override lazy val acceptedFlows: Seq[Seq[Flow]] = Seq(Seq(SEIS))
 
-  val show = featureSwitch(applicationConfig.seisFlowEnabled) {
+  def show(investorId: Int): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
     AuthorisedAndEnrolled.async { implicit user => implicit request =>
-      Future.successful(Ok(AddAnotherShareholding(addAnotherShareholdingForm)))
+      Future.successful(Ok(AddAnotherShareholding(addAnotherShareholdingForm, investorId)))
     }
   }
 
-  val submit = featureSwitch(applicationConfig.seisFlowEnabled) {
+  def submit(investorId: Int): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
     AuthorisedAndEnrolled.async { implicit user => implicit request =>
       val errorAction: Form[AddAnotherShareholdingModel] => Future[Result] = { form =>
-        Future.successful(BadRequest(AddAnotherShareholding(form)))
+        Future.successful(BadRequest(AddAnotherShareholding(form, investorId)))
       }
 
       val successAction: AddAnotherShareholdingModel => Future[Result] = {
-        case AddAnotherShareholdingModel(true) => Future.successful(Redirect(routes.ShareDescriptionController.show())) //TODO update if logic for determining ID is required
-        case AddAnotherShareholdingModel(false) => Future.successful(Redirect(routes.AddAnotherShareholdingController.show()))
+        case AddAnotherShareholdingModel(true) => Future.successful(Redirect(routes.PreviousShareHoldingDescriptionController.show(investorId)))
+        case AddAnotherShareholdingModel(false) => Future.successful(Redirect(routes.AddAnotherShareholdingController.show(investorId)))
       }
 
       addAnotherShareholdingForm.bindFromRequest().fold(errorAction, successAction)

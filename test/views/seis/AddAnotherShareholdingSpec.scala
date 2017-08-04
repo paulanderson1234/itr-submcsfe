@@ -30,7 +30,7 @@ class AddAnotherShareholdingSpec extends ViewSpec with FakeRequestHelper {
   "The AddAnotherShareHolding view" when {
 
     "no errors occur" should {
-      lazy val view = views.html.seis.investors.AddAnotherShareholding(addAnotherShareholdingForm)
+      lazy val view = views.html.seis.investors.AddAnotherShareholding(addAnotherShareholdingForm, 1)
       lazy val doc = Jsoup.parse(view.body)
 
       "have the correct title" in {
@@ -45,8 +45,12 @@ class AddAnotherShareholdingSpec extends ViewSpec with FakeRequestHelper {
         }
 
         "has a link to the review shareholders page" in {
-          backLink.attr("href") shouldBe controllers.seis.routes.AddAnotherShareholdingController.show().url
+          backLink.attr("href") shouldBe controllers.seis.routes.AddAnotherShareholdingController.show(1).url
         }
+      }
+
+      "not contain an error summary" in {
+        doc.select("div.error-summary").isEmpty shouldBe true
       }
 
       "has a progress bar with the correct text" in {
@@ -65,7 +69,82 @@ class AddAnotherShareholdingSpec extends ViewSpec with FakeRequestHelper {
         }
 
         "has the correct POST action" in {
-          form.attr("action") shouldBe controllers.seis.routes.AddAnotherShareholdingController.submit().url
+          form.attr("action") shouldBe controllers.seis.routes.AddAnotherShareholdingController.submit(1).url
+        }
+      }
+
+      "have the correct visually hidden legend" in {
+        doc.select("legend.visuallyhidden").text() shouldBe Messages("page.seis.investors.AddAnotherShareholding.title")
+      }
+
+      "have an input label for 'Yes'" which {
+
+        "contains the correct text" in {
+          doc.select("label[for=addAnotherShareholding-yes]").text() shouldBe Constants.StandardRadioButtonYesValue
+        }
+
+        "contains the correct value" in {
+          doc.select("label[for=addAnotherShareholding-yes] input").attr("value") shouldBe Constants.StandardRadioButtonYesValue
+        }
+      }
+
+      "have an input label for 'No'" which {
+
+        "contains the correct text" in {
+          doc.select("label[for=addAnotherShareholding-no]").text() shouldBe Constants.StandardRadioButtonNoValue
+        }
+
+        "contains the correct value" in {
+          doc.select("label[for=addAnotherShareholding-no] input").attr("value") shouldBe Constants.StandardRadioButtonNoValue
+        }
+      }
+
+      "has the correct continue button" in {
+        doc.select("button").text() shouldBe Messages("common.button.snc")
+      }
+    }
+
+    "some errors occur" should {
+      lazy val view = views.html.seis.investors.AddAnotherShareholding(addAnotherShareholdingForm.bind(Map("addAnotherShareholding" -> "")), 2)
+      lazy val doc = Jsoup.parse(view.body)
+
+      "have the correct title" in {
+        doc.title() shouldBe Messages("page.seis.investors.AddAnotherShareholding.title")
+      }
+
+      "have a back link" which {
+        lazy val backLink = doc.select("a.back-link")
+
+        "has the correct text" in {
+          backLink.text() shouldBe Messages("common.button.back")
+        }
+
+        "has a link to the review shareholders page" in {
+          backLink.attr("href") shouldBe controllers.seis.routes.AddAnotherShareholdingController.show(2).url
+        }
+      }
+
+      "contain an error summary" in {
+        doc.select("div.error-summary").isEmpty shouldBe false
+      }
+
+      "has a progress bar with the correct text" in {
+        doc.select("span.form-hint-breadcrumb").text() shouldBe Messages("common.section.progress.company.details.four")
+      }
+
+      "have the correct heading" in {
+        doc.select("h1").text() shouldBe Messages("page.seis.investors.AddAnotherShareholding.title")
+      }
+
+      "have a form" which {
+        lazy val form = doc.select("form")
+
+        "has a method of POST" in {
+          form.attr("method") shouldBe "POST"
+        }
+
+        "has the correct POST action" in {
+          form.attr("action") shouldBe controllers.seis.routes.AddAnotherShareholdingController.submit(2).url
         }
       }
 

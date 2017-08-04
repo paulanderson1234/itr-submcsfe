@@ -42,7 +42,7 @@ class AddAnotherShareholdingControllerSpec extends BaseSpec {
   "Calling AddAnotherShareholdingController.show" should {
     lazy val result = {
       mockEnrolledRequest(seisSchemeTypesModel)
-      testController.show(authorisedFakeRequest)
+      testController.show(1)(authorisedFakeRequest)
     }
 
     "return a status of 200" in {
@@ -59,7 +59,7 @@ class AddAnotherShareholdingControllerSpec extends BaseSpec {
     "an invalid POST is made" should {
       lazy val result = {
         mockEnrolledRequest(seisSchemeTypesModel)
-        testController.submit(authorisedFakeRequestToPOST(("addAnotherShareholding", "")))
+        testController.submit(1)(authorisedFakeRequestToPOST(("addAnotherShareholding", "")))
       }
 
       "return a status of 400" in {
@@ -74,7 +74,7 @@ class AddAnotherShareholdingControllerSpec extends BaseSpec {
     "a valid POST with a 'No' is made" should {
       lazy val result = {
         mockEnrolledRequest(seisSchemeTypesModel)
-        testController.submit(authorisedFakeRequestToPOST(("addAnotherShareholding", "No")))
+        testController.submit(1)(authorisedFakeRequestToPOST(("addAnotherShareholding", "No")))
       }
 
       "return a status of 303" in {
@@ -82,14 +82,14 @@ class AddAnotherShareholdingControllerSpec extends BaseSpec {
       }
 
       "redirect to the Review Investor Entry page" in {
-        redirectLocation(result) shouldBe Some(controllers.seis.routes.AddAnotherShareholdingController.show().url)
+        redirectLocation(result) shouldBe Some(controllers.seis.routes.AddAnotherShareholdingController.show(1).url)
       }
     }
 
-    "a valid POST with a 'Yes' is made" should {
+    "a valid POST with a 'Yes' is made with an Id of 1" should {
       lazy val result = {
         mockEnrolledRequest(seisSchemeTypesModel)
-        testController.submit(authorisedFakeRequestToPOST(("addAnotherShareholding", "Yes")))
+        testController.submit(1)(authorisedFakeRequestToPOST(("addAnotherShareholding", "Yes")))
       }
 
       "return a status of 303" in {
@@ -97,7 +97,22 @@ class AddAnotherShareholdingControllerSpec extends BaseSpec {
       }
 
       "redirect to the Share Description page" in {
-        redirectLocation(result) shouldBe Some(controllers.seis.routes.ShareDescriptionController.show().url)
+        redirectLocation(result) shouldBe Some(controllers.seis.routes.PreviousShareHoldingDescriptionController.show(1).url)
+      }
+    }
+
+    "a valid POST with a 'Yes' is made with an Id of 2" should {
+      lazy val result = {
+        mockEnrolledRequest(seisSchemeTypesModel)
+        testController.submit(2)(authorisedFakeRequestToPOST(("addAnotherShareholding", "Yes")))
+      }
+
+      "return a status of 303" in {
+        status(result) shouldBe 303
+      }
+
+      "redirect to the Share Description page" in {
+        redirectLocation(result) shouldBe Some(controllers.seis.routes.PreviousShareHoldingDescriptionController.show(2).url)
       }
     }
   }
