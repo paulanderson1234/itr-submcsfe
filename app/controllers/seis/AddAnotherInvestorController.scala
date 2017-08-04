@@ -67,11 +67,10 @@ trait AddAnotherInvestorController extends FrontendController with AuthorisedAnd
           validFormData.addAnotherInvestor match {
 
             case Constants.StandardRadioButtonYesValue => {
-              // Needs to navigate to routes.PreviousShareHoldingDescriptionController.show()
-              Future.successful(Redirect(routes.AddAnotherInvestorController.show()))
+              Future.successful(Redirect(routes.AddInvestorOrNomineeController.show()))
             }
             case Constants.StandardRadioButtonNoValue => {
-              // Needs to navigate to review previous investor entry
+              // Needs to navigate to Any Shares Repayment Page
               Future.successful(Redirect(routes.AddAnotherInvestorController.show()))
             }
           }

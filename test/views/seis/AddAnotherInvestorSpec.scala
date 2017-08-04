@@ -59,6 +59,7 @@ class AddAnotherInvestorSpec extends ViewSpec {
       document.getElementById("main-heading").hasClass("h1-heading")
       document.getElementById("addAnotherInvestor-yesLabel").text() shouldBe Messages("common.radioYesLabel")
       document.getElementById("addAnotherInvestor-noLabel").text() shouldBe Messages("common.radioNoLabel")
+      //Should redirect to Review all investors page
       document.body.getElementById("back-link").attr("href") shouldEqual routes.AddAnotherInvestorController.show().url
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.company.details.four")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
@@ -77,6 +78,7 @@ class AddAnotherInvestorSpec extends ViewSpec {
       document.getElementById("main-heading").text() shouldBe Messages("page.seis.investors.addAnotherInvestor.heading")
       document.getElementById("addAnotherInvestor-yesLabel").text() shouldBe Messages("common.radioYesLabel")
       document.getElementById("addAnotherInvestor-noLabel").text() shouldBe Messages("common.radioNoLabel")
+      //Should redirect to Review all investors page
       document.body.getElementById("back-link").attr("href") shouldEqual controllers.seis.routes.AddAnotherInvestorController.show().url
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.company.details.four")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")

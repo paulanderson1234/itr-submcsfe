@@ -76,28 +76,28 @@ class AddAnotherInvestorControllerSpec extends BaseSpec {
   }
 
   "Sending a valid Yes form submission to the AddAnotherInvestorController when authenticated and enrolled" should {
-    "redirect to the Used Investment Scheme Before page if the Trade start date condition is met" in {
+    "redirect to the Add investor or nominee page" in {
       val formInput = "addAnotherInvestor" -> Constants.StandardRadioButtonYesValue
       setupMocks()
       mockEnrolledRequest(seisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,formInput)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(controllers.seis.routes.AddAnotherInvestorController.show().url)
+          redirectLocation(result) shouldBe Some(controllers.seis.routes.AddInvestorOrNomineeController.show().url)
         }
       )
     }
   }
 
   "Sending a valid No form submission to the AddAnotherInvestorController when authenticated and enrolled" should {
-    "redirect to the Is This First Trade Error page" in {
+    "redirect to the Any SHares Repayment page" in {
       val formInput = "addAnotherInvestor" -> Constants.StandardRadioButtonNoValue
       setupMocks()
       mockEnrolledRequest(seisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,formInput)(
         result => {
           status(result) shouldBe SEE_OTHER
-          // To navigate to NotFirstTradeError page
+          // To navigate to Any Shares repayment page
           redirectLocation(result) shouldBe Some(controllers.seis.routes.AddAnotherInvestorController.show().url)
         }
       )
