@@ -1,0 +1,11 @@
+#Number of previously issued shares
+page.seis.investors.numberOfPreviouslyIssuedShares.heading=How many shares were previously issued to this {0}?
+page.seis.investors.numberOfPreviouslyIssuedShares.title=How many shares were previously issued to this {0}?
+
+#PreviousShareHoldingsDescription
+page.seis.investors.previousShareHoldingDescription.title = What were the shares called that were issued to this {0}?
+page.seis.investors.previousShareHoldingDescription.heading = What were the shares called that were issued to this {0}?
+page.seis.investors.previousShareHoldingDescription.example.text = Add one type of share at a time.
+page.seis.investors.previousShareHoldingDescription.question.hint = Suggested limit: 20 words
+page.seis.investors.previousShareHoldingDescription.whereToFind = Where can I find this?
+page.seis.investors.previousShareHoldingDescription.location = It''s on your company''s Register of Members.
