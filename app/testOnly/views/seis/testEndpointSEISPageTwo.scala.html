@@ -39,7 +39,10 @@ totalAmountRaisedForm:Form[TotalAmountRaisedModel], totalAmountSpentForm:Form[To
         nominalValueOfSharesForm("nominalValueOfShares"),
         '_divClass -> "form-label",
         '_label -> Messages("page.seis.nominalValueOfShares.title"),
-        '_labelTextClass -> "visuallyhidden"
+        '_labelTextClass -> "visuallyhidden",
+        '_inputClass -> "input--normal input--no-spinner input--left-padding",
+        '_type -> "text",
+        '_maxlength -> "9"
         )
     </div>
 
@@ -81,7 +84,28 @@ totalAmountRaisedForm:Form[TotalAmountRaisedModel], totalAmountSpentForm:Form[To
         '_labelId -> "label-totalAmountSpent",
         '_label -> Messages("page.seis.shareDetails.totalAmountSpent.heading=Total amount spent"),
         '_labelTextClass -> "visuallyhidden",
+        '_inputClass -> "input--normal input--no-spinner input--left-padding",
+        '_type -> "text",
+        '_maxlength -> "9"
+        )
+    </div>
+
+    <h2>How many shares were issued</h2>
+    <div class="form-group">
+        @input(
+        numberOfSharesPurchasedForm("numberOfSharesPurchased"),
+        '_divClass -> "form-label",
+        '_labelId -> "label-numberOfSharesPurchased",
+        '_label -> Messages("page.seis.investors.numberOfSharesPurchased.heading", companyOrIndividual.toLowerCase(), shareIssueDate),
+        '_labelTextClass -> "visuallyhidden",
+        '_maxlength -> "25",
         '_inputClass -> "input--fullwidth"
+        )
+    </div>
+    <div>
+        @hiddenField(
+        numberOfSharesPurchasedForm("processingId"),
+        'id -> "processingId"
         )
     </div>
 
