@@ -14,15 +14,19 @@
  * limitations under the License.
  */
 
-package models.investorDetails
+package forms
 
-import play.api.libs.json.Json
+import models.AddAnotherShareholdingModel
+import play.api.data.Form
+import play.api.data.Forms._
+import utils.Transformers._
 
-case class InvestorShareIssueDateModel(investorShareIssueDateDay: Option[Int],
-                                       investorShareIssueDateMonth: Option[Int],
-                                       investorShareIssueDateYear: Option[Int],
-                                       processingId: Option[Int] = None,
-                                       investorProcessingId: Option[Int] = None)
-object InvestorShareIssueDateModel{
-  implicit val formats = Json.format[InvestorShareIssueDateModel]
+object AddAnotherShareholdingForm {
+
+  val addAnotherShareholdingForm = Form(
+    mapping(
+      "addAnotherShareholding" -> nonEmptyText
+        .transform(stringToBoolean, booleanToString)
+    )(AddAnotherShareholdingModel.apply)(AddAnotherShareholdingModel.unapply)
+  )
 }
