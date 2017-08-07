@@ -19,11 +19,17 @@ package controllers.seis
 import akka.actor.ActorSystem
 import akka.stream.{ActorMaterializer, Materializer}
 import auth.{MockAuthConnector, MockConfig}
+import common.KeystoreKeys
 import controllers.helpers.BaseSpec
+import models.investorDetails._
 import org.jsoup.Jsoup
+import org.mockito.Matchers
+import org.mockito.Mockito._
 import play.api.i18n.Messages
 import play.api.i18n.Messages.Implicits._
 import play.api.test.Helpers._
+
+import scala.concurrent.Future
 
 class AddAnotherShareholdingControllerSpec extends BaseSpec {
 
@@ -39,9 +45,15 @@ class AddAnotherShareholdingControllerSpec extends BaseSpec {
     }
   }
 
+  def setupMocks(data: Option[Vector[InvestorDetailsModel]]): Unit = {
+    when(mockS4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](Matchers.eq(KeystoreKeys.investorDetails))(Matchers.any(),
+      Matchers.any(), Matchers.any())).thenReturn(Future.successful(data))
+  }
+
   "Calling AddAnotherShareholdingController.show" should {
     lazy val result = {
       mockEnrolledRequest(seisSchemeTypesModel)
+      setupMocks(None)
       testController.show(1)(authorisedFakeRequest)
     }
 
@@ -59,6 +71,7 @@ class AddAnotherShareholdingControllerSpec extends BaseSpec {
     "an invalid POST is made" should {
       lazy val result = {
         mockEnrolledRequest(seisSchemeTypesModel)
+        setupMocks(None)
         testController.submit(1)(authorisedFakeRequestToPOST(("addAnotherShareholding", "")))
       }
 
@@ -71,24 +84,80 @@ class AddAnotherShareholdingControllerSpec extends BaseSpec {
       }
     }
 
-    "a valid POST with a 'No' is made" should {
-      lazy val result = {
-        mockEnrolledRequest(seisSchemeTypesModel)
-        testController.submit(1)(authorisedFakeRequestToPOST(("addAnotherShareholding", "No")))
+    "a valid POST with a 'No' is made" when {
+
+      "an investor exists with all shareholdings valid" should {
+        lazy val result = {
+          mockEnrolledRequest(seisSchemeTypesModel)
+          setupMocks(Some(Vector(validModelWithPrevShareHoldings)))
+          testController.submit(2)(authorisedFakeRequestToPOST(("addAnotherShareholding", "No")))
+        }
+
+        "return a status of 303" in {
+          status(result) shouldBe 303
+        }
+
+        "redirect to the Review Investor Entry page" in {
+          redirectLocation(result) shouldBe Some(controllers.seis.routes.AddAnotherShareholdingController.show(2).url)
+        }
       }
 
-      "return a status of 303" in {
-        status(result) shouldBe 303
+      "no investors exist" should {
+        lazy val result = {
+          mockEnrolledRequest(seisSchemeTypesModel)
+          setupMocks(None)
+          testController.submit(1)(authorisedFakeRequestToPOST(("addAnotherShareholding", "No")))
+        }
+
+        "return a status of 303" in {
+          status(result) shouldBe 303
+        }
+
+        "redirect to the Add Investor or Nominee page" in {
+          redirectLocation(result) shouldBe Some(controllers.seis.routes.AddInvestorOrNomineeController.show().url)
+        }
       }
 
-      "redirect to the Review Investor Entry page" in {
-        redirectLocation(result) shouldBe Some(controllers.seis.routes.AddAnotherShareholdingController.show(1).url)
+      "the id does not match an existing investor" should {
+        lazy val result = {
+          mockEnrolledRequest(seisSchemeTypesModel)
+          setupMocks(Some(Vector(validModelWithPrevShareHoldings)))
+          testController.submit(1)(authorisedFakeRequestToPOST(("addAnotherShareholding", "No")))
+        }
+
+        "return a status of 303" in {
+          status(result) shouldBe 303
+        }
+
+        "redirect to the Add Investor or Nominee page" in {
+          redirectLocation(result) shouldBe Some(controllers.seis.routes.AddInvestorOrNomineeController.show().url)
+        }
+      }
+
+      "the investor has an incomplete shareholding" should {
+        val previousShareholdingModel = PreviousShareHoldingModel()
+        lazy val result = {
+          mockEnrolledRequest(seisSchemeTypesModel)
+          setupMocks(Some(Vector(validModelWithPrevShareHoldings.copy(
+            previousShareHoldingModels = Some(Vector(previousShareholdingModel))
+          ))))
+          testController.submit(2)(authorisedFakeRequestToPOST(("addAnotherShareholding", "No")))
+        }
+
+        "return a status of 303" in {
+          status(result) shouldBe 303
+        }
+
+        "redirect to the Review Shareholders page" in {
+          redirectLocation(result) shouldBe Some(controllers.seis.routes.AddAnotherShareholdingController.show(2).url)
+        }
       }
     }
 
     "a valid POST with a 'Yes' is made with an Id of 1" should {
       lazy val result = {
         mockEnrolledRequest(seisSchemeTypesModel)
+        setupMocks(None)
         testController.submit(1)(authorisedFakeRequestToPOST(("addAnotherShareholding", "Yes")))
       }
 
@@ -104,6 +173,7 @@ class AddAnotherShareholdingControllerSpec extends BaseSpec {
     "a valid POST with a 'Yes' is made with an Id of 2" should {
       lazy val result = {
         mockEnrolledRequest(seisSchemeTypesModel)
+        setupMocks(None)
         testController.submit(2)(authorisedFakeRequestToPOST(("addAnotherShareholding", "Yes")))
       }
 
