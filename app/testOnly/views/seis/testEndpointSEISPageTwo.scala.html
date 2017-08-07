@@ -90,26 +90,6 @@ totalAmountRaisedForm:Form[TotalAmountRaisedModel], totalAmountSpentForm:Form[To
         )
     </div>
 
-    <h2>How many shares were issued</h2>
-    <div class="form-group">
-        @input(
-        numberOfSharesPurchasedForm("numberOfSharesPurchased"),
-        '_divClass -> "form-label",
-        '_labelId -> "label-numberOfSharesPurchased",
-        '_label -> Messages("page.seis.investors.numberOfSharesPurchased.heading", companyOrIndividual.toLowerCase(), shareIssueDate),
-        '_labelTextClass -> "visuallyhidden",
-        '_maxlength -> "25",
-        '_inputClass -> "input--fullwidth"
-        )
-    </div>
-    <div>
-        @hiddenField(
-        numberOfSharesPurchasedForm("processingId"),
-        'id -> "processingId"
-        )
-    </div>
-
-
     <div class="form-group">
         <button class="btn button" type="submit" id="next">
             @Messages("page.test.submit-form.button")

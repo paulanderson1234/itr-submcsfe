@@ -201,9 +201,10 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
       Some(AddInvestorOrNomineeModel(Constants.investor, Some(1))), Some(CompanyOrIndividualModel(Constants.typeCompany, Some(1))),
         numberOfSharesPurchasedModel = Some(NumberOfSharesPurchasedModel(1000, Some(1))), amountSpentModel = Some(HowMuchSpentOnSharesModel(1000, Some(1))),
         isExistingShareHolderModel = Some(IsExistingShareHolderModel("Yes", Some(1))), previousShareHoldingModels = Some(Vector(PreviousShareHoldingModel(
-          Some(InvestorShareIssueDateModel(Some(1), Some(1), Some(1980), Some(1), Some(1))), Some(NumberOfPreviouslyIssuedSharesModel(1000, Some(1), Some(1))),
-          Some(PreviousShareHoldingNominalValueModel(1000, Some(1), Some(1))), Some(PreviousShareHoldingDescriptionModel("A previous shareholding", Some(1), Some(1))),
-          Some(1), Some(1)))),
+          numberOfPreviouslyIssuedSharesModel = Some(NumberOfPreviouslyIssuedSharesModel(1000, Some(1), Some(1))),
+          previousShareHoldingNominalValueModel = Some(PreviousShareHoldingNominalValueModel(1000, Some(1), Some(1))),
+          previousShareHoldingDescriptionModel = Some(PreviousShareHoldingDescriptionModel("A previous shareholding", Some(1), Some(1))),
+          processingId = Some(1), investorProcessingId = Some(1)))),
         processingId = Some(1))))
   }
 
