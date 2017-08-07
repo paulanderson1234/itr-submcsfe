@@ -22,6 +22,7 @@ import config.FrontendGlobal.internalServerErrorTemplate
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector, SubmissionConnector}
 import controllers.predicates.FeatureSwitch
+import forms.AddAnotherInvestorForm
 import forms.AddAnotherInvestorForm._
 import models.AddAnotherInvestorModel
 import play.Logger
@@ -49,21 +50,17 @@ trait AddAnotherInvestorController extends FrontendController with AuthorisedAnd
 
   val show = featureSwitch(applicationConfig.seisFlowEnabled) {
     AuthorisedAndEnrolled.async { implicit user => implicit request =>
-      s4lConnector.fetchAndGetFormData[AddAnotherInvestorModel](KeystoreKeys.addAnotherInvestor).map {
-        case Some(data) => Ok(AddAnotherInvestor(addAnotherInvestorForm.fill(data)))
-        case None => Ok(AddAnotherInvestor(addAnotherInvestorForm))
+      Future.successful(Ok(AddAnotherInvestor(addAnotherInvestorForm)))
       }
     }
-}
 
-  val submit = featureSwitch(applicationConfig.seisFlowEnabled) {
+    val submit = featureSwitch(applicationConfig.seisFlowEnabled) {
     AuthorisedAndEnrolled.async { implicit user => implicit request =>
       addAnotherInvestorForm.bindFromRequest().fold(
         formWithErrors => {
           Future.successful(BadRequest(AddAnotherInvestor(formWithErrors)))
         },
         validFormData => {
-          s4lConnector.saveFormData(KeystoreKeys.addAnotherInvestor, validFormData)
           validFormData.addAnotherInvestor match {
 
             case Constants.StandardRadioButtonYesValue => {
@@ -72,6 +69,8 @@ trait AddAnotherInvestorController extends FrontendController with AuthorisedAnd
             case Constants.StandardRadioButtonNoValue => {
               // Needs to navigate to Any Shares Repayment Page
               Future.successful(Redirect(routes.AddAnotherInvestorController.show()))
+
+
             }
           }
         }

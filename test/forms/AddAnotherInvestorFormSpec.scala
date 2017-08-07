@@ -17,101 +17,79 @@
 package forms
 
 import common.Constants
-import models.CompanyOrIndividualModel
+import forms.AddAnotherInvestorForm._
 import models.AddAnotherInvestorModel
 import org.scalatestplus.play.OneAppPerSuite
-import play.api.data.FormError
 import play.api.i18n.Messages
+import uk.gov.hmrc.play.test.UnitSpec
 import play.api.i18n.Messages.Implicits._
 import play.api.libs.json.Json
-import play.api.mvc.AnyContentAsFormUrlEncoded
-import play.api.test.FakeRequest
-import uk.gov.hmrc.play.test.UnitSpec
 
 class AddAnotherInvestorFormSpec extends UnitSpec with OneAppPerSuite{
 
-  private def bindSuccess(request: FakeRequest[AnyContentAsFormUrlEncoded]) = {
-    AddAnotherInvestorForm.addAnotherInvestorForm.bindFromRequest()(request).fold(
-      formWithErrors => None,
-      userData => Some(userData)
-    )
+  val modelYes = AddAnotherInvestorModel(Constants.StandardRadioButtonYesValue)
+  val modelNo = AddAnotherInvestorModel(Constants.StandardRadioButtonNoValue)
+
+  "Creating the form for the Add Another Investor" should {
+    "return a populated yes form using .fill" in {
+      val form = addAnotherInvestorForm.fill(modelYes)
+      form.value.get shouldBe AddAnotherInvestorModel(Constants.StandardRadioButtonYesValue)
+    }
+
+    "return a populated no form using .fill" in {
+      val form = addAnotherInvestorForm.fill(modelNo)
+      form.value.get shouldBe AddAnotherInvestorModel(Constants.StandardRadioButtonNoValue)
+    }
+
+    "return a Some if a model with valid yes option is supplied using .bind" in {
+      val map = Map(("addAnotherInvestor", Constants.StandardRadioButtonYesValue))
+      val form = addAnotherInvestorForm.bind(map)
+      form.value shouldBe Some(AddAnotherInvestorModel(Constants.StandardRadioButtonYesValue))
+    }
+
+    "return a Some if a model with 'No' selection using .bind" in {
+      val map = Map(("addAnotherInvestor", Constants.StandardRadioButtonNoValue))
+      val form = addAnotherInvestorForm.bind(map)
+      form.value shouldBe Some(AddAnotherInvestorModel(Constants.StandardRadioButtonNoValue))
+      form.hasErrors shouldBe false
+    }
+
+    "when no input is selected the form" should {
+      lazy val form = addAnotherInvestorForm.bind(Map(("addAnotherInvestor", "")))
+      "raise form error" in {
+        form.hasErrors shouldBe true
+      }
+      "raise 1 form error" in {
+        form.errors.length shouldBe 1
+        form.errors.head.key shouldBe "addAnotherInvestor"
+      }
+      "associate the correct error message to the error" in {
+        Messages(form.error("addAnotherInvestor").get.message) shouldBe Messages("error.required")
+      }
+    }
+
   }
 
-  private def bindWithError(request: FakeRequest[AnyContentAsFormUrlEncoded]): Option[FormError] = {
-    AddAnotherInvestorForm.addAnotherInvestorForm.bindFromRequest()(request).fold(
-      formWithErrors => Some(formWithErrors.errors(0)),
-      userData => None
-    )
-  }
-
-  val addAnotherInvestorJson = """{"addAnotherInvestor":"Yes"}"""
+  val addAnotherInvestorModelJson = """{"addAnotherInvestor":"Yes"}"""
   val addAnotherInvestorModel = AddAnotherInvestorModel("Yes")
 
-
-  "The Existing Share Holder Form" should {
-    "Return an error if no radio button is selected" in {
-      val request = FakeRequest("GET", "/").withFormUrlEncodedBody(
-        "addAnotherInvestor" -> ""
-      )
-      bindWithError(request) match {
-        case Some(err) => {
-          err.key shouldBe "addAnotherInvestor"
-          Messages(err.message) shouldBe Messages("error.required")
-          err.args shouldBe Array()
-        }
-        case _ => {
-          fail("Missing error")
-        }
-      }
-    }
-  }
-
-  "The Is Existing Share Holder Form" should {
-    "not return an error if the 'Yes' option is selected" in {
-      val request = FakeRequest("GET", "/").withFormUrlEncodedBody(
-        "addAnotherInvestor" -> Constants.StandardRadioButtonYesValue
-      )
-      bindWithError(request) match {
-        case Some(err) => {
-          fail("Validation error not expected")
-        }
-        case _ => ()
-      }
-    }
-  }
-
-
-  "The Is Existing Share Holder Form" should {
-    "not return an error if the 'No' option is selected" in {
-      val request = FakeRequest("GET", "/").withFormUrlEncodedBody(
-        "addAnotherInvestor" -> Constants.StandardRadioButtonNoValue
-      )
-      bindWithError(request) match {
-        case Some(err) => {
-          fail("Validation error not expected")
-        }
-        case _ => ()
-      }
-    }
-  }
-
   // model to json
-  "The Is Existing Share Holder Form model" should {
+  "The Form model" should {
     "load convert to JSON successfully" in {
 
       implicit val formats = Json.format[AddAnotherInvestorModel]
 
-      val addAnotherInvestor= Json.toJson(addAnotherInvestorModel).toString()
-      addAnotherInvestor shouldBe addAnotherInvestorJson
+      val newProduct = Json.toJson(addAnotherInvestorModel).toString()
+      newProduct shouldBe addAnotherInvestorModelJson
 
     }
   }
 
   // form model to json - apply
-  "The Is Existing Share Holder Form model" should {
+  "The Form model" should {
     "call apply correctly on the model" in {
       implicit val formats = Json.format[AddAnotherInvestorModel]
-      val addAnotherInvestorForm =AddAnotherInvestorForm.addAnotherInvestorForm.fill(addAnotherInvestorModel)
+      val addAnotherInvestorForm = AddAnotherInvestorForm.addAnotherInvestorForm.fill(addAnotherInvestorModel)
       addAnotherInvestorForm.get.addAnotherInvestor shouldBe Constants.StandardRadioButtonYesValue
     }
 
@@ -120,7 +98,7 @@ class AddAnotherInvestorFormSpec extends UnitSpec with OneAppPerSuite{
       implicit val formats = Json.format[AddAnotherInvestorModel]
       val addAnotherInvestorForm = AddAnotherInvestorForm.addAnotherInvestorForm.fill(addAnotherInvestorModel)
       val formJson = Json.toJson(addAnotherInvestorForm.get).toString()
-      formJson shouldBe addAnotherInvestorJson
+      formJson shouldBe addAnotherInvestorModelJson
     }
   }
 }

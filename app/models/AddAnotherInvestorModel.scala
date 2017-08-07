@@ -22,5 +22,4 @@ case class AddAnotherInvestorModel (addAnotherInvestor : String)
 
 object AddAnotherInvestorModel {
   implicit val format = Json.format[AddAnotherInvestorModel]
-  implicit val writes = Json.writes[AddAnotherInvestorModel]
 }
