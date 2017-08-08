@@ -17,18 +17,21 @@
 package controllers.seis
 
 import auth.{AuthorisedAndEnrolledForTAVC, Flow, SEIS}
+import common.KeystoreKeys
 import config.{AppConfig, FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
+import controllers.Helpers.ControllerHelpers
 import controllers.predicates.FeatureSwitch
-import uk.gov.hmrc.play.frontend.auth.connectors.AuthConnector
-import uk.gov.hmrc.play.frontend.controller.FrontendController
-import views.html.seis.investors.AddAnotherShareholding
 import forms.AddAnotherShareholdingForm._
 import models.AddAnotherShareholdingModel
+import models.investorDetails.InvestorDetailsModel
 import play.api.Play.current
 import play.api.data.Form
 import play.api.i18n.Messages.Implicits._
 import play.api.mvc.{Action, AnyContent, Result}
+import uk.gov.hmrc.play.frontend.auth.connectors.AuthConnector
+import uk.gov.hmrc.play.frontend.controller.FrontendController
+import views.html.seis.investors.AddAnotherShareholding
 
 import scala.concurrent.Future
 
@@ -39,7 +42,7 @@ object AddAnotherShareholdingController extends AddAnotherShareholdingController
   override lazy val authConnector: AuthConnector = FrontendAuthConnector
 }
 
-trait AddAnotherShareholdingController extends FrontendController with AuthorisedAndEnrolledForTAVC with FeatureSwitch {
+trait AddAnotherShareholdingController extends FrontendController with AuthorisedAndEnrolledForTAVC with FeatureSwitch with ControllerHelpers {
   override lazy val acceptedFlows: Seq[Seq[Flow]] = Seq(Seq(SEIS))
 
   def show(investorId: Int): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
@@ -50,13 +53,28 @@ trait AddAnotherShareholdingController extends FrontendController with Authorise
 
   def submit(investorId: Int): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
     AuthorisedAndEnrolled.async { implicit user => implicit request =>
+
+      val checkValidShareholdings: Result => Future[Result] = { result =>
+        s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map(vector =>
+          redirectNoInvestors(vector) { data =>
+            redirectInvalidInvestor(getInvestorIndex(investorId, data)) { investorIndex =>
+              if (data.apply(investorIndex).validateShareHoldings) result
+              //TODO update else statement to route to Shareholding review page
+              else Redirect(routes.AddAnotherShareholdingController.show(investorId))
+            }
+          }
+        )
+      }
+
       val errorAction: Form[AddAnotherShareholdingModel] => Future[Result] = { form =>
         Future.successful(BadRequest(AddAnotherShareholding(form, investorId)))
       }
 
       val successAction: AddAnotherShareholdingModel => Future[Result] = {
         case AddAnotherShareholdingModel(true) => Future.successful(Redirect(routes.PreviousShareHoldingDescriptionController.show(investorId)))
-        case AddAnotherShareholdingModel(false) => Future.successful(Redirect(routes.AddAnotherShareholdingController.show(investorId)))
+        case AddAnotherShareholdingModel(false) => checkValidShareholdings {
+          Redirect(routes.AddAnotherShareholdingController.show(investorId))
+        }
       }
 
       addAnotherShareholdingForm.bindFromRequest().fold(errorAction, successAction)
