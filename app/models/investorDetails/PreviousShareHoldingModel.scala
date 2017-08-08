@@ -17,6 +17,7 @@
 package models.investorDetails
 
 import play.api.libs.json.Json
+import utils.{CostFormatter, DateFormatter}
 
 case class PreviousShareHoldingModel(investorShareIssueDateModel: Option[InvestorShareIssueDateModel] = None,
                                      numberOfPreviouslyIssuedSharesModel: Option[NumberOfPreviouslyIssuedSharesModel] = None,
@@ -29,6 +30,6 @@ case class PreviousShareHoldingModel(investorShareIssueDateModel: Option[Investo
                           previousShareHoldingNominalValueModel.isDefined && previousShareHoldingDescriptionModel.isDefined
 }
 
-object PreviousShareHoldingModel{
+object PreviousShareHoldingModel extends DateFormatter with CostFormatter{
   implicit val formats = Json.format[PreviousShareHoldingModel]
 }

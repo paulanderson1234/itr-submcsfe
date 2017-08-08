@@ -1,141 +1,68 @@
+@import models.investorDetails.PreviousShareHoldingModel
+@import config.FrontendAppConfig
 @import uk.gov.hmrc.play.views.html.helpers.form
-@import views.html.helpers.backButton
-@import views.html.helpers.summary._
-@import common.Constants
-@import models.seis.SEISCheckAnswersModel
-@import utils.Transformers
-@import utils.CountriesHelper
+@import views.html.helpers.{errorSummary, formInputRadioGroup, backButtonWithProgress, input, inputWithCurrencySymbol, formInlineDateInput, hiddenField}
 
-@(checkAnswersModel: SEISCheckAnswersModel)(implicit request: Request[_], messages: Messages)
+@(previousShareHoldingModels: Vector[PreviousShareHoldingModel], backUrl: String)(implicit request: Request[_], messages: Messages)
 
-@main_template(Messages("page.checkAndSubmit.checkAnswers.heading"), articleLayout=false) {
+@main_template(Messages("page.seis.investors.previousShareHoldingReview.title"), articleLayout=false) {
 
-@backButton(controllers.seis.routes.SupportingDocumentsController.show().url)
+@backButtonWithProgress(backUrl, Messages("common.section.progress.company.details.four"))
 
-
-<h1 class="form-title heading-xlarge" id="main-heading">@Messages("page.checkAndSubmit.checkAnswers.heading")</h1>
-<div class="form-group">
-    <p id="description-one">@Messages("page.checkAndSubmit.checkAnswers.description.one")</p>
-
-    <ul class="bullets" id="schemes">
-        <li id="seis-scheme">@Messages("page.checkAndSubmit.checkAnswers.scheme.seis")</li>
-    </ul>
-</div>
-
-<div class="form-group">
-    <p id="description-two">@Messages("page.checkAndSubmit.checkAnswers.description.two")</p>
-</div>
-
-<div id="yourAnswers" class="full-width">
-
-    <table id="company-details-table">
-        <!-- Header -->
-        @tableHeaderHelper("companyDetailsSection",Messages("summaryQuestion.companyDetailsSection"))
-        <!-- Data Rows-->
-        <tbody>
-        <!-- Nature Of Business -->
-        @if(checkAnswersModel.natureOfBusinessModel.isDefined){
-        @textRowHelperBasic("natureOfBusiness", Messages("summaryQuestion.natureOfBusiness"),checkAnswersModel.natureOfBusinessModel.get.natureofbusiness, Some(controllers.seis.routes.NatureOfBusinessController.show().url))
-        }
-        <!-- Date of Incorporation -->
-        @if(checkAnswersModel.dateOfIncorporationModel.isDefined){
-        @defining(checkAnswersModel.dateOfIncorporationModel.get) { dateOfIncorporationModel =>
-        @textRowHelperBasic("dateOfIncorporation", Messages("summaryQuestion.dateOfIncorporation"), DateOfIncorporationModel.toDateString(dateOfIncorporationModel.day.get, dateOfIncorporationModel.month.get, dateOfIncorporationModel.year.get),Some(controllers.seis.routes.DateOfIncorporationController.show().url))
-        }
-        }
-        <!-- Trade Start Date -->
-        @if(checkAnswersModel.tradeStartDateModel.isDefined){
-        @defining(checkAnswersModel.tradeStartDateModel.get) { tradeStartDateModel =>
-        @if(tradeStartDateModel.hasTradeStartDate == Messages("common.radioYesLabel")){
-        @textRowHelperMultiLineQuestion("tradeStart", Array(Messages("summaryQuestion.hasTradeStartDate"),Messages("summaryQuestion.tradeStartDate")),Array(tradeStartDateModel.hasTradeStartDate, TradeStartDateModel.toDateString(tradeStartDateModel.tradeStartDay.get, tradeStartDateModel.tradeStartMonth.get, tradeStartDateModel.tradeStartYear.get)), Some(controllers.seis.routes.TradeStartDateController.show().url), None)
-        } else {
-        @textRowHelperBasic("tradeStart", Messages("summaryQuestion.hasTradeStartDate"), tradeStartDateModel.hasTradeStartDate, Some(controllers.seis.routes.TradeStartDateController.show().url))
-        }
-        }
-        }
-        </tbody>
-    </table>
-
-    <table id="previous-rfi-table">
-        <!-- Header -->
-        @tableHeaderHelper("previousRFISection", Messages("summaryQuestion.previousRFISection"))
-        <!-- Data Rows-->
-        <tbody>
-        @if(checkAnswersModel.previousSchemes.length > 0){
-        @for((previousScheme, index) <- checkAnswersModel.previousSchemes.zipWithIndex){
-        @textRowHelperMultiLine(s"previousScheme-$index", PreviousSchemeModel.getSchemeName(previousScheme.schemeTypeDesc, previousScheme.otherSchemeName),
-        PreviousSchemeModel.toArrayString(previousScheme), Some(controllers.seis.routes.ReviewPreviousSchemesController.show().url))
-        }
-        }else{
-        @textRowHelperBasic("noPreviousScheme", Messages("page.summaryQuestion.none.question"), Messages("page.summaryQuestion.none.answer"), Some(controllers.seis.routes.HadPreviousRFIController.show().url))
-        }
-
-        </tbody>
-    </table>
-
-    <table id="investment-table">
-        <!-- Header -->
-        @tableHeaderHelper("investmentSection", Messages("page.summaryQuestion.companyDetailsSectionThree"))
-        <!--Data rows-->
-        <tbody>
-        <!--Proposed Investment-->
-        @if(checkAnswersModel.proposedInvestmentModel.isDefined){
-        @textRowHelperBasic("proposedInvestment", Messages("page.summaryQuestion.proposedInvestment"), ProposedInvestmentModel.getAmountAsFormattedString(checkAnswersModel.proposedInvestmentModel.get.investmentAmount), Some(controllers.seis.routes.ProposedInvestmentController.show().url))
-        }
-        </tbody>
-    </table>
-
-    <table id="contactDetails-table">
-        <!-- Header -->
-        @tableHeaderHelper("contactDetailsSection", Messages("page.summaryQuestion.companyDetailsSectionFour"))
-        <!--Data rows-->
-        <tbody>
-        @if(checkAnswersModel.contactDetailsModel.isDefined){
-        @defining(checkAnswersModel.contactDetailsModel.get) { contactDetails =>
-        @textRowHelperMultiLine("contactDetails", Messages("page.summaryQuestion.contactDetails"), Transformers.contactDetailsModelToFlattenedArray(contactDetails),
-        Some(controllers.seis.routes.ContactDetailsController.show().url))
-        @if(checkAnswersModel.contactAddressModel.isDefined){
-        @textRowHelperMultiLine("address", Messages("page.summaryQuestion.contactAddress"), Transformers.addressModelToFlattenedArray(checkAnswersModel.contactAddressModel.get.copy(countryCode = CountriesHelper.getSelectedCountry(checkAnswersModel.contactAddressModel.get.countryCode))),
-        Some(controllers.seis.routes.ContactAddressController.show().url))
-        }
-        }
-        }
-        </tbody>
-    </table>
-
-    <table id="supporting-docs-table">
-        @tableHeaderHelper("supportingDocsSection",Messages("page.summaryQuestion.supportingDocsSection"))
-        <tbody>
-        <tr>
-            <td>
-                <div class="form-group">
-                    <p id="supportingDocs-sub-text">@Messages("page.checkAndSubmit.checkAnswers.suportingDocs.desc")</p>
-                    <ul class="bullets">
-                        <li id="supportingDocs-business-plan" class="font-xsmall">@Messages("page.supportingDocuments.SupportingDocuments.bullet.one")</li>
-                        <li id="supportingDocs-company-accounts" class="font-xsmall">@Messages("page.supportingDocuments.SupportingDocuments.bullet.two")</li>
-                        <li id="shareholder-agree" class="font-xsmall">@Messages("page.supportingDocuments.SupportingDocuments.bullet.three")</li>
-                        <li id="memorandum-docs" class="font-xsmall">@Messages("page.supportingDocuments.SupportingDocuments.bullet.four")</li>
-                        <li id="supportingDocs-prospectus" class="font-xsmall">@Messages("page.supportingDocuments.SupportingDocuments.bullet.five")</li>
-                    </ul>
-                </div>
-            </td>
-            <td></td>
-            @if(checkAnswersModel.attachmentsEnabled) {
-            <td class="summaryLink align-top">
-                <a id="supporting-docs-link" href=@controllers.seis.routes.SupportingDocumentsUploadController.show().url>@Messages("common.base.change")</a>
-            </td>
-            } else {
-            <td></td>
+<div class="grid-column">
+    <div class="full-width">
+        <h1 class="form-title heading-xlarge" id="main-heading">@Messages("page.seis.investors.previousShareHoldingReview.heading")</h1>
+        <table id="previous-schemes-table">
+            <thead>
+                <tr>
+                    <th id="scheme-table-heading">@Messages("page.seis.investors.previousShareHoldingReview.heading.one")</th>
+                    <th id="amount-raised-table-heading">@Messages("page.seis.investors.previousShareHoldingReview.heading.two")</th>
+                    <th id="date-table-heading">@Messages("page.seis.investors.previousShareHoldingReview.heading.three")</th>
+                    <th id="count-raised-table-heading">@Messages("page.seis.investors.previousShareHoldingReview.heading.four")</th>
+                    <th>
+                        <span class="visuallyhidden">
+                            @Messages("common.base.change")
+                        </span>
+                    </th>
+                    <th>
+                        <span class="visuallyhidden">
+                            @Messages("common.base.remove")
+                        </span>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+            @for((previousShareHoldingModel, index) <- previousShareHoldingModels.zipWithIndex) {
+            <tr>
+                <td id="share-desc-@{index}">@previousShareHoldingModel.previousShareHoldingDescriptionModel.get.description</td>
+                <td id="share-nominal-value-@{index}">@PreviousShareHoldingModel.getAmountAsFormattedString(previousShareHoldingModel.previousShareHoldingNominalValueModel.get.nominalValue)</td>
+                <td id="share-purchase-date-@{index}">@PreviousShareHoldingModel.toDateString(previousShareHoldingModel.investorShareIssueDateModel.get.investorShareIssueDateDay.get,
+                    previousShareHoldingModel.investorShareIssueDateModel.get.investorShareIssueDateMonth.get, previousShareHoldingModel.investorShareIssueDateModel.get.investorShareIssueDateYear.get)</td>
+                <td id="share-purchase-count-@{index}">@previousShareHoldingModel.numberOfPreviouslyIssuedSharesModel.get.previouslyIssuedShares</td>
+                <td id="change-@{index}"><a id="change-ref-@{index}"
+                                            href=@controllers.seis.routes.PreviousShareHoldingDescriptionController.show(previousShareHoldingModel.investorProcessingId.get,previousShareHoldingModel.processingId).toString>@Messages("common.base.change")</a></td>
+                <td id="remove-@{index}"> @form(action = controllers.seis.routes.PreviousShareHoldingsReviewController.remove(previousShareHoldingModel.investorProcessingId.get,previousShareHoldingModel.processingId.get)) {
+                    <button class="button--link-style font-xsmall removeLink" type="submit" id="remove-link-@{index}"> @Messages("common.base.remove")</button>
+                    }</td>
+            </tr>
+            @if(previousShareHoldingModel.validate){
+            <tr>
+                <td colspan="6"><a id="add-share-holder"
+                                   href=@controllers.seis.routes.PreviousShareHoldingDescriptionController.show(previousShareHoldingModel.investorProcessingId.get).toString>@Messages("page.seis.investors.previousShareHoldingReview.add")</a></td>
+            </tr>
             }
-        </tr>
-        </tbody>
-    </table>
-</div>
 
-@form(action = controllers.seis.routes.CheckAnswersController.submit()) {
-<div class="form-group">
-    <button class="btn button" type="submit" id="submit">@Messages("page.checkAndSubmit.checkAnswers.button.confirm")</button>
-</div>
-}
 
+            </tbody>
+        </table>
+        @if(previousShareHoldingModel.validate){
+        @form(action = controllers.seis.routes.PreviousShareHoldingsReviewController.submit(previousShareHoldingModel.investorProcessingId.get)) {
+        <div class="form-group">
+            <button class="btn button" type="submit" id="next">@Messages("common.button.snc")</button>
+        </div>
+        }
+        }
+        }
+    </div>
+</div>
 }

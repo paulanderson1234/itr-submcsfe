@@ -31,17 +31,32 @@ object PreviousInvestorShareHoldersHelper extends PreviousInvestorShareHoldersHe
 
 trait PreviousInvestorShareHoldersHelper {
 
-  def removeKeystorePreviousInvestment(s4lConnector: connectors.S4LConnector, processingId: Int)
-                                      (implicit hc: HeaderCarrier, user: TAVCUser): Future[Vector[InvestorDetailsModel]] = {
+  def removePreviousShareHolders(s4lConnector: connectors.S4LConnector, investorProcessingId: Int, processingId: Int)
+                                      (implicit hc: HeaderCarrier, user: TAVCUser): Future[InvestorDetailsModel] = {
 
-    require(processingId > 0, "The processingId must be an integer > 0")
+    require(investorProcessingId > 0, "The investorProcessingId must be an integer > 0")
 
     val result = s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
-      case Some(data) => data.filter(_.processingId.getOrElse(0) != processingId)
-      case None => Vector[InvestorDetailsModel]()
-    }.recover { case _ => Vector[InvestorDetailsModel]() }
+      case Some(data) => {
+        val shareHoldings = data.lift(investorProcessingId).get.previousShareHoldingModels.getOrElse(Vector.empty)
+        if(shareHoldings.size > 0) {
+          data.updated(investorProcessingId,
+            data.lift(investorProcessingId).get.copy(previousShareHoldingModels =
+              Some(shareHoldings.filter(_.processingId.getOrElse(0) != processingId))))
+        }
+        else
+          data
+      }
+      case None => throw new InternalServerException("No valid Investor information passed")
+    }
+
     result.flatMap(deletedVectorList => s4lConnector.saveFormData(KeystoreKeys.investorDetails, deletedVectorList))
-    result
+
+    val investor = for {
+      investors <- result
+    } yield investors.lift(investorProcessingId).get
+
+    investor
   }
 
   def clearPreviousInvestments(s4lConnector: connectors.S4LConnector)

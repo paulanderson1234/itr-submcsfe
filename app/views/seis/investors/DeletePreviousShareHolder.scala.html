@@ -1,0 +1,30 @@
+@import uk.gov.hmrc.play.views.html.helpers.{form}
+@import views.html.helpers.backButtonWithProgress
+@import models.investorDetails.PreviousShareHoldingModel
+
+@(previousShareHoldingModel: PreviousShareHoldingModel)(implicit request: Request[_], messages: Messages)
+
+@main_template(Messages("page.seis.investors.DeletePreviousShareHolder.title")) {
+@backButtonWithProgress(controllers.seis.routes.PreviousShareHoldingsReviewController.show(previousShareHoldingModel.investorProcessingId.get).url, Messages("common.section.progress.company.details.four"))
+
+<h1 id="main-heading" class="form-title heading-xlarge">@Messages("page.seis.investors.DeletePreviousShareHolder.heading")</h1>
+
+        @form(action = controllers.seis.routes.DeletePreviousShareHolderController.submit(previousShareHoldingModel.investorProcessingId.get, previousShareHoldingModel.processingId.get)){
+
+        <div class="panel panel-border-wide">
+            <p id="scheme-delete-hint">@Messages("page.seis.investors.DeletePreviousShareHolder.message.one", previousShareHoldingModel.previousShareHoldingDescriptionModel.get.description,
+                PreviousShareHoldingModel.toDateString(previousShareHoldingModel.investorShareIssueDateModel.get.investorShareIssueDateDay.get,
+                previousShareHoldingModel.investorShareIssueDateModel.get.investorShareIssueDateMonth.get, previousShareHoldingModel.investorShareIssueDateModel.get.investorShareIssueDateYear.get))
+            @Messages("page.seis.investors.DeletePreviousShareHolder.message.two")</p>
+        </div>
+
+        <div class="form-group">
+            <button id="scheme-remove" class="button" type="submit">@Messages("page.seis.investors.DeletePreviousShareHolder.confirm")</button>
+        </div>
+    }
+
+    <div class="form-group">
+        <a id="scheme-cancel" href="@controllers.seis.routes.PreviousShareHoldingsReviewController.show(previousShareHoldingModel.investorProcessingId.get)">@Messages("page.seis.investors.DeletePreviousShareHolder.cancel")</a>
+    </div>
+
+}
