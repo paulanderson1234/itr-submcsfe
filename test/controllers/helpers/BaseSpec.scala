@@ -198,6 +198,9 @@ trait BaseSpec extends UnitSpec with OneAppPerSuite with MockitoSugar with FakeR
   val isFirstTradeIModelYes = IsFirstTradeModel(Constants.StandardRadioButtonYesValue)
   val isFirstTradeModelNo = IsFirstTradeModel(Constants.StandardRadioButtonNoValue)
 
+  val addAnotherInvestorModelYes = AddAnotherInvestorModel(Constants.StandardRadioButtonYesValue)
+  val addAnotherInvestorModelNo = AddAnotherInvestorModel(Constants.StandardRadioButtonNoValue)
+
   val isSeventyPercentSpentModelYes = SeventyPercentSpentModel(Constants.StandardRadioButtonYesValue)
   val isSeventyPercentSpentModelNo = SeventyPercentSpentModel(Constants.StandardRadioButtonNoValue)
 
@@ -276,6 +279,7 @@ trait BaseSpec extends UnitSpec with OneAppPerSuite with MockitoSugar with FakeR
   val investorShareIssueDateModel1 = InvestorShareIssueDateModel(Some(1), Some(1), Some(1980), Some(1), Some(1))
   val investorShareIssueDateModel2 = InvestorShareIssueDateModel(Some(1), Some(1), Some(1980), Some(2), Some(2))
   val investorShareIssueDateModel3 = InvestorShareIssueDateModel(Some(1), Some(1), Some(1980), Some(3), Some(3))
+
   val shareHoldersModel1ForInvestor2 = Vector(PreviousShareHoldingModel(Some(investorShareIssueDateModel1), Some(numberOfPreviouslyIssuedSharesModel1),
     Some(previousShareHoldingNominalValueModel1), Some(previousShareHoldingDescriptionModel1), Some(1), Some(2)))
   val shareHoldersModel2ForInvestor2 = Vector(PreviousShareHoldingModel(Some(investorShareIssueDateModel2), Some(numberOfPreviouslyIssuedSharesModel2),
@@ -300,6 +304,7 @@ trait BaseSpec extends UnitSpec with OneAppPerSuite with MockitoSugar with FakeR
   val validModelWithPrevShareHoldings = InvestorDetailsModel(Some(investorModel2), Some(companyOrIndividualModel2), Some(companyDetailsModel2), None,
     Some(numberOfSharesPurchasedModel2), Some(howMuchSpentOnSharesModel2), Some(isExistingShareHolderModelYes),
     Some(shareHoldersModel1ForInvestor2), Some(2))
+
   val validModelNoPrevShareHoldings = InvestorDetailsModel(Some(investorModel1), Some(companyOrIndividualModel1), Some(companyDetailsModel1), None,
     Some(numberOfSharesPurchasedModel1), Some(howMuchSpentOnSharesModel1), Some(isExistingShareHolderModelNo), Some(Vector()), Some(1))
 

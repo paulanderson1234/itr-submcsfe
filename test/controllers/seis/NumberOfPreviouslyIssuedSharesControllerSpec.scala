@@ -42,7 +42,7 @@ class NumberOfPreviouslyIssuedSharesControllerSpec extends BaseSpec{
     override lazy val authConnector: AuthConnector = MockAuthConnector
   }
 
-  val backUrl = Some(controllers.seis.routes.PreviousShareHoldingDescriptionController.show(1).url)
+  val backUrl = Some(controllers.seis.routes.InvestorShareIssueDateController.show(2, 1).url)
 
   val listOfInvestorsEmptyShareHoldings =  Vector(validModelWithPrevShareHoldings.copy(previousShareHoldingModels = Some(Vector())))
   val listOfInvestorsWithShareHoldings =  Vector(validModelWithPrevShareHoldings)
@@ -181,8 +181,8 @@ class NumberOfPreviouslyIssuedSharesControllerSpec extends BaseSpec{
         result => {
           status(result) shouldBe SEE_OTHER
           redirectLocation(result) shouldBe
-            Some(controllers.seis.routes.NumberOfPreviouslyIssuedSharesController.show(listOfInvestorsComplete.head.processingId.get,
-              listOfInvestorsComplete.head.previousShareHoldingModels.get.head.processingId.get).url)
+            Some(controllers.seis.routes.PreviousShareHoldingsReviewController.show(listOfInvestorsComplete.head.processingId.get,
+              Some(listOfInvestorsComplete.head.previousShareHoldingModels.get.head.processingId.get)).url)
         }
       )
     }
@@ -201,8 +201,8 @@ class NumberOfPreviouslyIssuedSharesControllerSpec extends BaseSpec{
         result => {
           status(result) shouldBe SEE_OTHER
           redirectLocation(result) shouldBe
-            Some(controllers.seis.routes.NumberOfPreviouslyIssuedSharesController.show(listOfInvestorsComplete.head.processingId.get,
-              listOfInvestorsComplete.head.previousShareHoldingModels.get.head.processingId.get).url)
+            Some(controllers.seis.routes.PreviousShareHoldingsReviewController.show(listOfInvestorsComplete.head.processingId.get,
+              Some(listOfInvestorsComplete.head.previousShareHoldingModels.get.head.processingId.get)).url)
         }
       )
     }

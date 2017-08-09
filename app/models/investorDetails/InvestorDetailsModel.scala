@@ -38,19 +38,19 @@ case class InvestorDetailsModel(investorOrNomineeModel: Option[AddInvestorOrNomi
           case _ => individualDetailsModel.isDefined
         }
 
-    /*** Validates shareholdings by mapping over each shareholding and reducing the result to either true or false using 'forall'**/
-    def validateShareHoldings : Boolean = {
-      if(isExistingShareHolderModel.isDefined && isExistingShareHolderModel.get.isExistingShareHolder == Constants.StandardRadioButtonNoValue) true
-      else if(isExistingShareHolderModel.isDefined && isExistingShareHolderModel.get.isExistingShareHolder == Constants.StandardRadioButtonYesValue){
-        if(previousShareHoldingModels.isDefined) previousShareHoldingModels.get.forall(_.validate)
-        else false
-      }
-      else false
-    }
-
     investorOrNomineeModel.isDefined && companyOrIndividualModel.isDefined &&
       areDetailsPresent && numberOfSharesPurchasedModel.isDefined &&
     amountSpentModel.isDefined && validateShareHoldings
+  }
+
+  /*** Validates shareholdings by mapping over each shareholding and reducing the result to either true or false using 'forall'**/
+  def validateShareHoldings : Boolean = {
+    if(isExistingShareHolderModel.isDefined && isExistingShareHolderModel.get.isExistingShareHolder == Constants.StandardRadioButtonNoValue) true
+    else if(isExistingShareHolderModel.isDefined && isExistingShareHolderModel.get.isExistingShareHolder == Constants.StandardRadioButtonYesValue){
+      if(previousShareHoldingModels.isDefined) previousShareHoldingModels.get.forall(_.validate)
+      else false
+    }
+    else false
   }
 }
 

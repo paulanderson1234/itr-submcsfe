@@ -37,16 +37,19 @@ trait PreviousInvestorShareHoldersHelper {
     require(investorProcessingId > 0, "The investorProcessingId must be an integer > 0")
 
     val result = s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
-      case Some(data) => {
-        val shareHoldings = data.lift(investorProcessingId).get.previousShareHoldingModels.getOrElse(Vector.empty)
-        if(shareHoldings.size > 0) {
-          data.updated(investorProcessingId,
-            data.lift(investorProcessingId).get.copy(previousShareHoldingModels =
-              Some(shareHoldings.filter(_.processingId.getOrElse(0) != processingId))))
+      case Some(data) =>
+        val itemToUpdateIndex = data.indexWhere(_.processingId.getOrElse(0) == investorProcessingId)
+        if (itemToUpdateIndex != -1) {
+          val shareHoldings = data.lift(itemToUpdateIndex).get.previousShareHoldingModels.getOrElse(Vector.empty)
+          if(shareHoldings.size > 0) {
+            data.updated(itemToUpdateIndex,
+              data.lift(itemToUpdateIndex).get.copy(previousShareHoldingModels =
+                Some(shareHoldings.filter(_.processingId.getOrElse(0) != processingId))))
+          }
+          else
+            data
         }
-        else
-          data
-      }
+        else throw new InternalServerException("No valid Investor information passed")
       case None => throw new InternalServerException("No valid Investor information passed")
     }
 
@@ -54,7 +57,7 @@ trait PreviousInvestorShareHoldersHelper {
 
     val investor = for {
       investors <- result
-    } yield investors.lift(investorProcessingId).get
+    } yield investors.lift(investors.indexWhere(_.processingId.getOrElse(0) == investorProcessingId)).get
 
     investor
   }

@@ -42,7 +42,7 @@ trait PreviousShareHoldingsReviewController extends FrontendController with Auth
 
   override val acceptedFlows = Seq(Seq(SEIS))
 
-  def show(investorProcessingId: Int): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
+  def show(investorProcessingId: Int, id: Option[Int]): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
     AuthorisedAndEnrolled.async {
       implicit user =>
         implicit request =>
@@ -53,9 +53,9 @@ trait PreviousShareHoldingsReviewController extends FrontendController with Auth
                   redirectInvalidInvestor(getInvestorIndex(investorProcessingId, data)) { investorIdVal =>
                     val shareHoldings = retrieveInvestorData(investorIdVal, data)(_.previousShareHoldingModels)
                     if (shareHoldings.getOrElse(Vector.empty).size > 0) {
-                      Ok(PreviousShareHoldingsReview(shareHoldings.getOrElse(Vector.empty), backUrl.get))
+                      Ok(PreviousShareHoldingsReview(data.lift(getInvestorIndex(investorProcessingId, data)).get, backUrl.get))
                     }
-                    else Redirect(controllers.seis.routes.AddInvestorOrNomineeController.show(Some(investorProcessingId)))
+                    else Redirect(controllers.seis.routes.IsExistingShareHolderController.show(investorProcessingId))
                   }
                 }
               }

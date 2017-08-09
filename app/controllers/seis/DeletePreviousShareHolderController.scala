@@ -41,16 +41,19 @@ trait DeletePreviousShareHolderController extends FrontendController with Author
   override val acceptedFlows = Seq(Seq(SEIS))
 
   def show (investorProcessingId: Int, id: Int): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
-    AuthorisedAndEnrolled.async { implicit user => implicit request =>
-      s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map { vector =>
-        redirectNoInvestors(vector) { data =>
-          redirectInvalidInvestor(getInvestorIndex(investorProcessingId, data)) {
-            investorIdVal =>
-            val shareHoldings = retrieveInvestorData(investorIdVal, data)(_.previousShareHoldingModels)
-              Ok(DeletePreviousShareHolder(shareHoldings.get.lift(id).get))
-          }
+    AuthorisedAndEnrolled.async { implicit user =>
+      implicit request =>
+        s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
+          vector =>
+            redirectNoInvestors(vector) {
+              data =>
+                redirectInvalidInvestor(getInvestorIndex(investorProcessingId, data)) {
+                  investorIdVal =>
+                    val previousShares = retrieveInvestorData(investorIdVal, data)(_.previousShareHoldingModels)
+                    Ok(DeletePreviousShareHolder(previousShares.get.lift(getShareIndex(id, previousShares.getOrElse(Vector.empty))).get))
+                }
+            }
         }
-      }
     }
   }
 

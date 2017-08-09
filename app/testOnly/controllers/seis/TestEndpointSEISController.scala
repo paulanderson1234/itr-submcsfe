@@ -199,7 +199,9 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
     s4lConnector.saveFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails,
       Vector(InvestorDetailsModel(
       Some(AddInvestorOrNomineeModel(Constants.investor, Some(1))), Some(CompanyOrIndividualModel(Constants.typeCompany, Some(1))),
-        isExistingShareHolderModel = Some(IsExistingShareHolderModel("Yes")), previousShareHoldingModels = Some(Vector(shareHolding)),
+        numberOfSharesPurchasedModel = Some(NumberOfSharesPurchasedModel(1000, Some(1))), amountSpentModel = Some(HowMuchSpentOnSharesModel(1000, Some(1))),
+        isExistingShareHolderModel = Some(IsExistingShareHolderModel("Yes", Some(1))), previousShareHoldingModels =
+          Some(Vector(PreviousShareHoldingModel(processingId = Some(1), investorProcessingId = Some(1)))),
         processingId = Some(1))))
   }
 
@@ -226,6 +228,7 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
     s4lConnector.saveFormData[String](KeystoreKeys.backLinkShareClassAndDescription, routes.TestEndpointSEISController.showPageTwo().url)
     s4lConnector.saveFormData[String](KeystoreKeys.backLinkNumberOfPreviouslyIssuedShares, routes.TestEndpointSEISController.showPageTwo().url)
     s4lConnector.saveFormData[String](KeystoreKeys.backLinkIsPreviousShareHoldingNominalValue, routes.TestEndpointSEISController.showPageTwo().url)
+    s4lConnector.saveFormData[String](KeystoreKeys.backLinkInvestorShareIssueDate, routes.TestEndpointSEISController.showPageTwo().url)
   }
 
   private def saveSchemeType()(implicit hc: HeaderCarrier, user: TAVCUser) = {

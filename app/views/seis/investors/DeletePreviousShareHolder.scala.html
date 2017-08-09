@@ -12,19 +12,22 @@
         @form(action = controllers.seis.routes.DeletePreviousShareHolderController.submit(previousShareHoldingModel.investorProcessingId.get, previousShareHoldingModel.processingId.get)){
 
         <div class="panel panel-border-wide">
-            <p id="scheme-delete-hint">@Messages("page.seis.investors.DeletePreviousShareHolder.message.one", previousShareHoldingModel.previousShareHoldingDescriptionModel.get.description,
-                PreviousShareHoldingModel.toDateString(previousShareHoldingModel.investorShareIssueDateModel.get.investorShareIssueDateDay.get,
-                previousShareHoldingModel.investorShareIssueDateModel.get.investorShareIssueDateMonth.get, previousShareHoldingModel.investorShareIssueDateModel.get.investorShareIssueDateYear.get))
-            @Messages("page.seis.investors.DeletePreviousShareHolder.message.two")</p>
+            <p id="share-holding-delete-hint">@Messages("page.seis.investors.DeletePreviousShareHolder.message.one", previousShareHoldingModel.previousShareHoldingDescriptionModel.get.description)
+                @if(previousShareHoldingModel.investorShareIssueDateModel.isDefined){@Messages("page.seis.investors.DeletePreviousShareHolder.message.two", PreviousShareHoldingModel.toDateString(previousShareHoldingModel.investorShareIssueDateModel.get.investorShareIssueDateDay.get,
+                previousShareHoldingModel.investorShareIssueDateModel.get.investorShareIssueDateMonth.get, previousShareHoldingModel.investorShareIssueDateModel.get.investorShareIssueDateYear.get))}
+                @Messages("page.seis.investors.DeletePreviousShareHolder.message.three")
+            </p>
         </div>
 
         <div class="form-group">
-            <button id="scheme-remove" class="button" type="submit">@Messages("page.seis.investors.DeletePreviousShareHolder.confirm")</button>
+        </div>
+        <div class="form-group">
+            <button id="share-holding-remove" class="button" type="submit">@Messages("page.seis.investors.DeletePreviousShareHolder.confirm")</button>
         </div>
     }
 
     <div class="form-group">
-        <a id="scheme-cancel" href="@controllers.seis.routes.PreviousShareHoldingsReviewController.show(previousShareHoldingModel.investorProcessingId.get)">@Messages("page.seis.investors.DeletePreviousShareHolder.cancel")</a>
+        <a id="share-holding-cancel" href="@controllers.seis.routes.PreviousShareHoldingsReviewController.show(previousShareHoldingModel.investorProcessingId.get)">@Messages("page.seis.investors.DeletePreviousShareHolder.cancel")</a>
     </div>
 
 }

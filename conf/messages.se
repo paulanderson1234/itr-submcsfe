@@ -22,7 +22,8 @@ page.seis.investors.previousShareHoldingReview.add = Add another previous shareh
 #Delete Previous share holder
 page.seis.investors.DeletePreviousShareHolder.title = Confirm that you want to remove this shareholding
 page.seis.investors.DeletePreviousShareHolder.heading = Confirm that you want to remove this shareholding
-page.seis.investors.DeletePreviousShareHolder.message.one = This will permanently remove the
-page.seis.investors.DeletePreviousShareHolder.message.two = from your list of previous shareholdings.
+page.seis.investors.DeletePreviousShareHolder.message.one = This will permanently remove the {0}
+page.seis.investors.DeletePreviousShareHolder.message.two = (date of purchase {0})
+page.seis.investors.DeletePreviousShareHolder.message.three = from your list of previous shareholdings.
 page.seis.investors.DeletePreviousShareHolder.confirm = Remove
 page.seis.investors.DeletePreviousShareHolder.cancel = Cancel and go back
