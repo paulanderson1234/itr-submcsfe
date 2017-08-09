@@ -1,4 +1,4 @@
-@(rowId: String, question: String, answerLines: Array[String], link: Option[String] = None, addExtraLineBreaks: Option[Boolean] = None)(implicit messages: Messages)
+@(rowId: String, question: String, answerLines: Array[String], link: Option[String] = None, addExtraLineBreaks: Option[Boolean] = None, complete: Boolean = true)(implicit messages: Messages)
 
 <tr>
     <td id="@{rowId}-question" class="summaryQuestion">@question</td>
@@ -17,7 +17,12 @@
        }
 
     </td>
-    <td class="summaryLink align-top">@if(link.isDefined) {
-        <a id="@{rowId}-link" href=@link>@Messages("common.base.change")</a>
+    <td id="@{rowId}-change" class="summaryLink align-top text--right">@if(link.isDefined) {
+        <a id="@{rowId}-link" href=@link>
+            @Messages(
+                if(complete) "common.base.change"
+                else "common.button.continue"
+            )
+        </a>
         }</td>
 </tr>

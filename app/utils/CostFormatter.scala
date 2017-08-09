@@ -25,7 +25,7 @@ trait CostFormatter {
     Constants.taxYearFormattedAnswer(transformedValue,taxYear)
   }
 
-  def getAmountAsFormattedString(value: AnyVal): String = {
+  def getAmountAsFormattedString(value: Any): String = {
     val transformedValue = Transformers.numberToFormattedNumber(value)
     Constants.amountFormattedAnswer(transformedValue)
   }

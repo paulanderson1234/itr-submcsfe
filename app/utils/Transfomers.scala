@@ -46,12 +46,11 @@ object Transformers {
 
   val booleanToString: Boolean => String = (input) => if (input) "Yes" else "No"
 
-  val numberToFormattedNumber: AnyVal => String = {
-    (value) => value match {
-      case value: Int => NumberFormat.getNumberInstance.format(value)
-      case value: Long => NumberFormat.getNumberInstance.format(value)
-      case _ => "N/A"
-    }
+  val numberToFormattedNumber: Any => String = {
+    case value: Int => NumberFormat.getNumberInstance.format(value)
+    case value: Long => NumberFormat.getNumberInstance.format(value)
+    case value: BigDecimal => NumberFormat.getNumberInstance.format(value)
+    case _ => "N/A"
   }
 
 
