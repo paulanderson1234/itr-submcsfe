@@ -23,7 +23,6 @@ import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.Helpers.ControllerHelpers
 import controllers.predicates.FeatureSwitch
 import models.investorDetails._
-import play.api.Logger
 import play.api.Play.current
 import play.api.i18n.Messages.Implicits._
 import play.api.mvc.{Action, AnyContent}
@@ -43,9 +42,7 @@ trait ReviewInvestorDetailsController extends FrontendController with Authorised
   val show: Int => Action[AnyContent] = id => featureSwitch(applicationConfig.seisFlowEnabled) {
     AuthorisedAndEnrolled.async { implicit user => implicit request =>
       s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map { vector =>
-        Logger.warn("REACHED OPTIONAL INVESTORS")
         redirectNoInvestors(vector) { data =>
-          Logger.warn("REACHED INVESTORS")
           val itemToUpdateIndex = getInvestorIndex(id, data)
           redirectInvalidInvestor(itemToUpdateIndex) { index =>
             Ok(views.html.seis.investors.ReviewInvestorDetails(retrieveInvestorData(index, data)(model => Option(model)).get))
