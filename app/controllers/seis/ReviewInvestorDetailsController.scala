@@ -17,17 +17,16 @@
 package controllers.seis
 
 import auth.{AuthorisedAndEnrolledForTAVC, SEIS}
+import common.KeystoreKeys
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
+import controllers.Helpers.ControllerHelpers
 import controllers.predicates.FeatureSwitch
-import models.{AddInvestorOrNomineeModel, CompanyDetailsModel, CompanyOrIndividualModel, IndividualDetailsModel}
 import models.investorDetails._
-import play.api.mvc.{Action, AnyContent}
-import uk.gov.hmrc.play.frontend.controller.FrontendController
 import play.api.Play.current
 import play.api.i18n.Messages.Implicits._
-
-import scala.concurrent.Future
+import play.api.mvc.{Action, AnyContent}
+import uk.gov.hmrc.play.frontend.controller.FrontendController
 
 object ReviewInvestorDetailsController extends ReviewInvestorDetailsController {
   override lazy val s4lConnector = S4LConnector
@@ -36,42 +35,20 @@ object ReviewInvestorDetailsController extends ReviewInvestorDetailsController {
   override lazy val enrolmentConnector = EnrolmentConnector
 }
 
-trait ReviewInvestorDetailsController extends FrontendController with AuthorisedAndEnrolledForTAVC with FeatureSwitch {
+trait ReviewInvestorDetailsController extends FrontendController with AuthorisedAndEnrolledForTAVC with FeatureSwitch with ControllerHelpers {
 
   override val acceptedFlows = Seq(Seq(SEIS))
 
-  val testModel = InvestorDetailsModel(
-    Some(AddInvestorOrNomineeModel("Nominee", Some(1))),
-    Some(CompanyOrIndividualModel("Company", Some(1))),
-    Some(CompanyDetailsModel("Company Name", "72", "Redwood Close", Some("Albrook"), None, None, "DE", Some(1))),
-    Some(IndividualDetailsModel("James", "Forster", "68", "Purbeck Dale", Some("Telford"), None, Some("TF4 2QW"), "GB", Some(1))),
-    Some(NumberOfSharesPurchasedModel(100, Some(1))),
-    Some(HowMuchSpentOnSharesModel(1000, Some(1))),
-    Some(IsExistingShareHolderModel("Yes")),
-    Some(Vector(
-      PreviousShareHoldingModel(
-        Some(InvestorShareIssueDateModel(Some(1), Some(2), Some(2016), Some(1), Some(1))),
-        Some(NumberOfPreviouslyIssuedSharesModel(1000, Some(1), Some(1))),
-        Some(PreviousShareHoldingNominalValueModel(10000, Some(1), Some(1))),
-        Some(PreviousShareHoldingDescriptionModel("Class 1 Share", Some(1), Some(1))),
-        Some(1),
-        Some(1)
-      ),
-      PreviousShareHoldingModel(
-        Some(InvestorShareIssueDateModel(Some(1), Some(2), Some(2016), Some(1), Some(1))),
-        Some(NumberOfPreviouslyIssuedSharesModel(1000, Some(1), Some(1))),
-        Some(PreviousShareHoldingNominalValueModel(10000, Some(1), Some(1))),
-        Some(PreviousShareHoldingDescriptionModel("Class 2 Share", Some(2), Some(1))),
-        Some(2),
-        Some(1)
-      )
-    )),
-    Some(1)
-  )
-
   val show: Int => Action[AnyContent] = id => featureSwitch(applicationConfig.seisFlowEnabled) {
     AuthorisedAndEnrolled.async { implicit user => implicit request =>
-      Future.successful(Ok(views.html.seis.investors.ReviewInvestorDetails(testModel)))
+      s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map { vector =>
+        redirectNoInvestors(vector) { data =>
+          val itemToUpdateIndex = getInvestorIndex(id, data)
+          redirectInvalidInvestor(itemToUpdateIndex) { index =>
+            Ok(views.html.seis.investors.ReviewInvestorDetails(retrieveInvestorData(index, data)(model => Option(model)).get))
+          }
+        }
+      }
     }
   }
 }
