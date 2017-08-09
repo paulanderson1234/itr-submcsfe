@@ -547,7 +547,7 @@ class PreviousSchemeFormSpec extends UnitSpec with OneAppPerSuite{
           form.globalErrors.size shouldBe 1
         }
         "associate the correct error message to the error" in {
-          form.globalErrors.head.message shouldBe Messages("validation.error.ShareIssueDate.Future")
+          form.globalErrors.head.message shouldBe Messages("validation.error.PreviousScheme.Future")
         }
       }
     }

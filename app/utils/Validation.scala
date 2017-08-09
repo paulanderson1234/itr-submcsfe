@@ -53,7 +53,7 @@ object Validation {
             case false => Invalid(Seq(ValidationError(Messages("common.date.error.invalidDate"))))
             case true => dateNotInFuture(investmentForm.day.get, investmentForm.month.get, investmentForm.year.get) match {
               case true => Valid
-              case false => Invalid(Seq(ValidationError(Messages("validation.error.ShareIssueDate.Future"))))
+              case false => Invalid(Seq(ValidationError(Messages("validation.error.PreviousScheme.Future"))))
             }
           }
         }
@@ -70,7 +70,7 @@ object Validation {
           case false => Invalid(Seq(ValidationError(Messages("common.date.error.invalidDate"))))
           case true => dateNotInFuture(dateForm.commercialSaleDay.get, dateForm.commercialSaleMonth.get, dateForm.commercialSaleYear.get) match {
             case true => Valid
-            case false => Invalid(Seq(ValidationError(Messages("validation.error.ShareIssueDate.Future"))))
+            case false => Invalid(Seq(ValidationError(Messages("validation.error.DateOfCommercialSale.Future"))))
           }
         }
       }
@@ -98,7 +98,7 @@ object Validation {
           case false => Invalid(Seq(ValidationError(Messages("common.date.error.invalidDate"))))
           case true => dateNotInFuture(dateForm.hasInvestmentTradeStartedDay.get, dateForm.hasInvestmentTradeStartedMonth.get, dateForm.hasInvestmentTradeStartedYear.get) match {
             case true => Valid
-            case false => Invalid(Seq(ValidationError(Messages("validation.error.ShareIssueDate.Future"))))
+            case false => Invalid(Seq(ValidationError(Messages("validation.error.HasInvestmentTradeStarted.Future"))))
           }
         }
       }
@@ -126,7 +126,7 @@ object Validation {
           case false => Invalid(Seq(ValidationError(Messages("common.date.error.invalidDate"))))
           case true => dateNotInFuture(dateForm.tradeStartDay.get, dateForm.tradeStartMonth.get, dateForm.tradeStartYear.get) match {
             case true => Valid
-            case false => Invalid(Seq(ValidationError(Messages("validation.error.ShareIssueDate.Future"))))
+            case false => Invalid(Seq(ValidationError(Messages("validation.error.TradeStartDate.Future"))))
           }
         }
       }
@@ -154,7 +154,7 @@ object Validation {
           case false => Invalid(Seq(ValidationError(Messages("common.date.error.invalidDate"))))
           case true => dateNotInFuture(dateForm.researchStartDay.get, dateForm.researchStartMonth.get, dateForm.researchStartYear.get) match {
             case true => Valid
-            case false => Invalid(Seq(ValidationError(Messages("validation.error.ShareIssueDate.Future"))))
+            case false => Invalid(Seq(ValidationError(Messages("validation.error.researchStartDate.Future"))))
           }
         }
       }
