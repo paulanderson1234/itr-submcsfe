@@ -1150,3 +1150,21 @@ page.seis.investors.investorShareIssueDate.heading = When were these previous sh
 
 #AddAnotherShareholding
 page.seis.investors.AddAnotherShareholding.title = Do you want to add another previous shareholding?
+
+#Review Investors
+page.seis.investors.reviewInvestorDetails.title = Check {0} details
+page.seis.investors.reviewInvestorDetails.investor.subheading = {0} details
+page.seis.investors.reviewInvestorDetails.investor.investorOrNominee = Investor or nominee
+page.seis.investors.reviewInvestorDetails.investor.companyOrIndividual = Company or individual
+page.seis.investors.reviewInvestorDetails.investor.contactName = Contact name
+page.seis.investors.reviewInvestorDetails.investor.companyName = Company name
+page.seis.investors.reviewInvestorDetails.investor.contactAddress = Contact address
+page.seis.investors.reviewInvestorDetails.investor.purchasedShares = How many shares did they purchase
+page.seis.investors.reviewInvestorDetails.investor.totalSpent = How much did they spend in total
+page.seis.investors.reviewInvestorDetails.shareholdings.subheading = Previous shareholdings
+page.seis.investors.reviewInvestorDetails.shareholdings.isExistingShareholder = Do they have previous shareholdings
+page.seis.investors.reviewInvestorDetails.shareholdings.nominalValue = Nominal value: {0}
+page.seis.investors.reviewInvestorDetails.shareholdings.dateOfInvestment = Date of investment: {0}
+page.seis.investors.reviewInvestorDetails.shareholdings.numberOfShares = Number of shares purchased: {0}
+page.seis.investors.reviewInvestorDetails.shareholdings.addAnotherShareholding = Add another previous shareholding
+page.seis.investors.reviewInvestorDetails.incomplete = Incomplete

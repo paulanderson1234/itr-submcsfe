@@ -26,7 +26,10 @@ case class IndividualDetailsModel( forename : String,
                                    addressline4 : Option[String]=None,
                                    postcode :Option[String] = None,
                                    countryCode : String,
-                                   processingId: Option[Int])
+                                   processingId: Option[Int]) {
+
+  def toArray: Array[String] = Array(Some(addressline1), Some(addressline2), addressline3, addressline4, postcode, Some(countryCode)).flatten
+}
 
 object IndividualDetailsModel {
   implicit val format = Json.format[IndividualDetailsModel]

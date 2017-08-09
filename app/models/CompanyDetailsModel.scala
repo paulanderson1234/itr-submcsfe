@@ -25,7 +25,11 @@ case class CompanyDetailsModel(companyName : String,
                                companyAddressline4 : Option[String],
                                companyPostcode : Option[String],
                                countryCode : String,
-                               processingId: Option[Int])
+                               processingId: Option[Int]) {
+
+  def toArray: Array[String] = Array(Some(companyAddressline1), Some(companyAddressline2),
+    companyAddressline3, companyAddressline4, companyPostcode, Some(countryCode)).flatten
+}
 
 object CompanyDetailsModel {
   implicit val format: OFormat[CompanyDetailsModel] = Json.format[CompanyDetailsModel]
