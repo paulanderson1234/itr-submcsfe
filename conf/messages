@@ -561,8 +561,8 @@ summaryQuestion.subsidiaries =Own or control any other companies
 
 page.investment.PreviousScheme.investmentAmount.OutOfRange=Enter an amount between 1 and 999999999
 page.investment.PreviousScheme.otherScheme.OutOfRange=Other scheme name should be no more than 50 characters
-validation.error.ShareIssueDate.Future=Enter a past date or today''s date
 page.investment.PreviousScheme.otherSchemeName.label=What was its name?
+validation.error.PreviousScheme.Future=Date of investment date cannot be a future date
 
 
 #summary questions section two
@@ -751,12 +751,14 @@ page.introduction.hub.viewPrevious.AdvancedAssurance=View all of your Advance As
 page.seis.companyDetails.researchStartDate.title = Have you started research and development to do with the business activity you got investment for?
 page.seis.companyDetails.researchStartDate.heading = Have you started research and development to do with the business activity you got investment for?
 page.seis.companyDetails.researchStartDate.question = When did this research and development start?
+validation.error.researchStartDate.Future = Research and development start date cannot be a future date
 
 # SEIS trade start date
 page.seis.companyDetails.tradeStartDate.title=Has the trade you want investment in started?
 page.seis.companyDetails.tradeStartDate.heading=Has the trade you want investment in started?
 page.seis.companyDetails.text=The trade has started if your goods or services are available to the public. You may not have made a sale yet.
 page.seis.companyDetails.TradeStartDate.question.hint=When did this trade start?
+validation.error.TradeStartDate.Future = Trade start date cannot be a future date
 
 # SEIS Company Details
 page.investment.companyDetails.heading=What are this company''s details?
@@ -1081,6 +1083,7 @@ page.companyDetails.HasInvestmentTradeStarted.title=Has the business activity yo
 page.companyDetails.HasInvestmentTradeStarted.heading=Has the business activity you got investment for started?
 page.companyDetails.HasInvestmentTradeStarted.question.hint=When did this business activity start?
 page.companyDetails.HasInvestmentTradeStarted.descriptionOne.text=The business activity has started if your goods or services are available to the public. You may not have made a sale yet.
+validation.error.HasInvestmentTradeStarted.Future = Business activity start date cannot be a future date
 
 # number of shares
 page.shareDetails.numberOfShares.title=How many of these shares did your company issue?
