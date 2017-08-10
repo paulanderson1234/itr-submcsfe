@@ -43,14 +43,12 @@ trait PreviousShareHoldingDescriptionController extends FrontendController with 
 
   override val acceptedFlows = Seq(Seq(SEIS))
 
-  // id: Option[Int] should be changed to Int once the initial pages were implemented
   def show(investorProcessingId: Int, id: Option[Int]): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
     AuthorisedAndEnrolled.async { implicit user =>
       implicit request =>
 
         def process(backUrl: Option[String]) = {
           if (backUrl.isDefined) {
-
             s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
               vector =>
               redirectNoInvestors(vector) {
