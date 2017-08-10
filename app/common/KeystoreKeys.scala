@@ -77,6 +77,7 @@ trait KeystoreKeys {
   val numberOfSharesPurchased: String = "investors:numberOfSharesPurchased"
   val previousShareHoldingNominalValue: String = "investors:previousShareHoldingNominalValue"
   val numberOfPreviouslyIssuedShares: String = "investors:numberOfPreviouslyIssuedShares"
+  val addAnotherInvestor: String = "investors:addAnotherInvestor"
 
   // processing Keys
   val eisSeisProcessingModel: String = "processing:EisSeisProcessingModel"
@@ -117,6 +118,8 @@ trait KeystoreKeys {
   val backLinkIsPreviousShareHoldingNominalValue: String = "backLink:IsPreviousShareHoldingNominalValue"
   val backLinkNumberOfPreviouslyIssuedShares: String = "backLink:NumberOfPreviouslyIssuedShares"
   val backLinkShareClassAndDescription: String = "backLink:ShareClassAndDescription"
+  val backLinkInvestorPreviousShareHoldingReview: String = "backLink:InvestorPreviousShareHoldingReview"
+  val backLinkAddAnotherInvestor: String = "backLink:AddAnotherInvestor"
 
   //application in progress key
   val applicationInProgress: String = "applicationInProgress"

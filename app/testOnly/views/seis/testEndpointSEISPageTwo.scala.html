@@ -56,7 +56,10 @@
         nominalValueOfSharesForm("nominalValueOfShares"),
         '_divClass -> "form-label",
         '_label -> Messages("page.seis.nominalValueOfShares.title"),
-        '_labelTextClass -> "visuallyhidden"
+        '_labelTextClass -> "visuallyhidden",
+        '_inputClass -> "input--normal input--no-spinner input--left-padding",
+        '_type -> "text",
+        '_maxlength -> "9"
         )
     </div>
 
@@ -83,10 +86,11 @@
         '_labelId -> "label-totalAmountSpent",
         '_label -> Messages("page.seis.shareDetails.totalAmountSpent.heading=Total amount spent"),
         '_labelTextClass -> "visuallyhidden",
-        '_inputClass -> "input--fullwidth"
+        '_inputClass -> "input--normal input--no-spinner input--left-padding",
+        '_type -> "text",
+        '_maxlength -> "9"
         )
     </div>
-
 
     <div class="form-group">
         <button class="btn button" type="submit" id="next">

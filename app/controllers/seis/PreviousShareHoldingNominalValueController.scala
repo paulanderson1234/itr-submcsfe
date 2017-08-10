@@ -20,9 +20,10 @@ import auth.{AuthorisedAndEnrolledForTAVC, SEIS}
 import common.KeystoreKeys
 import config.{AppConfig, FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
+import controllers.Helpers.PreviousInvestorShareHoldersHelper
 import controllers.predicates.FeatureSwitch
 import forms.PreviousShareHoldingNominalValueForm._
-import models.investorDetails.PreviousShareHoldingNominalValueModel
+import models.investorDetails.{InvestorDetailsModel, PreviousShareHoldingNominalValueModel}
 import play.api.Play.current
 import play.api.data.Form
 import play.api.i18n.Messages.Implicits._
@@ -44,30 +45,73 @@ trait PreviousShareHoldingNominalValueController extends FrontendController with
 
   override val acceptedFlows = Seq(Seq(SEIS))
 
-  val show: Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
+  def show(investorProcessingId: Int, id: Int): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
     AuthorisedAndEnrolled.async {
       implicit user =>
         implicit request =>
-          s4lConnector.fetchAndGetFormData[PreviousShareHoldingNominalValueModel](KeystoreKeys.previousShareHoldingNominalValue).map {
-            case Some(data) => Ok(views.html.seis.investors.PreviousShareHoldingNominalValue(previousShareHoldingNominalValueForm.fill(data)))
-            case None => Ok(views.html.seis.investors.PreviousShareHoldingNominalValue(previousShareHoldingNominalValueForm))
+          def process(backUrl: Option[String]) = {
+            if (backUrl.isDefined) {
+              s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
+                case Some(data) => {
+                  val itemToUpdateIndex = data.indexWhere(_.processingId.getOrElse(0) == investorProcessingId)
+                  if (itemToUpdateIndex != -1) {
+                    val model = data.lift(itemToUpdateIndex)
+                    if (model.get.previousShareHoldingModels.isDefined && model.get.previousShareHoldingModels.get.size > 0) {
+                      val shareHoldingsIndex = model.get.previousShareHoldingModels.get.indexWhere(_.processingId.getOrElse(0) == id)
+                      if (shareHoldingsIndex != -1) {
+                        val shareHolderModel = model.get.previousShareHoldingModels.get.lift(shareHoldingsIndex)
+                        if(shareHolderModel.get.previousShareHoldingNominalValueModel.isDefined) {
+                          Ok(PreviousShareHoldingNominalValue(
+                            previousShareHoldingNominalValueForm.fill(shareHolderModel.get.previousShareHoldingNominalValueModel.get),
+                            backUrl.get))
+                        }
+                        else
+                          Ok(PreviousShareHoldingNominalValue(previousShareHoldingNominalValueForm, backUrl.get))
+                      }
+                      else Redirect(routes.AddInvestorOrNomineeController.show(model.get.processingId))
+                    }
+                    else Redirect(routes.AddInvestorOrNomineeController.show(model.get.processingId))
+                  }
+                  else Redirect(routes.AddInvestorOrNomineeController.show())
+                }
+                case None => Redirect(controllers.seis.routes.AddInvestorOrNomineeController.show())
+              }
+            }
+            else Future.successful(Redirect(controllers.seis.routes.AddInvestorOrNomineeController.show()))
           }
+
+          for {
+            backUrl <- s4lConnector.fetchAndGetFormData[String](KeystoreKeys.backLinkIsPreviousShareHoldingNominalValue)
+            route <- process(backUrl)
+          } yield route
     }
   }
 
-  val submit: Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
+  def submit(backUrl: Option[String]): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
     AuthorisedAndEnrolled.async {
       implicit user =>
         implicit request =>
           val success: PreviousShareHoldingNominalValueModel => Future[Result] = { model =>
-            s4lConnector.saveFormData(KeystoreKeys.previousShareHoldingNominalValue, model).map(_ =>
-              Redirect(controllers.seis.routes.PreviousShareHoldingNominalValueController.show())
-              //TODO - navigates to the When were they bought screen
-            )
+            model.processingId match {
+              case Some(_) => PreviousInvestorShareHoldersHelper.updatePreviousShareHoldingNominalValue(s4lConnector, model).map {
+                data => {
+                  s4lConnector.saveFormData(KeystoreKeys.backLinkInvestorShareIssueDate,
+                    routes.PreviousShareHoldingNominalValueController.show(data.investorProcessingId.get, data.processingId.get).url)
+                  Redirect(routes.InvestorShareIssueDateController.show(data.investorProcessingId.get, data.processingId.get))
+                }
+              }
+              case None => PreviousInvestorShareHoldersHelper.addPreviousShareHoldingNominalValue(s4lConnector, model).map {
+                data => {
+                  s4lConnector.saveFormData(KeystoreKeys.backLinkInvestorShareIssueDate,
+                    routes.PreviousShareHoldingNominalValueController.show(data.investorProcessingId.get, data.processingId.get).url)
+                  Redirect(routes.InvestorShareIssueDateController.show(data.investorProcessingId.get, data.processingId.get))
+                }
+              }
+            }
           }
 
           val failure: Form[PreviousShareHoldingNominalValueModel] => Future[Result] = { form =>
-            Future.successful(BadRequest(views.html.seis.investors.PreviousShareHoldingNominalValue(form)))
+            Future.successful(BadRequest(PreviousShareHoldingNominalValue(form, backUrl.get)))
           }
 
           previousShareHoldingNominalValueForm.bindFromRequest().fold(failure, success)

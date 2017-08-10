@@ -14,19 +14,6 @@
  * limitations under the License.
  */
 
-package utils
+package models
 
-import common.Constants
-
-trait CostFormatter {
-
-  def getOperatingAndRDCostsAsFormattedString(value: String, taxYear: String): String= {
-    val transformedValue = Transformers.numberToFormattedNumber(value.toInt)
-    Constants.taxYearFormattedAnswer(transformedValue,taxYear)
-  }
-
-  def getAmountAsFormattedString(value: Any): String = {
-    val transformedValue = Transformers.numberToFormattedNumber(value)
-    Constants.amountFormattedAnswer(transformedValue)
-  }
-}
+case class AddAnotherShareholdingModel(addAnotherShareholding: Boolean)

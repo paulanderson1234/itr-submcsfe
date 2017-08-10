@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-package utils
+package forms
 
-import common.Constants
+import models.AddAnotherShareholdingModel
+import play.api.data.Form
+import play.api.data.Forms._
+import utils.Transformers._
 
-trait CostFormatter {
+object AddAnotherShareholdingForm {
 
-  def getOperatingAndRDCostsAsFormattedString(value: String, taxYear: String): String= {
-    val transformedValue = Transformers.numberToFormattedNumber(value.toInt)
-    Constants.taxYearFormattedAnswer(transformedValue,taxYear)
-  }
-
-  def getAmountAsFormattedString(value: Any): String = {
-    val transformedValue = Transformers.numberToFormattedNumber(value)
-    Constants.amountFormattedAnswer(transformedValue)
-  }
+  val addAnotherShareholdingForm = Form(
+    mapping(
+      "addAnotherShareholding" -> nonEmptyText
+        .transform(stringToBoolean, booleanToString)
+    )(AddAnotherShareholdingModel.apply)(AddAnotherShareholdingModel.unapply)
+  )
 }

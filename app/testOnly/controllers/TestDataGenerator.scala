@@ -25,9 +25,6 @@ import java.util.Date
 
 object TestDataGenerator {
 
-
-
-
   val date = new Date()
   val localDate = date.toInstant.atZone(ZoneId.systemDefault()).toLocalDate
   val todayYear: Int = localDate.getYear
@@ -39,6 +36,9 @@ object TestDataGenerator {
 
   def randomAlphanumericString(n: Int): String =
     randomString("abcdefghijklmnopqrstuvwxyz0123456789")(n)
+
+  def randomWordString(n: Int): String =
+    randomString("abcdefg  hijklmn $%^&*() opqrstuvwxyzABCD EFGHI$  JKLM  NOPQRS TUVW  XYZ&")(n)
 
   def randomNumberString(n: Int): String =
     randomString("1234567890")(n)
@@ -86,9 +86,9 @@ object TestDataGenerator {
   def getRandomInvestorShareIssueDateModel(processingId: Int, investorId: Int): InvestorShareIssueDateModel = {
 
     InvestorShareIssueDateModel(
-      dateOfIssueDay = getRandomIntBetween(1, 28),
-      dateOfIssueMonth = getRandomIntBetween(1, 12),
-      dateOfIssueYear =  getRandomIntBetween(2000, todayYear),
+      investorShareIssueDateDay = Some(getRandomIntBetween(1, 28)),
+      investorShareIssueDateMonth = Some(getRandomIntBetween(1, 12)),
+      investorShareIssueDateYear =  Some(getRandomIntBetween(2000, todayYear)),
       investorProcessingId = Some(investorId),
       processingId = Some(processingId)
     )

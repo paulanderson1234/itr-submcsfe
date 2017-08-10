@@ -43,31 +43,41 @@ trait NumberOfPreviouslyIssuedSharesController extends FrontendController with A
 
   override val acceptedFlows = Seq(Seq(SEIS))
 
-  // id: Option[Int] should be changed to Int once the initial pages were implemented
   def show(investorProcessingId: Int, id: Int): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
     AuthorisedAndEnrolled.async { implicit user =>
       implicit request =>
 
         def process(backUrl: Option[String]) = {
           if (backUrl.isDefined) {
-            s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map { vector =>
-              redirectNoInvestors(vector) { data =>
-                redirectInvalidInvestor(getInvestorIndex(investorProcessingId, data)) { investorIdVal =>
-                  val shareHoldings = retrieveInvestorData(investorIdVal, data)(_.previousShareHoldingModels)
-                  redirectInvalidPreviousShareHolding(getShareIndex(id, shareHoldings.getOrElse(Vector.empty)),
-                    investorProcessingId, shareHoldings) { shareHoldingsIndex =>
-                    val form = fillForm(numberOfPreviouslyIssuedSharesForm, retrieveShareData(shareHoldingsIndex,
-                      shareHoldings)(_.numberOfPreviouslyIssuedSharesModel))
-                    Ok(NumberOfPreviouslyIssuedShares(retrieveInvestorData(investorIdVal, data)(_.companyOrIndividualModel.map(_.companyOrIndividual)).get,
-                      form, backUrl.get))
+            s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
+              case Some(data) => {
+                val itemToUpdateIndex = data.indexWhere(_.processingId.getOrElse(0) == investorProcessingId)
+                if (itemToUpdateIndex != -1) {
+                  val model = data.lift(itemToUpdateIndex)
+                  if (model.get.previousShareHoldingModels.isDefined && model.get.previousShareHoldingModels.get.size > 0) {
+                    val shareHoldingsIndex = model.get.previousShareHoldingModels.get.indexWhere(_.processingId.getOrElse(0) == id)
+                    if (shareHoldingsIndex != -1) {
+                      val shareHolderModel = model.get.previousShareHoldingModels.get.lift(shareHoldingsIndex)
+                      if (shareHolderModel.get.numberOfPreviouslyIssuedSharesModel.isDefined) {
+                        Ok(NumberOfPreviouslyIssuedShares(model.get.companyOrIndividualModel.get.companyOrIndividual,
+                          numberOfPreviouslyIssuedSharesForm.fill(shareHolderModel.get.numberOfPreviouslyIssuedSharesModel.get),
+                          backUrl.get))
+                      }
+                      else
+                        Ok(NumberOfPreviouslyIssuedShares(model.get.companyOrIndividualModel.get.companyOrIndividual,
+                          numberOfPreviouslyIssuedSharesForm, backUrl.get))
+                    }
+                    else Redirect(routes.AddInvestorOrNomineeController.show(model.get.processingId))
                   }
+                  else Redirect(routes.AddInvestorOrNomineeController.show(model.get.processingId))
                 }
+                else Redirect(routes.AddInvestorOrNomineeController.show())
               }
+              case None => Redirect(controllers.seis.routes.AddInvestorOrNomineeController.show())
             }
           }
           else Future.successful(Redirect(controllers.seis.routes.AddInvestorOrNomineeController.show()))
         }
-
         for {
           backUrl <- s4lConnector.fetchAndGetFormData[String](KeystoreKeys.backLinkNumberOfPreviouslyIssuedShares)
           route <- process(backUrl)
@@ -85,14 +95,10 @@ trait NumberOfPreviouslyIssuedSharesController extends FrontendController with A
           validFormData => {
             validFormData.processingId match {
               case Some(_) => PreviousInvestorShareHoldersHelper.updateNumberOfPreviouslyIssuedShares(s4lConnector, validFormData).map {
-                data => {
-                  Redirect(routes.NumberOfPreviouslyIssuedSharesController.show(data.investorProcessingId.get, data.processingId.get))
-                }
+                data => Redirect(routes.PreviousShareHoldingsReviewController.show(data.investorProcessingId.get))
               }
               case None => PreviousInvestorShareHoldersHelper.addNumberOfPreviouslyIssuedShares(s4lConnector, validFormData).map {
-                data => {
-                  Redirect(routes.NumberOfPreviouslyIssuedSharesController.show(data.investorProcessingId.get, data.processingId.get))
-                }
+                data => Redirect(routes.PreviousShareHoldingsReviewController.show(data.investorProcessingId.get))
               }
             }
           }
