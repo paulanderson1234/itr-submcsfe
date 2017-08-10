@@ -106,7 +106,7 @@ object TestDataGenerator {
 
   def randomDecimal(processingId:Int):BigDecimal = {
     if (processingId % 2 == 0) 9999999999999.00
-    else BigDecimal("999999999999.999999").setScale(5, BigDecimal.RoundingMode.HALF_UP)
+    else BigDecimal("999999999999.12345").setScale(5, BigDecimal.RoundingMode.HALF_UP)
   }
 
   def getRandomIntBetween(start: Int, end: Int): Int = {

@@ -18,7 +18,7 @@ package testOnly.controllers
 
 import common.Constants
 import models.{AddInvestorOrNomineeModel, CompanyOrIndividualModel}
-import models.investorDetails.{InvestorShareIssueDateModel, _}
+import models.investorDetails._
 
 object InvestorTestHelper extends InvestorTestHelper {
 
@@ -33,15 +33,10 @@ trait InvestorTestHelper {
   }
 
   private def getInvestorForList(investorId: Int = 1, numberToCreate: Int = 1, numberOfShareholdings: Int,
-                         includeIncompleteInvestor: Boolean = false, includeIncompleteShareHolding: Boolean = false,
-                         isLastInvestor: Boolean = false): InvestorDetailsModel = {
+                                 includeIncompleteInvestor: Boolean = false, includeIncompleteShareHolding: Boolean = false,
+                                 isLastInvestor: Boolean = false): InvestorDetailsModel = {
 
     val makeIncomplete = includeIncompleteInvestor && investorId == numberToCreate
-
-    println("=============================================CREATE INVESTOR================================================================")
-    println(s"creating investor $investorId")
-    println(s"Make Incomplete $makeIncomplete")
-    println("=============================================================================================================================")
 
     val companyIndividualModel = CompanyOrIndividualModel(TestDataGenerator.randomCompanyOrIndividual(investorId), Some(investorId))
     val isCompany = companyIndividualModel.companyOrIndividual == Constants.typeCompany
@@ -49,7 +44,7 @@ trait InvestorTestHelper {
     InvestorDetailsModel(
       investorOrNomineeModel = Some(AddInvestorOrNomineeModel(TestDataGenerator.randomInvestorOrNominee(investorId), Some(investorId))),
       companyOrIndividualModel = Some(companyIndividualModel),
-      numberOfSharesPurchasedModel = if (makeIncomplete) None else Some(NumberOfSharesPurchasedModel(12.3, Some(investorId))),
+      numberOfSharesPurchasedModel = if (makeIncomplete) None else Some(NumberOfSharesPurchasedModel(TestDataGenerator.randomDecimal(investorId), Some(investorId))),
       amountSpentModel = Some(HowMuchSpentOnSharesModel(TestDataGenerator.randomWholeAmount(utils.Validation.financialMaxAmountLength), Some(investorId))),
       companyDetailsModel = if (isCompany) Some(TestDataGenerator.randomCompanyDetails(investorId)) else None,
       individualDetailsModel = if (isCompany) None else Some(TestDataGenerator.randomIndividualDetails(investorId)),
@@ -70,12 +65,6 @@ trait InvestorTestHelper {
                                      numberToCreate: Int = 1, isLastInvestor: Boolean = false): PreviousShareHoldingModel = {
     val makeIncomplete = includeIncomplete && processingId == numberToCreate && isLastInvestor
 
-    println("=============================================CREATE SAHREHOLDING================================================================")
-    println(s"investorId: $investorProcessingId. Number To Create: $numberToCreate. Is Last investor: $isLastInvestor")
-    println(s"creating hareholdingId $processingId for investor $investorProcessingId. Is Last investor: $isLastInvestor")
-    println(s"make sahreholding incomplete: $makeIncomplete")
-    println("================================================================================================================================")
-
     PreviousShareHoldingModel(
       investorShareIssueDateModel = Some(TestDataGenerator.getRandomInvestorShareIssueDateModel(processingId, investorProcessingId)),
       numberOfPreviouslyIssuedSharesModel = if (makeIncomplete) None
@@ -86,18 +75,6 @@ trait InvestorTestHelper {
       else
         Some(PreviousShareHoldingDescriptionModel(TestDataGenerator.randomWordString(Constants.shortTextLimit), processingId = Some(processingId)))
       , processingId = Some(processingId), investorProcessingId = Some(investorProcessingId))
-  }
-
-  private def getSingleInvestorAndShareHolding: Vector[InvestorDetailsModel] = {
-
-    val shareHolding = PreviousShareHoldingModel(previousShareHoldingDescriptionModel =
-      Some(PreviousShareHoldingDescriptionModel("", Some(1))), processingId = Some(1))
-
-    Vector(InvestorDetailsModel(
-      Some(AddInvestorOrNomineeModel(Constants.investor, Some(1))), Some(CompanyOrIndividualModel(Constants.typeCompany, Some(1))),
-      isExistingShareHolderModel = Some(IsExistingShareHolderModel(Constants.StandardRadioButtonYesValue)),
-      previousShareHoldingModels = Some(Vector(shareHolding)),
-      processingId = Some(1)))
   }
 
 }
