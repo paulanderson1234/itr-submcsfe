@@ -158,6 +158,8 @@ POST       /investor-share-issue-date                   controllers.seis.Investo
 GET        /add-another-shareholding/:investorId              controllers.seis.AddAnotherShareholdingController.show(investorId: Int)
 POST       /add-another-shareholding/:investorId              controllers.seis.AddAnotherShareholdingController.submit(investorId: Int)
 
+GET        /review-investor/:investorId                 controllers.seis.ReviewInvestorDetailsController.show(investorId: Int)
+
 
 
 
