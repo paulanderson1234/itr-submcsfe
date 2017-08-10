@@ -68,6 +68,14 @@ trait PreviousShareHoldingsReviewController extends FrontendController with Auth
       }
   }
 
+  def change(investorProcessingId: Int, id: Int): Action[AnyContent] =
+    featureSwitch(applicationConfig.seisFlowEnabled) {
+      AuthorisedAndEnrolled.async { implicit user =>
+        implicit request =>
+          Future.successful(Redirect(controllers.seis.routes.PreviousShareHoldingDescriptionController.show(investorProcessingId, Some(id))))
+      }
+    }
+
   def submit(investorProcessingId: Int): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
     AuthorisedAndEnrolled.async { implicit user =>
       implicit request =>

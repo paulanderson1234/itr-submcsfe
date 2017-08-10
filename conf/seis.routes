@@ -164,6 +164,8 @@ POST       /add-another-shareholding/:investorId                     controllers
 GET        /review-previous-share-holdings/:InvestorId                 controllers.seis.PreviousShareHoldingsReviewController.show(InvestorId: Int)
 POST       /review-previous-share-holdings/:InvestorId                 controllers.seis.PreviousShareHoldingsReviewController.submit(InvestorId: Int)
 GET        /review-previous-investor-shareholdings-remove/:InvestorId/:Id      controllers.seis.PreviousShareHoldingsReviewController.remove(InvestorId: Int, Id: Int)
+GET        /review-previous-investor-shareholdings-change/:InvestorId/:Id      controllers.seis.PreviousShareHoldingsReviewController.change(InvestorId: Int, Id: Int)
+
 
 POST       /delete-previous-share-holding/:InvestorId/:Id                controllers.seis.DeletePreviousShareHolderController.submit(InvestorId: Int, Id: Int)
 GET        /delete-previous-share-holding/:InvestorId/:Id                controllers.seis.DeletePreviousShareHolderController.show(InvestorId: Int, Id: Int)

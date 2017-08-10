@@ -27,3 +27,4 @@ page.seis.investors.DeletePreviousShareHolder.message.two = (date of purchase {0
 page.seis.investors.DeletePreviousShareHolder.message.three = from your list of previous shareholdings.
 page.seis.investors.DeletePreviousShareHolder.confirm = Remove
 page.seis.investors.DeletePreviousShareHolder.cancel = Cancel and go back
+page.seis.investors.DeletePreviousShareHolder.continue = Continue
