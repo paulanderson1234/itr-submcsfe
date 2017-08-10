@@ -15,7 +15,7 @@ page.seis.investors.previousShareHoldingReview.title = Check previous shareholdi
 page.seis.investors.previousShareHoldingReview.heading = Check previous shareholdings
 page.seis.investors.previousShareHoldingReview.heading.one = Shareholding description
 page.seis.investors.previousShareHoldingReview.heading.two = Nominal value
-page.seis.investors.previousShareHoldingReview.heading.three = Date of purchase
+page.seis.investors.previousShareHoldingReview.heading.three = Date of purcha
 page.seis.investors.previousShareHoldingReview.heading.four = Number purchased
 page.seis.investors.previousShareHoldingReview.add = Add another previous shareholding
 

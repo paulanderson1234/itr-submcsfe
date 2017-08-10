@@ -78,10 +78,7 @@ class PreviousShareHoldingsReviewSpec extends ViewSpec {
         }
         else{
           reviewShareHoldingsTableBody.select("tr").get(index).getElementById(s"continue-$index").text() shouldBe
-            Messages("common.button.continue")
-          reviewShareHoldingsTableBody.select("tr").get(index).getElementById(s"continue-$index").getElementById(s"continue-ref-$index").attr("href") shouldBe
-            controllers.seis.routes.PreviousShareHoldingDescriptionController.show(
-              previousShareHoldingModel.investorProcessingId.get,previousShareHoldingModel.processingId).toString
+            Messages("page.seis.investors.DeletePreviousShareHolder.continue")
         }
 
         reviewShareHoldingsTableBody.select("tr").get(index).getElementById(s"remove-$index").text() shouldBe
