@@ -161,7 +161,7 @@ POST       /investor-share-issue-date                                controllers
 GET        /add-another-shareholding/:investorId                     controllers.seis.AddAnotherShareholdingController.show(investorId: Int)
 POST       /add-another-shareholding/:investorId                     controllers.seis.AddAnotherShareholdingController.submit(investorId: Int)
 
-GET        /review-previous-share-holdings/:InvestorId                 controllers.seis.PreviousShareHoldingsReviewController.show(InvestorId: Int, Id: Option[Int]?=None)
+GET        /review-previous-share-holdings/:InvestorId                 controllers.seis.PreviousShareHoldingsReviewController.show(InvestorId: Int)
 POST       /review-previous-share-holdings/:InvestorId                 controllers.seis.PreviousShareHoldingsReviewController.submit(InvestorId: Int)
 GET        /review-previous-investor-shareholdings-remove/:InvestorId/:Id      controllers.seis.PreviousShareHoldingsReviewController.remove(InvestorId: Int, Id: Int)
 

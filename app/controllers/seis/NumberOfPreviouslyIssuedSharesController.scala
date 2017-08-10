@@ -95,18 +95,10 @@ trait NumberOfPreviouslyIssuedSharesController extends FrontendController with A
           validFormData => {
             validFormData.processingId match {
               case Some(_) => PreviousInvestorShareHoldersHelper.updateNumberOfPreviouslyIssuedShares(s4lConnector, validFormData).map {
-                data => {
-                  s4lConnector.saveFormData(KeystoreKeys.backLinkInvestorPreviousShareHoldingReview,
-                    routes.NumberOfPreviouslyIssuedSharesController.show(data.investorProcessingId.get, data.processingId.get).url)
-                  Redirect(routes.PreviousShareHoldingsReviewController.show(data.investorProcessingId.get, data.processingId))
-                }
+                data => Redirect(routes.PreviousShareHoldingsReviewController.show(data.investorProcessingId.get))
               }
               case None => PreviousInvestorShareHoldersHelper.addNumberOfPreviouslyIssuedShares(s4lConnector, validFormData).map {
-                data => {
-                  s4lConnector.saveFormData(KeystoreKeys.backLinkInvestorPreviousShareHoldingReview,
-                    routes.NumberOfPreviouslyIssuedSharesController.show(data.investorProcessingId.get, data.processingId.get).url)
-                  Redirect(routes.PreviousShareHoldingsReviewController.show(data.investorProcessingId.get, data.processingId))
-                }
+                data => Redirect(routes.PreviousShareHoldingsReviewController.show(data.investorProcessingId.get))
               }
             }
           }

@@ -22,7 +22,7 @@ import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.Helpers.ControllerHelpers
 import controllers.predicates.FeatureSwitch
-import models.investorDetails.{InvestorDetailsModel, PreviousShareHoldingModel}
+import models.investorDetails.InvestorDetailsModel
 import play.api.Play.current
 import play.api.i18n.Messages.Implicits._
 import play.api.mvc.{Action, AnyContent}
@@ -42,31 +42,21 @@ trait PreviousShareHoldingsReviewController extends FrontendController with Auth
 
   override val acceptedFlows = Seq(Seq(SEIS))
 
-  def show(investorProcessingId: Int, id: Option[Int]): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
+  def show(investorProcessingId: Int): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
     AuthorisedAndEnrolled.async {
       implicit user =>
         implicit request =>
-          def process(backUrl: Option[String]) = {
-            if (backUrl.isDefined) {
-              s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map { vector =>
-                redirectNoInvestors(vector) { data =>
-                  redirectInvalidInvestor(getInvestorIndex(investorProcessingId, data)) { investorIdVal =>
-                    val shareHoldings = retrieveInvestorData(investorIdVal, data)(_.previousShareHoldingModels)
-                    if (shareHoldings.getOrElse(Vector.empty).size > 0) {
-                      Ok(PreviousShareHoldingsReview(data.lift(getInvestorIndex(investorProcessingId, data)).get, backUrl.get))
-                    }
-                    else Redirect(controllers.seis.routes.IsExistingShareHolderController.show(investorProcessingId))
-                  }
+          s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map { vector =>
+            redirectNoInvestors(vector) { data =>
+              redirectInvalidInvestor(getInvestorIndex(investorProcessingId, data)) { investorIdVal =>
+                val shareHoldings = retrieveInvestorData(investorIdVal, data)(_.previousShareHoldingModels)
+                if (shareHoldings.getOrElse(Vector.empty).nonEmpty) {
+                  Ok(PreviousShareHoldingsReview(data.lift(getInvestorIndex(investorProcessingId, data)).get))
                 }
+                else Redirect(controllers.seis.routes.IsExistingShareHolderController.show(investorProcessingId))
               }
             }
-            else Future.successful(Redirect(controllers.seis.routes.AddInvestorOrNomineeController.show()))
           }
-
-          for {
-            backUrl <- s4lConnector.fetchAndGetFormData[String](KeystoreKeys.backLinkInvestorPreviousShareHoldingReview)
-            route <- process(backUrl)
-          } yield route
     }
   }
 

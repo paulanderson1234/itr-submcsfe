@@ -50,7 +50,10 @@ trait DeletePreviousShareHolderController extends FrontendController with Author
                 redirectInvalidInvestor(getInvestorIndex(investorProcessingId, data)) {
                   investorIdVal =>
                     val previousShares = retrieveInvestorData(investorIdVal, data)(_.previousShareHoldingModels)
-                    Ok(DeletePreviousShareHolder(previousShares.get.lift(getShareIndex(id, previousShares.getOrElse(Vector.empty))).get))
+                    if (previousShares.getOrElse(Vector.empty).nonEmpty) {
+                      Ok(DeletePreviousShareHolder(previousShares.get.lift(getShareIndex(id, previousShares.getOrElse(Vector.empty))).get))
+                    }
+                    else Redirect(controllers.seis.routes.IsExistingShareHolderController.show(investorProcessingId))
                 }
             }
         }

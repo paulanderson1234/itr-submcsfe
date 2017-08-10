@@ -3,11 +3,9 @@
 @import uk.gov.hmrc.play.views.html.helpers.form
 @import views.html.helpers.{errorSummary, formInputRadioGroup, backButtonWithProgress, input, inputWithCurrencySymbol, formInlineDateInput, hiddenField}
 
-@(investor: InvestorDetailsModel, backUrl: String)(implicit request: Request[_], messages: Messages)
+@(investor: InvestorDetailsModel)(implicit request: Request[_], messages: Messages)
 
 @main_template(Messages("page.seis.investors.previousShareHoldingReview.title"), articleLayout=false) {
-
-@backButtonWithProgress(backUrl, Messages("common.section.progress.company.details.four"))
 
 <div class="grid-column">
     <div class="full-width">

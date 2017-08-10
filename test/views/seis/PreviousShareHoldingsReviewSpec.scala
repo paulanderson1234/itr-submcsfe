@@ -25,8 +25,6 @@ import views.html.seis.investors.PreviousShareHoldingsReview
 
 class PreviousShareHoldingsReviewSpec extends ViewSpec {
 
-  val backUrl = Some(controllers.seis.routes.NumberOfPreviouslyIssuedSharesController.show(2, 1).url)
-
   val shareHoldersModelForReview = Vector(PreviousShareHoldingModel(investorShareIssueDateModel = Some(investorShareIssueDateModel1),
     numberOfPreviouslyIssuedSharesModel = Some (numberOfPreviouslyIssuedSharesModel1),
     previousShareHoldingNominalValueModel = Some(previousShareHoldingNominalValueModel1),
@@ -42,13 +40,11 @@ class PreviousShareHoldingsReviewSpec extends ViewSpec {
     "Verify that Review Previous share holdings page contains the correct table rows and data " +
       "when a valid vector of Previous share holdings model are passed as returned from keystore" in new SEISSetup {
 
-      lazy val page = PreviousShareHoldingsReview(investorModelForReview, backUrl.get)(fakeRequest, applicationMessages)
+      lazy val page = PreviousShareHoldingsReview(investorModelForReview)(fakeRequest, applicationMessages)
       lazy val document = Jsoup.parse(page.body)
 
       document.title shouldBe Messages("page.seis.investors.previousShareHoldingReview.title")
       document.getElementById("main-heading").text() shouldBe Messages("page.seis.investors.previousShareHoldingReview.heading")
-      document.body.getElementById("back-link").attr("href") shouldEqual backUrl.get
-      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.company.details.four")
 
       lazy val reviewShareHoldingsTableHead = document.getElementById("previous-share-holdings-table").select("thead")
       lazy val reviewShareHoldingsTableBody = document.getElementById("previous-share-holdings-table").select("tbody")
