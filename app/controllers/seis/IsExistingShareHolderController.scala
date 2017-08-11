@@ -17,7 +17,7 @@
 package controllers.seis
 
 import auth.{AuthorisedAndEnrolledForTAVC, SEIS}
-import common.KeystoreKeys
+import common.{Constants, KeystoreKeys}
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.Helpers.{ControllerHelpers, PreviousInvestorsHelper}
@@ -83,16 +83,31 @@ trait IsExistingShareHolderController extends FrontendController with Authorised
             validFormData.processingId match {
               case Some(_) => PreviousInvestorsHelper.updateIsExistingShareHoldersDetails(s4lConnector, validFormData).map {
                 investorDetailsModel => {
-                  s4lConnector.saveFormData(KeystoreKeys.backLinkShareClassAndDescription,
-                    routes.IsExistingShareHolderController.show(investorDetailsModel.processingId.get).url)
-                  Redirect(routes.PreviousShareHoldingDescriptionController.show(investorDetailsModel.processingId.get))
+                  if(investorDetailsModel.previousShareHoldingModels.isDefined &&
+                    investorDetailsModel.previousShareHoldingModels.get.nonEmpty)
+                    s4lConnector.saveFormData(KeystoreKeys.backLinkShareClassAndDescription,
+                      routes.PreviousShareHoldingsReviewController.show(investorDetailsModel.processingId.get).url)
+                  else
+                    s4lConnector.saveFormData(KeystoreKeys.backLinkShareClassAndDescription,
+                      routes.IsExistingShareHolderController.show(investorDetailsModel.processingId.get).url)
+                  validFormData.isExistingShareHolder match {
+                    case Constants.StandardRadioButtonYesValue =>
+                      Redirect(routes.PreviousShareHoldingDescriptionController.show(investorDetailsModel.processingId.get))
+                    case Constants.StandardRadioButtonNoValue =>
+                      Redirect(routes.PreviousShareHoldingsReviewController.show(investorDetailsModel.processingId.get))
+                  }
                 }
               }
               case None => PreviousInvestorsHelper.addIsExistingShareHoldersDetails(s4lConnector, validFormData).map {
                 investorDetailsModel => {
                   s4lConnector.saveFormData(KeystoreKeys.backLinkShareClassAndDescription,
                     routes.IsExistingShareHolderController.show(investorDetailsModel.processingId.get).url)
-                  Redirect(routes.PreviousShareHoldingDescriptionController.show(investorDetailsModel.processingId.get))
+                  validFormData.isExistingShareHolder match {
+                    case Constants.StandardRadioButtonYesValue =>
+                      Redirect(routes.PreviousShareHoldingDescriptionController.show(investorDetailsModel.processingId.get))
+                    case Constants.StandardRadioButtonNoValue =>
+                      Redirect(routes.PreviousShareHoldingsReviewController.show(investorDetailsModel.processingId.get))
+                  }
                 }
               }
             }
