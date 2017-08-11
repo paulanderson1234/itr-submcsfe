@@ -1,7 +1,7 @@
 @import views.html.helpers.backButtonWithProgress
 @import uk.gov.hmrc.play.views.html.helpers.form
 @import views.html.helpers.inputWithCurrencySymbol
-@import views.html.helpers.errorSummary
+@import views.html.helpers.{errorSummary, hiddenField}
 @import models.investorDetails.PreviousShareHoldingNominalValueModel
 
 @(previousShareHoldingNominalValueForm: Form[PreviousShareHoldingNominalValueModel], backUrl: String)(implicit request: Request[_], messages: Messages)
@@ -32,6 +32,20 @@
             '_inputHint -> Messages("page.seis.investors.previousShareHoldingNominalValue.hint")
             )
 
+        </div>
+
+        <div>
+            @hiddenField(
+            previousShareHoldingNominalValueForm("processingId"),
+            'id -> "processingId"
+            )
+        </div>
+
+        <div>
+            @hiddenField(
+            previousShareHoldingNominalValueForm("investorProcessingId"),
+            'id -> "investorProcessingId"
+            )
         </div>
 
         <div>
