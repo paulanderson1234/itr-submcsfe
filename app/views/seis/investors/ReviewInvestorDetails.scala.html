@@ -145,7 +145,7 @@
             </tbody>
         </table>
 
-        @if(investor.validate) {
+        @if(investor.validate && investor.previousShareHoldingModels.map{_.nonEmpty}.getOrElse(true)) {
             <a class="button" id="next" href="@controllers.seis.routes.ReviewInvestorDetailsController.show(investor.processingId.getOrElse(0)).url">
                 @Messages("common.button.snc")
             </a>
