@@ -87,7 +87,7 @@ trait InvestorShareIssueDateController extends FrontendController with Authorise
                 data => {
                   s4lConnector.saveFormData(KeystoreKeys.backLinkNumberOfPreviouslyIssuedShares,
                     routes.InvestorShareIssueDateController.show(data.investorProcessingId.get, data.processingId.get).url)
-                  Redirect(routes.NumberOfPreviouslyIssuedSharesController.show(data.investorProcessingId.get, data.investorProcessingId.get))
+                  Redirect(routes.NumberOfPreviouslyIssuedSharesController.show(data.investorProcessingId.get, data.processingId.get))
                 }
               }
               case None => PreviousInvestorShareHoldersHelper.addInvestorShareIssueDate(s4lConnector, validFormData).map {
