@@ -20,7 +20,8 @@ import play.api.libs.json.Json
 import utils.CostFormatter
 
 case class HowMuchSpentOnSharesModel(amount: BigDecimal,
-                                     processingId: Option[Int]) extends CostFormatter
-object HowMuchSpentOnSharesModel{
+                                     processingId: Option[Int])
+
+object HowMuchSpentOnSharesModel  extends CostFormatter{
   implicit val formats = Json.format[HowMuchSpentOnSharesModel]
 }

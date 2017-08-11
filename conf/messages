@@ -1166,3 +1166,13 @@ page.seis.investors.reviewInvestorDetails.shareholdings.dateOfInvestment = Date 
 page.seis.investors.reviewInvestorDetails.shareholdings.numberOfShares = Number of shares purchased: {0}
 page.seis.investors.reviewInvestorDetails.shareholdings.addAnotherShareholding = Add another previous shareholding
 page.seis.investors.reviewInvestorDetails.incomplete = Incomplete
+
+#Review All Investors Page
+page.seis.investors.reviewAllInvestors.title = Check your investors or nominees
+page.seis.investors.reviewAllInvestors.heading = Check your investors or nominees
+page.seis.investors.reviewAllInvestors.info = Make sure you’ve only added the investors or nominees seeking tax relief from this share issue.
+page.seis.investors.reviewAllInvestors.investorName=Name
+page.seis.investors.reviewAllInvestors.numberOfShares=Number of shares
+page.seis.investors.reviewAllInvestors.amountSpent=Amount spent
+page.seis.investors.reviewAllInvestors.add=Add another investor or nominee
+

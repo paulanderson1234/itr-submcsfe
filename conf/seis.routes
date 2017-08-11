@@ -160,6 +160,16 @@ POST       /add-another-shareholding/:investorId              controllers.seis.A
 
 GET        /review-investor/:investorId                 controllers.seis.ReviewInvestorDetailsController.show(investorId: Int)
 
+GET        /review-all-investors                  controllers.seis.ReviewAllInvestorsController.show
+POST       /review-all-investors                  controllers.seis.ReviewAllInvestorsController.submit
+
+GET        /review-all-investors-add             controllers.seis.ReviewAllInvestorsController.add
+GET        /review-all-investors-change/:Id      controllers.seis.ReviewAllInvestorsController.change(Id: Int)
+
+
+GET        /review-all-investors-remove/:Id      controllers.seis.ReviewAllInvestorsController.remove(Id: Int)
+
+
 
 
 
