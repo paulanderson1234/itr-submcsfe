@@ -69,7 +69,7 @@
         </tr>
         }
         <tr>
-            @if(investors.forall(investor => investor.validate)){-->
+            @if(investors.forall(investor => investor.validate)){
                 <td id="add-investor" colspan="5"><a  id="add-investor-ref" href="@controllers.seis.routes.ReviewAllInvestorsController.add.toString">@Messages("page.seis.investors.reviewAllInvestors.add")</a></td>
             }
         </tr>

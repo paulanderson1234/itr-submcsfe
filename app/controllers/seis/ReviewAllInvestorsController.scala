@@ -70,7 +70,7 @@ trait ReviewAllInvestorsController extends FrontendController with AuthorisedAnd
     AuthorisedAndEnrolled.async { implicit user => implicit request =>
       s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map { vector =>
         redirectNoInvestors(vector) { data =>
-          if(data(getInvestorIndex(id,data)).validate || data.forall(_.validate))
+          if(!data(getInvestorIndex(id,data)).validate || data.forall(_.validate))
             Redirect(routes.ReviewInvestorDetailsController.show(id))
           else Redirect(routes.ReviewAllInvestorsController.show())
         }
