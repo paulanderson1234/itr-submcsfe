@@ -43,26 +43,13 @@ trait ReviewAllInvestorsController extends FrontendController with AuthorisedAnd
 
   override val acceptedFlows = Seq(Seq(SEIS))
 
-  val show = Action.async { implicit request =>
-
-    val address = CompanyDetailsModel("Tiimmys Company", "Line 1", "Line 2", Some("Line 3"), Some("Line 4"), Some("AB1 1AB"), countryCode = "JP", Some(1))
-    val address1 = IndividualDetailsModel("Joe", "Bloggs", "Line 1", "Line 2", Some("Line 3"), Some("AB1 1AB"), None, countryCode = "JP", Some(1))
-
-    val investor = InvestorDetailsModel(
-      investorOrNomineeModel = Some(AddInvestorOrNomineeModel(Constants.investor, Some(1))),
-      companyOrIndividualModel = Some(CompanyOrIndividualModel(Constants.typeIndividual, Some(1))),
-      individualDetailsModel = Some(address1),
-      amountSpentModel = Some(HowMuchSpentOnSharesModel(100812212.32323312, Some(1))),
-      numberOfSharesPurchasedModel = Some(NumberOfSharesPurchasedModel(1000, Some(1))),
-      isExistingShareHolderModel = Some(IsExistingShareHolderModel(Constants.StandardRadioButtonNoValue, Some(1))),
-      processingId = Some(1))
-
-//    s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
-//      case Some(investors)=> Ok(ReviewAllInvestors(investors))
-//      case None => Redirect(routes.AddInvestorOrNomineeController.show(None))
-//    }
-
-    Future.successful(Ok(ReviewAllInvestors(Vector(investor, investor))))
+  val show = featureSwitch(applicationConfig.seisFlowEnabled) {
+    AuthorisedAndEnrolled.async { implicit user => implicit request =>
+      s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
+        case Some(investors) => Ok(ReviewAllInvestors(investors))
+        case None => Redirect(routes.AddInvestorOrNomineeController.show(None))
+      }
+    }
   }
 
 
