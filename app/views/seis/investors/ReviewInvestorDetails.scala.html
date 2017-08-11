@@ -28,7 +28,7 @@
                 Messages("page.seis.investors.reviewInvestorDetails.shareholdings.numberOfShares", Transformers.numberToFormattedNumber(model.previouslyIssuedShares))
             }.getOrElse(Messages("page.seis.investors.reviewInvestorDetails.incomplete"))
         ),
-        Some(controllers.seis.routes.ReviewInvestorDetailsController.show(investor.processingId.get).url),
+        Some(controllers.seis.routes.PreviousShareHoldingsReviewController.show(investor.processingId.get).url),
         complete = model.validate
     )
 }

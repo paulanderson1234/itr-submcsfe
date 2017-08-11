@@ -350,7 +350,7 @@ class ReviewInvestorDetailsSpec extends ViewSpec {
           }
 
           "has a change link to the correct page" in {
-            table.select(s"$id-change a").attr("href") shouldBe controllers.seis.routes.ReviewInvestorDetailsController.show(1).url
+            table.select(s"$id-change a").attr("href") shouldBe controllers.seis.routes.PreviousShareHoldingsReviewController.show(1).url
           }
         }
 
@@ -366,7 +366,7 @@ class ReviewInvestorDetailsSpec extends ViewSpec {
           }
 
           "has a change link to the correct page" in {
-            table.select(s"$id-change a").attr("href") shouldBe controllers.seis.routes.ReviewInvestorDetailsController.show(1).url
+            table.select(s"$id-change a").attr("href") shouldBe controllers.seis.routes.PreviousShareHoldingsReviewController.show(1).url
           }
         }
 
@@ -466,7 +466,7 @@ class ReviewInvestorDetailsSpec extends ViewSpec {
           }
 
           "has a change link to the correct page" in {
-            table.select(s"$id-change a").attr("href") shouldBe controllers.seis.routes.ReviewInvestorDetailsController.show(1).url
+            table.select(s"$id-change a").attr("href") shouldBe controllers.seis.routes.PreviousShareHoldingsReviewController.show(1).url
           }
         }
 
