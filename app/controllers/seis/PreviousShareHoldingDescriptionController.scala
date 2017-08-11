@@ -85,7 +85,6 @@ trait PreviousShareHoldingDescriptionController extends FrontendController with 
             Future.successful(BadRequest(PreviousShareHoldingDescription(companyOrIndividual.get, formWithErrors, backUrl.get)))
           },
           validFormData => {
-            println(s"=================== validformdat id is ${validFormData.investorProcessingId.getOrElse(0)}")
             validFormData.processingId match {
               case Some(_) => PreviousInvestorShareHoldersHelper.updateShareClassAndDescription(s4lConnector, validFormData).map {
                 data => {
