@@ -26,7 +26,8 @@ case class IndividualDetailsModel( forename : String,
                                    addressline4 : Option[String]=None,
                                    postcode :Option[String] = None,
                                    countryCode : String,
-                                   processingId: Option[Int])
+                                   processingId: Option[Int],
+                                   shareHolderProcessingId: Option[Int] = None)
 
 object IndividualDetailsModel {
   implicit val format = Json.format[IndividualDetailsModel]

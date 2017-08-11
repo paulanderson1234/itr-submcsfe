@@ -33,7 +33,8 @@ object CompanyDetailsForm  {
       "companyAddressline4" -> optional(addressLineFourCheck),
       "companyPostcode" -> optional(postcodeCheck),
       "countryCode" -> countryCodeCheck,
-      "processingId" -> optional(number)
+      "processingId" -> optional(number),
+      "shareHolderProcessingId" -> optional(number)
     )(CompanyDetailsModel.apply)(CompanyDetailsModel.unapply).verifying(postcodeCountryCheckConstraint)
   )
 }

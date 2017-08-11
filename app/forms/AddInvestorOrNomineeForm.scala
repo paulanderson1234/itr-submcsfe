@@ -24,7 +24,8 @@ object AddInvestorOrNomineeForm {
   val addInvestorOrNomineeForm = Form(
     mapping(
       "addInvestorOrNominee" -> nonEmptyText,
-      "processingId" -> optional(number)
+      "processingId" -> optional(number),
+      "shareHolderProcessingId" -> optional(number)
     )(AddInvestorOrNomineeModel.apply)(AddInvestorOrNomineeModel.unapply)
   )
 }

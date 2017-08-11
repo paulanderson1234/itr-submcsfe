@@ -19,7 +19,8 @@ package models.investorDetails
 import play.api.libs.json.Json
 
 case class HowMuchSpentOnSharesModel(amount: BigDecimal,
-                                     processingId: Option[Int])
+                                     processingId: Option[Int],
+                                     shareHolderProcessingId: Option[Int] = None)
 object HowMuchSpentOnSharesModel{
   implicit val formats = Json.format[HowMuchSpentOnSharesModel]
 }

@@ -25,7 +25,8 @@ case class CompanyDetailsModel(companyName : String,
                                companyAddressline4 : Option[String],
                                companyPostcode : Option[String],
                                countryCode : String,
-                               processingId: Option[Int])
+                               processingId: Option[Int],
+                               shareHolderProcessingId: Option[Int] = None)
 
 object CompanyDetailsModel {
   implicit val format: OFormat[CompanyDetailsModel] = Json.format[CompanyDetailsModel]

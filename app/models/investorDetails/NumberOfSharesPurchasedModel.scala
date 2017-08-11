@@ -20,7 +20,8 @@ import play.api.libs.json.Json
 
 
 case class NumberOfSharesPurchasedModel(numberOfSharesPurchased: BigDecimal,
-                                        processingId: Option[Int])
+                                        processingId: Option[Int],
+                                        shareHolderProcessingId: Option[Int] = None)
 object NumberOfSharesPurchasedModel{
   implicit val formats = Json.format[NumberOfSharesPurchasedModel]
 }

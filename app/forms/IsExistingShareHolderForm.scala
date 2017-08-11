@@ -25,7 +25,8 @@ object IsExistingShareHolderForm {
   val isExistingShareHolderForm = Form(
     mapping(
       "isExistingShareHolder" -> nonEmptyText,
-      "processingId" -> optional(number)
+      "processingId" -> optional(number),
+      "shareHolderProcessingId" -> optional(number)
     )(IsExistingShareHolderModel.apply)(IsExistingShareHolderModel.unapply)
   )
 }

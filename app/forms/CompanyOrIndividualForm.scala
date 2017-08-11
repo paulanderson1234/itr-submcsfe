@@ -24,6 +24,7 @@ import play.api.data.Forms._
 object CompanyOrIndividualForm {
   val companyOrIndividualForm = Form(
     mapping(
-    "companyOrIndividual" -> nonEmptyText, "processingId" -> optional(number))
+    "companyOrIndividual" -> nonEmptyText, "processingId" -> optional(number),
+      "shareHolderProcessingId" -> optional(number))
     (CompanyOrIndividualModel.apply)(CompanyOrIndividualModel.unapply))
 }

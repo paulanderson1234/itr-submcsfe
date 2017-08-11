@@ -29,12 +29,13 @@ case class InvestorDetailsModel(investorOrNomineeModel: Option[AddInvestorOrNomi
                                 amountSpentModel: Option[HowMuchSpentOnSharesModel] = None,
                                 isExistingShareHolderModel: Option[IsExistingShareHolderModel] = None,
                                 previousShareHoldingModels: Option[Vector[PreviousShareHoldingModel]] = None,
-                                processingId: Option[Int] = None) {
+                                processingId: Option[Int] = None,
+                                shareHolderProcessingId: Option[Int] = None) {
 
   def validate: Boolean = {
 
     val areDetailsPresent = companyOrIndividualModel match {
-          case Some(CompanyOrIndividualModel(Constants.typeCompany, _)) => companyDetailsModel.isDefined
+          case Some(CompanyOrIndividualModel(Constants.typeCompany, _, _)) => companyDetailsModel.isDefined
           case _ => individualDetailsModel.isDefined
         }
 
