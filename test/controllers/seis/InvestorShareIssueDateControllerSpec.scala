@@ -203,7 +203,7 @@ class InvestorShareIssueDateControllerSpec extends BaseSpec {
           status(result) shouldBe SEE_OTHER
           redirectLocation(result) shouldBe
             Some(controllers.seis.routes.NumberOfPreviouslyIssuedSharesController.show(listOfInvestorsComplete.head.processingId.get,
-              listOfInvestorsComplete.head.previousShareHoldingModels.get.head.processingId.get+1).url)
+              listOfInvestorsComplete.head.previousShareHoldingModels.get.head.processingId.get).url)
         }
       )
     }
