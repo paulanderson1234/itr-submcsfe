@@ -26,6 +26,9 @@ trait Constants {
   val SuggestedTextMaxLength: Int = 2048
   val SuggestedTextMaxLengthLower: Int = 1024
   val CompanyDetailsMaxLength: Int = 56
+  val addressLineLength = 35
+  val forenameLength = 35
+  val surnameLength = 35
 
   val shortTextLimit: Int = 250
 
