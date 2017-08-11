@@ -38,7 +38,7 @@ class InvestorTestHelperSpec extends UnitSpec {
 
       firstInvestorHoldings.length shouldBe 2
       firstInvestorHoldings.forall(_.validate) shouldBe true
-      validateHoldingIdSequence(firstInvestorHoldings) shouldBe true
+      validateHoldingIdAndSequence(firstInvestorHoldings, firstInvestor.processingId.get) shouldBe true
 
       firstInvestor.processingId shouldBe Some(1)
       firstInvestor.validate shouldBe true
@@ -50,7 +50,8 @@ class InvestorTestHelperSpec extends UnitSpec {
 
       lastInvestorHoldings.length shouldBe 2
       lastInvestorHoldings.forall(_.validate) shouldBe true
-      validateHoldingIdSequence(lastInvestorHoldings) shouldBe true
+      validateHoldingIdAndSequence(lastInvestorHoldings, lastInvestor.processingId.get) shouldBe true
+
     }
   }
 
@@ -80,7 +81,7 @@ class InvestorTestHelperSpec extends UnitSpec {
 
       firstInvestorHoldings.length shouldBe 5
       firstInvestorHoldings.forall(_.validate) shouldBe true
-      validateHoldingIdSequence(firstInvestorHoldings) shouldBe true
+      validateHoldingIdAndSequence(firstInvestorHoldings, firstInvestor.processingId.get) shouldBe true
 
       val secondInvestor = list(1)
       secondInvestor.processingId shouldBe Some(2)
@@ -89,7 +90,7 @@ class InvestorTestHelperSpec extends UnitSpec {
       val secondInvestorHoldings = secondInvestor.previousShareHoldingModels.get
       secondInvestorHoldings.length shouldBe 5
       secondInvestorHoldings.forall(_.validate) shouldBe true
-      validateHoldingIdSequence(firstInvestorHoldings) shouldBe true
+      validateHoldingIdAndSequence(secondInvestorHoldings, secondInvestor.processingId.get) shouldBe true
 
       val thirdInvestor = list(2)
       thirdInvestor.processingId shouldBe Some(3)
@@ -99,7 +100,7 @@ class InvestorTestHelperSpec extends UnitSpec {
 
       thirdInvestorHoldings.length shouldBe 5
       thirdInvestorHoldings.forall(_.validate) shouldBe true
-      validateHoldingIdSequence(thirdInvestorHoldings) shouldBe true
+      validateHoldingIdAndSequence(thirdInvestorHoldings, thirdInvestor.processingId.get) shouldBe true
 
       val lastInvestor = list.last
       lastInvestor.validate shouldBe false
@@ -123,7 +124,7 @@ class InvestorTestHelperSpec extends UnitSpec {
 
       firstInvestorHoldings.length shouldBe 5
       firstInvestorHoldings.forall(_.validate) shouldBe true
-      validateHoldingIdSequence(firstInvestorHoldings) shouldBe true
+      validateHoldingIdAndSequence(firstInvestorHoldings, firstInvestor.processingId.get) shouldBe true
 
       val secondInvestor = list(1)
       secondInvestor.processingId shouldBe Some(2)
@@ -132,7 +133,7 @@ class InvestorTestHelperSpec extends UnitSpec {
       val secondInvestorHoldings = secondInvestor.previousShareHoldingModels.get
       secondInvestorHoldings.length shouldBe 5
       secondInvestorHoldings.forall(_.validate) shouldBe true
-      validateHoldingIdSequence(firstInvestorHoldings) shouldBe true
+      validateHoldingIdAndSequence(secondInvestorHoldings, secondInvestor.processingId.get) shouldBe true
 
       val thirdInvestor = list(2)
       thirdInvestor.processingId shouldBe Some(3)
@@ -142,7 +143,7 @@ class InvestorTestHelperSpec extends UnitSpec {
 
       thirdInvestorHoldings.length shouldBe 5
       thirdInvestorHoldings.forall(_.validate) shouldBe true
-      validateHoldingIdSequence(thirdInvestorHoldings) shouldBe true
+      validateHoldingIdAndSequence(thirdInvestorHoldings, thirdInvestor.processingId.get) shouldBe true
 
       val lastInvestor = list.last
       lastInvestor.processingId shouldBe Some(4)
@@ -164,7 +165,7 @@ class InvestorTestHelperSpec extends UnitSpec {
       val firstInvestorHoldings = firstInvestor.previousShareHoldingModels.get
       firstInvestorHoldings.length shouldBe 5
       firstInvestorHoldings.forall(_.validate) shouldBe true
-      validateHoldingIdSequence(firstInvestorHoldings) shouldBe true
+      validateHoldingIdAndSequence(firstInvestorHoldings, firstInvestor.processingId.get) shouldBe true
 
       val secondInvestor = list(1)
       secondInvestor.processingId shouldBe Some(2)
@@ -173,7 +174,7 @@ class InvestorTestHelperSpec extends UnitSpec {
       val secondInvestorHoldings = secondInvestor.previousShareHoldingModels.get
       secondInvestorHoldings.length shouldBe 5
       secondInvestorHoldings.forall(_.validate) shouldBe true
-      validateHoldingIdSequence(secondInvestorHoldings) shouldBe true
+      validateHoldingIdAndSequence(secondInvestorHoldings, secondInvestor.processingId.get) shouldBe true
 
       val thirdInvestor = list(2)
       thirdInvestor.processingId shouldBe Some(3)
@@ -182,7 +183,7 @@ class InvestorTestHelperSpec extends UnitSpec {
       val thirdInvestorHoldings = thirdInvestor.previousShareHoldingModels.get
       thirdInvestorHoldings.length shouldBe 5
       thirdInvestorHoldings.forall(_.validate) shouldBe true
-      validateHoldingIdSequence(thirdInvestorHoldings) shouldBe true
+      validateHoldingIdAndSequence(thirdInvestorHoldings, thirdInvestor.processingId.get) shouldBe true
 
 
       val lastInvestor = list.last
@@ -198,7 +199,7 @@ class InvestorTestHelperSpec extends UnitSpec {
       lastInvestorHoldings(3).validate shouldBe true
       // only the last shareholding should be invalid
       lastInvestorHoldings.last.validate shouldBe false
-      validateHoldingIdSequence(lastInvestorHoldings) shouldBe true
+      validateHoldingIdAndSequence(lastInvestorHoldings, lastInvestor.processingId.get) shouldBe true
 
     }
   }
@@ -210,8 +211,7 @@ class InvestorTestHelperSpec extends UnitSpec {
     }
   }
 
-  private def validateHoldingIdSequence(shareholdings:Vector[PreviousShareHoldingModel]): Boolean = {
-    shareholdings.zipWithIndex.forall( { case (holding, i) => holding.processingId.get  == i + 1 })
+  private def validateHoldingIdAndSequence(shareholdings:Vector[PreviousShareHoldingModel], investorId:Int): Boolean = {
+    shareholdings.zipWithIndex.forall( { case (holding, i) => holding.processingId.get  == i + 1 && holding.investorProcessingId.get == investorId})
   }
-
 }

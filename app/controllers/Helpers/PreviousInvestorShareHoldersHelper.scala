@@ -126,13 +126,25 @@ trait PreviousInvestorShareHoldersHelper {
 
     val result = s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
       case Some(data) =>
+
         val itemToUpdateIndex = data.indexWhere(_.processingId.getOrElse(0) ==
+
           previousShareHoldingDescriptionModel.investorProcessingId.getOrElse(0))
+
+        println(s"investor id is: $itemToUpdateIndex")
+        println(s"holdingr id is: ${previousShareHoldingDescriptionModel.investorProcessingId.getOrElse(0)} ")
         if (itemToUpdateIndex != -1) {
+
           getUpdatePreviousIssuedShares(data, itemToUpdateIndex, previousShareHoldingDescriptionModel)
         }
-        else throw new InternalServerException("No valid Investor information passed")
-      case None => throw new InternalServerException("No valid Investor information passed")
+        else {
+          println(s"============================= not found itrem to update")
+          throw new InternalServerException("No valid Investor information passed")
+        }
+      case None => {
+        println(s"============================= no investor info")
+        throw new InternalServerException("No valid Investor information passed")
+      }
     }
     result.flatMap(newVectorList => s4lConnector.saveFormData(KeystoreKeys.investorDetails, newVectorList))
 

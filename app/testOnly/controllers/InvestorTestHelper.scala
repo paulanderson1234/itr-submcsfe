@@ -68,12 +68,12 @@ trait InvestorTestHelper {
     PreviousShareHoldingModel(
       investorShareIssueDateModel = Some(TestDataGenerator.getRandomInvestorShareIssueDateModel(processingId, investorProcessingId)),
       numberOfPreviouslyIssuedSharesModel = if (makeIncomplete) None
-      else Some(NumberOfPreviouslyIssuedSharesModel(TestDataGenerator.randomDecimal(processingId), Some(processingId))),
+      else Some(NumberOfPreviouslyIssuedSharesModel(TestDataGenerator.randomDecimal(processingId), Some(processingId), Some(investorProcessingId))),
       previousShareHoldingNominalValueModel =
-        Some(PreviousShareHoldingNominalValueModel(TestDataGenerator.randomWholeAmount(utils.Validation.financialMaxAmountLength), Some(processingId))),
+        Some(PreviousShareHoldingNominalValueModel(TestDataGenerator.randomWholeAmount(utils.Validation.financialMaxAmountLength), Some(processingId), Some(investorProcessingId))),
       previousShareHoldingDescriptionModel = if (makeIncomplete) None
       else
-        Some(PreviousShareHoldingDescriptionModel(TestDataGenerator.randomWordString(Constants.shortTextLimit), processingId = Some(processingId)))
+        Some(PreviousShareHoldingDescriptionModel(TestDataGenerator.randomWordString(Constants.shortTextLimit), processingId = Some(processingId), Some(investorProcessingId)))
       , processingId = Some(processingId), investorProcessingId = Some(investorProcessingId))
   }
 
