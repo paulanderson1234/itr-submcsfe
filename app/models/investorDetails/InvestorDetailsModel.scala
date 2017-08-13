@@ -52,6 +52,15 @@ case class InvestorDetailsModel(investorOrNomineeModel: Option[AddInvestorOrNomi
     }
     else false
   }
+
+  def investorNomineeDescription : String = {
+    companyOrIndividualModel match {
+      case Some(CompanyOrIndividualModel(Constants.typeCompany, _)) =>
+        companyDetailsModel.fold("")(_.companyName)
+      case _ =>
+        individualDetailsModel.fold("")(individual => (individual.forename + " " + individual.surname).trim)
+    }
+  }
 }
 
 object InvestorDetailsModel{
