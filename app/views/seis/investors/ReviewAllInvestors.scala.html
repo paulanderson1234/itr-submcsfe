@@ -60,7 +60,7 @@
             <td id="number-of-shares-@{index}">@if(investor.numberOfSharesPurchasedModel.isDefined) { @investor.numberOfSharesPurchasedModel.get.numberOfSharesPurchased
                 } else { @Messages("page.seis.investors.reviewInvestorDetails.incomplete") }</td>
             <td id="amount-raised-@{index}">@if(investor.amountSpentModel.isDefined) {
-                @HowMuchSpentOnSharesModel.getAmountAsFormattedString(investor.amountSpentModel.get.amount)
+                @investor.amountSpentModel.get.getAmountAsFormattedString(investor.amountSpentModel.get.amount)
                 } else { @Messages("page.seis.investors.reviewInvestorDetails.incomplete") }</td>
             @if(investors.forall(_.validate)){
                 <td id="change-@{index}"><a id="change-ref-@{index}" href=@controllers.seis.routes.ReviewAllInvestorsController.change(investor.processingId.get).toString>

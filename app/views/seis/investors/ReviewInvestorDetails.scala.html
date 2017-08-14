@@ -35,6 +35,10 @@
 
 @main_template(Messages("page.seis.investors.reviewInvestorDetails.title", investor.investorOrNomineeModel.map(_.addInvestorOrNominee).get.toLowerCase), articleLayout=false) {
 
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
     <p>@Messages("common.section.progress.company.details.four")</p>
 
     <h1 class="heading-xlarge">@Messages("page.seis.investors.reviewInvestorDetails.title", investor.investorOrNomineeModel.map(_.addInvestorOrNominee).get.toLowerCase)</h1>
@@ -123,6 +127,7 @@
                     "is-existing-shareholder",
                     Messages("page.seis.investors.reviewInvestorDetails.shareholdings.isExistingShareholder"),
                     investor.isExistingShareHolderModel.map(_.isExistingShareHolder).getOrElse(Messages("page.seis.investors.reviewInvestorDetails.incomplete")),
+
                     if (investor.showIsExistingShareholderChangeLink) {
                         Some(controllers.seis.routes.IsExistingShareHolderController.show(investor.processingId.get).url)
                     } else None,
