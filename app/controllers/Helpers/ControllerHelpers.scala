@@ -130,7 +130,7 @@ trait ControllerHelpers {
 
   def redirectNoInvestors(vector: Option[Vector[InvestorDetailsModel]])(f: Vector[InvestorDetailsModel] => Result): Result = {
     vector match {
-      case Some(data) => f(data)
+      case Some(data) if data.nonEmpty => f(data)
       case _ => Redirect(controllers.seis.routes.AddInvestorOrNomineeController.show())
     }
   }

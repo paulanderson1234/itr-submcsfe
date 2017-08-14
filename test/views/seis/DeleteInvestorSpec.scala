@@ -47,7 +47,7 @@ class DeleteInvestorSpec  extends BaseSpec {
 
       document.body.getElementById("remove-button").text() shouldBe Messages("common.base.remove")
       document.body.getElementById("remove-button").hasClass("button--alert") shouldBe true
-      document.body.getElementById("delete-investor-cancel").text() shouldBe Messages("common.button.cancelRemove")
+      document.body.getElementById("delete-investor-cancel").text() shouldBe Messages("common.button.cancel")
       //TODO href should be all investors when available
       document.body.getElementById("delete-investor-cancel").attr("href") shouldEqual controllers.seis.routes.TotalAmountRaisedController.show().url
     }
@@ -71,7 +71,7 @@ class DeleteInvestorSpec  extends BaseSpec {
 
       document.body.getElementById("remove-button").text() shouldBe Messages("common.base.remove")
       document.body.getElementById("remove-button").hasClass("button--alert") shouldBe true
-      document.body.getElementById("delete-investor-cancel").text() shouldBe Messages("common.button.cancelRemove")
+      document.body.getElementById("delete-investor-cancel").text() shouldBe Messages("common.button.cancel")
       //TODO href should be all investors when available
       document.body.getElementById("delete-investor-cancel").attr("href") shouldEqual controllers.seis.routes.TotalAmountRaisedController.show().url
     }
@@ -95,7 +95,7 @@ class DeleteInvestorSpec  extends BaseSpec {
 
       document.body.getElementById("remove-button").text() shouldBe Messages("common.base.remove")
       document.body.getElementById("remove-button").hasClass("button--alert") shouldBe true
-      document.body.getElementById("delete-investor-cancel").text() shouldBe Messages("common.button.cancelRemove")
+      document.body.getElementById("delete-investor-cancel").text() shouldBe Messages("common.button.cancel")
       //TODO href should be all investors when available
       document.body.getElementById("delete-investor-cancel").attr("href") shouldEqual controllers.seis.routes.TotalAmountRaisedController.show().url
     }
@@ -119,7 +119,7 @@ class DeleteInvestorSpec  extends BaseSpec {
 
       document.body.getElementById("remove-button").text() shouldBe Messages("common.base.remove")
       document.body.getElementById("remove-button").hasClass("button--alert") shouldBe true
-      document.body.getElementById("delete-investor-cancel").text() shouldBe Messages("common.button.cancelRemove")
+      document.body.getElementById("delete-investor-cancel").text() shouldBe Messages("common.button.cancel")
       //TODO href should be all investors when available
       document.body.getElementById("delete-investor-cancel").attr("href") shouldEqual controllers.seis.routes.TotalAmountRaisedController.show().url
     }
@@ -143,7 +143,7 @@ class DeleteInvestorSpec  extends BaseSpec {
 
       document.body.getElementById("remove-button").text() shouldBe Messages("common.base.remove")
       document.body.getElementById("remove-button").hasClass("button--alert") shouldBe true
-      document.body.getElementById("delete-investor-cancel").text() shouldBe Messages("common.button.cancelRemove")
+      document.body.getElementById("delete-investor-cancel").text() shouldBe Messages("common.button.cancel")
       //TODO href should be all investors when available
       document.body.getElementById("delete-investor-cancel").attr("href") shouldEqual controllers.seis.routes.TotalAmountRaisedController.show().url
     }

@@ -34,31 +34,37 @@ case class InvestorDetailsModel(investorOrNomineeModel: Option[AddInvestorOrNomi
   def validate: Boolean = {
 
     val areDetailsPresent = companyOrIndividualModel match {
-          case Some(CompanyOrIndividualModel(Constants.typeCompany, _)) => companyDetailsModel.isDefined
-          case _ => individualDetailsModel.isDefined
-        }
+      case Some(CompanyOrIndividualModel(Constants.typeCompany, _)) => companyDetailsModel.isDefined
+      case _ => individualDetailsModel.isDefined
+    }
 
     investorOrNomineeModel.isDefined && companyOrIndividualModel.isDefined &&
       areDetailsPresent && numberOfSharesPurchasedModel.isDefined &&
-    amountSpentModel.isDefined && validateShareHoldings
+      amountSpentModel.isDefined && validateShareHoldings
   }
 
   /*** Validates shareholdings by mapping over each shareholding and reducing the result to either true or false using 'forall'**/
   def validateShareHoldings : Boolean = {
-    if(isExistingShareHolderModel.isDefined && isExistingShareHolderModel.get.isExistingShareHolder == Constants.StandardRadioButtonNoValue) true
-    else if(isExistingShareHolderModel.isDefined && isExistingShareHolderModel.get.isExistingShareHolder == Constants.StandardRadioButtonYesValue){
-      if(previousShareHoldingModels.isDefined) previousShareHoldingModels.get.forall(_.validate)
-      else false
+    if(isExistingShareHolderModel.exists(_.isExistingShareHolder == Constants.StandardRadioButtonNoValue)) true
+    else if(isExistingShareHolderModel.exists(_.isExistingShareHolder == Constants.StandardRadioButtonYesValue)){
+      previousShareHoldingModels.exists(vector => vector.nonEmpty && vector.forall(_.validate))
     }
     else false
   }
 
-  def investorNomineeDescription : String = {
+  def investorNomineeDescription: String = {
     companyOrIndividualModel match {
       case Some(CompanyOrIndividualModel(Constants.typeCompany, _)) =>
         companyDetailsModel.fold("")(_.companyName)
       case _ =>
         individualDetailsModel.fold("")(individual => (individual.forename + " " + individual.surname).trim)
+    }
+  }
+
+  def showIsExistingShareholderChangeLink: Boolean = {
+    isExistingShareHolderModel match {
+      case Some(IsExistingShareHolderModel(Constants.StandardRadioButtonYesValue, _)) if previousShareHoldingModels.exists(_.nonEmpty) => false
+      case _ => true
     }
   }
 }

@@ -180,7 +180,7 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
     val totalAmountRaised = bindForm[TotalAmountRaisedModel](KeystoreKeys.totalAmountRaised, TotalAmountRaisedForm.totalAmountRaisedForm)
     val totalAmountSpent = bindForm[TotalAmountSpentModel](KeystoreKeys.totalAmountSpent, TotalAmountSpentForm.totalAmountSpentForm)
 
-    saveInvestorDetails(populateIvestorTestData(investorModelOptions.get))
+    saveInvestorDetails(populateIvestorTestData(investorModelOptions.value.fold("1")(_.testInvestorModeOptions)))
     saveBackLinks()
     saveSchemeType()
     Future.successful(Ok(
@@ -200,8 +200,8 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
     s4lConnector.saveFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails, investorDetails)
   }
 
-  private def populateIvestorTestData(options: TestInvestorModeOptionsModel): Vector[InvestorDetailsModel] = {
-    options.testInvestorModeOptions match {
+  private def populateIvestorTestData(options: String = "1"): Vector[InvestorDetailsModel] = {
+    options match {
 
       // single investor no holdings
       case "1" => InvestorTestHelper.getInvestors(1, 0)

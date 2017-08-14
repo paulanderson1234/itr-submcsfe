@@ -17,16 +17,16 @@
 package controllers.seis
 
 import auth.{AuthorisedAndEnrolledForTAVC, SEIS}
-import common.KeystoreKeys
+import common.{Constants, KeystoreKeys}
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.Helpers.{ControllerHelpers, PreviousInvestorsHelper}
 import controllers.predicates.FeatureSwitch
 import forms.IsExistingShareHolderForm._
-import models.investorDetails.InvestorDetailsModel
+import models.investorDetails.{InvestorDetailsModel, IsExistingShareHolderModel}
 import play.api.Play.current
 import play.api.i18n.Messages.Implicits._
-import play.api.mvc.{Action, AnyContent}
+import play.api.mvc.{Action, AnyContent, Result}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import views.html.seis.investors.IsExistingShareHolder
 
@@ -75,6 +75,21 @@ trait IsExistingShareHolderController extends FrontendController with Authorised
   def submit(companyOrIndividual: Option[String], backUrl: Option[String]): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
     AuthorisedAndEnrolled.async { implicit user =>
       implicit request =>
+        def routing(model: Option[IsExistingShareHolderModel], investorDetailsModel: InvestorDetailsModel): Result = {
+          s4lConnector.saveFormData(KeystoreKeys.backLinkShareClassAndDescription,
+            routes.IsExistingShareHolderController.show(investorDetailsModel.processingId.get).url)
+          if (model.exists(_.isExistingShareHolder == Constants.StandardRadioButtonYesValue))
+            if(investorDetailsModel.previousShareHoldingModels.isDefined &&
+              investorDetailsModel.previousShareHoldingModels.get.nonEmpty) {
+              Redirect(routes.PreviousShareHoldingsReviewController.show(investorDetailsModel.processingId.get))
+            }
+            else {
+              Redirect(routes.PreviousShareHoldingDescriptionController.show(investorDetailsModel.processingId.get))
+            }
+          else
+            Redirect(routes.ReviewInvestorDetailsController.show(investorDetailsModel.processingId.get))
+        }
+
         isExistingShareHolderForm.bindFromRequest().fold(
           formWithErrors => {
             Future.successful(BadRequest(IsExistingShareHolder(companyOrIndividual.get, formWithErrors, backUrl.get)))
@@ -83,16 +98,12 @@ trait IsExistingShareHolderController extends FrontendController with Authorised
             validFormData.processingId match {
               case Some(_) => PreviousInvestorsHelper.updateIsExistingShareHoldersDetails(s4lConnector, validFormData).map {
                 investorDetailsModel => {
-                  s4lConnector.saveFormData(KeystoreKeys.backLinkShareClassAndDescription,
-                    routes.IsExistingShareHolderController.show(investorDetailsModel.processingId.get).url)
-                  Redirect(routes.PreviousShareHoldingDescriptionController.show(investorDetailsModel.processingId.get))
+                  routing(investorDetailsModel.isExistingShareHolderModel, investorDetailsModel)
                 }
               }
               case None => PreviousInvestorsHelper.addIsExistingShareHoldersDetails(s4lConnector, validFormData).map {
                 investorDetailsModel => {
-                  s4lConnector.saveFormData(KeystoreKeys.backLinkShareClassAndDescription,
-                    routes.IsExistingShareHolderController.show(investorDetailsModel.processingId.get).url)
-                  Redirect(routes.PreviousShareHoldingDescriptionController.show(investorDetailsModel.processingId.get))
+                  routing(investorDetailsModel.isExistingShareHolderModel, investorDetailsModel)
                 }
               }
             }
