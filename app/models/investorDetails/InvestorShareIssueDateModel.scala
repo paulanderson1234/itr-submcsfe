@@ -17,12 +17,21 @@
 package models.investorDetails
 
 import play.api.libs.json.Json
+import utils.DateFormatter
 
 case class InvestorShareIssueDateModel(investorShareIssueDateDay: Option[Int],
                                        investorShareIssueDateMonth: Option[Int],
                                        investorShareIssueDateYear: Option[Int],
                                        processingId: Option[Int] = None,
-                                       investorProcessingId: Option[Int] = None)
+                                       investorProcessingId: Option[Int] = None) extends DateFormatter {
+
+  def formatDateToString: Option[String] = for {
+    day <- investorShareIssueDateDay
+    month <- investorShareIssueDateDay
+    year <- investorShareIssueDateYear
+  } yield {toDateString(day, month, year)}
+}
+
 object InvestorShareIssueDateModel{
   implicit val formats = Json.format[InvestorShareIssueDateModel]
 }

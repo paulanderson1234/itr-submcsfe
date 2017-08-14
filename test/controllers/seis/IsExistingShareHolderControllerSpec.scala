@@ -117,7 +117,7 @@ class IsExistingShareHolderControllerSpec extends BaseSpec with DateFormatter{
         }
       }
 
-      "redirect to the 'CompanyOrIndividual' page" when {
+      "redirect to the 'AddInvestorOrNominee' page" when {
         "a 'backlink' is defined, an 'investor details list' is retrieved but a 'company or individual' is not provided" in {
           mockEnrolledRequest(seisSchemeTypesModel)
           setupMocks(Some(listOfInvestorsIncompleteCompanyOrIndividualMissing),  backUrl)
@@ -158,7 +158,7 @@ class IsExistingShareHolderControllerSpec extends BaseSpec with DateFormatter{
     }
 
     "Submitting to the IsExistingShareHolder Controller when authenticated and enrolled" should {
-      "redirect to the correct page if the form 'was not' previously populated" in {
+      "redirect to the shareholding description page if the form 'was not' previously populated with a 'Yes' response" in {
 
         val formInput = "isExistingShareHolder" -> "Yes"
         setupMocks(Some(listOfInvestorsComplete), None)
@@ -171,12 +171,26 @@ class IsExistingShareHolderControllerSpec extends BaseSpec with DateFormatter{
           }
         )
       }
+
+      "redirect to the investor review page if the form 'was not' previously populated with a 'No' response" in {
+
+        val formInput = "isExistingShareHolder" -> "No"
+        setupMocks(Some(listOfInvestorsComplete), None)
+        mockEnrolledRequest(seisSchemeTypesModel)
+        submitWithSessionAndAuth(controller.submit(Some(Constants.typeCompany),backUrl),formInput)(
+          result => {
+            status(result) shouldBe SEE_OTHER
+            redirectLocation(result) shouldBe
+              Some(controllers.seis.routes.ReviewInvestorDetailsController.show(listOfInvestorsComplete.head.processingId.get).url)
+          }
+        )
+      }
     }
 
 
 
     "Submitting to the IsExistingShareHolder when authenticated and enrolled" should {
-      "redirect to the correct page the form 'was' previously populated and had a processing id" in {
+      "redirect to the shareholding description page the form 'was' previously populated and had a processing id with a 'Yes' response" in {
 
         val formInput = Seq("isExistingShareHolder" -> "Yes", "processingId" -> "2")
         setupMocks(Some(listOfInvestorsComplete), None)
@@ -186,6 +200,20 @@ class IsExistingShareHolderControllerSpec extends BaseSpec with DateFormatter{
             status(result) shouldBe SEE_OTHER
             redirectLocation(result) shouldBe
               Some(controllers.seis.routes.PreviousShareHoldingsReviewController.show(listOfInvestorsComplete.head.processingId.get).url)
+          }
+        )
+      }
+
+      "redirect to the investor review page the form 'was' previously populated and had a processing id with a 'No' response" in {
+
+        val formInput = Seq("isExistingShareHolder" -> "No", "processingId" -> "2")
+        setupMocks(Some(listOfInvestorsComplete), None)
+        mockEnrolledRequest(seisSchemeTypesModel)
+        submitWithSessionAndAuth(controller.submit(Some(Constants.typeCompany),backUrl), formInput:_*)(
+          result => {
+            status(result) shouldBe SEE_OTHER
+            redirectLocation(result) shouldBe
+              Some(controllers.seis.routes.ReviewInvestorDetailsController.show(listOfInvestorsComplete.head.processingId.get).url)
           }
         )
       }
