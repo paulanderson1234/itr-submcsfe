@@ -74,6 +74,7 @@ trait PreviousShareHoldingDescriptionController extends FrontendController with 
           backUrl <- s4lConnector.fetchAndGetFormData[String](KeystoreKeys.backLinkShareClassAndDescription)
           route <- process(backUrl)
         } yield route
+
     }
   }
 
@@ -95,6 +96,8 @@ trait PreviousShareHoldingDescriptionController extends FrontendController with 
               }
               case None => PreviousInvestorShareHoldersHelper.addShareClassAndDescription(s4lConnector, validFormData).map {
                 data => {
+                  s4lConnector.saveFormData(KeystoreKeys.backLinkShareClassAndDescription,
+                      routes.PreviousShareHoldingsReviewController.show(data.investorProcessingId.get).url)
                   s4lConnector.saveFormData(KeystoreKeys.backLinkIsPreviousShareHoldingNominalValue,
                     routes.PreviousShareHoldingDescriptionController.show(data.investorProcessingId.get, data.processingId).url)
                   Redirect(routes.PreviousShareHoldingNominalValueController.show(data.investorProcessingId.get, data.processingId.get))

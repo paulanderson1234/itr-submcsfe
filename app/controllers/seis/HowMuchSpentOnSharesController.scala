@@ -83,7 +83,11 @@ trait HowMuchSpentOnSharesController extends FrontendController with AuthorisedA
                 investorDetailsModel => {
                   s4lConnector.saveFormData(KeystoreKeys.backLinkIsExistingShareHolder,
                     routes.HowMuchSpentOnSharesController.show(investorDetailsModel.processingId.get).url)
-                  Redirect(routes.IsExistingShareHolderController.show(investorDetailsModel.processingId.get))
+                  if(investorDetailsModel.previousShareHoldingModels.isDefined &&
+                    investorDetailsModel.previousShareHoldingModels.get.nonEmpty)
+                    Redirect(routes.PreviousShareHoldingsReviewController.show(investorDetailsModel.processingId.get))
+                  else
+                    Redirect(routes.IsExistingShareHolderController.show(investorDetailsModel.processingId.get))
                 }
               }
               case None => PreviousInvestorsHelper.addAmountSpentOnSharesDetails(s4lConnector, validFormData).map {
