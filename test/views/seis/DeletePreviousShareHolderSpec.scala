@@ -51,6 +51,7 @@ class DeletePreviousShareHolderSpec  extends BaseSpec {
 
       document.body.getElementById("share-holding-remove").text() shouldBe Messages("common.base.remove")
       document.body.getElementById("share-holding-cancel").text() shouldBe Messages("common.button.cancel")
+      
     }
   }
 
