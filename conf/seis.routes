@@ -166,4 +166,7 @@ GET        /review-previous-investor-shareholdings-change/:InvestorId/:Id      c
 POST       /delete-previous-share-holding/:InvestorId/:Id                controllers.seis.DeletePreviousShareHolderController.submit(InvestorId: Int, Id: Int)
 GET        /delete-previous-share-holding/:InvestorId/:Id                controllers.seis.DeletePreviousShareHolderController.show(InvestorId: Int, Id: Int)
 
+GET        /delete-investor/:investorId             controllers.seis.DeleteInvestorController.show(investorId: Int)
+POST       /delete-investor/:InvestorId             controllers.seis.DeleteInvestorController.submit(InvestorId: Int)
+
 

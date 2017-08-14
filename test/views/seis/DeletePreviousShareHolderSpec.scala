@@ -49,8 +49,9 @@ class DeletePreviousShareHolderSpec  extends BaseSpec {
             Messages("page.seis.investors.DeletePreviousShareHolder.message.three")
       }
 
-      document.body.getElementById("share-holding-remove").text() shouldBe Messages("page.seis.investors.DeletePreviousShareHolder.confirm")
-      document.body.getElementById("share-holding-cancel").text() shouldBe Messages("page.seis.investors.DeletePreviousShareHolder.cancel")
+      document.body.getElementById("share-holding-remove").text() shouldBe Messages("common.base.remove")
+      document.body.getElementById("share-holding-cancel").text() shouldBe Messages("common.button.cancel")
+      
     }
   }
 

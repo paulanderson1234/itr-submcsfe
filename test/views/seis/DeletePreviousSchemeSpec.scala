@@ -41,8 +41,12 @@ class DeletePreviousSchemeSpec  extends BaseSpec {
 
       document.body.getElementById("main-heading").text() shouldBe Messages("page.deletePreviousScheme.heading")
       document.body.getElementById("scheme-delete-hint").text() shouldBe Messages("page.deletePreviousScheme.hint", schemeName, shareIssue)
-      document.body.getElementById("scheme-remove").text() shouldBe Messages("page.deletePreviousScheme.confirm")
-      document.body.getElementById("scheme-cancel").text() shouldBe Messages("page.deletePreviousScheme.cancel")
+      document.body.getElementById("scheme-remove").text() shouldBe Messages("common.base.remove")
+      document.body.getElementById("scheme-remove").hasClass("button--alert") shouldBe true
+      document.body.getElementById("scheme-cancel").text() shouldBe Messages("common.button.cancel")
+      document.body.getElementById("scheme-cancel").attr("href") shouldEqual controllers.eis.routes.ReviewPreviousSchemesController.show().url
+
+
     }
   }
 

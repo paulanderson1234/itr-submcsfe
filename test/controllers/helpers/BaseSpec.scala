@@ -241,6 +241,11 @@ trait BaseSpec extends UnitSpec with OneAppPerSuite with MockitoSugar with FakeR
 
   val numberOfSharesModel= NumberOfSharesModel(9999999999999.00)
 
+
+
+
+
+
   //investor details
   val investorModel = AddInvestorOrNomineeModel(Constants.investor, Some(1))
   val investorModel1 = AddInvestorOrNomineeModel(Constants.investor, Some(1))
@@ -280,6 +285,18 @@ trait BaseSpec extends UnitSpec with OneAppPerSuite with MockitoSugar with FakeR
   val investorShareIssueDateModel2 = InvestorShareIssueDateModel(Some(1), Some(1), Some(1980), Some(2), Some(2))
   val investorShareIssueDateModel3 = InvestorShareIssueDateModel(Some(1), Some(1), Some(1980), Some(3), Some(3))
 
+  val previousShareHoldingNominalValueModel = PreviousShareHoldingNominalValueModel(1000, Some(1), Some(1))
+  val previousShareHoldingNominalValueModel1 = PreviousShareHoldingNominalValueModel(1000, Some(1), Some(1))
+  val previousShareHoldingNominalValueModel2 = PreviousShareHoldingNominalValueModel(1000, Some(2))
+  val previousShareHoldingDescriptionModel = PreviousShareHoldingDescriptionModel("A previous shareholding", Some(1), Some(1))
+  val previousShareHoldingDescriptionModel1 = PreviousShareHoldingDescriptionModel("A previous shareholding", Some(1), Some(1))
+  val previousShareHoldingDescriptionModel2 = PreviousShareHoldingDescriptionModel("A previous shareholding", Some(2))
+
+  val numberOfPreviouslyIssuedSharesModel = NumberOfPreviouslyIssuedSharesModel(1000, Some(1), Some(1))
+  val numberOfPreviouslyIssuedSharesModel1 = NumberOfPreviouslyIssuedSharesModel(1000, Some(1), Some(1))
+  val numberOfPreviouslyIssuedSharesModel2 = NumberOfPreviouslyIssuedSharesModel(1000, Some(2))
+
+
   val shareHoldersModel1ForInvestor2 = Vector(PreviousShareHoldingModel(Some(investorShareIssueDateModel1), Some(numberOfPreviouslyIssuedSharesModel1),
     Some(previousShareHoldingNominalValueModel1), Some(previousShareHoldingDescriptionModel1), Some(1), Some(2)))
   val shareHoldersModel2ForInvestor2 = Vector(PreviousShareHoldingModel(Some(investorShareIssueDateModel2), Some(numberOfPreviouslyIssuedSharesModel2),
@@ -290,16 +307,10 @@ trait BaseSpec extends UnitSpec with OneAppPerSuite with MockitoSugar with FakeR
   val shareHoldersModel2ForInvestor1 = Vector(PreviousShareHoldingModel(Some(investorShareIssueDateModel2), Some(numberOfPreviouslyIssuedSharesModel2),
     Some(previousShareHoldingNominalValueModel2), Some(previousShareHoldingDescriptionModel2), Some(2), Some(1)))
 
-  val numberOfPreviouslyIssuedSharesModel = NumberOfPreviouslyIssuedSharesModel(1000, Some(1), Some(1))
-  val numberOfPreviouslyIssuedSharesModel1 = NumberOfPreviouslyIssuedSharesModel(1000, Some(1), Some(1))
-  val numberOfPreviouslyIssuedSharesModel2 = NumberOfPreviouslyIssuedSharesModel(1000, Some(2))
+  val investorCompany = InvestorDetailsModel(Some(investorModel2), Some(companyOrIndividualModel2), Some(companyDetailsModel2), None,
+    Some(numberOfSharesPurchasedModel2), Some(howMuchSpentOnSharesModel2), Some(isExistingShareHolderModelYes),
+    Some(shareHoldersModel1ForInvestor2), Some(2))
 
-  val previousShareHoldingNominalValueModel = PreviousShareHoldingNominalValueModel(1000, Some(1), Some(1))
-  val previousShareHoldingNominalValueModel1 = PreviousShareHoldingNominalValueModel(1000, Some(1), Some(1))
-  val previousShareHoldingNominalValueModel2 = PreviousShareHoldingNominalValueModel(1000, Some(2))
-  val previousShareHoldingDescriptionModel = PreviousShareHoldingDescriptionModel("A previous shareholding", Some(1), Some(1))
-  val previousShareHoldingDescriptionModel1 = PreviousShareHoldingDescriptionModel("A previous shareholding", Some(1), Some(1))
-  val previousShareHoldingDescriptionModel2 = PreviousShareHoldingDescriptionModel("A previous shareholding", Some(2))
 
   val validModelWithPrevShareHoldings = InvestorDetailsModel(Some(investorModel2), Some(companyOrIndividualModel2), Some(companyDetailsModel2), None,
     Some(numberOfSharesPurchasedModel2), Some(howMuchSpentOnSharesModel2), Some(isExistingShareHolderModelYes),
@@ -321,4 +332,53 @@ trait BaseSpec extends UnitSpec with OneAppPerSuite with MockitoSugar with FakeR
   val listOfInvestorsComplete = Vector(validModelWithPrevShareHoldings)
   val listOfInvestorsCompleteOption1 = Vector(validModelWithPrevShareHoldingsOption1)
   val listOfInvestorsIncomplete = Vector(validModelWithPrevShareHoldings.copy(companyOrIndividualModel = None))
+
+
+  //investors tets data for investor delete tests
+  val investorNominee1 = AddInvestorOrNomineeModel(Constants.investor, Some(1))
+  val investorNominee2 = AddInvestorOrNomineeModel(Constants.nominee, Some(2))
+  val investorNominee3 = AddInvestorOrNomineeModel(Constants.investor, Some(3))
+  val investorNominee4 = AddInvestorOrNomineeModel(Constants.nominee, Some(4))
+  val investorNominee5 = AddInvestorOrNomineeModel(Constants.investor, Some(5))
+  val investorNominee6 = AddInvestorOrNomineeModel(Constants.nominee, Some(6))
+  val companyIndividual1 = CompanyOrIndividualModel(Constants.typeIndividual, Some(1))
+  val companyIndividual2 = CompanyOrIndividualModel(Constants.typeCompany, Some(2))
+  // no individual details details f0r 3
+  val companyIndividual3 = CompanyOrIndividualModel(Constants.typeIndividual, Some(3))
+  val companyIndividual4 = CompanyOrIndividualModel(Constants.typeCompany, Some(4))
+  // only investor/nominee supplied
+  val companyIndividual5 = CompanyOrIndividualModel(Constants.typeIndividual, Some(5))
+  val companyIndividual6 = CompanyOrIndividualModel(Constants.typeCompany, Some(6))
+
+  val individualDetail1 =
+    IndividualDetailsModel("Sam", "West", "Line 1", "Line 2", Some("Line 3"),
+      Some("AB1 1AB"), None, countryCode = "JP", Some(1))
+
+  val companyDetail1 = CompanyDetailsModel("Ben's Boots Ltd.", "Line 1", "Line 2", Some("Line 3"),
+    Some("AB1 1AB"), None, countryCode = "UK", Some(2))
+
+  val individualDetail2 =
+    IndividualDetailsModel("Jack", "Smith", "1 Line", "2 Line", Some("3 Line"),
+      Some("QQ1 1QQ"), None, countryCode = "UK", Some(4))
+
+  val investor1 = InvestorDetailsModel(processingId = Some(1), investorOrNomineeModel = Some(investorNominee1),
+    companyOrIndividualModel = Some(companyIndividual1), individualDetailsModel = Some(individualDetail1),
+    companyDetailsModel = None, previousShareHoldingModels = Some(shareHoldersModel1ForInvestor1))
+
+  val investor2 = InvestorDetailsModel(processingId = Some(2), investorOrNomineeModel = Some(investorNominee2),
+    companyOrIndividualModel = Some(companyIndividual2), individualDetailsModel = None,
+    companyDetailsModel = Some(companyDetail1), previousShareHoldingModels = Some(shareHoldersModel1ForInvestor2))
+
+  // individual specified but no details
+  val investor3 = InvestorDetailsModel(processingId = Some(3), investorOrNomineeModel = Some(investorNominee3),
+    companyOrIndividualModel = Some(companyIndividual3), individualDetailsModel = None, companyDetailsModel = None)
+
+  // company specified but no details
+  val investor4 = InvestorDetailsModel(processingId = Some(4), investorOrNomineeModel = Some(investorNominee4),
+    companyOrIndividualModel = Some(companyIndividual4), individualDetailsModel = None, companyDetailsModel = None)
+
+  // only investor/nominee supplied and nothing else
+  val investor5 = InvestorDetailsModel(processingId = Some(5), investorOrNomineeModel = Some(investorNominee5))
+
+  val investorListForDeleteTests = Vector(investor1, investor2, investor3, investor4, investor5)
 }
