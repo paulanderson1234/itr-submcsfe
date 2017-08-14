@@ -167,7 +167,7 @@ class TestEndpointSEISControllerSpec extends BaseSpec {
 
   }
 
-  "TestEndpointSEISController.submitPageTwo" when {
+  /*"TestEndpointSEISController.submitPageTwo" when {
 
     "Called as an authorised and enrolled user" should {
 
@@ -180,7 +180,7 @@ class TestEndpointSEISControllerSpec extends BaseSpec {
 
     }
 
-  }
+  }*/
 
   "TestEndpointSEISController.fillForm" when {
 
