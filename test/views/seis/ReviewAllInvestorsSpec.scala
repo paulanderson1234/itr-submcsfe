@@ -28,7 +28,6 @@ import play.api.i18n.Messages.Implicits._
 class ReviewAllInvestorsSpec extends ViewSpec {
 
   val expectedAmountSpentResult = "£1,000"
-  val emptyTableData = ""
 
   val testModelValidCompany = validModelWithPrevShareHoldings
   val testModelValidIndividual = validModelWithPrevShareHoldings.copy(
@@ -64,24 +63,24 @@ class ReviewAllInvestorsSpec extends ViewSpec {
       }
 
       "have the correct title" in {
-        doc.title() shouldBe Messages("page.seis.investors.reviewAllInvestors.title")
+        doc.title() shouldBe Messages("page.investors.reviewAllInvestors.title")
       }
 
       "have the correct heading" in {
-        doc.select("h1").text() shouldBe Messages("page.seis.investors.reviewAllInvestors.title")
+        doc.select("h1").text() shouldBe Messages("page.investors.reviewAllInvestors.title")
       }
 
       "have the correct sub text" in {
-        doc.getElementById("review-all-investors-info").text() shouldBe Messages("page.seis.investors.reviewAllInvestors.info")
+        doc.getElementById("review-all-investors-info").text() shouldBe Messages("page.investors.reviewAllInvestors.info")
       }
 
       "have a table for investors" which {
         lazy val table = doc.select("table").get(0)
 
         "has the correct table headings" in {
-          table.select("th").get(0).text() shouldBe Messages("page.seis.investors.reviewAllInvestors.investorName")
-          table.select("th").get(1).text() shouldBe Messages("page.seis.investors.reviewAllInvestors.numberOfShares")
-          table.select("th").get(2).text() shouldBe Messages("page.seis.investors.reviewAllInvestors.amountSpent")
+          table.select("th").get(0).text() shouldBe Messages("page.investors.reviewAllInvestors.investorName")
+          table.select("th").get(1).text() shouldBe Messages("page.investors.reviewAllInvestors.numberOfShares")
+          table.select("th").get(2).text() shouldBe Messages("page.investors.reviewAllInvestors.amountSpent")
           table.select("th").get(3).getElementsByTag("span").get(0).className() shouldBe "visuallyhidden"
           table.select("th").get(4).getElementsByTag("span").get(0).className() shouldBe "visuallyhidden"
         }
@@ -137,7 +136,7 @@ class ReviewAllInvestorsSpec extends ViewSpec {
         }
 
         "have the correct 'add another investor' button text" in {
-          table.select("td#add-investor").text() shouldBe Messages("page.seis.investors.reviewAllInvestors.add")
+          table.select("td#add-investor").text() shouldBe Messages("page.investors.reviewAllInvestors.add")
         }
 
         "have the correct 'add another investor' button reference" in {
@@ -170,24 +169,24 @@ class ReviewAllInvestorsSpec extends ViewSpec {
       }
 
       "have the correct title" in {
-        doc.title() shouldBe Messages("page.seis.investors.reviewAllInvestors.title")
+        doc.title() shouldBe Messages("page.investors.reviewAllInvestors.title")
       }
 
       "have the correct heading" in {
-        doc.select("h1").text() shouldBe Messages("page.seis.investors.reviewAllInvestors.title")
+        doc.select("h1").text() shouldBe Messages("page.investors.reviewAllInvestors.title")
       }
 
       "have the correct sub text" in {
-        doc.getElementById("review-all-investors-info").text() shouldBe Messages("page.seis.investors.reviewAllInvestors.info")
+        doc.getElementById("review-all-investors-info").text() shouldBe Messages("page.investors.reviewAllInvestors.info")
       }
 
       "have a table for investors" which {
         lazy val table = doc.select("table").get(0)
 
         "has the correct table headings" in {
-          table.select("th").get(0).text() shouldBe Messages("page.seis.investors.reviewAllInvestors.investorName")
-          table.select("th").get(1).text() shouldBe Messages("page.seis.investors.reviewAllInvestors.numberOfShares")
-          table.select("th").get(2).text() shouldBe Messages("page.seis.investors.reviewAllInvestors.amountSpent")
+          table.select("th").get(0).text() shouldBe Messages("page.investors.reviewAllInvestors.investorName")
+          table.select("th").get(1).text() shouldBe Messages("page.investors.reviewAllInvestors.numberOfShares")
+          table.select("th").get(2).text() shouldBe Messages("page.investors.reviewAllInvestors.amountSpent")
           table.select("th").get(3).getElementsByTag("span").get(0).className() shouldBe "visuallyhidden"
           table.select("th").get(4).getElementsByTag("span").get(0).className() shouldBe "visuallyhidden"
         }
@@ -195,19 +194,19 @@ class ReviewAllInvestorsSpec extends ViewSpec {
         "has the correct investor names" in {
           val id = "td#investor-name"
           table.select(s"$id-0").text() shouldBe testModelValidCompany.companyDetailsModel.get.companyName
-          table.select(s"$id-1").text() shouldBe emptyTableData
+          table.select(s"$id-1").text() shouldBe Messages("page.investors.reviewInvestorDetails.incomplete")
         }
 
         "has the correct number of shares for each investor" in {
           val id = "td#number-of-shares"
           table.select(s"$id-0").text() shouldBe testModelValidCompany.numberOfSharesPurchasedModel.get.numberOfSharesPurchased.toString()
-          table.select(s"$id-1").text() shouldBe emptyTableData
+          table.select(s"$id-1").text() shouldBe Messages("page.investors.reviewInvestorDetails.incomplete")
         }
 
         "has the correct amounts spent for each investor" in {
           val id = "td#amount-raised"
           table.select(s"$id-0").text() shouldBe expectedAmountSpentResult
-          table.select(s"$id-1").text() shouldBe emptyTableData
+          table.select(s"$id-1").text() shouldBe Messages("page.investors.reviewInvestorDetails.incomplete")
         }
 
         "have the correct change links text" in {

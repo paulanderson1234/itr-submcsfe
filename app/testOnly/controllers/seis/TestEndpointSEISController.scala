@@ -30,11 +30,12 @@ import play.api.data.Form
 import play.api.libs.json.Format
 import play.api.mvc.{Action, AnyContent, Request}
 import testOnly.models._
-import testOnly.forms._
+import testOnly.forms.{TestInvestorModeOptionsForm, _}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import uk.gov.hmrc.play.http.HeaderCarrier
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
+import testOnly.controllers.InvestorTestHelper
 
 import scala.concurrent.Future
 
@@ -44,6 +45,7 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
 
   val s4lConnector: S4LConnector
   val defaultPreviousSchemesSize = 2
+  val keyStoreKeyInvestorModelOptions = "testonly:keyStoreKeyInvestorModelOptions"
 
   def showPageOne(schemes: Option[Int]): Action[AnyContent] = AuthorisedAndEnrolled.async {
     implicit user => implicit request =>
@@ -147,18 +149,20 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
   def showPageTwo: Action[AnyContent] = AuthorisedAndEnrolled.async {
     implicit user => implicit request =>
       for {
+
+        testInvestorModeOptionsForm <- fillForm[TestInvestorModeOptionsModel](keyStoreKeyInvestorModelOptions,
+          TestInvestorModeOptionsForm.testInvestorModeOptionsForm)
         numberOfSharesForm <- fillForm[NumberOfSharesModel](KeystoreKeys.numberOfShares, NumberOfSharesForm.numberOfSharesForm)
         nominalValueOfSharesForm <- fillForm[NominalValueOfSharesModel](KeystoreKeys.nominalValueOfShares, NominalValueOfSharesForm.nominalValueOfSharesForm)
-        individualDetailsForm <- fillForm[IndividualDetailsModel](KeystoreKeys.individualDetails, IndividualDetailsForm.individualDetailsForm)
         shareDescription <- fillForm[ShareDescriptionModel](KeystoreKeys.shareDescription, ShareDescriptionForm.shareDescriptionForm)
         totalAmountRaisedForm <- fillForm[TotalAmountRaisedModel](KeystoreKeys.totalAmountRaised, TotalAmountRaisedForm.totalAmountRaisedForm)
         totalAmountSpentForm <- fillForm[TotalAmountSpentModel](KeystoreKeys.totalAmountSpent, TotalAmountSpentForm.totalAmountSpentForm)
 
       } yield Ok(
         testOnly.views.html.seis.testEndpointSEISPageTwo(
+          testInvestorModeOptionsForm,
           numberOfSharesForm,
           nominalValueOfSharesForm,
-          individualDetailsForm,
           shareDescription,
           totalAmountRaisedForm,
           totalAmountSpentForm
@@ -169,23 +173,21 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
   }
 
   def submitPageTwo: Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user => implicit request =>
+    val investorModelOptions = bindForm[TestInvestorModeOptionsModel](keyStoreKeyInvestorModelOptions, TestInvestorModeOptionsForm.testInvestorModeOptionsForm)
     val numberOfShares = bindForm[NumberOfSharesModel](KeystoreKeys.numberOfShares, NumberOfSharesForm.numberOfSharesForm)
     val nominalValueOfShares = bindForm[NominalValueOfSharesModel](KeystoreKeys.nominalValueOfShares, NominalValueOfSharesForm.nominalValueOfSharesForm)
-    val individualDetailsForm = bindForm[IndividualDetailsModel](KeystoreKeys.individualDetails, IndividualDetailsForm.individualDetailsForm)
     val shareDescription = bindForm[ShareDescriptionModel](KeystoreKeys.shareDescription, ShareDescriptionForm.shareDescriptionForm)
-    val companyDetails = bindForm[CompanyDetailsModel](KeystoreKeys.companyDetails, CompanyDetailsForm.companyDetailsForm)
     val totalAmountRaised = bindForm[TotalAmountRaisedModel](KeystoreKeys.totalAmountRaised, TotalAmountRaisedForm.totalAmountRaisedForm)
     val totalAmountSpent = bindForm[TotalAmountSpentModel](KeystoreKeys.totalAmountSpent, TotalAmountSpentForm.totalAmountSpentForm)
 
-
-    saveInvestorDetails()
+    saveInvestorDetails(populateIvestorTestData(investorModelOptions.get))
     saveBackLinks()
     saveSchemeType()
     Future.successful(Ok(
       testOnly.views.html.seis.testEndpointSEISPageTwo(
+        investorModelOptions,
         numberOfShares,
         nominalValueOfShares,
-        individualDetailsForm,
         shareDescription,
         totalAmountRaised,
         totalAmountSpent
@@ -193,18 +195,39 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
     ))
   }
 
-  private def saveInvestorDetails()(implicit hc: HeaderCarrier, user: TAVCUser) = {
-    val shareHolding = PreviousShareHoldingModel(previousShareHoldingDescriptionModel =
-      Some(PreviousShareHoldingDescriptionModel("", Some(1))), processingId = Some(1))
-    s4lConnector.saveFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails,
-      Vector(InvestorDetailsModel(
-      Some(AddInvestorOrNomineeModel(Constants.investor, Some(1))), Some(CompanyOrIndividualModel(Constants.typeCompany, Some(1))),
-        numberOfSharesPurchasedModel = Some(NumberOfSharesPurchasedModel(1000, Some(1))), amountSpentModel = Some(HowMuchSpentOnSharesModel(1000, Some(1))),
-        isExistingShareHolderModel = Some(IsExistingShareHolderModel("Yes", Some(1))), previousShareHoldingModels =
-          Some(Vector(PreviousShareHoldingModel(processingId = Some(1), investorProcessingId = Some(1)))),
-        processingId = Some(1))))
+
+  private def saveInvestorDetails(investorDetails: Vector[InvestorDetailsModel])(implicit hc: HeaderCarrier, user: TAVCUser) = {
+    s4lConnector.saveFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails, investorDetails)
   }
 
+  private def populateIvestorTestData(options: TestInvestorModeOptionsModel): Vector[InvestorDetailsModel] = {
+    options.testInvestorModeOptions match {
+
+      // single investor no holdings
+      case "1" => InvestorTestHelper.getInvestors(1, 0)
+
+      // Single Investor with 5 holdings"
+      case "2" => InvestorTestHelper.getInvestors(1, 5)
+
+      //  5 Investors with 4 holdings each
+      case "3" => InvestorTestHelper.getInvestors(5, 4)
+
+      // 5 Investors with 4 holdings each. Last Holding incomplete
+      case "4" => InvestorTestHelper.getInvestors(5, 4, includeIncompleteShareHolding = true)
+
+      // 5 Investors with 4 holdings each. Last Investor incomplete (0 holdings)
+      case "5" => InvestorTestHelper.getInvestors(5, 4, includeIncompleteInvestor = true)
+
+      // 20 complete Investors with 5 holdings each
+      case "6" => InvestorTestHelper.getInvestors(20, 5)
+
+      // 20 complete Investors with 0 holdings each
+      case "7" => InvestorTestHelper.getInvestors(20, 0)
+
+      // catch all
+      case _ => InvestorTestHelper.getInvestors(1, 5)
+    }
+  }
 
   private def saveBackLinks()(implicit hc: HeaderCarrier, user: TAVCUser) = {
     s4lConnector.saveFormData[Boolean](KeystoreKeys.applicationInProgress, true)

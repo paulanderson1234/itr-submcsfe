@@ -170,13 +170,13 @@ class TestEndpointSEISControllerSpec extends BaseSpec {
   "TestEndpointSEISController.submitPageTwo" when {
 
     "Called as an authorised and enrolled user" should {
-
-      "Return OK" in {
-        mockEnrolledRequest()
-        submitWithSessionAndAuth(TestController.submitPageTwo())(
-          result => status(result) shouldBe OK
-        )
-      }
+//
+//      "Return OK" in {
+//        mockEnrolledRequest()
+//        submitWithSessionAndAuth(TestController.submitPageTwo())(
+//          result => status(result) shouldBe OK
+//        )
+//      }
 
     }
 
