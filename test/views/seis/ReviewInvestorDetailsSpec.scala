@@ -66,6 +66,10 @@ class ReviewInvestorDetailsSpec extends ViewSpec {
         doc.title() shouldBe Messages("page.seis.investors.reviewInvestorDetails.title", "nominee")
       }
 
+      "have a progress breadcrumb for section 4" in {
+        doc.select("#content p").first().text() shouldBe Messages("common.section.progress.company.details.four")
+      }
+
       "have the correct heading for a nominee" in {
         doc.select("h1").text() shouldBe Messages("page.seis.investors.reviewInvestorDetails.title", "nominee")
       }
@@ -197,6 +201,10 @@ class ReviewInvestorDetailsSpec extends ViewSpec {
 
       "have the correct title for an investor" in {
         doc.title() shouldBe Messages("page.seis.investors.reviewInvestorDetails.title", "investor")
+      }
+
+      "have a progress breadcrumb for section 4" in {
+        doc.select("#content p").first().text() shouldBe Messages("common.section.progress.company.details.four")
       }
 
       "have the correct heading for a nominee" in {
