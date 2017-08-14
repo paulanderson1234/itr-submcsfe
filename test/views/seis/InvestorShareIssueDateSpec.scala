@@ -36,7 +36,7 @@ class InvestorShareIssueDateSpec extends ViewSpec {
 
     "not supplied with form errors" should {
       lazy val document: Document = {
-        val result = InvestorShareIssueDate(investorShareIssueDateForm, backUrl)
+        val result = InvestorShareIssueDate(investorShareIssueDateForm, backUrl, 1)
         Jsoup.parse(contentAsString(result))
       }
 
@@ -72,7 +72,7 @@ class InvestorShareIssueDateSpec extends ViewSpec {
           "investorShareIssueDateDay" -> "",
           "investorShareIssueDateMonth" -> "",
           "investorShareIssueDateYear" -> "")
-        val result = InvestorShareIssueDate(investorShareIssueDateForm.bind(formInput), backUrl)
+        val result = InvestorShareIssueDate(investorShareIssueDateForm.bind(formInput), backUrl, 1)
         Jsoup.parse(contentAsString(result))
       }
 

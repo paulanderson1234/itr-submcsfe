@@ -58,7 +58,7 @@ trait InvestorShareIssueDateController extends FrontendController with Authorise
                     investorProcessingId, shareHoldings) { shareHoldingsIndex =>
                     val form = fillForm(investorShareIssueDateForm, retrieveShareData(shareHoldingsIndex,
                       shareHoldings)(_.investorShareIssueDateModel))
-                    Ok(InvestorShareIssueDate(form, backUrl.get))
+                    Ok(InvestorShareIssueDate(form, backUrl.get, investorProcessingId))
                   }
                 }
               }
@@ -74,12 +74,12 @@ trait InvestorShareIssueDateController extends FrontendController with Authorise
     }
   }
 
-  def submit(backUrl: Option[String]): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
+  def submit(backUrl: Option[String], investorProcessingId: Option[Int]): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
     AuthorisedAndEnrolled.async { implicit user =>
       implicit request =>
         investorShareIssueDateForm.bindFromRequest().fold(
           formWithErrors => {
-            Future.successful(BadRequest(InvestorShareIssueDate(formWithErrors, backUrl.get)))
+            Future.successful(BadRequest(InvestorShareIssueDate(formWithErrors, backUrl.get, investorProcessingId.get)))
           },
           validFormData => {
             validFormData.processingId match {
@@ -90,7 +90,7 @@ trait InvestorShareIssueDateController extends FrontendController with Authorise
                   Redirect(routes.NumberOfPreviouslyIssuedSharesController.show(data.investorProcessingId.get, data.processingId.get))
                 }
               }
-              case None => PreviousInvestorShareHoldersHelper.addInvestorShareIssueDate(s4lConnector, validFormData).map {
+              case None => PreviousInvestorShareHoldersHelper.addInvestorShareIssueDate(s4lConnector, validFormData, investorProcessingId.get).map {
                 data => {
                   s4lConnector.saveFormData(KeystoreKeys.backLinkNumberOfPreviouslyIssuedShares,
                     routes.InvestorShareIssueDateController.show(data.investorProcessingId.get, data.processingId.get).url)

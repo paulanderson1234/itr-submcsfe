@@ -35,7 +35,7 @@ class PreviousShareHoldingNominalValueSpec extends ViewSpec {
 
       "not supplied with form errors" should {
         lazy val document: Document = {
-          val result = PreviousShareHoldingNominalValue(previousShareHoldingNominalValueForm, backUrl)
+          val result = PreviousShareHoldingNominalValue(previousShareHoldingNominalValueForm, backUrl, 1)
           Jsoup.parse(contentAsString(result))
 
         }
@@ -81,7 +81,7 @@ class PreviousShareHoldingNominalValueSpec extends ViewSpec {
     "supplied with form errors" should {
       lazy val document: Document = {
         val map = Map("previousShareHoldingNominalValue" -> "")
-        val result = PreviousShareHoldingNominalValue(previousShareHoldingNominalValueForm.bind(map), backUrl)
+        val result = PreviousShareHoldingNominalValue(previousShareHoldingNominalValueForm.bind(map), backUrl, 1)
         Jsoup.parse(contentAsString(result))
       }
 

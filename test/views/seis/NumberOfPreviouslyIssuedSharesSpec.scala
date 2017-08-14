@@ -35,7 +35,7 @@ class NumberOfPreviouslyIssuedSharesSpec extends ViewSpec {
 
     "not supplied with form errors" should {
       lazy val document: Document = {
-        val result = NumberOfPreviouslyIssuedShares("Company", numberOfPreviouslyIssuedSharesForm, backUrl)
+        val result = NumberOfPreviouslyIssuedShares("Company", numberOfPreviouslyIssuedSharesForm, backUrl, 1)
         Jsoup.parse(contentAsString(result))
       }
 
@@ -75,7 +75,7 @@ class NumberOfPreviouslyIssuedSharesSpec extends ViewSpec {
     "supplied with form errors" should {
       lazy val document: Document = {
         val map = Map("numberOfPreviouslyIssuedShares" -> "")
-        val result = NumberOfPreviouslyIssuedShares("Company", numberOfPreviouslyIssuedSharesForm.bind(map), backUrl)
+        val result = NumberOfPreviouslyIssuedShares("Company", numberOfPreviouslyIssuedSharesForm.bind(map), backUrl, 1)
         Jsoup.parse(contentAsString(result))
       }
 
