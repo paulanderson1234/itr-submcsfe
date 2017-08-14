@@ -66,7 +66,8 @@ class PreviousShareHoldingNominalValueSpec extends ViewSpec {
       }
 
       "have a form posting to the correct route" in {
-        document.select("form").attr("action") shouldBe controllers.seis.routes.PreviousShareHoldingNominalValueController.submit(Some(backUrl)).url
+        document.select("form").attr("action") shouldBe
+          controllers.seis.routes.PreviousShareHoldingNominalValueController.submit(Some(backUrl), Some(1)).url
       }
 
       "have the correct hint" in {
@@ -115,7 +116,8 @@ class PreviousShareHoldingNominalValueSpec extends ViewSpec {
       }
 
       "have a form posting to the correct route" in {
-        document.select("form").attr("action") shouldBe controllers.seis.routes.PreviousShareHoldingNominalValueController.submit(Some(backUrl)).url
+        document.select("form").attr("action") shouldBe
+          controllers.seis.routes.PreviousShareHoldingNominalValueController.submit(Some(backUrl), Some(1)).url
       }
 
       "have the correct hint" in {

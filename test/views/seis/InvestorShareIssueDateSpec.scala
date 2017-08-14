@@ -58,7 +58,7 @@ class InvestorShareIssueDateSpec extends ViewSpec {
 
       "have a form posting to the correct route" in {
         document.select("form").attr("action") shouldBe
-          controllers.seis.routes.InvestorShareIssueDateController.submit(Some(backUrl)).url
+          controllers.seis.routes.InvestorShareIssueDateController.submit(Some(backUrl), Some(1)).url
       }
 
       "have a next button" in {
@@ -94,7 +94,7 @@ class InvestorShareIssueDateSpec extends ViewSpec {
 
       "have a form posting to the correct route" in {
         document.select("form").attr("action") shouldBe
-          controllers.seis.routes.InvestorShareIssueDateController.submit(Some(backUrl)).url
+          controllers.seis.routes.InvestorShareIssueDateController.submit(Some(backUrl), Some(1)).url
       }
 
       "have a next button" in {
