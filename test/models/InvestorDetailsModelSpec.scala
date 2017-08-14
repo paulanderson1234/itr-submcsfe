@@ -128,4 +128,26 @@ class InvestorDetailsModelSpec extends BaseSpec{
       }
     }
   }
+
+  "Calling .showIsExistingShareholderChangeLink" should {
+
+    "return a true" when {
+
+      "provided with an answer of no for existing shareholders" in {
+        validModelNoPrevShareHoldings.showIsExistingShareholderChangeLink shouldBe true
+      }
+
+      "provided with an answer of yes for existing shareholders but with no shareholders" in {
+        validModelWithPrevShareHoldings.copy(previousShareHoldingModels = None).showIsExistingShareholderChangeLink shouldBe true
+      }
+
+      "provided with an answer of yes for existing shareholders but an empty vector of shareholders" in {
+        validModelWithPrevShareHoldings.copy(previousShareHoldingModels = Some(Vector.empty)).showIsExistingShareholderChangeLink shouldBe true
+      }
+    }
+
+    "return a false when provided with a yes for existing shareholders with valid shareholders" in {
+      validModelWithPrevShareHoldings.showIsExistingShareholderChangeLink shouldBe false
+    }
+  }
 }

@@ -121,8 +121,10 @@
                     "is-existing-shareholder",
                     Messages("page.seis.investors.reviewInvestorDetails.shareholdings.isExistingShareholder"),
                     investor.isExistingShareHolderModel.map(_.isExistingShareHolder).getOrElse(Messages("page.seis.investors.reviewInvestorDetails.incomplete")),
-                    Some(controllers.seis.routes.IsExistingShareHolderController.show(investor.processingId.get).url),
-                    complete = investor.isExistingShareHolderModel.isDefined
+                    if (investor.showIsExistingShareholderChangeLink) {
+                        Some(controllers.seis.routes.IsExistingShareHolderController.show(investor.processingId.get).url)
+                    } else None,
+                    complete = investor.isExistingShareHolderModel.isDefined && investor.validateShareHoldings
                 )
 
                 @if(investor.isExistingShareHolderModel.map(_.isExistingShareHolder == Constants.StandardRadioButtonYesValue).getOrElse(false)) {

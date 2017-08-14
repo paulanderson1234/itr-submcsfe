@@ -333,8 +333,8 @@ class ReviewInvestorDetailsSpec extends ViewSpec {
             table.select(s"$id-answer").text() shouldBe Messages("common.radioYesLabel")
           }
 
-          "has a change link to the correct page" in {
-            table.select(s"$id-change a").attr("href") shouldBe controllers.seis.routes.IsExistingShareHolderController.show(1).url
+          "has no change link" in {
+            table.select(s"$id-change a").isEmpty shouldBe true
           }
         }
 

@@ -45,12 +45,18 @@ case class InvestorDetailsModel(investorOrNomineeModel: Option[AddInvestorOrNomi
 
   /*** Validates shareholdings by mapping over each shareholding and reducing the result to either true or false using 'forall'**/
   def validateShareHoldings : Boolean = {
-    if(isExistingShareHolderModel.isDefined && isExistingShareHolderModel.get.isExistingShareHolder == Constants.StandardRadioButtonNoValue) true
-    else if(isExistingShareHolderModel.isDefined && isExistingShareHolderModel.get.isExistingShareHolder == Constants.StandardRadioButtonYesValue){
-      if(previousShareHoldingModels.isDefined && previousShareHoldingModels.get.nonEmpty) previousShareHoldingModels.exists(_.forall(_.validate))
-      else false
+    if(isExistingShareHolderModel.exists(_.isExistingShareHolder == Constants.StandardRadioButtonNoValue)) true
+    else if(isExistingShareHolderModel.exists(_.isExistingShareHolder == Constants.StandardRadioButtonYesValue)){
+      previousShareHoldingModels.exists(vector => vector.nonEmpty && vector.forall(_.validate))
     }
     else false
+  }
+
+  def showIsExistingShareholderChangeLink: Boolean = {
+    isExistingShareHolderModel match {
+      case Some(IsExistingShareHolderModel(Constants.StandardRadioButtonYesValue, _)) if previousShareHoldingModels.exists(_.nonEmpty) => false
+      case _ => true
+    }
   }
 }
 
