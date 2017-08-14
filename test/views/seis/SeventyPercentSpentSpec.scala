@@ -77,7 +77,7 @@ class SeventyPercentSpentSpec extends ViewSpec {
       document.body.getElementById("back-link").attr("href") shouldEqual testUrl
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.company.details.one")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
-      document.getElementById("seventyPercentSpent-legend").hasClass("visuallyhidden")
+      document.getElementById("seventyPercentSpent-legend").hasClass("visuallyhidden") shouldBe true
       document.getElementById("seventyPercentSpent-legend").text shouldBe Messages("page.companyDetails.seventyPercentSpent.legend")
     }
 
@@ -95,7 +95,7 @@ class SeventyPercentSpentSpec extends ViewSpec {
       document.body.getElementById("back-link").attr("href") shouldEqual testUrlOther
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.company.details.one")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
-      document.getElementById("seventyPercentSpent-legend").hasClass("visuallyhidden")
+      document.getElementById("seventyPercentSpent-legend").hasClass("visuallyhidden") shouldBe true
       document.getElementById("seventyPercentSpent-legend").text shouldBe Messages("page.companyDetails.seventyPercentSpent.legend")
     }
 
@@ -114,7 +114,7 @@ class SeventyPercentSpentSpec extends ViewSpec {
       document.body.getElementById("back-link").attr("href") shouldEqual testUrl
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.company.details.one")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
-      document.getElementById("seventyPercentSpent-legend").hasClass("visuallyhidden")
+      document.getElementById("seventyPercentSpent-legend").hasClass("visuallyhidden") shouldBe true
       document.getElementById("seventyPercentSpent-legend").text shouldBe Messages("page.companyDetails.seventyPercentSpent.legend")
       document.getElementById("error-summary-display").hasClass("error-summary--show")
       document.getElementById("seventyPercentSpent-error-summary")

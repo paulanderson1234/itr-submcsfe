@@ -1151,6 +1151,15 @@ page.seis.investors.investorShareIssueDate.heading = When were these previous sh
 #AddAnotherShareholding
 page.seis.investors.AddAnotherShareholding.title = Do you want to add another previous shareholding?
 
+
+#Delete Investor
+page.investors.deleteInvestor.title=Confirm that you want to remove this {0}
+page.investors.deleteInvestor.heading=Confirm that you want to remove this {0}
+page.investors.deleteInvestor.investorOrNominee=investor or nominee
+page.investors.deleteInvestor.confirm=This will remove {0} from your list of investors and nominees.
+page.investors.deleteInvestor.cancel=Cancel remove and go back
+page.investors.deleteInvestor.confirm.noName=This {0} will be permanently removed from your list of investors and nominees.
+
 #Review Investors
 page.seis.investors.reviewInvestorDetails.title = Check {0} details
 page.seis.investors.reviewInvestorDetails.investor.subheading = {0} details
@@ -1178,4 +1187,30 @@ page.investors.reviewAllInvestors.numberOfShares=Number of shares
 page.investors.reviewAllInvestors.amountSpent=Amount spent
 page.investors.reviewAllInvestors.add=Add another investor or nominee
 
+#Number of previously issued shares
+page.seis.investors.numberOfPreviouslyIssuedShares.heading=How many shares were previously issued to this {0}?
+page.seis.investors.numberOfPreviouslyIssuedShares.title=How many shares were previously issued to this {0}?
 
+#PreviousShareHoldingsDescription
+page.seis.investors.previousShareHoldingDescription.title = What were the shares called that were issued to this {0}?
+page.seis.investors.previousShareHoldingDescription.heading = What were the shares called that were issued to this {0}?
+page.seis.investors.previousShareHoldingDescription.example.text = Add one type of share at a time.
+page.seis.investors.previousShareHoldingDescription.question.hint = Suggested limit: 20 words
+page.seis.investors.previousShareHoldingDescription.whereToFind = Where can I find this?
+page.seis.investors.previousShareHoldingDescription.location = It''s on your company''s Register of Members.
+
+#Previous share holders review
+page.seis.investors.previousShareHoldingReview.title = Check previous shareholdings
+page.seis.investors.previousShareHoldingReview.heading = Check previous shareholdings
+page.seis.investors.previousShareHoldingReview.heading.one = Shareholding description
+page.seis.investors.previousShareHoldingReview.heading.two = Nominal value
+page.seis.investors.previousShareHoldingReview.heading.three = Date of purchase
+page.seis.investors.previousShareHoldingReview.heading.four = Number purchased
+page.seis.investors.previousShareHoldingReview.add = Add another previous shareholding
+
+#Delete Previous share holder
+page.seis.investors.DeletePreviousShareHolder.title = Confirm that you want to remove this shareholding
+page.seis.investors.DeletePreviousShareHolder.heading = Confirm that you want to remove this shareholding
+page.seis.investors.DeletePreviousShareHolder.message.one = This will permanently remove the {0}
+page.seis.investors.DeletePreviousShareHolder.message.two = (date of purchase {0})
+page.seis.investors.DeletePreviousShareHolder.message.three = from your list of previous shareholdings.
