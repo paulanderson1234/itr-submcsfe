@@ -48,7 +48,6 @@ class DeleteInvestorControllerSpec extends BaseSpec {
 
   }
 
-
   "DeleteInvestorController" should {
     "use the correct keystore connector" in {
       DeleteInvestorController.s4lConnector shouldBe S4LConnector
@@ -67,46 +66,32 @@ class DeleteInvestorControllerSpec extends BaseSpec {
     }
   }
 
-    "no 'investor details list' is retrieved" in {
-      mockEnrolledRequest(seisSchemeTypesModel)
-      setupMocks(None)
-      showWithSessionAndAuth(TestController.show(2, 1))(
-        result => {
-          status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(controllers.seis.routes.AddInvestorOrNomineeController.show(None).url)
-        }
-      )
-    }
+  "no 'investor details list' is retrieved" in {
+    mockEnrolledRequest(seisSchemeTypesModel)
+    setupMocks(None)
+    showWithSessionAndAuth(TestController.show(1))(
+      result => {
+        status(result) shouldBe SEE_OTHER
+        redirectLocation(result) shouldBe Some(controllers.seis.routes.AddInvestorOrNomineeController.show(None).url)
+      }
+    )
+  }
 
 
-    "an 'investor details list' is retrieved and an INVALID investor details ID is passed" in {
-      mockEnrolledRequest(seisSchemeTypesModel)
-      setupMocks(Some(investorListForDeleteTests))
-      showWithSessionAndAuth(TestController.show(Constants.obviouslyInvalidId))(
-        result => {
-          status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(controllers.seis.routes.AddInvestorOrNomineeController.show(None).url)
-        }
-      )
-    }
-
-
-    "an 'investor details list' is retrieved, a VALID investor details " +
-      "ID is passed and the investor details contains an empty list of share holdings" in {
+  "Load the delete confirmation page page" when {
+    "an 'investor details list' is retrieved, and a VALID investor nominee details is provided" in {
       mockEnrolledRequest(seisSchemeTypesModel)
       setupMocks(Some(investorListForDeleteTests))
-      showWithSessionAndAuth(TestController.show(2))(
+      showWithSessionAndAuth(TestController.show(1))(
         result => {
-          status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(controllers.seis.routes.IsExistingShareHolderController.show(2).url)
+          status(result) shouldBe OK
         }
       )
     }
+  }
 
-
-  "Load a populated ShareHolding review page" when {
-    "an 'investor details list' is retrieved, a VALID investor details " +
-      "ID is defined and a VALID share holding Id is provided" in {
+  "Load the delete confirmation page page" when {
+    "an 'investor details list' is retrieved, and a VALID investor company details is provided" in {
       mockEnrolledRequest(seisSchemeTypesModel)
       setupMocks(Some(investorListForDeleteTests))
       showWithSessionAndAuth(TestController.show(2))(
@@ -118,15 +103,15 @@ class DeleteInvestorControllerSpec extends BaseSpec {
   }
 
   "Submitting to the DeleteInvestorController when authenticated and enrolled" should {
-    "redirect to the PreviousShareHoldingsReviewController page " in {
-
+    "redirect to the expected loaction page " in {
       setupMocks(Some(investorListForDeleteTests))
       mockEnrolledRequest(seisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit(2))(
         result => {
           status(result) shouldBe SEE_OTHER
           redirectLocation(result) shouldBe
-            Some(controllers.seis.routes.PreviousShareHoldingsReviewController.show(listOfInvestorsComplete.head.processingId.get).url)
+          // TODO: navigate to all investors review page
+          Some(controllers.seis.routes.TotalAmountRaisedController.show().url)
         }
       )
     }

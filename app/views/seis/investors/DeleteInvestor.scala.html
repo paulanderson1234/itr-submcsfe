@@ -5,24 +5,23 @@
 
 @(investor: InvestorDetailsModel)(implicit request: Request[_], messages: Messages)
 
-@main_template(Messages("page.investors.deleteInvestor.title")) {
+@main_template(Messages("page.investors.deleteInvestor.title", investor.investorOrNomineeModel.get.addInvestorOrNominee.toLowerCase())) {
 
 @*TODO: route back to ReviewAllInvestorsController when available*@
 @backButtonWithProgress(controllers.seis.routes.TotalAmountRaisedController.show().url, Messages("common.section.progress.company.details.four"))
 
 
-<h1 id="main-heading" class="form-title heading-xlarge">@Messages("page.investors.deleteInvestor.heading", investor.investorOrNomineeModel.map(_.addInvestorOrNominee).get)</h1>
+<h1 id="main-heading" class="form-title heading-xlarge">@Messages("page.investors.deleteInvestor.title", investor.investorOrNomineeModel.get.addInvestorOrNominee.toLowerCase())</h1>
 
-<p class="lede">
-    @if(investor.investorNomineeDescription.isEmpty){@Messages("page.investors.deleteInvestor.confirm.noName")} else {@Messages("page.investors.deleteInvestor.confirm", investor.investorNomineeDescription)}
-
+<p class="lede" id="info">
+    @if(investor.investorNomineeDescription.isEmpty){@Messages("page.investors.deleteInvestor.confirm.noName", investor.investorOrNomineeModel.get.addInvestorOrNominee.toLowerCase())} else {@Messages("page.investors.deleteInvestor.confirm", investor.investorNomineeDescription)}
 </p>
 
 
 @form(action = controllers.seis.routes.DeleteInvestorController.submit(investor.processingId.get)){
    <div class="form-group"></div>
     <div class="form-group">
-        <button id="share-holding-remove" class="button button--alert" type="submit">@Messages("page.seis.investors.DeletePreviousShareHolder.confirm")</button>
+        <button id="remove-button" class="button button--alert" type="submit">@Messages("common.base.remove")</button>
     </div>
 }
 
@@ -30,7 +29,7 @@
     @*TODO route to All investor review page*@
     <a id="delete-investor-cancel"
        href="@controllers.seis.routes.TotalAmountRaisedController.show().url">
-        @Messages("page.investors.deleteInvestor.cancel")</a>
+        @Messages("common.button.cancelRemove")</a>
 </div>
 
 }

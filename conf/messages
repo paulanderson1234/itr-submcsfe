@@ -13,6 +13,7 @@ common.button.findAddress=Find address
 common.button.checkAnswers=Check your answers
 common.button.upload=Upload
 common.button.cancel=Cancel and go back
+common.button.cancelRemove=Cancel remove and go back
 common.errorSummary.label=The following errors were identified on this page.
 common.radioNoLabel=No
 common.radioYesLabel=Yes
@@ -1152,10 +1153,9 @@ page.seis.investors.investorShareIssueDate.heading = When were these previous sh
 page.seis.investors.AddAnotherShareholding.title = Do you want to add another previous shareholding?
 
 #Delete Investor
-page.investors.deleteInvestor.title=Confirm that you want to remove this Investor or Nominee
-page.investors.deleteInvestor.heading2=Confirm that you want to remove this Investor or Nominee
+page.investors.deleteInvestor.title=Confirm that you want to remove this {0}
 page.investors.deleteInvestor.heading=Confirm that you want to remove this {0}
 page.investors.deleteInvestor.investorOrNominee=investor or nominee
 page.investors.deleteInvestor.confirm=This will remove {0} from your list of investors and nominees.
 page.investors.deleteInvestor.cancel=Cancel remove and go back
-page.investors.deleteInvestor.confirm.noName=This will removed from your list of investors and nominees.
+page.investors.deleteInvestor.confirm.noName=This {0} will be permanently removed from your list of investors and nominees.
