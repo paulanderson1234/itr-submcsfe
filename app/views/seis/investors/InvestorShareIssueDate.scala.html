@@ -2,7 +2,7 @@
 @import uk.gov.hmrc.play.views.html.helpers.form
 @import views.html.helpers.{externalLink, backButtonWithProgress, errorSummary, formInlineDateInput, hiddenField}
 
-@(investorShareIssueDateForm: Form[InvestorShareIssueDateModel], backLink:String)(implicit request: Request[_], messages: Messages)
+@(investorShareIssueDateForm: Form[InvestorShareIssueDateModel], backLink:String, investorProcessingId: Int)(implicit request: Request[_], messages: Messages)
 
 @main_template(Messages("page.investors.investorShareIssueDate.title")) {
 
@@ -12,7 +12,7 @@
 
     <h1 class="heading-xlarge" id="main-heading">@Messages("page.investors.investorShareIssueDate.heading")</h1>
 
-    @form(action = controllers.seis.routes.InvestorShareIssueDateController.submit(Some(backLink))) {
+    @form(action = controllers.seis.routes.InvestorShareIssueDateController.submit(Some(backLink), Some(investorProcessingId))) {
 
         @formInlineDateInput(investorShareIssueDateForm, "investorShareIssueDate", Some(Messages("page.investors.investorShareIssueDate.heading")),
         true, Some(Messages("common.date.hint.example")), None)

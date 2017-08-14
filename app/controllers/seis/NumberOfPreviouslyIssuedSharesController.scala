@@ -61,11 +61,11 @@ trait NumberOfPreviouslyIssuedSharesController extends FrontendController with A
                       if (shareHolderModel.get.numberOfPreviouslyIssuedSharesModel.isDefined) {
                         Ok(NumberOfPreviouslyIssuedShares(model.get.companyOrIndividualModel.get.companyOrIndividual,
                           numberOfPreviouslyIssuedSharesForm.fill(shareHolderModel.get.numberOfPreviouslyIssuedSharesModel.get),
-                          backUrl.get))
+                          backUrl.get, investorProcessingId))
                       }
                       else
                         Ok(NumberOfPreviouslyIssuedShares(model.get.companyOrIndividualModel.get.companyOrIndividual,
-                          numberOfPreviouslyIssuedSharesForm, backUrl.get))
+                          numberOfPreviouslyIssuedSharesForm, backUrl.get, investorProcessingId))
                     }
                     else Redirect(routes.AddInvestorOrNomineeController.show(model.get.processingId))
                   }
@@ -85,19 +85,22 @@ trait NumberOfPreviouslyIssuedSharesController extends FrontendController with A
     }
   }
 
-  def submit(companyOrIndividual: Option[String], backUrl: Option[String]): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
+  def submit(companyOrIndividual: Option[String], backUrl: Option[String], investorProcessingId: Option[Int]):
+  Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
     AuthorisedAndEnrolled.async { implicit user =>
       implicit request =>
         numberOfPreviouslyIssuedSharesForm.bindFromRequest().fold(
           formWithErrors => {
-            Future.successful(BadRequest(NumberOfPreviouslyIssuedShares(companyOrIndividual.get, formWithErrors, backUrl.get)))
+            Future.successful(BadRequest(NumberOfPreviouslyIssuedShares(companyOrIndividual.get,
+              formWithErrors, backUrl.get, investorProcessingId.get)))
           },
           validFormData => {
             validFormData.processingId match {
               case Some(_) => PreviousInvestorShareHoldersHelper.updateNumberOfPreviouslyIssuedShares(s4lConnector, validFormData).map {
                 data => Redirect(routes.PreviousShareHoldingsReviewController.show(data.investorProcessingId.get))
               }
-              case None => PreviousInvestorShareHoldersHelper.addNumberOfPreviouslyIssuedShares(s4lConnector, validFormData).map {
+              case None => PreviousInvestorShareHoldersHelper.addNumberOfPreviouslyIssuedShares(s4lConnector,
+                validFormData, investorProcessingId.get).map {
                 data => Redirect(routes.PreviousShareHoldingsReviewController.show(data.investorProcessingId.get))
               }
             }
