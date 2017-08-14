@@ -170,7 +170,7 @@ class HowMuchSpentOnSharesControllerSpec extends BaseSpec  {
           result => {
             status(result) shouldBe SEE_OTHER
             redirectLocation(result) shouldBe
-              Some(controllers.seis.routes.IsExistingShareHolderController.show(listOfInvestorsComplete.head.processingId.get).url)
+              Some(controllers.seis.routes.PreviousShareHoldingsReviewController.show(listOfInvestorsComplete.head.processingId.get).url)
           }
         )
       }

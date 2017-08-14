@@ -23,11 +23,13 @@ import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
 import forms.NatureOfBusinessForm
 import models._
-import models.investorDetails.HowMuchSpentOnSharesModel
+import models.investorDetails.{HowMuchSpentOnSharesModel, InvestorDetailsModel}
 import org.mockito.Matchers
 import org.mockito.Mockito._
 import play.api.test.Helpers._
+import testOnly.controllers.InvestorTestHelper
 import testOnly.models.TestPreviousSchemesModel
+import uk.gov.hmrc.http.cache.client.CacheMap
 
 import scala.concurrent.Future
 
@@ -93,6 +95,8 @@ class TestEndpointSEISControllerSpec extends BaseSpec {
       (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
     when(mockS4lConnector.fetchAndGetFormData[String](Matchers.any())
       (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
+    when(mockS4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](Matchers.eq(KeystoreKeys.investorDetails))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
   }
 
   def setupFillFormMocks(natureOfBusinessModel: Option[NatureOfBusinessModel]): Unit = {
@@ -103,6 +107,17 @@ class TestEndpointSEISControllerSpec extends BaseSpec {
   def setupFillPreviousSchemesFormMocks(previousSchemes: Option[Vector[PreviousSchemeModel]]): Unit = {
     when(mockS4lConnector.fetchAndGetFormData[Vector[PreviousSchemeModel]](Matchers.eq(KeystoreKeys.previousSchemes))
       (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(previousSchemes))
+  }
+
+  def setUpSubmitMocks(numberOfInvestorsToCreate:Int = 1,numberOfShareholdingsToCreate:Int =1) :Unit = {
+    val investorDetails = InvestorTestHelper.getInvestors(numberOfInvestorsToCreate, numberOfShareholdingsToCreate)
+
+//    when(mockS4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](Matchers.eq(KeystoreKeys.investorDetails))
+//      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
+
+    when(mockS4lConnector.saveFormData(Matchers.eq(KeystoreKeys.investorDetails),
+      Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(CacheMap("", Map())))
   }
 
   "TestEndpointSEISController" should {
@@ -167,7 +182,7 @@ class TestEndpointSEISControllerSpec extends BaseSpec {
 
   }
 
-  "TestEndpointSEISController.submitPageTwo" when {
+  /*"TestEndpointSEISController.submitPageTwo" when {
 
     "Called as an authorised and enrolled user" should {
 //
@@ -177,10 +192,8 @@ class TestEndpointSEISControllerSpec extends BaseSpec {
 //          result => status(result) shouldBe OK
 //        )
 //      }
-
     }
-
-  }
+  }*/
 
   "TestEndpointSEISController.fillForm" when {
 
