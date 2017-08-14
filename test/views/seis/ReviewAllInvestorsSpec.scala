@@ -145,18 +145,6 @@ class ReviewAllInvestorsSpec extends ViewSpec {
         }
 
       }
-
-//      "have a save and continue button" which {
-//        lazy val button = doc.select("btn")
-//
-//        "has the correct text" in {
-//          button.text() shouldBe Messages("common.button.snc")
-//        }
-//
-//        "links to the  AddAnotherInvestor page" in {
-//          button.attr("href") shouldBe controllers.seis.routes.AddAnotherInvestorController.show().url
-//        }
-//      }
     }
 
 
@@ -241,17 +229,6 @@ class ReviewAllInvestorsSpec extends ViewSpec {
 
       }
 
-//      "have a save and continue button" which {
-//        lazy val button = doc.select("btn")
-//
-//        "has the correct text" in {
-//          button.text() shouldBe Messages("common.button.snc")
-//        }
-//
-//        "links to the  AddAnotherInvestor page" in {
-//          button.attr("href") shouldBe controllers.seis.routes.AddAnotherInvestorController.show().url
-//        }
-//      }
     }
   }
 }

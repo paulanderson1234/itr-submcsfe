@@ -20,6 +20,8 @@ import akka.actor.ActorSystem
 import akka.stream.{ActorMaterializer, Materializer}
 import auth.{MockAuthConnector, MockConfig}
 import common.KeystoreKeys
+import config.FrontendAuthConnector
+import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
 import models.AddInvestorOrNomineeModel
 import models.investorDetails.InvestorDetailsModel
@@ -53,7 +55,20 @@ class ReviewAllInvestorsControllerSpec extends BaseSpec {
       .thenReturn(Future.successful(investorDetails))
   }
 
-  "When a GET request is made to ReviewInvestorsDetailsController show method" which {
+  "ReviewAllInvestorsController" should {
+    "use the correct auth connector" in {
+      ReviewAllInvestorsController.authConnector shouldBe FrontendAuthConnector
+    }
+    "use the correct keystore connector" in {
+      ReviewAllInvestorsController.s4lConnector shouldBe S4LConnector
+    }
+    "use the correct enrolment connector" in {
+      ReviewAllInvestorsController.enrolmentConnector shouldBe EnrolmentConnector
+    }
+  }
+
+
+  "When a GET request is made to ReviewAllInvestorsController show method" which {
 
     "does not find any investors" should {
       lazy val result = {
@@ -87,7 +102,7 @@ class ReviewAllInvestorsControllerSpec extends BaseSpec {
     }
   }
 
-  "When a POST request is made to ReviewInvestorsDetailsController submit method" which {
+  "When a POST request is made to ReviewAllInvestorsController submit method" which {
 
     "does not find any investors" should {
       lazy val result = {
@@ -138,7 +153,7 @@ class ReviewAllInvestorsControllerSpec extends BaseSpec {
     }
   }
 
-  "When a GET request is made to ReviewInvestorsDetailsController change method" which {
+  "When a GET request is made to ReviewAllInvestorsController change method" which {
 
     "does not find any investors" should {
       lazy val result = {
@@ -187,7 +202,7 @@ class ReviewAllInvestorsControllerSpec extends BaseSpec {
     }
   }
 
-  "When a GET request is made to ReviewInvestorsDetailsController add method" which {
+  "When a GET request is made to ReviewAllInvestorsController add method" which {
 
     "does not find any investors" should {
       lazy val result = {
@@ -236,7 +251,7 @@ class ReviewAllInvestorsControllerSpec extends BaseSpec {
     }
   }
 
-  "Making a GET request to the ReviewInvestorsDetailsController remove method" should {
+  "Making a GET request to the ReviewAllInvestorsController remove method" should {
 
     lazy val result = {
       testController.remove(1)(authorisedFakeRequest)

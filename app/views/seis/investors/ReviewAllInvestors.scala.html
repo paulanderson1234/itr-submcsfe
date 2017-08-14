@@ -21,7 +21,7 @@
     <table id="review-all-investors-table">
         <thead>
         <tr>
-            <th id="investor-name-table-heading" width="38%">@Messages("page.investors.reviewAllInvestors.investorName")</th>
+            <th id="investor-name-table-heading">@Messages("page.investors.reviewAllInvestors.investorName")</th>
             <th id="number-of-shares-table-heading">@Messages("page.investors.reviewAllInvestors.numberOfShares")</th>
             <th id="amount-spent-table-heading">@Messages("page.investors.reviewAllInvestors.amountSpent")</th>
             <th>
@@ -76,12 +76,15 @@
                 }</td>
         </tr>
         }
-        <tr>
-            @if(investors.forall(_.validate)){
-                <td id="add-investor" colspan="5"><a  id="add-investor-ref" href="@controllers.seis.routes.ReviewAllInvestorsController.add.toString">@Messages("page.investors.reviewAllInvestors.add")</a></td>
-            }
-        </tr>
         </tbody>
+        <tfoot>
+        @if(investors.forall(_.validate)){
+        <tr>
+            <td id="add-investor"><a  id="add-investor-ref" href="@controllers.seis.routes.ReviewAllInvestorsController.add.toString">@Messages("page.investors.reviewAllInvestors.add")</a></td>
+            <td colspan="4"></td>
+        </tr>
+        }
+        </tfoot>
     </table>
 
     @if(investors.forall(_.validate)){
