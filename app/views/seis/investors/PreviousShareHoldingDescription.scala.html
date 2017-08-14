@@ -3,7 +3,7 @@
 @import models.investorDetails.PreviousShareHoldingDescriptionModel
 @import common.Constants
 
-@(companyOrIndividual: String, previousShareHoldingDescriptionForm: Form[PreviousShareHoldingDescriptionModel], backUrl: String)(implicit request: Request[_], messages: Messages)
+@(companyOrIndividual: String, previousShareHoldingDescriptionForm: Form[PreviousShareHoldingDescriptionModel], backUrl: String, investorProcessingId: Int)(implicit request: Request[_], messages: Messages)
 
 @main_template(Messages("page.seis.investors.previousShareHoldingDescription.title", companyOrIndividual.toLowerCase())) {
 
@@ -17,7 +17,7 @@
     <p id="description-one" class="lede">@Messages("page.seis.investors.previousShareHoldingDescription.example.text")</p>
 </div>
 
-@form(action = controllers.seis.routes.PreviousShareHoldingDescriptionController.submit(Some(companyOrIndividual), Some(backUrl))) {
+@form(action = controllers.seis.routes.PreviousShareHoldingDescriptionController.submit(Some(companyOrIndividual), Some(backUrl), Some(investorProcessingId))) {
 
 <fieldset>
     <legend class="visuallyhidden">@Messages("page.seis.investors.previousShareHoldingDescription.heading")</legend>

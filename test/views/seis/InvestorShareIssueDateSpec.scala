@@ -36,7 +36,7 @@ class InvestorShareIssueDateSpec extends ViewSpec {
 
     "not supplied with form errors" should {
       lazy val document: Document = {
-        val result = InvestorShareIssueDate(investorShareIssueDateForm, backUrl)
+        val result = InvestorShareIssueDate(investorShareIssueDateForm, backUrl, 1)
         Jsoup.parse(contentAsString(result))
       }
 
@@ -58,7 +58,7 @@ class InvestorShareIssueDateSpec extends ViewSpec {
 
       "have a form posting to the correct route" in {
         document.select("form").attr("action") shouldBe
-          controllers.seis.routes.InvestorShareIssueDateController.submit(Some(backUrl)).url
+          controllers.seis.routes.InvestorShareIssueDateController.submit(Some(backUrl), Some(1)).url
       }
 
       "have a next button" in {
@@ -72,7 +72,7 @@ class InvestorShareIssueDateSpec extends ViewSpec {
           "investorShareIssueDateDay" -> "",
           "investorShareIssueDateMonth" -> "",
           "investorShareIssueDateYear" -> "")
-        val result = InvestorShareIssueDate(investorShareIssueDateForm.bind(formInput), backUrl)
+        val result = InvestorShareIssueDate(investorShareIssueDateForm.bind(formInput), backUrl, 1)
         Jsoup.parse(contentAsString(result))
       }
 
@@ -94,7 +94,7 @@ class InvestorShareIssueDateSpec extends ViewSpec {
 
       "have a form posting to the correct route" in {
         document.select("form").attr("action") shouldBe
-          controllers.seis.routes.InvestorShareIssueDateController.submit(Some(backUrl)).url
+          controllers.seis.routes.InvestorShareIssueDateController.submit(Some(backUrl), Some(1)).url
       }
 
       "have a next button" in {

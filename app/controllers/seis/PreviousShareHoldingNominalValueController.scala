@@ -63,10 +63,10 @@ trait PreviousShareHoldingNominalValueController extends FrontendController with
                         if(shareHolderModel.get.previousShareHoldingNominalValueModel.isDefined) {
                           Ok(PreviousShareHoldingNominalValue(
                             previousShareHoldingNominalValueForm.fill(shareHolderModel.get.previousShareHoldingNominalValueModel.get),
-                            backUrl.get))
+                            backUrl.get, investorProcessingId))
                         }
                         else
-                          Ok(PreviousShareHoldingNominalValue(previousShareHoldingNominalValueForm, backUrl.get))
+                          Ok(PreviousShareHoldingNominalValue(previousShareHoldingNominalValueForm, backUrl.get, investorProcessingId))
                       }
                       else Redirect(routes.AddInvestorOrNomineeController.show(model.get.processingId))
                     }
@@ -87,7 +87,7 @@ trait PreviousShareHoldingNominalValueController extends FrontendController with
     }
   }
 
-  def submit(backUrl: Option[String]): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
+  def submit(backUrl: Option[String], investorProcessingId: Option[Int]): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
     AuthorisedAndEnrolled.async {
       implicit user =>
         implicit request =>
@@ -100,7 +100,7 @@ trait PreviousShareHoldingNominalValueController extends FrontendController with
                   Redirect(routes.InvestorShareIssueDateController.show(data.investorProcessingId.get, data.processingId.get))
                 }
               }
-              case None => PreviousInvestorShareHoldersHelper.addPreviousShareHoldingNominalValue(s4lConnector, model).map {
+              case None => PreviousInvestorShareHoldersHelper.addPreviousShareHoldingNominalValue(s4lConnector, model, investorProcessingId.get).map {
                 data => {
                   s4lConnector.saveFormData(KeystoreKeys.backLinkInvestorShareIssueDate,
                     routes.PreviousShareHoldingNominalValueController.show(data.investorProcessingId.get, data.processingId.get).url)
@@ -111,7 +111,7 @@ trait PreviousShareHoldingNominalValueController extends FrontendController with
           }
 
           val failure: Form[PreviousShareHoldingNominalValueModel] => Future[Result] = { form =>
-            Future.successful(BadRequest(PreviousShareHoldingNominalValue(form, backUrl.get)))
+            Future.successful(BadRequest(PreviousShareHoldingNominalValue(form, backUrl.get, investorProcessingId.get)))
           }
 
           previousShareHoldingNominalValueForm.bindFromRequest().fold(failure, success)

@@ -62,7 +62,7 @@ trait PreviousShareHoldingDescriptionController extends FrontendController with 
                       previousShares)(_.previousShareHoldingDescriptionModel)))
                   Ok(PreviousShareHoldingDescription(retrieveInvestorData(investorIdVal,
                     data)(_.companyOrIndividualModel.map(_.companyOrIndividual)).get,
-                    form, backUrl.get))
+                    form, backUrl.get, investorProcessingId))
                 }
               }
             }
@@ -78,12 +78,12 @@ trait PreviousShareHoldingDescriptionController extends FrontendController with 
     }
   }
 
-  def submit(companyOrIndividual: Option[String], backUrl: Option[String]): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
+  def submit(companyOrIndividual: Option[String], backUrl: Option[String], investorProcessingId: Option[Int]): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
     AuthorisedAndEnrolled.async { implicit user =>
       implicit request =>
         previousShareHoldingDescriptionForm.bindFromRequest().fold(
           formWithErrors => {
-            Future.successful(BadRequest(PreviousShareHoldingDescription(companyOrIndividual.get, formWithErrors, backUrl.get)))
+            Future.successful(BadRequest(PreviousShareHoldingDescription(companyOrIndividual.get, formWithErrors, backUrl.get, investorProcessingId.get)))
           },
           validFormData => {
             validFormData.processingId match {
@@ -94,7 +94,7 @@ trait PreviousShareHoldingDescriptionController extends FrontendController with 
                   Redirect(routes.PreviousShareHoldingNominalValueController.show(data.investorProcessingId.get, data.processingId.get))
                 }
               }
-              case None => PreviousInvestorShareHoldersHelper.addShareClassAndDescription(s4lConnector, validFormData).map {
+              case None => PreviousInvestorShareHoldersHelper.addShareClassAndDescription(s4lConnector, validFormData, investorProcessingId.get).map {
                 data => {
                   s4lConnector.saveFormData(KeystoreKeys.backLinkShareClassAndDescription,
                       routes.PreviousShareHoldingsReviewController.show(data.investorProcessingId.get).url)
