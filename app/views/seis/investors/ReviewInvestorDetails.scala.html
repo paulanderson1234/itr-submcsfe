@@ -28,12 +28,14 @@
                 Messages("page.seis.investors.reviewInvestorDetails.shareholdings.numberOfShares", Transformers.numberToFormattedNumber(model.previouslyIssuedShares))
             }.getOrElse(Messages("page.seis.investors.reviewInvestorDetails.incomplete"))
         ),
-        Some(controllers.seis.routes.ReviewInvestorDetailsController.show(investor.processingId.get).url),
+        Some(controllers.seis.routes.PreviousShareHoldingsReviewController.show(investor.processingId.get).url),
         complete = model.validate
     )
 }
 
 @main_template(Messages("page.seis.investors.reviewInvestorDetails.title", investor.investorOrNomineeModel.map(_.addInvestorOrNominee).get.toLowerCase), articleLayout=false) {
+
+    <p>@Messages("common.section.progress.company.details.four")</p>
 
     <h1 class="heading-xlarge">@Messages("page.seis.investors.reviewInvestorDetails.title", investor.investorOrNomineeModel.map(_.addInvestorOrNominee).get.toLowerCase)</h1>
 
@@ -121,8 +123,10 @@
                     "is-existing-shareholder",
                     Messages("page.seis.investors.reviewInvestorDetails.shareholdings.isExistingShareholder"),
                     investor.isExistingShareHolderModel.map(_.isExistingShareHolder).getOrElse(Messages("page.seis.investors.reviewInvestorDetails.incomplete")),
-                    Some(controllers.seis.routes.IsExistingShareHolderController.show(investor.processingId.get).url),
-                    complete = investor.isExistingShareHolderModel.isDefined
+                    if (investor.showIsExistingShareholderChangeLink) {
+                        Some(controllers.seis.routes.IsExistingShareHolderController.show(investor.processingId.get).url)
+                    } else None,
+                    complete = investor.isExistingShareHolderModel.isDefined && investor.validateShareHoldings
                 )
 
                 @if(investor.isExistingShareHolderModel.map(_.isExistingShareHolder == Constants.StandardRadioButtonYesValue).getOrElse(false)) {
@@ -146,7 +150,7 @@
         </table>
 
         @if(investor.validate) {
-            <a class="button" href="@controllers.seis.routes.ReviewInvestorDetailsController.show(investor.processingId.getOrElse(0)).url">
+            <a class="button" id="next" href="@controllers.seis.routes.ReviewInvestorDetailsController.show(investor.processingId.getOrElse(0)).url">
                 @Messages("common.button.snc")
             </a>
         }

@@ -4,7 +4,7 @@
 @import views.html.helpers.{errorSummary, hiddenField}
 @import models.investorDetails.PreviousShareHoldingNominalValueModel
 
-@(previousShareHoldingNominalValueForm: Form[PreviousShareHoldingNominalValueModel], backUrl: String)(implicit request: Request[_], messages: Messages)
+@(previousShareHoldingNominalValueForm: Form[PreviousShareHoldingNominalValueModel], backUrl: String, investorProcessingId: Int)(implicit request: Request[_], messages: Messages)
 
 @main_template(Messages("page.seis.investors.previousShareHoldingNominalValue.title")) {
 @backButtonWithProgress(backUrl, Messages("common.section.progress.company.details.four"))
@@ -17,7 +17,7 @@
         <p>@Messages("page.seis.investors.previousShareHoldingNominalValue.whereToFind")</p>
     </div>
 
-    @form(action = controllers.seis.routes.PreviousShareHoldingNominalValueController.submit(Some(backUrl))) {
+    @form(action = controllers.seis.routes.PreviousShareHoldingNominalValueController.submit(Some(backUrl), Some(investorProcessingId))) {
         <div class="form-group">
             @inputWithCurrencySymbol(
             previousShareHoldingNominalValueForm("previousShareHoldingNominalValue"),

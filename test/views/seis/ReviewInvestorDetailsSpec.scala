@@ -66,6 +66,10 @@ class ReviewInvestorDetailsSpec extends ViewSpec {
         doc.title() shouldBe Messages("page.seis.investors.reviewInvestorDetails.title", "nominee")
       }
 
+      "have a progress breadcrumb for section 4" in {
+        doc.select("#content p").first().text() shouldBe Messages("common.section.progress.company.details.four")
+      }
+
       "have the correct heading for a nominee" in {
         doc.select("h1").text() shouldBe Messages("page.seis.investors.reviewInvestorDetails.title", "nominee")
       }
@@ -197,6 +201,10 @@ class ReviewInvestorDetailsSpec extends ViewSpec {
 
       "have the correct title for an investor" in {
         doc.title() shouldBe Messages("page.seis.investors.reviewInvestorDetails.title", "investor")
+      }
+
+      "have a progress breadcrumb for section 4" in {
+        doc.select("#content p").first().text() shouldBe Messages("common.section.progress.company.details.four")
       }
 
       "have the correct heading for a nominee" in {
@@ -333,8 +341,9 @@ class ReviewInvestorDetailsSpec extends ViewSpec {
             table.select(s"$id-answer").text() shouldBe Messages("common.radioYesLabel")
           }
 
-          "has a change link to the correct page" in {
-            table.select(s"$id-change a").attr("href") shouldBe controllers.seis.routes.IsExistingShareHolderController.show(1).url
+
+          "has no change link" in {
+            table.select(s"$id-change a").isEmpty shouldBe true
           }
         }
 
@@ -350,7 +359,7 @@ class ReviewInvestorDetailsSpec extends ViewSpec {
           }
 
           "has a change link to the correct page" in {
-            table.select(s"$id-change a").attr("href") shouldBe controllers.seis.routes.ReviewInvestorDetailsController.show(1).url
+            table.select(s"$id-change a").attr("href") shouldBe controllers.seis.routes.PreviousShareHoldingsReviewController.show(1).url
           }
         }
 
@@ -366,7 +375,7 @@ class ReviewInvestorDetailsSpec extends ViewSpec {
           }
 
           "has a change link to the correct page" in {
-            table.select(s"$id-change a").attr("href") shouldBe controllers.seis.routes.ReviewInvestorDetailsController.show(1).url
+            table.select(s"$id-change a").attr("href") shouldBe controllers.seis.routes.PreviousShareHoldingsReviewController.show(1).url
           }
         }
 
@@ -466,7 +475,7 @@ class ReviewInvestorDetailsSpec extends ViewSpec {
           }
 
           "has a change link to the correct page" in {
-            table.select(s"$id-change a").attr("href") shouldBe controllers.seis.routes.ReviewInvestorDetailsController.show(1).url
+            table.select(s"$id-change a").attr("href") shouldBe controllers.seis.routes.PreviousShareHoldingsReviewController.show(1).url
           }
         }
 
