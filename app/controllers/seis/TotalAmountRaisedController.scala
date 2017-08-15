@@ -31,6 +31,7 @@ import views.html.seis.shareDetails.TotalAmountRaised
 
 import scala.concurrent.Future
 import controllers.predicates.FeatureSwitch
+import models.investorDetails.InvestorDetailsModel
 import play.Logger
 import play.api.mvc.Result
 
@@ -49,60 +50,68 @@ trait TotalAmountRaisedController extends FrontendController with AuthorisedAndE
   val submissionConnector: SubmissionConnector
 
   val show = featureSwitch(applicationConfig.seisFlowEnabled) {
-    AuthorisedAndEnrolled.async { implicit user => implicit request =>
-      s4lConnector.fetchAndGetFormData[TotalAmountRaisedModel](KeystoreKeys.totalAmountRaised).map {
-        case Some(data) => Ok(TotalAmountRaised(totalAmountRaisedForm.fill(data)))
-        case None => Ok(TotalAmountRaised(totalAmountRaisedForm))
-      }
+    AuthorisedAndEnrolled.async { implicit user =>
+      implicit request =>
+        s4lConnector.fetchAndGetFormData[TotalAmountRaisedModel](KeystoreKeys.totalAmountRaised).map {
+          case Some(data) => Ok(TotalAmountRaised(totalAmountRaisedForm.fill(data)))
+          case None => Ok(TotalAmountRaised(totalAmountRaisedForm))
+        }
     }
   }
 
   val submit = featureSwitch(applicationConfig.seisFlowEnabled) {
-    AuthorisedAndEnrolled.async { implicit user => implicit request =>
+    AuthorisedAndEnrolled.async { implicit user =>
+      implicit request =>
 
-      def routeRequest(dateForActivity: Option[HasInvestmentTradeStartedModel]): Future[Result] = {
+        def routeRequest(dateForActivity: Option[HasInvestmentTradeStartedModel]): Future[Result] = {
+          if (dateForActivity.isDefined) {
+            if (dateForActivity.get.hasInvestmentTradeStarted == Constants.StandardRadioButtonYesValue) {
+              val validationFlag = for {
+                startDateValid <- submissionConnector.validateHasInvestmentTradeStartedCondition(dateForActivity.get.hasInvestmentTradeStartedDay.get,
+                  dateForActivity.get.hasInvestmentTradeStartedMonth.get, dateForActivity.get.hasInvestmentTradeStartedYear.get)
+                investorDetails <- s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails)
+              } yield (startDateValid, investorDetails)
 
-        if (dateForActivity.isDefined) {
-          if (dateForActivity.get.hasInvestmentTradeStarted == Constants.StandardRadioButtonYesValue) {
-            submissionConnector.validateHasInvestmentTradeStartedCondition(dateForActivity.get.hasInvestmentTradeStartedDay.get,
-              dateForActivity.get.hasInvestmentTradeStartedMonth.get, dateForActivity.get.hasInvestmentTradeStartedYear.get).map {
-              case Some(valid) if valid => {
-                s4lConnector.saveFormData(KeystoreKeys.backLinkAddInvestorOrNominee, routes.TotalAmountRaisedController.show().url)
-                Redirect(routes.AddInvestorOrNomineeController.show())
+              validationFlag.map {
+                case (Some(startDateValid) ,investorDetails)  if startDateValid => {
+                  s4lConnector.saveFormData(KeystoreKeys.backLinkAddInvestorOrNominee, routes.TotalAmountRaisedController.show().url)
+                  if(investorDetails.isDefined && investorDetails.get.nonEmpty)
+                    Redirect(controllers.seis.routes.ReviewInvestorDetailsController.show(1))
+                  else Redirect(controllers.seis.routes.AddInvestorOrNomineeController.show())
+                }
+                case (Some(startDateValid), _) if !startDateValid => Redirect(routes.TotalAmountSpentController.show())
+                case (None, _) =>
+                  Logger.warn("[TotalAmountRaisedController][submit] - validateHasInvestmentTradeStartedCondition did not return expected true/false answer")
+                  InternalServerError(internalServerErrorTemplate)
               }
-              case Some(valid) if !valid => Redirect(routes.TotalAmountSpentController.show())
-              case None =>
-                Logger.warn("[TotalAmountRaisedController][submit] - validateHasInvestmentTradeStartedCondition did not return expected true/false answer")
-                InternalServerError(internalServerErrorTemplate)
             }
+            else
+            // trade not started so treat as less than 4 months trading
+              Future.successful(Redirect(routes.TotalAmountSpentController.show()))
           }
           else
-            // trade not started so treat as less than 4 months trading
-            Future.successful(Redirect(routes.TotalAmountSpentController.show()))
-        }
-        else
           // inconsistent date. User page skipping etc. Send to start of flow.
-          Future.successful(Redirect(routes.QualifyBusinessActivityController.show()))
-      }
-
-      totalAmountRaisedForm.bindFromRequest().fold(
-        formWithErrors => {
-          Future.successful(BadRequest(TotalAmountRaised(formWithErrors)))
-        },
-        validFormData => {
-          s4lConnector.saveFormData(KeystoreKeys.totalAmountRaised, validFormData)
-          (for {
-            dateForActivity <- ControllerHelpers.getTradeStartDateForBusinessActivity(s4lConnector)
-            route <- routeRequest(dateForActivity)
-          } yield route) recover {
-            case e: Exception => {
-              Logger.warn(s"[TotalAmountRaisedController][submit]- Exception occurred: ${e.getMessage}")
-              InternalServerError(internalServerErrorTemplate)
-            }
-          }
-
+            Future.successful(Redirect(routes.QualifyBusinessActivityController.show()))
         }
-      )
+
+        totalAmountRaisedForm.bindFromRequest().fold(
+          formWithErrors => {
+            Future.successful(BadRequest(TotalAmountRaised(formWithErrors)))
+          },
+          validFormData => {
+            s4lConnector.saveFormData(KeystoreKeys.totalAmountRaised, validFormData)
+            (for {
+              dateForActivity <- ControllerHelpers.getTradeStartDateForBusinessActivity(s4lConnector)
+              route <- routeRequest(dateForActivity)
+            } yield route) recover {
+              case e: Exception => {
+                Logger.warn(s"[TotalAmountRaisedController][submit]- Exception occurred: ${e.getMessage}")
+                InternalServerError(internalServerErrorTemplate)
+              }
+            }
+
+          }
+        )
     }
   }
 }

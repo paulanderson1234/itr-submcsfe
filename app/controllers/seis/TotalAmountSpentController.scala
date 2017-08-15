@@ -29,6 +29,7 @@ import common.KeystoreKeys
 import config.{AppConfig, FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.predicates.FeatureSwitch
+import models.investorDetails.InvestorDetailsModel
 
 import scala.concurrent.Future
 
@@ -59,11 +60,12 @@ trait TotalAmountSpentController extends FrontendController with AuthorisedAndEn
       implicit user =>
         implicit request =>
           val success: TotalAmountSpentModel => Future[Result] = { model =>
-            s4lConnector.saveFormData(KeystoreKeys.totalAmountSpent, model).map(_ => {
+              s4lConnector.saveFormData(KeystoreKeys.totalAmountSpent, model)
               s4lConnector.saveFormData(KeystoreKeys.backLinkAddInvestorOrNominee, routes.TotalAmountSpentController.show().url)
-              Redirect(controllers.seis.routes.AddInvestorOrNomineeController.show())
+            s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map{
+              case Some(data) => if(data.nonEmpty) Redirect(controllers.seis.routes.ReviewInvestorDetailsController.show())
+              case None => Redirect(controllers.seis.routes.AddInvestorOrNomineeController.show())
             }
-            )
           }
 
           val failure: Form[TotalAmountSpentModel] => Future[Result] = { form =>

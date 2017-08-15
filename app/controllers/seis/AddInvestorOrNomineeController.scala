@@ -50,20 +50,23 @@ trait AddInvestorOrNomineeController extends FrontendController with AuthorisedA
           if (backUrl.isDefined) {
             s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
               case Some(data) =>
-                id match {
-                  case Some(idVal) => {
-                    redirectInvalidInvestor(getInvestorIndex(idVal, data)) { id =>
-                      val form = fillForm(addInvestorOrNomineeForm, retrieveInvestorData(id, data)(_.investorOrNomineeModel))
-                      Ok(AddInvestorOrNominee(form, backUrl.get))
+                if(data.nonEmpty) {
+                  id match {
+                    case Some(idVal) => {
+                      redirectInvalidInvestor(getInvestorIndex(idVal, data)) { id =>
+                        val form = fillForm(addInvestorOrNomineeForm, retrieveInvestorData(id, data)(_.investorOrNomineeModel))
+                        Ok(AddInvestorOrNominee(form, backUrl.get))
+                      }
+                    }
+                    case None => {
+                      val investorDetailsModel = data.last
+                      if (investorDetailsModel.validate) Ok(AddInvestorOrNominee(addInvestorOrNomineeForm, backUrl.get))
+                      else Ok(AddInvestorOrNominee(addInvestorOrNomineeForm.fill(investorDetailsModel.investorOrNomineeModel.get),
+                        backUrl.get))
                     }
                   }
-                  case None => {
-                    val investorDetailsModel = data.last
-                    if (investorDetailsModel.validate) Ok(AddInvestorOrNominee(addInvestorOrNomineeForm, backUrl.get))
-                    else Ok(AddInvestorOrNominee(addInvestorOrNomineeForm.fill(investorDetailsModel.investorOrNomineeModel.get),
-                      backUrl.get))
-                  }
-                }
+                }else
+                  Ok(AddInvestorOrNominee(addInvestorOrNomineeForm, backUrl.get))
               case _ => Ok(AddInvestorOrNominee(addInvestorOrNomineeForm, backUrl.get))
             }
           }

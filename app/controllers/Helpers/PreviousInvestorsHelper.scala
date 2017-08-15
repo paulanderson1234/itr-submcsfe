@@ -95,16 +95,14 @@ trait PreviousInvestorsHelper {
 
     val result = s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
       case Some(data) =>
-        val investorDetailsModel = data.last
-        if (investorDetailsModel.validate) {
-          // forward to the review page
+        if (data.nonEmpty && data.last.validate) {
           val newId = data.last.processingId.get + 1
           data :+ InvestorDetailsModel.apply(investorOrNomineeModel = Some(addInvestorOrNomineeModel.copy(processingId = Some(newId))),
             processingId = Some(newId))
         }
         else{
-          data.updated(data.size - 1, investorDetailsModel.copy(investorOrNomineeModel =
-            Some(addInvestorOrNomineeModel.copy(processingId = investorDetailsModel.processingId))))
+          data.updated(data.size - 1, data.last.copy(investorOrNomineeModel =
+            Some(addInvestorOrNomineeModel.copy(processingId = data.last.processingId))))
         }
       case None =>
         Vector.empty :+ InvestorDetailsModel.apply(investorOrNomineeModel = Some(addInvestorOrNomineeModel.copy(processingId = Some(defaultId))),
