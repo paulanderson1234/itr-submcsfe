@@ -93,8 +93,7 @@ trait ReviewAllInvestorsController extends FrontendController with AuthorisedAnd
 
   def remove(id: Int): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
     AuthorisedAndEnrolled.async { implicit user => implicit request =>
-      //TODO redirect to investor delete page with correct ID
-      Future.successful(Redirect(""))
+      Future.successful(Redirect(routes.DeleteInvestorController.show(id)))
     }
   }
 }

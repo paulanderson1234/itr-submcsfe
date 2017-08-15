@@ -48,8 +48,8 @@ class DeleteInvestorSpec  extends BaseSpec {
       document.body.getElementById("remove-button").text() shouldBe Messages("common.base.remove")
       document.body.getElementById("remove-button").hasClass("button--alert") shouldBe true
       document.body.getElementById("delete-investor-cancel").text() shouldBe Messages("common.button.cancel")
-      //TODO href should be all investors when available
-      document.body.getElementById("delete-investor-cancel").attr("href") shouldEqual controllers.seis.routes.TotalAmountRaisedController.show().url
+
+      document.body.getElementById("delete-investor-cancel").attr("href") shouldEqual controllers.seis.routes.ReviewAllInvestorsController.show().url
     }
 
     "contain the correct elements for a nominee company" in {
@@ -72,8 +72,8 @@ class DeleteInvestorSpec  extends BaseSpec {
       document.body.getElementById("remove-button").text() shouldBe Messages("common.base.remove")
       document.body.getElementById("remove-button").hasClass("button--alert") shouldBe true
       document.body.getElementById("delete-investor-cancel").text() shouldBe Messages("common.button.cancel")
-      //TODO href should be all investors when available
-      document.body.getElementById("delete-investor-cancel").attr("href") shouldEqual controllers.seis.routes.TotalAmountRaisedController.show().url
+
+      document.body.getElementById("delete-investor-cancel").attr("href") shouldEqual controllers.seis.routes.ReviewAllInvestorsController.show().url
     }
 
     "contain the correct elements for an investor but no company or individual option has been selected" in {
@@ -96,8 +96,8 @@ class DeleteInvestorSpec  extends BaseSpec {
       document.body.getElementById("remove-button").text() shouldBe Messages("common.base.remove")
       document.body.getElementById("remove-button").hasClass("button--alert") shouldBe true
       document.body.getElementById("delete-investor-cancel").text() shouldBe Messages("common.button.cancel")
-      //TODO href should be all investors when available
-      document.body.getElementById("delete-investor-cancel").attr("href") shouldEqual controllers.seis.routes.TotalAmountRaisedController.show().url
+
+      document.body.getElementById("delete-investor-cancel").attr("href") shouldEqual controllers.seis.routes.ReviewAllInvestorsController.show().url
     }
 
     "contain the correct elements for an nominee/company but no company details have been entered" in {
@@ -120,8 +120,8 @@ class DeleteInvestorSpec  extends BaseSpec {
       document.body.getElementById("remove-button").text() shouldBe Messages("common.base.remove")
       document.body.getElementById("remove-button").hasClass("button--alert") shouldBe true
       document.body.getElementById("delete-investor-cancel").text() shouldBe Messages("common.button.cancel")
-      //TODO href should be all investors when available
-      document.body.getElementById("delete-investor-cancel").attr("href") shouldEqual controllers.seis.routes.TotalAmountRaisedController.show().url
+
+      document.body.getElementById("delete-investor-cancel").attr("href") shouldEqual controllers.seis.routes.ReviewAllInvestorsController.show().url
     }
 
     "contain the correct elements for an investor/individual but no individual details have been entered" in {
@@ -144,8 +144,8 @@ class DeleteInvestorSpec  extends BaseSpec {
       document.body.getElementById("remove-button").text() shouldBe Messages("common.base.remove")
       document.body.getElementById("remove-button").hasClass("button--alert") shouldBe true
       document.body.getElementById("delete-investor-cancel").text() shouldBe Messages("common.button.cancel")
-      //TODO href should be all investors when available
-      document.body.getElementById("delete-investor-cancel").attr("href") shouldEqual controllers.seis.routes.TotalAmountRaisedController.show().url
+
+      document.body.getElementById("delete-investor-cancel").attr("href") shouldEqual controllers.seis.routes.ReviewAllInvestorsController.show().url
     }
 
   }

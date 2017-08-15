@@ -157,20 +157,6 @@ POST       /add-another-shareholding/:investorId              controllers.seis.A
 
 GET        /review-investor/:investorId                 controllers.seis.ReviewInvestorDetailsController.show(investorId: Int)
 
-GET        /review-all-investors                  controllers.seis.ReviewAllInvestorsController.show
-POST       /review-all-investors                  controllers.seis.ReviewAllInvestorsController.submit
-
-GET        /review-all-investors-add             controllers.seis.ReviewAllInvestorsController.add
-GET        /review-all-investors-change/:Id      controllers.seis.ReviewAllInvestorsController.change(Id: Int)
-
-
-GET        /review-all-investors-remove/:Id      controllers.seis.ReviewAllInvestorsController.remove(Id: Int)
-
-GET        /investor-share-issue-date/:InvestorId/:Id                controllers.seis.InvestorShareIssueDateController.show(InvestorId: Int, Id: Int)
-POST       /investor-share-issue-date                                controllers.seis.InvestorShareIssueDateController.submit(backUrl: Option[String]?=None)
-
-GET        /review-investor/:investorId                 controllers.seis.ReviewInvestorDetailsController.show(investorId: Int)
-
 GET        /review-previous-share-holdings/:InvestorId                 controllers.seis.PreviousShareHoldingsReviewController.show(InvestorId: Int)
 POST       /review-previous-share-holdings/:InvestorId                 controllers.seis.PreviousShareHoldingsReviewController.submit(InvestorId: Int)
 GET        /review-previous-investor-shareholdings-remove/:InvestorId/:Id      controllers.seis.PreviousShareHoldingsReviewController.remove(InvestorId: Int, Id: Int)
@@ -182,5 +168,16 @@ GET        /delete-previous-share-holding/:InvestorId/:Id                control
 
 GET        /delete-investor/:investorId             controllers.seis.DeleteInvestorController.show(investorId: Int)
 POST       /delete-investor/:InvestorId             controllers.seis.DeleteInvestorController.submit(InvestorId: Int)
+
+GET        /review-investor/:investorId                 controllers.seis.ReviewInvestorDetailsController.show(investorId: Int)
+
+GET        /review-all-investors                  controllers.seis.ReviewAllInvestorsController.show
+POST       /review-all-investors                  controllers.seis.ReviewAllInvestorsController.submit
+
+GET        /review-all-investors-add             controllers.seis.ReviewAllInvestorsController.add
+GET        /review-all-investors-change/:Id      controllers.seis.ReviewAllInvestorsController.change(Id: Int)
+
+GET        /review-all-investors-remove/:Id      controllers.seis.ReviewAllInvestorsController.remove(Id: Int)
+
 
 

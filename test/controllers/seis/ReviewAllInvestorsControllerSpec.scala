@@ -256,9 +256,13 @@ class ReviewAllInvestorsControllerSpec extends BaseSpec {
     lazy val result = {
       testController.remove(1)(authorisedFakeRequest)
     }
-    "redirect the remove investor page" in {
-        //todo when delete page exists
-        redirectLocation(result) shouldBe Some("")
+
+    "return a status of 303" in {
+      status(result) shouldBe SEE_OTHER
+    }
+
+    "redirect to the remove investor page" in {
+        redirectLocation(result) shouldBe Some(controllers.seis.routes.DeleteInvestorController.show(1).url)
       }
 
   }
