@@ -1181,7 +1181,7 @@ page.seis.investors.reviewInvestorDetails.incomplete = Incomplete
 #Review All Investors Page
 page.investors.reviewAllInvestors.title = Check your investors or nominees
 page.investors.reviewAllInvestors.heading = Check your investors or nominees
-page.investors.reviewAllInvestors.info = Make sure you’ve only added the investors or nominees seeking tax relief from this share issue.
+page.investors.reviewAllInvestors.info = Make sure you''ve only added the investors or nominees seeking tax relief from this share issue.
 page.investors.reviewAllInvestors.investorName=Name
 page.investors.reviewAllInvestors.numberOfShares=Number of shares
 page.investors.reviewAllInvestors.amountSpent=Amount spent
