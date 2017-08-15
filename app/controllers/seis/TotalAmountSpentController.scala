@@ -63,7 +63,7 @@ trait TotalAmountSpentController extends FrontendController with AuthorisedAndEn
               s4lConnector.saveFormData(KeystoreKeys.totalAmountSpent, model)
               s4lConnector.saveFormData(KeystoreKeys.backLinkAddInvestorOrNominee, routes.TotalAmountSpentController.show().url)
             s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map{
-              case Some(data) => if(data.nonEmpty) Redirect(controllers.seis.routes.ReviewInvestorDetailsController.show())
+              case Some(data) if(data.nonEmpty) => Redirect(controllers.seis.routes.ReviewAllInvestorsController.show())
               case None => Redirect(controllers.seis.routes.AddInvestorOrNomineeController.show())
             }
           }

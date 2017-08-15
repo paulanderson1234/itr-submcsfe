@@ -72,7 +72,7 @@ trait AddAnotherShareholdingController extends FrontendController with Authorise
       val successAction: AddAnotherShareholdingModel => Future[Result] = {
         case AddAnotherShareholdingModel(true) => Future.successful(Redirect(routes.PreviousShareHoldingDescriptionController.show(investorId)))
         case AddAnotherShareholdingModel(false) => checkValidShareholdings {
-          Redirect(routes.AddAnotherShareholdingController.show(investorId))
+          Redirect(routes.ReviewInvestorDetailsController.show(investorId))
         }
       }
 

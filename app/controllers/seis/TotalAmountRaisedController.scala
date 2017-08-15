@@ -76,7 +76,7 @@ trait TotalAmountRaisedController extends FrontendController with AuthorisedAndE
                 case (Some(startDateValid) ,investorDetails)  if startDateValid => {
                   s4lConnector.saveFormData(KeystoreKeys.backLinkAddInvestorOrNominee, routes.TotalAmountRaisedController.show().url)
                   if(investorDetails.isDefined && investorDetails.get.nonEmpty)
-                    Redirect(controllers.seis.routes.ReviewInvestorDetailsController.show(1))
+                    Redirect(controllers.seis.routes.ReviewAllInvestorsController.show())
                   else Redirect(controllers.seis.routes.AddInvestorOrNomineeController.show())
                 }
                 case (Some(startDateValid), _) if !startDateValid => Redirect(routes.TotalAmountSpentController.show())
