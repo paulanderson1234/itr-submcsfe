@@ -110,8 +110,7 @@ class DeleteInvestorControllerSpec extends BaseSpec {
         result => {
           status(result) shouldBe SEE_OTHER
           redirectLocation(result) shouldBe
-          // TODO: navigate to all investors review page
-          Some(controllers.seis.routes.TotalAmountRaisedController.show().url)
+          Some(controllers.seis.routes.ReviewAllInvestorsController.show().url)
         }
       )
     }

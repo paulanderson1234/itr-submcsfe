@@ -1176,6 +1176,15 @@ page.seis.investors.reviewInvestorDetails.shareholdings.numberOfShares = Number 
 page.seis.investors.reviewInvestorDetails.shareholdings.addAnotherShareholding = Add another previous shareholding
 page.seis.investors.reviewInvestorDetails.incomplete = Incomplete
 
+#Review All Investors Page
+page.investors.reviewAllInvestors.title = Check your investors or nominees
+page.investors.reviewAllInvestors.heading = Check your investors or nominees
+page.investors.reviewAllInvestors.info = Make sure you''ve only added the investors or nominees seeking tax relief from this share issue.
+page.investors.reviewAllInvestors.investorName=Name
+page.investors.reviewAllInvestors.numberOfShares=Number of shares
+page.investors.reviewAllInvestors.amountSpent=Amount spent
+page.investors.reviewAllInvestors.add=Add another investor or nominee
+
 #Number of previously issued shares
 page.seis.investors.numberOfPreviouslyIssuedShares.heading=How many shares were previously issued to this {0}?
 page.seis.investors.numberOfPreviouslyIssuedShares.title=How many shares were previously issued to this {0}?
@@ -1203,3 +1212,4 @@ page.seis.investors.DeletePreviousShareHolder.heading = Confirm that you want to
 page.seis.investors.DeletePreviousShareHolder.message.one = This will permanently remove the {0}
 page.seis.investors.DeletePreviousShareHolder.message.two = (date of purchase {0})
 page.seis.investors.DeletePreviousShareHolder.message.three = from your list of previous shareholdings.
+

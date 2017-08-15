@@ -46,9 +46,9 @@ class AddAnotherInvestorSpec extends ViewSpec {
     when(mockS4lConnector.fetchAndGetFormData[AddAnotherInvestorModel](Matchers.eq(KeystoreKeys.addAnotherInvestor))
       (Matchers.any(), Matchers.any(),Matchers.any())).thenReturn(Future.successful(addAnotherInvestorModel))
 
-  "The Is this the first trade your company has carried out page" should {
+  "The AddAnotherInvestor page" should {
 
-    "Verify that the Is First Trade page contains the correct elements when a valid AddAnotherInvestorModel is passed from keystore" in new SEISSetup {
+    "Verify that the AddAnotherInvestor page contains the correct elements when a valid AddAnotherInvestorModel is passed from keystore" in new SEISSetup {
       val document: Document = {
         setupMocks(Some(addAnotherInvestorModelYes))
         val result = TestController.show.apply(authorisedFakeRequest)
@@ -59,8 +59,7 @@ class AddAnotherInvestorSpec extends ViewSpec {
       document.getElementById("main-heading").hasClass("h1-heading")
       document.getElementById("addAnotherInvestor-yesLabel").text() shouldBe Messages("common.radioYesLabel")
       document.getElementById("addAnotherInvestor-noLabel").text() shouldBe Messages("common.radioNoLabel")
-      //Should redirect to Review all investors page
-      document.body.getElementById("back-link").attr("href") shouldEqual routes.AddAnotherInvestorController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual routes.ReviewAllInvestorsController.show().url
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.company.details.four")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       document.getElementById("addAnotherInvestor-legend").hasClass("visuallyhidden")
@@ -78,8 +77,7 @@ class AddAnotherInvestorSpec extends ViewSpec {
       document.getElementById("main-heading").text() shouldBe Messages("page.seis.investors.addAnotherInvestor.heading")
       document.getElementById("addAnotherInvestor-yesLabel").text() shouldBe Messages("common.radioYesLabel")
       document.getElementById("addAnotherInvestor-noLabel").text() shouldBe Messages("common.radioNoLabel")
-      //Should redirect to Review all investors page
-      document.body.getElementById("back-link").attr("href") shouldEqual controllers.seis.routes.AddAnotherInvestorController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual controllers.seis.routes.ReviewAllInvestorsController.show().url
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.company.details.four")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       document.getElementById("addAnotherInvestor-legend").hasClass("visuallyhidden")
