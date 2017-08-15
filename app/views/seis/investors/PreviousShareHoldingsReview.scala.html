@@ -52,7 +52,7 @@
                                             href="@controllers.seis.routes.PreviousShareHoldingDescriptionController.show(previousShareHoldingModel.investorProcessingId.get,previousShareHoldingModel.processingId).toString">@Messages("common.base.change")</a></td>
                 }else{
                 <td id="continue-@{index}"> @form(action = controllers.seis.routes.PreviousShareHoldingsReviewController.change(previousShareHoldingModel.investorProcessingId.get,previousShareHoldingModel.processingId.get)) {
-                    <button class="button--link-style font-xsmall removeLink" type="submit" id="continue-link-@{index}"> @Messages("page.seis.investors.DeletePreviousShareHolder.continue")</button>
+                    <button class="button--link-style font-xsmall removeLink" type="submit" id="continue-link-@{index}"> @Messages("common.base.remove")</button>
                     }</td>
                 }
                 <td id="remove-@{index}"> @form(action = controllers.seis.routes.PreviousShareHoldingsReviewController.remove(previousShareHoldingModel.investorProcessingId.get,previousShareHoldingModel.processingId.get)) {

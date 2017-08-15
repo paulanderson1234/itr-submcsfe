@@ -21,7 +21,7 @@ import models.PreviousSchemeModel
 import org.jsoup.Jsoup
 import play.api.i18n.Messages
 import play.api.i18n.Messages.Implicits._
-import views.html.eis.previousInvestment.DeletePreviousScheme
+import views.html.seis.previousInvestment.DeletePreviousScheme
 
 class DeletePreviousSchemeSpec  extends BaseSpec {
 
@@ -44,7 +44,7 @@ class DeletePreviousSchemeSpec  extends BaseSpec {
       document.body.getElementById("scheme-remove").text() shouldBe Messages("common.base.remove")
       document.body.getElementById("scheme-remove").hasClass("button--alert") shouldBe true
       document.body.getElementById("scheme-cancel").text() shouldBe Messages("common.button.cancel")
-      document.body.getElementById("scheme-cancel").attr("href") shouldEqual controllers.eis.routes.ReviewPreviousSchemesController.show().url
+      document.body.getElementById("scheme-cancel").attr("href") shouldEqual controllers.seis.routes.ReviewPreviousSchemesController.show().url
 
 
     }

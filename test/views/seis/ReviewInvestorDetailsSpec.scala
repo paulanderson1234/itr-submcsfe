@@ -340,7 +340,7 @@ class ReviewInvestorDetailsSpec extends ViewSpec {
           "has an answer of 'Yes'" in {
             table.select(s"$id-answer").text() shouldBe Messages("common.radioYesLabel")
           }
-
+          
           "has no change link" in {
             table.select(s"$id-change a").isEmpty shouldBe true
           }

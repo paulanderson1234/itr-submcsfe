@@ -7,8 +7,7 @@
 
 @main_template(Messages("page.investors.deleteInvestor.title", investor.investorOrNomineeModel.get.addInvestorOrNominee.toLowerCase())) {
 
-@*TODO: route back to ReviewAllInvestorsController when available*@
-@backButtonWithProgress(controllers.seis.routes.TotalAmountRaisedController.show().url, Messages("common.section.progress.company.details.four"))
+@backButtonWithProgress(controllers.seis.routes.ReviewAllInvestorsController.show().url, Messages("common.section.progress.company.details.four"))
 
 
 <h1 id="main-heading" class="form-title heading-xlarge">@Messages("page.investors.deleteInvestor.title", investor.investorOrNomineeModel.get.addInvestorOrNominee.toLowerCase())</h1>
@@ -26,9 +25,8 @@
 }
 
 <div class="form-group">
-    @*TODO route to All investor review page*@
     <a id="delete-investor-cancel"
-       href="@controllers.seis.routes.TotalAmountRaisedController.show().url">
+       href="@controllers.seis.routes.ReviewAllInvestorsController.show().url">
         @Messages("common.button.cancel")</a>
 </div>
 

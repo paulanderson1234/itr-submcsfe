@@ -1,0 +1,97 @@
+@import views.html.helpers.backButtonWithProgress
+@import uk.gov.hmrc.play.views.html.helpers.form
+@import views.html.helpers.inputWithCurrencySymbol
+@import views.html.helpers.errorSummary
+@import models.investorDetails._
+@import common.Constants
+
+@(investors: Vector[InvestorDetailsModel])(implicit request: Request[_], messages: Messages)
+
+@main_template(Messages("page.investors.reviewAllInvestors.title"),  articleLayout=false) {
+
+    <span id="progress-section" class="form-hint-breadcrumb leftPadding">@Messages("common.section.progress.company.details.four")</span>
+
+    <h1 id="main-heading" class="heading-xlarge">@Messages("page.investors.reviewAllInvestors.heading")</h1>
+
+    <div id="review-all-investors-info" class = "form-group">
+        <p>@Messages("page.investors.reviewAllInvestors.info")</p>
+    </div>
+
+
+    <table id="review-all-investors-table">
+        <thead>
+        <tr>
+            <th id="investor-name-table-heading">@Messages("page.investors.reviewAllInvestors.investorName")</th>
+            <th id="number-of-shares-table-heading">@Messages("page.investors.reviewAllInvestors.numberOfShares")</th>
+            <th id="amount-spent-table-heading">@Messages("page.investors.reviewAllInvestors.amountSpent")</th>
+            <th>
+                        <span class="visuallyhidden">
+                            @Messages("common.base.change")
+                        </span>
+            </th>
+            <th>
+                        <span class="visuallyhidden">
+                            @Messages("common.base.remove")
+                        </span>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        @for((investor, index) <- investors.zipWithIndex) {
+        <tr>
+            <td id="investor-name-@{index}">
+                @if(investor.companyOrIndividualModel.map(_.companyOrIndividual).getOrElse("") == Constants.typeCompany) {
+                    @if(investor.companyDetailsModel.isDefined){
+                        @investor.companyDetailsModel.get.companyName
+                    } else {
+                        @Messages("page.seis.investors.reviewInvestorDetails.incomplete")
+                    }
+                }else { @if(investor.companyOrIndividualModel.map(_.companyOrIndividual).getOrElse("") == Constants.typeIndividual) {
+                    @if(investor.individualDetailsModel.isDefined){
+                        @(s"${investor.individualDetailsModel.get.forename} ${investor.individualDetailsModel.get.surname}")
+                    } else {
+                        @Messages("page.seis.investors.reviewInvestorDetails.incomplete")
+                    }
+                }else {
+                    @Messages("page.seis.investors.reviewInvestorDetails.incomplete")
+                }}
+
+            </td>
+            <td id="number-of-shares-@{index}">@if(investor.numberOfSharesPurchasedModel.isDefined) { @investor.numberOfSharesPurchasedModel.get.numberOfSharesPurchased
+                } else { @Messages("page.seis.investors.reviewInvestorDetails.incomplete") }</td>
+            <td id="amount-raised-@{index}">@if(investor.amountSpentModel.isDefined) {
+                @investor.amountSpentModel.get.getAmountAsFormattedString(investor.amountSpentModel.get.amount)
+                } else { @Messages("page.seis.investors.reviewInvestorDetails.incomplete") }</td>
+            @if(investors.forall(_.validate)){
+                <td id="change-@{index}"><a id="change-ref-@{index}" href=@controllers.seis.routes.ReviewAllInvestorsController.change(investor.processingId.get).toString>
+                    @Messages("common.base.change")</a></td>
+            }else { @if(!investor.validate) {
+                <td id="continue-@{index}"><a id="continue-ref-@{index}" href=@controllers.seis.routes.ReviewAllInvestorsController.change(investor.processingId.get).toString>
+                    @Messages("common.button.continue")</a></td>
+            }else{
+                <td id="change-invisible-@{index}"></td>
+            }}
+            <td id="remove-@{index}"> @form(action = controllers.seis.routes.ReviewAllInvestorsController.remove(investor.processingId.getOrElse(0))) {
+                <button class="button--link-style font-xsmall removeLink" type="submit" id="remove-link-@{index}"> @Messages("common.base.remove")</button>
+                }</td>
+        </tr>
+        }
+        </tbody>
+        <tfoot>
+        @if(investors.forall(_.validate)){
+        <tr>
+            <td id="add-investor"><a  id="add-investor-ref" href="@controllers.seis.routes.ReviewAllInvestorsController.add.toString">@Messages("page.investors.reviewAllInvestors.add")</a></td>
+            <td colspan="4"></td>
+        </tr>
+        }
+        </tfoot>
+    </table>
+
+    @if(investors.forall(_.validate)){
+        @form(action = controllers.seis.routes.ReviewAllInvestorsController.submit) {
+            <div>
+                <button class="btn button" type="submit" id="next">@Messages("common.button.snc")</button>
+            </div>
+        }
+    }
+}

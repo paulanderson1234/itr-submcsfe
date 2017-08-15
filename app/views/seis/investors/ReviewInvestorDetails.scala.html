@@ -123,6 +123,7 @@
                     "is-existing-shareholder",
                     Messages("page.seis.investors.reviewInvestorDetails.shareholdings.isExistingShareholder"),
                     investor.isExistingShareHolderModel.map(_.isExistingShareHolder).getOrElse(Messages("page.seis.investors.reviewInvestorDetails.incomplete")),
+
                     if (investor.showIsExistingShareholderChangeLink) {
                         Some(controllers.seis.routes.IsExistingShareHolderController.show(investor.processingId.get).url)
                     } else None,

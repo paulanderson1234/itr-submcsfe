@@ -58,8 +58,7 @@ trait DeleteInvestorController extends FrontendController with AuthorisedAndEnro
     AuthorisedAndEnrolled.async { implicit user =>
       implicit request =>
         PreviousInvestorsHelper.removeKeystorePreviousInvestment(s4lConnector, investorProcessingId).map{
-          //TODO: route to all investors review page when available
-          data => Redirect(controllers.seis.routes.TotalAmountRaisedController.show())
+          data => Redirect(controllers.seis.routes.ReviewAllInvestorsController.show())
         }
     }
   }
