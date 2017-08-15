@@ -46,7 +46,7 @@ trait ReviewAllInvestorsController extends FrontendController with AuthorisedAnd
   val show = featureSwitch(applicationConfig.seisFlowEnabled) {
     AuthorisedAndEnrolled.async { implicit user => implicit request =>
       s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
-        case Some(investors) => Ok(ReviewAllInvestors(investors))
+        case Some(investors) => if(investors.nonEmpty) Ok(ReviewAllInvestors(investors)) else Redirect(routes.AddInvestorOrNomineeController.show(None))
         case None => Redirect(routes.AddInvestorOrNomineeController.show(None))
       }
     }

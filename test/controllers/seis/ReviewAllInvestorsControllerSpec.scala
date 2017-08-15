@@ -219,6 +219,21 @@ class ReviewAllInvestorsControllerSpec extends BaseSpec {
       }
     }
 
+    "finds an empty list of investors" should {
+      lazy val result = {
+          setupMocks(Some(Vector()))
+        testController.add()(authorisedFakeRequest)
+      }
+
+      "return a status of 303" in {
+        status(result) shouldBe SEE_OTHER
+      }
+
+      "redirect the user to the add investor or nominee page" in {
+        redirectLocation(result) shouldBe Some(controllers.seis.routes.AddInvestorOrNomineeController.show().url)
+      }
+    }
+
 
     "finds previous investor details which are all valid" should {
       lazy val result = {
