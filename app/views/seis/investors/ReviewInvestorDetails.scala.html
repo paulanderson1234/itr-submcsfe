@@ -151,7 +151,7 @@
         </table>
 
         @if(investor.validate) {
-            <a class="button" id="next" href="@controllers.seis.routes.ReviewInvestorDetailsController.show(investor.processingId.getOrElse(0)).url">
+            <a class="button" id="next" href="@controllers.seis.routes.ReviewAllInvestorsController.show().url">
                 @Messages("common.button.snc")
             </a>
         }

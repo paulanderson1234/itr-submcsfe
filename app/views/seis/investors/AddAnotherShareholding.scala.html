@@ -9,7 +9,7 @@
 
 @main_template(Messages("page.seis.investors.AddAnotherShareholding.title")) {
 
-    @backButtonWithProgress(controllers.seis.routes.AddAnotherShareholdingController.show(processingId).url, Messages("common.section.progress.company.details.four"))
+    @backButtonWithProgress(controllers.seis.routes.PreviousShareHoldingsReviewController.show(processingId).url, Messages("common.section.progress.company.details.four"))
 
     @errorSummary(addAnotherShareholdingForm, "add-another-shareholding", "addAnotherShareholding")
 
