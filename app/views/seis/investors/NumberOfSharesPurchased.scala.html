@@ -5,23 +5,23 @@
 
 @(companyOrIndividual: String, shareIssueDate: String, numberOfSharesPurchasedForm: Form[NumberOfSharesPurchasedModel], backUrl: String)(implicit request: Request[_], messages: Messages)
 
-@main_template(Messages("page.seis.investors.numberOfSharesPurchased.title", companyOrIndividual.toLowerCase(), shareIssueDate)) {
+@main_template(Messages("page.investors.numberOfSharesPurchased.title", companyOrIndividual.toLowerCase(), shareIssueDate)) {
 
 @backButtonWithProgress(backUrl, Messages("common.section.progress.company.details.four"))
 
 @errorSummary(numberOfSharesPurchasedForm, "number-of-shares-purchased", "numberOfSharesPurchased")
 
-<h1 class="heading-xlarge" id="main-heading">@Html(Messages("page.seis.investors.numberOfSharesPurchased.heading", companyOrIndividual.toLowerCase() , shareIssueDate))</h1>
+<h1 class="heading-xlarge" id="main-heading">@Html(Messages("page.investors.numberOfSharesPurchased.heading", companyOrIndividual.toLowerCase() , shareIssueDate))</h1>
 
     @form(action = controllers.seis.routes.NumberOfSharesPurchasedController.submit(Some(shareIssueDate), Some(backUrl))) {
     <fieldset>
-        <legend class="visuallyhidden">@Messages("page.seis.investors.numberOfSharesPurchased.heading", companyOrIndividual.toLowerCase(), shareIssueDate)</legend>
+        <legend class="visuallyhidden">@Messages("page.investors.numberOfSharesPurchased.heading", companyOrIndividual.toLowerCase(), shareIssueDate)</legend>
         <div class="form-group">
             @input(
             numberOfSharesPurchasedForm("numberOfSharesPurchased"),
             '_divClass -> "form-label",
             '_labelId -> "label-numberOfSharesPurchased",
-            '_label -> Messages("page.seis.investors.numberOfSharesPurchased.heading", companyOrIndividual.toLowerCase(), shareIssueDate),
+            '_label -> Messages("page.investors.numberOfSharesPurchased.heading", companyOrIndividual.toLowerCase(), shareIssueDate),
             '_labelTextClass -> "visuallyhidden",
             '_maxlength -> "25",
             '_inputClass -> "input--fullwidth"

@@ -41,7 +41,7 @@ class InvestorShareIssueDateSpec extends ViewSpec {
       }
 
       "have the correct title" in {
-        document.title() shouldBe Messages("page.seis.investors.investorShareIssueDate.title")
+        document.title() shouldBe Messages("page.investors.investorShareIssueDate.title")
       }
 
       "have the correct back link text" in {
@@ -53,7 +53,7 @@ class InvestorShareIssueDateSpec extends ViewSpec {
       }
 
       "have the correct heading" in {
-        document.select("h1").text() shouldBe Messages("page.seis.investors.investorShareIssueDate.title")
+        document.select("h1").text() shouldBe Messages("page.investors.investorShareIssueDate.title")
       }
 
       "have a form posting to the correct route" in {
@@ -81,7 +81,7 @@ class InvestorShareIssueDateSpec extends ViewSpec {
       }
 
       "have the correct title" in {
-        document.title() shouldBe Messages("page.seis.investors.investorShareIssueDate.title")
+        document.title() shouldBe Messages("page.investors.investorShareIssueDate.title")
       }
 
       "have the correct back link url" in {
@@ -89,7 +89,7 @@ class InvestorShareIssueDateSpec extends ViewSpec {
       }
 
       "have the correct heading" in {
-        document.select("h1").text() shouldBe Messages("page.seis.investors.investorShareIssueDate.heading")
+        document.select("h1").text() shouldBe Messages("page.investors.investorShareIssueDate.heading")
       }
 
       "have a form posting to the correct route" in {

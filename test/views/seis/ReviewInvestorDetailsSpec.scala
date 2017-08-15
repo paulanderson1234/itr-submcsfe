@@ -63,7 +63,7 @@ class ReviewInvestorDetailsSpec extends ViewSpec {
       lazy val doc = Jsoup.parse(view.body)
 
       "have the correct title for a nominee" in {
-        doc.title() shouldBe Messages("page.seis.investors.reviewInvestorDetails.title", "nominee")
+        doc.title() shouldBe Messages("page.investors.reviewInvestorDetails.title", "nominee")
       }
 
       "have a progress breadcrumb for section 4" in {
@@ -71,25 +71,25 @@ class ReviewInvestorDetailsSpec extends ViewSpec {
       }
 
       "have the correct heading for a nominee" in {
-        doc.select("h1").text() shouldBe Messages("page.seis.investors.reviewInvestorDetails.title", "nominee")
+        doc.select("h1").text() shouldBe Messages("page.investors.reviewInvestorDetails.title", "nominee")
       }
 
       "have a table for investor details" which {
         lazy val table = doc.select("table").get(0)
 
         "has the correct subheading for a nominee" in {
-          table.select("th").text() shouldBe Messages("page.seis.investors.reviewInvestorDetails.investor.subheading", "Nominee")
+          table.select("th").text() shouldBe Messages("page.investors.reviewInvestorDetails.investor.subheading", "Nominee")
         }
 
         "has an entry for investor or nominee" which {
           val id = "td#investor-or-nominee"
 
           "has the correct question text" in {
-            table.select(s"$id-question").text() shouldBe Messages("page.seis.investors.reviewInvestorDetails.investor.investorOrNominee")
+            table.select(s"$id-question").text() shouldBe Messages("page.investors.reviewInvestorDetails.investor.investorOrNominee")
           }
 
           "has an answer of 'Nominee'" in {
-            table.select(s"$id-answer").text() shouldBe Messages("page.seis.investors.AddInvestorOrNominee.radioButton.two")
+            table.select(s"$id-answer").text() shouldBe Messages("page.investors.AddInvestorOrNominee.radioButton.two")
           }
 
           "has a change link to the correct page" in {
@@ -101,11 +101,11 @@ class ReviewInvestorDetailsSpec extends ViewSpec {
           val id = "td#company-or-individual"
 
           "has the correct question text" in {
-            table.select(s"$id-question").text() shouldBe Messages("page.seis.investors.reviewInvestorDetails.investor.companyOrIndividual")
+            table.select(s"$id-question").text() shouldBe Messages("page.investors.reviewInvestorDetails.investor.companyOrIndividual")
           }
 
           "has an answer of 'Incomplete'" in {
-            table.select(s"$id-answer").text() shouldBe Messages("page.seis.investors.reviewInvestorDetails.incomplete")
+            table.select(s"$id-answer").text() shouldBe Messages("page.investors.reviewInvestorDetails.incomplete")
           }
 
           "has a change link to the correct page" in {
@@ -133,11 +133,11 @@ class ReviewInvestorDetailsSpec extends ViewSpec {
           val id = "td#shares-purchased"
 
           "has the correct question text" in {
-            table.select(s"$id-question").text() shouldBe Messages("page.seis.investors.reviewInvestorDetails.investor.purchasedShares")
+            table.select(s"$id-question").text() shouldBe Messages("page.investors.reviewInvestorDetails.investor.purchasedShares")
           }
 
           "has an answer of 'Incomplete'" in {
-            table.select(s"$id-answer").text() shouldBe Messages("page.seis.investors.reviewInvestorDetails.incomplete")
+            table.select(s"$id-answer").text() shouldBe Messages("page.investors.reviewInvestorDetails.incomplete")
           }
 
           "has a change link to the correct page" in {
@@ -149,11 +149,11 @@ class ReviewInvestorDetailsSpec extends ViewSpec {
           val id = "td#amount-spent"
 
           "has the correct question text" in {
-            table.select(s"$id-question").text() shouldBe Messages("page.seis.investors.reviewInvestorDetails.investor.totalSpent")
+            table.select(s"$id-question").text() shouldBe Messages("page.investors.reviewInvestorDetails.investor.totalSpent")
           }
 
           "has an answer of 'Incomplete'" in {
-            table.select(s"$id-answer").text() shouldBe Messages("page.seis.investors.reviewInvestorDetails.incomplete")
+            table.select(s"$id-answer").text() shouldBe Messages("page.investors.reviewInvestorDetails.incomplete")
           }
 
           "has a change link to the correct page" in {
@@ -166,18 +166,18 @@ class ReviewInvestorDetailsSpec extends ViewSpec {
         lazy val table = doc.select("table").get(1)
 
         "has the correct subheading" in {
-          table.select("th").text() shouldBe Messages("page.seis.investors.reviewInvestorDetails.shareholdings.subheading")
+          table.select("th").text() shouldBe Messages("page.investors.reviewInvestorDetails.shareholdings.subheading")
         }
 
         "has an entry for previous shareholdings" which {
           val id = "td#is-existing-shareholder"
 
           "has the correct question text" in {
-            table.select(s"$id-question").text() shouldBe Messages("page.seis.investors.reviewInvestorDetails.shareholdings.isExistingShareholder")
+            table.select(s"$id-question").text() shouldBe Messages("page.investors.reviewInvestorDetails.shareholdings.isExistingShareholder")
           }
 
           "has an answer of 'Incomplete'" in {
-            table.select(s"$id-answer").text() shouldBe Messages("page.seis.investors.reviewInvestorDetails.incomplete")
+            table.select(s"$id-answer").text() shouldBe Messages("page.investors.reviewInvestorDetails.incomplete")
           }
 
           "has a change link to the correct page" in {
@@ -200,7 +200,7 @@ class ReviewInvestorDetailsSpec extends ViewSpec {
       lazy val doc = Jsoup.parse(view.body)
 
       "have the correct title for an investor" in {
-        doc.title() shouldBe Messages("page.seis.investors.reviewInvestorDetails.title", "investor")
+        doc.title() shouldBe Messages("page.investors.reviewInvestorDetails.title", "investor")
       }
 
       "have a progress breadcrumb for section 4" in {
@@ -208,25 +208,25 @@ class ReviewInvestorDetailsSpec extends ViewSpec {
       }
 
       "have the correct heading for a nominee" in {
-        doc.select("h1").text() shouldBe Messages("page.seis.investors.reviewInvestorDetails.title", "investor")
+        doc.select("h1").text() shouldBe Messages("page.investors.reviewInvestorDetails.title", "investor")
       }
 
       "have a table for investor details" which {
         lazy val table = doc.select("table").get(0)
 
         "has the correct subheading for a nominee" in {
-          table.select("th").text() shouldBe Messages("page.seis.investors.reviewInvestorDetails.investor.subheading", "Investor")
+          table.select("th").text() shouldBe Messages("page.investors.reviewInvestorDetails.investor.subheading", "Investor")
         }
 
         "has an entry for investor or nominee" which {
           val id = "td#investor-or-nominee"
 
           "has the correct question text" in {
-            table.select(s"$id-question").text() shouldBe Messages("page.seis.investors.reviewInvestorDetails.investor.investorOrNominee")
+            table.select(s"$id-question").text() shouldBe Messages("page.investors.reviewInvestorDetails.investor.investorOrNominee")
           }
 
           "has an answer of 'Investor'" in {
-            table.select(s"$id-answer").text() shouldBe Messages("page.seis.investors.AddInvestorOrNominee.radioButton.one")
+            table.select(s"$id-answer").text() shouldBe Messages("page.investors.AddInvestorOrNominee.radioButton.one")
           }
 
           "has a change link to the correct page" in {
@@ -238,7 +238,7 @@ class ReviewInvestorDetailsSpec extends ViewSpec {
           val id = "td#company-or-individual"
 
           "has the correct question text" in {
-            table.select(s"$id-question").text() shouldBe Messages("page.seis.investors.reviewInvestorDetails.investor.companyOrIndividual")
+            table.select(s"$id-question").text() shouldBe Messages("page.investors.reviewInvestorDetails.investor.companyOrIndividual")
           }
 
           "has an answer of 'Company'" in {
@@ -254,7 +254,7 @@ class ReviewInvestorDetailsSpec extends ViewSpec {
           val id = "td#company-name"
 
           "has the correct question text" in {
-            table.select(s"$id-question").text() shouldBe Messages("page.seis.investors.reviewInvestorDetails.investor.companyName")
+            table.select(s"$id-question").text() shouldBe Messages("page.investors.reviewInvestorDetails.investor.companyName")
           }
 
           "has an answer of 'Company name'" in {
@@ -270,7 +270,7 @@ class ReviewInvestorDetailsSpec extends ViewSpec {
           val id = "td#company-address"
 
           "has the correct question text" in {
-            table.select(s"$id-question").text() shouldBe Messages("page.seis.investors.reviewInvestorDetails.investor.contactAddress")
+            table.select(s"$id-question").text() shouldBe Messages("page.investors.reviewInvestorDetails.investor.contactAddress")
           }
 
           "has an answer of '72 Redwood Close Albrook DE'" in {
@@ -294,7 +294,7 @@ class ReviewInvestorDetailsSpec extends ViewSpec {
           val id = "td#shares-purchased"
 
           "has the correct question text" in {
-            table.select(s"$id-question").text() shouldBe Messages("page.seis.investors.reviewInvestorDetails.investor.purchasedShares")
+            table.select(s"$id-question").text() shouldBe Messages("page.investors.reviewInvestorDetails.investor.purchasedShares")
           }
 
           "has an answer of '100'" in {
@@ -310,7 +310,7 @@ class ReviewInvestorDetailsSpec extends ViewSpec {
           val id = "td#amount-spent"
 
           "has the correct question text" in {
-            table.select(s"$id-question").text() shouldBe Messages("page.seis.investors.reviewInvestorDetails.investor.totalSpent")
+            table.select(s"$id-question").text() shouldBe Messages("page.investors.reviewInvestorDetails.investor.totalSpent")
           }
 
           "has an answer of '£1000'" in {
@@ -327,14 +327,14 @@ class ReviewInvestorDetailsSpec extends ViewSpec {
         lazy val table = doc.select("table").get(1)
 
         "has the correct subheading" in {
-          table.select("th").text() shouldBe Messages("page.seis.investors.reviewInvestorDetails.shareholdings.subheading")
+          table.select("th").text() shouldBe Messages("page.investors.reviewInvestorDetails.shareholdings.subheading")
         }
 
         "has an entry for previous shareholdings" which {
           val id = "td#is-existing-shareholder"
 
           "has the correct question text" in {
-            table.select(s"$id-question").text() shouldBe Messages("page.seis.investors.reviewInvestorDetails.shareholdings.isExistingShareholder")
+            table.select(s"$id-question").text() shouldBe Messages("page.investors.reviewInvestorDetails.shareholdings.isExistingShareholder")
           }
 
           "has an answer of 'Yes'" in {
@@ -382,7 +382,7 @@ class ReviewInvestorDetailsSpec extends ViewSpec {
           lazy val link = table.select("td#add-shareholder-link a")
 
           "has the correct text" in {
-            link.text() shouldBe Messages("page.seis.investors.reviewInvestorDetails.shareholdings.addAnotherShareholding")
+            link.text() shouldBe Messages("page.investors.reviewInvestorDetails.shareholdings.addAnotherShareholding")
           }
 
           "has a link to the shareholder description page" in {
@@ -430,7 +430,7 @@ class ReviewInvestorDetailsSpec extends ViewSpec {
           val id = "td#individual-name"
 
           "has the correct question text" in {
-            table.select(s"$id-question").text() shouldBe Messages("page.seis.investors.reviewInvestorDetails.investor.contactName")
+            table.select(s"$id-question").text() shouldBe Messages("page.investors.reviewInvestorDetails.investor.contactName")
           }
 
           "has an answer of 'Jon Doe'" in {
@@ -446,7 +446,7 @@ class ReviewInvestorDetailsSpec extends ViewSpec {
           val id = "td#individual-address"
 
           "has the correct question text" in {
-            table.select(s"$id-question").text() shouldBe Messages("page.seis.investors.reviewInvestorDetails.investor.contactAddress")
+            table.select(s"$id-question").text() shouldBe Messages("page.investors.reviewInvestorDetails.investor.contactAddress")
           }
 
           "has an answer of '68 Purbeck Road Woking W13 2QW GB'" in {
@@ -466,7 +466,7 @@ class ReviewInvestorDetailsSpec extends ViewSpec {
           val id = "td#previous-shareholding-1"
 
           "has the correct description text" in {
-            table.select(s"$id-question").text() shouldBe Messages("page.seis.investors.reviewInvestorDetails.incomplete")
+            table.select(s"$id-question").text() shouldBe Messages("page.investors.reviewInvestorDetails.incomplete")
           }
 
           "has an answer of 'Incomplete Incomplete Incomplete'" in {
@@ -495,11 +495,11 @@ class ReviewInvestorDetailsSpec extends ViewSpec {
         lazy val table = doc.select("table").get(0)
 
         "has an incomplete entry for individual name" in {
-          table.select("td#individual-name-answer").text() shouldBe Messages("page.seis.investors.reviewInvestorDetails.incomplete")
+          table.select("td#individual-name-answer").text() shouldBe Messages("page.investors.reviewInvestorDetails.incomplete")
         }
 
         "has an incomplete entry for individual address" in {
-          table.select("td#individual-address-answer").text() shouldBe Messages("page.seis.investors.reviewInvestorDetails.incomplete")
+          table.select("td#individual-address-answer").text() shouldBe Messages("page.investors.reviewInvestorDetails.incomplete")
         }
       }
     }
@@ -514,11 +514,11 @@ class ReviewInvestorDetailsSpec extends ViewSpec {
         lazy val table = doc.select("table").get(0)
 
         "has an incomplete entry for company name" in {
-          table.select("td#company-name-answer").text() shouldBe Messages("page.seis.investors.reviewInvestorDetails.incomplete")
+          table.select("td#company-name-answer").text() shouldBe Messages("page.investors.reviewInvestorDetails.incomplete")
         }
 
         "has an incomplete entry for company address" in {
-          table.select("td#company-address-answer").text() shouldBe Messages("page.seis.investors.reviewInvestorDetails.incomplete")
+          table.select("td#company-address-answer").text() shouldBe Messages("page.investors.reviewInvestorDetails.incomplete")
         }
       }
     }

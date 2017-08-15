@@ -8,18 +8,18 @@
 
 @(addInvestorOrNomineeForm: Form[AddInvestorOrNomineeModel], backUrl: String)(implicit request: Request[_], messages: Messages)
 
-@main_template(Messages("page.seis.investors.AddInvestorOrNominee.title")) {
+@main_template(Messages("page.investors.AddInvestorOrNominee.title")) {
 
     @backButtonWithProgress(backUrl, Messages("common.section.progress.company.details.four"))
 
     @errorSummary(addInvestorOrNomineeForm, "add-investor-or-nominee", "addInvestorOrNominee")
 
-    <h1 class="heading-xlarge" id="main-heading">@Messages("page.seis.investors.AddInvestorOrNominee.heading")</h1>
+    <h1 class="heading-xlarge" id="main-heading">@Messages("page.investors.AddInvestorOrNominee.heading")</h1>
 
     <div>
-        <p>@Messages("page.seis.investors.AddInvestorOrNominee.info.one")</p>
+        <p>@Messages("page.investors.AddInvestorOrNominee.info.one")</p>
 
-        <p>@Messages("page.seis.investors.AddInvestorOrNominee.info.two")</p>
+        <p>@Messages("page.investors.AddInvestorOrNominee.info.two")</p>
     </div>
 
     @form(action = controllers.seis.routes.AddInvestorOrNomineeController.submit()) {
@@ -27,9 +27,9 @@
             @formInputRadioGroup(
             field = addInvestorOrNomineeForm("addInvestorOrNominee"),
             Seq(
-            Constants.investor -> Messages("page.seis.investors.AddInvestorOrNominee.radioButton.one"),
-            Constants.nominee -> Messages("page.seis.investors.AddInvestorOrNominee.radioButton.two")),
-            '_legend -> Messages("page.seis.investors.AddInvestorOrNominee.heading"),
+            Constants.investor -> Messages("page.investors.AddInvestorOrNominee.radioButton.one"),
+            Constants.nominee -> Messages("page.investors.AddInvestorOrNominee.radioButton.two")),
+            '_legend -> Messages("page.investors.AddInvestorOrNominee.heading"),
             '_legendClass -> "visuallyhidden",
             '_labelAfter -> true,
             '_labelClass -> "block-label",

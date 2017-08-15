@@ -28,7 +28,7 @@ class FullTimeEmployeeCountErrorSpec extends ViewSpec {
     lazy val doc = Jsoup.parse(FullTimeEmployeeCountError()(fakeRequest, applicationMessages).body)
 
     "contain a title with the correct text" in {
-      doc.title() shouldBe Messages("page.seis.companyDetails.fullTimeEmployeeCountError.title")
+      doc.title() shouldBe Messages("page.companyDetails.fullTimeEmployeeCountError.title")
     }
 
     "contain a back link" which {
@@ -44,26 +44,26 @@ class FullTimeEmployeeCountErrorSpec extends ViewSpec {
     }
 
     "contain a heading with the correct text" in {
-      doc.select("h1").text() shouldBe Messages("page.seis.companyDetails.fullTimeEmployeeCountError.title")
+      doc.select("h1").text() shouldBe Messages("page.companyDetails.fullTimeEmployeeCountError.title")
     }
 
     "contain a paragraph explaining the error" in {
-      doc.select("article p").first().text() shouldBe Messages("page.seis.companyDetails.fullTimeEmployeeCountError.error")
+      doc.select("article p").first().text() shouldBe Messages("page.companyDetails.fullTimeEmployeeCountError.error")
     }
 
     "contain a sub-heading for what to do next" in {
-      doc.select("h2").text() should include(Messages("page.seis.companyDetails.fullTimeEmployeeCountError.whatNext"))
+      doc.select("h2").text() should include(Messages("page.companyDetails.fullTimeEmployeeCountError.whatNext"))
     }
 
     "contain a paragraph explaining what actions should be taken" in {
-      doc.select("article p").get(1).text() shouldBe Messages("page.seis.companyDetails.fullTimeEmployeeCountError.guidance")
+      doc.select("article p").get(1).text() shouldBe Messages("page.companyDetails.fullTimeEmployeeCountError.guidance")
     }
 
     "contain a change link" which {
       lazy val change = doc.select("article div span")
 
       "has the correct guidance text" in {
-        change.text() shouldBe s"${Messages("page.seis.companyDetails.fullTimeEmployeeCountError.incorrect")} ${Messages("page.seis.companyDetails.fullTimeEmployeeCountError.incorrect.link")}."
+        change.text() shouldBe s"${Messages("page.companyDetails.fullTimeEmployeeCountError.incorrect")} ${Messages("page.companyDetails.fullTimeEmployeeCountError.incorrect.link")}."
       }
 
       "has a link with an href to FullTimeEmployeeCount page" in {
@@ -71,7 +71,7 @@ class FullTimeEmployeeCountErrorSpec extends ViewSpec {
       }
 
       "has the correct link component text" in {
-        change.select("a").text() shouldBe Messages("page.seis.companyDetails.fullTimeEmployeeCountError.incorrect.link")
+        change.select("a").text() shouldBe Messages("page.companyDetails.fullTimeEmployeeCountError.incorrect.link")
       }
     }
   }

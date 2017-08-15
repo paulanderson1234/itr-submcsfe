@@ -41,7 +41,7 @@ class PreviousShareHoldingNominalValueSpec extends ViewSpec {
         }
 
       "have the correct title" in {
-        document.title() shouldBe Messages("page.seis.investors.previousShareHoldingNominalValue.title")
+        document.title() shouldBe Messages("page.investors.previousShareHoldingNominalValue.title")
       }
 
       "have the correct back link text" in {
@@ -58,11 +58,11 @@ class PreviousShareHoldingNominalValueSpec extends ViewSpec {
       }
 
       "have the correct heading" in {
-        document.select("h1").text() shouldBe Messages("page.seis.investors.previousShareHoldingNominalValue.heading")
+        document.select("h1").text() shouldBe Messages("page.investors.previousShareHoldingNominalValue.heading")
       }
 
       "have a paragraph for guidance" in {
-        document.select("article p").first().text() shouldBe Messages("page.seis.investors.previousShareHoldingNominalValue.whereToFind")
+        document.select("article p").first().text() shouldBe Messages("page.investors.previousShareHoldingNominalValue.whereToFind")
       }
 
       "have a form posting to the correct route" in {
@@ -71,7 +71,7 @@ class PreviousShareHoldingNominalValueSpec extends ViewSpec {
       }
 
       "have the correct hint" in {
-        document.getElementById("label-nominal-value-hint").text() shouldBe Messages("page.seis.investors.previousShareHoldingNominalValue.hint")
+        document.getElementById("label-nominal-value-hint").text() shouldBe Messages("page.investors.previousShareHoldingNominalValue.hint")
       }
 
       "have a next button" in {
@@ -91,7 +91,7 @@ class PreviousShareHoldingNominalValueSpec extends ViewSpec {
       }
 
       "have the correct title" in {
-        document.title() shouldBe Messages("page.seis.investors.previousShareHoldingNominalValue.title")
+        document.title() shouldBe Messages("page.investors.previousShareHoldingNominalValue.title")
       }
 
       "have the correct back link text" in {
@@ -108,11 +108,11 @@ class PreviousShareHoldingNominalValueSpec extends ViewSpec {
       }
 
       "have the correct heading" in {
-        document.select("h1").text() shouldBe Messages("page.seis.investors.previousShareHoldingNominalValue.heading")
+        document.select("h1").text() shouldBe Messages("page.investors.previousShareHoldingNominalValue.heading")
       }
 
       "have a paragraph for guidance" in {
-        document.select("article p").first().text() shouldBe Messages("page.seis.investors.previousShareHoldingNominalValue.whereToFind")
+        document.select("article p").first().text() shouldBe Messages("page.investors.previousShareHoldingNominalValue.whereToFind")
       }
 
       "have a form posting to the correct route" in {
@@ -121,7 +121,7 @@ class PreviousShareHoldingNominalValueSpec extends ViewSpec {
       }
 
       "have the correct hint" in {
-        document.getElementById("label-nominal-value-hint").text() shouldBe Messages("page.seis.investors.previousShareHoldingNominalValue.hint")
+        document.getElementById("label-nominal-value-hint").text() shouldBe Messages("page.investors.previousShareHoldingNominalValue.hint")
       }
 
       "have a next button" in {

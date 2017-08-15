@@ -96,7 +96,7 @@ class ReviewInvestorDetailsControllerSpec extends BaseSpec {
       }
 
       "load the Review Investor page" in {
-        Jsoup.parse(bodyOf(result)).title() shouldBe Messages("page.seis.investors.reviewInvestorDetails.title", "investor")
+        Jsoup.parse(bodyOf(result)).title() shouldBe Messages("page.investors.reviewInvestorDetails.title", "investor")
       }
     }
   }

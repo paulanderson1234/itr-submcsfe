@@ -38,7 +38,7 @@ class FullTimeEmployeeCountSpec extends ViewSpec {
       }
 
       "have the correct title" in {
-        document.title() shouldBe Messages("page.seis.companyDetails.fullTimeEmployeeCount.title")
+        document.title() shouldBe Messages("page.companyDetails.fullTimeEmployeeCount.title")
       }
 
       "have the correct back link text" in {
@@ -54,23 +54,23 @@ class FullTimeEmployeeCountSpec extends ViewSpec {
       }
 
       "have the correct heading" in {
-        document.select("h1").text() shouldBe Messages("page.seis.companyDetails.fullTimeEmployeeCount.heading")
+        document.select("h1").text() shouldBe Messages("page.companyDetails.fullTimeEmployeeCount.heading")
       }
 
       "have a paragraph for guidance" in {
-        document.select("article p").first().text() shouldBe Messages("page.seis.companyDetails.fullTimeEmployeeCount.guidance.one")
+        document.select("article p").first().text() shouldBe Messages("page.companyDetails.fullTimeEmployeeCount.guidance.one")
       }
 
       "have some progressive disclosure" in {
-        document.select("summary").text() shouldBe Messages("page.seis.companyDetails.fullTimeEmployeeCount.guidance.progressive")
+        document.select("summary").text() shouldBe Messages("page.companyDetails.fullTimeEmployeeCount.guidance.progressive")
       }
 
       "have a first paragraph of disclosed text" in {
-        document.select("details p").get(0).text() shouldBe Messages("page.seis.companyDetails.fullTimeEmployeeCount.guidance.two")
+        document.select("details p").get(0).text() shouldBe Messages("page.companyDetails.fullTimeEmployeeCount.guidance.two")
       }
 
       "have a second paragraph of disclosed text" in {
-        document.select("details p").get(1).text() shouldBe Messages("page.seis.companyDetails.fullTimeEmployeeCount.guidance.three")
+        document.select("details p").get(1).text() shouldBe Messages("page.companyDetails.fullTimeEmployeeCount.guidance.three")
       }
 
       "have a form posting to the correct route" in {
@@ -78,7 +78,7 @@ class FullTimeEmployeeCountSpec extends ViewSpec {
       }
 
       "have the correct question in a label" in {
-        document.select("fieldset label").text() shouldBe Messages("page.seis.companyDetails.fullTimeEmployeeCount.heading")
+        document.select("fieldset label").text() shouldBe Messages("page.companyDetails.fullTimeEmployeeCount.heading")
       }
 
       "have an input for employeeCount" in {
@@ -102,7 +102,7 @@ class FullTimeEmployeeCountSpec extends ViewSpec {
       }
 
       "have the correct title" in {
-        document.title() shouldBe Messages("page.seis.companyDetails.fullTimeEmployeeCount.title")
+        document.title() shouldBe Messages("page.companyDetails.fullTimeEmployeeCount.title")
       }
 
       "have the correct back link text" in {
@@ -118,23 +118,23 @@ class FullTimeEmployeeCountSpec extends ViewSpec {
       }
 
       "have the correct heading" in {
-        document.select("h1").text() shouldBe Messages("page.seis.companyDetails.fullTimeEmployeeCount.heading")
+        document.select("h1").text() shouldBe Messages("page.companyDetails.fullTimeEmployeeCount.heading")
       }
 
       "have a paragraph for guidance" in {
-        document.select("article p").first().text() shouldBe Messages("page.seis.companyDetails.fullTimeEmployeeCount.guidance.one")
+        document.select("article p").first().text() shouldBe Messages("page.companyDetails.fullTimeEmployeeCount.guidance.one")
       }
 
       "have some progressive disclosure" in {
-        document.select("summary").text() shouldBe Messages("page.seis.companyDetails.fullTimeEmployeeCount.guidance.progressive")
+        document.select("summary").text() shouldBe Messages("page.companyDetails.fullTimeEmployeeCount.guidance.progressive")
       }
 
       "have a first paragraph of disclosed text" in {
-        document.select("details p").get(0).text() shouldBe Messages("page.seis.companyDetails.fullTimeEmployeeCount.guidance.two")
+        document.select("details p").get(0).text() shouldBe Messages("page.companyDetails.fullTimeEmployeeCount.guidance.two")
       }
 
       "have a second paragraph of disclosed text" in {
-        document.select("details p").get(1).text() shouldBe Messages("page.seis.companyDetails.fullTimeEmployeeCount.guidance.three")
+        document.select("details p").get(1).text() shouldBe Messages("page.companyDetails.fullTimeEmployeeCount.guidance.three")
       }
 
       "have a form posting to the correct route" in {
@@ -142,7 +142,7 @@ class FullTimeEmployeeCountSpec extends ViewSpec {
       }
 
       "have the correct question in a label" in {
-        document.select("label span.visuallyhidden").text() shouldBe Messages("page.seis.companyDetails.fullTimeEmployeeCount.heading")
+        document.select("label span.visuallyhidden").text() shouldBe Messages("page.companyDetails.fullTimeEmployeeCount.heading")
       }
 
       "have an input for employeeCount" in {

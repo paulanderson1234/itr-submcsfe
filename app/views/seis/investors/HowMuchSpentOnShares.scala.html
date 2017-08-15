@@ -4,13 +4,13 @@
 
 @(howMuchSpentOnShares: String, howMuchSpentOnSharesForm: Form[HowMuchSpentOnSharesModel], backUrl: String)(implicit request: Request[_], messages: Messages)
 
-@main_template(Messages("page.seis.investors.howMuchSpentOnShares.title", howMuchSpentOnShares.toLowerCase)) {
+@main_template(Messages("page.investors.howMuchSpentOnShares.title", howMuchSpentOnShares.toLowerCase)) {
 
 @backButtonWithProgress(backUrl, Messages("common.section.progress.company.details.four"))
 
 @errorSummary(howMuchSpentOnSharesForm, "how-much-spent-on-shares", "howMuchSpentOnShares")
 
-<h1 class="heading-xlarge">@Messages("page.seis.investors.howMuchSpentOnShares.title", howMuchSpentOnShares.toLowerCase())</h1>
+<h1 class="heading-xlarge">@Messages("page.investors.howMuchSpentOnShares.title", howMuchSpentOnShares.toLowerCase())</h1>
 
 @form(action = controllers.seis.routes.HowMuchSpentOnSharesController.submit(Some(backUrl))) {
 <div class="form-group">
@@ -18,7 +18,7 @@
     howMuchSpentOnSharesForm("howMuchSpentOnShares"),
     '_divClass -> "form-label",
     '_labelId -> "label-howMuchSpentOnShares",
-    '_label -> Messages("page.seis.investors.howMuchSpentOnShares.title", howMuchSpentOnShares.toLowerCase()),
+    '_label -> Messages("page.investors.howMuchSpentOnShares.title", howMuchSpentOnShares.toLowerCase()),
     '_labelTextClass -> "visuallyhidden",
     '_inputClass -> "input--no-spinner input--left-padding",
     '_type -> "text",

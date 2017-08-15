@@ -5,15 +5,15 @@
 
 @(nominalValueOfSharesForm: Form[NominalValueOfSharesModel])(implicit request: Request[_], messages: Messages)
 
-@main_template(Messages("page.seis.nominalValueOfShares.title")) {
+@main_template(Messages("page.nominalValueOfShares.title")) {
     @backButtonWithProgress(controllers.seis.routes.NumberOfSharesController.show().url, Messages("common.section.progress.company.details.three"))
 
     @errorSummary(nominalValueOfSharesForm, "nominal-value-of-shares", "nominalValueOfShares")
 
-    <h1 class="heading-xlarge">@Messages("page.seis.nominalValueOfShares.title")</h1>
+    <h1 class="heading-xlarge">@Messages("page.nominalValueOfShares.title")</h1>
 
     <div class = "form-group">
-        <p>@Messages("page.seis.nominalValueOfShares.hint")</p>
+        <p>@Messages("page.nominalValueOfShares.hint")</p>
     </div>
 
     @form(action = controllers.seis.routes.NominalValueOfSharesController.submit()) {
@@ -22,7 +22,7 @@
             nominalValueOfSharesForm("nominalValueOfShares"),
             '_divClass -> "form-label",
             '_labelId -> "label-nominalValueOfShares",
-            '_label -> Messages("page.seis.nominalValueOfShares.title"),
+            '_label -> Messages("page.nominalValueOfShares.title"),
             '_labelTextClass -> "visuallyhidden",
             '_inputClass -> "input--no-spinner input--left-padding",
             '_type -> "text",
