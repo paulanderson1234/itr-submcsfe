@@ -154,7 +154,7 @@ class PreviousShareHoldingsReviewControllerSpec extends BaseSpec{
         result => {
           status(result) shouldBe SEE_OTHER
           redirectLocation(result) shouldBe
-            Some(controllers.seis.routes.AddInvestorOrNomineeController.show(Some(1)).url)
+            Some(controllers.seis.routes.AddAnotherShareholdingController.show(1).url)
         }
       )
     }
