@@ -34,7 +34,7 @@ class AddAnotherShareholdingSpec extends ViewSpec with FakeRequestHelper {
       lazy val doc = Jsoup.parse(view.body)
 
       "have the correct title" in {
-        doc.title() shouldBe Messages("page.seis.investors.AddAnotherShareholding.title")
+        doc.title() shouldBe Messages("page.investors.AddAnotherShareholding.title")
       }
 
       "have a back link" which {
@@ -58,7 +58,7 @@ class AddAnotherShareholdingSpec extends ViewSpec with FakeRequestHelper {
       }
 
       "have the correct heading" in {
-        doc.select("h1").text() shouldBe Messages("page.seis.investors.AddAnotherShareholding.title")
+        doc.select("h1").text() shouldBe Messages("page.investors.AddAnotherShareholding.title")
       }
 
       "have a form" which {
@@ -74,7 +74,7 @@ class AddAnotherShareholdingSpec extends ViewSpec with FakeRequestHelper {
       }
 
       "have the correct visually hidden legend" in {
-        doc.select("legend.visuallyhidden").text() shouldBe Messages("page.seis.investors.AddAnotherShareholding.title")
+        doc.select("legend.visuallyhidden").text() shouldBe Messages("page.investors.AddAnotherShareholding.title")
       }
 
       "have an input label for 'Yes'" which {
@@ -109,7 +109,7 @@ class AddAnotherShareholdingSpec extends ViewSpec with FakeRequestHelper {
       lazy val doc = Jsoup.parse(view.body)
 
       "have the correct title" in {
-        doc.title() shouldBe Messages("page.seis.investors.AddAnotherShareholding.title")
+        doc.title() shouldBe Messages("page.investors.AddAnotherShareholding.title")
       }
 
       "have a back link" which {
@@ -133,7 +133,7 @@ class AddAnotherShareholdingSpec extends ViewSpec with FakeRequestHelper {
       }
 
       "have the correct heading" in {
-        doc.select("h1").text() shouldBe Messages("page.seis.investors.AddAnotherShareholding.title")
+        doc.select("h1").text() shouldBe Messages("page.investors.AddAnotherShareholding.title")
       }
 
       "have a form" which {
@@ -149,7 +149,7 @@ class AddAnotherShareholdingSpec extends ViewSpec with FakeRequestHelper {
       }
 
       "have the correct visually hidden legend" in {
-        doc.select("legend.visuallyhidden").text() shouldBe Messages("page.seis.investors.AddAnotherShareholding.title")
+        doc.select("legend.visuallyhidden").text() shouldBe Messages("page.investors.AddAnotherShareholding.title")
       }
 
       "have an input label for 'Yes'" which {

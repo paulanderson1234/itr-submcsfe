@@ -39,7 +39,7 @@ class TotalAmountSpentSpec extends ViewSpec {
       }
 
       "have the correct title" in {
-        document.title() shouldBe Messages("page.seis.shareDetails.totalAmountSpent.title")
+        document.title() shouldBe Messages("page.shareDetails.totalAmountSpent.title")
       }
 
       "have the correct back link text" in {
@@ -55,7 +55,7 @@ class TotalAmountSpentSpec extends ViewSpec {
       }
 
       "have the correct heading" in {
-        document.select("h1").text() shouldBe Messages("page.seis.shareDetails.totalAmountSpent.heading")
+        document.select("h1").text() shouldBe Messages("page.shareDetails.totalAmountSpent.heading")
       }
 
       "have a form posting to the correct route" in {
@@ -63,7 +63,7 @@ class TotalAmountSpentSpec extends ViewSpec {
       }
 
       "have the correct question in a label" in {
-        document.select("fieldset label").text() shouldBe Messages("page.seis.shareDetails.totalAmountSpent.heading")
+        document.select("fieldset label").text() shouldBe Messages("page.shareDetails.totalAmountSpent.heading")
       }
 
       "have a next button" in {
@@ -83,7 +83,7 @@ class TotalAmountSpentSpec extends ViewSpec {
       }
 
       "have the correct title" in {
-        document.title() shouldBe Messages("page.seis.shareDetails.totalAmountSpent.title")
+        document.title() shouldBe Messages("page.shareDetails.totalAmountSpent.title")
       }
 
       "have the correct back link text" in {
@@ -99,7 +99,7 @@ class TotalAmountSpentSpec extends ViewSpec {
       }
 
       "have the correct heading" in {
-        document.select("h1").text() shouldBe Messages("page.seis.shareDetails.totalAmountSpent.heading")
+        document.select("h1").text() shouldBe Messages("page.shareDetails.totalAmountSpent.heading")
       }
 
       "have a form posting to the correct route" in {

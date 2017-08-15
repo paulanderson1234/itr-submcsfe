@@ -5,23 +5,23 @@
 
 @(totalAmountSpentForm: Form[TotalAmountSpentModel])(implicit request: Request[_], messages: Messages)
 
-@main_template(Messages("page.seis.shareDetails.totalAmountSpent.title")) {
+@main_template(Messages("page.shareDetails.totalAmountSpent.title")) {
 
 @backButtonWithProgress(controllers.seis.routes.TotalAmountRaisedController.show().url, Messages("common.section.progress.share.details.three"))
 
 @errorSummary(totalAmountSpentForm, "total-amount-spent", "totalAmountSpent")
 
-<h1 class="heading-xlarge" id="main-heading">@Messages("page.seis.shareDetails.totalAmountSpent.heading")</h1>
+<h1 class="heading-xlarge" id="main-heading">@Messages("page.shareDetails.totalAmountSpent.heading")</h1>
 
 @form(action = controllers.seis.routes.TotalAmountSpentController.submit()) {
 <fieldset>
-    <legend class="visuallyhidden">@Messages("page.seis.shareDetails.totalAmountSpent.heading")</legend>
+    <legend class="visuallyhidden">@Messages("page.shareDetails.totalAmountSpent.heading")</legend>
     <div class="form-group">
         @inputWithCurrencySymbol(
         totalAmountSpentForm("totalAmountSpent"),
         '_divClass -> "form-label",
         '_labelId -> "label-amount",
-        '_label -> Messages("page.seis.shareDetails.totalAmountSpent.heading"),
+        '_label -> Messages("page.shareDetails.totalAmountSpent.heading"),
         '_labelTextClass -> "visuallyhidden",
         '_inputClass -> "input--no-spinner input--left-padding",
         '_type -> "text",

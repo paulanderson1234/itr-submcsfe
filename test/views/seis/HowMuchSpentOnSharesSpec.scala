@@ -41,7 +41,7 @@ class HowMuchSpentOnSharesSpec extends ViewSpec {
       }
 
       "have the correct title" in {
-        document.title() shouldBe Messages("page.seis.investors.howMuchSpentOnShares.title", "companyorindividual")
+        document.title() shouldBe Messages("page.investors.howMuchSpentOnShares.title", "companyorindividual")
       }
 
       "have the correct back link text" in {
@@ -57,7 +57,7 @@ class HowMuchSpentOnSharesSpec extends ViewSpec {
       }
 
       "have the correct heading" in {
-        document.select("h1").text() shouldBe Messages("page.seis.investors.howMuchSpentOnShares.heading", "companyorindividual")
+        document.select("h1").text() shouldBe Messages("page.investors.howMuchSpentOnShares.heading", "companyorindividual")
       }
 
       "have a form posting to the correct route" in {
@@ -82,7 +82,7 @@ class HowMuchSpentOnSharesSpec extends ViewSpec {
       }
 
       "have the correct title" in {
-        document.title() shouldBe Messages("page.seis.investors.howMuchSpentOnShares.title", "companyorindividual")
+        document.title() shouldBe Messages("page.investors.howMuchSpentOnShares.title", "companyorindividual")
       }
 
       "have the correct back link text" in {
@@ -98,7 +98,7 @@ class HowMuchSpentOnSharesSpec extends ViewSpec {
       }
 
       "have the correct heading" in {
-        document.select("h1").text() shouldBe Messages("page.seis.investors.howMuchSpentOnShares.heading", "companyorindividual")
+        document.select("h1").text() shouldBe Messages("page.investors.howMuchSpentOnShares.heading", "companyorindividual")
       }
 
       "have a form posting to the correct route" in {

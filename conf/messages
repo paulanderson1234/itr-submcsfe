@@ -818,16 +818,16 @@ page.eisseis.companyDetails.isFirstTrade.heading=Is this the first trade your co
 page.eisseis.companyDetails.isFirstTrade.legend=Is this the first trade your company has carried out?
 
 #SEIS Full Time Employee Count Page
-page.seis.companyDetails.fullTimeEmployeeCount.title = How many full-time equivalent employees did your company have when the shares were issued?
-page.seis.companyDetails.fullTimeEmployeeCount.heading = How many full-time equivalent employees did your company have when the shares were issued?
-page.seis.companyDetails.fullTimeEmployeeCount.guidance.progressive = How to work this out
-page.seis.companyDetails.fullTimeEmployeeCount.guidance.one = A full-time employee works at least 35 hours a week. You can''t include any employees on maternity / paternity leave, apprentices or students on vocational training.
-page.seis.companyDetails.fullTimeEmployeeCount.guidance.two = The number of hours that each part-time employee works should be used to calculate their contribution to the full-time limit.
-page.seis.companyDetails.fullTimeEmployeeCount.guidance.three = For example, someone working 21 hours a week would count as 60% of a full-time employee and someone working 14 hours a week would count as 40% of a full-time employee. Together they would count as one full-time employee.
+page.companyDetails.fullTimeEmployeeCount.title = How many full-time equivalent employees did your company have when the shares were issued?
+page.companyDetails.fullTimeEmployeeCount.heading = How many full-time equivalent employees did your company have when the shares were issued?
+page.companyDetails.fullTimeEmployeeCount.guidance.progressive = How to work this out
+page.companyDetails.fullTimeEmployeeCount.guidance.one = A full-time employee works at least 35 hours a week. You can''t include any employees on maternity / paternity leave, apprentices or students on vocational training.
+page.companyDetails.fullTimeEmployeeCount.guidance.two = The number of hours that each part-time employee works should be used to calculate their contribution to the full-time limit.
+page.companyDetails.fullTimeEmployeeCount.guidance.three = For example, someone working 21 hours a week would count as 60% of a full-time employee and someone working 14 hours a week would count as 40% of a full-time employee. Together they would count as one full-time employee.
 
 #SEIS Total Amount Spent
-page.seis.shareDetails.totalAmountSpent.heading=How much of the investment from this share issue has been spent?
-page.seis.shareDetails.totalAmountSpent.title=How much of the investment from this share issue has been spent?
+page.shareDetails.totalAmountSpent.heading=How much of the investment from this share issue has been spent?
+page.shareDetails.totalAmountSpent.title=How much of the investment from this share issue has been spent?
 
 # SEIS Proposed Investment page
 page.seis.investment.proposedInvestment.amount.title=How much investment do you want to raise?
@@ -839,27 +839,27 @@ page.seis.investment.proposedInvestment.help.bullet.two=any previous SEIS invest
 page.seis.investment.proposedInvestment.help.bullet.three=any State aid you''ve received under the de minimis regulation
 
 # SEIS Full Time Employee Count Error
-page.seis.companyDetails.fullTimeEmployeeCountError.title = You don''t appear to qualify for this scheme
-page.seis.companyDetails.fullTimeEmployeeCountError.error = This is because your company had 25 or more full-time equivalent employees on the share issue date.
-page.seis.companyDetails.fullTimeEmployeeCountError.whatNext = What happens next
-page.seis.companyDetails.fullTimeEmployeeCountError.guidance = You can continue with your application if you think that you should qualify.
-page.seis.companyDetails.fullTimeEmployeeCountError.incorrect = If this information is incorrect you can
-page.seis.companyDetails.fullTimeEmployeeCountError.incorrect.link = change your answers
+page.companyDetails.fullTimeEmployeeCountError.title = You don''t appear to qualify for this scheme
+page.companyDetails.fullTimeEmployeeCountError.error = This is because your company had 25 or more full-time equivalent employees on the share issue date.
+page.companyDetails.fullTimeEmployeeCountError.whatNext = What happens next
+page.companyDetails.fullTimeEmployeeCountError.guidance = You can continue with your application if you think that you should qualify.
+page.companyDetails.fullTimeEmployeeCountError.incorrect = If this information is incorrect you can
+page.companyDetails.fullTimeEmployeeCountError.incorrect.link = change your answers
 
 # SEIS Nominal Value of Shares
-page.seis.nominalValueOfShares.title = What was the nominal value of each share when they were issued?
-page.seis.nominalValueOfShares.hint = The nominal value is the amount shown on the share certificate.
+page.nominalValueOfShares.title = What was the nominal value of each share when they were issued?
+page.nominalValueOfShares.hint = The nominal value is the amount shown on the share certificate.
 
 # SEIS Individual Details Page
-page.seis.individualDetails.title =What are this individual''s details?
-page.seis.individualDetails.forename.label= First Name
-page.seis.individualDetails.surname.label= Last Name
-page.seis.individualDetails.addressline1.label= Address line 1
-page.seis.individualDetails.addressline2.label= Address line 2
-page.seis.individualDetails.addressline3.label= Address line 3 (optional)
-page.seis.individualDetails.addressline4.label= Address line 4 (optional)
-page.seis.individualDetails.postcode.label= Postcode
-page.seis.individualDetails.country.label= Country
+page.individualDetails.title =What are this individual''s details?
+page.individualDetails.forename.label= First Name
+page.individualDetails.surname.label= Last Name
+page.individualDetails.addressline1.label= Address line 1
+page.individualDetails.addressline2.label= Address line 2
+page.individualDetails.addressline3.label= Address line 3 (optional)
+page.individualDetails.addressline4.label= Address line 4 (optional)
+page.individualDetails.postcode.label= Postcode
+page.individualDetails.country.label= Country
 
 # SEIS Check Answers
 page.seis.checkAndSubmit.checkAnswers.description.one=You''re applying for Advance Assurance for the Seed Enterprise Investment Scheme.
@@ -1088,16 +1088,16 @@ page.shareDetails.numberOfShares.title=How many of these shares did your company
 page.shareDetails.numberOfShares.heading=How many of these shares did your company issue?
 
 #Create Investors or Nominee
-page.seis.investors.AddInvestorOrNominee.title=Add each investor or nominee
-page.seis.investors.AddInvestorOrNominee.heading=Add each investor or nominee
-page.seis.investors.AddInvestorOrNominee.info.one=Only add the investors or nominees seeking tax relief from this share issue.
-page.seis.investors.AddInvestorOrNominee.info.two=A nominee is someone who acts on behalf of an individual investor.
-page.seis.investors.AddInvestorOrNominee.radioButton.one=Investor
-page.seis.investors.AddInvestorOrNominee.radioButton.two=Nominee
+page.investors.AddInvestorOrNominee.title=Add each investor or nominee
+page.investors.AddInvestorOrNominee.heading=Add each investor or nominee
+page.investors.AddInvestorOrNominee.info.one=Only add the investors or nominees seeking tax relief from this share issue.
+page.investors.AddInvestorOrNominee.info.two=A nominee is someone who acts on behalf of an individual investor.
+page.investors.AddInvestorOrNominee.radioButton.one=Investor
+page.investors.AddInvestorOrNominee.radioButton.two=Nominee
 
 #How Much Spent On Shares
-page.seis.investors.howMuchSpentOnShares.title=How much did this {0} pay in total for these shares?
-page.seis.investors.howMuchSpentOnShares.heading=How much did this {0} pay in total for these shares?
+page.investors.howMuchSpentOnShares.title=How much did this {0} pay in total for these shares?
+page.investors.howMuchSpentOnShares.heading=How much did this {0} pay in total for these shares?
 
 #Company or Individual
 page.investors.companyOrIndividual.title = Is this {0} a company or an individual?
@@ -1106,9 +1106,9 @@ page.investors.companyOrIndividual.company=Company
 page.investors.companyOrIndividual.individual=Individual
 
 #PreviousShareHoldings
-page.seis.investors.isExistingShareHolder.title = Did this {0} already own shares in your company?
-page.seis.investors.isExistingShareHolder.heading = Did this {0} already own shares in your company?
-page.seis.investors.isExistingShareHolder.legend = Did this {0} already own shares in your company?
+page.investors.isExistingShareHolder.title = Did this {0} already own shares in your company?
+page.investors.isExistingShareHolder.heading = Did this {0} already own shares in your company?
+page.investors.isExistingShareHolder.legend = Did this {0} already own shares in your company?
 
 #Investor Share Issue Date
 page.investors.investorShareIssueDate.title = When were these previous shares issued?
@@ -1116,38 +1116,38 @@ page.investors.investorShareIssueDate.heading = When were these previous shares 
 validation.error.InvestorShareIssueDate.Future = Investor previous shares issued date cannot be a future date
 
 #Number of shares purchased
-page.seis.investors.numberOfSharesPurchased.title = How many shares were issued to this {0} on {1}?
-page.seis.investors.numberOfSharesPurchased.heading = How many shares were issued to this {0} on <br/>{1}?
+page.investors.numberOfSharesPurchased.title = How many shares were issued to this {0} on {1}?
+page.investors.numberOfSharesPurchased.heading = How many shares were issued to this {0} on <br/>{1}?
 
 #Previous ShareHolding Nominal Value
-page.seis.investors.previousShareHoldingNominalValue.title = What was the nominal value for each share in this previous issue?
-page.seis.investors.previousShareHoldingNominalValue.heading = What was the nominal value for each share in this previous issue?
-page.seis.investors.previousShareHoldingNominalValue.whereToFind = The nominal value is the amount shown on the share certificate.
-page.seis.investors.previousShareHoldingNominalValue.hint = For example if the nominal value was 0.70, round it up to 1
+page.investors.previousShareHoldingNominalValue.title = What was the nominal value for each share in this previous issue?
+page.investors.previousShareHoldingNominalValue.heading = What was the nominal value for each share in this previous issue?
+page.investors.previousShareHoldingNominalValue.whereToFind = The nominal value is the amount shown on the share certificate.
+page.investors.previousShareHoldingNominalValue.hint = For example if the nominal value was 0.70, round it up to 1
 
 #Number of previously issued shares
 page.seis.investors.numberOfPreviouslyIssuedShares.heading=How many shares were previously issued to this {0}?
 page.seis.investors.numberOfPreviouslyIssuedShares.title=How many shares were previously issued to this {0}?
 
 #PreviousShareHoldingsDescription
-page.seis.investors.previousShareHoldingDescription.title = What were the shares called that were issued to this {0}?
-page.seis.investors.previousShareHoldingDescription.heading = What were the shares called that were issued to this {0}?
-page.seis.investors.previousShareHoldingDescription.example.text = Add one type of share at a time.
-page.seis.investors.previousShareHoldingDescription.question.hint = Suggested limit: 20 words
-page.seis.investors.previousShareHoldingDescription.whereToFind = Where can I find this?
-page.seis.investors.previousShareHoldingDescription.location = It''s on your company''s Register of Members.
+page.investors.previousShareHoldingDescription.title = What were the shares called that were issued to this {0}?
+page.investors.previousShareHoldingDescription.heading = What were the shares called that were issued to this {0}?
+page.investors.previousShareHoldingDescription.example.text = Add one type of share at a time.
+page.investors.previousShareHoldingDescription.question.hint = Suggested limit: 20 words
+page.investors.previousShareHoldingDescription.whereToFind = Where can I find this?
+page.investors.previousShareHoldingDescription.location = It''s on your company''s Register of Members.
 
 #AddAnotherInvestor
-page.seis.investors.addAnotherInvestor.title = Do you want to add another investor or nominee?
-page.seis.investors.addAnotherInvestor.heading = Do you want to add another investor or nominee?
-page.seis.investors.addAnotherInvestor.legend = Do you want to add another investor or nominee?
+page.investors.addAnotherInvestor.title = Do you want to add another investor or nominee?
+page.investors.addAnotherInvestor.heading = Do you want to add another investor or nominee?
+page.investors.addAnotherInvestor.legend = Do you want to add another investor or nominee?
 
 #InvestorShareIssueDate
-page.seis.investors.investorShareIssueDate.title = When were these previous shares issued?
-page.seis.investors.investorShareIssueDate.heading = When were these previous shares issued?
+page.investors.investorShareIssueDate.title = When were these previous shares issued?
+page.investors.investorShareIssueDate.heading = When were these previous shares issued?
 
 #AddAnotherShareholding
-page.seis.investors.AddAnotherShareholding.title = Do you want to add another previous shareholding?
+page.investors.AddAnotherShareholding.title = Do you want to add another previous shareholding?
 
 
 #Delete Investor
@@ -1159,22 +1159,22 @@ page.investors.deleteInvestor.cancel=Cancel remove and go back
 page.investors.deleteInvestor.confirm.noName=This {0} will be permanently removed from your list of investors and nominees.
 
 #Review Investors
-page.seis.investors.reviewInvestorDetails.title = Check {0} details
-page.seis.investors.reviewInvestorDetails.investor.subheading = {0} details
-page.seis.investors.reviewInvestorDetails.investor.investorOrNominee = Investor or nominee
-page.seis.investors.reviewInvestorDetails.investor.companyOrIndividual = Company or individual
-page.seis.investors.reviewInvestorDetails.investor.contactName = Contact name
-page.seis.investors.reviewInvestorDetails.investor.companyName = Company name
-page.seis.investors.reviewInvestorDetails.investor.contactAddress = Contact address
-page.seis.investors.reviewInvestorDetails.investor.purchasedShares = How many shares did they purchase
-page.seis.investors.reviewInvestorDetails.investor.totalSpent = How much did they spend in total
-page.seis.investors.reviewInvestorDetails.shareholdings.subheading = Previous shareholdings
-page.seis.investors.reviewInvestorDetails.shareholdings.isExistingShareholder = Do they have previous shareholdings
-page.seis.investors.reviewInvestorDetails.shareholdings.nominalValue = Nominal value: {0}
-page.seis.investors.reviewInvestorDetails.shareholdings.dateOfInvestment = Date of investment: {0}
-page.seis.investors.reviewInvestorDetails.shareholdings.numberOfShares = Number of shares purchased: {0}
-page.seis.investors.reviewInvestorDetails.shareholdings.addAnotherShareholding = Add another previous shareholding
-page.seis.investors.reviewInvestorDetails.incomplete = Incomplete
+page.investors.reviewInvestorDetails.title = Check {0} details
+page.investors.reviewInvestorDetails.investor.subheading = {0} details
+page.investors.reviewInvestorDetails.investor.investorOrNominee = Investor or nominee
+page.investors.reviewInvestorDetails.investor.companyOrIndividual = Company or individual
+page.investors.reviewInvestorDetails.investor.contactName = Contact name
+page.investors.reviewInvestorDetails.investor.companyName = Company name
+page.investors.reviewInvestorDetails.investor.contactAddress = Contact address
+page.investors.reviewInvestorDetails.investor.purchasedShares = How many shares did they purchase
+page.investors.reviewInvestorDetails.investor.totalSpent = How much did they spend in total
+page.investors.reviewInvestorDetails.shareholdings.subheading = Previous shareholdings
+page.investors.reviewInvestorDetails.shareholdings.isExistingShareholder = Do they have previous shareholdings
+page.investors.reviewInvestorDetails.shareholdings.nominalValue = Nominal value: {0}
+page.investors.reviewInvestorDetails.shareholdings.dateOfInvestment = Date of investment: {0}
+page.investors.reviewInvestorDetails.shareholdings.numberOfShares = Number of shares purchased: {0}
+page.investors.reviewInvestorDetails.shareholdings.addAnotherShareholding = Add another previous shareholding
+page.investors.reviewInvestorDetails.incomplete = Incomplete
 
 #Review All Investors Page
 page.investors.reviewAllInvestors.title = Check your investors or nominees
@@ -1190,26 +1190,26 @@ page.seis.investors.numberOfPreviouslyIssuedShares.heading=How many shares were 
 page.seis.investors.numberOfPreviouslyIssuedShares.title=How many shares were previously issued to this {0}?
 
 #PreviousShareHoldingsDescription
-page.seis.investors.previousShareHoldingDescription.title = What were the shares called that were issued to this {0}?
-page.seis.investors.previousShareHoldingDescription.heading = What were the shares called that were issued to this {0}?
-page.seis.investors.previousShareHoldingDescription.example.text = Add one type of share at a time.
-page.seis.investors.previousShareHoldingDescription.question.hint = Suggested limit: 20 words
-page.seis.investors.previousShareHoldingDescription.whereToFind = Where can I find this?
-page.seis.investors.previousShareHoldingDescription.location = It''s on your company''s Register of Members.
+page.investors.previousShareHoldingDescription.title = What were the shares called that were issued to this {0}?
+page.investors.previousShareHoldingDescription.heading = What were the shares called that were issued to this {0}?
+page.investors.previousShareHoldingDescription.example.text = Add one type of share at a time.
+page.investors.previousShareHoldingDescription.question.hint = Suggested limit: 20 words
+page.investors.previousShareHoldingDescription.whereToFind = Where can I find this?
+page.investors.previousShareHoldingDescription.location = It''s on your company''s Register of Members.
 
 #Previous share holders review
-page.seis.investors.previousShareHoldingReview.title = Check previous shareholdings
-page.seis.investors.previousShareHoldingReview.heading = Check previous shareholdings
-page.seis.investors.previousShareHoldingReview.heading.one = Shareholding description
-page.seis.investors.previousShareHoldingReview.heading.two = Nominal value
-page.seis.investors.previousShareHoldingReview.heading.three = Date of purchase
-page.seis.investors.previousShareHoldingReview.heading.four = Number purchased
-page.seis.investors.previousShareHoldingReview.add = Add another previous shareholding
+page.investors.previousShareHoldingReview.title = Check previous shareholdings
+page.investors.previousShareHoldingReview.heading = Check previous shareholdings
+page.investors.previousShareHoldingReview.heading.one = Shareholding description
+page.investors.previousShareHoldingReview.heading.two = Nominal value
+page.investors.previousShareHoldingReview.heading.three = Date of purchase
+page.investors.previousShareHoldingReview.heading.four = Number purchased
+page.investors.previousShareHoldingReview.add = Add another previous shareholding
 
 #Delete Previous share holder
-page.seis.investors.DeletePreviousShareHolder.title = Confirm that you want to remove this shareholding
-page.seis.investors.DeletePreviousShareHolder.heading = Confirm that you want to remove this shareholding
-page.seis.investors.DeletePreviousShareHolder.message.one = This will permanently remove the {0}
-page.seis.investors.DeletePreviousShareHolder.message.two = (date of purchase {0})
-page.seis.investors.DeletePreviousShareHolder.message.three = from your list of previous shareholdings.
+page.investors.DeletePreviousShareHolder.title = Confirm that you want to remove this shareholding
+page.investors.DeletePreviousShareHolder.heading = Confirm that you want to remove this shareholding
+page.investors.DeletePreviousShareHolder.message.one = This will permanently remove the {0}
+page.investors.DeletePreviousShareHolder.message.two = (date of purchase {0})
+page.investors.DeletePreviousShareHolder.message.three = from your list of previous shareholdings.
 

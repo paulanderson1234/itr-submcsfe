@@ -33,7 +33,7 @@ class NominalValueOfSharesViewSpec extends ViewSpec with FakeRequestHelper {
       lazy val doc = Jsoup.parse(view.body)
 
       "have the correct title" in {
-        doc.title shouldBe Messages("page.seis.nominalValueOfShares.title")
+        doc.title shouldBe Messages("page.nominalValueOfShares.title")
       }
 
       "have the correct section" in {
@@ -54,7 +54,7 @@ class NominalValueOfSharesViewSpec extends ViewSpec with FakeRequestHelper {
       }
 
       "have a header with the correct question" in {
-        doc.select("h1").text() shouldBe Messages("page.seis.nominalValueOfShares.title")
+        doc.select("h1").text() shouldBe Messages("page.nominalValueOfShares.title")
       }
 
       "have a form" which {
@@ -76,7 +76,7 @@ class NominalValueOfSharesViewSpec extends ViewSpec with FakeRequestHelper {
           lazy val label = input.select("label")
 
           "has the correct message" in {
-            label.text() shouldBe Messages("page.seis.nominalValueOfShares.title")
+            label.text() shouldBe Messages("page.nominalValueOfShares.title")
           }
 
           "is visually hidden" in {
@@ -85,7 +85,7 @@ class NominalValueOfSharesViewSpec extends ViewSpec with FakeRequestHelper {
         }
 
         "contains help text with the correct message" in {
-          input.select("p").text() shouldBe Messages("page.seis.nominalValueOfShares.hint")
+          input.select("p").text() shouldBe Messages("page.nominalValueOfShares.hint")
         }
 
         "contains an input field with the correct name" in {

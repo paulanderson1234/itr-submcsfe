@@ -3,7 +3,7 @@
 @import views.html.helpers.{backButtonWithProgress, input, errorSummary, dropdown, hiddenField}
 @(individualDetailsForm: Form[IndividualDetailsModel], listOfIsoCode: List[(String, String)], backUrl: String)(implicit request: Request[_], messages: Messages)
 
-@main_template(Messages("page.seis.individualDetails.title")) {
+@main_template(Messages("page.individualDetails.title")) {
 
 @backButtonWithProgress(backUrl, Messages("common.section.progress.company.details.four"))
 
@@ -12,7 +12,7 @@
 
         @errorSummary(individualDetailsForm, "individual-details", "postcode")
 
-        <h1 id="main-heading" class="form-title heading-xlarge">@Messages("page.seis.individualDetails.title")</h1>
+        <h1 id="main-heading" class="form-title heading-xlarge">@Messages("page.individualDetails.title")</h1>
 
         @form(action = controllers.seis.routes.IndividualDetailsController.submit(Some(backUrl))) {
         <div class="form-group">
@@ -21,7 +21,7 @@
             individualDetailsForm("forename"),
             '_divClass -> "form-label",
             '_labelId -> "label-forename",
-            '_label -> Messages("page.seis.individualDetails.forename.label"),
+            '_label -> Messages("page.individualDetails.forename.label"),
             '_maxlength -> "35",
             '_inputClass -> "input--medium input--cleared",
             'id -> "forename"
@@ -33,7 +33,7 @@
             individualDetailsForm("surname"),
             '_divClass -> "form-label",
             '_labelId -> "label-surname",
-            '_label -> Messages("page.seis.individualDetails.surname.label"),
+            '_label -> Messages("page.individualDetails.surname.label"),
             '_maxlength -> "35",
             '_inputClass -> "input--medium input--cleared",
             'id -> "surname"
@@ -45,7 +45,7 @@
             individualDetailsForm("addressline1"),
             '_divClass -> "form-label",
             '_labelId -> "label-addressline1",
-            '_label -> Messages("page.seis.individualDetails.addressline1.label"),
+            '_label -> Messages("page.individualDetails.addressline1.label"),
             '_maxlength -> "35",
             '_inputClass -> "input--medium input--cleared",
             'id -> "addressline1"
@@ -56,7 +56,7 @@
             individualDetailsForm("addressline2"),
             '_divClass -> "form-label",
             '_labelId -> "label-addressline2",
-            '_label -> Messages("page.seis.individualDetails.addressline2.label"),
+            '_label -> Messages("page.individualDetails.addressline2.label"),
             '_maxlength -> "35",
             '_inputClass -> "input--medium input--cleared",
             'id -> "addressline2"
@@ -67,7 +67,7 @@
             individualDetailsForm("addressline3"),
             '_divClass -> "form-label",
             '_labelId -> "label-addressline3",
-            '_label -> Messages("page.seis.individualDetails.addressline3.label"),
+            '_label -> Messages("page.individualDetails.addressline3.label"),
             '_maxlength -> "35",
             '_inputClass -> "input--medium input--cleared",
             'id -> "addressline3"
@@ -78,7 +78,7 @@
             individualDetailsForm("addressline4"),
             '_divClass -> "form-label",
             '_labelId -> "label-addressline4",
-            '_label -> Messages("page.seis.individualDetails.addressline4.label"),
+            '_label -> Messages("page.individualDetails.addressline4.label"),
             '_maxlength -> "35",
             '_inputClass -> "input--medium input--cleared",
             'id -> "addressline4"
@@ -89,7 +89,7 @@
             individualDetailsForm("postcode"),
             '_divClass -> "form-label",
             '_labelId -> "label-postcode",
-            '_label -> Messages("page.seis.individualDetails.postcode.label"),
+            '_label -> Messages("page.individualDetails.postcode.label"),
             '_maxlength -> "10",
             '_inputClass -> "input--small input--cleared",
             'id -> "postcode"

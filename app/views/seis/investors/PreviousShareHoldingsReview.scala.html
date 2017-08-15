@@ -5,20 +5,20 @@
 
 @(investor: InvestorDetailsModel)(implicit request: Request[_], messages: Messages)
 
-@main_template(Messages("page.seis.investors.previousShareHoldingReview.title"), articleLayout=false) {
+@main_template(Messages("page.investors.previousShareHoldingReview.title"), articleLayout=false) {
 
 @Messages("common.section.progress.company.details.four")
 
 <div class="grid-column">
     <div class="full-width">
-        <h1 class="form-title heading-xlarge" id="main-heading">@Messages("page.seis.investors.previousShareHoldingReview.heading")</h1>
+        <h1 class="form-title heading-xlarge" id="main-heading">@Messages("page.investors.previousShareHoldingReview.heading")</h1>
         <table id="previous-share-holdings-table">
             <thead>
                 <tr>
-                    <th id="share-holdings-table-heading">@Messages("page.seis.investors.previousShareHoldingReview.heading.one")</th>
-                    <th id="amount-raised-table-heading">@Messages("page.seis.investors.previousShareHoldingReview.heading.two")</th>
-                    <th id="date-table-heading">@Messages("page.seis.investors.previousShareHoldingReview.heading.three")</th>
-                    <th id="count-table-heading">@Messages("page.seis.investors.previousShareHoldingReview.heading.four")</th>
+                    <th id="share-holdings-table-heading">@Messages("page.investors.previousShareHoldingReview.heading.one")</th>
+                    <th id="amount-raised-table-heading">@Messages("page.investors.previousShareHoldingReview.heading.two")</th>
+                    <th id="date-table-heading">@Messages("page.investors.previousShareHoldingReview.heading.three")</th>
+                    <th id="count-table-heading">@Messages("page.investors.previousShareHoldingReview.heading.four")</th>
                     <th>
                         <span class="visuallyhidden">
                             @Messages("common.base.change")
@@ -63,7 +63,7 @@
             @if(investor.validate){
             <tr>
                 <td colspan="6"><a id="add-share-holder"
-                                   href=@controllers.seis.routes.PreviousShareHoldingDescriptionController.show(investor.processingId.get).toString>@Messages("page.seis.investors.previousShareHoldingReview.add")</a></td>
+                                   href=@controllers.seis.routes.PreviousShareHoldingDescriptionController.show(investor.processingId.get).toString>@Messages("page.investors.previousShareHoldingReview.add")</a></td>
             </tr>
             }
 

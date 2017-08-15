@@ -43,20 +43,20 @@ class PreviousShareHoldingsReviewSpec extends ViewSpec {
       lazy val page = PreviousShareHoldingsReview(investorModelForReview)(fakeRequest, applicationMessages)
       lazy val document = Jsoup.parse(page.body)
 
-      document.title shouldBe Messages("page.seis.investors.previousShareHoldingReview.title")
-      document.getElementById("main-heading").text() shouldBe Messages("page.seis.investors.previousShareHoldingReview.heading")
+      document.title shouldBe Messages("page.investors.previousShareHoldingReview.title")
+      document.getElementById("main-heading").text() shouldBe Messages("page.investors.previousShareHoldingReview.heading")
 
       lazy val reviewShareHoldingsTableHead = document.getElementById("previous-share-holdings-table").select("thead")
       lazy val reviewShareHoldingsTableBody = document.getElementById("previous-share-holdings-table").select("tbody")
       //head
       reviewShareHoldingsTableHead.select("tr").get(0).getElementById("share-holdings-table-heading").text() shouldBe
-        Messages("page.seis.investors.previousShareHoldingReview.heading.one")
+        Messages("page.investors.previousShareHoldingReview.heading.one")
       reviewShareHoldingsTableHead.select("tr").get(0).getElementById("amount-raised-table-heading").text() shouldBe
-        Messages("page.seis.investors.previousShareHoldingReview.heading.two")
+        Messages("page.investors.previousShareHoldingReview.heading.two")
       reviewShareHoldingsTableHead.select("tr").get(0).getElementById("date-table-heading").text() shouldBe
-        Messages("page.seis.investors.previousShareHoldingReview.heading.three")
+        Messages("page.investors.previousShareHoldingReview.heading.three")
       reviewShareHoldingsTableHead.select("tr").get(0).getElementById("count-table-heading").text() shouldBe
-        Messages("page.seis.investors.previousShareHoldingReview.heading.four")
+        Messages("page.investors.previousShareHoldingReview.heading.four")
       //body
       for((previousShareHoldingModel, index) <- investorModelForReview.previousShareHoldingModels.get.zipWithIndex) {
         reviewShareHoldingsTableBody.select("tr").get(index).getElementById(s"share-desc-$index").text() shouldBe
@@ -88,7 +88,7 @@ class PreviousShareHoldingsReviewSpec extends ViewSpec {
 
       if(validModelWithPrevShareHoldings.validate){
         reviewShareHoldingsTableBody.select("tr").get(1).getElementById("add-share-holder").text() shouldBe
-          Messages("page.seis.investors.previousShareHoldingReview.add")
+          Messages("page.investors.previousShareHoldingReview.add")
         reviewShareHoldingsTableBody.select("tr").get(1).getElementById("add-share-holder").attr("href") shouldBe
           controllers.seis.routes.PreviousShareHoldingDescriptionController.show(validModelWithPrevShareHoldings.processingId.get).toString
         document.body.getElementById("next").text() shouldEqual Messages("common.button.snc")

@@ -6,13 +6,13 @@
 
 @(companyOrIndividual: String, IsExistingShareHolderForm: Form[IsExistingShareHolderModel], backUrl: String)(implicit request: Request[_], messages: Messages)
 
-@main_template(Messages("page.seis.investors.isExistingShareHolder.title", companyOrIndividual.toLowerCase)) {
+@main_template(Messages("page.investors.isExistingShareHolder.title", companyOrIndividual.toLowerCase)) {
 
     @backButtonWithProgress(backUrl, Messages("common.section.progress.company.details.four"))
 
     @errorSummary(IsExistingShareHolderForm, "is-existing-share-holder", "isExistingShareHolder")
 
-    <h1 class="heading-xlarge" id="main-heading">@Messages("page.seis.investors.isExistingShareHolder.heading", companyOrIndividual.toLowerCase)</h1>
+    <h1 class="heading-xlarge" id="main-heading">@Messages("page.investors.isExistingShareHolder.heading", companyOrIndividual.toLowerCase)</h1>
 
     @form(action = controllers.seis.routes.IsExistingShareHolderController.submit(Some(companyOrIndividual), Some(backUrl))) {
         <div class="form-group">
@@ -21,7 +21,7 @@
             Seq(
                 Constants.StandardRadioButtonYesValue -> Messages("common.radioYesLabel"),
                 Constants.StandardRadioButtonNoValue -> Messages("common.radioNoLabel")),
-            '_legend -> Messages("page.seis.investors.isExistingShareHolder.legend", companyOrIndividual.toLowerCase),
+            '_legend -> Messages("page.investors.isExistingShareHolder.legend", companyOrIndividual.toLowerCase),
             '_legendClass -> "visuallyhidden",
             '_labelAfter -> true,
             '_labelClass -> "block-label",

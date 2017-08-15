@@ -7,13 +7,13 @@
 
 @(addAnotherShareholdingForm: Form[AddAnotherShareholdingModel], processingId: Int)(implicit request: Request[_], messages: Messages)
 
-@main_template(Messages("page.seis.investors.AddAnotherShareholding.title")) {
+@main_template(Messages("page.investors.AddAnotherShareholding.title")) {
 
     @backButtonWithProgress(controllers.seis.routes.PreviousShareHoldingsReviewController.show(processingId).url, Messages("common.section.progress.company.details.four"))
 
     @errorSummary(addAnotherShareholdingForm, "add-another-shareholding", "addAnotherShareholding")
 
-    <h1 class="heading-xlarge" id="main-heading">@Messages("page.seis.investors.AddAnotherShareholding.title")</h1>
+    <h1 class="heading-xlarge" id="main-heading">@Messages("page.investors.AddAnotherShareholding.title")</h1>
 
     @form(action = controllers.seis.routes.AddAnotherShareholdingController.submit(processingId)) {
         <div class="form-group">
@@ -23,7 +23,7 @@
                     Constants.StandardRadioButtonYesValue -> Messages("common.radioYesLabel"),
                     Constants.StandardRadioButtonNoValue -> Messages("common.radioNoLabel")
                 ),
-                '_legend -> Messages("page.seis.investors.AddAnotherShareholding.title"),
+                '_legend -> Messages("page.investors.AddAnotherShareholding.title"),
                 '_legendClass -> "visuallyhidden",
                 '_labelAfter -> true,
                 '_labelClass -> "block-label",

@@ -66,18 +66,18 @@ class AddInvestorOrNomineeSpec extends ViewSpec {
           val result = TestController.show(None).apply(authorisedFakeRequest)
           Jsoup.parse(contentAsString(result))
         }
-        document.title() shouldBe Messages("page.seis.investors.AddInvestorOrNominee.title")
+        document.title() shouldBe Messages("page.investors.AddInvestorOrNominee.title")
         document.select("a.back-link").text() shouldBe Messages("common.button.back")
         document.select("a.back-link").attr("href") shouldBe testUrl
 
         document.select("article span").first().text shouldBe Messages("common.section.progress.company.details.four")
-        document.select("h1").text() shouldBe Messages("page.seis.investors.AddInvestorOrNominee.heading")
-        document.select("article p").get(0).text() shouldBe Messages("page.seis.investors.AddInvestorOrNominee.info.one")
-        document.select("article p").get(1).text() shouldBe Messages("page.seis.investors.AddInvestorOrNominee.info.two")
-        document.getElementById("addInvestorOrNominee-investorLabel").text() shouldBe Messages("page.seis.investors.AddInvestorOrNominee.radioButton.one")
-        document.getElementById("addInvestorOrNominee-nomineeLabel").text() shouldBe Messages("page.seis.investors.AddInvestorOrNominee.radioButton.two")
+        document.select("h1").text() shouldBe Messages("page.investors.AddInvestorOrNominee.heading")
+        document.select("article p").get(0).text() shouldBe Messages("page.investors.AddInvestorOrNominee.info.one")
+        document.select("article p").get(1).text() shouldBe Messages("page.investors.AddInvestorOrNominee.info.two")
+        document.getElementById("addInvestorOrNominee-investorLabel").text() shouldBe Messages("page.investors.AddInvestorOrNominee.radioButton.one")
+        document.getElementById("addInvestorOrNominee-nomineeLabel").text() shouldBe Messages("page.investors.AddInvestorOrNominee.radioButton.two")
         document.getElementById("addInvestorOrNominee-legend").select(".visuallyhidden").text() shouldBe
-          Messages("page.seis.investors.AddInvestorOrNominee.heading")
+          Messages("page.investors.AddInvestorOrNominee.heading")
 
         document.select("form").attr("action") shouldBe controllers.seis.routes.AddInvestorOrNomineeController.submit().url
         document.select("button").text() shouldBe Messages("common.button.snc")
@@ -91,18 +91,18 @@ class AddInvestorOrNomineeSpec extends ViewSpec {
         val result = TestController.show(Some(1)).apply(authorisedFakeRequest)
         Jsoup.parse(contentAsString(result))
       }
-      document.title() shouldBe Messages("page.seis.investors.AddInvestorOrNominee.title")
+      document.title() shouldBe Messages("page.investors.AddInvestorOrNominee.title")
       document.select("a.back-link").text() shouldBe Messages("common.button.back")
       document.select("a.back-link").attr("href") shouldBe testUrlOther
 
       document.select("article span").first().text shouldBe Messages("common.section.progress.company.details.four")
-      document.select("h1").text() shouldBe Messages("page.seis.investors.AddInvestorOrNominee.heading")
-      document.select("article p").get(0).text() shouldBe Messages("page.seis.investors.AddInvestorOrNominee.info.one")
-      document.select("article p").get(1).text() shouldBe Messages("page.seis.investors.AddInvestorOrNominee.info.two")
-      document.getElementById("addInvestorOrNominee-investorLabel").text() shouldBe Messages("page.seis.investors.AddInvestorOrNominee.radioButton.one")
-      document.getElementById("addInvestorOrNominee-nomineeLabel").text() shouldBe Messages("page.seis.investors.AddInvestorOrNominee.radioButton.two")
+      document.select("h1").text() shouldBe Messages("page.investors.AddInvestorOrNominee.heading")
+      document.select("article p").get(0).text() shouldBe Messages("page.investors.AddInvestorOrNominee.info.one")
+      document.select("article p").get(1).text() shouldBe Messages("page.investors.AddInvestorOrNominee.info.two")
+      document.getElementById("addInvestorOrNominee-investorLabel").text() shouldBe Messages("page.investors.AddInvestorOrNominee.radioButton.one")
+      document.getElementById("addInvestorOrNominee-nomineeLabel").text() shouldBe Messages("page.investors.AddInvestorOrNominee.radioButton.two")
       document.getElementById("addInvestorOrNominee-legend").select(".visuallyhidden").text() shouldBe
-        Messages("page.seis.investors.AddInvestorOrNominee.heading")
+        Messages("page.investors.AddInvestorOrNominee.heading")
 
       document.select("form").attr("action") shouldBe controllers.seis.routes.AddInvestorOrNomineeController.submit().url
       document.select("button").text() shouldBe Messages("common.button.snc")
@@ -114,18 +114,18 @@ class AddInvestorOrNomineeSpec extends ViewSpec {
         val result = TestController.submit.apply(authorisedFakeRequest)
         Jsoup.parse(contentAsString(result))
       }
-      document.title() shouldBe Messages("page.seis.investors.AddInvestorOrNominee.title")
+      document.title() shouldBe Messages("page.investors.AddInvestorOrNominee.title")
       document.select("a.back-link").text() shouldBe Messages("common.button.back")
       document.select("a.back-link").attr("href") shouldBe testUrl
 
       document.select("article span").first().text shouldBe Messages("common.section.progress.company.details.four")
-      document.select("h1").text() shouldBe Messages("page.seis.investors.AddInvestorOrNominee.heading")
-      document.select("article p").get(0).text() shouldBe Messages("page.seis.investors.AddInvestorOrNominee.info.one")
-      document.select("article p").get(1).text() shouldBe Messages("page.seis.investors.AddInvestorOrNominee.info.two")
-      document.getElementById("addInvestorOrNominee-investorLabel").text() shouldBe Messages("page.seis.investors.AddInvestorOrNominee.radioButton.one")
-      document.getElementById("addInvestorOrNominee-nomineeLabel").text() shouldBe Messages("page.seis.investors.AddInvestorOrNominee.radioButton.two")
+      document.select("h1").text() shouldBe Messages("page.investors.AddInvestorOrNominee.heading")
+      document.select("article p").get(0).text() shouldBe Messages("page.investors.AddInvestorOrNominee.info.one")
+      document.select("article p").get(1).text() shouldBe Messages("page.investors.AddInvestorOrNominee.info.two")
+      document.getElementById("addInvestorOrNominee-investorLabel").text() shouldBe Messages("page.investors.AddInvestorOrNominee.radioButton.one")
+      document.getElementById("addInvestorOrNominee-nomineeLabel").text() shouldBe Messages("page.investors.AddInvestorOrNominee.radioButton.two")
       document.getElementById("addInvestorOrNominee-legend").select(".visuallyhidden").text() shouldBe
-        Messages("page.seis.investors.AddInvestorOrNominee.heading")
+        Messages("page.investors.AddInvestorOrNominee.heading")
 
       document.select("form").attr("action") shouldBe controllers.seis.routes.AddInvestorOrNomineeController.submit().url
       document.select("button").text() shouldBe Messages("common.button.snc")

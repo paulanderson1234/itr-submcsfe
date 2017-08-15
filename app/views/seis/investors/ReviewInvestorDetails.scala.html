@@ -12,48 +12,48 @@
 @previousShareholdingRow(model: PreviousShareHoldingModel, id: Int) = {
     @textRowHelperMultiLine(
         s"previous-shareholding-$id",
-        model.previousShareHoldingDescriptionModel.map(_.description).getOrElse(Messages("page.seis.investors.reviewInvestorDetails.incomplete")),
+        model.previousShareHoldingDescriptionModel.map(_.description).getOrElse(Messages("page.investors.reviewInvestorDetails.incomplete")),
         Array(
             model.previousShareHoldingNominalValueModel.map { model =>
-                Messages("page.seis.investors.reviewInvestorDetails.shareholdings.nominalValue", s"£${Transformers.numberToFormattedNumber(model.nominalValue)}")
-            }.getOrElse(Messages("page.seis.investors.reviewInvestorDetails.incomplete")),
+                Messages("page.investors.reviewInvestorDetails.shareholdings.nominalValue", s"£${Transformers.numberToFormattedNumber(model.nominalValue)}")
+            }.getOrElse(Messages("page.investors.reviewInvestorDetails.incomplete")),
 
             model.investorShareIssueDateModel.flatMap { date =>
                 date.formatDateToString.map { dateString =>
-                    Messages("page.seis.investors.reviewInvestorDetails.shareholdings.dateOfInvestment", dateString)
+                    Messages("page.investors.reviewInvestorDetails.shareholdings.dateOfInvestment", dateString)
                 }
-            }.getOrElse(Messages("page.seis.investors.reviewInvestorDetails.incomplete")),
+            }.getOrElse(Messages("page.investors.reviewInvestorDetails.incomplete")),
 
             model.numberOfPreviouslyIssuedSharesModel.map { model =>
-                Messages("page.seis.investors.reviewInvestorDetails.shareholdings.numberOfShares", Transformers.numberToFormattedNumber(model.previouslyIssuedShares))
-            }.getOrElse(Messages("page.seis.investors.reviewInvestorDetails.incomplete"))
+                Messages("page.investors.reviewInvestorDetails.shareholdings.numberOfShares", Transformers.numberToFormattedNumber(model.previouslyIssuedShares))
+            }.getOrElse(Messages("page.investors.reviewInvestorDetails.incomplete"))
         ),
         Some(controllers.seis.routes.PreviousShareHoldingsReviewController.show(investor.processingId.get).url),
         complete = model.validate
     )
 }
 
-@main_template(Messages("page.seis.investors.reviewInvestorDetails.title", investor.investorOrNomineeModel.map(_.addInvestorOrNominee).get.toLowerCase), articleLayout=false) {
+@main_template(Messages("page.investors.reviewInvestorDetails.title", investor.investorOrNomineeModel.map(_.addInvestorOrNominee).get.toLowerCase), articleLayout=false) {
 
     <p>@Messages("common.section.progress.company.details.four")</p>
 
-    <h1 class="heading-xlarge">@Messages("page.seis.investors.reviewInvestorDetails.title", investor.investorOrNomineeModel.map(_.addInvestorOrNominee).get.toLowerCase)</h1>
+    <h1 class="heading-xlarge">@Messages("page.investors.reviewInvestorDetails.title", investor.investorOrNomineeModel.map(_.addInvestorOrNominee).get.toLowerCase)</h1>
 
     <div id="review-investor" class="full-width">
         <table id="investor-details-table">
-            @tableHeaderHelper("investor-details", Messages("page.seis.investors.reviewInvestorDetails.investor.subheading", investor.investorOrNomineeModel.map(_.addInvestorOrNominee).get))
+            @tableHeaderHelper("investor-details", Messages("page.investors.reviewInvestorDetails.investor.subheading", investor.investorOrNomineeModel.map(_.addInvestorOrNominee).get))
             <tbody>
                 @textRowHelperBasic(
                     "investor-or-nominee",
-                    Messages("page.seis.investors.reviewInvestorDetails.investor.investorOrNominee"),
-                    investor.investorOrNomineeModel.map(_.addInvestorOrNominee).getOrElse(Messages("page.seis.investors.reviewInvestorDetails.incomplete")),
+                    Messages("page.investors.reviewInvestorDetails.investor.investorOrNominee"),
+                    investor.investorOrNomineeModel.map(_.addInvestorOrNominee).getOrElse(Messages("page.investors.reviewInvestorDetails.incomplete")),
                     Some(controllers.seis.routes.AddInvestorOrNomineeController.show(investor.processingId).url)
                 )
 
                 @textRowHelperBasic(
                     "company-or-individual",
-                    Messages("page.seis.investors.reviewInvestorDetails.investor.companyOrIndividual"),
-                    investor.companyOrIndividualModel.map(_.companyOrIndividual).getOrElse(Messages("page.seis.investors.reviewInvestorDetails.incomplete")),
+                    Messages("page.investors.reviewInvestorDetails.investor.companyOrIndividual"),
+                    investor.companyOrIndividualModel.map(_.companyOrIndividual).getOrElse(Messages("page.investors.reviewInvestorDetails.incomplete")),
                     Some(controllers.seis.routes.CompanyOrIndividualController.show(investor.processingId.get).url),
                     complete = investor.companyOrIndividualModel.isDefined
                 )
@@ -61,16 +61,16 @@
                 @if(investor.companyOrIndividualModel.map(_.companyOrIndividual).getOrElse("") == Constants.typeCompany) {
                     @textRowHelperBasic(
                         "company-name",
-                        Messages("page.seis.investors.reviewInvestorDetails.investor.companyName"),
-                        investor.companyDetailsModel.map(_.companyName).getOrElse(Messages("page.seis.investors.reviewInvestorDetails.incomplete")),
+                        Messages("page.investors.reviewInvestorDetails.investor.companyName"),
+                        investor.companyDetailsModel.map(_.companyName).getOrElse(Messages("page.investors.reviewInvestorDetails.incomplete")),
                         Some(controllers.seis.routes.CompanyDetailsController.show(investor.processingId.get).url),
                         complete = investor.companyDetailsModel.isDefined
                     )
 
                     @textRowHelperMultiLine(
                         "company-address",
-                        Messages("page.seis.investors.reviewInvestorDetails.investor.contactAddress"),
-                        investor.companyDetailsModel.map(_.toArray).getOrElse(Array(Messages("page.seis.investors.reviewInvestorDetails.incomplete"))),
+                        Messages("page.investors.reviewInvestorDetails.investor.contactAddress"),
+                        investor.companyDetailsModel.map(_.toArray).getOrElse(Array(Messages("page.investors.reviewInvestorDetails.incomplete"))),
                         Some(controllers.seis.routes.CompanyDetailsController.show(investor.processingId.get).url),
                         complete = investor.companyDetailsModel.isDefined
                     )
@@ -79,18 +79,18 @@
                 @if(investor.companyOrIndividualModel.map(_.companyOrIndividual).getOrElse("") == Constants.typeIndividual) {
                     @textRowHelperBasic(
                         "individual-name",
-                        Messages("page.seis.investors.reviewInvestorDetails.investor.contactName"),
+                        Messages("page.investors.reviewInvestorDetails.investor.contactName"),
                         if(investor.individualDetailsModel.isDefined) {
                             s"${investor.individualDetailsModel.get.forename} ${investor.individualDetailsModel.get.surname}"
-                        } else { Messages("page.seis.investors.reviewInvestorDetails.incomplete") },
+                        } else { Messages("page.investors.reviewInvestorDetails.incomplete") },
                         Some(controllers.seis.routes.IndividualDetailsController.show(investor.processingId.get).url),
                         complete = investor.individualDetailsModel.isDefined
                     )
 
                     @textRowHelperMultiLine(
                         "individual-address",
-                        Messages("page.seis.investors.reviewInvestorDetails.investor.contactAddress"),
-                        investor.individualDetailsModel.map(_.toArray).getOrElse(Array(Messages("page.seis.investors.reviewInvestorDetails.incomplete"))),
+                        Messages("page.investors.reviewInvestorDetails.investor.contactAddress"),
+                        investor.individualDetailsModel.map(_.toArray).getOrElse(Array(Messages("page.investors.reviewInvestorDetails.incomplete"))),
                         Some(controllers.seis.routes.IndividualDetailsController.show(investor.processingId.get).url),
                         complete = investor.individualDetailsModel.isDefined
                     )
@@ -98,18 +98,18 @@
 
                 @textRowHelperBasic(
                     "shares-purchased",
-                    Messages("page.seis.investors.reviewInvestorDetails.investor.purchasedShares"),
-                    investor.numberOfSharesPurchasedModel.map(_.numberOfSharesPurchased.toString).getOrElse(Messages("page.seis.investors.reviewInvestorDetails.incomplete")),
+                    Messages("page.investors.reviewInvestorDetails.investor.purchasedShares"),
+                    investor.numberOfSharesPurchasedModel.map(_.numberOfSharesPurchased.toString).getOrElse(Messages("page.investors.reviewInvestorDetails.incomplete")),
                     Some(controllers.seis.routes.NumberOfSharesPurchasedController.show(investor.processingId.get).url),
                     complete = investor.numberOfSharesPurchasedModel.isDefined
                 )
 
                 @textRowHelperBasic(
                     "amount-spent",
-                    Messages("page.seis.investors.reviewInvestorDetails.investor.totalSpent"),
+                    Messages("page.investors.reviewInvestorDetails.investor.totalSpent"),
                     investor.amountSpentModel.map( model =>
                         s"£${Transformers.numberToFormattedNumber(model.amount)}"
-                    ).getOrElse(Messages("page.seis.investors.reviewInvestorDetails.incomplete")),
+                    ).getOrElse(Messages("page.investors.reviewInvestorDetails.incomplete")),
                     Some(controllers.seis.routes.HowMuchSpentOnSharesController.show(investor.processingId.get).url),
                     complete = investor.amountSpentModel.isDefined
                 )
@@ -117,12 +117,12 @@
         </table>
 
         <table id="previous-shareholdings-table">
-            @tableHeaderHelper("previous-shareholdings", Messages("page.seis.investors.reviewInvestorDetails.shareholdings.subheading"))
+            @tableHeaderHelper("previous-shareholdings", Messages("page.investors.reviewInvestorDetails.shareholdings.subheading"))
             <tbody>
                 @textRowHelperBasic(
                     "is-existing-shareholder",
-                    Messages("page.seis.investors.reviewInvestorDetails.shareholdings.isExistingShareholder"),
-                    investor.isExistingShareHolderModel.map(_.isExistingShareHolder).getOrElse(Messages("page.seis.investors.reviewInvestorDetails.incomplete")),
+                    Messages("page.investors.reviewInvestorDetails.shareholdings.isExistingShareholder"),
+                    investor.isExistingShareHolderModel.map(_.isExistingShareHolder).getOrElse(Messages("page.investors.reviewInvestorDetails.incomplete")),
 
                     if (investor.showIsExistingShareholderChangeLink) {
                         Some(controllers.seis.routes.IsExistingShareHolderController.show(investor.processingId.get).url)
@@ -139,7 +139,7 @@
                         <tr>
                             <td id="add-shareholder-link">
                                 <a href="@controllers.seis.routes.PreviousShareHoldingDescriptionController.show(investor.processingId.getOrElse(0)).url">
-                                    @Messages("page.seis.investors.reviewInvestorDetails.shareholdings.addAnotherShareholding")
+                                    @Messages("page.investors.reviewInvestorDetails.shareholdings.addAnotherShareholding")
                                 </a>
                             </td>
                             <td></td>
