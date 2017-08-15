@@ -29,8 +29,8 @@ import views.html.seis.investors.IsExistingShareHolder
 class IsExistingShareHolderSpec extends ViewSpec {
 
   def commonTests(document: Document, templateText: String): Unit = {
-    document.title() shouldBe Messages("page.seis.investors.isExistingShareHolder.title", templateText)
-    document.getElementById("main-heading").text() shouldBe Messages("page.seis.investors.isExistingShareHolder.heading", templateText)
+    document.title() shouldBe Messages("page.investors.isExistingShareHolder.title", templateText)
+    document.getElementById("main-heading").text() shouldBe Messages("page.investors.isExistingShareHolder.heading", templateText)
     document.getElementById("next").text() shouldBe Messages("common.button.snc")
     document.body.getElementById("back-link").attr("href") shouldEqual controllers.seis.routes.HowMuchSpentOnSharesController.show(1).url
     document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.company.details.four")

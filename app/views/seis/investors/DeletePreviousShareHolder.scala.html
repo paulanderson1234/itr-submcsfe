@@ -4,18 +4,18 @@
 
 @(previousShareHoldingModel: PreviousShareHoldingModel)(implicit request: Request[_], messages: Messages)
 
-@main_template(Messages("page.seis.investors.DeletePreviousShareHolder.title")) {
+@main_template(Messages("page.investors.DeletePreviousShareHolder.title")) {
 @backButtonWithProgress(controllers.seis.routes.PreviousShareHoldingsReviewController.show(previousShareHoldingModel.investorProcessingId.get).url, Messages("common.section.progress.company.details.four"))
 
-<h1 id="main-heading" class="form-title heading-xlarge">@Messages("page.seis.investors.DeletePreviousShareHolder.heading")</h1>
+<h1 id="main-heading" class="form-title heading-xlarge">@Messages("page.investors.DeletePreviousShareHolder.heading")</h1>
 
 @form(action = controllers.seis.routes.DeletePreviousShareHolderController.submit(previousShareHoldingModel.investorProcessingId.get, previousShareHoldingModel.processingId.get)){
 
 <div class="panel panel-border-wide">
-    <p id="share-holding-delete-hint">@Messages("page.seis.investors.DeletePreviousShareHolder.message.one", previousShareHoldingModel.previousShareHoldingDescriptionModel.get.description)
-        @if(previousShareHoldingModel.investorShareIssueDateModel.isDefined){@Messages("page.seis.investors.DeletePreviousShareHolder.message.two", PreviousShareHoldingModel.toDateString(previousShareHoldingModel.investorShareIssueDateModel.get.investorShareIssueDateDay.get,
+    <p id="share-holding-delete-hint">@Messages("page.investors.DeletePreviousShareHolder.message.one", previousShareHoldingModel.previousShareHoldingDescriptionModel.get.description)
+        @if(previousShareHoldingModel.investorShareIssueDateModel.isDefined){@Messages("page.investors.DeletePreviousShareHolder.message.two", PreviousShareHoldingModel.toDateString(previousShareHoldingModel.investorShareIssueDateModel.get.investorShareIssueDateDay.get,
         previousShareHoldingModel.investorShareIssueDateModel.get.investorShareIssueDateMonth.get, previousShareHoldingModel.investorShareIssueDateModel.get.investorShareIssueDateYear.get))}
-        @Messages("page.seis.investors.DeletePreviousShareHolder.message.three")
+        @Messages("page.investors.DeletePreviousShareHolder.message.three")
     </p>
 </div>
 

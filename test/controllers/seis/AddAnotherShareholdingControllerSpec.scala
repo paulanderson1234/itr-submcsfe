@@ -62,7 +62,7 @@ class AddAnotherShareholdingControllerSpec extends BaseSpec {
     }
 
     "load the Add Another Shareholder page" in {
-      Jsoup.parse(bodyOf(result)).title() shouldBe Messages("page.seis.investors.AddAnotherShareholding.title")
+      Jsoup.parse(bodyOf(result)).title() shouldBe Messages("page.investors.AddAnotherShareholding.title")
     }
   }
 
@@ -80,7 +80,7 @@ class AddAnotherShareholdingControllerSpec extends BaseSpec {
       }
 
       "reload the Add Another Shareholder page" in {
-        Jsoup.parse(bodyOf(result)).title() shouldBe Messages("page.seis.investors.AddAnotherShareholding.title")
+        Jsoup.parse(bodyOf(result)).title() shouldBe Messages("page.investors.AddAnotherShareholding.title")
       }
     }
 

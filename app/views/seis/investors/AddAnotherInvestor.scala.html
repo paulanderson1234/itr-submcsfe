@@ -5,7 +5,7 @@
 
 @(addAnotherInvestorForm: Form[AddAnotherInvestorModel])(implicit request: Request[_], messages: Messages)
 
-@main_template(Messages("page.seis.investors.addAnotherInvestor.title")) {
+@main_template(Messages("page.investors.addAnotherInvestor.title")) {
 
 
 @backButtonWithProgress(controllers.seis.routes.ReviewAllInvestorsController.show().url, Messages("common.section.progress.company.details.four"))
@@ -15,7 +15,7 @@
 
         @errorSummary(addAnotherInvestorForm, "add-another-investor", "addAnotherInvestor")
 
-        <h1 id="main-heading" class="form-title heading-xlarge">@Messages("page.seis.investors.addAnotherInvestor.heading")</h1>
+        <h1 id="main-heading" class="form-title heading-xlarge">@Messages("page.investors.addAnotherInvestor.heading")</h1>
 
         @form(action = controllers.seis.routes.AddAnotherInvestorController.submit()) {
         <div class="form-group">
@@ -24,7 +24,7 @@
             Seq(
             Constants.StandardRadioButtonYesValue -> Messages("common.radioYesLabel"),
             Constants.StandardRadioButtonNoValue -> Messages("common.radioNoLabel")),
-            '_legend -> Messages("page.seis.investors.addAnotherInvestor.legend"),
+            '_legend -> Messages("page.investors.addAnotherInvestor.legend"),
             '_legendClass -> "visuallyhidden",
             '_labelAfter -> true,
             '_labelClass -> "block-label",

@@ -42,7 +42,7 @@ class NumberOfSharesPurchasedSpec extends ViewSpec with DateFormatter{
       }
 
       "have the correct title" in {
-        document.title() shouldBe Messages("page.seis.investors.numberOfSharesPurchased.title", "company", "TODO")
+        document.title() shouldBe Messages("page.investors.numberOfSharesPurchased.title", "company", "TODO")
       }
 
       "have the correct back link text" in {
@@ -54,7 +54,7 @@ class NumberOfSharesPurchasedSpec extends ViewSpec with DateFormatter{
       }
 
      "have the correct heading" in {
-        document.select("h1").text() shouldBe Html(Messages("page.seis.investors.numberOfSharesPurchased.title", "company", "TODO")).toString()
+        document.select("h1").text() shouldBe Html(Messages("page.investors.numberOfSharesPurchased.title", "company", "TODO")).toString()
       }
 
       "have a form posting to the correct route" in {
@@ -62,7 +62,7 @@ class NumberOfSharesPurchasedSpec extends ViewSpec with DateFormatter{
       }
 
       "have the correct question in a label" in {
-        document.select("fieldset label").text() shouldBe Messages("page.seis.investors.numberOfSharesPurchased.heading", "company", "TODO")
+        document.select("fieldset label").text() shouldBe Messages("page.investors.numberOfSharesPurchased.heading", "company", "TODO")
       }
 
       "have an input for SharesPurchased" in {
@@ -85,7 +85,7 @@ class NumberOfSharesPurchasedSpec extends ViewSpec with DateFormatter{
       }
 
       "have the correct title" in {
-        document.title() shouldBe Messages("page.seis.investors.numberOfSharesPurchased.title", "company", "TODO")
+        document.title() shouldBe Messages("page.investors.numberOfSharesPurchased.title", "company", "TODO")
       }
       "have the correct back link text" in {
         document.select("a.back-link").text() shouldBe Messages("common.button.back")
@@ -100,7 +100,7 @@ class NumberOfSharesPurchasedSpec extends ViewSpec with DateFormatter{
       }
 
       "have the correct question in a label" in {
-        document.select("label span.visuallyhidden").text() shouldBe Messages("page.seis.investors.numberOfSharesPurchased.heading", "company", "TODO")
+        document.select("label span.visuallyhidden").text() shouldBe Messages("page.investors.numberOfSharesPurchased.heading", "company", "TODO")
       }
 
       "have an input for employeeCount" in {

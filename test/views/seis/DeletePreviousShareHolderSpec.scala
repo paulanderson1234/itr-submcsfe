@@ -36,17 +36,17 @@ class DeletePreviousShareHolderSpec  extends BaseSpec {
       lazy val document = Jsoup.parse(page.body)
 
       //title and heading
-      document.title() shouldBe Messages("page.seis.investors.DeletePreviousShareHolder.title")
+      document.title() shouldBe Messages("page.investors.DeletePreviousShareHolder.title")
 
-      document.body.getElementById("main-heading").text() shouldBe Messages("page.seis.investors.DeletePreviousShareHolder.heading")
+      document.body.getElementById("main-heading").text() shouldBe Messages("page.investors.DeletePreviousShareHolder.heading")
       if(shareHoldersModel.investorShareIssueDateModel.isDefined){
         document.body.getElementById("share-holding-delete-hint").text() shouldBe
-          Messages("page.seis.investors.DeletePreviousShareHolder.message.one",
-            shareHoldersModel.previousShareHoldingDescriptionModel.get.description) +" " + Messages("page.seis.investors.DeletePreviousShareHolder.message.two",
+          Messages("page.investors.DeletePreviousShareHolder.message.one",
+            shareHoldersModel.previousShareHoldingDescriptionModel.get.description) +" " + Messages("page.investors.DeletePreviousShareHolder.message.two",
             PreviousShareHoldingModel.toDateString(shareHoldersModel.investorShareIssueDateModel.get.investorShareIssueDateDay.get,
               shareHoldersModel.investorShareIssueDateModel.get.investorShareIssueDateMonth.get,
               shareHoldersModel.investorShareIssueDateModel.get.investorShareIssueDateYear.get)) + " " +
-            Messages("page.seis.investors.DeletePreviousShareHolder.message.three")
+            Messages("page.investors.DeletePreviousShareHolder.message.three")
       }
 
       document.body.getElementById("share-holding-remove").text() shouldBe Messages("common.base.remove")

@@ -182,19 +182,19 @@ class ReviewAllInvestorsSpec extends ViewSpec {
         "has the correct investor names" in {
           val id = "td#investor-name"
           table.select(s"$id-0").text() shouldBe testModelValidCompany.companyDetailsModel.get.companyName
-          table.select(s"$id-1").text() shouldBe Messages("page.seis.investors.reviewInvestorDetails.incomplete")
+          table.select(s"$id-1").text() shouldBe Messages("page.investors.reviewInvestorDetails.incomplete")
         }
 
         "has the correct number of shares for each investor" in {
           val id = "td#number-of-shares"
           table.select(s"$id-0").text() shouldBe testModelValidCompany.numberOfSharesPurchasedModel.get.numberOfSharesPurchased.toString()
-          table.select(s"$id-1").text() shouldBe Messages("page.seis.investors.reviewInvestorDetails.incomplete")
+          table.select(s"$id-1").text() shouldBe Messages("page.investors.reviewInvestorDetails.incomplete")
         }
 
         "has the correct amounts spent for each investor" in {
           val id = "td#amount-raised"
           table.select(s"$id-0").text() shouldBe expectedAmountSpentResult
-          table.select(s"$id-1").text() shouldBe Messages("page.seis.investors.reviewInvestorDetails.incomplete")
+          table.select(s"$id-1").text() shouldBe Messages("page.investors.reviewInvestorDetails.incomplete")
         }
 
         "have the correct continue links text" in {

@@ -6,15 +6,15 @@
 
 @(previousShareHoldingNominalValueForm: Form[PreviousShareHoldingNominalValueModel], backUrl: String, investorProcessingId: Int)(implicit request: Request[_], messages: Messages)
 
-@main_template(Messages("page.seis.investors.previousShareHoldingNominalValue.title")) {
+@main_template(Messages("page.investors.previousShareHoldingNominalValue.title")) {
 @backButtonWithProgress(backUrl, Messages("common.section.progress.company.details.four"))
 
     @errorSummary(previousShareHoldingNominalValueForm, "previous-share-holding-nominal-value", "previousShareHoldingNominalValue")
 
-    <h1 id="main-heading" class="heading-xlarge">@Messages("page.seis.investors.previousShareHoldingNominalValue.heading")</h1>
+    <h1 id="main-heading" class="heading-xlarge">@Messages("page.investors.previousShareHoldingNominalValue.heading")</h1>
 
     <div id="nominal-value-info" class = "form-group">
-        <p>@Messages("page.seis.investors.previousShareHoldingNominalValue.whereToFind")</p>
+        <p>@Messages("page.investors.previousShareHoldingNominalValue.whereToFind")</p>
     </div>
 
     @form(action = controllers.seis.routes.PreviousShareHoldingNominalValueController.submit(Some(backUrl), Some(investorProcessingId))) {
@@ -29,7 +29,7 @@
             '_type -> "text",
             '_maxlength -> "11",
             '_hintId -> "label-nominal-value-hint",
-            '_inputHint -> Messages("page.seis.investors.previousShareHoldingNominalValue.hint")
+            '_inputHint -> Messages("page.investors.previousShareHoldingNominalValue.hint")
             )
 
         </div>

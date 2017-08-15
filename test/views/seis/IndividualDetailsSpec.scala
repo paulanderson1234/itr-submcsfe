@@ -41,7 +41,7 @@ class IndividualDetailsSpec extends ViewSpec with FakeRequestHelper {
       }
 
       "have the correct title" in {
-        document.title shouldBe Messages("page.seis.individualDetails.title")
+        document.title shouldBe Messages("page.individualDetails.title")
       }
 
       "have the correct section" in {
@@ -53,7 +53,7 @@ class IndividualDetailsSpec extends ViewSpec with FakeRequestHelper {
       }
 
       "have a header with the correct question" in {
-        document.select("h1").text() shouldBe Messages("page.seis.individualDetails.title")
+        document.select("h1").text() shouldBe Messages("page.individualDetails.title")
       }
 
       "have a form" which {
