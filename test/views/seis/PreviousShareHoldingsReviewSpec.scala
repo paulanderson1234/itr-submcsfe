@@ -78,7 +78,7 @@ class PreviousShareHoldingsReviewSpec extends ViewSpec {
         }
         else{
           reviewShareHoldingsTableBody.select("tr").get(index).getElementById(s"continue-$index").text() shouldBe
-            Messages("page.seis.investors.DeletePreviousShareHolder.continue")
+            Messages("common.base.remove")
         }
 
         reviewShareHoldingsTableBody.select("tr").get(index).getElementById(s"remove-$index").text() shouldBe
