@@ -98,7 +98,7 @@ class AddAnotherShareholdingControllerSpec extends BaseSpec {
         }
 
         "redirect to the Review Investor Entry page" in {
-          redirectLocation(result) shouldBe Some(controllers.seis.routes.AddAnotherShareholdingController.show(2).url)
+          redirectLocation(result) shouldBe Some(controllers.seis.routes.ReviewInvestorDetailsController.show(2).url)
         }
       }
 
@@ -131,25 +131,6 @@ class AddAnotherShareholdingControllerSpec extends BaseSpec {
 
         "redirect to the Add Investor or Nominee page" in {
           redirectLocation(result) shouldBe Some(controllers.seis.routes.AddInvestorOrNomineeController.show().url)
-        }
-      }
-
-      "the investor has an incomplete shareholding" should {
-        val previousShareholdingModel = PreviousShareHoldingModel()
-        lazy val result = {
-          mockEnrolledRequest(seisSchemeTypesModel)
-          setupMocks(Some(Vector(validModelWithPrevShareHoldings.copy(
-            previousShareHoldingModels = Some(Vector(previousShareholdingModel))
-          ))))
-          testController.submit(2)(authorisedFakeRequestToPOST(("addAnotherShareholding", "No")))
-        }
-
-        "return a status of 303" in {
-          status(result) shouldBe 303
-        }
-
-        "redirect to the Review Shareholders page" in {
-          redirectLocation(result) shouldBe Some(controllers.seis.routes.AddAnotherShareholdingController.show(2).url)
         }
       }
     }

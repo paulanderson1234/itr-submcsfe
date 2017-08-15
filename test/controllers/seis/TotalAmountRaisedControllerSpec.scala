@@ -22,6 +22,7 @@ import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector, SubmissionConnector}
 import controllers.helpers.BaseSpec
 import models._
+import models.investorDetails.InvestorDetailsModel
 import org.mockito.Matchers
 import org.mockito.Mockito._
 import play.api.test.Helpers._
@@ -52,7 +53,8 @@ class TotalAmountRaisedControllerSpec extends BaseSpec {
   def setupSubmissionMocks(tradingConditionLessThanFourMonths: Option[Boolean] = None,
                            businessActivityModel: Option[QualifyBusinessActivityModel] = None,
                            tradeStartDateModel: Option[HasInvestmentTradeStartedModel] = None,
-                           researchStartDateModel: Option[ResearchStartDateModel] = None): Unit = {
+                           researchStartDateModel: Option[ResearchStartDateModel] = None,
+                           investorDetailsModel: Option[Vector[InvestorDetailsModel]]): Unit = {
 
     when(mockS4lConnector.saveFormData(Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
       .thenReturn(Future.successful(CacheMap("", Map())))
@@ -76,6 +78,10 @@ class TotalAmountRaisedControllerSpec extends BaseSpec {
 
     when(mockS4lConnector.saveFormData(Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
       .thenReturn(Future.successful(CacheMap("", Map())))
+
+    when(mockS4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](Matchers.eq(KeystoreKeys.investorDetails))
+      (Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(investorDetailsModel))
 
   }
 
@@ -115,7 +121,7 @@ class TotalAmountRaisedControllerSpec extends BaseSpec {
   "Sending a valid form submit and date validation API condition true to the TotalAmountRaisedController" should {
     "redirect to the expected page if valid trade activity has that started is found in s4l but no research date" in {
       setupSubmissionMocks(tradeDateConditionMet, Some(qualifyPrepareToTrade),
-        Some(hasInvestmentTradeStartedModelYes), None)
+        Some(hasInvestmentTradeStartedModelYes), None, None)
       mockEnrolledRequest(seisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,
         "amount" -> "1")(
@@ -131,7 +137,7 @@ class TotalAmountRaisedControllerSpec extends BaseSpec {
   "Sending a valid form submit and date validation API condition false to the TotalAmountRaisedController" should {
     "redirect to the expected page if valid trade activity has that started in s4l but no research date" in {
       setupSubmissionMocks(tradeDateConditionNotMet, Some(qualifyPrepareToTrade),
-        Some(hasInvestmentTradeStartedModelYes), None)
+        Some(hasInvestmentTradeStartedModelYes), None, None)
       mockEnrolledRequest(seisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,
         "amount" -> "1")(
@@ -144,9 +150,10 @@ class TotalAmountRaisedControllerSpec extends BaseSpec {
   }
 
   "Sending a valid form submit and date validation API condition true to the TotalAmountRaisedController" should {
-    "redirect to the expected page if valid research activity that has started in s4l but no trade date found" in {
+    "redirect to the expected page if valid research activity that has started in s4l but no trade date found" +
+      " with no investor details" in {
       setupSubmissionMocks(tradeDateConditionMet, Some(qualifyResearchAndDevelopment),
-        None, Some(researchStartDateModelYes))
+        None, Some(researchStartDateModelYes), None)
       mockEnrolledRequest(seisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,
         "amount" -> "1")(
@@ -158,10 +165,26 @@ class TotalAmountRaisedControllerSpec extends BaseSpec {
     }
   }
 
+  "Sending a valid form submit and date validation API condition true to the TotalAmountRaisedController" should {
+    "redirect to the expected page if valid research activity that has started in s4l but no trade date found " +
+      "with investor details" in {
+      setupSubmissionMocks(tradeDateConditionMet, Some(qualifyResearchAndDevelopment),
+        None, Some(researchStartDateModelYes), Some(listOfInvestorsComplete))
+      mockEnrolledRequest(seisSchemeTypesModel)
+      submitWithSessionAndAuth(TestController.submit,
+        "amount" -> "1")(
+        result => {
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(routes.ReviewAllInvestorsController.show().url)
+        }
+      )
+    }
+  }
+
   "Sending a valid form submit and date validation API condition false to the TotalAmountRaisedController" should {
     "redirect to the expected page if valid research activity that has started in s4l but no trade date found" in {
       setupSubmissionMocks(tradeDateConditionNotMet, Some(qualifyResearchAndDevelopment),
-        None, Some(researchStartDateModelYes))
+        None, Some(researchStartDateModelYes), None)
       mockEnrolledRequest(seisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,
         "amount" -> "1")(
@@ -176,7 +199,7 @@ class TotalAmountRaisedControllerSpec extends BaseSpec {
   "Sending a valid form submit and date validation API condition None (not called) to the TotalAmountRaisedController" should {
     "redirect to the expected page if a valid trade activity that has NOT Started is found in s4l and no trade date" in {
       setupSubmissionMocks(None, Some(qualifyPrepareToTrade),
-        Some(hasInvestmentTradeStartedModelNo), None)
+        Some(hasInvestmentTradeStartedModelNo), None, None)
       mockEnrolledRequest(seisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,
         "amount" -> "1")(
@@ -191,7 +214,7 @@ class TotalAmountRaisedControllerSpec extends BaseSpec {
   "Sending a valid form submit and date validation API condition None (not called) to the TotalAmountRaisedController" should {
     "redirect to the expected page if valid research activity that has NOT Started is found in s4l and no trade date" in {
       setupSubmissionMocks(None, Some(qualifyResearchAndDevelopment),
-        None, Some(researchStartDateModelNo))
+        None, Some(researchStartDateModelNo), None)
       mockEnrolledRequest(seisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,
         "amount" -> "1")(
@@ -206,7 +229,7 @@ class TotalAmountRaisedControllerSpec extends BaseSpec {
   "Sending a valid form submit and date validation API condition None (not called) to the TotalAmountRaisedController" should {
     "redirect to the expected page if no business activity is found is s4l even if research date and trade are date present as started" in {
       setupSubmissionMocks(None, None,
-        Some(hasInvestmentTradeStartedModelYes), Some(researchStartDateModelYes))
+        Some(hasInvestmentTradeStartedModelYes), Some(researchStartDateModelYes), None)
       mockEnrolledRequest(seisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,
         "amount" -> "1")(
@@ -221,7 +244,7 @@ class TotalAmountRaisedControllerSpec extends BaseSpec {
   "Sending a valid form submit and date validation API condition None (not called) to the TotalAmountRaisedController" should {
     "redirect to the expected page if no business activity is found is s4l even if research date and trade are date present as NOT started" in {
       setupSubmissionMocks(None, None,
-        Some(hasInvestmentTradeStartedModelNo), Some(researchStartDateModelNo))
+        Some(hasInvestmentTradeStartedModelNo), Some(researchStartDateModelNo), None)
       mockEnrolledRequest(seisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,
         "amount" -> "1")(
@@ -236,7 +259,7 @@ class TotalAmountRaisedControllerSpec extends BaseSpec {
   "Sending a valid form submit and date validation API condition None (not called) to the TotalAmountRaisedController" should {
     "redirect to the expected page if no business activity is found is s4l and research date and trade date are also NOT present" in {
       setupSubmissionMocks(None, None,
-        Some(hasInvestmentTradeStartedModelNo), Some(researchStartDateModelNo))
+        Some(hasInvestmentTradeStartedModelNo), Some(researchStartDateModelNo), None)
       mockEnrolledRequest(seisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,
         "amount" -> "1")(
@@ -251,7 +274,7 @@ class TotalAmountRaisedControllerSpec extends BaseSpec {
   "Sending a valid form submit where valid research buiness activity and research date exist in S4L to the TotalAmountRaisedController" should {
     "return a 500 internal server error if the API return None instead of the expected true/false response" in {
       setupSubmissionMocks(None, Some(qualifyResearchAndDevelopment),
-        None, Some(researchStartDateModelYes))
+        None, Some(researchStartDateModelYes), None)
       mockEnrolledRequest(seisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,
         "amount" -> "1")(
@@ -265,7 +288,7 @@ class TotalAmountRaisedControllerSpec extends BaseSpec {
   "Sending a valid form submit where valid trade buiness activity and trade date exist in S4L to the TotalAmountRaisedController" should {
     "return a 500 internal server error if the API return None instead of the expected true/false response" in {
       setupSubmissionMocks(None, Some(qualifyPrepareToTrade),
-      Some(hasInvestmentTradeStartedModelYes), None)
+      Some(hasInvestmentTradeStartedModelYes), None, None)
       mockEnrolledRequest(seisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,
         "amount" -> "1")(

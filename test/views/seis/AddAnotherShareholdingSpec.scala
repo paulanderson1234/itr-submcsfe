@@ -45,7 +45,7 @@ class AddAnotherShareholdingSpec extends ViewSpec with FakeRequestHelper {
         }
 
         "has a link to the review shareholders page" in {
-          backLink.attr("href") shouldBe controllers.seis.routes.AddAnotherShareholdingController.show(1).url
+          backLink.attr("href") shouldBe controllers.seis.routes.PreviousShareHoldingsReviewController.show(1).url
         }
       }
 
@@ -120,7 +120,7 @@ class AddAnotherShareholdingSpec extends ViewSpec with FakeRequestHelper {
         }
 
         "has a link to the review shareholders page" in {
-          backLink.attr("href") shouldBe controllers.seis.routes.AddAnotherShareholdingController.show(2).url
+          backLink.attr("href") shouldBe controllers.seis.routes.PreviousShareHoldingsReviewController.show(2).url
         }
       }
 

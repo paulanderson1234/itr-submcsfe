@@ -399,7 +399,7 @@ class ReviewInvestorDetailsSpec extends ViewSpec {
         }
 
         "links to the review investors page" in {
-          button.attr("href") shouldBe controllers.seis.routes.ReviewInvestorDetailsController.show(1).url
+          button.attr("href") shouldBe controllers.seis.routes.ReviewAllInvestorsController.show().url
         }
       }
     }

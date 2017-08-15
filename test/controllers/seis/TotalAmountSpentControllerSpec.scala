@@ -22,6 +22,7 @@ import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
 import models._
+import models.investorDetails.InvestorDetailsModel
 import org.mockito.Matchers
 import org.mockito.Mockito._
 import play.api.test.Helpers._
@@ -43,7 +44,7 @@ class TotalAmountSpentControllerSpec extends BaseSpec {
   val invalidTotalAmountSpent = BigDecimal(9999999999999.1)
 
 
-  def setupMocks(model: Option[TotalAmountSpentModel]): Unit = {
+  def setupMocks(model: Option[TotalAmountSpentModel], investorDetailsModel: Option[Vector[InvestorDetailsModel]]): Unit = {
     mockEnrolledRequest(seisSchemeTypesModel)
 
     when(mockS4lConnector.fetchAndGetFormData[TotalAmountSpentModel](Matchers.eq(KeystoreKeys.totalAmountSpent))(Matchers.any(),
@@ -52,6 +53,10 @@ class TotalAmountSpentControllerSpec extends BaseSpec {
 
     when(mockS4lConnector.saveFormData(Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
       .thenReturn(Future.successful(mock[CacheMap]))
+
+    when(mockS4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](Matchers.eq(KeystoreKeys.investorDetails))
+      (Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(investorDetailsModel))
   }
 
   "TotalAmountSpentController" should {
@@ -73,22 +78,33 @@ class TotalAmountSpentControllerSpec extends BaseSpec {
   "return a 200 on a GET request" when {
 
     "no data is already stored" in {
-      setupMocks(None)
+      setupMocks(None, None)
       showWithSessionAndAuth(controller.show)(
         result => status(result) shouldBe 200
       )
     }
 
     "data is already stored" in {
-      setupMocks(Some(validTotalAmountSpentModel))
+      setupMocks(Some(validTotalAmountSpentModel), None)
       showWithSessionAndAuth(controller.show)(
         result => status(result) shouldBe 200
       )
     }
   }
 
-  "return a 303 on a successful POST request" in {
-    setupMocks(None)
+  "return a 303 on a successful POST request with investordetails" in {
+    setupMocks(None, Some(listOfInvestorsComplete))
+    val form = Seq("totalAmountSpent" -> s"$validTotalAmountSpent")
+    submitWithSessionAndAuth(controller.submit, form: _*) (
+      result => {
+        status(result) shouldBe 303
+        redirectLocation(result) shouldBe Some(controllers.seis.routes.ReviewAllInvestorsController.show().url)
+      }
+    )
+  }
+
+  "return a 303 on a successful POST request with no investor details" in {
+    setupMocks(None, None)
     val form = Seq("totalAmountSpent" -> s"$validTotalAmountSpent")
     submitWithSessionAndAuth(controller.submit, form: _*) (
       result => {
@@ -99,7 +115,7 @@ class TotalAmountSpentControllerSpec extends BaseSpec {
   }
 
   "return a 400 on a form validation failure" in {
-    setupMocks(None)
+    setupMocks(None, None)
     val form = Seq("totalAmountSpent" -> "")
     submitWithSessionAndAuth(controller.submit, form: _*) (
       result => status(result) shouldBe 400

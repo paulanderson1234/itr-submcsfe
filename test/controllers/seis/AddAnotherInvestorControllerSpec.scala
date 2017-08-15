@@ -98,7 +98,7 @@ class AddAnotherInvestorControllerSpec extends BaseSpec {
         result => {
           status(result) shouldBe SEE_OTHER
           // To navigate to Any Shares repayment page
-          redirectLocation(result) shouldBe Some(controllers.seis.routes.AddAnotherInvestorController.show().url)
+          redirectLocation(result) shouldBe Some(controllers.seis.routes.ReviewAllInvestorsController.show().url)
         }
       )
     }

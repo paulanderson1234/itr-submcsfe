@@ -79,8 +79,7 @@ trait PreviousShareHoldingsReviewController extends FrontendController with Auth
   def submit(investorProcessingId: Int): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
     AuthorisedAndEnrolled.async { implicit user =>
       implicit request =>
-        // this should change it to REVIEW INVESTOR DETAILS PAGE
-         Future.successful(Redirect(controllers.seis.routes.AddInvestorOrNomineeController.show(Some(investorProcessingId))))
+        Future.successful(Redirect(controllers.seis.routes.AddAnotherShareholdingController.show(investorProcessingId)))
     }
   }
 }

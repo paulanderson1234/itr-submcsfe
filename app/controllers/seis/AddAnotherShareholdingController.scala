@@ -59,8 +59,7 @@ trait AddAnotherShareholdingController extends FrontendController with Authorise
           redirectNoInvestors(vector) { data =>
             redirectInvalidInvestor(getInvestorIndex(investorId, data)) { investorIndex =>
               if (data.apply(investorIndex).validateShareHoldings) result
-              //TODO update else statement to route to Shareholding review page
-              else Redirect(routes.AddAnotherShareholdingController.show(investorId))
+              else Redirect(routes.ReviewInvestorDetailsController.show(investorId))
             }
           }
         )
@@ -73,7 +72,7 @@ trait AddAnotherShareholdingController extends FrontendController with Authorise
       val successAction: AddAnotherShareholdingModel => Future[Result] = {
         case AddAnotherShareholdingModel(true) => Future.successful(Redirect(routes.PreviousShareHoldingDescriptionController.show(investorId)))
         case AddAnotherShareholdingModel(false) => checkValidShareholdings {
-          Redirect(routes.AddAnotherShareholdingController.show(investorId))
+          Redirect(routes.ReviewInvestorDetailsController.show(investorId))
         }
       }
 
