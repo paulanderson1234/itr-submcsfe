@@ -57,7 +57,7 @@ class NumberOfPreviouslyIssuedSharesSpec extends ViewSpec {
 
       "have a form posting to the correct route" in {
         document.select("form").attr("action") shouldBe
-          controllers.seis.routes.NumberOfPreviouslyIssuedSharesController.submit(Some("Company"), Some(backUrl), Some(1)).url
+          controllers.seis.routes.NumberOfPreviouslyIssuedSharesController.submit(Some("Company"), Some(1)).url
       }
 
       "have the correct question in a label" in {
@@ -98,7 +98,7 @@ class NumberOfPreviouslyIssuedSharesSpec extends ViewSpec {
 
       "have a form posting to the correct route" in {
         document.select("form").attr("action") shouldBe
-          controllers.seis.routes.NumberOfPreviouslyIssuedSharesController.submit(Some("Company"), Some(backUrl), Some(1)).url
+          controllers.seis.routes.NumberOfPreviouslyIssuedSharesController.submit(Some("Company"), Some(1)).url
       }
 
       "have the correct question in a label" in {

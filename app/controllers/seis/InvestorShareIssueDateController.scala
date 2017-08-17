@@ -74,12 +74,13 @@ trait InvestorShareIssueDateController extends FrontendController with Authorise
     }
   }
 
-  def submit(backUrl: Option[String], investorProcessingId: Option[Int]): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
+  def submit(investorProcessingId: Option[Int]): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
     AuthorisedAndEnrolled.async { implicit user =>
       implicit request =>
         investorShareIssueDateForm.bindFromRequest().fold(
           formWithErrors => {
-            Future.successful(BadRequest(InvestorShareIssueDate(formWithErrors, backUrl.get, investorProcessingId.get)))
+            ControllerHelpers.getSavedBackLink(KeystoreKeys.backLinkInvestorShareIssueDate, s4lConnector).flatMap(url =>
+              Future.successful(BadRequest(InvestorShareIssueDate(formWithErrors, url.get, investorProcessingId.get))))
           },
           validFormData => {
             validFormData.processingId match {

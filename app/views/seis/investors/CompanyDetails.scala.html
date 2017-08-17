@@ -19,7 +19,7 @@
 
         <h1 id="main-heading" class="form-title heading-xlarge">@Messages("page.investment.companyDetails.heading")</h1>
 
-        @form(action = controllers.seis.routes.CompanyDetailsController.submit(Some(backUrl))) {
+        @form(action = controllers.seis.routes.CompanyDetailsController.submit()) {
         <div class="form-group">
             @input(
             companyDetailsForm("companyName"),

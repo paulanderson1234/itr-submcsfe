@@ -12,7 +12,7 @@
 
 <h1 class="heading-xlarge">@Messages("page.investors.howMuchSpentOnShares.title", howMuchSpentOnShares.toLowerCase())</h1>
 
-@form(action = controllers.seis.routes.HowMuchSpentOnSharesController.submit(Some(backUrl))) {
+@form(action = controllers.seis.routes.HowMuchSpentOnSharesController.submit()) {
 <div class="form-group">
     @inputWithCurrencySymbol(
     howMuchSpentOnSharesForm("howMuchSpentOnShares"),

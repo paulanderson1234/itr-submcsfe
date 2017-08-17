@@ -64,7 +64,7 @@ class IndividualDetailsSpec extends ViewSpec with FakeRequestHelper {
         }
 
         "has an action to the correct route" in {
-          form.attr("action") shouldBe controllers.seis.routes.IndividualDetailsController.submit(Some(backUrl)).url
+          form.attr("action") shouldBe controllers.seis.routes.IndividualDetailsController.submit().url
         }
 
         "has a label forename with the correct text" in {

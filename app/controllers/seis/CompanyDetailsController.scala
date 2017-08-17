@@ -60,9 +60,12 @@ trait CompanyDetailsController extends FrontendController with AuthorisedAndEnro
             s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map { vector =>
                redirectNoInvestors(vector) { data =>
                  val itemToUpdateIndex = getInvestorIndex(id, data)
-                 redirectInvalidInvestor(itemToUpdateIndex) { id =>
-                   val form = fillForm(companyDetailsForm, retrieveInvestorData(id, data)(_.companyDetailsModel))
-                   Ok(CompanyDetails(form, countriesList, backUrl.get))
+                 redirectInvalidInvestor(itemToUpdateIndex) { index =>
+                   if(data.lift(itemToUpdateIndex).get.companyOrIndividualModel.isDefined) {
+                     val form = fillForm(companyDetailsForm, retrieveInvestorData(index, data)(_.companyDetailsModel))
+                     Ok(CompanyDetails(form, countriesList, backUrl.get))
+                   }
+                   else Redirect(routes.CompanyOrIndividualController.show(id))
                  }
               }
             }
@@ -76,14 +79,15 @@ trait CompanyDetailsController extends FrontendController with AuthorisedAndEnro
     }
   }
 
-  def submit(backUrl: Option[String]): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
+  val submit = featureSwitch(applicationConfig.seisFlowEnabled) {
     AuthorisedAndEnrolled.async { implicit user =>
       implicit request =>
         companyDetailsForm.bindFromRequest().fold(
           formWithErrors => {
+            ControllerHelpers.getSavedBackLink(KeystoreKeys.backLinkCompanyAndIndividualBoth, s4lConnector).flatMap(url =>
             Future.successful(BadRequest(CompanyDetails(if (formWithErrors.hasGlobalErrors)
               formWithErrors.discardingErrors.withError("companyPostcode", Messages("validation.error.countrypostcode"))
-            else formWithErrors, countriesList, backUrl.get)))
+            else formWithErrors, countriesList, url.get))))
           },
           validFormData => {
             validFormData.processingId match {

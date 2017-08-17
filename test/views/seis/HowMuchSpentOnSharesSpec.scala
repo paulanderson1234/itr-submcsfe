@@ -61,7 +61,7 @@ class HowMuchSpentOnSharesSpec extends ViewSpec {
       }
 
       "have a form posting to the correct route" in {
-        document.select("form").attr("action") shouldBe controllers.seis.routes.HowMuchSpentOnSharesController.submit(Some(backUrl)).url
+        document.select("form").attr("action") shouldBe controllers.seis.routes.HowMuchSpentOnSharesController.submit().url
       }
 
       "have a next button" in {
@@ -102,7 +102,7 @@ class HowMuchSpentOnSharesSpec extends ViewSpec {
       }
 
       "have a form posting to the correct route" in {
-        document.select("form").attr("action") shouldBe controllers.seis.routes.HowMuchSpentOnSharesController.submit(Some(backUrl)).url
+        document.select("form").attr("action") shouldBe controllers.seis.routes.HowMuchSpentOnSharesController.submit().url
       }
 
       "have a next button" in {
