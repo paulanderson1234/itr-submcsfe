@@ -21,6 +21,12 @@ import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.predicates.FeatureSwitch
 import uk.gov.hmrc.play.frontend.controller.FrontendController
+import forms.WasAnyValueReceivedForm._
+import play.api.mvc.Action
+import play.api.i18n.Messages.Implicits._
+import play.api.Play.current
+
+import scala.concurrent.Future
 
 object WasAnyValueReceivedController extends WasAnyValueReceivedController {
   override lazy val s4lConnector = S4LConnector
@@ -33,7 +39,9 @@ trait WasAnyValueReceivedController extends FrontendController with AuthorisedAn
 
   override val acceptedFlows = Seq(Seq(SEIS))
 
-  val show = TODO
+  val show = Action.async{ implicit request =>
+    Future(Ok(views.html.seis.investors.WasAnyValueReceived(wasAnyValueReceivedForm)))
+  }
 
   val submit = TODO
 }

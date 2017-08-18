@@ -69,7 +69,7 @@ class WasAnyValueReceivedViewSpec extends ViewSpec with FakeRequestHelper {
           lazy val list = doc.select("div.form-group > ul")
 
           "has the correct list title" in {
-            list.select("span").text() shouldBe Messages("page.investors.wasAnyValueReceived.guidance.title")
+            doc.select("div.form-group p").get(1).text() shouldBe Messages("page.investors.wasAnyValueReceived.guidance.title")
           }
 
           "has the correct entry for the first bullet point" in {
@@ -90,7 +90,7 @@ class WasAnyValueReceivedViewSpec extends ViewSpec with FakeRequestHelper {
         }
 
         "has an instruction for how to answer the question" in {
-          doc.select("div.form-group p").last().text() shouldBe Messages("page.investors.wasAnyValueReceived.guidance.hint")
+          doc.select("div.form-group p").get(2).text() shouldBe Messages("page.investors.wasAnyValueReceived.guidance.hint")
         }
       }
 
@@ -136,7 +136,7 @@ class WasAnyValueReceivedViewSpec extends ViewSpec with FakeRequestHelper {
           lazy val list = doc.select("form ul")
 
           "has the correct list title" in {
-            list.select("span").text() shouldBe Messages("page.investors.wasAnyValueReceived.additionalGuidance.title")
+            doc.select("form p").text() shouldBe Messages("page.investors.wasAnyValueReceived.additionalGuidance.title")
           }
 
           "has the correct entry for the first bullet point" in {
