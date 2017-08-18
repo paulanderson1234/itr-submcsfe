@@ -156,6 +156,7 @@ GET        /add-another-shareholding/:investorId              controllers.seis.A
 POST       /add-another-shareholding/:investorId              controllers.seis.AddAnotherShareholdingController.submit(investorId: Int)
 
 GET        /review-investor/:investorId                 controllers.seis.ReviewInvestorDetailsController.show(investorId: Int)
+GET        /review-investor/:actionType/:investorId                 controllers.seis.ReviewInvestorDetailsController.change(actionType: String, investorId: Int)
 
 GET        /review-previous-share-holdings/:InvestorId                 controllers.seis.PreviousShareHoldingsReviewController.show(InvestorId: Int)
 POST       /review-previous-share-holdings/:InvestorId                 controllers.seis.PreviousShareHoldingsReviewController.submit(InvestorId: Int)
@@ -168,8 +169,6 @@ GET        /delete-previous-share-holding/:InvestorId/:Id                control
 
 GET        /delete-investor/:investorId             controllers.seis.DeleteInvestorController.show(investorId: Int)
 POST       /delete-investor/:InvestorId             controllers.seis.DeleteInvestorController.submit(InvestorId: Int)
-
-GET        /review-investor/:investorId                 controllers.seis.ReviewInvestorDetailsController.show(investorId: Int)
 
 GET        /review-all-investors                  controllers.seis.ReviewAllInvestorsController.show
 POST       /review-all-investors                  controllers.seis.ReviewAllInvestorsController.submit

@@ -17,7 +17,7 @@
 package controllers.seis
 
 import auth.{AuthorisedAndEnrolledForTAVC, SEIS}
-import common.KeystoreKeys
+import common.{Constants, KeystoreKeys}
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.Helpers.ControllerHelpers
@@ -27,6 +27,8 @@ import play.api.Play.current
 import play.api.i18n.Messages.Implicits._
 import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
+
+import scala.concurrent.Future
 
 object ReviewInvestorDetailsController extends ReviewInvestorDetailsController {
   override lazy val s4lConnector = S4LConnector
@@ -49,6 +51,13 @@ trait ReviewInvestorDetailsController extends FrontendController with Authorised
           }
         }
       }
+    }
+  }
+
+  def change(actionType: String, id: Int): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
+    AuthorisedAndEnrolled.async { implicit user =>
+      implicit request =>
+        ControllerHelpers.redirectToChangeProcess(s4lConnector, actionType, id)
     }
   }
 }

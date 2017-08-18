@@ -176,4 +176,45 @@ trait ControllerHelpers {
       case _ => Redirect(routes.AddInvestorOrNomineeController.show(Some(index)))
     }
   }
+
+  def redirectToChangeProcess(s4lConnector: connectors.S4LConnector, actionType: String, id: Int): Future[Result] = {
+    actionType match {
+      case Constants.HowMuchSpentOnSharesController => {
+        s4lConnector.saveFormData(KeystoreKeys.backLinkHowMuchSpentOnShares,
+          routes.ReviewInvestorDetailsController.show(id).url)
+        Future.successful(Redirect(routes.HowMuchSpentOnSharesController.show(id)))
+      }
+      case Constants.AddInvestorOrNomineeController => {
+        s4lConnector.saveFormData(KeystoreKeys.backLinkAddInvestorOrNominee,
+          routes.ReviewInvestorDetailsController.show(id).url)
+        Future.successful(Redirect(routes.AddInvestorOrNomineeController.show(Some(id))))
+      }
+      case Constants.CompanyOrIndividualController => {
+        s4lConnector.saveFormData(KeystoreKeys.backLinkCompanyOrIndividual,
+          routes.ReviewInvestorDetailsController.show(id).url)
+        Future.successful(Redirect(routes.CompanyOrIndividualController.show(id)))
+      }
+      case Constants.CompanyDetailsController => {
+        s4lConnector.saveFormData(KeystoreKeys.backLinkCompanyAndIndividualBoth,
+          routes.ReviewInvestorDetailsController.show(id).url)
+        Future.successful(Redirect(routes.CompanyDetailsController.show(id)))
+      }
+      case Constants.IndividualDetailsController => {
+        s4lConnector.saveFormData(KeystoreKeys.backLinkCompanyAndIndividualBoth,
+          routes.ReviewInvestorDetailsController.show(id).url)
+        Future.successful(Redirect(routes.IndividualDetailsController.show(id)))
+      }
+      case Constants.NumberOfSharesPurchasedController => {
+        s4lConnector.saveFormData(KeystoreKeys.backLinkNumberOfSharesPurchased,
+          routes.ReviewInvestorDetailsController.show(id).url)
+        Future.successful(Redirect(routes.NumberOfSharesPurchasedController.show(id)))
+      }
+      case Constants.IsExistingShareHolderController => {
+        s4lConnector.saveFormData(KeystoreKeys.backLinkIsExistingShareHolder,
+          routes.ReviewInvestorDetailsController.show(id).url)
+        Future.successful(Redirect(routes.IsExistingShareHolderController.show(id)))
+      }
+    }
+  }
+
 }
