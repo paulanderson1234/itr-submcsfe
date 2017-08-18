@@ -21,6 +21,7 @@ import controllers.seis.routes
 import org.jsoup.Jsoup
 import play.api.i18n.Messages
 import play.api.test.Helpers._
+import play.twirl.api.Html
 import views.helpers.ViewSpec
 import forms.SupportingDocumentsUploadForm._
 import play.api.i18n.Messages.Implicits._
@@ -48,12 +49,13 @@ class SupportingDocumentsUploadSpec extends ViewSpec {
       document.getElementById("bullet-five").text() shouldBe Messages("page.supportingDocumentsUpload.bullet.five")
       document.getElementById("docs-current").text() shouldBe Messages("page.supportingDocumentsUpload.docs.current")
       document.getElementById("noticeMessage").text() shouldBe Messages("page.supportingDocumentsUpload.Note")
-      document.getElementById("send-instruction").text() shouldBe Messages("page.supportingDocumentsUpload.upload.instruction")
       document.getElementById("doUpload-yesLabel").text() shouldBe Messages("common.radioYesLabel")
       document.getElementById("doUpload-noLabel").text() shouldBe Messages("common.radioNoLabel")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
-      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.company.details.five")
+      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.company.details.six")
       document.body.getElementById("back-link").attr("href") shouldEqual routes.ConfirmCorrespondAddressController.show().url
+      document.body.getElementById("venture-capital-schemes-dashboard").getElementsByTag("a").first().attr("href") shouldBe
+        controllers.routes.ApplicationHubController.show().url
 
     }
 
@@ -69,13 +71,14 @@ class SupportingDocumentsUploadSpec extends ViewSpec {
       documentEmpty.getElementById("bullet-five").text() shouldBe Messages("page.supportingDocumentsUpload.bullet.five")
       documentEmpty.getElementById("docs-current").text() shouldBe Messages("page.supportingDocumentsUpload.docs.current")
       documentEmpty.getElementById("noticeMessage").text() shouldBe Messages("page.supportingDocumentsUpload.Note")
-      documentEmpty.getElementById("send-instruction").text() shouldBe Messages("page.supportingDocumentsUpload.upload.instruction")
       documentEmpty.getElementById("doUpload-yesLabel").text() shouldBe Messages("common.radioYesLabel")
       documentEmpty.getElementById("doUpload-noLabel").text() shouldBe Messages("common.radioNoLabel")
       documentEmpty.getElementById("next").text() shouldBe Messages("common.button.snc")
       documentEmpty.getElementById("error-summary-display").hasClass("error-summary--show")
-      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.company.details.five")
+      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.company.details.six")
       document.body.getElementById("back-link").attr("href") shouldEqual routes.ConfirmCorrespondAddressController.show().url
+      document.body.getElementById("venture-capital-schemes-dashboard").getElementsByTag("a").first().attr("href") shouldBe
+        controllers.routes.ApplicationHubController.show().url
     }
   }
 
