@@ -16,15 +16,23 @@
 
 package forms
 
+import common.Constants
 import models.WasAnyValueReceivedModel
 import play.api.data.Form
 import play.api.data.Forms._
+import play.api.Play.current
+import play.api.i18n.Messages
+import play.api.i18n.Messages.Implicits._
+import utils.Transformers._
 
 object WasAnyValueReceivedForm {
 
   val wasAnyValueReceivedForm = Form(
     mapping(
-      "wasAnyValueReceived" -> nonEmptyText
+      "wasAnyValueReceived" -> nonEmptyText,
+      "aboutValueReceived" -> text
+        .transform(stringToOptionString, optionStringToString)
     )(WasAnyValueReceivedModel.apply)(WasAnyValueReceivedModel.unapply)
+      .verifying(Messages("error.required"), model => if (model.wasAnyValueReceived == Constants.StandardRadioButtonYesValue) model.aboutValueReceived.isDefined else true)
   )
 }

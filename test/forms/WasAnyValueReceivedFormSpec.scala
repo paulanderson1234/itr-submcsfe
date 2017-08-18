@@ -16,26 +16,35 @@
 
 package forms
 
-import uk.gov.hmrc.play.test.UnitSpec
-import WasAnyValueReceivedForm._
+import forms.WasAnyValueReceivedForm._
 import models.WasAnyValueReceivedModel
+import org.scalatestplus.play.OneAppPerSuite
+import play.api.i18n.Messages
+import play.api.i18n.Messages.Implicits._
+import uk.gov.hmrc.play.test.UnitSpec
 
-class WasAnyValueReceivedFormSpec extends UnitSpec {
+class WasAnyValueReceivedFormSpec extends UnitSpec with OneAppPerSuite {
 
   "Creating a form" when {
 
     "supplied with a model" should {
-      lazy val form = wasAnyValueReceivedForm.fill(WasAnyValueReceivedModel("Yes"))
+      lazy val form = wasAnyValueReceivedForm.fill(WasAnyValueReceivedModel("Yes", Some("text")))
 
       "return a form with the correct map" in {
-        form.data shouldBe Map("wasAnyValueReceived" -> "Yes")
+        form.data shouldBe Map(
+          "wasAnyValueReceived" -> "Yes",
+          "aboutValueReceived" -> "text"
+        )
       }
     }
 
     "supplied with a map" which {
 
       "has empty data" should {
-        lazy val form = wasAnyValueReceivedForm.bind(Map("wasAnyValueReceived" -> ""))
+        lazy val form = wasAnyValueReceivedForm.bind(Map(
+          "wasAnyValueReceived" -> "",
+          "aboutValueReceived" -> "")
+        )
 
         "have a form with one error" in {
           form.errors.size shouldBe 1
@@ -46,15 +55,48 @@ class WasAnyValueReceivedFormSpec extends UnitSpec {
         }
       }
 
-      "has valid data" should {
-        lazy val form = wasAnyValueReceivedForm.bind(Map("wasAnyValueReceived" -> "Yes"))
+      "has invalid data for a 'Yes' response" should {
+        lazy val form = wasAnyValueReceivedForm.bind(Map(
+          "wasAnyValueReceived" -> "Yes",
+          "aboutValueReceived" -> ""
+        ))
+
+        "have a form with one error" in {
+          form.errors.size shouldBe 1
+        }
+
+        "have the correct error" in {
+          form.errors.head.message shouldBe Messages("error.required")
+        }
+      }
+
+      "has valid data for a 'Yes' response" should {
+        lazy val form = wasAnyValueReceivedForm.bind(Map(
+          "wasAnyValueReceived" -> "Yes",
+          "aboutValueReceived" -> "text"
+        ))
 
         "have no errors" in {
           form.hasErrors shouldBe false
         }
 
         "have a valid model" in {
-          form.value shouldBe Some(WasAnyValueReceivedModel("Yes"))
+          form.value shouldBe Some(WasAnyValueReceivedModel("Yes", Some("text")))
+        }
+      }
+
+      "has valid data for a 'No' response" should {
+        lazy val form = wasAnyValueReceivedForm.bind(Map(
+          "wasAnyValueReceived" -> "No",
+          "aboutValueReceived" -> ""
+        ))
+
+        "have no errors" in {
+          form.hasErrors shouldBe false
+        }
+
+        "have a valid model" in {
+          form.value shouldBe Some(WasAnyValueReceivedModel("No", None))
         }
       }
     }

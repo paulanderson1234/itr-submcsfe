@@ -44,6 +44,15 @@ object Transformers {
     case _ => false
   }
 
+  val stringToOptionString: String => Option[String] = {
+    case data if data.trim.nonEmpty => Some(data)
+    case _ => None
+  }
+
+  val optionStringToString: Option[String] => String = {
+    _.fold("")(data => data)
+  }
+
   val booleanToString: Boolean => String = (input) => if (input) "Yes" else "No"
 
   val numberToFormattedNumber: Any => String = {

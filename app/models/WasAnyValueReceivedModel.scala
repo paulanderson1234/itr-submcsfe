@@ -18,7 +18,7 @@ package models
 
 import play.api.libs.json.{Json, OFormat}
 
-case class WasAnyValueReceivedModel(wasAnyValueReceived: String)
+case class WasAnyValueReceivedModel(wasAnyValueReceived: String, aboutValueReceived: Option[String])
 
 object WasAnyValueReceivedModel {
   implicit val formats: OFormat[WasAnyValueReceivedModel] = Json.format[WasAnyValueReceivedModel]
