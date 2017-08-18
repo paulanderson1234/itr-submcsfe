@@ -58,7 +58,7 @@ class NumberOfSharesPurchasedSpec extends ViewSpec with DateFormatter{
       }
 
       "have a form posting to the correct route" in {
-        document.select("form").attr("action") shouldBe controllers.seis.routes.NumberOfSharesPurchasedController.submit(Some("TODO"), Some(backUrl)).url
+        document.select("form").attr("action") shouldBe controllers.seis.routes.NumberOfSharesPurchasedController.submit(Some("TODO")).url
       }
 
       "have the correct question in a label" in {
@@ -96,7 +96,7 @@ class NumberOfSharesPurchasedSpec extends ViewSpec with DateFormatter{
       }
 
       "have a form posting to the correct route" in {
-        document.select("form").attr("action") shouldBe controllers.seis.routes.NumberOfSharesPurchasedController.submit(Some("TODO"), Some(backUrl)).url
+        document.select("form").attr("action") shouldBe controllers.seis.routes.NumberOfSharesPurchasedController.submit(Some("TODO")).url
       }
 
       "have the correct question in a label" in {

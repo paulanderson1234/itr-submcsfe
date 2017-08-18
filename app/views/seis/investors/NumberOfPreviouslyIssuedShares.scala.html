@@ -13,7 +13,7 @@
 <h1 class="heading-xlarge" id="main-heading">@Messages("page.seis.investors.numberOfPreviouslyIssuedShares.heading", companyOrIndividual.toLowerCase())</h1>
 
 <div>
-    @form(action = controllers.seis.routes.NumberOfPreviouslyIssuedSharesController.submit(Some(companyOrIndividual), Some(backUrl), Some(investorProcessingId))) {
+    @form(action = controllers.seis.routes.NumberOfPreviouslyIssuedSharesController.submit(Some(companyOrIndividual), Some(investorProcessingId))) {
     <fieldset>
         <legend class="visuallyhidden">@Messages("page.seis.investors.numberOfPreviouslyIssuedShares.heading", companyOrIndividual.toLowerCase())</legend>
         <div class="form-group">

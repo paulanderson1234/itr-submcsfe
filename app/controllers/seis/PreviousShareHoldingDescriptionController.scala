@@ -52,38 +52,38 @@ trait PreviousShareHoldingDescriptionController extends FrontendController with 
             s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
               vector =>
               redirectNoInvestors(vector) {
-                data =>
-                redirectInvalidInvestor(getInvestorIndex(investorProcessingId, data)) {
-                  investorIdVal =>
+                data => redirectInvalidInvestor(getInvestorIndex(investorProcessingId, data)) { investorIdVal =>
                   val previousShares = retrieveInvestorData(investorIdVal,data)(_.previousShareHoldingModels)
                   val form = fillForm[PreviousShareHoldingDescriptionModel](previousShareHoldingDescriptionForm,
                     id.flatMap (idVal =>
                       retrieveShareData(getShareIndex(idVal, previousShares.getOrElse(Vector.empty)),
                       previousShares)(_.previousShareHoldingDescriptionModel)))
-                  Ok(PreviousShareHoldingDescription(retrieveInvestorData(investorIdVal,
-                    data)(_.companyOrIndividualModel.map(_.companyOrIndividual)).get,
-                    form, backUrl.get, investorProcessingId))
+                  if(data.lift(getInvestorIndex(investorProcessingId, data)).get.companyOrIndividualModel.isDefined)
+                    Ok(PreviousShareHoldingDescription(retrieveInvestorData(investorIdVal,
+                      data)(_.companyOrIndividualModel.map(_.companyOrIndividual)).get,
+                      form, backUrl.get, investorProcessingId))
+                  else Redirect(routes.CompanyOrIndividualController.show(investorProcessingId))
                 }
               }
             }
           }
           else Future.successful(Redirect(controllers.seis.routes.AddInvestorOrNomineeController.show()))
         }
-
         for {
           backUrl <- s4lConnector.fetchAndGetFormData[String](KeystoreKeys.backLinkShareClassAndDescription)
           route <- process(backUrl)
         } yield route
-
     }
   }
 
-  def submit(companyOrIndividual: Option[String], backUrl: Option[String], investorProcessingId: Option[Int]): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
+  def submit(companyOrIndividual: Option[String], investorProcessingId: Option[Int]): Action[AnyContent] =
+    featureSwitch(applicationConfig.seisFlowEnabled) {
     AuthorisedAndEnrolled.async { implicit user =>
       implicit request =>
         previousShareHoldingDescriptionForm.bindFromRequest().fold(
           formWithErrors => {
-            Future.successful(BadRequest(PreviousShareHoldingDescription(companyOrIndividual.get, formWithErrors, backUrl.get, investorProcessingId.get)))
+            ControllerHelpers.getSavedBackLink(KeystoreKeys.backLinkShareClassAndDescription, s4lConnector).flatMap(url =>
+            Future.successful(BadRequest(PreviousShareHoldingDescription(companyOrIndividual.get, formWithErrors, url.get, investorProcessingId.get))))
           },
           validFormData => {
             validFormData.processingId match {
