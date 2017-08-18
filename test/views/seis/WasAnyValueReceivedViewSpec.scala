@@ -17,11 +17,11 @@
 package views.seis
 
 import controllers.helpers.FakeRequestHelper
-import org.jsoup.Jsoup
-import views.helpers.ViewSpec
 import forms.WasAnyValueReceivedForm._
+import org.jsoup.Jsoup
 import play.api.i18n.Messages
 import play.api.i18n.Messages.Implicits._
+import views.helpers.ViewSpec
 
 class WasAnyValueReceivedViewSpec extends ViewSpec with FakeRequestHelper {
 
@@ -52,7 +52,7 @@ class WasAnyValueReceivedViewSpec extends ViewSpec with FakeRequestHelper {
       }
 
       "have no error summary" in {
-        doc.select("#error-summary").isEmpty shouldBe true
+        doc.select(".error-summary").isEmpty shouldBe true
       }
 
       "have the correct heading" in {
@@ -175,6 +175,17 @@ class WasAnyValueReceivedViewSpec extends ViewSpec with FakeRequestHelper {
         "has a type of 'Submit'" in {
           button.attr("type") shouldBe "submit"
         }
+      }
+    }
+
+    "errors are present" should {
+      lazy val doc = Jsoup.parse(views.html.seis.investors.WasAnyValueReceived(wasAnyValueReceivedForm.bind(Map(
+        "wasAnyValueReceived" -> "",
+        "aboutValueReceived" -> ""
+      ))).body)
+
+      "display an error summary" in {
+        doc.select(".error-summary").isEmpty shouldBe false
       }
     }
   }

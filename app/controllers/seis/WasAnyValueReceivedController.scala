@@ -17,14 +17,17 @@
 package controllers.seis
 
 import auth.{AuthorisedAndEnrolledForTAVC, SEIS}
+import common.KeystoreKeys
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.predicates.FeatureSwitch
-import uk.gov.hmrc.play.frontend.controller.FrontendController
 import forms.WasAnyValueReceivedForm._
-import play.api.mvc.Action
-import play.api.i18n.Messages.Implicits._
+import models.WasAnyValueReceivedModel
 import play.api.Play.current
+import play.api.data.Form
+import play.api.i18n.Messages.Implicits._
+import play.api.mvc.Result
+import uk.gov.hmrc.play.frontend.controller.FrontendController
 
 import scala.concurrent.Future
 
@@ -39,9 +42,27 @@ trait WasAnyValueReceivedController extends FrontendController with AuthorisedAn
 
   override val acceptedFlows = Seq(Seq(SEIS))
 
-  val show = Action.async{ implicit request =>
-    Future(Ok(views.html.seis.investors.WasAnyValueReceived(wasAnyValueReceivedForm)))
+  val show = featureSwitch(applicationConfig.seisFlowEnabled) {
+    AuthorisedAndEnrolled.async { implicit user => implicit request =>
+      s4lConnector.fetchAndGetFormData[WasAnyValueReceivedModel](KeystoreKeys.wasAnyValueReceived).map {
+        case Some(data) => Ok(views.html.seis.investors.WasAnyValueReceived(wasAnyValueReceivedForm.fill(data)))
+        case None => Ok(views.html.seis.investors.WasAnyValueReceived(wasAnyValueReceivedForm))
+      }
+    }
   }
 
-  val submit = TODO
+  val submit = featureSwitch(applicationConfig.seisFlowEnabled) {
+    AuthorisedAndEnrolled.async { implicit user => implicit request =>
+      val errorResponse: Form[WasAnyValueReceivedModel] => Future[Result] = form =>
+        Future(BadRequest(views.html.seis.investors.WasAnyValueReceived(form)))
+
+      val successResponse: WasAnyValueReceivedModel => Future[Result] = model =>
+        s4lConnector.saveFormData(KeystoreKeys.wasAnyValueReceived, model).map { _ =>
+          Redirect(controllers.seis.routes.WasAnyValueReceivedController.show())
+        }
+      wasAnyValueReceivedForm.bindFromRequest().fold(errorResponse, successResponse)
+    }
+  }
+
 }
+
