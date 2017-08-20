@@ -179,5 +179,11 @@ GET        /review-all-investors-change/:Id      controllers.seis.ReviewAllInves
 
 GET        /review-all-investors-remove/:Id      controllers.seis.ReviewAllInvestorsController.remove(Id: Int)
 
+GET       /share-capital-changes                        controllers.seis.ShareCapitalChangesController.show
+POST      /share-capital-changes                        controllers.seis.ShareCapitalChangesController.submit
+
+
+
+
 
 

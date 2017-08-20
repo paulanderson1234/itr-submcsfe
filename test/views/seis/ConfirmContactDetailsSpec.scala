@@ -55,7 +55,7 @@ class ConfirmContactDetailsSpec extends UnitSpec with OneAppPerSuite{
       }
 
       s"has a link to '${routes.ContactDetailsController.show().url}" in {
-        document.body.getElementById("back-link").attr("href") shouldEqual routes.ProposedInvestmentController.show().url
+        document.body.getElementById("back-link").attr("href") shouldEqual routes.ConfirmContactDetailsController.show().url
       }
 
       s"has a Section heading next to it of '${Messages("common.section.progress.company.details.four")}" in {

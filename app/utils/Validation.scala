@@ -94,9 +94,11 @@ object Validation {
     def validateYes(dateForm: HasInvestmentTradeStartedModel) = {
       anyEmpty(dateForm.hasInvestmentTradeStartedDay, dateForm.hasInvestmentTradeStartedMonth, dateForm.hasInvestmentTradeStartedYear) match {
         case true => Invalid(Seq(ValidationError(Messages("validation.error.DateNotEntered"))))
-        case false => isValidDate(dateForm.hasInvestmentTradeStartedDay.get, dateForm.hasInvestmentTradeStartedMonth.get, dateForm.hasInvestmentTradeStartedYear.get) match {
+        case false => isValidDate(dateForm.hasInvestmentTradeStartedDay.get, dateForm.hasInvestmentTradeStartedMonth.get,
+          dateForm.hasInvestmentTradeStartedYear.get) match {
           case false => Invalid(Seq(ValidationError(Messages("common.date.error.invalidDate"))))
-          case true => dateNotInFuture(dateForm.hasInvestmentTradeStartedDay.get, dateForm.hasInvestmentTradeStartedMonth.get, dateForm.hasInvestmentTradeStartedYear.get) match {
+          case true => dateNotInFuture(dateForm.hasInvestmentTradeStartedDay.get, dateForm.hasInvestmentTradeStartedMonth.get,
+            dateForm.hasInvestmentTradeStartedYear.get) match {
             case true => Valid
             case false => Invalid(Seq(ValidationError(Messages("validation.error.HasInvestmentTradeStarted.Future"))))
           }
@@ -117,7 +119,7 @@ object Validation {
     })
   }
 
-  def tradeStartDateValidation: Constraint[TradeStartDateModel] = {
+    def tradeStartDateValidation: Constraint[TradeStartDateModel] = {
 
     def validateYes(dateForm: TradeStartDateModel) = {
       anyEmpty(dateForm.tradeStartDay, dateForm.tradeStartMonth, dateForm.tradeStartYear) match {
@@ -196,6 +198,33 @@ object Validation {
             Invalid(Seq(ValidationError(Messages("validation.common.error.fieldRequired"))))
           else Valid
           case Constants.StandardRadioButtonYesValue => validateYes(tenYearForm)
+        }
+    })
+  }
+
+  def shareCapitalChangesDescriptionValidation: Constraint[ShareCapitalChangesModel] = {
+
+    def validateFields(hasPlan: String, planDesc: Option[String]): Boolean = {
+      if (hasPlan.isEmpty || planDesc.isEmpty || planDesc.get.length > Constants.shortTextLimit) {
+        true
+      } else
+        false
+    }
+
+    def validateYes(shareCapitalChangesModel: ShareCapitalChangesModel) = {
+      validateFields(shareCapitalChangesModel.hasChanges, shareCapitalChangesModel.changesDescription) match {
+        case true => Invalid(Seq(ValidationError(Messages("validation.common.error.fieldRequired"))))
+        case false => Valid
+      }
+    }
+
+    Constraint("constraints.share_capital_changes")({
+      shareCapitalChangesModel: ShareCapitalChangesModel =>
+        shareCapitalChangesModel.hasChanges match {
+          case Constants.StandardRadioButtonNoValue => if (shareCapitalChangesModel.hasChanges.isEmpty)
+            Invalid(Seq(ValidationError(Messages("validation.common.error.fieldRequired"))))
+          else Valid
+          case Constants.StandardRadioButtonYesValue => validateYes(shareCapitalChangesModel)
         }
     })
   }
