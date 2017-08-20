@@ -16,6 +16,8 @@
 
 package forms
 
+import common.Constants
+import controllers.helpers.MockDataGenerator
 import forms.WasAnyValueReceivedForm._
 import models.WasAnyValueReceivedModel
 import org.scalatestplus.play.OneAppPerSuite
@@ -25,14 +27,17 @@ import uk.gov.hmrc.play.test.UnitSpec
 
 class WasAnyValueReceivedFormSpec extends UnitSpec with OneAppPerSuite {
 
+  lazy val maxLengthText = MockDataGenerator.randomAlphanumericString(Constants.shortTextLimit)
+  lazy val overMaxLengthText = MockDataGenerator.randomAlphanumericString(Constants.shortTextLimit  + 1)
+
   "Creating a form" when {
 
     "supplied with a model" should {
-      lazy val form = wasAnyValueReceivedForm.fill(WasAnyValueReceivedModel("Yes", Some("text")))
+      lazy val form = wasAnyValueReceivedForm.fill(WasAnyValueReceivedModel(Constants.StandardRadioButtonYesValue, Some("text")))
 
       "return a form with the correct map" in {
         form.data shouldBe Map(
-          "wasAnyValueReceived" -> "Yes",
+          "wasAnyValueReceived" -> Constants.StandardRadioButtonYesValue,
           "aboutValueReceived" -> "text"
         )
       }
@@ -57,7 +62,7 @@ class WasAnyValueReceivedFormSpec extends UnitSpec with OneAppPerSuite {
 
       "has invalid data for a 'Yes' response" should {
         lazy val form = wasAnyValueReceivedForm.bind(Map(
-          "wasAnyValueReceived" -> "Yes",
+          "wasAnyValueReceived" -> Constants.StandardRadioButtonYesValue,
           "aboutValueReceived" -> ""
         ))
 
@@ -72,7 +77,7 @@ class WasAnyValueReceivedFormSpec extends UnitSpec with OneAppPerSuite {
 
       "has valid data for a 'Yes' response" should {
         lazy val form = wasAnyValueReceivedForm.bind(Map(
-          "wasAnyValueReceived" -> "Yes",
+          "wasAnyValueReceived" -> Constants.StandardRadioButtonYesValue,
           "aboutValueReceived" -> "text"
         ))
 
@@ -81,13 +86,13 @@ class WasAnyValueReceivedFormSpec extends UnitSpec with OneAppPerSuite {
         }
 
         "have a valid model" in {
-          form.value shouldBe Some(WasAnyValueReceivedModel("Yes", Some("text")))
+          form.value shouldBe Some(WasAnyValueReceivedModel(Constants.StandardRadioButtonYesValue, Some("text")))
         }
       }
 
       "has valid data for a 'No' response" should {
         lazy val form = wasAnyValueReceivedForm.bind(Map(
-          "wasAnyValueReceived" -> "No",
+          "wasAnyValueReceived" -> Constants.StandardRadioButtonNoValue,
           "aboutValueReceived" -> ""
         ))
 
@@ -96,7 +101,37 @@ class WasAnyValueReceivedFormSpec extends UnitSpec with OneAppPerSuite {
         }
 
         "have a valid model" in {
-          form.value shouldBe Some(WasAnyValueReceivedModel("No", None))
+          form.value shouldBe Some(WasAnyValueReceivedModel(Constants.StandardRadioButtonNoValue, None))
+        }
+      }
+
+      "has valid data for a 'Yes' respone with aboutValueReceived at maximum allowed length" should {
+        lazy val form = wasAnyValueReceivedForm.bind(Map(
+          "wasAnyValueReceived" -> Constants.StandardRadioButtonYesValue,
+          "aboutValueReceived" -> maxLengthText
+        ))
+
+        "have no errors" in {
+          form.hasErrors shouldBe false
+        }
+
+        "have a valid model" in {
+          form.value shouldBe Some(WasAnyValueReceivedModel(Constants.StandardRadioButtonYesValue, Some(maxLengthText)))
+        }
+      }
+
+      "has valid data for a 'Yes' response with aboutValueReceived over maximum allowed length" should {
+        lazy val form = wasAnyValueReceivedForm.bind(Map(
+          "wasAnyValueReceived" -> Constants.StandardRadioButtonYesValue,
+          "aboutValueReceived" -> overMaxLengthText
+        ))
+
+        "have no errors" in {
+          form.hasErrors shouldBe true
+        }
+
+        "have a valid model" in {
+          form.value shouldBe None
         }
       }
     }

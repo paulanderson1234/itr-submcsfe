@@ -19,7 +19,7 @@ package controllers.seis
 import akka.actor.ActorSystem
 import akka.stream.{ActorMaterializer, Materializer}
 import auth.{MockAuthConnector, MockConfig}
-import common.KeystoreKeys
+import common.{Constants, KeystoreKeys}
 import controllers.helpers.{BaseSpec, FakeRequestHelper}
 import models.WasAnyValueReceivedModel
 import org.jsoup.Jsoup
@@ -72,7 +72,8 @@ class WasAnyValueReceivedControllerSpec extends BaseSpec with FakeRequestHelper 
       }
 
       "has previously saved data" should {
-        lazy val result = setupController(Some(WasAnyValueReceivedModel("Yes", Some("text")))).show(authorisedFakeRequest)
+        lazy val result = setupController(Some(WasAnyValueReceivedModel(Constants.StandardRadioButtonYesValue,
+          Some("text")))).show(authorisedFakeRequest)
 
         "return a status of 200" in {
           status(result) shouldBe 200
@@ -99,7 +100,8 @@ class WasAnyValueReceivedControllerSpec extends BaseSpec with FakeRequestHelper 
       }
 
       "has a valid form" should {
-        lazy val result = setupController().submit(authorisedFakeRequestToPOST(("wasAnyValueReceived", "No"), ("aboutValueReceived", "")))
+        lazy val result = setupController().submit(authorisedFakeRequestToPOST(("wasAnyValueReceived",
+          Constants.StandardRadioButtonNoValue), ("aboutValueReceived", "")))
 
         "return a status of 303" in {
           status(result) shouldBe 303

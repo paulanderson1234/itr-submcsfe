@@ -17,7 +17,7 @@
 package controllers.seis
 
 import auth.{AuthorisedAndEnrolledForTAVC, SEIS}
-import common.KeystoreKeys
+import common.{Constants, KeystoreKeys}
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.predicates.FeatureSwitch
@@ -57,7 +57,8 @@ trait WasAnyValueReceivedController extends FrontendController with AuthorisedAn
         Future(BadRequest(views.html.seis.investors.WasAnyValueReceived(form)))
 
       val successResponse: WasAnyValueReceivedModel => Future[Result] = model =>
-        s4lConnector.saveFormData(KeystoreKeys.wasAnyValueReceived, model).map { _ =>
+        s4lConnector.saveFormData(KeystoreKeys.wasAnyValueReceived,
+          if(model.wasAnyValueReceived == Constants.StandardRadioButtonYesValue) model else model.copy(aboutValueReceived = None)).map { _ =>
           Redirect(controllers.seis.routes.WasAnyValueReceivedController.show())
         }
       wasAnyValueReceivedForm.bindFromRequest().fold(errorResponse, successResponse)

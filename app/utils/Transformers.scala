@@ -18,6 +18,7 @@ package utils
 
 import java.text.NumberFormat
 
+import common.Constants
 import models.{AddressModel, ContactDetailsModel}
 
 import scala.util.{Failure, Success, Try}
@@ -40,7 +41,7 @@ object Transformers {
   }
 
   val stringToBoolean: String => Boolean = {
-    case "Yes" => true
+    case Constants.StandardRadioButtonYesValue => true
     case _ => false
   }
 
@@ -53,7 +54,7 @@ object Transformers {
     _.fold("")(data => data)
   }
 
-  val booleanToString: Boolean => String = (input) => if (input) "Yes" else "No"
+  val booleanToString: Boolean => String = (input) => if (input) Constants.StandardRadioButtonYesValue else Constants.StandardRadioButtonNoValue
 
   val numberToFormattedNumber: Any => String = {
     case value: Int => NumberFormat.getNumberInstance.format(value)
