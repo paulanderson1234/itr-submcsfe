@@ -74,7 +74,7 @@ trait ShareCapitalChangesController extends FrontendController with AuthorisedAn
         implicit request =>
           val success: ShareCapitalChangesModel => Future[Result] = { model =>
             s4lConnector.saveFormData(KeystoreKeys.shareCapitalChanges,
-              if(model.hasChanges == Constants.StandardRadioButtonYesValue) model else model.copy(changesDescription = Some(""))).map(_ =>
+              if(model.hasChanges == Constants.StandardRadioButtonYesValue) model else model.copy(changesDescription = None)).map(_ =>
               Redirect(controllers.seis.routes.ConfirmContactDetailsController.show())
             )
           }
