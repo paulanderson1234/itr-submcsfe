@@ -18,22 +18,36 @@
                 <p id="ref-number-heading">@Messages("page.seis.checkAndSubmit.acknowledgement.refNumberHeading")</p>
                 <span id="ref-number" class="bold-medium">@submissionResponseModel.formBundleNumber</span>
             </div>
-
+            <p>@Messages("page.seis.checkAndSubmit.acknowledgement.refNumber.note")</p>
         </div>
 
-        <br>
-
         <div class="form-group">
-            <strong id ="legal-not-complete" class="bold-medium">
-                <span class="exclamation"></span>
-                @Messages("page.seis.checkAndSubmit.acknowledgement.application.not.complete")
-            </strong>
+            <h2 class="heading-medium">@Messages("page.seis.checkAndSubmit.acknowledgement.whatNext.heading")</h2>
+
+            <p>@Messages("page.seis.checkAndSubmit.acknowledgement.whatNext.list.heading")</p>
+
+            <ul class="list-bullet">
+                <li>@Messages("page.seis.checkAndSubmit.acknowledgement.whatNext.list.one")</li>
+                <li>@Messages("page.seis.checkAndSubmit.acknowledgement.whatNext.list.two")</li>
+            </ul>
+
+            <p>@Messages("page.seis.checkAndSubmit.acknowledgement.whatNext.outcome")</p>
+
+            <p>@Messages("page.seis.checkAndSubmit.acknowledgement.whatNext.issue")</p>
+
+            <div class="form-group">
+                <p class="important-notice">
+                    <span class="bold-medium">
+                        @Messages("page.seis.checkAndSubmit.acknowledgement.whatNext.certificate.warning")
+                    </span>
+                </p>
+            </div>
+
+            <p>@Messages("page.seis.checkAndSubmit.acknowledgement.whatNext.conditions")</p>
         </div>
 
-        <br>
-
         <div class="form-group">
-            <h2 id= "supporting-docs" class="heading-medium">@Messages("page.seis.checkAndSubmit.acknowledgement.supporting.docs.heading")</h2>
+            <h2 id="supporting-docs" class="heading-medium">@Messages("page.seis.checkAndSubmit.acknowledgement.supporting.docs.heading")</h2>
 
             <p id="remember-to-include">@Messages("page.seis.checkAndSubmit.acknowledgement.review")</p>
 
@@ -47,32 +61,15 @@
         </div>
 
         <div class="form-group">
-            <h2 id= "email-docs" class="heading-medium">@Messages("page.seis.checkAndSubmit.acknowledgement.email.docs.heading")</h2>
-
-            <p id="email-to">
-                <span id="email-docs-to">@Messages("page.seis.checkAndSubmit.acknowledgement.emailTo")</span>
-                <span> <a id="email-to-ref" href="mailto:enterprise.centre@@hmrc.gsi.gov.uk">enterprise.centre@@hmrc.gsi.gov.uk </a>.</span>
-                <span id="email-docs-include">@Messages("page.seis.checkAndSubmit.acknowledgement.email.include")</span>
+            <p>
+                <span>@Messages("page.seis.checkAndSubmit.acknowledgement.upload.one")</span>
+                <a href="@controllers.seis.routes.SupportingDocumentsController.show().url">@Messages("page.seis.checkAndSubmit.acknowledgement.upload.link")</a>
+                <span>@Messages("page.seis.checkAndSubmit.acknowledgement.upload.two")</span>
+                <a href="/hub">@Messages("page.seis.checkAndSubmit.acknowledgement.upload.dashboard")</a>.
             </p>
 
-            <ul class="list list-bullet">
-                <li id="email-name">@Messages("page.seis.checkAndSubmit.acknowledgement.email.one")</li>
-                <li id="email-utr">@Messages("page.seis.checkAndSubmit.acknowledgement.email.two")</li>
-                <li id="email-whitelister">@Messages("page.seis.checkAndSubmit.acknowledgement.email.three")</li>
-            </ul>
-            <p> <span id="email-docs-size">@Messages("page.seis.checkAndSubmit.acknowledgement.email.size")</span></p>
         </div>
 
-        <div class="form-group">
-            <h2 id="post-docs" class="heading-medium">@Messages("page.seis.checkAndSubmit.acknowledgement.post.docs.heading")</h2>
-            <p id="post-to">@Messages("page.seis.checkAndSubmit.acknowledgement.post.to")</p>
-
-        </div>
-
-        <div class="form-group">
-            <h2 id="waiting-time" class="heading-medium">@Messages("page.seis.checkAndSubmit.acknowledgement.waitingTime.heading")</h2>
-            <p id="course-of-action">@Messages("page.seis.checkAndSubmit.acknowledgement.courseOfAction")</p>
-        </div>
         <div class="form-group">
             <a id="submit" class="button" href="@controllers.feedback.routes.FeedbackController.show().url">@Messages("page.seis.checkAndSubmit.acknowledgement.button.confirm")</a>
         </div>
