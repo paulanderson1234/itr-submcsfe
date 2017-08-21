@@ -47,11 +47,11 @@ GET        /review-previous-schemes                 controllers.seis.ReviewPrevi
 POST       /review-previous-schemes                 controllers.seis.ReviewPreviousSchemesController.submit
 
 GET        /review-previous-schemes-add             controllers.seis.ReviewPreviousSchemesController.add
-GET        /review-previous-schemes-change/:Id      controllers.seis.ReviewPreviousSchemesController.change(Id: Int)
+GET        /review-previous-schemes-change/:id      controllers.seis.ReviewPreviousSchemesController.change(id: Int)
 
-GET        /review-previous-schemes-remove/:Id      controllers.seis.ReviewPreviousSchemesController.remove(Id: Int)
+GET        /review-previous-schemes-remove/:id      controllers.seis.ReviewPreviousSchemesController.remove(id: Int)
 
-GET        /delete-previous-scheme/:Id              controllers.seis.DeletePreviousSchemeController.show(Id: Int)
+GET        /delete-previous-scheme/:previousSchemeId              controllers.seis.DeletePreviousSchemeController.show(previousSchemeId: Int)
 POST       /delete-previous-scheme                  controllers.seis.DeletePreviousSchemeController.submit
 
 GET        /previous-investment                     controllers.seis.PreviousSchemeController.show(id: Option[Int]?=None)
@@ -86,7 +86,7 @@ GET       /not-first-trade                          controllers.seis.NotFirstTra
 GET       /attachments-acknowledgement             controllers.seis.AttachmentsAcknowledgementController.show
 POST      /attachments-acknowledgement             controllers.seis.AttachmentsAcknowledgementController.submit
 
-GET       /invalid-scheme-type/:Id                 controllers.seis.InvalidPreviousSchemeController.show(Id: Int)
+GET       /invalid-scheme-type/:schemeId           controllers.seis.InvalidPreviousSchemeController.show(schemeId: Int)
 POST      /invalid-scheme-type                     controllers.seis.InvalidPreviousSchemeController.submit
 
 GET        /had-other-investments-before           controllers.seis.HadOtherInvestmentsController.show
@@ -113,8 +113,8 @@ POST       /total-amount-spent                    controllers.seis.TotalAmountSp
 GET        /nominal-value-of-shares               controllers.seis.NominalValueOfSharesController.show
 POST       /nominal-value-of-shares               controllers.seis.NominalValueOfSharesController.submit
 
-GET        /company-details/:Id                   controllers.seis.CompanyDetailsController.show(Id: Int)
-POST       /company-details                       controllers.seis.CompanyDetailsController.submit(backUrl: Option[String]?=None)
+GET        /company-details/:id                   controllers.seis.CompanyDetailsController.show(id: Int)
+POST       /company-details                       controllers.seis.CompanyDetailsController.submit
 
 GET       /total-amount-raised                    controllers.seis.TotalAmountRaisedController.show
 POST      /total-amount-raised                    controllers.seis.TotalAmountRaisedController.submit
@@ -122,62 +122,65 @@ POST      /total-amount-raised                    controllers.seis.TotalAmountRa
 GET        /add-investor-or-nominee               controllers.seis.AddInvestorOrNomineeController.show(id: Option[Int]?=None)
 POST       /add-investor-or-nominee               controllers.seis.AddInvestorOrNomineeController.submit
 
-GET        /company-or-individual/:Id             controllers.seis.CompanyOrIndividualController.show(Id: Int)
-POST       /company-or-individual                 controllers.seis.CompanyOrIndividualController.submit(investorOrNominee: Option[String]?=None, backUrl: Option[String]?=None)
+GET        /company-or-individual/:id             controllers.seis.CompanyOrIndividualController.show(id: Int)
+POST       /company-or-individual                 controllers.seis.CompanyOrIndividualController.submit(investorOrNominee: Option[String]?=None)
 
-GET        /individuals-details/:Id               controllers.seis.IndividualDetailsController.show(Id: Int)
-POST       /individuals-details                   controllers.seis.IndividualDetailsController.submit(backUrl: Option[String]?=None)
+GET        /individuals-details/:id               controllers.seis.IndividualDetailsController.show(id: Int)
+POST       /individuals-details                   controllers.seis.IndividualDetailsController.submit
 
-GET        /how-much-spent-on-shares/:Id          controllers.seis.HowMuchSpentOnSharesController.show(Id: Int)
-POST       /how-much-spent-on-shares              controllers.seis.HowMuchSpentOnSharesController.submit(backUrl: Option[String]?=None)
+GET        /how-much-spent-on-shares/:id          controllers.seis.HowMuchSpentOnSharesController.show(id: Int)
+POST       /how-much-spent-on-shares              controllers.seis.HowMuchSpentOnSharesController.submit
 
-GET        /is-existing-shareholder/:Id            controllers.seis.IsExistingShareHolderController.show(Id: Int)
-POST       /is-existing-shareholder               controllers.seis.IsExistingShareHolderController.submit(companyOrIndividual: Option[String]?=None, backUrl: Option[String]?=None)
+GET        /is-existing-shareholder/:id            controllers.seis.IsExistingShareHolderController.show(id: Int)
+POST       /is-existing-shareholder               controllers.seis.IsExistingShareHolderController.submit(companyOrIndividual: Option[String]?=None)
 
-GET        /number-of-shares-purchased/:Id        controllers.seis.NumberOfSharesPurchasedController.show(Id: Int)
-POST       /number-of-shares-purchased            controllers.seis.NumberOfSharesPurchasedController.submit(shareIssueDate: Option[String]?=None, backUrl: Option[String]?=None)
+GET        /number-of-shares-purchased/:id        controllers.seis.NumberOfSharesPurchasedController.show(id: Int)
+POST       /number-of-shares-purchased            controllers.seis.NumberOfSharesPurchasedController.submit(shareIssueDate: Option[String]?=None)
 
-GET        /previous-shareholding-nominal-value/:InvestorId/:Id      controllers.seis.PreviousShareHoldingNominalValueController.show(InvestorId: Int, Id: Int)
-POST       /previous-shareholding-nominal-value                      controllers.seis.PreviousShareHoldingNominalValueController.submit(backUrl: Option[String]?=None, Id: Option[Int]?=None)
+GET        /previous-shareholding-nominal-value/:investorProcessingId/:id      controllers.seis.PreviousShareHoldingNominalValueController.show(investorProcessingId: Int, id: Int)
+POST       /previous-shareholding-nominal-value                      controllers.seis.PreviousShareHoldingNominalValueController.submit(id: Option[Int]?=None)
 
-GET        /number-of-previously-issued-shares/:InvestorId/:Id       controllers.seis.NumberOfPreviouslyIssuedSharesController.show(InvestorId: Int, Id: Int)
-POST       /number-of-previously-issued-shares                   controllers.seis.NumberOfPreviouslyIssuedSharesController.submit(companyOrIndividual: Option[String]?=None, backUrl: Option[String]?=None, Id: Option[Int]?=None)
+GET        /number-of-previously-issued-shares/:investorProcessingId/:id       controllers.seis.NumberOfPreviouslyIssuedSharesController.show(investorProcessingId: Int, id: Int)
+POST       /number-of-previously-issued-shares                   controllers.seis.NumberOfPreviouslyIssuedSharesController.submit(companyOrIndividual: Option[String]?=None, id: Option[Int]?=None)
 
-GET        /previous-shareholding-description/:InvestorId       controllers.seis.PreviousShareHoldingDescriptionController.show(InvestorId: Int, Id: Option[Int]?=None)
-POST       /previous-shareholding-description                   controllers.seis.PreviousShareHoldingDescriptionController.submit(companyOrIndividual: Option[String]?=None, backUrl: Option[String]?=None, Id: Option[Int]?=None)
+GET        /previous-shareholding-description/:investorProcessingId       controllers.seis.PreviousShareHoldingDescriptionController.show(investorProcessingId: Int, id: Option[Int]?=None)
+POST       /previous-shareholding-description                   controllers.seis.PreviousShareHoldingDescriptionController.submit(companyOrIndividual: Option[String]?=None, id: Option[Int]?=None)
 
 GET        /add-another-investor                  controllers.seis.AddAnotherInvestorController.show
 POST       /add-another-investor                  controllers.seis.AddAnotherInvestorController.submit
 
 GET        /investor-share-issue-date/:InvestorId/:Id       controllers.seis.InvestorShareIssueDateController.show(InvestorId: Int, Id: Int)
-POST       /investor-share-issue-date                   controllers.seis.InvestorShareIssueDateController.submit(backUrl: Option[String]?=None, Id: Option[Int]?=None)
+POST       /investor-share-issue-date                   controllers.seis.InvestorShareIssueDateController.submit(Id: Option[Int]?=None)
 
 GET        /add-another-shareholding/:investorId              controllers.seis.AddAnotherShareholdingController.show(investorId: Int)
 POST       /add-another-shareholding/:investorId              controllers.seis.AddAnotherShareholdingController.submit(investorId: Int)
 
 GET        /review-investor/:investorId                 controllers.seis.ReviewInvestorDetailsController.show(investorId: Int)
+GET        /review-investor/:actionType/:investorId                 controllers.seis.ReviewInvestorDetailsController.change(actionType: String, investorId: Int)
 
-GET        /review-previous-share-holdings/:InvestorId                 controllers.seis.PreviousShareHoldingsReviewController.show(InvestorId: Int)
-POST       /review-previous-share-holdings/:InvestorId                 controllers.seis.PreviousShareHoldingsReviewController.submit(InvestorId: Int)
-GET        /review-previous-investor-shareholdings-remove/:InvestorId/:Id      controllers.seis.PreviousShareHoldingsReviewController.remove(InvestorId: Int, Id: Int)
+GET        /review-previous-share-holdings/:investorProcessingId                 controllers.seis.PreviousShareHoldingsReviewController.show(investorProcessingId: Int)
+POST       /review-previous-share-holdings/:investorProcessingId                 controllers.seis.PreviousShareHoldingsReviewController.submit(investorProcessingId: Int)
+GET        /review-previous-investor-shareholdings-remove/:investorProcessingId/:id        controllers.seis.PreviousShareHoldingsReviewController.remove(investorProcessingId: Int, id: Int)
 
-GET        /review-previous-investor-shareholdings-change/:InvestorId/:Id      controllers.seis.PreviousShareHoldingsReviewController.change(InvestorId: Int, Id: Int)
+GET        /review-previous-investor-shareholdings-change/:investorProcessingId/:Id      controllers.seis.PreviousShareHoldingsReviewController.change(investorProcessingId: Int, Id: Int)
 
-POST       /delete-previous-share-holding/:InvestorId/:Id                controllers.seis.DeletePreviousShareHolderController.submit(InvestorId: Int, Id: Int)
-GET        /delete-previous-share-holding/:InvestorId/:Id                controllers.seis.DeletePreviousShareHolderController.show(InvestorId: Int, Id: Int)
+POST       /delete-previous-share-holding/:investorProcessingId/:id                controllers.seis.DeletePreviousShareHolderController.submit(investorProcessingId: Int, id: Int)
+GET        /delete-previous-share-holding/:investorProcessingId/:id                controllers.seis.DeletePreviousShareHolderController.show(investorProcessingId: Int, id: Int)
 
 GET        /delete-investor/:investorId             controllers.seis.DeleteInvestorController.show(investorId: Int)
-POST       /delete-investor/:InvestorId             controllers.seis.DeleteInvestorController.submit(InvestorId: Int)
-
-GET        /review-investor/:investorId                 controllers.seis.ReviewInvestorDetailsController.show(investorId: Int)
+POST       /delete-investor/:investorProcessingId             controllers.seis.DeleteInvestorController.submit(investorProcessingId: Int)
 
 GET        /review-all-investors                  controllers.seis.ReviewAllInvestorsController.show
 POST       /review-all-investors                  controllers.seis.ReviewAllInvestorsController.submit
 
 GET        /review-all-investors-add             controllers.seis.ReviewAllInvestorsController.add
-GET        /review-all-investors-change/:Id      controllers.seis.ReviewAllInvestorsController.change(Id: Int)
+GET        /review-all-investors-change/:id      controllers.seis.ReviewAllInvestorsController.change(id: Int)
 
-GET        /review-all-investors-remove/:Id      controllers.seis.ReviewAllInvestorsController.remove(Id: Int)
+GET        /review-all-investors-remove/:id      controllers.seis.ReviewAllInvestorsController.remove(id: Int)
+
+GET        /was-any-value-received               controllers.seis.WasAnyValueReceivedController.show
+POST       /was-any-value-received               controllers.seis.WasAnyValueReceivedController.submit
+
 
 GET       /share-capital-changes                        controllers.seis.ShareCapitalChangesController.show
 POST      /share-capital-changes                        controllers.seis.ShareCapitalChangesController.submit

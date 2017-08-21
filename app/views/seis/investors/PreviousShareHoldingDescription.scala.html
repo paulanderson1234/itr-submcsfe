@@ -17,7 +17,7 @@
     <p id="description-one" class="lede">@Messages("page.investors.previousShareHoldingDescription.example.text")</p>
 </div>
 
-@form(action = controllers.seis.routes.PreviousShareHoldingDescriptionController.submit(Some(companyOrIndividual), Some(backUrl), Some(investorProcessingId))) {
+@form(action = controllers.seis.routes.PreviousShareHoldingDescriptionController.submit(Some(companyOrIndividual), Some(investorProcessingId))) {
 
 <fieldset>
     <legend class="visuallyhidden">@Messages("page.investors.previousShareHoldingDescription.heading")</legend>

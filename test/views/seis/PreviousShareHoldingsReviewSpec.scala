@@ -73,8 +73,8 @@ class PreviousShareHoldingsReviewSpec extends ViewSpec {
           reviewShareHoldingsTableBody.select("tr").get(index).getElementById(s"change-$index").text() shouldBe
             Messages("common.base.change")
           reviewShareHoldingsTableBody.select("tr").get(index).getElementById(s"change-$index").getElementById(s"change-ref-$index").attr("href")shouldBe
-            controllers.seis.routes.PreviousShareHoldingDescriptionController.show(
-              previousShareHoldingModel.investorProcessingId.get,previousShareHoldingModel.processingId).toString
+            controllers.seis.routes.PreviousShareHoldingsReviewController.change(
+              previousShareHoldingModel.investorProcessingId.get, previousShareHoldingModel.processingId.get).toString
         }
         else{
           reviewShareHoldingsTableBody.select("tr").get(index).getElementById(s"continue-$index").text() shouldBe

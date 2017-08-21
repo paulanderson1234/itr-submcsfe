@@ -504,18 +504,19 @@ page.supportingDocuments.SupportingDocuments.bullet.five=last annual accounts or
 page.supportingDocuments.SupportingDocuments.text.two=If these aren''t up-to-date you should also tell us about any changes you''ll be making to them.
 
 #supporting docs upload
-page.supportingDocumentsUpload.heading=To support your application you''ll need to send us your company''s:
+page.supportingDocumentsUpload.heading=To complete your Compliance Statement, we''ll need your company''s:
 page.supportingDocumentsUpload.bullet.one=business plan
 page.supportingDocumentsUpload.bullet.two=shareholder agreements or drafts
 page.supportingDocumentsUpload.bullet.three=memorandum and articles of association
 page.supportingDocumentsUpload.bullet.four= prospectuses and other documents for attracting investment
 page.supportingDocumentsUpload.bullet.five=last annual accounts or cash flow forecast if you haven''t submitted accounts yet
-page.supportingDocumentsUpload.docs.current=If your documents aren''t up-to-date, you need to tell us about any changes you plan to make.
+page.supportingDocumentsUpload.docs.current=You don''t need to resend these documents if you''ve sent them to us before. If your documents aren''t up-to-date, you need to tell us about any changes.
 page.supportingDocumentsUpload.upload.instruction=You can either upload your documents now, or after you have checked and submitted your application.
-page.supportingDocumentsUpload.send.confirm=Send your documents now?
-page.supportingDocumentsUpload.Note=Your application will not be complete until you send us these files
+page.supportingDocumentsUpload.send.confirm=Do you want to upload your documents now?
+page.supportingDocumentsUpload.Note=Your Compliance Statement is incomplete until we have your documents.
 page.supportingDocumentsUpload.outFlow.heading=If you haven''t already submitted supporting documents, you''ll need to upload your company''s:
 page.supportingDocumentsUpload.outFlow.Note=You must submit these documents to complete your application
+page.supportingDocumentsUpload.ventureCapitalSchemes.dashboard=You can upload your documents on the <a href={0}>Venture Capital Schemes dashboard</a>. To get to the dashboard later, log into this service with the same Government Gateway ID that you used to apply.
 
 #Confirm Correspondence Address
 page.contactInformation.ConfirmCorrespondAddress.heading=Is this the correspondence address you want us to use for this application?
@@ -531,7 +532,7 @@ page.checkAndSubmit.checkAnswers.scheme.vct=the Venture Capital Trust scheme
 page.checkAndSubmit.checkAnswers.description.two=Check your answers are correct before submitting.
 page.checkAndSubmit.checkAnswers.print.text=Print this page
 page.checkAndSubmit.checkAnswers.button.confirm=Submit
-page.checkAndSubmit.checkAnswers.suportingDocs.desc=To support your application you will need to send us your company''s:
+page.checkAndSubmit.checkAnswers.suportingDocs.desc=To complete your Compliance Statement, we''ll need your company''s:
 
 #check your answers page
 page.checkAndSubmit.checkDocuments.title=Check your documents
@@ -1225,3 +1226,21 @@ page.shareCapitalChanges.info.title=For example, your company might have:
 page.shareCapitalChanges.info.bullet.one=issued more shares
 page.shareCapitalChanges.info.bullet.two=added more share classes
 page.shareCapitalChanges.info.bullet.three=changed the nominal value of some or all of its shares
+
+#Was Any Value Received
+page.investors.wasAnyValueReceived.title = Did the investor get value back from your company or a connected company?
+page.investors.wasAnyValueReceived.guidance.definition = This is called ''value received''.
+page.investors.wasAnyValueReceived.guidance.title = Examples of value received include:
+page.investors.wasAnyValueReceived.guidance.list.one = waiving a debt
+page.investors.wasAnyValueReceived.guidance.list.two = getting assets for free or less than their market value
+page.investors.wasAnyValueReceived.guidance.list.three = making a payment to the investor
+page.investors.wasAnyValueReceived.guidance.list.four = having shares or securities repaid or repurchased
+page.investors.wasAnyValueReceived.guidance.hint = You must tell us about any value received since your company’s date of incorporation.
+page.investors.wasAnyValueReceived.subHeading = Tell us about the value received
+page.investors.wasAnyValueReceived.additionalGuidance.title = You should include:
+page.investors.wasAnyValueReceived.additionalGuidance.list.one = which investor got it
+page.investors.wasAnyValueReceived.additionalGuidance.list.two = what it was
+page.investors.wasAnyValueReceived.additionalGuidance.list.three = when the investor received it
+page.investors.wasAnyValueReceived.additionalGuidance.list.four = how much it was worth
+page.investors.wasAnyValueReceived.additionalGuidance.list.five = whether you got anything in return
+

@@ -165,7 +165,7 @@ class NumberOfSharesPurchasedControllerSpec extends BaseSpec with DateFormatter{
         val formInput = "numberOfSharesPurchased" -> "10000000"
         setupMocks(Some(listOfInvestorsComplete), None, None)
         mockEnrolledRequest(seisSchemeTypesModel)
-        submitWithSessionAndAuth(controller.submit(shareIssueDate,backUrl),formInput)(
+        submitWithSessionAndAuth(controller.submit(shareIssueDate),formInput)(
           result => {
             status(result) shouldBe SEE_OTHER
             redirectLocation(result) shouldBe
@@ -183,7 +183,7 @@ class NumberOfSharesPurchasedControllerSpec extends BaseSpec with DateFormatter{
         val formInput = Seq("numberOfSharesPurchased" -> "10000000", "processingId" -> "2")
         setupMocks(Some(listOfInvestorsComplete), None, None)
         mockEnrolledRequest(seisSchemeTypesModel)
-        submitWithSessionAndAuth(controller.submit(shareIssueDate,backUrl),formInput:_*)(
+        submitWithSessionAndAuth(controller.submit(shareIssueDate),formInput:_*)(
           result => {
             status(result) shouldBe SEE_OTHER
             redirectLocation(result) shouldBe
@@ -196,10 +196,10 @@ class NumberOfSharesPurchasedControllerSpec extends BaseSpec with DateFormatter{
 
     "Sending an invalid form submission with validation errors to the NumberOfSharesPurchasedController when authenticated and enrolled" should {
       "redirect to itself" in {
-        setupMocks(Some(listOfInvestorsComplete), None, None)
+        setupMocks(Some(listOfInvestorsComplete), None, backUrl)
         mockEnrolledRequest(seisSchemeTypesModel)
         val formInput = "numberOfSharesPurchased" -> ""
-        submitWithSessionAndAuth(controller.submit(shareIssueDate,backUrl), formInput)(
+        submitWithSessionAndAuth(controller.submit(shareIssueDate), formInput)(
           result => {
             status(result) shouldBe BAD_REQUEST
           }

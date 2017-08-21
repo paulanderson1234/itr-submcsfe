@@ -124,7 +124,7 @@ class IsExistingShareHolderControllerSpec extends BaseSpec with DateFormatter{
           showWithSessionAndAuth(controller.show(2))(
             result => {
               status(result) shouldBe SEE_OTHER
-              redirectLocation(result) shouldBe Some(controllers.seis.routes.AddInvestorOrNomineeController.show(None).url)
+              redirectLocation(result) shouldBe Some(controllers.seis.routes.CompanyOrIndividualController.show(2).url)
             }
           )
         }
@@ -163,7 +163,7 @@ class IsExistingShareHolderControllerSpec extends BaseSpec with DateFormatter{
         val formInput = "isExistingShareHolder" -> "Yes"
         setupMocks(Some(listOfInvestorsComplete), None)
         mockEnrolledRequest(seisSchemeTypesModel)
-        submitWithSessionAndAuth(controller.submit(Some(Constants.typeCompany),backUrl),formInput)(
+        submitWithSessionAndAuth(controller.submit(Some(Constants.typeCompany)),formInput)(
           result => {
             status(result) shouldBe SEE_OTHER
             redirectLocation(result) shouldBe
@@ -177,7 +177,7 @@ class IsExistingShareHolderControllerSpec extends BaseSpec with DateFormatter{
         val formInput = "isExistingShareHolder" -> "No"
         setupMocks(Some(listOfInvestorsComplete), None)
         mockEnrolledRequest(seisSchemeTypesModel)
-        submitWithSessionAndAuth(controller.submit(Some(Constants.typeCompany),backUrl),formInput)(
+        submitWithSessionAndAuth(controller.submit(Some(Constants.typeCompany)),formInput)(
           result => {
             status(result) shouldBe SEE_OTHER
             redirectLocation(result) shouldBe
@@ -195,7 +195,7 @@ class IsExistingShareHolderControllerSpec extends BaseSpec with DateFormatter{
         val formInput = Seq("isExistingShareHolder" -> "Yes", "processingId" -> "2")
         setupMocks(Some(listOfInvestorsComplete), None)
         mockEnrolledRequest(seisSchemeTypesModel)
-        submitWithSessionAndAuth(controller.submit(Some(Constants.typeCompany),backUrl), formInput:_*)(
+        submitWithSessionAndAuth(controller.submit(Some(Constants.typeCompany)), formInput:_*)(
           result => {
             status(result) shouldBe SEE_OTHER
             redirectLocation(result) shouldBe
@@ -209,7 +209,7 @@ class IsExistingShareHolderControllerSpec extends BaseSpec with DateFormatter{
         val formInput = Seq("isExistingShareHolder" -> "No", "processingId" -> "2")
         setupMocks(Some(listOfInvestorsComplete), None)
         mockEnrolledRequest(seisSchemeTypesModel)
-        submitWithSessionAndAuth(controller.submit(Some(Constants.typeCompany),backUrl), formInput:_*)(
+        submitWithSessionAndAuth(controller.submit(Some(Constants.typeCompany)), formInput:_*)(
           result => {
             status(result) shouldBe SEE_OTHER
             redirectLocation(result) shouldBe
@@ -222,10 +222,10 @@ class IsExistingShareHolderControllerSpec extends BaseSpec with DateFormatter{
 
     "Sending an invalid form submission with validation errors to the IsExistingShareHolder when authenticated and enrolled" should {
       "redirect to itself" in {
-        setupMocks(Some(listOfInvestorsComplete), None)
+        setupMocks(Some(listOfInvestorsComplete), backUrl)
         mockEnrolledRequest(seisSchemeTypesModel)
         val formInput = "isExistingShareHolder" -> ""
-        submitWithSessionAndAuth(controller.submit(Some(Constants.typeCompany),backUrl), formInput)(
+        submitWithSessionAndAuth(controller.submit(Some(Constants.typeCompany)), formInput)(
           result => {
             status(result) shouldBe BAD_REQUEST
           }

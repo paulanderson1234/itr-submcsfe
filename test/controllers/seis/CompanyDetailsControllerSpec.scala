@@ -143,7 +143,7 @@ class CompanyDetailsControllerSpec extends BaseSpec {
                 "countryCode" -> "GB")
       setupMocks(Some(listOfInvestorsComplete), backUrl)
       mockEnrolledRequest(seisSchemeTypesModel)
-      submitWithSessionAndAuth(TestController.submit(Some(routes.CompanyOrIndividualController.show(2).url)),formInput:_*)(
+      submitWithSessionAndAuth(TestController.submit(),formInput:_*)(
         result => {
           status(result) shouldBe SEE_OTHER
           redirectLocation(result) shouldBe
@@ -168,7 +168,7 @@ class CompanyDetailsControllerSpec extends BaseSpec {
           "countryCode" -> "GB", "processingId" -> "2")
       setupMocks(Some(listOfInvestorsComplete), backUrl)
       mockEnrolledRequest(seisSchemeTypesModel)
-      submitWithSessionAndAuth(TestController.submit(Some(routes.CompanyOrIndividualController.show(2).url)),formInput:_*)(
+      submitWithSessionAndAuth(TestController.submit(),formInput:_*)(
         result => {
           status(result) shouldBe SEE_OTHER
           redirectLocation(result) shouldBe
@@ -184,7 +184,7 @@ class CompanyDetailsControllerSpec extends BaseSpec {
       setupMocks(Some(listOfInvestorsComplete), backUrl)
       mockEnrolledRequest(seisSchemeTypesModel)
       val formInput = "companyAddressline1" -> ""
-      submitWithSessionAndAuth(TestController.submit(Some(routes.CompanyOrIndividualController.show(2).url)), formInput)(
+      submitWithSessionAndAuth(TestController.submit(), formInput)(
         result => {
           status(result) shouldBe BAD_REQUEST
         }

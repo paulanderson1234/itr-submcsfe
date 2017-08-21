@@ -14,7 +14,7 @@
 
     <h1 class="heading-xlarge" id="main-heading">@Messages("page.investors.isExistingShareHolder.heading", companyOrIndividual.toLowerCase)</h1>
 
-    @form(action = controllers.seis.routes.IsExistingShareHolderController.submit(Some(companyOrIndividual), Some(backUrl))) {
+    @form(action = controllers.seis.routes.IsExistingShareHolderController.submit(Some(companyOrIndividual))) {
         <div class="form-group">
         @formInputRadioGroup(
             field = IsExistingShareHolderForm("isExistingShareHolder"),

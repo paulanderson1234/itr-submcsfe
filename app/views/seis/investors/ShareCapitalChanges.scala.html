@@ -8,7 +8,7 @@
 
 @main_template(Messages("page.shareCapitalChanges.heading", shareIssueDate)) {
 
-    @backButtonWithProgress(controllers.seis.routes.ShareCapitalChangesController.show().url, Messages("common.section.progress.company.details.four"))
+    @backButtonWithProgress(controllers.seis.routes.WasAnyValueReceivedController.show().url, Messages("common.section.progress.company.details.four"))
 
     @errorSummary(shareCapitalChangesForm, "share-capital-changes", "changesDescription")
 

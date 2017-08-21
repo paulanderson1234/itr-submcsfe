@@ -89,4 +89,12 @@ trait Constants {
 
   val notFound = -1
   val obviouslyInvalidId = 9999999
+
+  val AddInvestorOrNomineeController = "AddInvestorOrNomineeController"
+  val CompanyOrIndividualController = "CompanyOrIndividualController"
+  val CompanyDetailsController = "CompanyDetailsController"
+  val IndividualDetailsController = "IndividualDetailsController"
+  val NumberOfSharesPurchasedController = "NumberOfSharesPurchasedController"
+  val HowMuchSpentOnSharesController = "HowMuchSpentOnSharesController"
+  val IsExistingShareHolderController = "IsExistingShareHolderController"
 }

@@ -17,7 +17,7 @@
         <p>@Messages("page.investors.previousShareHoldingNominalValue.whereToFind")</p>
     </div>
 
-    @form(action = controllers.seis.routes.PreviousShareHoldingNominalValueController.submit(Some(backUrl), Some(investorProcessingId))) {
+    @form(action = controllers.seis.routes.PreviousShareHoldingNominalValueController.submit(Some(investorProcessingId))) {
         <div class="form-group">
             @inputWithCurrencySymbol(
             previousShareHoldingNominalValueForm("previousShareHoldingNominalValue"),

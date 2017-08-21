@@ -12,7 +12,7 @@
 
     <h1 class="heading-xlarge" id="main-heading">@Messages("page.investors.investorShareIssueDate.heading")</h1>
 
-    @form(action = controllers.seis.routes.InvestorShareIssueDateController.submit(Some(backLink), Some(investorProcessingId))) {
+    @form(action = controllers.seis.routes.InvestorShareIssueDateController.submit(Some(investorProcessingId))) {
 
         @formInlineDateInput(investorShareIssueDateForm, "investorShareIssueDate", Some(Messages("page.investors.investorShareIssueDate.heading")),
         true, Some(Messages("common.date.hint.example")), None)

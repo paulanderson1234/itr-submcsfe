@@ -72,6 +72,8 @@ trait PreviousShareHoldingsReviewController extends FrontendController with Auth
     featureSwitch(applicationConfig.seisFlowEnabled) {
       AuthorisedAndEnrolled.async { implicit user =>
         implicit request =>
+          s4lConnector.saveFormData(KeystoreKeys.backLinkShareClassAndDescription,
+            routes.PreviousShareHoldingsReviewController.show(investorProcessingId).url)
           Future.successful(Redirect(controllers.seis.routes.PreviousShareHoldingDescriptionController.show(investorProcessingId, Some(id))))
       }
     }

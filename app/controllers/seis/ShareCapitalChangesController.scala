@@ -55,7 +55,7 @@ trait ShareCapitalChangesController extends FrontendController with AuthorisedAn
           }
         }
         else {
-          //TODO: Route to the beginning of flow as no backlink found
+          //TODO: Route to the missing share issue date
           Future.successful(Redirect(routes.ShareIssueDateController.show()))
         }
       }

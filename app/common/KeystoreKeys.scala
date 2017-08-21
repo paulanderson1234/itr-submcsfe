@@ -79,6 +79,7 @@ trait KeystoreKeys {
   val numberOfPreviouslyIssuedShares: String = "investors:numberOfPreviouslyIssuedShares"
   val addAnotherInvestor: String = "investors:addAnotherInvestor"
   val shareCapitalChanges: String = "investors:shareCapitalChanges"
+  val wasAnyValueReceived: String = "investors:wasAnyValueReceived"
 
   // processing Keys
   val eisSeisProcessingModel: String = "processing:EisSeisProcessingModel"
@@ -91,7 +92,6 @@ trait KeystoreKeys {
 
   // Subscription Details keys
   val subscriptionDetails: String = "subscription:subscriptionDetails"
-
 
 
   // backlink keys
