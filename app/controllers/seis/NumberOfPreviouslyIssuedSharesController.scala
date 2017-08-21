@@ -85,14 +85,15 @@ trait NumberOfPreviouslyIssuedSharesController extends FrontendController with A
     }
   }
 
-  def submit(companyOrIndividual: Option[String], backUrl: Option[String], investorProcessingId: Option[Int]):
+  def submit(companyOrIndividual: Option[String], investorProcessingId: Option[Int]):
   Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
     AuthorisedAndEnrolled.async { implicit user =>
       implicit request =>
         numberOfPreviouslyIssuedSharesForm.bindFromRequest().fold(
           formWithErrors => {
-            Future.successful(BadRequest(NumberOfPreviouslyIssuedShares(companyOrIndividual.get,
-              formWithErrors, backUrl.get, investorProcessingId.get)))
+            ControllerHelpers.getSavedBackLink(KeystoreKeys.backLinkNumberOfPreviouslyIssuedShares, s4lConnector).flatMap(url =>
+              Future.successful(BadRequest(NumberOfPreviouslyIssuedShares(companyOrIndividual.get,
+              formWithErrors, url.get, investorProcessingId.get))))
           },
           validFormData => {
             validFormData.processingId match {

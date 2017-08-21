@@ -154,7 +154,7 @@ class IndividualDetailsControllerSpec extends BaseSpec with FakeRequestHelper{
                 "countryCode" -> "GB")
         setupMocks(Some(listOfInvestorsComplete), backUrl)
         mockEnrolledRequest(seisSchemeTypesModel)
-        submitWithSessionAndAuth(TestController.submit(Some(routes.CompanyOrIndividualController.show(2).url)), formInput: _*)(
+        submitWithSessionAndAuth(TestController.submit(), formInput: _*)(
           result => {
             status(result) shouldBe SEE_OTHER
             redirectLocation(result) shouldBe
@@ -181,7 +181,7 @@ class IndividualDetailsControllerSpec extends BaseSpec with FakeRequestHelper{
                 "processingId" -> "2")
         setupMocks(Some(listOfInvestorsComplete), backUrl)
         mockEnrolledRequest(seisSchemeTypesModel)
-        submitWithSessionAndAuth(TestController.submit(Some(routes.CompanyOrIndividualController.show(2).url)), formInput: _*)(
+        submitWithSessionAndAuth(TestController.submit(), formInput: _*)(
           result => {
             status(result) shouldBe SEE_OTHER
             redirectLocation(result) shouldBe
@@ -205,7 +205,7 @@ class IndividualDetailsControllerSpec extends BaseSpec with FakeRequestHelper{
                   "addressline4" -> "line 4",
                   "postcode" -> "",
                   "countryCode" -> "GB")
-        submitWithSessionAndAuth(TestController.submit(Some(routes.CompanyOrIndividualController.show(2).url)), formInput:_*)(
+        submitWithSessionAndAuth(TestController.submit(), formInput:_*)(
           result => {
             status(result) shouldBe BAD_REQUEST
           }

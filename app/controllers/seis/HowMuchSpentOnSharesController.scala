@@ -53,10 +53,13 @@ trait HowMuchSpentOnSharesController extends FrontendController with AuthorisedA
             s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map { vector =>
               redirectNoInvestors(vector) { data =>
                 val itemToUpdateIndex = getInvestorIndex(id, data)
-                redirectInvalidInvestor(itemToUpdateIndex) { id =>
-                  val form = fillForm(howMuchSpentOnSharesForm, retrieveInvestorData[HowMuchSpentOnSharesModel](id, data)(_.amountSpentModel))
-                  Ok(HowMuchSpentOnShares(retrieveInvestorData[String](id, data)(_.companyOrIndividualModel.map(_.companyOrIndividual)).get,
-                    form, backUrl.get))
+                redirectInvalidInvestor(itemToUpdateIndex) { index =>
+                  if(data.lift(itemToUpdateIndex).get.companyOrIndividualModel.isDefined) {
+                    val form = fillForm(howMuchSpentOnSharesForm, retrieveInvestorData[HowMuchSpentOnSharesModel](index, data)(_.amountSpentModel))
+                    Ok(HowMuchSpentOnShares(retrieveInvestorData[String](index, data)(_.companyOrIndividualModel.map(_.companyOrIndividual)).get,
+                      form, backUrl.get))
+                  }
+                  else Redirect(routes.CompanyOrIndividualController.show(id))
                 }
               }
             }
@@ -73,7 +76,7 @@ trait HowMuchSpentOnSharesController extends FrontendController with AuthorisedA
     }
   }
 
-  def submit(backUrl: Option[String]): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
+  val submit = featureSwitch(applicationConfig.seisFlowEnabled) {
     AuthorisedAndEnrolled.async {
       implicit user =>
         implicit request =>
@@ -101,12 +104,13 @@ trait HowMuchSpentOnSharesController extends FrontendController with AuthorisedA
           }
 
           val failure: Form[HowMuchSpentOnSharesModel] => Future[Result] = { formWithErrors =>
+            ControllerHelpers.getSavedBackLink(KeystoreKeys.backLinkHowMuchSpentOnShares, s4lConnector).flatMap(url =>
             s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
               case Some(data) => {
                 val investorDetailsModel = data.last
-                BadRequest(HowMuchSpentOnShares(investorDetailsModel.companyOrIndividualModel.get.companyOrIndividual, formWithErrors, backUrl.get))
+                BadRequest(HowMuchSpentOnShares(investorDetailsModel.companyOrIndividualModel.get.companyOrIndividual, formWithErrors, url.get))
               }
-            }
+            })
           }
           howMuchSpentOnSharesForm.bindFromRequest().fold(failure, success)
     }

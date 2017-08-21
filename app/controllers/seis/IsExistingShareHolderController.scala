@@ -52,13 +52,15 @@ trait IsExistingShareHolderController extends FrontendController with Authorised
             s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map { vector =>
               redirectNoInvestors(vector) { data =>
                 val itemToUpdateIndex = getInvestorIndex(id, data)
-                redirectInvalidInvestor(itemToUpdateIndex) { id =>
-                  val companyModel = retrieveInvestorData(id, data)(_.companyOrIndividualModel)
-                  if (companyModel.isDefined) {
-                    val form = fillForm(isExistingShareHolderForm, retrieveInvestorData(id, data)(_.isExistingShareHolderModel))
-                    Ok(IsExistingShareHolder(companyModel.get.companyOrIndividual, form, backUrl.get))
-                  }
-                  else Redirect(routes.AddInvestorOrNomineeController.show())
+                redirectInvalidInvestor(itemToUpdateIndex) { index =>
+                  if(data.lift(itemToUpdateIndex).get.companyOrIndividualModel.isDefined) {
+                    val companyModel = retrieveInvestorData(index, data)(_.companyOrIndividualModel)
+                    if (companyModel.isDefined) {
+                      val form = fillForm(isExistingShareHolderForm, retrieveInvestorData(index, data)(_.isExistingShareHolderModel))
+                      Ok(IsExistingShareHolder(companyModel.get.companyOrIndividual, form, backUrl.get))
+                    }
+                    else Redirect(routes.AddInvestorOrNomineeController.show())
+                  } else Redirect(routes.CompanyOrIndividualController.show(id))
                 }
               }
             }
@@ -72,7 +74,7 @@ trait IsExistingShareHolderController extends FrontendController with Authorised
     }
   }
 
-  def submit(companyOrIndividual: Option[String], backUrl: Option[String]): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
+  def submit(companyOrIndividual: Option[String]): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
     AuthorisedAndEnrolled.async { implicit user =>
       implicit request =>
         def routing(model: Option[IsExistingShareHolderModel], investorDetailsModel: InvestorDetailsModel): Result = {
@@ -92,7 +94,8 @@ trait IsExistingShareHolderController extends FrontendController with Authorised
 
         isExistingShareHolderForm.bindFromRequest().fold(
           formWithErrors => {
-            Future.successful(BadRequest(IsExistingShareHolder(companyOrIndividual.get, formWithErrors, backUrl.get)))
+            ControllerHelpers.getSavedBackLink(KeystoreKeys.backLinkIsExistingShareHolder, s4lConnector).flatMap(url =>
+              Future.successful(BadRequest(IsExistingShareHolder(companyOrIndividual.get, formWithErrors, url.get))))
           },
           validFormData => {
             validFormData.processingId match {

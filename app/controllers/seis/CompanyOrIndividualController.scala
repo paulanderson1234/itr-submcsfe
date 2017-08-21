@@ -53,9 +53,9 @@ trait CompanyOrIndividualController extends FrontendController with AuthorisedAn
             s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map { vector =>
               redirectNoInvestors(vector) { data =>
                 val itemToUpdateIndex = getInvestorIndex(id, data)
-                redirectInvalidInvestor(itemToUpdateIndex) { id =>
-                  val form = fillForm(companyOrIndividualForm, retrieveInvestorData(id, data)(_.companyOrIndividualModel))
-                  Ok(CompanyOrIndividual(useInvestorOrNomineeValueAsHeadingText(retrieveInvestorData(id, data)(_.investorOrNomineeModel).get),
+                redirectInvalidInvestor(itemToUpdateIndex) { index =>
+                  val form = fillForm(companyOrIndividualForm, retrieveInvestorData(index, data)(_.companyOrIndividualModel))
+                  Ok(CompanyOrIndividual(useInvestorOrNomineeValueAsHeadingText(retrieveInvestorData(index, data)(_.investorOrNomineeModel).get),
                     form, backUrl.get))
                 }
               }
@@ -72,12 +72,13 @@ trait CompanyOrIndividualController extends FrontendController with AuthorisedAn
   }
 
 
-  def submit(investorOrNominee: Option[String], backUrl: Option[String]): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
+  def submit(investorOrNominee: Option[String]): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
     AuthorisedAndEnrolled.async { implicit user =>
       implicit request =>
         companyOrIndividualForm.bindFromRequest().fold(
           formWithErrors => {
-            Future.successful(BadRequest(CompanyOrIndividual(investorOrNominee.get, formWithErrors, backUrl.get)))
+            ControllerHelpers.getSavedBackLink(KeystoreKeys.backLinkCompanyOrIndividual, s4lConnector).flatMap(url =>
+            Future.successful(BadRequest(CompanyOrIndividual(investorOrNominee.get, formWithErrors, url.get))))
           },
           validFormData => {
             validFormData.processingId match {

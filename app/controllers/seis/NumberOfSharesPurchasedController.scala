@@ -54,14 +54,15 @@ trait NumberOfSharesPurchasedController extends FrontendController with Authoris
           s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map { vector =>
             redirectNoInvestors(vector) { data =>
               val itemToUpdateIndex = getInvestorIndex(id, data)
-              redirectInvalidInvestor(itemToUpdateIndex) { id =>
-                val form = fillForm(numberOfSharesPurchasedForm, retrieveInvestorData(id, data)(_.numberOfSharesPurchasedModel))
-                if (shareIssueDate.isDefined)
-                  Ok(NumberOfSharesPurchased(retrieveInvestorData(id, data)(_.companyOrIndividualModel.map(_.companyOrIndividual)).get,
+              redirectInvalidInvestor(itemToUpdateIndex) { index =>
+                val form = fillForm(numberOfSharesPurchasedForm, retrieveInvestorData(index, data)(_.numberOfSharesPurchasedModel))
+                if (shareIssueDate.isDefined && data.lift(itemToUpdateIndex).get.companyOrIndividualModel.isDefined)
+                  Ok(NumberOfSharesPurchased(retrieveInvestorData(index, data)(_.companyOrIndividualModel.map(_.companyOrIndividual)).get,
                     dateToStringWithNoZeroDay(shareIssueDate.get.day.get, shareIssueDate.get.month.get, shareIssueDate.get.year.get),
                     form, backUrl.get))
-                else
+                else if(data.lift(itemToUpdateIndex).get.companyOrIndividualModel.isDefined)
                   Redirect(controllers.seis.routes.ShareIssueDateController.show())
+                else Redirect(controllers.seis.routes.CompanyOrIndividualController.show(id))
               }
             }
           }
@@ -78,18 +79,19 @@ trait NumberOfSharesPurchasedController extends FrontendController with Authoris
     }
   }
 
-  def submit(shareIssueDate: Option[String], backUrl: Option[String]): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
+  def submit(shareIssueDate: Option[String]): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
     AuthorisedAndEnrolled.async { implicit user =>
       implicit request =>
         numberOfSharesPurchasedForm.bindFromRequest().fold(
           formWithErrors => {
+            ControllerHelpers.getSavedBackLink(KeystoreKeys.backLinkNumberOfSharesPurchased, s4lConnector).flatMap(url =>
             s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
               case Some(data) => {
                 val investorDetailsModel = data.last
                 BadRequest(NumberOfSharesPurchased(investorDetailsModel.companyOrIndividualModel.get.companyOrIndividual,
-                  shareIssueDate.get, formWithErrors, backUrl.get))
+                  shareIssueDate.get, formWithErrors, url.get))
               }
-            }
+            })
           },
           validFormData => {
             validFormData.processingId match {

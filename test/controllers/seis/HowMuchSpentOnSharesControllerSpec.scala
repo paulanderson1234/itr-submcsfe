@@ -148,7 +148,7 @@ class HowMuchSpentOnSharesControllerSpec extends BaseSpec  {
         val formInput = "howMuchSpentOnShares" -> "10000000"
         setupMocks(Some(listOfInvestorsComplete), None)
         mockEnrolledRequest(seisSchemeTypesModel)
-        submitWithSessionAndAuth(controller.submit(backUrl),formInput)(
+        submitWithSessionAndAuth(controller.submit(),formInput)(
           result => {
             status(result) shouldBe SEE_OTHER
             redirectLocation(result) shouldBe
@@ -166,7 +166,7 @@ class HowMuchSpentOnSharesControllerSpec extends BaseSpec  {
         val formInput = Seq("howMuchSpentOnShares" -> "10000000", "processingId" -> "2")
         setupMocks(Some(listOfInvestorsComplete), None)
         mockEnrolledRequest(seisSchemeTypesModel)
-        submitWithSessionAndAuth(controller.submit(backUrl),formInput:_*)(
+        submitWithSessionAndAuth(controller.submit(),formInput:_*)(
           result => {
             status(result) shouldBe SEE_OTHER
             redirectLocation(result) shouldBe
@@ -179,10 +179,10 @@ class HowMuchSpentOnSharesControllerSpec extends BaseSpec  {
 
     "Sending an invalid form submission with validation errors to the HowMuchSpentOnSharesController when authenticated and enrolled" should {
       "redirect to itself" in {
-        setupMocks(Some(listOfInvestorsComplete), None)
+        setupMocks(Some(listOfInvestorsComplete), backUrl)
         mockEnrolledRequest(seisSchemeTypesModel)
         val formInput = "howMuchSpentOnShares" -> ""
-        submitWithSessionAndAuth(controller.submit(backUrl), formInput)(
+        submitWithSessionAndAuth(controller.submit(), formInput)(
           result => {
             status(result) shouldBe BAD_REQUEST
           }

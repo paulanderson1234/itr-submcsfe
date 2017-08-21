@@ -176,7 +176,7 @@ class PreviousShareHoldingDescriptionControllerSpec extends BaseSpec{
       val formInput = "previousShareHoldingDescription" -> "This is a description of a previous share holding"
       setupMocks(Some(listOfInvestorsComplete), None)
       mockEnrolledRequest(seisSchemeTypesModel)
-      submitWithSessionAndAuth(controller.submit(Some(Constants.typeCompany),backUrl, Some(2)),formInput)(
+      submitWithSessionAndAuth(controller.submit(Some(Constants.typeCompany), Some(2)),formInput)(
         result => {
           status(result) shouldBe SEE_OTHER
           redirectLocation(result) shouldBe
@@ -196,7 +196,7 @@ class PreviousShareHoldingDescriptionControllerSpec extends BaseSpec{
         "processingId" -> "1", "investorProcessingId" -> "2")
       setupMocks(Some(listOfInvestorsComplete), None)
       mockEnrolledRequest(seisSchemeTypesModel)
-      submitWithSessionAndAuth(controller.submit(Some(Constants.typeCompany), backUrl, Some(2)),formInput:_*)(
+      submitWithSessionAndAuth(controller.submit(Some(Constants.typeCompany), Some(2)),formInput:_*)(
         result => {
           status(result) shouldBe SEE_OTHER
           redirectLocation(result) shouldBe
@@ -210,10 +210,10 @@ class PreviousShareHoldingDescriptionControllerSpec extends BaseSpec{
 
   "Sending an invalid form submission with validation errors to the PreviousShareHoldingDescriptionController when authenticated and enrolled" should {
     "redirect to itself" in {
-      setupMocks(Some(listOfInvestorsComplete), None)
+      setupMocks(Some(listOfInvestorsComplete), backUrl)
       mockEnrolledRequest(seisSchemeTypesModel)
       val formInput = "previousShareHoldingDescription" -> ""
-      submitWithSessionAndAuth(controller.submit(Some(Constants.typeCompany),backUrl, Some(2)), formInput)(
+      submitWithSessionAndAuth(controller.submit(Some(Constants.typeCompany), Some(2)), formInput)(
         result => {
           status(result) shouldBe BAD_REQUEST
         }

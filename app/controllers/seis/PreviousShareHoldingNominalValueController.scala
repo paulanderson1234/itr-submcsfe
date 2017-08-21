@@ -20,7 +20,7 @@ import auth.{AuthorisedAndEnrolledForTAVC, SEIS}
 import common.KeystoreKeys
 import config.{AppConfig, FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
-import controllers.Helpers.PreviousInvestorShareHoldersHelper
+import controllers.Helpers.{ControllerHelpers, PreviousInvestorShareHoldersHelper}
 import controllers.predicates.FeatureSwitch
 import forms.PreviousShareHoldingNominalValueForm._
 import models.investorDetails.{InvestorDetailsModel, PreviousShareHoldingNominalValueModel}
@@ -56,7 +56,7 @@ trait PreviousShareHoldingNominalValueController extends FrontendController with
                   val itemToUpdateIndex = data.indexWhere(_.processingId.getOrElse(0) == investorProcessingId)
                   if (itemToUpdateIndex != -1) {
                     val model = data.lift(itemToUpdateIndex)
-                    if (model.get.previousShareHoldingModels.isDefined && model.get.previousShareHoldingModels.get.size > 0) {
+                    if (model.get.previousShareHoldingModels.isDefined && model.get.previousShareHoldingModels.get.nonEmpty) {
                       val shareHoldingsIndex = model.get.previousShareHoldingModels.get.indexWhere(_.processingId.getOrElse(0) == id)
                       if (shareHoldingsIndex != -1) {
                         val shareHolderModel = model.get.previousShareHoldingModels.get.lift(shareHoldingsIndex)
@@ -87,7 +87,7 @@ trait PreviousShareHoldingNominalValueController extends FrontendController with
     }
   }
 
-  def submit(backUrl: Option[String], investorProcessingId: Option[Int]): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
+  def submit(investorProcessingId: Option[Int]): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
     AuthorisedAndEnrolled.async {
       implicit user =>
         implicit request =>
@@ -111,7 +111,8 @@ trait PreviousShareHoldingNominalValueController extends FrontendController with
           }
 
           val failure: Form[PreviousShareHoldingNominalValueModel] => Future[Result] = { form =>
-            Future.successful(BadRequest(PreviousShareHoldingNominalValue(form, backUrl.get, investorProcessingId.get)))
+            ControllerHelpers.getSavedBackLink(KeystoreKeys.backLinkIsPreviousShareHoldingNominalValue, s4lConnector).flatMap(url =>
+              Future.successful(BadRequest(PreviousShareHoldingNominalValue(form, url.get, investorProcessingId.get))))
           }
 
           previousShareHoldingNominalValueForm.bindFromRequest().fold(failure, success)

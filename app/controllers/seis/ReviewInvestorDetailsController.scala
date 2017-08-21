@@ -17,7 +17,7 @@
 package controllers.seis
 
 import auth.{AuthorisedAndEnrolledForTAVC, SEIS}
-import common.KeystoreKeys
+import common.{Constants, KeystoreKeys}
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.Helpers.ControllerHelpers
@@ -27,6 +27,8 @@ import play.api.Play.current
 import play.api.i18n.Messages.Implicits._
 import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
+
+import scala.concurrent.Future
 
 object ReviewInvestorDetailsController extends ReviewInvestorDetailsController {
   override lazy val s4lConnector = S4LConnector
@@ -49,6 +51,49 @@ trait ReviewInvestorDetailsController extends FrontendController with Authorised
           }
         }
       }
+    }
+  }
+
+  def change(actionType: String, id: Int): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
+    AuthorisedAndEnrolled.async { implicit user =>
+      implicit request =>
+        actionType match {
+          case Constants.HowMuchSpentOnSharesController => {
+            s4lConnector.saveFormData(KeystoreKeys.backLinkHowMuchSpentOnShares,
+              routes.ReviewInvestorDetailsController.show(id).url)
+            Future.successful(Redirect(routes.HowMuchSpentOnSharesController.show(id)))
+          }
+          case Constants.AddInvestorOrNomineeController => {
+            s4lConnector.saveFormData(KeystoreKeys.backLinkAddInvestorOrNominee,
+              routes.ReviewInvestorDetailsController.show(id).url)
+            Future.successful(Redirect(routes.AddInvestorOrNomineeController.show(Some(id))))
+          }
+          case Constants.CompanyOrIndividualController => {
+            s4lConnector.saveFormData(KeystoreKeys.backLinkCompanyOrIndividual,
+              routes.ReviewInvestorDetailsController.show(id).url)
+            Future.successful(Redirect(routes.CompanyOrIndividualController.show(id)))
+          }
+          case Constants.CompanyDetailsController => {
+            s4lConnector.saveFormData(KeystoreKeys.backLinkCompanyAndIndividualBoth,
+              routes.ReviewInvestorDetailsController.show(id).url)
+            Future.successful(Redirect(routes.CompanyDetailsController.show(id)))
+          }
+          case Constants.IndividualDetailsController => {
+            s4lConnector.saveFormData(KeystoreKeys.backLinkCompanyAndIndividualBoth,
+              routes.ReviewInvestorDetailsController.show(id).url)
+            Future.successful(Redirect(routes.IndividualDetailsController.show(id)))
+          }
+          case Constants.NumberOfSharesPurchasedController => {
+            s4lConnector.saveFormData(KeystoreKeys.backLinkNumberOfSharesPurchased,
+              routes.ReviewInvestorDetailsController.show(id).url)
+            Future.successful(Redirect(routes.NumberOfSharesPurchasedController.show(id)))
+          }
+          case Constants.IsExistingShareHolderController => {
+            s4lConnector.saveFormData(KeystoreKeys.backLinkIsExistingShareHolder,
+              routes.ReviewInvestorDetailsController.show(id).url)
+            Future.successful(Redirect(routes.IsExistingShareHolderController.show(id)))
+          }
+        }
     }
   }
 }
