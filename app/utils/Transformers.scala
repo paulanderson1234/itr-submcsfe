@@ -76,8 +76,8 @@ object Transformers {
 
   def poundToPence(pounds: Either[String, Int]): String = {
     pounds match {
-      case Left(pounds) => pounds ++ "00"
-      case Right(pounds) => (pounds * 100).toString
+      case Left(poundsMatch) => poundsMatch ++ "00"
+      case Right(poundsMatch) => (poundsMatch * 100).toString
     }
   }
 }

@@ -10,7 +10,7 @@
 
 @(testInvestorModeOptionsForm:Form[TestInvestorModeOptionsModel], numberOfSharesForm:Form[NumberOfSharesModel], nominalValueOfSharesForm: Form[NominalValueOfSharesModel],
  shareDescriptionForm: Form[ShareDescriptionModel],totalAmountRaisedForm:Form[TotalAmountRaisedModel], totalAmountSpentForm:Form[TotalAmountSpentModel],
-wasAnyValueReceivedForm: Form[WasAnyValueReceivedModel])(implicit request: Request[_], messages: Messages)
+wasAnyValueReceivedForm: Form[WasAnyValueReceivedModel],shareCapitalChangesForm: Form[ShareCapitalChangesModel])(implicit request: Request[_], messages: Messages)
 
 @main_template(Messages("page.test.page-two.title")) {
 
@@ -111,6 +111,25 @@ wasAnyValueReceivedForm: Form[WasAnyValueReceivedModel])(implicit request: Reque
             Some("visuallyhidden")
         )
      </div>
+
+    <h2>Share Capital Changes?</h2>
+    <div class="form-group">
+        @formHiddenYesNoRadioNoError(
+        shareCapitalChangesForm,
+        "hasChanges",
+        Messages("page.investors.wasAnyValueReceived.title"),
+        textArea(
+        shareCapitalChangesForm("changesDescription"),
+        '_cols -> "45",
+        '_rows -> "5",
+        '_maxLength-> Constants.shortTextLimit,
+        '_label-> Messages("page.investors.wasAnyValueReceived.title"),
+        '_labelTextClass-> "visuallyhidden"
+        ),
+        None,
+        Some("visuallyhidden")
+        )
+    </div>
 
     <div class="form-group">
         <button class="btn button" type="submit" id="next">

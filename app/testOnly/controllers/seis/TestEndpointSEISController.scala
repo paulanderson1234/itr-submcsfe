@@ -158,6 +158,7 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
         totalAmountRaisedForm <- fillForm[TotalAmountRaisedModel](KeystoreKeys.totalAmountRaised, TotalAmountRaisedForm.totalAmountRaisedForm)
         totalAmountSpentForm <- fillForm[TotalAmountSpentModel](KeystoreKeys.totalAmountSpent, TotalAmountSpentForm.totalAmountSpentForm)
         wasAnyValueReceivedForm <- fillForm[WasAnyValueReceivedModel](KeystoreKeys.wasAnyValueReceived, WasAnyValueReceivedForm.wasAnyValueReceivedForm)
+        shareCapitalChangesForm <- fillForm[ShareCapitalChangesModel](KeystoreKeys.shareCapitalChanges, ShareCapitalChangesForm.shareCapitalChangesForm)
       } yield Ok(
         testOnly.views.html.seis.testEndpointSEISPageTwo(
           testInvestorModeOptionsForm,
@@ -166,7 +167,8 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
           shareDescription,
           totalAmountRaisedForm,
           totalAmountSpentForm,
-          wasAnyValueReceivedForm
+          wasAnyValueReceivedForm,
+          shareCapitalChangesForm
         )
       )
 
@@ -180,6 +182,7 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
     val totalAmountRaised = bindForm[TotalAmountRaisedModel](KeystoreKeys.totalAmountRaised, TotalAmountRaisedForm.totalAmountRaisedForm)
     val totalAmountSpent = bindForm[TotalAmountSpentModel](KeystoreKeys.totalAmountSpent, TotalAmountSpentForm.totalAmountSpentForm)
     val wasAnyValueReceived = bindForm[WasAnyValueReceivedModel](KeystoreKeys.wasAnyValueReceived, WasAnyValueReceivedForm.wasAnyValueReceivedForm)
+    val shareCapitalChanges = bindForm[ShareCapitalChangesModel](KeystoreKeys.shareCapitalChanges, ShareCapitalChangesForm.shareCapitalChangesForm)
 
     saveInvestorDetails(populateIvestorTestData(investorModelOptions.value.fold("1")(_.testInvestorModeOptions)))
     saveBackLinks()
@@ -192,7 +195,8 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
         shareDescription,
         totalAmountRaised,
         totalAmountSpent,
-        wasAnyValueReceived
+        wasAnyValueReceived,
+        shareCapitalChanges
       )
     ))
   }

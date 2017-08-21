@@ -59,7 +59,7 @@ trait WasAnyValueReceivedController extends FrontendController with AuthorisedAn
       val successResponse: WasAnyValueReceivedModel => Future[Result] = model =>
         s4lConnector.saveFormData(KeystoreKeys.wasAnyValueReceived,
           if(model.wasAnyValueReceived == Constants.StandardRadioButtonYesValue) model else model.copy(aboutValueReceived = None)).map { _ =>
-          Redirect(controllers.seis.routes.WasAnyValueReceivedController.show())
+          Redirect(controllers.seis.routes.ShareCapitalChangesController.show())
         }
       wasAnyValueReceivedForm.bindFromRequest().fold(errorResponse, successResponse)
     }

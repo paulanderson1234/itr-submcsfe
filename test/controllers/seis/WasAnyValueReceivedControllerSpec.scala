@@ -108,7 +108,7 @@ class WasAnyValueReceivedControllerSpec extends BaseSpec with FakeRequestHelper 
         }
 
         "redirect to the share/loan capital pages" in {
-          redirectLocation(result) shouldBe Some(controllers.seis.routes.WasAnyValueReceivedController.show().url)
+          redirectLocation(result) shouldBe Some(controllers.seis.routes.ShareCapitalChangesController.show().url)
         }
       }
     }

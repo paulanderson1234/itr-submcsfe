@@ -67,8 +67,7 @@ trait AddAnotherInvestorController extends FrontendController with AuthorisedAnd
               Future.successful(Redirect(routes.AddInvestorOrNomineeController.show()))
             }
             case Constants.StandardRadioButtonNoValue => {
-              //TODO SHOULD GO TO THE ANY SHARES REPAYMENT PAGE
-              Future.successful(Redirect(routes.ReviewAllInvestorsController.show()))
+              Future.successful(Redirect(routes.WasAnyValueReceivedController.show()))
             }
           }
         }

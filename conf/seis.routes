@@ -181,6 +181,7 @@ GET        /review-all-investors-remove/:id      controllers.seis.ReviewAllInves
 GET        /was-any-value-received               controllers.seis.WasAnyValueReceivedController.show
 POST       /was-any-value-received               controllers.seis.WasAnyValueReceivedController.submit
 
+GET       /share-capital-changes                        controllers.seis.ShareCapitalChangesController.show
+POST      /share-capital-changes                        controllers.seis.ShareCapitalChangesController.submit
 
 GET        /declaration                          controllers.seis.DeclarationController.show
-
