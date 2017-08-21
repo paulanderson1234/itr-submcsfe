@@ -1214,3 +1214,19 @@ page.investors.DeletePreviousShareHolder.message.one = This will permanently rem
 page.investors.DeletePreviousShareHolder.message.two = (date of purchase {0})
 page.investors.DeletePreviousShareHolder.message.three = from your list of previous shareholdings.
 
+#Was Any Value Received
+page.investors.wasAnyValueReceived.title = Did the investor get value back from your company or a connected company?
+page.investors.wasAnyValueReceived.guidance.definition = This is called ''value received''.
+page.investors.wasAnyValueReceived.guidance.title = Examples of value received include:
+page.investors.wasAnyValueReceived.guidance.list.one = waiving a debt
+page.investors.wasAnyValueReceived.guidance.list.two = getting assets for free or less than their market value
+page.investors.wasAnyValueReceived.guidance.list.three = making a payment to the investor
+page.investors.wasAnyValueReceived.guidance.list.four = having shares or securities repaid or repurchased
+page.investors.wasAnyValueReceived.guidance.hint = You must tell us about any value received since your company’s date of incorporation.
+page.investors.wasAnyValueReceived.subHeading = Tell us about the value received
+page.investors.wasAnyValueReceived.additionalGuidance.title = You should include:
+page.investors.wasAnyValueReceived.additionalGuidance.list.one = which investor got it
+page.investors.wasAnyValueReceived.additionalGuidance.list.two = what it was
+page.investors.wasAnyValueReceived.additionalGuidance.list.three = when the investor received it
+page.investors.wasAnyValueReceived.additionalGuidance.list.four = how much it was worth
+page.investors.wasAnyValueReceived.additionalGuidance.list.five = whether you got anything in return

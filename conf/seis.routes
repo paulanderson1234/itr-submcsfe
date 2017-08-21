@@ -178,5 +178,9 @@ GET        /review-all-investors-change/:id      controllers.seis.ReviewAllInves
 
 GET        /review-all-investors-remove/:id      controllers.seis.ReviewAllInvestorsController.remove(id: Int)
 
+GET        /was-any-value-received               controllers.seis.WasAnyValueReceivedController.show
+POST       /was-any-value-received               controllers.seis.WasAnyValueReceivedController.submit
+
+
 
 
