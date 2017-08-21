@@ -1,7 +1,7 @@
 @import common.Constants
 @import models.ShareCapitalChangesModel
 @import uk.gov.hmrc.play.views.html.helpers.form
-@import views.html.helpers.{externalLink, backButtonWithProgress, errorSummary,formHiddenYesNoRadioNoError, textArea}
+@import views.html.helpers.{externalLink, backButtonWithProgress, errorSummary,formHiddenYesNoRadioNoError,formHiddenYesNoRadio, textArea}
 
 
 @(shareCapitalChangesForm: Form[ShareCapitalChangesModel], shareIssueDate: String)(implicit request: Request[_], messages: Messages)
@@ -25,7 +25,7 @@
 
     @form(action = controllers.seis.routes.ShareCapitalChangesController.submit()) {
 
-    @formHiddenYesNoRadioNoError(
+    @formHiddenYesNoRadio(
     shareCapitalChangesForm,
     "hasChanges",
     Messages("page.shareCapitalChanges.heading", shareIssueDate),
