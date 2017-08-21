@@ -1,7 +1,7 @@
 @import models.WasAnyValueReceivedModel
 @import views.html.helpers.backButtonWithProgress
 @import views.html.helpers.errorSummary
-@import views.html.helpers.formHiddenYesNoRadioNoError
+@import views.html.helpers.formHiddenYesNoRadio
 @import views.html.helpers.textArea
 @import common.Constants
 @import uk.gov.hmrc.play.views.html.helpers.form
@@ -24,7 +24,7 @@
     <div class="form-group">
         <span class = "form-hint" id="desc-one">@Messages("page.investors.previousShareHoldingDescription.question.hint")</span>
         @textArea(
-        wasAnyValueReceivedForm("anyValueDescription"),
+        wasAnyValueReceivedForm("aboutValueReceived"),
             '_cols -> "45",
             '_rows -> "5",
             '_maxLength-> Constants.shortTextLimit,
@@ -38,7 +38,7 @@
 
     @backButtonWithProgress(controllers.seis.routes.ReviewAllInvestorsController.show().url, Messages("common.section.progress.company.details.four"))
 
-    @errorSummary(wasAnyValueReceivedForm, "was-any-value-received", "wasAnyValueReceived")
+    @errorSummary(wasAnyValueReceivedForm, "was-any-value-received", "aboutValueReceived")
 
     <h1 class="heading-xlarge">@Messages("page.investors.wasAnyValueReceived.title")</h1>
 
@@ -55,7 +55,7 @@
     </div>
 
     @form(action = controllers.seis.routes.WasAnyValueReceivedController.submit()) {
-        @formHiddenYesNoRadioNoError(
+        @formHiddenYesNoRadio(
             wasAnyValueReceivedForm,
             "wasAnyValueReceived",
             Messages("page.investors.wasAnyValueReceived.title"),
@@ -63,9 +63,9 @@
             None,
             Some("visuallyhidden")
         )
-    }
 
-    <div class="form-group">
-        <button class="btn button" type="submit" id="next">@Messages("common.button.snc")</button>
-    </div>
+        <div class="form-group">
+            <button class="btn button" type="submit" id="next">@Messages("common.button.snc")</button>
+        </div>
+    }
 }

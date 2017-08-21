@@ -64,6 +64,5 @@ trait WasAnyValueReceivedController extends FrontendController with AuthorisedAn
       wasAnyValueReceivedForm.bindFromRequest().fold(errorResponse, successResponse)
     }
   }
-
 }
 

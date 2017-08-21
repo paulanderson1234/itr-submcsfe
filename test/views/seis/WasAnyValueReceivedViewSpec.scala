@@ -161,7 +161,7 @@ class WasAnyValueReceivedViewSpec extends ViewSpec with FakeRequestHelper {
         }
 
         "has an input box for text" in {
-          doc.select("form textarea").attr("name") shouldBe "anyValueDescription"
+          doc.select("form textarea").attr("name") shouldBe "aboutValueReceived"
         }
       }
 
