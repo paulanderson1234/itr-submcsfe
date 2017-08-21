@@ -1,0 +1,34 @@
+@import common.Constants
+@import views.html.helpers.backButton
+@import uk.gov.hmrc.play.views.html.helpers.form
+
+@()(implicit request: Request[_], messages: Messages)
+
+@main_template(title = Messages("page.declaration.title"), bodyClasses = None) {
+
+    @backButton(controllers.seis.routes.CheckAnswersController.show().toString)
+
+    <h1 class="heading-xlarge" id="main-heading">@Messages("page.declaration.heading")</h1>
+
+    <div class="form-group">
+        <p class="lede" id="description">@Messages("page.declaration.description")</p>
+    </div>
+
+    <div id="warning" class="form-group">
+        <h2 id="warningMessage" class="important-notice">
+            @Messages("page.declaration.warning")
+        </h2>
+    </div>
+
+
+    @form(action = controllers.seis.routes.AcknowledgementController.show()) {
+        <div class="form-group">
+            <button class="btn button" type="submit" id="next">@Messages("page.declaration.submit")</button>
+        </div>
+    }
+
+    <div class="form-group">
+        <a id="do-not-agree" href="@controllers.routes.ApplicationHubController.show()">@Messages("page.declaration.doNotAgree")</a>
+    </div>
+
+}

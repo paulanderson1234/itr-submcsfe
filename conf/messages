@@ -1214,3 +1214,10 @@ page.investors.DeletePreviousShareHolder.message.one = This will permanently rem
 page.investors.DeletePreviousShareHolder.message.two = (date of purchase {0})
 page.investors.DeletePreviousShareHolder.message.three = from your list of previous shareholdings.
 
+#Declaration
+page.declaration.title=Declaration
+page.declaration.heading=Declaration
+page.declaration.description=By submitting this Compliance Statement, you agree that the information you''ve given is true and complete to the best of your knowledge and belief.
+page.declaration.warning=If you submit untrue or misleading information you could be fined up to £3,000
+page.declaration.submit=I agree and submit
+page.declaration.doNotAgree=I don''t agree
