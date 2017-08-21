@@ -182,5 +182,5 @@ GET        /was-any-value-received               controllers.seis.WasAnyValueRec
 POST       /was-any-value-received               controllers.seis.WasAnyValueReceivedController.submit
 
 
-
+GET        /declaration                          controllers.seis.DeclarationController.show
 
