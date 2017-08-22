@@ -17,19 +17,26 @@
 package models.seis
 
 import models._
+import models.investorDetails.InvestorDetailsModel
 
 case class SEISCheckAnswersModel(
-                              registeredAddressModel: Option[RegisteredAddressModel],
-                              dateOfIncorporationModel: Option[DateOfIncorporationModel],
-                              tradeStartDateModel: Option[TradeStartDateModel],
-                              natureOfBusinessModel: Option[NatureOfBusinessModel],
-                              subsidiariesModel: Option[SubsidiariesModel],
-                              hadPreviousRFIModel: Option[HadPreviousRFIModel],
-                              previousSchemes: Vector[PreviousSchemeModel],
-                              proposedInvestmentModel: Option[ProposedInvestmentModel],
-                              subsidiariesSpendingInvestmentModel: Option[SubsidiariesSpendingInvestmentModel],
-                              subsidiariesNinetyOwnedModel: Option[SubsidiariesNinetyOwnedModel],
-                              contactDetailsModel: Option[ContactDetailsModel],
-                              contactAddressModel: Option[AddressModel],
-                              attachmentsEnabled: Boolean
+                                  registeredAddressModel: Option[RegisteredAddressModel],
+                                  dateOfIncorporationModel: Option[DateOfIncorporationModel],
+                                  tradeStartDateModel: Option[TradeStartDateModel],
+                                  natureOfBusinessModel: Option[NatureOfBusinessModel],
+                                  previousSchemes: Vector[PreviousSchemeModel],
+                                  contactDetailsModel: Option[ContactDetailsModel],
+                                  contactAddressModel: Option[AddressModel],
+                                  qualifyBusinessActivity: Option[QualifyBusinessActivityModel],
+                                  isBusinessActivityStarted: Option[HasInvestmentTradeStartedModel],
+                                  isSeventyPercentSpent: Option[SeventyPercentSpentModel],
+                                  shareIssueDate: Option[ShareIssueDateModel],
+                                  grossAssets: Option[GrossAssetsModel],
+                                  fullTimeEmployees: Option[FullTimeEmployeeCountModel],
+                                  shareDescription: Option[ShareDescriptionModel],
+                                  numberOfShares: Option[NumberOfSharesModel],
+                                  totalAmountRaised: Option[TotalAmountRaisedModel],
+                                  totalAmountSpent: Option[TotalAmountSpentModel],
+                                  investorDetails: Option[Vector[InvestorDetailsModel]],
+                                  attachmentsEnabled: Boolean
                             )

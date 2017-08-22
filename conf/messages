@@ -525,11 +525,11 @@ page.contactInformation.ConfirmCorrespondAddress.title=Is this the correspondenc
 
 #check your answers page
 page.checkAndSubmit.checkAnswers.heading=Check your answers
-page.checkAndSubmit.checkAnswers.description.one=You''re applying for Advance Assurance for:
+page.checkAndSubmit.checkAnswers.description.one=You’re submitting a Compliance Statement for
 page.checkAndSubmit.checkAnswers.scheme.eis=the Enterprise Investment Scheme
 page.checkAndSubmit.checkAnswers.scheme.seis=the Seed Enterprise Investment Scheme
 page.checkAndSubmit.checkAnswers.scheme.vct=the Venture Capital Trust scheme
-page.checkAndSubmit.checkAnswers.description.two=Check your answers are correct before submitting.
+page.checkAndSubmit.checkAnswers.description.two=Check your answers before you continue.
 page.checkAndSubmit.checkAnswers.print.text=Print this page
 page.checkAndSubmit.checkAnswers.button.confirm=Submit
 page.checkAndSubmit.checkAnswers.suportingDocs.desc=To complete your Compliance Statement, we''ll need your company''s:
@@ -542,7 +542,7 @@ page.checkAndSubmit.checkDocuments.outsideFlow.table.heading=Your supporting doc
 page.checkAndSubmit.checkDocuments.button.confirm=Submit
 
 #summaryQuestions
-summaryQuestion.companyDetailsSection =Section 1: Business details
+summaryQuestion.companyDetailsSection =Section 1: Company details
 summaryQuestion.companyName =Company name
 summaryQuestion.utr =Company Unique Taxpayer Reference
 summaryQuestion.registeredAddress =Registered address
@@ -559,6 +559,13 @@ summaryQuestion.percentageStaffWithMasters =Percentage of staff with master's de
 summaryQuestion.developmentPlan =Plan to develop something that you''ll own the rights to
 summaryQuestion.developmentPlanDesc =How your company will do that
 summaryQuestion.subsidiaries =Own or control any other companies
+summaryQuestion.bussinessPurpose = What will the money raised be used for
+summaryQuestion.bussinessStatus = Business activity started
+summaryQuestion.bussinessActivityStarted = Date business activity started
+summaryQuestion.IsSeventyPercentSpent = Spent at least 70% of the money raised
+summaryQuestion.shareIssueDate = Date of share issue
+summaryQuestion.businessGrossAssets = Gross assets immediately before share issue
+summaryQuestion.fullTimeEmployees = Full-time employees at share issue date
 
 page.investment.PreviousScheme.investmentAmount.OutOfRange=Enter an amount between 1 and 999999999
 page.investment.PreviousScheme.otherScheme.OutOfRange=Other scheme name should be no more than 50 characters
@@ -576,20 +583,26 @@ page.summaryQuestion.none.question=Previous schemes
 page.summaryQuestion.none.answer=None
 
 #summary questions section three
-page.summaryQuestion.companyDetailsSectionThree=Section 3: This investment
-page.summaryQuestion.proposedInvestment=Amount to be raised
-page.summaryQuestion.usedRAndD=Used for research and development
-page.summaryQuestion.whatWillUseFor=What you''ll use it for
-page.summaryQuestion.usedInvestReasonBefore=Same reason as a previous investment
-page.summaryQuestion.previousBeforeDOFCS=Got the investment within 7 or 10 years of your first commercial sale
-page.summaryQuestion.newGeoMarket=Launching somewhere new
-page.summaryQuestion.newProduct=Entering a new product market
-page.summaryQuestion.subsSpendingInvest=Company owned or controlled by [company name] to spend this investment
-page.summaryQuestion.subNinetyOwned=[Company name] owns more than 90% of that company
-page.summaryQuestion.investmentGrow=How the investment will help your company grow
+page.summaryQuestion.shares=Section 3: Shares
+page.summaryQuestion.shareClass=Class of shares issued
+page.summaryQuestion.sharesIssues=Number of shares issued
+page.summaryQuestion.amountRaised=Total amount raised
+page.summaryQuestion.amountSpent=Total amount spent
 
 #summary questions section four
-page.summaryQuestion.companyDetailsSectionFour=Section 4: Contact details for this application
+page.summaryQuestion.investorsSectionThree=Section 4: Investors and nominees
+page.summaryQuestion.noOfInvestors=Number of investors and nominees
+page.summaryQuestion.investorShares=Shares or debentures repaid or repurchased
+page.summaryQuestion.sharesRepaymentType=Type of repayment or repurchase:
+page.summaryQuestion.sharesRepaymentDate=Date of repayment or repurchase:
+page.summaryQuestion.sharesRepaymentAmount=Amount repaid or repurchased:
+page.summaryQuestion.isSharesValueReceived=Was any value received
+page.summaryQuestion.sharesValueReceived=What value was received
+page.summaryQuestion.isSharesValueChanged=Any changes in share capital
+page.summaryQuestion.sharesValueChanges=What were the changes
+
+#summary questions section five
+page.summaryQuestion.companyDetailsSectionFive=Section 5: Contact details for this application
 page.summaryQuestion.contactDetails=Contact details
 page.summaryQuestion.contactAddress=Contact address
 
