@@ -18,61 +18,51 @@ package controllers.seis
 
 import auth.{AuthorisedAndEnrolledForTAVC, SEIS}
 import common.{Constants, KeystoreKeys}
-import config.FrontendGlobal.internalServerErrorTemplate
 import config.{FrontendAppConfig, FrontendAuthConnector}
-import connectors.{EnrolmentConnector, S4LConnector, SubmissionConnector}
+import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.predicates.FeatureSwitch
-import forms.AddAnotherInvestorForm
-import forms.AddAnotherInvestorForm._
-import models.AddAnotherInvestorModel
-import play.Logger
+import forms.WasAnyValueReceivedForm._
+import models.WasAnyValueReceivedModel
 import play.api.Play.current
+import play.api.data.Form
 import play.api.i18n.Messages.Implicits._
+import play.api.mvc.Result
 import uk.gov.hmrc.play.frontend.controller.FrontendController
-import views.html.seis.investors.AddAnotherInvestor
 
 import scala.concurrent.Future
 
-object AddAnotherInvestorController extends AddAnotherInvestorController{
+object WasAnyValueReceivedController extends WasAnyValueReceivedController {
   override lazy val s4lConnector = S4LConnector
   override lazy val applicationConfig = FrontendAppConfig
   override lazy val authConnector = FrontendAuthConnector
   override lazy val enrolmentConnector = EnrolmentConnector
-  override lazy val submissionConnector = SubmissionConnector
-
 }
 
-trait AddAnotherInvestorController extends FrontendController with AuthorisedAndEnrolledForTAVC with FeatureSwitch {
+trait WasAnyValueReceivedController extends FrontendController with AuthorisedAndEnrolledForTAVC with FeatureSwitch {
 
   override val acceptedFlows = Seq(Seq(SEIS))
 
-  val submissionConnector: SubmissionConnector
-
   val show = featureSwitch(applicationConfig.seisFlowEnabled) {
     AuthorisedAndEnrolled.async { implicit user => implicit request =>
-      Future.successful(Ok(AddAnotherInvestor(addAnotherInvestorForm)))
+      s4lConnector.fetchAndGetFormData[WasAnyValueReceivedModel](KeystoreKeys.wasAnyValueReceived).map {
+        case Some(data) => Ok(views.html.seis.investors.WasAnyValueReceived(wasAnyValueReceivedForm.fill(data)))
+        case None => Ok(views.html.seis.investors.WasAnyValueReceived(wasAnyValueReceivedForm))
       }
-    }
-
-    val submit = featureSwitch(applicationConfig.seisFlowEnabled) {
-    AuthorisedAndEnrolled.async { implicit user => implicit request =>
-      addAnotherInvestorForm.bindFromRequest().fold(
-        formWithErrors => {
-          Future.successful(BadRequest(AddAnotherInvestor(formWithErrors)))
-        },
-        validFormData => {
-          validFormData.addAnotherInvestor match {
-
-            case Constants.StandardRadioButtonYesValue => {
-              Future.successful(Redirect(routes.AddInvestorOrNomineeController.show()))
-            }
-            case Constants.StandardRadioButtonNoValue => {
-              Future.successful(Redirect(routes.WasAnyValueReceivedController.show()))
-            }
-          }
-        }
-      )
     }
   }
 
+  val submit = featureSwitch(applicationConfig.seisFlowEnabled) {
+    AuthorisedAndEnrolled.async { implicit user => implicit request =>
+      val errorResponse: Form[WasAnyValueReceivedModel] => Future[Result] = form =>
+        Future(BadRequest(views.html.seis.investors.WasAnyValueReceived(form)))
+
+      val successResponse: WasAnyValueReceivedModel => Future[Result] = model =>
+        s4lConnector.saveFormData(KeystoreKeys.wasAnyValueReceived,
+          if(model.wasAnyValueReceived == Constants.StandardRadioButtonYesValue) model else model.copy(aboutValueReceived = None)).map { _ =>
+          Redirect(controllers.seis.routes.ShareCapitalChangesController.show())
+        }
+      wasAnyValueReceivedForm.bindFromRequest().fold(errorResponse, successResponse)
+    }
+  }
 }
+

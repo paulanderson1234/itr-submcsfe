@@ -879,28 +879,29 @@ page.individualDetails.country.label= Country
 page.seis.checkAndSubmit.checkAnswers.description.one=You''re applying for Advance Assurance for the Seed Enterprise Investment Scheme.
 
 # SEIS acknowledgement
-page.seis.checkAndSubmit.acknowledgement.title=You''ve submitted your answers
-page.seis.checkAndSubmit.acknowledgement.submissionConfirmation=Your application details have been submitted
-page.seis.checkAndSubmit.acknowledgement.refNumberHeading=Make a note of your reference number:
-page.seis.checkAndSubmit.acknowledgement.application.not.complete=Your application is not yet complete
-page.seis.checkAndSubmit.acknowledgement.supporting.docs.heading=Supporting documentation
-page.seis.checkAndSubmit.acknowledgement.review=To review your application, we need to see your company''s:
+page.seis.checkAndSubmit.acknowledgement.title=Your Compliance Statement has been received
+page.seis.checkAndSubmit.acknowledgement.submissionConfirmation=Your Compliance Statement has been received
+page.seis.checkAndSubmit.acknowledgement.refNumberHeading=Your reference number is:
+page.seis.checkAndSubmit.acknowledgement.refNumber.note=Make a note of your reference number. If you need to contact us, we can use it to help identify your submission.
+page.seis.checkAndSubmit.acknowledgement.whatNext.heading = What happens next
+page.seis.checkAndSubmit.acknowledgement.whatNext.list.heading = You need to send us your supporting documents if:
+page.seis.checkAndSubmit.acknowledgement.whatNext.list.one = you haven't sent them to us before
+page.seis.checkAndSubmit.acknowledgement.whatNext.list.two = they''ve changed or been updated since you first sent them
+page.seis.checkAndSubmit.acknowledgement.whatNext.outcome = Once we''ve received your supporting documents, we''ll review your Compliance Statement and let you know the outcome within 4 weeks.
+page.seis.checkAndSubmit.acknowledgement.whatNext.issue = If your company and shares meet the conditions of the Seed Enterprise Investment Scheme, we''ll authorise you to issue certificates to your investors. We''ll send you the certificates and information on how to issue them.
+page.seis.checkAndSubmit.acknowledgement.whatNext.certificate.warning = Your investors must have their certificates before they claim any tax relief
+page.seis.checkAndSubmit.acknowledgement.whatNext.conditions = If your company and shares do not meet the conditions, we''ll explain why and may ask you for more information. You''ll also be able to appeal against this decision.
+page.seis.checkAndSubmit.acknowledgement.supporting.docs.heading=Sending your supporting documents
+page.seis.checkAndSubmit.acknowledgement.review=We need your company''s:
 page.seis.checkAndSubmit.acknowledgement.doc.one=business plan
-page.seis.checkAndSubmit.acknowledgement.doc.two=shareholder agreements or drafts
+page.seis.checkAndSubmit.acknowledgement.doc.two=shareholder agreements
 page.seis.checkAndSubmit.acknowledgement.doc.three=memorandum and articles of association
-page.seis.checkAndSubmit.acknowledgement.doc.four=prospectuses and other documents for attracting investment
+page.seis.checkAndSubmit.acknowledgement.doc.four=prospectuses and other documents you used to attract the investment
 page.seis.checkAndSubmit.acknowledgement.doc.five=last annual accounts or cash flow forecast if you haven''t submitted accounts yet
-page.seis.checkAndSubmit.acknowledgement.email.docs.heading=Send by email
-page.seis.checkAndSubmit.acknowledgement.emailTo=You can email your documents to
-page.seis.checkAndSubmit.acknowledgement.email.include=The subject line must include:
-page.seis.checkAndSubmit.acknowledgement.email.one=your company name
-page.seis.checkAndSubmit.acknowledgement.email.two=your company''s Unique Taxpayer Reference Number (UTR)
-page.seis.checkAndSubmit.acknowledgement.email.three=the word ''WHITELISTER''
-page.seis.checkAndSubmit.acknowledgement.email.size=We can''t accept emails that are larger than 10MB.
-page.seis.checkAndSubmit.acknowledgement.post.docs.heading=Send by post
-page.seis.checkAndSubmit.acknowledgement.post.to=If you need to send by post, call the Small Companies Enterprise Centre (SCEC) on 0300 123 1083.
-page.seis.checkAndSubmit.acknowledgement.waitingTime.heading=How long you''ll have to wait
-page.seis.checkAndSubmit.acknowledgement.courseOfAction=Once we''ve received your supporting documents we''ll contact you within 4 weeks.
+page.seis.checkAndSubmit.acknowledgement.upload.one = You can
+page.seis.checkAndSubmit.acknowledgement.upload.link = upload your supporting documents
+page.seis.checkAndSubmit.acknowledgement.upload.two = now, or you can upload them later from the
+page.seis.checkAndSubmit.acknowledgement.upload.dashboard = Venture Capital Schemes dashboard
 page.seis.checkAndSubmit.acknowledgement.button.confirm=Finish
 
 
@@ -1226,4 +1227,42 @@ page.investors.DeletePreviousShareHolder.heading = Confirm that you want to remo
 page.investors.DeletePreviousShareHolder.message.one = This will permanently remove the {0}
 page.investors.DeletePreviousShareHolder.message.two = (date of purchase {0})
 page.investors.DeletePreviousShareHolder.message.three = from your list of previous shareholdings.
+
+#Share Capital Changes date
+validation.error.shareCapitalChanges.Future=Date of investment date cannot be a future date
+page.shareCapitalChanges.suggested=Suggested limit: 20 words
+page.shareCapitalChanges.question=What were the changes?
+page.shareCapitalChanges.heading=Have there been any changes in your company''s share capital since {0}?
+page.shareCapitalChanges.question.hint=Have there been any changes in your company''s share capital since {0}?
+page.shareCapitalChanges.title=Have there been any changes in your company''s share capital since {0}?
+
+page.shareCapitalChanges.info.title=For example, your company might have:
+page.shareCapitalChanges.info.bullet.one=issued more shares
+page.shareCapitalChanges.info.bullet.two=added more share classes
+page.shareCapitalChanges.info.bullet.three=changed the nominal value of some or all of its shares
+
+#Declaration
+page.declaration.title=Declaration
+page.declaration.heading=Declaration
+page.declaration.description=By submitting this Compliance Statement, you agree that the information you''ve given is true and complete to the best of your knowledge and belief.
+page.declaration.warning=If you submit untrue or misleading information you could be fined up to £3,000
+page.declaration.submit=I agree and submit
+page.declaration.doNotAgree=I don''t agree
+
+#Was Any Value Received
+page.investors.wasAnyValueReceived.title = Did the investor get value back from your company or a connected company?
+page.investors.wasAnyValueReceived.guidance.definition = This is called ''value received''.
+page.investors.wasAnyValueReceived.guidance.title = Examples of value received include:
+page.investors.wasAnyValueReceived.guidance.list.one = waiving a debt
+page.investors.wasAnyValueReceived.guidance.list.two = getting assets for free or less than their market value
+page.investors.wasAnyValueReceived.guidance.list.three = making a payment to the investor
+page.investors.wasAnyValueReceived.guidance.list.four = having shares or securities repaid or repurchased
+page.investors.wasAnyValueReceived.guidance.hint = You must tell us about any value received since your company’s date of incorporation.
+page.investors.wasAnyValueReceived.subHeading = Tell us about the value received
+page.investors.wasAnyValueReceived.additionalGuidance.title = You should include:
+page.investors.wasAnyValueReceived.additionalGuidance.list.one = which investor got it
+page.investors.wasAnyValueReceived.additionalGuidance.list.two = what it was
+page.investors.wasAnyValueReceived.additionalGuidance.list.three = when the investor received it
+page.investors.wasAnyValueReceived.additionalGuidance.list.four = how much it was worth
+page.investors.wasAnyValueReceived.additionalGuidance.list.five = whether you got anything in return
 

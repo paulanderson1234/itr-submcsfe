@@ -5,11 +5,12 @@
 @import uk.gov.hmrc.play.views.html.helpers.form
 @import common.Constants
 @import utils.CountriesHelper
-@import views.html.helpers.{externalLink,formHint, formInputRadioGroup, backButtonWithProgress, input, inputWithCurrencySymbol,formInlineDateInput, hiddenField, errorSummary, formShowYesNoRadioContent, textArea, dropdown}
+@import views.html.helpers.{externalLink,formHint, formInputRadioGroup, backButtonWithProgress, input, inputWithCurrencySymbol,formInlineDateInput, hiddenField, errorSummary, formShowYesNoRadioContent, textArea, dropdown, formHiddenYesNoRadioNoError}
 
 
 @(testInvestorModeOptionsForm:Form[TestInvestorModeOptionsModel], numberOfSharesForm:Form[NumberOfSharesModel], nominalValueOfSharesForm: Form[NominalValueOfSharesModel],
- shareDescriptionForm: Form[ShareDescriptionModel],totalAmountRaisedForm:Form[TotalAmountRaisedModel], totalAmountSpentForm:Form[TotalAmountSpentModel])(implicit request: Request[_], messages: Messages)
+ shareDescriptionForm: Form[ShareDescriptionModel],totalAmountRaisedForm:Form[TotalAmountRaisedModel], totalAmountSpentForm:Form[TotalAmountSpentModel],
+wasAnyValueReceivedForm: Form[WasAnyValueReceivedModel],shareCapitalChangesForm: Form[ShareCapitalChangesModel])(implicit request: Request[_], messages: Messages)
 
 @main_template(Messages("page.test.page-two.title")) {
 
@@ -89,6 +90,44 @@
         '_inputClass -> "input--normal input--no-spinner input--left-padding",
         '_type -> "text",
         '_maxlength -> "9"
+        )
+    </div>
+
+    <h2>Was Any Value Received</h2>
+    <div class="form-group">
+        @formHiddenYesNoRadioNoError(
+             wasAnyValueReceivedForm,
+            "wasAnyValueReceived",
+            Messages("page.investors.wasAnyValueReceived.title"),
+            textArea(
+                wasAnyValueReceivedForm("anyValueDescription"),
+                '_cols -> "45",
+                '_rows -> "5",
+                '_maxLength-> Constants.shortTextLimit,
+                '_label-> Messages("page.investors.wasAnyValueReceived.title"),
+                '_labelTextClass-> "visuallyhidden"
+            ),
+            None,
+            Some("visuallyhidden")
+        )
+     </div>
+
+    <h2>Share Capital Changes?</h2>
+    <div class="form-group">
+        @formHiddenYesNoRadioNoError(
+        shareCapitalChangesForm,
+        "hasChanges",
+        Messages("page.investors.wasAnyValueReceived.title"),
+        textArea(
+        shareCapitalChangesForm("changesDescription"),
+        '_cols -> "45",
+        '_rows -> "5",
+        '_maxLength-> Constants.shortTextLimit,
+        '_label-> Messages("page.investors.wasAnyValueReceived.title"),
+        '_labelTextClass-> "visuallyhidden"
+        ),
+        None,
+        Some("visuallyhidden")
         )
     </div>
 

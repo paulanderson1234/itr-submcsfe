@@ -18,6 +18,7 @@ package utils
 
 import java.text.NumberFormat
 
+import common.Constants
 import models.{AddressModel, ContactDetailsModel}
 
 import scala.util.{Failure, Success, Try}
@@ -40,11 +41,20 @@ object Transformers {
   }
 
   val stringToBoolean: String => Boolean = {
-    case "Yes" => true
+    case Constants.StandardRadioButtonYesValue => true
     case _ => false
   }
 
-  val booleanToString: Boolean => String = (input) => if (input) "Yes" else "No"
+  val stringToOptionString: String => Option[String] = {
+    case data if data.trim.nonEmpty => Some(data)
+    case _ => None
+  }
+
+  val optionStringToString: Option[String] => String = {
+    _.fold("")(data => data)
+  }
+
+  val booleanToString: Boolean => String = (input) => if (input) Constants.StandardRadioButtonYesValue else Constants.StandardRadioButtonNoValue
 
   val numberToFormattedNumber: Any => String = {
     case value: Int => NumberFormat.getNumberInstance.format(value)
@@ -66,8 +76,8 @@ object Transformers {
 
   def poundToPence(pounds: Either[String, Int]): String = {
     pounds match {
-      case Left(pounds) => pounds ++ "00"
-      case Right(pounds) => (pounds * 100).toString
+      case Left(poundsMatch) => poundsMatch ++ "00"
+      case Right(poundsMatch) => (poundsMatch * 100).toString
     }
   }
 }

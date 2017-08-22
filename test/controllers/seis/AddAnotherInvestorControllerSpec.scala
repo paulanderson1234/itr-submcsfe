@@ -90,15 +90,14 @@ class AddAnotherInvestorControllerSpec extends BaseSpec {
   }
 
   "Sending a valid No form submission to the AddAnotherInvestorController when authenticated and enrolled" should {
-    "redirect to the Any SHares Repayment page" in {
+    "redirect to the Value Receieved page" in {
       val formInput = "addAnotherInvestor" -> Constants.StandardRadioButtonNoValue
       setupMocks()
       mockEnrolledRequest(seisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,formInput)(
         result => {
           status(result) shouldBe SEE_OTHER
-          // To navigate to Any Shares repayment page
-          redirectLocation(result) shouldBe Some(controllers.seis.routes.ReviewAllInvestorsController.show().url)
+          redirectLocation(result) shouldBe Some(controllers.seis.routes.WasAnyValueReceivedController.show().url)
         }
       )
     }
