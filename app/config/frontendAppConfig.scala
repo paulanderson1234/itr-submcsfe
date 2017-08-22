@@ -89,10 +89,9 @@ object FrontendAppConfig extends AppConfig with ServicesConfig {
       s"/check-your-documents&backUrl=$submissionFrontendServiceBaseUrl/supporting-documents-upload"
 
   private def whitelistConfig(key: String): Seq[String] = Some(new String(Base64.getDecoder
-    .decode(configuration.getString(key).getOrElse("")), "UTF-8"))
+    .decode(loadConfig(key)), "UTF-8"))
     .map(_.split(",")).getOrElse(Array.empty).toSeq
 
-  lazy val whitelistDestination = loadConfig("whitelistDestination")
   lazy val whitelist = whitelistConfig("whitelist")
   lazy val whitelistExcluded = whitelistConfig("whitelist-excluded")
 }
