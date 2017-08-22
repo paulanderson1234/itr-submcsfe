@@ -57,7 +57,6 @@ common.section.progress.company.details.three=Section 3 of 6: Shares
 common.section.progress.company.details.four=Section 4 of 6: Investors
 common.section.progress.company.details.five=Section 5 of 6: Contact details
 common.section.progress.company.details.six=Section 6 of 6: Supporting documents
-common.section.progress.share.details.three=Section 3 of 6: Shares
 
 ## Common report error ##
 common.error.help.text=Get help with this page.
