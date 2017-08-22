@@ -1118,7 +1118,7 @@ validation.error.InvestorShareIssueDate.Future = Investor previous shares issued
 
 #Number of shares purchased
 page.investors.numberOfSharesPurchased.title = How many shares were issued to this {0} on {1}?
-page.investors.numberOfSharesPurchased.heading = How many shares were issued to this {0} on <br/>{1}?
+page.investors.numberOfSharesPurchased.heading = How many shares were issued to this {0} on {1}?
 
 #Previous ShareHolding Nominal Value
 page.investors.previousShareHoldingNominalValue.title = What was the nominal value for each share in this previous issue?
