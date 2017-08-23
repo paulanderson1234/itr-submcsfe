@@ -112,7 +112,7 @@ class ShareCapitalChangesControllerSpec extends BaseSpec {
       mockEnrolledRequest(seisSchemeTypesModel)
       val formInput = Seq(
         "hasChanges" -> Constants.StandardRadioButtonYesValue,
-        "changesDescription" -> "test"
+        "descriptionTextArea" -> "test"
       )
       submitWithSessionAndAuth(TestController.submit,formInput:_*)(
         result => {
@@ -129,7 +129,7 @@ class ShareCapitalChangesControllerSpec extends BaseSpec {
       mockEnrolledRequest(seisSchemeTypesModel)
       val formInput = Seq(
         "hasChanges" -> Constants.StandardRadioButtonNoValue,
-        "changesDescription" -> ""
+        "descriptionTextArea" -> ""
       )
       submitWithSessionAndAuth(TestController.submit,formInput:_*)(
         result => {

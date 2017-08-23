@@ -161,7 +161,7 @@ class WasAnyValueReceivedViewSpec extends ViewSpec with FakeRequestHelper {
         }
 
         "has an input box for text" in {
-          doc.select("form textarea").attr("name") shouldBe "aboutValueReceived"
+          doc.select("form textarea").attr("name") shouldBe "descriptionTextArea"
         }
       }
 
@@ -181,7 +181,7 @@ class WasAnyValueReceivedViewSpec extends ViewSpec with FakeRequestHelper {
     "errors are present" should {
       lazy val doc = Jsoup.parse(views.html.seis.investors.WasAnyValueReceived(wasAnyValueReceivedForm.bind(Map(
         "wasAnyValueReceived" -> "",
-        "aboutValueReceived" -> ""
+        "descriptionTextArea" -> ""
       ))).body)
 
       "display an error summary" in {

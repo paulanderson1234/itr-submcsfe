@@ -24,7 +24,7 @@
     <div class="form-group">
         <span class = "form-hint" id="desc-one">@Messages("page.investors.previousShareHoldingDescription.question.hint")</span>
         @textArea(
-        wasAnyValueReceivedForm("aboutValueReceived"),
+        wasAnyValueReceivedForm("descriptionTextArea"),
             '_cols -> "45",
             '_rows -> "5",
             '_maxLength-> Constants.shortTextLimit,
@@ -38,7 +38,7 @@
 
     @backButtonWithProgress(controllers.seis.routes.ReviewAllInvestorsController.show().url, Messages("common.section.progress.company.details.four"))
 
-    @errorSummary(wasAnyValueReceivedForm, "was-any-value-received", "aboutValueReceived")
+    @errorSummary(wasAnyValueReceivedForm, "was-any-value-received", "descriptionTextArea")
 
     <h1 class="heading-xlarge">@Messages("page.investors.wasAnyValueReceived.title")</h1>
 

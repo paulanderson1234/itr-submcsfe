@@ -88,7 +88,7 @@ class WasAnyValueReceivedControllerSpec extends BaseSpec with FakeRequestHelper 
     "the submit method is called" which {
 
       "has an invalid form" should {
-        lazy val result = setupController().submit(authorisedFakeRequestToPOST(("wasAnyValueReceived", ""), ("aboutValueReceived", "")))
+        lazy val result = setupController().submit(authorisedFakeRequestToPOST(("wasAnyValueReceived", ""), ("descriptionTextArea", "")))
 
         "return a status of 400" in {
           status(result) shouldBe 400
@@ -101,7 +101,7 @@ class WasAnyValueReceivedControllerSpec extends BaseSpec with FakeRequestHelper 
 
       "has a valid form" should {
         lazy val result = setupController().submit(authorisedFakeRequestToPOST(("wasAnyValueReceived",
-          Constants.StandardRadioButtonNoValue), ("aboutValueReceived", "")))
+          Constants.StandardRadioButtonNoValue), ("descriptionTextArea", "")))
 
         "return a status of 303" in {
           status(result) shouldBe 303
