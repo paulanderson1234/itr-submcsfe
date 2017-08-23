@@ -33,9 +33,7 @@ import play.api.Play.current
 
 object FrontendGlobal extends FrontendGlobal
 
-  trait FrontendGlobal
-    extends DefaultFrontendGlobal
-      with RunMode {
+  trait FrontendGlobal extends DefaultFrontendGlobal with RunMode {
 
     override val auditConnector = FrontendAuditConnector
     override val loggingFilter = LoggingFilter
