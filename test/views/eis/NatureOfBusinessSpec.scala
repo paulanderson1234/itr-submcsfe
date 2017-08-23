@@ -67,7 +67,7 @@ class NatureOfBusinessSpec extends ViewSpec {
       document.getElementById("bullet-three").text() shouldBe Messages("page.companyDetails.natureofbusiness.bullet.three")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       document.body.getElementById("back-link").attr("href") shouldEqual routes.ApplicationHubController.show().url
-      document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.company.details.one")
+      document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.one")
     }
 
     "Verify that the nature of business page contains the correct elements when an invalid NatureOfBusinessModel model is passed" in new Setup {
@@ -90,7 +90,7 @@ class NatureOfBusinessSpec extends ViewSpec {
       document.getElementById("bullet-three").text() shouldBe Messages("page.companyDetails.natureofbusiness.bullet.three")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       document.body.getElementById("back-link").attr("href") shouldEqual routes.ApplicationHubController.show().url
-      document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.company.details.one")
+      document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.one")
     }
 
   }

@@ -60,7 +60,7 @@ class IsFirstTradeSpec extends ViewSpec {
       document.getElementById("isFirstTrade-yesLabel").text() shouldBe Messages("common.radioYesLabel")
       document.getElementById("isFirstTrade-noLabel").text() shouldBe Messages("common.radioNoLabel")
       document.body.getElementById("back-link").attr("href") shouldEqual routes.TradeStartDateController.show().url
-      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.company.details.one")
+      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.one")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       document.getElementById("isFirstTrade-legend").hasClass("visuallyhidden")
       document.getElementById("isFirstTrade-legend").text shouldBe Messages("page.seis.companyDetails.isFirstTrade.legend")
@@ -78,7 +78,7 @@ class IsFirstTradeSpec extends ViewSpec {
       document.getElementById("isFirstTrade-yesLabel").text() shouldBe Messages("common.radioYesLabel")
       document.getElementById("isFirstTrade-noLabel").text() shouldBe Messages("common.radioNoLabel")
       document.body.getElementById("back-link").attr("href") shouldEqual controllers.seis.routes.TradeStartDateController.show().url
-      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.company.details.one")
+      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.one")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       document.getElementById("isFirstTrade-legend").hasClass("visuallyhidden")
       document.getElementById("isFirstTrade-legend").text shouldBe Messages("page.seis.companyDetails.isFirstTrade.legend")

@@ -69,7 +69,7 @@ class TradeStartDateSpec extends ViewSpec {
       document.getElementById("hasTradeStartDate-yesLabel").text() shouldBe Messages("common.radioYesLabel")
       document.getElementById("hasTradeStartDate-noLabel").text() shouldBe Messages("common.radioNoLabel")
       document.body.getElementById("back-link").attr("href") shouldEqual controllers.eisseis.routes.DateOfIncorporationController.show().url
-      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.company.details.one")
+      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.one")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
     }
 
@@ -90,7 +90,7 @@ class TradeStartDateSpec extends ViewSpec {
       document.getElementById("hasTradeStartDate-yesLabel").text() shouldBe Messages("common.radioYesLabel")
       document.getElementById("hasTradeStartDate-noLabel").text() shouldBe Messages("common.radioNoLabel")
       document.body.getElementById("back-link").attr("href") shouldEqual controllers.eisseis.routes.DateOfIncorporationController.show().url
-      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.company.details.one")
+      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.one")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
     }
 
@@ -110,7 +110,7 @@ class TradeStartDateSpec extends ViewSpec {
       document.getElementById("hasTradeStartDate-yesLabel").text() shouldBe Messages("common.radioYesLabel")
       document.getElementById("hasTradeStartDate-noLabel").text() shouldBe Messages("common.radioNoLabel")
       document.body.getElementById("back-link").attr("href") shouldEqual controllers.eisseis.routes.DateOfIncorporationController.show().url
-      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.company.details.one")
+      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.one")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       document.getElementById("error-summary-display").hasClass("error-summary--show")
     }
@@ -131,7 +131,7 @@ class TradeStartDateSpec extends ViewSpec {
       document.getElementById("hasTradeStartDate-yesLabel").text() shouldBe Messages("common.radioYesLabel")
       document.getElementById("hasTradeStartDate-noLabel").text() shouldBe Messages("common.radioNoLabel")
       document.body.getElementById("back-link").attr("href") shouldEqual controllers.eisseis.routes.DateOfIncorporationController.show().url
-      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.company.details.one")
+      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.one")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       document.getElementById("error-summary-display").hasClass("error-summary--show")
     }

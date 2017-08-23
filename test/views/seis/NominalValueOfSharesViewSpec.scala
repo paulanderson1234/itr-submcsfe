@@ -37,7 +37,7 @@ class NominalValueOfSharesViewSpec extends ViewSpec with FakeRequestHelper {
       }
 
       "have the correct section" in {
-        doc.select("article span").first().text() shouldBe Messages("common.section.progress.company.details.three")
+        doc.select("article span").first().text() shouldBe Messages("common.section.progress.details.three")
       }
 
       "have a link to the number of shares page" in {

@@ -53,7 +53,7 @@ class HowMuchSpentOnSharesSpec extends ViewSpec {
       }
 
       "have the progress details" in {
-        document.select("article span").first().text shouldBe Messages("common.section.progress.company.details.four")
+        document.select("article span").first().text shouldBe Messages("common.section.progress.details.four")
       }
 
       "have the correct heading" in {
@@ -94,7 +94,7 @@ class HowMuchSpentOnSharesSpec extends ViewSpec {
       }
 
       "have the progress details" in {
-        document.select("article span").first().text shouldBe Messages("common.section.progress.company.details.four")
+        document.select("article span").first().text shouldBe Messages("common.section.progress.details.four")
       }
 
       "have the correct heading" in {

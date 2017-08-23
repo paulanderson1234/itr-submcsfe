@@ -7,7 +7,7 @@
 
 @main_template(Messages("page.eisseis.companyDetails.isFirstTrade.title")) {
 
-    @backButtonWithProgress(controllers.eisseis.routes.TradeStartDateController.show().url, Messages("common.section.progress.company.details.one"))
+    @backButtonWithProgress(controllers.eisseis.routes.TradeStartDateController.show().url, Messages("common.section.progress.details.one"))
 
     @errorSummary(isFirstTradeForm, "is-first-trade", "isFirstTrade")
     <h1 class="heading-xlarge" id="main-heading">@Messages("page.eisseis.companyDetails.isFirstTrade.heading")</h1>
