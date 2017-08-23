@@ -173,7 +173,7 @@ class PreviousShareHoldingDescriptionControllerSpec extends BaseSpec{
   "Submitting to the PreviousShareHoldingDescriptionController when authenticated and enrolled" should {
     "redirect to the PreviousShareHoldingNominalValue page if the form 'was not' previously populated" in {
 
-      val formInput = "previousShareHoldingDescription" -> "This is a description of a previous share holding"
+      val formInput = "descriptionTextArea" -> "This is a description of a previous share holding"
       setupMocks(Some(listOfInvestorsComplete), None)
       mockEnrolledRequest(seisSchemeTypesModel)
       submitWithSessionAndAuth(controller.submit(Some(Constants.typeCompany), Some(2)),formInput)(
@@ -192,7 +192,7 @@ class PreviousShareHoldingDescriptionControllerSpec extends BaseSpec{
   "Submitting to the PreviousShareHoldingDescriptionController when authenticated and enrolled" should {
     "redirect to the PreviousShareHoldingNominalValue page if the form 'was' previously populated and had a processing id" in {
 
-      val formInput = Seq("previousShareHoldingDescription" -> "This is a description of a previous share holding",
+      val formInput = Seq("descriptionTextArea" -> "This is a description of a previous share holding",
         "processingId" -> "1", "investorProcessingId" -> "2")
       setupMocks(Some(listOfInvestorsComplete), None)
       mockEnrolledRequest(seisSchemeTypesModel)
@@ -212,7 +212,7 @@ class PreviousShareHoldingDescriptionControllerSpec extends BaseSpec{
     "redirect to itself" in {
       setupMocks(Some(listOfInvestorsComplete), backUrl)
       mockEnrolledRequest(seisSchemeTypesModel)
-      val formInput = "previousShareHoldingDescription" -> ""
+      val formInput = "descriptionTextArea" -> ""
       submitWithSessionAndAuth(controller.submit(Some(Constants.typeCompany), Some(2)), formInput)(
         result => {
           status(result) shouldBe BAD_REQUEST
