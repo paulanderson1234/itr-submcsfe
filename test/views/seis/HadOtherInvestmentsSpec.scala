@@ -67,7 +67,7 @@ class HadOtherInvestmentsSpec extends ViewSpec {
     document.getElementById("hadOtherInvestments-yesLabel").text() shouldBe Messages("common.radioYesLabel")
     document.getElementById("hadOtherInvestments-noLabel").text() shouldBe Messages("common.radioNoLabel")
     document.getElementById("hadOtherInvestments-legend").select(".visuallyhidden").text() shouldBe Messages("page.previousInvestment.hadOtherInvestments.heading")
-    document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.company.details.two")
+    document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.two")
     document.getElementById("next").text() shouldBe Messages("common.button.snc")
   }
 
@@ -85,7 +85,7 @@ class HadOtherInvestmentsSpec extends ViewSpec {
     document.getElementById("hadOtherInvestments-yesLabel").text() shouldBe Messages("common.radioYesLabel")
     document.getElementById("hadOtherInvestments-noLabel").text() shouldBe Messages("common.radioNoLabel")
     document.getElementById("hadOtherInvestments-legend").select(".visuallyhidden").text() shouldBe Messages("page.previousInvestment.hadOtherInvestments.heading")
-    document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.company.details.two")
+    document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.two")
     document.getElementById("next").text() shouldBe Messages("common.button.snc")
   }
 

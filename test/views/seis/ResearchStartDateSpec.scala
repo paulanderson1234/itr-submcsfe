@@ -92,7 +92,7 @@ class ResearchStartDateSpec extends ViewSpec with OneAppPerSuite{
       }
 
       "have the progress details" in {
-        document.select("article span").first().text shouldBe Messages("common.section.progress.company.details.one")
+        document.select("article span").first().text shouldBe Messages("common.section.progress.details.one")
       }
 
       "have a next button" in {
@@ -172,7 +172,7 @@ class ResearchStartDateSpec extends ViewSpec with OneAppPerSuite{
       }
 
       "have the progress details" in {
-        document.select("article span").first().text shouldBe Messages("common.section.progress.company.details.one")
+        document.select("article span").first().text shouldBe Messages("common.section.progress.details.one")
       }
 
       "have a next button" in {

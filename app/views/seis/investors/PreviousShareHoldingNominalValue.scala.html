@@ -7,7 +7,7 @@
 @(previousShareHoldingNominalValueForm: Form[PreviousShareHoldingNominalValueModel], backUrl: String, investorProcessingId: Int)(implicit request: Request[_], messages: Messages)
 
 @main_template(Messages("page.investors.previousShareHoldingNominalValue.title")) {
-@backButtonWithProgress(backUrl, Messages("common.section.progress.company.details.four"))
+@backButtonWithProgress(backUrl, Messages("common.section.progress.details.four"))
 
     @errorSummary(previousShareHoldingNominalValueForm, "previous-share-holding-nominal-value", "previousShareHoldingNominalValue")
 

@@ -79,7 +79,7 @@ class ShareIssueDateSpec extends ViewSpec {
 
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       document.body.getElementById("back-link").attr("href") shouldEqual testUrl
-      document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.company.details.one")
+      document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.one")
     }
 
     "Verify that Share Issue Date page contains the correct elements when a valid ShareIssueDateModel is passed with alternate url" in new SEISSetup {
@@ -99,7 +99,7 @@ class ShareIssueDateSpec extends ViewSpec {
 
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       document.body.getElementById("back-link").attr("href") shouldEqual testUrlOther
-      document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.company.details.one")
+      document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.one")
     }
 
     "Verify that the Share Issue Date page contains the correct elements when an invalid ShareIssueDateModel is passed" in new SEISSetup {
@@ -118,7 +118,7 @@ class ShareIssueDateSpec extends ViewSpec {
         Messages("page.companyDetails.ShareIssueDate.location")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       document.body.getElementById("back-link").attr("href") shouldEqual testUrl
-      document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.company.details.one")
+      document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.one")
       document.getElementById("error-summary-display").hasClass("error-summary--show")
 
     }

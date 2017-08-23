@@ -72,7 +72,7 @@ class ProposedInvestmentSpec extends ViewSpec {
       document.getElementById("help-text").text() shouldBe Messages("page.investment.help.link.text")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       document.body.getElementById("back-link").attr("href") shouldEqual controllers.eisseis.routes.TenYearPlanController.show().url
-      document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.company.details.three")
+      document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.three")
     }
 
     "Verify that the proposed investment page contains the correct elements when an invalid ProposedInvestmentModel is passed" in new Setup {
@@ -90,7 +90,7 @@ class ProposedInvestmentSpec extends ViewSpec {
       document.getElementById("help-text").text() shouldBe Messages("page.investment.help.link.text")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       document.body.getElementById("back-link").attr("href") shouldEqual controllers.eisseis.routes.HadPreviousRFIController.show().url
-      document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.company.details.three")
+      document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.three")
       document.getElementById("error-summary-display").hasClass("error-summary--show")
     }
 
@@ -109,7 +109,7 @@ class ProposedInvestmentSpec extends ViewSpec {
       document.getElementById("help-text").text() shouldBe Messages("page.investment.help.link.text")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       document.body.getElementById("back-link").attr("href") shouldEqual controllers.eisseis.routes.ReviewPreviousSchemesController.show().url
-      document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.company.details.three")
+      document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.three")
       document.getElementById("error-summary-display").hasClass("error-summary--show")
     }
   }

@@ -54,7 +54,7 @@ class AddAnotherShareholdingSpec extends ViewSpec with FakeRequestHelper {
       }
 
       "has a progress bar with the correct text" in {
-        doc.select("span.form-hint-breadcrumb").text() shouldBe Messages("common.section.progress.company.details.four")
+        doc.select("span.form-hint-breadcrumb").text() shouldBe Messages("common.section.progress.details.four")
       }
 
       "have the correct heading" in {
@@ -129,7 +129,7 @@ class AddAnotherShareholdingSpec extends ViewSpec with FakeRequestHelper {
       }
 
       "has a progress bar with the correct text" in {
-        doc.select("span.form-hint-breadcrumb").text() shouldBe Messages("common.section.progress.company.details.four")
+        doc.select("span.form-hint-breadcrumb").text() shouldBe Messages("common.section.progress.details.four")
       }
 
       "have the correct heading" in {

@@ -59,7 +59,7 @@ class UsedInvestmentReasonBeforeSpec extends ViewSpec {
     document.select("#usedInvestmentReasonBefore-no").size() shouldBe 1
     document.getElementById("usedInvestmentReasonBefore-yesLabel").text() shouldBe Messages("common.radioYesLabel")
     document.getElementById("usedInvestmentReasonBefore-noLabel").text() shouldBe Messages("common.radioNoLabel")
-    document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.company.details.three")
+    document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.three")
     document.getElementById("next").text() shouldBe Messages("common.button.snc")
   }
 
@@ -77,7 +77,7 @@ class UsedInvestmentReasonBeforeSpec extends ViewSpec {
     document.select("#usedInvestmentReasonBefore-no").size() shouldBe 1
     document.getElementById("usedInvestmentReasonBefore-yesLabel").text() shouldBe Messages("common.radioYesLabel")
     document.getElementById("usedInvestmentReasonBefore-noLabel").text() shouldBe Messages("common.radioNoLabel")
-    document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.company.details.three")
+    document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.three")
     document.getElementById("next").text() shouldBe Messages("common.button.snc")
   }
 
