@@ -71,7 +71,7 @@ class ShareCapitalChangesSpec extends ViewSpec {
       document.getElementById("hasChanges-yesLabel").text() shouldBe Messages("common.radioYesLabel")
       document.getElementById("hasChanges-noLabel").text() shouldBe Messages("common.radioNoLabel")
       document.body.getElementById("back-link").attr("href") shouldEqual routes.WasAnyValueReceivedController.show().url
-      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.company.details.four")
+      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.four")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       document.getElementById("hasChanges-legend").hasClass("visuallyhidden") shouldBe true
       document.getElementById("hasChanges-legend").text shouldBe "Have there been any changes in your company's share capital since 29 February 2004?"
@@ -90,7 +90,7 @@ class ShareCapitalChangesSpec extends ViewSpec {
       document.getElementById("hasChanges-yesLabel").text() shouldBe Messages("common.radioYesLabel")
       document.getElementById("hasChanges-noLabel").text() shouldBe Messages("common.radioNoLabel")
       document.body.getElementById("back-link").attr("href") shouldEqual routes.WasAnyValueReceivedController.show().url
-      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.company.details.four")
+      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.four")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       document.getElementById("hasChanges-legend").hasClass("visuallyhidden") shouldBe true
       document.getElementById("hasChanges-legend").text shouldBe "Have there been any changes in your company's share capital since 2 March 1970?"
@@ -110,7 +110,7 @@ class ShareCapitalChangesSpec extends ViewSpec {
       document.getElementById("hasChanges-yesLabel").text() shouldBe Messages("common.radioYesLabel")
       document.getElementById("hasChanges-noLabel").text() shouldBe Messages("common.radioNoLabel")
       document.body.getElementById("back-link").attr("href") shouldEqual routes.WasAnyValueReceivedController.show().url
-      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.company.details.four")
+      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.four")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       document.getElementById("hasChanges-legend").hasClass("visuallyhidden") shouldBe true
       document.getElementById("hasChanges-legend").text shouldBe "Have there been any changes in your company's share capital since 2 March 1970?"

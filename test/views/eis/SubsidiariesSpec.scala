@@ -63,7 +63,7 @@ class SubsidiariesSpec extends ViewSpec {
 //      document.getElementById("subsidiaries-yesLabel").text() shouldBe Messages("common.radioYesLabel")
 //      document.getElementById("subsidiaries-noLabel").text() shouldBe Messages("common.radioNoLabel")
 //      document.getElementById("next").text() shouldBe Messages("common.button.continue")
-//      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.company.details.one")
+//      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.one")
 //    }
 //
 //    "Verify the Subsidiaries page contains the correct elements when a valid 'Yes' SubsidiariesModel is retrieved" +
@@ -83,7 +83,7 @@ class SubsidiariesSpec extends ViewSpec {
 //      document.getElementById("subsidiaries-yesLabel").text() shouldBe Messages("common.radioYesLabel")
 //      document.getElementById("subsidiaries-noLabel").text() shouldBe Messages("common.radioNoLabel")
 //      document.getElementById("next").text() shouldBe Messages("common.button.continue")
-//      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.company.details.one")
+//      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.one")
 //    }
 //
 //    "Verify the Subsidiaries page contains the correct elements when a valid 'No' SubsidiariesModel is retrieved" +
@@ -102,7 +102,7 @@ class SubsidiariesSpec extends ViewSpec {
 //      document.getElementById("subsidiaries-yesLabel").text() shouldBe Messages("common.radioYesLabel")
 //      document.getElementById("subsidiaries-noLabel").text() shouldBe Messages("common.radioNoLabel")
 //      document.getElementById("next").text() shouldBe Messages("common.button.continue")
-//      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.company.details.one")
+//      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.one")
 //    }
 //
 //    "Verify the Subsidiaries page contains the correct elements when a valid 'No' SubsidiariesModel is retrieved" +
@@ -121,7 +121,7 @@ class SubsidiariesSpec extends ViewSpec {
 //      document.getElementById("subsidiaries-yesLabel").text() shouldBe Messages("common.radioYesLabel")
 //      document.getElementById("subsidiaries-noLabel").text() shouldBe Messages("common.radioNoLabel")
 //      document.getElementById("next").text() shouldBe Messages("common.button.continue")
-//      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.company.details.one")
+//      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.one")
 //    }
 //
 //    "Verify that Subsidiaries page contains the correct elements when an empty model " +
@@ -142,7 +142,7 @@ class SubsidiariesSpec extends ViewSpec {
 //      document.getElementById("subsidiaries-yesLabel").text() shouldBe Messages("common.radioYesLabel")
 //      document.getElementById("subsidiaries-noLabel").text() shouldBe Messages("common.radioNoLabel")
 //      document.getElementById("next").text() shouldBe Messages("common.button.continue")
-//      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.company.details.one")
+//      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.one")
 //    }
 //
 //    "Verify that Subsidiaries page shows the error summary and has the correct back link when " +

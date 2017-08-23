@@ -46,7 +46,7 @@ class ProposedInvestmentSpec extends ViewSpec {
       document.getElementById("help-bullet-three").text() shouldBe Messages("page.seis.investment.proposedInvestment.help.bullet.three")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       document.body.getElementById("back-link").attr("href") shouldEqual routes.ProposedInvestmentController.show().url
-      document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.company.details.three")
+      document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.three")
     }
 
     "Verify that the proposed investment page contains the correct elements when an invalid ProposedInvestmentModel is passed" in new SEISSetup {
@@ -62,7 +62,7 @@ class ProposedInvestmentSpec extends ViewSpec {
       document.getElementById("help-bullet-three").text() shouldBe Messages("page.seis.investment.proposedInvestment.help.bullet.three")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       document.body.getElementById("back-link").attr("href") shouldEqual routes.ProposedInvestmentController.show().url
-      document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.company.details.three")
+      document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.three")
       document.getElementById("error-summary-display").hasClass("error-summary--show")
     }
 
@@ -79,7 +79,7 @@ class ProposedInvestmentSpec extends ViewSpec {
       document.getElementById("help-bullet-three").text() shouldBe Messages("page.seis.investment.proposedInvestment.help.bullet.three")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       document.body.getElementById("back-link").attr("href") shouldEqual routes.ProposedInvestmentController.show().url
-      document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.company.details.three")
+      document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.three")
     }
   }
 

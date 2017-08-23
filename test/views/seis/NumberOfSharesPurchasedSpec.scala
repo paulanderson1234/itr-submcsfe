@@ -54,7 +54,7 @@ class NumberOfSharesPurchasedSpec extends ViewSpec with DateFormatter{
       }
 
      "have the correct heading" in {
-        document.select("h1").text() shouldBe Html(Messages("page.investors.numberOfSharesPurchased.title", "company", "TODO")).toString()
+        document.select("h1").text() shouldBe Messages("page.investors.numberOfSharesPurchased.title", "company", "TODO")
       }
 
       "have a form posting to the correct route" in {

@@ -5,7 +5,7 @@
 @(previousShareHoldingModel: PreviousShareHoldingModel)(implicit request: Request[_], messages: Messages)
 
 @main_template(Messages("page.investors.DeletePreviousShareHolder.title")) {
-@backButtonWithProgress(controllers.seis.routes.PreviousShareHoldingsReviewController.show(previousShareHoldingModel.investorProcessingId.get).url, Messages("common.section.progress.company.details.four"))
+@backButtonWithProgress(controllers.seis.routes.PreviousShareHoldingsReviewController.show(previousShareHoldingModel.investorProcessingId.get).url, Messages("common.section.progress.details.four"))
 
 <h1 id="main-heading" class="form-title heading-xlarge">@Messages("page.investors.DeletePreviousShareHolder.heading")</h1>
 

@@ -50,7 +50,7 @@ class ConfirmContactDetailsSpec extends UnitSpec with OneAppPerSuite{
     }
 
     "have a back-link" which {
-      s"has the text '${Messages("common.section.progress.company.details.four")}" in {
+      s"has the text '${Messages("common.section.progress.details.five")}" in {
         document.body.getElementById("back-link").text shouldEqual Messages("common.button.back")
       }
 
@@ -58,8 +58,8 @@ class ConfirmContactDetailsSpec extends UnitSpec with OneAppPerSuite{
         document.body.getElementById("back-link").attr("href") shouldEqual routes.ShareCapitalChangesController.show().url
       }
 
-      s"has a Section heading next to it of '${Messages("common.section.progress.company.details.four")}" in {
-        document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.company.details.four")
+      s"has a Section heading next to it of '${Messages("common.section.progress.details.five")}" in {
+        document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.five")
       }
     }
 

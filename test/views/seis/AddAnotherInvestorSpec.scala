@@ -60,7 +60,7 @@ class AddAnotherInvestorSpec extends ViewSpec {
       document.getElementById("addAnotherInvestor-yesLabel").text() shouldBe Messages("common.radioYesLabel")
       document.getElementById("addAnotherInvestor-noLabel").text() shouldBe Messages("common.radioNoLabel")
       document.body.getElementById("back-link").attr("href") shouldEqual routes.ReviewAllInvestorsController.show().url
-      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.company.details.four")
+      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.four")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       document.getElementById("addAnotherInvestor-legend").hasClass("visuallyhidden")
       document.getElementById("addAnotherInvestor-legend").text shouldBe Messages("page.investors.addAnotherInvestor.legend")
@@ -78,7 +78,7 @@ class AddAnotherInvestorSpec extends ViewSpec {
       document.getElementById("addAnotherInvestor-yesLabel").text() shouldBe Messages("common.radioYesLabel")
       document.getElementById("addAnotherInvestor-noLabel").text() shouldBe Messages("common.radioNoLabel")
       document.body.getElementById("back-link").attr("href") shouldEqual controllers.seis.routes.ReviewAllInvestorsController.show().url
-      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.company.details.four")
+      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.four")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       document.getElementById("addAnotherInvestor-legend").hasClass("visuallyhidden")
       document.getElementById("addAnotherInvestor-legend").text shouldBe Messages("page.investors.addAnotherInvestor.legend")
