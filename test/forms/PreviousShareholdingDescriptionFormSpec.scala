@@ -18,52 +18,32 @@ package forms
 
 import common.Constants
 import controllers.helpers.MockDataGenerator
-import forms.ShareDescriptionForm.shareDescriptionForm
-import models.ShareDescriptionModel
+import forms.PreviousShareHoldingDescriptionForm.previousShareHoldingDescriptionForm
+import models.investorDetails.PreviousShareHoldingDescriptionModel
 import org.scalatestplus.play.OneAppPerSuite
 import play.api.data.FormError
 import play.api.i18n.Messages
-import play.api.libs.json.Json
+import play.api.i18n.Messages.Implicits._
 import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
 import uk.gov.hmrc.play.test.UnitSpec
-import play.api.i18n.Messages.Implicits._
 
-class ShareDescriptionFormSpec extends UnitSpec with OneAppPerSuite{
+class PreviousShareholdingDescriptionFormSpec extends UnitSpec with OneAppPerSuite{
 
   private def bindSuccess(request: FakeRequest[AnyContentAsFormUrlEncoded]) = {
-    shareDescriptionForm.bindFromRequest()(request).fold(
+    previousShareHoldingDescriptionForm.bindFromRequest()(request).fold(
       formWithErrors => None,
       userData => Some(userData)
     )
   }
 
   private def bindWithError(request: FakeRequest[AnyContentAsFormUrlEncoded]): Option[FormError] = {
-    shareDescriptionForm.bindFromRequest()(request).fold(
+    previousShareHoldingDescriptionForm.bindFromRequest()(request).fold(
       formWithErrors => Some(formWithErrors.errors(0)),
       userData => None
     )
   }
-
-  val shareDescriptionJson = """{"shareDescription":"Ordinary shares"}"""
-  val shareDescriptionModel = ShareDescriptionModel("Ordinary shares")
-
-  val shareDescriptionExceedsMaxJson =
-    """{"shareDescription":"Arise, arise, Riders of Théoden
-      |Fell deeds awake: fire and slaughter!
-      |Spear shall be shaken, shield be splintered,
-      |A sword-day, a red day, ere the sun rises!
-      |Ride now, ride now! Ride to Gondor!
-      |Arise, arise, Riders of Théoden
-      |Fell deeds awake: fire and slaughter!
-      |Spear shall be shaken, shield be splintered,
-      |A sword-day, a red day, ere the sun rises!
-      |Ride now, ride now! Ride to Gondor!
-      |Arise, arise, Riders of Théoden
-      |Fell deeds awake: fire and slaughter!
-      |Spear shall be shaken, shield be splintered,
-      |A sword-day, a red day, ere the sun rises!
-      |Ride now, ride now! Ride to Gondor!"}""".stripMargin
+  val previousShareHoldingModel = PreviousShareHoldingDescriptionModel("Ordinary shares", Some(1), Some(1))
 
 
   "The share description Form" should {
@@ -101,7 +81,7 @@ class ShareDescriptionFormSpec extends UnitSpec with OneAppPerSuite{
   "The share description Form" should {
     "not return an error if entry is above the suggested 20 word limit (21 words)" in {
       val request = FakeRequest("GET", "/").withFormUrlEncodedBody(
-        "descriptionTextArea" -> "this is more than 20 words to see if that amount is suggested but not enforced"
+        "descriptionTextArea" -> "this is more than 20 words to see if that amount is suggested but not enforced and it isn't if this passes so there"
       )
       bindWithError(request) match {
         case Some(err) => {
@@ -115,7 +95,7 @@ class ShareDescriptionFormSpec extends UnitSpec with OneAppPerSuite{
   "The share description Form" should {
     "not return an error if entry is on boundary (250)" in {
       val request = FakeRequest("GET", "/").withFormUrlEncodedBody(
-        "descriptionTextArea" -> MockDataGenerator.randomAlphanumericString(250)
+        "descriptionTextArea" -> MockDataGenerator.randomAlphanumericString(Constants.shortTextLimit)
       )
       bindWithError(request) match {
         case Some(err) => {
@@ -129,7 +109,7 @@ class ShareDescriptionFormSpec extends UnitSpec with OneAppPerSuite{
   "The share description Form" should {
     "return an error if entry is greater than 250 words in length" in {
       val request = FakeRequest("GET", "/").withFormUrlEncodedBody(
-        "descriptionTextArea" -> MockDataGenerator.randomAlphanumericString(251)
+        "descriptionTextArea" -> MockDataGenerator.randomAlphanumericString(Constants.shortTextLimit + 1)
       )
       bindWithError(request) match {
         case Some(err) => {
@@ -144,29 +124,4 @@ class ShareDescriptionFormSpec extends UnitSpec with OneAppPerSuite{
     }
   }
 
-  // model to json
-  "The share description model" should {
-    "load convert to JSON successfully" in {
-      implicit val formats = Json.format[ShareDescriptionModel]
-      val utrJson = Json.toJson(shareDescriptionModel).toString()
-      utrJson shouldBe shareDescriptionJson
-    }
-  }
-
-  // form model to json - apply
-  "The share descriptionForm model" should {
-    "call apply correctly on the model" in {
-      implicit val formats = Json.format[ShareDescriptionModel]
-      val form = shareDescriptionForm.fill(shareDescriptionModel)
-      form.get.shareDescription shouldBe "Ordinary shares"
-    }
-
-    // form json to model - unapply
-    "call unapply successfully to create expected Json" in {
-      implicit val formats = Json.format[ShareDescriptionModel]
-      val form = shareDescriptionForm.fill(shareDescriptionModel)
-      val formJson = Json.toJson(form.get).toString()
-      formJson shouldBe shareDescriptionJson
-    }
-  }
 }

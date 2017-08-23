@@ -42,21 +42,21 @@ class ShareCapitalChangesFormSpec extends UnitSpec with OneAppPerSuite{
     }
 
     "return a Some if a model with valid inputs is supplied using .bind" in {
-      val map = Map(("hasChanges", Constants.StandardRadioButtonYesValue), ("changesDescription", "TEXT"))
+      val map = Map(("hasChanges", Constants.StandardRadioButtonYesValue), ("descriptionTextArea", "TEXT"))
       val form = shareCapitalChangesForm.bind(map)
       form.value shouldBe Some(ShareCapitalChangesModel(Constants.StandardRadioButtonYesValue, Some("TEXT")))
     }
 
     "return a Some if a model with both a 'No' selection and data present using .bind." +
       "Validation should allow both No and some text to be entered (text is cleared on submission in controller)" in {
-      val map = Map(("hasChanges", Constants.StandardRadioButtonNoValue), ("changesDescription", "TEXT"))
+      val map = Map(("hasChanges", Constants.StandardRadioButtonNoValue), ("descriptionTextArea", "TEXT"))
       val form = shareCapitalChangesForm.bind(map)
       form.value shouldBe Some(ShareCapitalChangesModel(Constants.StandardRadioButtonNoValue, Some("TEXT")))
       form.hasErrors shouldBe false
     }
 
     "when no input is selected the form" should {
-      lazy val form = shareCapitalChangesForm.bind(Map(("hasChanges", ""), ("changesDescription", "")))
+      lazy val form = shareCapitalChangesForm.bind(Map(("hasChanges", ""), ("descriptionTextArea", "")))
       "raise form error" in {
         form.hasErrors shouldBe true
       }
@@ -71,7 +71,7 @@ class ShareCapitalChangesFormSpec extends UnitSpec with OneAppPerSuite{
 
     "when maximum input length input is entered exactly the form" should {
       lazy val form = shareCapitalChangesForm.bind(Map(("hasChanges", Constants.StandardRadioButtonYesValue),
-        ("changesDescription", MockDataGenerator.randomAlphanumericString(Constants.shortTextLimit))))
+        ("descriptionTextArea", MockDataGenerator.randomAlphanumericString(Constants.shortTextLimit))))
       "not raise any form errors" in {
         form.hasErrors shouldBe false
       }
@@ -79,14 +79,14 @@ class ShareCapitalChangesFormSpec extends UnitSpec with OneAppPerSuite{
 
     "when maximum input length input is exceeded the form" should {
       lazy val form = shareCapitalChangesForm.bind(Map(("hasChanges", Constants.StandardRadioButtonYesValue),
-        ("changesDescription", MockDataGenerator.randomAlphanumericString(Constants.shortTextLimit + 1))))
+        ("descriptionTextArea", MockDataGenerator.randomAlphanumericString(Constants.shortTextLimit + 1))))
       "raise form error" in {
         form.hasErrors shouldBe true
       }
 
       "raise 1 form error" in {
         form.errors.length shouldBe 1
-        form.errors.head.key shouldBe "changesDescription"
+        form.errors.head.key shouldBe "descriptionTextArea"
       }
       "associate the correct error message to the error" in {
         form.errors.head.message shouldBe "error.maxLength"
@@ -95,7 +95,7 @@ class ShareCapitalChangesFormSpec extends UnitSpec with OneAppPerSuite{
     }
 
     "when Yes input is selected with no text description the form" should {
-      lazy val form = shareCapitalChangesForm.bind(Map(("hasChanges", Constants.StandardRadioButtonYesValue), ("changesDescription", "")))
+      lazy val form = shareCapitalChangesForm.bind(Map(("hasChanges", Constants.StandardRadioButtonYesValue), ("descriptionTextArea", "")))
       "raise form error" in {
         form.hasErrors shouldBe true
       }

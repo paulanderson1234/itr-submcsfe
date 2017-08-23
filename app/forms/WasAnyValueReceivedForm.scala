@@ -30,9 +30,10 @@ object WasAnyValueReceivedForm {
   val wasAnyValueReceivedForm = Form(
     mapping(
       "wasAnyValueReceived" -> nonEmptyText,
-      "aboutValueReceived" -> text(maxLength = Constants.shortTextLimit)
+      "descriptionTextArea" -> text(maxLength = Constants.shortTextLimit)
         .transform(stringToOptionString, optionStringToString)
     )(WasAnyValueReceivedModel.apply)(WasAnyValueReceivedModel.unapply)
-      .verifying(Messages("error.required"), model => if (model.wasAnyValueReceived == Constants.StandardRadioButtonYesValue) model.aboutValueReceived.isDefined else true)
+      .verifying(Messages("error.required"), model =>
+        if (model.wasAnyValueReceived == Constants.StandardRadioButtonYesValue) model.aboutValueReceived.isDefined else true)
   )
 }
