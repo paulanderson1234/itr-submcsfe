@@ -85,14 +85,7 @@ trait CheckAnswersController extends FrontendController with AuthorisedAndEnroll
 
   val submit = featureSwitch(applicationConfig.seisFlowEnabled) {
     AuthorisedAndEnrolled.async { implicit user => implicit request =>
-      s4lConnector.fetchAndGetFormData[String](KeystoreKeys.envelopeId).flatMap {
-        envelopeId => {
-          if (envelopeId.isEmpty)
-            Future.successful(Redirect(routes.AcknowledgementController.show()))
-          else Future.successful(Redirect(controllers.seis.routes.DeclarationController.show()))
-
-        }
-      }
+      Future.successful(Redirect(controllers.seis.routes.DeclarationController.show()))
     }
   }
 
