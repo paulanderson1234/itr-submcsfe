@@ -5,6 +5,7 @@
 @import models.seis.SEISCheckAnswersModel
 @import utils.Transformers
 @import utils.CountriesHelper
+@import models.investorDetails.{PreviousShareHoldingModel, InvestorDetailsModel}
 
 @(checkAnswersModel: SEISCheckAnswersModel)(implicit request: Request[_], messages: Messages)
 
@@ -15,16 +16,10 @@
 
 <h1 class="form-title heading-xlarge" id="main-heading">@Messages("page.checkAndSubmit.checkAnswers.heading")</h1>
 <div class="form-group">
-    <p id="description-one">@Messages("page.checkAndSubmit.checkAnswers.description.one")</p>
-
-    <ul class="bullets" id="schemes">
-        <li id="seis-scheme">@Messages("page.checkAndSubmit.checkAnswers.scheme.seis")</li>
-    </ul>
-</div>
-
-<div class="form-group">
+    <p id="description-one">@Messages("page.checkAndSubmit.checkAnswers.description.one") @Messages("page.checkAndSubmit.checkAnswers.scheme.seis")</p>
     <p id="description-two">@Messages("page.checkAndSubmit.checkAnswers.description.two")</p>
 </div>
+
 
 <div id="yourAnswers" class="full-width">
 
@@ -53,15 +48,44 @@
         }
         }
         }
+        <!-- Qualify business activity -->
+        @if(checkAnswersModel.qualifyBusinessActivity.isDefined){
+        @textRowHelperBasic("qualifyBusinessActivity", Messages("summaryQuestion.bussinessPurpose"),checkAnswersModel.qualifyBusinessActivity.get.isQualifyBusinessActivity, Some(controllers.seis.routes.QualifyBusinessActivityController.show().url))
+        }
+        <!-- Is Business activity started -->
+        @if(checkAnswersModel.hasInvestmentTradeStarted.isDefined){
+        @if(checkAnswersModel.hasInvestmentTradeStarted.get.hasDate){
+        @textRowHelperMultiLineQuestion("hasInvestmentTradeStarted", Array(Messages("summaryQuestion.bussinessStatus"), "", Messages("summaryQuestion.bussinessActivityStarted")), Array(checkAnswersModel.hasInvestmentTradeStarted.get.hasInvestmentTradeStarted, "", HasInvestmentTradeStartedModel.toDateString(checkAnswersModel.hasInvestmentTradeStarted.get.hasInvestmentTradeStartedDay.get, checkAnswersModel.hasInvestmentTradeStarted.get.hasInvestmentTradeStartedMonth.get, checkAnswersModel.hasInvestmentTradeStarted.get.hasInvestmentTradeStartedYear.get)), Some(controllers.seis.routes.HasInvestmentTradeStartedController.show().url))
+        }else{
+        @textRowHelperBasic("hasInvestmentTradeStarted", Messages("summaryQuestion.bussinessStatus"), checkAnswersModel.hasInvestmentTradeStarted.get.hasInvestmentTradeStarted, Some(controllers.seis.routes.HasInvestmentTradeStartedController.show().url))
+        }
+        }
+        <!-- Is Seventy Percent Spent on shares-->
+        @if(checkAnswersModel.isSeventyPercentSpent.isDefined){
+        @textRowHelperBasic("isSeventyPercentSpent", Messages("summaryQuestion.IsSeventyPercentSpent"), checkAnswersModel.isSeventyPercentSpent.get.isSeventyPercentSpent, Some(controllers.seis.routes.SeventyPercentSpentController.show().url))
+        }
+        <!-- Total Amount Spent -->
+        @if(checkAnswersModel.shareIssueDate.isDefined){
+        @textRowHelperBasic("shareIssueDate", Messages("summaryQuestion.shareIssueDate"), ShareIssueDateModel.toDateString(checkAnswersModel.shareIssueDate.get.day.get, checkAnswersModel.shareIssueDate.get.month.get, checkAnswersModel.shareIssueDate.get.year.get), Some(controllers.seis.routes.ShareIssueDateController.show().url))
+        }
+        <!-- Gross Assets -->
+        @if(checkAnswersModel.grossAssets.isDefined){
+        @textRowHelperBasic("grossAssets", Messages("summaryQuestion.businessGrossAssets"), GrossAssetsModel.getAmountAsFormattedString(checkAnswersModel.grossAssets.get.grossAmount), Some(controllers.seis.routes.GrossAssetsController.show().url))
+        }
+        <!-- Full time employees -->
+        @if(checkAnswersModel.fullTimeEmployees.isDefined){
+        @textRowHelperBasic("fullTimeEmployees", Messages("summaryQuestion.fullTimeEmployees"), checkAnswersModel.fullTimeEmployees.get.employeeCount.toString(), Some(controllers.seis.routes.FullTimeEmployeeCountController.show().url))
+        }
         </tbody>
     </table>
 
-    <table id="previous-rfi-table">
+    <table id="previous-schemes-table">
         <!-- Header -->
         @tableHeaderHelper("previousRFISection", Messages("summaryQuestion.previousRFISection"))
         <!-- Data Rows-->
         <tbody>
         @if(checkAnswersModel.previousSchemes.length > 0){
+        @textRowHelperBasic("yesPreviousScheme", Messages("page.summaryQuestion.none.question"), Messages("common.base.yes"), None)
         @for((previousScheme, index) <- checkAnswersModel.previousSchemes.zipWithIndex){
         @textRowHelperMultiLine(s"previousScheme-$index", PreviousSchemeModel.getSchemeName(previousScheme.schemeTypeDesc, previousScheme.otherSchemeName),
         PreviousSchemeModel.toArrayString(previousScheme), Some(controllers.seis.routes.ReviewPreviousSchemesController.show().url))
@@ -73,21 +97,61 @@
         </tbody>
     </table>
 
-    <table id="investment-table">
+    <table id="shares-table">
         <!-- Header -->
-        @tableHeaderHelper("investmentSection", Messages("page.summaryQuestion.companyDetailsSectionThree"))
-        <!--Data rows-->
+        @tableHeaderHelper("sharesSection", Messages("page.summaryQuestion.shares"))
+        <!-- Data Rows-->
         <tbody>
-        <!--Proposed Investment-->
-        @if(checkAnswersModel.proposedInvestmentModel.isDefined){
-        @textRowHelperBasic("proposedInvestment", Messages("page.summaryQuestion.proposedInvestment"), ProposedInvestmentModel.getAmountAsFormattedString(checkAnswersModel.proposedInvestmentModel.get.investmentAmount), Some(controllers.seis.routes.ProposedInvestmentController.show().url))
+        <!-- Share Class Desc -->
+        @if(checkAnswersModel.shareDescription.isDefined){
+        @textRowHelperBasic("shareDescription", Messages("page.summaryQuestion.shareClass"),checkAnswersModel.shareDescription.get.shareDescription, Some(controllers.seis.routes.ShareDescriptionController.show().url))
+        }
+        <!-- Number of shares issued -->
+        @if(checkAnswersModel.numberOfShares.isDefined){
+        @textRowHelperBasic("numberOfShares", Messages("page.summaryQuestion.sharesIssues"), checkAnswersModel.numberOfShares.get.numberOfShares.toString() ,Some(controllers.seis.routes.NumberOfSharesController.show().url))
+        }
+        <!-- Total Amount Raised -->
+        @if(checkAnswersModel.totalAmountRaised.isDefined){
+        @textRowHelperBasic("totalAmountRaised", Messages("page.summaryQuestion.amountRaised"),PreviousShareHoldingModel.getAmountAsFormattedString(checkAnswersModel.totalAmountRaised.get.amount), Some(controllers.seis.routes.TotalAmountRaisedController.show().url))
+        }
+        <!-- Total Amount Spent -->
+        @if(checkAnswersModel.totalAmountSpent.isDefined){
+        @textRowHelperBasic("totalAmountSpent", Messages("page.summaryQuestion.amountSpent"), PreviousShareHoldingModel.getAmountAsFormattedString(checkAnswersModel.totalAmountSpent.get.totalAmountSpent) ,Some(controllers.seis.routes.TotalAmountSpentController.show().url))
+        }
+        </tbody>
+    </table>
+
+    <table id="investors-table">
+        <!-- Header -->
+        @tableHeaderHelper("investorsSection", Messages("page.summaryQuestion.investorsSection"))
+        <!-- Data Rows-->
+        <tbody>
+        <!-- Investors created-->
+        @if(checkAnswersModel.investorDetails.isDefined && checkAnswersModel.investorDetails.get.length > 0){
+        @textRowHelperBasic("numberOfInvestors", Messages("page.summaryQuestion.noOfInvestors"), checkAnswersModel.investorDetails.get.size.toString(), Some(controllers.seis.routes.ReviewAllInvestorsController.show().url))
+        }
+        <!-- Value received -->
+        @if(checkAnswersModel.valueReceived.isDefined){
+        @if(checkAnswersModel.valueReceived.get.wasAnyValueReceived == Messages("common.radioYesLabel")){
+        @textRowHelperMultiLineQuestion("valueReceived", Array(Messages("page.summaryQuestion.isSharesValueReceived"), "", Messages("page.summaryQuestion.sharesValueReceived")), Array(checkAnswersModel.valueReceived.get.wasAnyValueReceived, "", checkAnswersModel.valueReceived.get.aboutValueReceived.get), Some(controllers.seis.routes.WasAnyValueReceivedController.show().url))
+        }else{
+        @textRowHelperBasic("valueReceived", Messages("page.summaryQuestion.isSharesValueReceived"), checkAnswersModel.valueReceived.get.wasAnyValueReceived, Some(controllers.seis.routes.WasAnyValueReceivedController.show().url))
+        }
+        }
+        <!-- Share Capital Changes -->
+        @if(checkAnswersModel.shareCapitalChanges.isDefined){
+        @if(checkAnswersModel.shareCapitalChanges.get.hasChanges == Messages("common.radioYesLabel")){
+        @textRowHelperMultiLineQuestion("shareCapitalChanges", Array(Messages("page.summaryQuestion.isSharesValueChanged"), "", Messages("page.summaryQuestion.sharesValueChanges")), Array(checkAnswersModel.shareCapitalChanges.get.hasChanges, "", checkAnswersModel.shareCapitalChanges.get.changesDescription.get), Some(controllers.seis.routes.ShareCapitalChangesController.show().url))
+        }else{
+        @textRowHelperBasic("shareCapitalChanges", Messages("page.summaryQuestion.isSharesValueChanged"), checkAnswersModel.shareCapitalChanges.get.hasChanges, Some(controllers.seis.routes.ShareCapitalChangesController.show().url))
+        }
         }
         </tbody>
     </table>
 
     <table id="contactDetails-table">
         <!-- Header -->
-        @tableHeaderHelper("contactDetailsSection", Messages("page.summaryQuestion.companyDetailsSectionFour"))
+        @tableHeaderHelper("contactDetailsSection", Messages("page.summaryQuestion.companyDetailsSectionFive"))
         <!--Data rows-->
         <tbody>
         @if(checkAnswersModel.contactDetailsModel.isDefined){

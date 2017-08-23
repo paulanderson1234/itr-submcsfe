@@ -17,7 +17,9 @@
 package models.investorDetails
 
 import common.Constants
+import models.PreviousSchemeModel.{getAmountAsFormattedString, toDateString}
 import models.{AddInvestorOrNomineeModel, CompanyDetailsModel, CompanyOrIndividualModel, IndividualDetailsModel}
+import play.api.i18n.Messages
 import play.api.libs.json.Json
 
 

@@ -29,13 +29,14 @@ class CheckAnswersSupportingDocsSpec extends CheckAnswersSpec {
 
     "Verify that the Check Answers page contains the correct elements for Section 5: Supporting Documents" +
       " when the page is loaded" in new SEISSetup {
-      val model = SEISCheckAnswersModel(None, None, None, None, None, None, Vector(), None, None, None, None, None, false)
+      val model = SEISCheckAnswersModel(None, None, None, None, Vector(), None, None, None, None, None, None, None,
+        None, None, None, None, None, None, None, None, None,  false)
       val page = CheckAnswers(model)(authorisedFakeRequest, applicationMessages)
       val document = Jsoup.parse(page.body)
 
       document.title() shouldBe Messages("page.checkAndSubmit.checkAnswers.heading")
       document.getElementById("main-heading").text() shouldBe Messages("page.checkAndSubmit.checkAnswers.heading")
-      document.getElementById("description-one").text() shouldBe Messages("page.checkAndSubmit.checkAnswers.description.one")
+      document.getElementById("description-one").text() shouldBe Messages("page.checkAndSubmit.checkAnswers.description.one")+" "+Messages("page.checkAndSubmit.checkAnswers.scheme.seis")
       document.getElementById("description-two").text() shouldBe Messages("page.checkAndSubmit.checkAnswers.description.two")
 
       lazy val supportingDocsTableBody = document.getElementById("supporting-docs-table").select("tbody")

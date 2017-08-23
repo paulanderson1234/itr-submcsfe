@@ -23,6 +23,7 @@ import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.Helpers.PreviousSchemesHelper
 import controllers.predicates.FeatureSwitch
 import models._
+import models.investorDetails.InvestorDetailsModel
 import models.seis.SEISCheckAnswersModel
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import uk.gov.hmrc.play.http.HeaderCarrier
@@ -50,17 +51,27 @@ trait CheckAnswersController extends FrontendController with AuthorisedAndEnroll
     dateOfIncorporation <- s4lConnector.fetchAndGetFormData[DateOfIncorporationModel](KeystoreKeys.dateOfIncorporation)
     tradeStartDate <- s4lConnector.fetchAndGetFormData[TradeStartDateModel](KeystoreKeys.tradeStartDate)
     natureOfBusiness <- s4lConnector.fetchAndGetFormData[NatureOfBusinessModel](KeystoreKeys.natureOfBusiness)
-    subsidiaries <- s4lConnector.fetchAndGetFormData[SubsidiariesModel](KeystoreKeys.subsidiaries)
-    hadPreviousRFI <- s4lConnector.fetchAndGetFormData[HadPreviousRFIModel](KeystoreKeys.hadPreviousRFI)
     previousSchemes <- getAllInvestmentFromKeystore(s4lConnector)
-    proposedInvestment <- s4lConnector.fetchAndGetFormData[ProposedInvestmentModel](KeystoreKeys.proposedInvestment)
-    subsidiariesSpendingInvestment <- s4lConnector.fetchAndGetFormData[SubsidiariesSpendingInvestmentModel](KeystoreKeys.subsidiariesSpendingInvestment)
-    subsidiariesNinetyOwned <- s4lConnector.fetchAndGetFormData[SubsidiariesNinetyOwnedModel](KeystoreKeys.subsidiariesNinetyOwned)
     contactDetails <- s4lConnector.fetchAndGetFormData[ContactDetailsModel](KeystoreKeys.contactDetails)
     contactAddress <- s4lConnector.fetchAndGetFormData[AddressModel](KeystoreKeys.contactAddress)
-  } yield SEISCheckAnswersModel(registeredAddress, dateOfIncorporation, tradeStartDate, natureOfBusiness, subsidiaries, hadPreviousRFI,
-    previousSchemes, proposedInvestment, subsidiariesSpendingInvestment, subsidiariesNinetyOwned, contactDetails, contactAddress,
-    applicationConfig.uploadFeatureEnabled)
+    qualifyBusinessActivity <- s4lConnector.fetchAndGetFormData[QualifyBusinessActivityModel](KeystoreKeys.isQualifyBusinessActivity)
+    hasInvestmentTradeStarted <- s4lConnector.fetchAndGetFormData[HasInvestmentTradeStartedModel](KeystoreKeys.hasInvestmentTradeStarted)
+    isSeventyPercentSpent <- s4lConnector.fetchAndGetFormData[SeventyPercentSpentModel](KeystoreKeys.seventyPercentSpent)
+    shareIssueDate <- s4lConnector.fetchAndGetFormData[ShareIssueDateModel](KeystoreKeys.shareIssueDate)
+    grossAssets <- s4lConnector.fetchAndGetFormData[GrossAssetsModel](KeystoreKeys.grossAssets)
+    fullTimeEmployees <- s4lConnector.fetchAndGetFormData[FullTimeEmployeeCountModel](KeystoreKeys.fullTimeEmployeeCount)
+    shareDescription <- s4lConnector.fetchAndGetFormData[ShareDescriptionModel](KeystoreKeys.shareDescription)
+    numberOfShares <- s4lConnector.fetchAndGetFormData[NumberOfSharesModel](KeystoreKeys.numberOfShares)
+    totalAmountRaised <- s4lConnector.fetchAndGetFormData[TotalAmountRaisedModel](KeystoreKeys.totalAmountRaised)
+    totalAmountSpent <- s4lConnector.fetchAndGetFormData[TotalAmountSpentModel](KeystoreKeys.totalAmountSpent)
+    investorDetails <- s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails)
+    valueReceived <- s4lConnector.fetchAndGetFormData[WasAnyValueReceivedModel](KeystoreKeys.wasAnyValueReceived)
+    shareCapitalChanges <- s4lConnector.fetchAndGetFormData[ShareCapitalChangesModel](KeystoreKeys.shareCapitalChanges)
+    supportingDocumentsUpload <- s4lConnector.fetchAndGetFormData[SupportingDocumentsUploadModel](KeystoreKeys.supportingDocumentsUpload)
+  } yield SEISCheckAnswersModel(registeredAddress, dateOfIncorporation, tradeStartDate, natureOfBusiness, previousSchemes,
+    contactDetails, contactAddress, qualifyBusinessActivity, hasInvestmentTradeStarted, isSeventyPercentSpent, shareIssueDate,
+    grossAssets, fullTimeEmployees, shareDescription, numberOfShares, totalAmountRaised, totalAmountSpent, investorDetails,
+    valueReceived, shareCapitalChanges, supportingDocumentsUpload, applicationConfig.uploadFeatureEnabled)
 
   def show(envelopeId: Option[String]): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
     AuthorisedAndEnrolled.async { implicit user => implicit request =>
@@ -74,14 +85,7 @@ trait CheckAnswersController extends FrontendController with AuthorisedAndEnroll
 
   val submit = featureSwitch(applicationConfig.seisFlowEnabled) {
     AuthorisedAndEnrolled.async { implicit user => implicit request =>
-      s4lConnector.fetchAndGetFormData[String](KeystoreKeys.envelopeId).flatMap {
-        envelopeId => {
-          if (envelopeId.isEmpty)
-            Future.successful(Redirect(routes.AcknowledgementController.show()))
-          else Future.successful(Redirect(controllers.seis.routes.AttachmentsAcknowledgementController.show()))
-
-        }
-      }
+      Future.successful(Redirect(controllers.seis.routes.DeclarationController.show()))
     }
   }
 
