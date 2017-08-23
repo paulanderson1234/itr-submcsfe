@@ -55,7 +55,7 @@ trait CheckAnswersController extends FrontendController with AuthorisedAndEnroll
     contactDetails <- s4lConnector.fetchAndGetFormData[ContactDetailsModel](KeystoreKeys.contactDetails)
     contactAddress <- s4lConnector.fetchAndGetFormData[AddressModel](KeystoreKeys.contactAddress)
     qualifyBusinessActivity <- s4lConnector.fetchAndGetFormData[QualifyBusinessActivityModel](KeystoreKeys.isQualifyBusinessActivity)
-    isBusinessActivityStarted <- s4lConnector.fetchAndGetFormData[HasInvestmentTradeStartedModel](KeystoreKeys.hasInvestmentTradeStarted)
+    hasInvestmentTradeStarted <- s4lConnector.fetchAndGetFormData[HasInvestmentTradeStartedModel](KeystoreKeys.hasInvestmentTradeStarted)
     isSeventyPercentSpent <- s4lConnector.fetchAndGetFormData[SeventyPercentSpentModel](KeystoreKeys.seventyPercentSpent)
     shareIssueDate <- s4lConnector.fetchAndGetFormData[ShareIssueDateModel](KeystoreKeys.shareIssueDate)
     grossAssets <- s4lConnector.fetchAndGetFormData[GrossAssetsModel](KeystoreKeys.grossAssets)
@@ -65,10 +65,13 @@ trait CheckAnswersController extends FrontendController with AuthorisedAndEnroll
     totalAmountRaised <- s4lConnector.fetchAndGetFormData[TotalAmountRaisedModel](KeystoreKeys.totalAmountRaised)
     totalAmountSpent <- s4lConnector.fetchAndGetFormData[TotalAmountSpentModel](KeystoreKeys.totalAmountSpent)
     investorDetails <- s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails)
+    valueReceived <- s4lConnector.fetchAndGetFormData[WasAnyValueReceivedModel](KeystoreKeys.wasAnyValueReceived)
+    shareCapitalChanges <- s4lConnector.fetchAndGetFormData[ShareCapitalChangesModel](KeystoreKeys.shareCapitalChanges)
+    supportingDocumentsUpload <- s4lConnector.fetchAndGetFormData[SupportingDocumentsUploadModel](KeystoreKeys.supportingDocumentsUpload)
   } yield SEISCheckAnswersModel(registeredAddress, dateOfIncorporation, tradeStartDate, natureOfBusiness, previousSchemes,
-    contactDetails, contactAddress, qualifyBusinessActivity, isBusinessActivityStarted, isSeventyPercentSpent, shareIssueDate,
+    contactDetails, contactAddress, qualifyBusinessActivity, hasInvestmentTradeStarted, isSeventyPercentSpent, shareIssueDate,
     grossAssets, fullTimeEmployees, shareDescription, numberOfShares, totalAmountRaised, totalAmountSpent, investorDetails,
-    applicationConfig.uploadFeatureEnabled)
+    valueReceived, shareCapitalChanges, supportingDocumentsUpload, applicationConfig.uploadFeatureEnabled)
 
   def show(envelopeId: Option[String]): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
     AuthorisedAndEnrolled.async { implicit user => implicit request =>
@@ -86,7 +89,7 @@ trait CheckAnswersController extends FrontendController with AuthorisedAndEnroll
         envelopeId => {
           if (envelopeId.isEmpty)
             Future.successful(Redirect(routes.AcknowledgementController.show()))
-          else Future.successful(Redirect(controllers.seis.routes.AttachmentsAcknowledgementController.show()))
+          else Future.successful(Redirect(controllers.seis.routes.DeclarationController.show()))
 
         }
       }

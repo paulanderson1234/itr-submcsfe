@@ -28,7 +28,7 @@ case class SEISCheckAnswersModel(
                                   contactDetailsModel: Option[ContactDetailsModel],
                                   contactAddressModel: Option[AddressModel],
                                   qualifyBusinessActivity: Option[QualifyBusinessActivityModel],
-                                  isBusinessActivityStarted: Option[HasInvestmentTradeStartedModel],
+                                  hasInvestmentTradeStarted: Option[HasInvestmentTradeStartedModel],
                                   isSeventyPercentSpent: Option[SeventyPercentSpentModel],
                                   shareIssueDate: Option[ShareIssueDateModel],
                                   grossAssets: Option[GrossAssetsModel],
@@ -38,5 +38,8 @@ case class SEISCheckAnswersModel(
                                   totalAmountRaised: Option[TotalAmountRaisedModel],
                                   totalAmountSpent: Option[TotalAmountSpentModel],
                                   investorDetails: Option[Vector[InvestorDetailsModel]],
+                                  valueReceived: Option[WasAnyValueReceivedModel],
+                                  shareCapitalChanges: Option[ShareCapitalChangesModel],
+                                  supportingDocumentsUpload: Option[SupportingDocumentsUploadModel],
                                   attachmentsEnabled: Boolean
                             )

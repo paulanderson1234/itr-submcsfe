@@ -531,7 +531,7 @@ page.checkAndSubmit.checkAnswers.scheme.seis=the Seed Enterprise Investment Sche
 page.checkAndSubmit.checkAnswers.scheme.vct=the Venture Capital Trust scheme
 page.checkAndSubmit.checkAnswers.description.two=Check your answers before you continue.
 page.checkAndSubmit.checkAnswers.print.text=Print this page
-page.checkAndSubmit.checkAnswers.button.confirm=Submit
+page.checkAndSubmit.checkAnswers.button.confirm=Continue to declaration
 page.checkAndSubmit.checkAnswers.suportingDocs.desc=To complete your Compliance Statement, we''ll need your company''s:
 
 #check your answers page
@@ -579,7 +579,7 @@ summaryQuestion.previousRFISection =Section 2: Previous schemes
 page.investment.amount.label=Amount raised:
 page.investment.amountSpent.label=Amount spent:
 page.investment.dateOfShareIssue.label=Date of investment:
-page.summaryQuestion.none.question=Previous schemes
+page.summaryQuestion.none.question=Previous investment before
 page.summaryQuestion.none.answer=None
 
 #summary questions section three
@@ -590,7 +590,7 @@ page.summaryQuestion.amountRaised=Total amount raised
 page.summaryQuestion.amountSpent=Total amount spent
 
 #summary questions section four
-page.summaryQuestion.investorsSectionThree=Section 4: Investors and nominees
+page.summaryQuestion.investorsSection=Section 4: Investors and nominees
 page.summaryQuestion.noOfInvestors=Number of investors and nominees
 page.summaryQuestion.investorShares=Shares or debentures repaid or repurchased
 page.summaryQuestion.sharesRepaymentType=Type of repayment or repurchase:

@@ -18,6 +18,7 @@ package models
 
 import common.Constants
 import play.api.libs.json.Json
+import utils.DateFormatter
 
 case class HasInvestmentTradeStartedModel(hasInvestmentTradeStarted : String, hasInvestmentTradeStartedDay: Option[Int],
                                           hasInvestmentTradeStartedMonth: Option[Int], hasInvestmentTradeStartedYear: Option[Int]) {
@@ -32,6 +33,6 @@ case class HasInvestmentTradeStartedModel(hasInvestmentTradeStarted : String, ha
 
                                           }
 
-object HasInvestmentTradeStartedModel {
+object HasInvestmentTradeStartedModel extends DateFormatter{
   implicit val format = Json.format[HasInvestmentTradeStartedModel]
 }
