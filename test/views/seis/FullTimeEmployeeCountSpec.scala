@@ -50,7 +50,7 @@ class FullTimeEmployeeCountSpec extends ViewSpec {
       }
 
       "have the progress details" in {
-        document.select("article span").first().text shouldBe Messages("common.section.progress.company.details.one")
+        document.select("article span").first().text shouldBe Messages("common.section.progress.details.one")
       }
 
       "have the correct heading" in {
@@ -114,7 +114,7 @@ class FullTimeEmployeeCountSpec extends ViewSpec {
       }
 
       "have the progress details" in {
-        document.select("article span").first().text shouldBe Messages("common.section.progress.company.details.one")
+        document.select("article span").first().text shouldBe Messages("common.section.progress.details.one")
       }
 
       "have the correct heading" in {

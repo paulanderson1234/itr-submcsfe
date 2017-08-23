@@ -52,7 +52,7 @@ class SupportingDocumentsUploadSpec extends ViewSpec {
       document.getElementById("doUpload-yesLabel").text() shouldBe Messages("common.radioYesLabel")
       document.getElementById("doUpload-noLabel").text() shouldBe Messages("common.radioNoLabel")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
-      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.company.details.six")
+      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.six")
       document.body.getElementById("back-link").attr("href") shouldEqual routes.ConfirmCorrespondAddressController.show().url
       document.body.getElementById("venture-capital-schemes-dashboard").getElementsByTag("a").first().attr("href") shouldBe
         controllers.routes.ApplicationHubController.show().url
@@ -75,7 +75,7 @@ class SupportingDocumentsUploadSpec extends ViewSpec {
       documentEmpty.getElementById("doUpload-noLabel").text() shouldBe Messages("common.radioNoLabel")
       documentEmpty.getElementById("next").text() shouldBe Messages("common.button.snc")
       documentEmpty.getElementById("error-summary-display").hasClass("error-summary--show")
-      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.company.details.six")
+      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.six")
       document.body.getElementById("back-link").attr("href") shouldEqual routes.ConfirmCorrespondAddressController.show().url
       document.body.getElementById("venture-capital-schemes-dashboard").getElementsByTag("a").first().attr("href") shouldBe
         controllers.routes.ApplicationHubController.show().url

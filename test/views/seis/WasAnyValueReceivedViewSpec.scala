@@ -48,7 +48,7 @@ class WasAnyValueReceivedViewSpec extends ViewSpec with FakeRequestHelper {
       }
 
       "have the correct breadcrumbs message" in {
-        doc.select("span.form-hint-breadcrumb").text() shouldBe Messages("common.section.progress.company.details.four")
+        doc.select("span.form-hint-breadcrumb").text() shouldBe Messages("common.section.progress.details.four")
       }
 
       "have no error summary" in {

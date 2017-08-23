@@ -81,7 +81,7 @@ class PreviousBeforeDOFCSSpec extends ViewSpec with DateFormatter {
       Messages("page.previousInvestment.previousBeforeDOFCS.description",Constants.IsKnowledgeIntensiveYears)
     document.getElementById("previousBeforeDOFCS-legend").select(".visuallyhidden").text() shouldBe
       Messages("page.previousInvestment.previousBeforeDOFCS.heading",commercialDate,secondDate(Constants.IsKnowledgeIntensiveYears))
-    document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.company.details.three")
+    document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.three")
     document.getElementById("next").text() shouldBe Messages("common.button.snc")
   }
 
@@ -105,7 +105,7 @@ class PreviousBeforeDOFCSSpec extends ViewSpec with DateFormatter {
       Messages("page.previousInvestment.previousBeforeDOFCS.description",Constants.IsNotKnowledgeIntensiveYears)
     document.getElementById("previousBeforeDOFCS-legend").select(".visuallyhidden").text() shouldBe
       Messages("page.previousInvestment.previousBeforeDOFCS.heading",commercialDate,secondDate(Constants.IsNotKnowledgeIntensiveYears))
-    document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.company.details.three")
+    document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.three")
     document.getElementById("next").text() shouldBe Messages("common.button.snc")
   }
 
@@ -129,7 +129,7 @@ class PreviousBeforeDOFCSSpec extends ViewSpec with DateFormatter {
       Messages("page.previousInvestment.previousBeforeDOFCS.description",Constants.IsKnowledgeIntensiveYears)
     document.getElementById("previousBeforeDOFCS-legend").select(".visuallyhidden").text() shouldBe
       Messages("page.previousInvestment.previousBeforeDOFCS.heading",commercialDate,secondDate(Constants.IsKnowledgeIntensiveYears))
-    document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.company.details.three")
+    document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.three")
     document.getElementById("next").text() shouldBe Messages("common.button.snc")
   }
 
@@ -153,7 +153,7 @@ class PreviousBeforeDOFCSSpec extends ViewSpec with DateFormatter {
       Messages("page.previousInvestment.previousBeforeDOFCS.description",Constants.IsNotKnowledgeIntensiveYears)
     document.getElementById("previousBeforeDOFCS-legend").select(".visuallyhidden").text() shouldBe
       Messages("page.previousInvestment.previousBeforeDOFCS.heading",commercialDate,secondDate(Constants.IsNotKnowledgeIntensiveYears))
-    document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.company.details.three")
+    document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.three")
     document.getElementById("next").text() shouldBe Messages("common.button.snc")
   }
 

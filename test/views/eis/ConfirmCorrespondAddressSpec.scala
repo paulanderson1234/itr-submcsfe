@@ -77,7 +77,7 @@ class ConfirmCorrespondAddressSpec extends ViewSpec with BaseSpec {
       document.getElementById("main-heading").text() shouldBe Messages("page.contactInformation.ConfirmCorrespondAddress.heading")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       document.body.getElementById("back-link").attr("href") shouldEqual "backLink"
-      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.company.details.four")
+      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.four")
       document.body.getElementById("contactAddressUse-yesLabel").text shouldBe  Messages("common.radioYesLabel")
       document.body.getElementById("contactAddressUse-noLabel").text shouldBe  Messages("common.radioNoLabel")
       document.body.select("#contactAddressUse-yes").size() shouldBe 1
@@ -105,7 +105,7 @@ class ConfirmCorrespondAddressSpec extends ViewSpec with BaseSpec {
       document.getElementById("main-heading").text() shouldBe Messages("page.contactInformation.ConfirmCorrespondAddress.heading")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       document.body.getElementById("back-link").attr("href") shouldEqual "backLink"
-      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.company.details.four")
+      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.four")
       document.body.getElementById("contactAddressUse-yesLabel").text shouldBe  Messages("common.radioYesLabel")
       document.body.getElementById("contactAddressUse-noLabel").text shouldBe  Messages("common.radioNoLabel")
       document.body.select("#contactAddressUse-yes").size() shouldBe 1
@@ -139,7 +139,7 @@ class ConfirmCorrespondAddressSpec extends ViewSpec with BaseSpec {
       document.getElementById("main-heading").text() shouldBe Messages("page.contactInformation.ConfirmCorrespondAddress.heading")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       document.body.getElementById("back-link").attr("href") shouldEqual "backLink"
-      document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.company.details.four")
+      document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.four")
       document.body.getElementById("contactAddressUse-yesLabel").text shouldBe  Messages("common.radioYesLabel")
       document.body.getElementById("contactAddressUse-noLabel").text shouldBe  Messages("common.radioNoLabel")
       document.body.select("#contactAddressUse-yes").size() shouldBe 1

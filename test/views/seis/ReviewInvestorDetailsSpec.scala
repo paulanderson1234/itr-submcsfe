@@ -68,7 +68,7 @@ class ReviewInvestorDetailsSpec extends ViewSpec {
       }
 
       "have a progress breadcrumb for section 4" in {
-        doc.select("#content p").first().text() shouldBe Messages("common.section.progress.company.details.four")
+        doc.select("#content p").first().text() shouldBe Messages("common.section.progress.details.four")
       }
 
       "have the correct heading for a nominee" in {
@@ -210,7 +210,7 @@ class ReviewInvestorDetailsSpec extends ViewSpec {
       }
 
       "have a progress breadcrumb for section 4" in {
-        doc.select("#content p").first().text() shouldBe Messages("common.section.progress.company.details.four")
+        doc.select("#content p").first().text() shouldBe Messages("common.section.progress.details.four")
       }
 
       "have the correct heading for a nominee" in {

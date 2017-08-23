@@ -62,7 +62,7 @@ class NewGeographicalMarketSpec extends ViewSpec {
     document.select("#isNewGeographicalMarket-no").size() shouldBe 1
     document.getElementById("isNewGeographicalMarket-yesLabel").text() shouldBe Messages("common.radioYesLabel")
     document.getElementById("isNewGeographicalMarket-noLabel").text() shouldBe Messages("common.radioNoLabel")
-    document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.company.details.three")
+    document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.three")
     document.body.getElementById("external-hint").text shouldBe
       s"${Messages("page.investment.NewGeographicalMarket.hint")} ${Messages("page.investment.NewGeographicalMarket.hint.link")} opens in a new window"
     document.getElementById("next").text() shouldBe Messages("common.button.snc")
@@ -103,7 +103,7 @@ class NewGeographicalMarketSpec extends ViewSpec {
     document.getElementById("isNewGeographicalMarket-noLabel").text() shouldBe Messages("common.radioNoLabel")
     document.body.getElementById("external-hint").text shouldBe
       s"${Messages("page.investment.NewGeographicalMarket.hint")} ${Messages("page.investment.NewGeographicalMarket.hint.link")} opens in a new window"
-    document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.company.details.three")
+    document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.three")
     document.getElementById("next").text() shouldBe Messages("common.button.snc")
   }
 

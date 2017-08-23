@@ -64,7 +64,7 @@ class SubsidiariesNinetyOwnedSpec extends ViewSpec {
       document.getElementById("text-two-id").text() shouldBe Messages("page.investment.SubsidiariesNinetyOwned.error.two")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       document.body.getElementById("back-link").attr("href") shouldEqual controllers.eisseis.routes.SubsidiariesSpendingInvestmentController.show().url
-      document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.company.details.three")
+      document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.three")
     }
 
     "Verify that the taxpayer reference page contains the correct elements when an invalid TaxpayerReferenceModel is passed" in new Setup {
@@ -79,7 +79,7 @@ class SubsidiariesNinetyOwnedSpec extends ViewSpec {
       document.getElementById("text-two-id").text() shouldBe Messages("page.investment.SubsidiariesNinetyOwned.error.two")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       document.body.getElementById("back-link").attr("href") shouldEqual controllers.eisseis.routes.SubsidiariesSpendingInvestmentController.show().url
-      document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.company.details.three")
+      document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.three")
       document.getElementById("error-summary-display").hasClass("error-summary--show")
     }
   }
