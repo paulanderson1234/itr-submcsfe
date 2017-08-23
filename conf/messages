@@ -632,7 +632,7 @@ page.contactInformation.ConfirmContactDetails.heading=Are these the contact deta
 page.contactInformation.ConfirmContactDetails.title=Are these the contact details you want us to use for this application?
 
 #summary questions section five
-page.summaryQuestion.supportingDocsSection=Section 5: Supporting documents
+page.summaryQuestion.supportingDocsSection=Section 6: Supporting documents
 
 #acknowledgement
 page.checkAndSubmit.acknowledgement.title=You''ve submitted your answers
