@@ -20,7 +20,7 @@
 @form(action = controllers.seis.routes.PreviousShareHoldingDescriptionController.submit(Some(companyOrIndividual), Some(investorProcessingId))) {
 
 <fieldset>
-    <legend class="visuallyhidden">@Messages("page.investors.previousShareHoldingDescription.heading")</legend>
+    <legend class="visuallyhidden">@Messages("page.investors.previousShareHoldingDescription.heading", companyOrIndividual.toLowerCase())</legend>
     <div class="form-group">
         <span class = "form-hint" id="desc-one">@Messages("page.investors.previousShareHoldingDescription.question.hint")</span>
         @textArea(
