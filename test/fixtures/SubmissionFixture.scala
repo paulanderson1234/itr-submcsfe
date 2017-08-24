@@ -23,6 +23,8 @@ import models.{KiProcessingModel, _}
 import org.mockito.Matchers
 import org.mockito.Mockito._
 import auth.AuthEnrolledTestController.{INTERNAL_SERVER_ERROR => _, OK => _, SEE_OTHER => _, _}
+import models.investorDetails.{HowMuchSpentOnSharesModel, InvestorDetailsModel, IsExistingShareHolderModel, NumberOfSharesPurchasedModel}
+import models.seis.{ContactDetailsAnswersModel, _}
 import models.submission._
 import services.RegistrationDetailsService
 
@@ -30,6 +32,54 @@ import scala.concurrent.Future
 
 //noinspection ScalaStyle
 trait SubmissionFixture {
+
+  def setupMocksCs(mockS4lConnector: S4LConnector): Unit = {
+
+    when(mockS4lConnector.fetchAndGetFormData[NatureOfBusinessModel](Matchers.eq(KeystoreKeys.natureOfBusiness))(Matchers.any(), Matchers.any(),Matchers.any()))
+      .thenReturn(Future.successful(Option(natureOfBusinessValid)))
+    when(mockS4lConnector.fetchAndGetFormData[DateOfIncorporationModel](Matchers.eq(KeystoreKeys.dateOfIncorporation))(Matchers.any(), Matchers.any(),Matchers.any()))
+      .thenReturn(Future.successful(Option(dateOfIncorporationValid)))
+    when(mockS4lConnector.fetchAndGetFormData[QualifyBusinessActivityModel](Matchers.eq(KeystoreKeys.isQualifyBusinessActivity))(Matchers.any(), Matchers.any(),Matchers.any()))
+        .thenReturn(Future.successful(Some(QualifyBusinessActivityModel(Constants.qualifyResearchAndDevelopment))))
+    when(mockS4lConnector.fetchAndGetFormData[TradeStartDateModel](Matchers.eq(KeystoreKeys.tradeStartDate))(Matchers.any(), Matchers.any(),Matchers.any()))
+      .thenReturn(Future.successful(None))
+    when(mockS4lConnector.fetchAndGetFormData[ResearchStartDateModel](Matchers.eq(KeystoreKeys.researchStartDate))(Matchers.any(), Matchers.any(),Matchers.any()))
+      .thenReturn(Future.successful(Some(ResearchStartDateModel("Yes", Some(1), Some(4), Some(2016)))))
+    when(mockS4lConnector.fetchAndGetFormData[SeventyPercentSpentModel](Matchers.eq(KeystoreKeys.seventyPercentSpent))(Matchers.any(), Matchers.any(),Matchers.any()))
+      .thenReturn(Future.successful(None))
+    when(mockS4lConnector.fetchAndGetFormData[ShareIssueDateModel](Matchers.eq(KeystoreKeys.shareIssueDate))(Matchers.any(), Matchers.any(),Matchers.any()))
+      .thenReturn(Future.successful(Some(shareIssueDateModel)))
+    when(mockS4lConnector.fetchAndGetFormData[GrossAssetsModel](Matchers.eq(KeystoreKeys.grossAssets))(Matchers.any(), Matchers.any(),Matchers.any()))
+      .thenReturn(Future.successful(Some(GrossAssetsModel(1000))))
+    when(mockS4lConnector.fetchAndGetFormData[FullTimeEmployeeCountModel](Matchers.eq(KeystoreKeys.fullTimeEmployeeCount))(Matchers.any(), Matchers.any(),Matchers.any()))
+      .thenReturn(Future.successful(Some(FullTimeEmployeeCountModel(1))))
+    when(mockS4lConnector.fetchAndGetFormData[HadPreviousRFIModel](Matchers.eq(KeystoreKeys.hadPreviousRFI))(Matchers.any(), Matchers.any(),Matchers.any()))
+      .thenReturn(Future.successful(Some(HadPreviousRFIModel("Yes"))))
+    when(mockS4lConnector.fetchAndGetFormData[HadOtherInvestmentsModel](Matchers.eq(KeystoreKeys.hadOtherInvestments))(Matchers.any(), Matchers.any(),Matchers.any()))
+      .thenReturn(Future.successful(Some(HadOtherInvestmentsModel("Yes"))))
+    when(mockS4lConnector.fetchAndGetFormData[List[PreviousSchemeModel]](Matchers.eq(KeystoreKeys.previousSchemes))(Matchers.any(), Matchers.any(),Matchers.any()))
+      .thenReturn(Future.successful(Some(List(PreviousSchemeModel("test", 1, Some(1), Some("Name"), Some(1), Some(2), Some(2015), Some(1))))))
+    when(mockS4lConnector.fetchAndGetFormData[ShareDescriptionModel](Matchers.eq(KeystoreKeys.shareDescription))(Matchers.any(), Matchers.any(),Matchers.any()))
+      .thenReturn(Future.successful(Some(ShareDescriptionModel(""))))
+    when(mockS4lConnector.fetchAndGetFormData[NumberOfSharesModel](Matchers.eq(KeystoreKeys.numberOfShares))(Matchers.any(), Matchers.any(),Matchers.any()))
+      .thenReturn(Future.successful(Some(NumberOfSharesModel(5))))
+    when(mockS4lConnector.fetchAndGetFormData[TotalAmountRaisedModel](Matchers.eq(KeystoreKeys.totalAmountRaised))(Matchers.any(), Matchers.any(),Matchers.any()))
+      .thenReturn(Future.successful(Some(TotalAmountRaisedModel(5))))
+    when(mockS4lConnector.fetchAndGetFormData[TotalAmountSpentModel](Matchers.eq(KeystoreKeys.totalAmountSpent))(Matchers.any(), Matchers.any(),Matchers.any()))
+      .thenReturn(Future.successful(Some(TotalAmountSpentModel(5))))
+    when(mockS4lConnector.fetchAndGetFormData[List[InvestorDetailsModel]](Matchers.eq(KeystoreKeys.investorDetails))(Matchers.any(), Matchers.any(),Matchers.any()))
+      .thenReturn(Future.successful(Some(validInvestors)))
+    when(mockS4lConnector.fetchAndGetFormData[WasAnyValueReceivedModel](Matchers.eq(KeystoreKeys.wasAnyValueReceived))(Matchers.any(), Matchers.any(),Matchers.any()))
+      .thenReturn(Future.successful(Some(WasAnyValueReceivedModel("No", None))))
+    when(mockS4lConnector.fetchAndGetFormData[ShareCapitalChangesModel](Matchers.eq(KeystoreKeys.shareCapitalChanges))(Matchers.any(), Matchers.any(),Matchers.any()))
+      .thenReturn(Future.successful(Some(ShareCapitalChangesModel("No", None))))
+    when(mockS4lConnector.fetchAndGetFormData[ContactDetailsModel](Matchers.eq(KeystoreKeys.contactDetails))(Matchers.any(), Matchers.any(),Matchers.any()))
+      .thenReturn(Future.successful(Some(ContactDetailsModel("", "", None, None, ""))))
+    when(mockS4lConnector.fetchAndGetFormData[ConfirmCorrespondAddressModel](Matchers.eq(KeystoreKeys.confirmContactAddress))(Matchers.any(), Matchers.any(),Matchers.any()))
+      .thenReturn(Future.successful(Some(ConfirmCorrespondAddressModel("Yes", fullCorrespondenceAddress))))
+    when(mockS4lConnector.fetchAndGetFormData[SupportingDocumentsUploadModel](Matchers.eq(KeystoreKeys.supportingDocumentsUpload))(Matchers.any(), Matchers.any(),Matchers.any()))
+      .thenReturn(Future.successful(Some(SupportingDocumentsUploadModel("Yes"))))
+  }
 
   def setUpMocks(mockS4lConnector: S4LConnector) {
 
@@ -286,4 +336,23 @@ trait SubmissionFixture {
   val tenYearPlanValid = TenYearPlanModel(Constants.StandardRadioButtonYesValue, Some("To borrow to invest as in business plan"))
   val operatingCostsValid = OperatingCostsModel("12", "13", "14", "15", "16", "17", "2005", "2004", "2003")
   val turnoverCostsValid = AnnualTurnoverCostsModel("12", "13", "14", "15", "16", "2003", "2004", "2005", "2006", "2007")
+
+  val validInvestors = List(InvestorDetailsModel(Some(AddInvestorOrNomineeModel("Investor", Some(1))),
+    Some(CompanyOrIndividualModel("Individual", Some(1))), None, Some(IndividualDetailsModel("", "", "", "", None, None, None, "UK", Some(1))),
+    Some(NumberOfSharesPurchasedModel(1, Some(1))), Some(HowMuchSpentOnSharesModel(1, Some(1))), Some(IsExistingShareHolderModel("No", Some(1))),
+    None, Some(1)))
+
+  val validSEISAnswersModel = SEISAnswersModel(
+    CompanyDetailsAnswersModel(natureOfBusinessValid, dateOfIncorporationValid, QualifyBusinessActivityModel(Constants.qualifyResearchAndDevelopment),
+      None, Some(ResearchStartDateModel("Yes", Some(1), Some(4), Some(2016))), None, shareIssueDateModel, GrossAssetsModel(1000),
+      FullTimeEmployeeCountModel(1)),
+    PreviousSchemesAnswersModel(HadPreviousRFIModel("Yes"), HadOtherInvestmentsModel("Yes"),
+      Some(List(PreviousSchemeModel("test", 1, Some(1), Some("Name"), Some(1), Some(2), Some(2015), Some(1))))),
+    ShareDetailsAnswersModel(ShareDescriptionModel(""),
+      NumberOfSharesModel(5), TotalAmountRaisedModel(5), Some(TotalAmountSpentModel(5))),
+    InvestorDetailsAnswersModel(validInvestors,
+      WasAnyValueReceivedModel("No", None), ShareCapitalChangesModel("No", None)),
+    ContactDetailsAnswersModel(ContactDetailsModel("", "", None, None, ""),
+      ConfirmCorrespondAddressModel("Yes", fullCorrespondenceAddress)),
+    SupportingDocumentsUploadModel("Yes"))
 }

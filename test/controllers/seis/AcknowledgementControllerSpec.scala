@@ -16,23 +16,26 @@
 
 package controllers.seis
 
+import java.util.concurrent.TimeUnit.SECONDS
+
+import auth.AuthEnrolledTestController.{INTERNAL_SERVER_ERROR => _, NO_CONTENT => _, OK => _, SEE_OTHER => _, _}
 import auth._
 import common.KeystoreKeys
 import config.FrontendAuthConnector
 import connectors.{EnrolmentConnector, S4LConnector, SubmissionConnector}
+import controllers.feedback
+import controllers.helpers.BaseSpec
 import models._
+import models.submission.{SchemeTypesModel, SubmissionResponse}
 import org.mockito.Matchers
 import org.mockito.Mockito._
 import play.api.libs.json.Json
 import play.api.test.Helpers._
 import services.FileUploadService
 import uk.gov.hmrc.play.http.HttpResponse
-import auth.AuthEnrolledTestController.{INTERNAL_SERVER_ERROR => _, NO_CONTENT => _, OK => _, SEE_OTHER => _, _}
-import controllers.feedback
-import controllers.helpers.BaseSpec
-import models.submission.{SchemeTypesModel, SubmissionResponse}
 
-import scala.concurrent.Future
+import scala.concurrent.duration.Duration
+import scala.concurrent.{Await, Future}
 
 class AcknowledgementControllerSpec extends BaseSpec {
 
@@ -42,6 +45,8 @@ class AcknowledgementControllerSpec extends BaseSpec {
   val submissionRequestValid = SubmissionRequest(contactValid, yourCompanyNeed)
   val submissionRequestInvalid = SubmissionRequest(contactInvalid, yourCompanyNeed)
   val submissionResponse = SubmissionResponse("2014-12-17", "FBUND09889765")
+
+  implicit val user = mock[TAVCUser]
 
   object TestController extends AcknowledgementController {
     override lazy val applicationConfig = MockConfig
@@ -94,10 +99,35 @@ class AcknowledgementControllerSpec extends BaseSpec {
     }
   }
 
+  "Extracting all the answers from the SEIS flow" should {
+
+    "return an error if any of the calls to save for later fail" in {
+      setupMocksCs(mockS4lConnector)
+      when(mockS4lConnector.fetchAndGetFormData[NatureOfBusinessModel](Matchers.eq(KeystoreKeys.natureOfBusiness))(Matchers.any(),
+        Matchers.any(), Matchers.any())).thenReturn(Future.failed(new Exception("test error")))
+
+      intercept[Exception](Await.result(TestController.getAnswers, Duration(10.0, SECONDS))).getMessage shouldBe "test error"
+    }
+
+    "return a None if any of the mandatory data is missing" in {
+      setupMocksCs(mockS4lConnector)
+      when(mockS4lConnector.fetchAndGetFormData[NatureOfBusinessModel](Matchers.eq(KeystoreKeys.natureOfBusiness))(Matchers.any(),
+        Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
+
+      Await.result(TestController.getAnswers, Duration(10.0, SECONDS)) shouldBe None
+    }
+
+    "return a valid model if all required data is found" in {
+      setupMocksCs(mockS4lConnector)
+
+      Await.result(TestController.getAnswers, Duration(10.0, SECONDS)).contains(validSEISAnswersModel) shouldBe true
+    }
+  }
+
   "Sending an Authenticated and Enrolled GET request with a session to AcknowledgementController" should {
     "return a 200 and delete the current application when a valid submission data is submitted" in new SetupPageFull {
       when(mockFileUploadService.getUploadFeatureEnabled).thenReturn(false)
-      when(mockS4lConnector.clearCache()(Matchers.any(),Matchers.any())).thenReturn(HttpResponse(NO_CONTENT))
+      when(mockS4lConnector.clearCache()(Matchers.any(), Matchers.any())).thenReturn(HttpResponse(NO_CONTENT))
       setupMocks()
       mockEnrolledRequest(seisSchemeTypesModel)
       val result = TestController.show.apply(authorisedFakeRequest)
@@ -109,10 +139,11 @@ class AcknowledgementControllerSpec extends BaseSpec {
     "return a 200, close the file upload envelope and " +
       "delete the current application when a valid submission data is submitted with the file upload flag enabled" in new SetupPageFull {
       when(mockFileUploadService.getUploadFeatureEnabled).thenReturn(true)
-      when(mockFileUploadService.closeEnvelope(Matchers.any(), Matchers.any())(Matchers.any(),Matchers.any(), Matchers.any())).thenReturn(Future(HttpResponse(OK)))
+      when(mockFileUploadService.closeEnvelope(Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(),
+        Matchers.any())).thenReturn(Future(HttpResponse(OK)))
       when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.envelopeId))
-        (Matchers.any(), Matchers.any(),Matchers.any())).thenReturn(Future.successful(envelopeId))
-      when(mockS4lConnector.clearCache()(Matchers.any(),Matchers.any())).thenReturn(HttpResponse(NO_CONTENT))
+        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(envelopeId))
+      when(mockS4lConnector.clearCache()(Matchers.any(), Matchers.any())).thenReturn(HttpResponse(NO_CONTENT))
       setupMocks()
       mockEnrolledRequest(seisSchemeTypesModel)
       val result = TestController.show.apply(authorisedFakeRequest)
@@ -123,7 +154,7 @@ class AcknowledgementControllerSpec extends BaseSpec {
   "Sending an Authenticated and Enrolled GET request with a session to AcknowledgementController" should {
     "return a 200 and delete the current application when a valid submission data is submitted with minimum expected data" in new SetupPageMinimum {
       when(mockFileUploadService.getUploadFeatureEnabled).thenReturn(false)
-      when(mockS4lConnector.clearCache()(Matchers.any(),Matchers.any())).thenReturn(HttpResponse(NO_CONTENT))
+      when(mockS4lConnector.clearCache()(Matchers.any(), Matchers.any())).thenReturn(HttpResponse(NO_CONTENT))
       setupMocks()
       mockEnrolledRequest(seisSchemeTypesModel)
       val result = TestController.show.apply(authorisedFakeRequest)

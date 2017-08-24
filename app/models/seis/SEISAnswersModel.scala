@@ -19,27 +19,35 @@ package models.seis
 import models._
 import models.investorDetails.InvestorDetailsModel
 
-case class SEISAnswersModel(
-                             natureOfBusinessModel: NatureOfBusinessModel,
-                             dateOfIncorporationModel: DateOfIncorporationModel,
-                             qualifyBusinessActivityModel: QualifyBusinessActivityModel,
-                             tradeStartDateModel: Option[TradeStartDateModel],
-                             researchStartDateModel: Option[ResearchStartDateModel],
-                             seventyPercentSpentModel: Option[SeventyPercentSpentModel],
-                             shareIssueDateModel: ShareIssueDateModel,
-                             grossAssetsModel: GrossAssetsModel,
-                             fullTimeEmployeeCountModel: FullTimeEmployeeCountModel,
-                             hadPreviousRFIModel: HadPreviousRFIModel,
-                             otherInvestmentsModel: HadOtherInvestmentsModel,
-                             previousSchemeModel: Option[List[PreviousSchemeModel]],
-                             shareDescriptionModel: ShareDescriptionModel,
-                             numberOfSharesModel: NumberOfSharesModel,
-                             totalAmountRaisedModel: TotalAmountRaisedModel,
-                             totalAmountSpentModel: Option[TotalAmountSpentModel],
-                             investors: List[InvestorDetailsModel],
-                             valueReceivedModel: WasAnyValueReceivedModel,
-                             shareCapitalChangesModel: ShareCapitalChangesModel,
-                             contactDetailsModel: ContactDetailsModel,
-                             correspondAddressModel: ConfirmCorrespondAddressModel,
-                             supportingDocumentsUploadModel: SupportingDocumentsUploadModel
-                           )
+case class SEISAnswersModel(companyDetailsAnswersModel: CompanyDetailsAnswersModel,
+                            previousSchemesAnswersModel: PreviousSchemesAnswersModel,
+                            shareDetailsAnswersModel: ShareDetailsAnswersModel,
+                            investorDetailsAnswersModel: InvestorDetailsAnswersModel,
+                            contactDetailsAnswersModel: ContactDetailsAnswersModel,
+                            supportingDocumentsUploadModel: SupportingDocumentsUploadModel)
+
+case class CompanyDetailsAnswersModel(natureOfBusinessModel: NatureOfBusinessModel,
+                                      dateOfIncorporationModel: DateOfIncorporationModel,
+                                      qualifyBusinessActivityModel: QualifyBusinessActivityModel,
+                                      tradeStartDateModel: Option[TradeStartDateModel],
+                                      researchStartDateModel: Option[ResearchStartDateModel],
+                                      seventyPercentSpentModel: Option[SeventyPercentSpentModel],
+                                      shareIssueDateModel: ShareIssueDateModel,
+                                      grossAssetsModel: GrossAssetsModel,
+                                      fullTimeEmployeeCountModel: FullTimeEmployeeCountModel)
+
+case class PreviousSchemesAnswersModel(hadPreviousRFIModel: HadPreviousRFIModel,
+                                       otherInvestmentsModel: HadOtherInvestmentsModel,
+                                       previousSchemeModel: Option[List[PreviousSchemeModel]])
+
+case class ShareDetailsAnswersModel(shareDescriptionModel: ShareDescriptionModel,
+                                    numberOfSharesModel: NumberOfSharesModel,
+                                    totalAmountRaisedModel: TotalAmountRaisedModel,
+                                    totalAmountSpentModel: Option[TotalAmountSpentModel])
+
+case class InvestorDetailsAnswersModel(investors: List[InvestorDetailsModel],
+                                       valueReceivedModel: WasAnyValueReceivedModel,
+                                       shareCapitalChangesModel: ShareCapitalChangesModel)
+
+case class ContactDetailsAnswersModel(contactDetailsModel: ContactDetailsModel,
+                                      correspondAddressModel: ConfirmCorrespondAddressModel)
