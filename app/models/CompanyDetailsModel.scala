@@ -24,7 +24,7 @@ case class CompanyDetailsModel(companyName : String,
                                companyAddressline3 : Option[String],
                                companyAddressline4 : Option[String],
                                companyPostcode : Option[String],
-                               countryCode : String,
+                               countryCode : String = "GB",
                                processingId: Option[Int]) {
 
   def toArray: Array[String] = Array(Some(companyAddressline1), Some(companyAddressline2),

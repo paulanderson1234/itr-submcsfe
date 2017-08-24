@@ -87,6 +87,8 @@ trait Constants {
   val typeCompany = "Company"
   val typeIndividual = "Individual"
 
+  val countyCodeGB = "GB"
+
   val notFound = -1
   val obviouslyInvalidId = 9999999
 
