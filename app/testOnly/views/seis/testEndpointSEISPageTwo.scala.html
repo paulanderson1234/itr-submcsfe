@@ -100,7 +100,7 @@ wasAnyValueReceivedForm: Form[WasAnyValueReceivedModel],shareCapitalChangesForm:
             "wasAnyValueReceived",
             Messages("page.investors.wasAnyValueReceived.title"),
             textArea(
-                wasAnyValueReceivedForm("anyValueDescription"),
+                wasAnyValueReceivedForm("descriptionTextArea"),
                 '_cols -> "45",
                 '_rows -> "5",
                 '_maxLength-> Constants.shortTextLimit,
@@ -119,7 +119,7 @@ wasAnyValueReceivedForm: Form[WasAnyValueReceivedModel],shareCapitalChangesForm:
         "hasChanges",
         Messages("page.investors.wasAnyValueReceived.title"),
         textArea(
-        shareCapitalChangesForm("changesDescription"),
+        shareCapitalChangesForm("descriptionTextArea"),
         '_cols -> "45",
         '_rows -> "5",
         '_maxLength-> Constants.shortTextLimit,
