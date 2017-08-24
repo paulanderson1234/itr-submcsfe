@@ -191,7 +191,7 @@ class CheckAnswersControllerSpec extends BaseSpec with CheckAnswersSpec {
 
   "Sending a submission to the CheckAnswersController with no attachments for SEIS" should {
 
-    "redirect to the acknowledgement page when authenticated and enrolled" in {
+    "redirect to the declaration page when authenticated and enrolled" in {
       when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.envelopeId))
         (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
       setupMocks(Some(listOfInvestorsWithShareHoldings))
@@ -199,7 +199,7 @@ class CheckAnswersControllerSpec extends BaseSpec with CheckAnswersSpec {
       submitWithSessionAndAuth(TestController.submit)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(controllers.seis.routes.AcknowledgementController.show().url)
+          redirectLocation(result) shouldBe Some(controllers.seis.routes.DeclarationController.show().url)
         }
       )
     }
