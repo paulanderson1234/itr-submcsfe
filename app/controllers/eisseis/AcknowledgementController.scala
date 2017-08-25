@@ -220,7 +220,7 @@ trait AcknowledgementController extends FrontendController with AuthorisedAndEnr
     if (ki.companyAssertsIsKi.getOrElse(false))
       Some(KiModel(skilledEmployeesConditionMet = ki.hasPercentageWithMasters.getOrElse(false),
         innovationConditionMet = if (tenYearPlan.nonEmpty) tenYearPlan.get.tenYearPlanDesc else None,
-        kiConditionMet = ki.isKi))
+        kiConditionMet = Some(ki.isKi)))
     else None
   }
 

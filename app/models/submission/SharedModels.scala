@@ -21,7 +21,7 @@ import play.api.libs.json.Json
 case class KiModel(
                     skilledEmployeesConditionMet: Boolean,
                     innovationConditionMet: Option[String],
-                    kiConditionMet: Boolean
+                    kiConditionMet: Option[Boolean]
                   )
 
 case class CostModel(
@@ -40,10 +40,20 @@ case class TurnoverCostModel(
                             turnover: CostModel
                           )
 
+case class UnitIssueModel(
+                           description: String,
+                           dateOfIssue: String,
+                           unitType: String, // Mandatory as per schema
+                           nominalValue: CostModel,
+                           numberUnitsIssued: BigDecimal,
+                           totalAmount: CostModel
+                         )
+
 object SharedImplicits {
 
   implicit val formatSubmiKitModel = Json.format[KiModel]
   implicit val formatSubmitCostModel = Json.format[CostModel]
   implicit val formatSubmitAnnualCostModel = Json.format[AnnualCostModel]
   implicit val formatSubmitTurnoverCostModel = Json.format[TurnoverCostModel]
+  implicit val formatSubmitUnitIssueModel = Json.format[UnitIssueModel]
 }
