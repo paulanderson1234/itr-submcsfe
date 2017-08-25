@@ -78,6 +78,7 @@ trait AcknowledgementController extends FrontendController with AuthorisedAndEnr
                     shareIssueDateModel: Option[ShareIssueDateModel],
                     grossAssetsModel: Option[GrossAssetsModel],
                     fullTimeEmployeeCountModel: Option[FullTimeEmployeeCountModel]) = {
+
       for {
         natureOfBusinessModel <- natureOfBusinessModel
         dateOfIncorporationModel <- dateOfIncorporationModel

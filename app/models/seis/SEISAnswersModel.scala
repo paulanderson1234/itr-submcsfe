@@ -16,15 +16,30 @@
 
 package models.seis
 
+import common.Constants
+import connectors.SubmissionConnector
 import models._
 import models.investorDetails.InvestorDetailsModel
+import uk.gov.hmrc.play.http.HeaderCarrier
+
+import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.Implicits.global
 
 case class SEISAnswersModel(companyDetailsAnswersModel: CompanyDetailsAnswersModel,
                             previousSchemesAnswersModel: PreviousSchemesAnswersModel,
                             shareDetailsAnswersModel: ShareDetailsAnswersModel,
                             investorDetailsAnswersModel: InvestorDetailsAnswersModel,
                             contactDetailsAnswersModel: ContactDetailsAnswersModel,
-                            supportingDocumentsUploadModel: SupportingDocumentsUploadModel)
+                            supportingDocumentsUploadModel: SupportingDocumentsUploadModel) {
+
+  def validate(submissionConnector: SubmissionConnector)(implicit hc: HeaderCarrier): Future[Boolean] = {
+    for {
+      companyCheck <- companyDetailsAnswersModel.validate(submissionConnector)
+      shareCheck <- shareDetailsAnswersModel.validate(companyDetailsAnswersModel.qualifyBusinessActivityModel,
+        companyDetailsAnswersModel.tradeStartDateModel, companyDetailsAnswersModel.researchStartDateModel, submissionConnector)
+    } yield companyCheck && previousSchemesAnswersModel.validate && shareCheck && investorDetailsAnswersModel.validate
+  }
+}
 
 case class CompanyDetailsAnswersModel(natureOfBusinessModel: NatureOfBusinessModel,
                                       dateOfIncorporationModel: DateOfIncorporationModel,
@@ -34,20 +49,108 @@ case class CompanyDetailsAnswersModel(natureOfBusinessModel: NatureOfBusinessMod
                                       seventyPercentSpentModel: Option[SeventyPercentSpentModel],
                                       shareIssueDateModel: ShareIssueDateModel,
                                       grossAssetsModel: GrossAssetsModel,
-                                      fullTimeEmployeeCountModel: FullTimeEmployeeCountModel)
+                                      fullTimeEmployeeCountModel: FullTimeEmployeeCountModel) {
+
+  def validate(submissionConnector: SubmissionConnector)(implicit hc: HeaderCarrier): Future[Boolean] = {
+
+    def validateStartCondition[T](check: String)(f: Option[Future[Boolean]]) = {
+      if(check == Constants.StandardRadioButtonYesValue) f else Some(Future.successful(seventyPercentSpentModel.isDefined))
+    }
+
+    val validateSeventyPercentSpent: Option[Boolean] => Boolean = {
+      case Some(true) => true
+      case _ => seventyPercentSpentModel.isDefined
+    }
+
+    val validateResearch: ResearchStartDateModel => Option[Future[Boolean]] = { model =>
+      validateStartCondition[ResearchStartDateModel](model.hasStartedResearch) {
+        for {
+          day <- model.researchStartDay
+          month <- model.researchStartMonth
+          year <- model.researchStartYear
+        } yield submissionConnector.validateHasInvestmentTradeStartedCondition(day, month, year).map(validateSeventyPercentSpent)
+      }
+    }
+
+    val validateTrade: TradeStartDateModel => Option[Future[Boolean]] = { model =>
+      validateStartCondition[TradeStartDateModel](model.hasTradeStartDate) {
+        for {
+          day <- model.tradeStartDay
+          month <- model.tradeStartMonth
+          year <- model.tradeStartYear
+        } yield submissionConnector.validateHasInvestmentTradeStartedCondition(day, month, year).map(validateSeventyPercentSpent)
+      }
+    }
+
+    qualifyBusinessActivityModel.isQualifyBusinessActivity match {
+      case Constants.qualifyResearchAndDevelopment => researchStartDateModel.flatMap(validateResearch).getOrElse(Future.successful(false))
+      case Constants.qualifyPrepareToTrade => tradeStartDateModel.flatMap(validateTrade).getOrElse(Future.successful(false))
+      case _ => Future.successful(false)
+    }
+  }
+}
 
 case class PreviousSchemesAnswersModel(hadPreviousRFIModel: HadPreviousRFIModel,
                                        otherInvestmentsModel: HadOtherInvestmentsModel,
-                                       previousSchemeModel: Option[List[PreviousSchemeModel]])
+                                       previousSchemeModel: Option[List[PreviousSchemeModel]]) {
+  def validate: Boolean = {
+    if (hadPreviousRFIModel.hadPreviousRFI == Constants.StandardRadioButtonYesValue ||
+      otherInvestmentsModel.hadOtherInvestments == Constants.StandardRadioButtonYesValue) previousSchemeModel.exists(_.nonEmpty)
+    else true
+  }
+}
 
 case class ShareDetailsAnswersModel(shareDescriptionModel: ShareDescriptionModel,
                                     numberOfSharesModel: NumberOfSharesModel,
                                     totalAmountRaisedModel: TotalAmountRaisedModel,
-                                    totalAmountSpentModel: Option[TotalAmountSpentModel])
+                                    totalAmountSpentModel: Option[TotalAmountSpentModel]) {
+  def validate(qualifyBusinessActivityModel: QualifyBusinessActivityModel,
+               tradeStartDateModel: Option[TradeStartDateModel],
+               researchStartDateModel: Option[ResearchStartDateModel],
+               submissionConnector: SubmissionConnector)(implicit hc: HeaderCarrier): Future[Boolean] = {
+
+    def validateStartCondition[T](check: String)(f: Option[Future[Boolean]]) = {
+      if(check == Constants.StandardRadioButtonYesValue) f else Some(Future.successful(totalAmountSpentModel.isDefined))
+    }
+
+    val validateTotalAmountSpent: Option[Boolean] => Boolean = {
+      case Some(true) => true
+      case _ => totalAmountSpentModel.isDefined
+    }
+
+    val validateResearch: ResearchStartDateModel => Option[Future[Boolean]] = { model =>
+      validateStartCondition[ResearchStartDateModel](model.hasStartedResearch) {
+        for {
+          day <- model.researchStartDay
+          month <- model.researchStartMonth
+          year <- model.researchStartYear
+        } yield submissionConnector.validateHasInvestmentTradeStartedCondition(day, month, year).map(validateTotalAmountSpent)
+      }
+    }
+
+    val validateTrade: TradeStartDateModel => Option[Future[Boolean]] = { model =>
+      validateStartCondition[TradeStartDateModel](model.hasTradeStartDate) {
+        for {
+          day <- model.tradeStartDay
+          month <- model.tradeStartMonth
+          year <- model.tradeStartYear
+        } yield submissionConnector.validateHasInvestmentTradeStartedCondition(day, month, year).map(validateTotalAmountSpent)
+      }
+    }
+
+    qualifyBusinessActivityModel.isQualifyBusinessActivity match {
+      case Constants.qualifyResearchAndDevelopment => researchStartDateModel.flatMap(validateResearch).getOrElse(Future.successful(false))
+      case Constants.qualifyPrepareToTrade => tradeStartDateModel.flatMap(validateTrade).getOrElse(Future.successful(false))
+      case _ => Future.successful(false)
+    }
+  }
+}
 
 case class InvestorDetailsAnswersModel(investors: List[InvestorDetailsModel],
                                        valueReceivedModel: WasAnyValueReceivedModel,
-                                       shareCapitalChangesModel: ShareCapitalChangesModel)
+                                       shareCapitalChangesModel: ShareCapitalChangesModel) {
+  def validate: Boolean = investors.forall(_.validate)
+}
 
 case class ContactDetailsAnswersModel(contactDetailsModel: ContactDetailsModel,
                                       correspondAddressModel: ConfirmCorrespondAddressModel)
