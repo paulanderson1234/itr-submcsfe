@@ -59,7 +59,6 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
         researchStartDateForm <- fillForm[ResearchStartDateModel](KeystoreKeys.researchStartDate, ResearchStartDateForm.researchStartDateForm)
         hadPreviousRFIForm <- fillForm[HadPreviousRFIModel](KeystoreKeys.hadPreviousRFI, HadPreviousRFIForm.hadPreviousRFIForm)
         previousSchemesForm <- fillPreviousSchemesForm
-        proposedInvestmentForm <- fillForm[ProposedInvestmentModel](KeystoreKeys.proposedInvestment, ProposedInvestmentForm.proposedInvestmentForm)
         hadOtherInvestmentsForm <- fillForm[HadOtherInvestmentsModel](KeystoreKeys.hadOtherInvestments, HadOtherInvestmentsForm.hadOtherInvestmentsForm)
         qualifyBusinessActivityForm <- fillForm[QualifyBusinessActivityModel](KeystoreKeys.isQualifyBusinessActivity, QualifyBusinessActivityForm.qualifyBusinessActivityForm)
         hasInvestmentTradeStarted <- fillForm[HasInvestmentTradeStartedModel](KeystoreKeys.hasInvestmentTradeStarted, HasInvestmentTradeStartedForm.hasInvestmentTradeStartedForm)
@@ -75,7 +74,6 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
           hadPreviousRFIForm,
           previousSchemesForm,
           schemes.getOrElse(defaultPreviousSchemesSize),
-          proposedInvestmentForm,
           hadOtherInvestmentsForm,
           qualifyBusinessActivityForm,
           hasInvestmentTradeStarted,
@@ -93,7 +91,6 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
     val researchStartDate = bindForm[ResearchStartDateModel](KeystoreKeys.researchStartDate, ResearchStartDateForm.researchStartDateForm)
     val hadPreviousRFI = bindForm[HadPreviousRFIModel](KeystoreKeys.hadPreviousRFI, HadPreviousRFIForm.hadPreviousRFIForm)
     val testPreviousSchemes = bindPreviousSchemesForm()
-    val proposedInvestment = bindForm[ProposedInvestmentModel](KeystoreKeys.proposedInvestment, ProposedInvestmentForm.proposedInvestmentForm)
     val hadOtherInvestments = bindForm[HadOtherInvestmentsModel](KeystoreKeys.hadOtherInvestments, HadOtherInvestmentsForm.hadOtherInvestmentsForm)
     val qualifyBusinessActivityForm = bindForm[QualifyBusinessActivityModel](KeystoreKeys.isQualifyBusinessActivity,
       QualifyBusinessActivityForm.qualifyBusinessActivityForm)
@@ -114,7 +111,6 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
         hadPreviousRFI,
         testPreviousSchemes,
         defaultPreviousSchemesSize,
-        proposedInvestment,
         hadOtherInvestments,
         qualifyBusinessActivityForm,
         hasInvestmentTradeStarted,
