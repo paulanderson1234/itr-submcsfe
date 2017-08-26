@@ -18,7 +18,7 @@ package controllers.seis
 
 import auth.{MockAuthConnector, MockConfig}
 import common.{Constants, KeystoreKeys}
-import config.FrontendAuthConnector
+import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
 import models.{HadOtherInvestmentsModel, HadPreviousRFIModel, PreviousSchemeModel}
@@ -43,6 +43,9 @@ class HadOtherInvestmentsControllerSpec extends BaseSpec {
     }
     "use the correct auth connector" in {
       HadOtherInvestmentsController.authConnector shouldBe FrontendAuthConnector
+    }
+    "use the correct config" in {
+      HadOtherInvestmentsController.applicationConfig shouldBe FrontendAppConfig
     }
     "use the correct enrolment connector" in {
       HadOtherInvestmentsController.enrolmentConnector shouldBe EnrolmentConnector
@@ -132,7 +135,7 @@ class HadOtherInvestmentsControllerSpec extends BaseSpec {
 
   "Sending an invalid form submission with validation errors to the HadOtherInvestmentsController when authenticated " +
     "and enrolled for combined" should {
-    "redirect to itself" in {
+    "respond wih a bad request" in {
       setupMocks(None, None, None, Some(hadPreviousRFIModelYes))
       when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.backLinkReviewPreviousSchemes))
         (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(routes.HadPreviousRFIController.show().url)))

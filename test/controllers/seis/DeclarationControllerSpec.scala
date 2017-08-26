@@ -17,13 +17,9 @@
 package controllers.seis
 
 import auth.{MockAuthConnector, MockConfig}
-import common.KeystoreKeys
-import config.FrontendAuthConnector
+import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
-import models._
-import org.mockito.Matchers
-import org.mockito.Mockito._
 import play.api.test.Helpers._
 
 import scala.concurrent.Future
@@ -44,6 +40,9 @@ class DeclarationControllerSpec extends BaseSpec {
     }
     "use the correct auth connector" in {
       DeclarationController.authConnector shouldBe FrontendAuthConnector
+    }
+    "use the correct config" in {
+      DeclarationController.applicationConfig shouldBe FrontendAppConfig
     }
     "use the correct enrolment connector" in {
       DeclarationController.enrolmentConnector shouldBe EnrolmentConnector
