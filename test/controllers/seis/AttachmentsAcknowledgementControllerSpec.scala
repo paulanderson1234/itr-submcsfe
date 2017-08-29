@@ -19,7 +19,7 @@ package controllers.seis
 import auth.AuthEnrolledTestController.{INTERNAL_SERVER_ERROR => _, NO_CONTENT => _, OK => _, SEE_OTHER => _, _}
 import auth._
 import common.KeystoreKeys
-import config.FrontendAuthConnector
+import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector, SubmissionConnector}
 import controllers.feedback
 import controllers.helpers.BaseSpec
@@ -79,6 +79,9 @@ class AttachmentsAcknowledgementControllerSpec extends BaseSpec {
   "AttachmentsAcknowledgementController" should {
     "use the correct keystore connector" in {
       AttachmentsAcknowledgementController.s4lConnector shouldBe S4LConnector
+    }
+    "use the correct config" in {
+      AttachmentsAcknowledgementController.applicationConfig shouldBe FrontendAppConfig
     }
     "use the correct auth connector" in {
       AttachmentsAcknowledgementController.authConnector shouldBe FrontendAuthConnector

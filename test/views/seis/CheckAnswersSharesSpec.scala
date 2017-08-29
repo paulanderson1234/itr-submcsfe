@@ -34,7 +34,7 @@ class CheckAnswersSharesSpec extends CheckAnswersSpec {
 
     "Verify that the Check Answers page contains the correct elements for Section 3: Investment" +
       " when it is fully populated with investment models" in {
-      val model = SEISCheckAnswersModel(None, None, None, None, Vector(), None, None, None, None, None, None, None,
+      val model = SEISCheckAnswersModel(None, None, None, Vector(), None, None, None, None, None, None, None,
         None, Some(shareDescriptionModel), Some(numberOfSharesModel), totalAmountRaise,
         totalAmountSpent, None, None, None, None, false)
       val page = CheckAnswers(model)(authorisedFakeRequest, applicationMessages)
@@ -76,7 +76,7 @@ class CheckAnswersSharesSpec extends CheckAnswersSpec {
 
     "Verify that the Check Answers page contains an empty table for Section 3: Investment" +
       " when the investment models are empty" in new SEISSetup {
-      val model = SEISCheckAnswersModel(None, None, None, None, Vector(),None, None, None, None, None, None, None,
+      val model = SEISCheckAnswersModel(None, None, None, Vector(),None, None, None, None, None, None, None,
         None, None, None, None, None, None,None, None, None, false)
       val page = CheckAnswers(model)(authorisedFakeRequest, applicationMessages)
       val document = Jsoup.parse(page.body)

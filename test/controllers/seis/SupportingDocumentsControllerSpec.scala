@@ -40,7 +40,6 @@ class SupportingDocumentsControllerSpec extends BaseSpec {
 
   }
 
-
   def setupMocks(backLink: Option[String] = None, uploadFeatureEnabled: Boolean = false): Unit = {
     when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.backLinkSupportingDocs))(Matchers.any(), Matchers.any(),Matchers.any()))
       .thenReturn(Future.successful(backLink))
@@ -65,7 +64,7 @@ class SupportingDocumentsControllerSpec extends BaseSpec {
   "Sending a GET request to SupportingDocumentsController with upload feature disabled" should {
     "return a 200 OK" in {
       mockEnrolledRequest(seisSchemeTypesModel)
-      setupMocks(Some(routes.ConfirmCorrespondAddressController.show().url), false)
+      setupMocks(Some(routes.ConfirmCorrespondAddressController.show().url), uploadFeatureEnabled = false)
       showWithSessionAndAuth(TestController.show)(
         result => status(result) shouldBe OK
       )
@@ -89,7 +88,7 @@ class SupportingDocumentsControllerSpec extends BaseSpec {
   "Sending a GET request to SupportingDocumentsController with upload feature enabled" should {
     "redirect to the upload file supporting documents page" in {
       mockEnrolledRequest(seisSchemeTypesModel)
-      setupMocks(Some(routes.ConfirmCorrespondAddressController.show().url), true)
+      setupMocks(Some(routes.ConfirmCorrespondAddressController.show().url), uploadFeatureEnabled = true)
       showWithSessionAndAuth(TestController.show) {
           result => status(result) shouldBe SEE_OTHER
           redirectLocation(result) shouldBe Some("/investment-tax-relief-cs/seis/supporting-documents-upload")

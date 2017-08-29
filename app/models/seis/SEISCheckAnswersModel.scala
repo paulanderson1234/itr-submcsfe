@@ -22,7 +22,6 @@ import models.investorDetails.InvestorDetailsModel
 case class SEISCheckAnswersModel(
                                   registeredAddressModel: Option[RegisteredAddressModel],
                                   dateOfIncorporationModel: Option[DateOfIncorporationModel],
-                                  tradeStartDateModel: Option[TradeStartDateModel],
                                   natureOfBusinessModel: Option[NatureOfBusinessModel],
                                   previousSchemes: Vector[PreviousSchemeModel],
                                   contactDetailsModel: Option[ContactDetailsModel],

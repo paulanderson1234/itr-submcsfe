@@ -18,7 +18,7 @@ package controllers.seis
 
 import auth.{MockAuthConnector, MockConfig}
 import common.{Constants, KeystoreKeys}
-import config.FrontendAuthConnector
+import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
 import models._
@@ -44,6 +44,9 @@ class SeventyPercentSpentControllerSpec extends BaseSpec {
     }
     "use the correct auth connector" in {
       SeventyPercentSpentController.authConnector shouldBe FrontendAuthConnector
+    }
+    "use the correct config" in {
+      SeventyPercentSpentController.applicationConfig shouldBe FrontendAppConfig
     }
     "use the correct enrolment connector" in {
       SeventyPercentSpentController.enrolmentConnector shouldBe EnrolmentConnector

@@ -17,7 +17,7 @@
 package controllers.seis
 
 import auth.{MockAuthConnector, MockConfig}
-import common.{Constants, KeystoreKeys}
+import common.KeystoreKeys
 import config.{AppConfig, FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
@@ -71,7 +71,7 @@ class FullTimeEmployeeCountControllerSpec extends BaseSpec {
     }
 
     "return a valid 200 response from a show GET request when authorised" in {
-      setupMocks(validFullTimeEmploymentCount, false)
+      setupMocks(validFullTimeEmploymentCount, validCount = false)
       mockEnrolledRequest(seisSchemeTypesModel)
       showWithSessionAndAuth(controller.show)(
         result => {
@@ -83,7 +83,7 @@ class FullTimeEmployeeCountControllerSpec extends BaseSpec {
     "Sending a valid employee count form submission to the FullTimeEmployeeCountController when authenticated and enrolled" should {
       "redirect to the HadPreviousRFI page" in {
         val formInput = "employeeCount" -> "22"
-        setupMocks(validFullTimeEmploymentCount, true)
+        setupMocks(fullTimeEmployeeCountModel = validFullTimeEmploymentCount, validCount = true)
         mockEnrolledRequest(seisSchemeTypesModel)
         submitWithSessionAndAuth(controller.submit,formInput)(
           result => {
@@ -94,10 +94,10 @@ class FullTimeEmployeeCountControllerSpec extends BaseSpec {
       }
     }
 
-    "Sending a invalid employee count form submission to the FullTimeEmployeeCountController when authenticated and enrolled" should {
+    "Sending a employee count form that fails API validation submission to the FullTimeEmployeeCountController when authenticated and enrolled" should {
       "redirect to the FullTimeEmployeeCountError page" in {
         val formInput = "employeeCount" -> "44"
-        setupMocks(validFullTimeEmploymentCount, false)
+        setupMocks(validFullTimeEmploymentCount, validCount = false)
         mockEnrolledRequest(seisSchemeTypesModel)
         submitWithSessionAndAuth(controller.submit,formInput)(
           result => {
@@ -108,8 +108,8 @@ class FullTimeEmployeeCountControllerSpec extends BaseSpec {
       }
     }
 
-    "Sending a no employee count form submission to the FullTimeEmployeeCountController when authenticated and enrolled" should {
-      "redirect to itself" in {
+    "Sending an invalid employee count form submission to the FullTimeEmployeeCountController when authenticated and enrolled" should {
+      "rsepond with a bad request" in {
         mockEnrolledRequest(seisSchemeTypesModel)
         val formInput = "isFirstTrade" -> ""
         submitWithSessionAndAuth(controller.submit,formInput)(

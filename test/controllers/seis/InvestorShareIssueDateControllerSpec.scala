@@ -18,7 +18,7 @@ package controllers.seis
 
 import auth.{MockAuthConnector, MockConfig}
 import common.{Constants, KeystoreKeys}
-import config.{AppConfig, FrontendAuthConnector}
+import config.{AppConfig, FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
 import models.investorDetails.InvestorDetailsModel
@@ -61,6 +61,9 @@ class InvestorShareIssueDateControllerSpec extends BaseSpec {
 
     "use the correct auth connector" in {
       InvestorShareIssueDateController.authConnector shouldBe FrontendAuthConnector
+    }
+    "use the correct config" in {
+      InvestorShareIssueDateController.applicationConfig shouldBe FrontendAppConfig
     }
 
     "use the correct keystore connector" in {
@@ -212,7 +215,7 @@ class InvestorShareIssueDateControllerSpec extends BaseSpec {
 
   "Sending an invalid form submission with validation errors to the InvestorShareIssueDateController" +
     " when authenticated and enrolled" should {
-    "redirect to itself" in {
+    "respond with a bad requet" in {
       setupMocks(Some(listOfInvestorsComplete), backUrl)
       mockEnrolledRequest(seisSchemeTypesModel)
       val formInput = "previousShareHoldingNominalValue" -> ""

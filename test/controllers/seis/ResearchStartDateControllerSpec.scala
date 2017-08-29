@@ -18,8 +18,8 @@ package controllers.seis
 
 import auth.{MockAuthConnector, MockConfig}
 import common.{Constants, KeystoreKeys}
-import config.FrontendAuthConnector
-import connectors.{EnrolmentConnector, S4LConnector, SubmissionConnector}
+import config.{FrontendAppConfig, FrontendAuthConnector}
+import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
 import models.ResearchStartDateModel
 import org.mockito.Matchers
@@ -45,6 +45,9 @@ class ResearchStartDateControllerSpec extends BaseSpec {
     }
     "use the correct keystore connector" in {
       ResearchStartDateController.s4lConnector shouldBe S4LConnector
+    }
+    "use the correct config" in {
+      ResearchStartDateController.applicationConfig shouldBe FrontendAppConfig
     }
     "use the correct enrolment connector" in {
       ResearchStartDateController.enrolmentConnector shouldBe EnrolmentConnector
@@ -147,7 +150,7 @@ class ResearchStartDateControllerSpec extends BaseSpec {
   }
 
   "Sending an invalid form submission to the ResearchStartDateController when authenticated and enrolled" should {
-    "redirect respond with BADREQUEST" in {
+    "respond with a BADREQUEST" in {
       setUpSubmitMocks(true)
       val formInput = Seq(
         "hasStartedResearch" -> "",
