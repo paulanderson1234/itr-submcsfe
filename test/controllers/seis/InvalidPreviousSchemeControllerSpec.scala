@@ -17,13 +17,9 @@
 package controllers.seis
 
 import auth.{MockAuthConnector, MockConfig}
-import common.{Constants, KeystoreKeys}
-import config.FrontendAuthConnector
-import connectors.EnrolmentConnector
+import config.{FrontendAppConfig, FrontendAuthConnector}
+import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
-import models.PreviousSchemeModel
-import org.mockito.Matchers
-import org.mockito.Mockito.when
 import play.api.test.Helpers._
 
 import scala.concurrent.Future
@@ -38,11 +34,6 @@ class InvalidPreviousSchemeControllerSpec extends BaseSpec {
     override lazy val s4lConnector = mockS4lConnector
   }
 
-  def setupMocks(previousSchemeVectorList: Option[Vector[PreviousSchemeModel]] = None, previousScheme: Option[PreviousSchemeModel] = None): Unit = {
-    when(mockS4lConnector.fetchAndGetFormData[Vector[PreviousSchemeModel]](Matchers.eq(KeystoreKeys.previousSchemes))
-      (Matchers.any(), Matchers.any(),Matchers.any())).thenReturn(Future.successful(previousSchemeVectorList))
-  }
-
   "InvalidPreviousSchemeController" should {
     "use the correct auth connector" in {
       InvalidPreviousSchemeController.authConnector shouldBe FrontendAuthConnector
@@ -50,6 +41,13 @@ class InvalidPreviousSchemeControllerSpec extends BaseSpec {
     "use the correct enrolment connector" in {
       InvalidPreviousSchemeController.enrolmentConnector shouldBe EnrolmentConnector
     }
+    "use the correct keystore connector" in {
+      IndividualDetailsController.s4lConnector shouldBe S4LConnector
+    }
+    "use the correct config" in {
+      InvalidPreviousSchemeController.applicationConfig shouldBe FrontendAppConfig
+    }
+
   }
 
   "Sending a GET request to InvalidPreviousSchemeController when authenticated and enrolled" should {
@@ -63,12 +61,11 @@ class InvalidPreviousSchemeControllerSpec extends BaseSpec {
 
   "Continue to the ReviewPreviousSchemeController when authenticated and enrolled" should {
     "redirect Review previous screen page " in {
-      setupMocks(Some(previousSchemeVectorList), Some(previousSchemeModel1))
       mockEnrolledRequest(seisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some("/investment-tax-relief-cs/seis/review-previous-schemes")
+          redirectLocation(result) shouldBe Some(routes.ReviewPreviousSchemesController.show().url)
         }
       )
     }

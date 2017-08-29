@@ -16,8 +16,6 @@
 
 package controllers.seis
 
-import java.net.URLEncoder
-
 import auth.{MockAuthConnector, MockConfig}
 import common.KeystoreKeys
 import config.{FrontendAppConfig, FrontendAuthConnector}
@@ -45,6 +43,9 @@ class ContactAddressControllerSpec extends BaseSpec {
     }
     "use the correct keystore connector" in {
       ContactAddressController.s4lConnector shouldBe S4LConnector
+    }
+    "use the correct config" in {
+      ContactAddressController.applicationConfig shouldBe FrontendAppConfig
     }
     "use the correct enrolment connector" in {
       ContactAddressController.enrolmentConnector shouldBe EnrolmentConnector
@@ -94,7 +95,7 @@ class ContactAddressControllerSpec extends BaseSpec {
   }
 
   "Sending an invalid form submission with validation errors to the ContactAddressController when authenticated and enrolled" should {
-    "redirect to itself" in {
+    "respond wih a bad request" in {
       mockEnrolledRequest(seisSchemeTypesModel)
       val formInput = Seq("addressLine1" -> "", "addressLine1" -> "", "addressLine3" -> "Line3",
         "addressLine4" -> "Line4", "postCode" -> "AA1 1AA", "countryCode" -> "GB")

@@ -18,7 +18,7 @@ package controllers.seis
 
 import auth.{MockAuthConnector, MockConfig}
 import common.{Constants, KeystoreKeys}
-import config.FrontendAuthConnector
+import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector, SubmissionConnector}
 import controllers.helpers.BaseSpec
 import models.HasInvestmentTradeStartedModel
@@ -49,18 +49,14 @@ class HasInvestmentTradeStartedControllerSpec extends BaseSpec {
     "use the correct enrolment connector" in {
       HasInvestmentTradeStartedController.enrolmentConnector shouldBe EnrolmentConnector
     }
+    "use the correct config" in {
+      HasInvestmentTradeStartedController.applicationConfig shouldBe FrontendAppConfig
+    }
   }
 
   def setupShowMocks(hasInvestmentTradeStartedModel: Option[HasInvestmentTradeStartedModel] = None): Unit = {
     when(mockS4lConnector.fetchAndGetFormData[HasInvestmentTradeStartedModel](Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
       .thenReturn(Future.successful(hasInvestmentTradeStartedModel))
-    when(mockS4lConnector.saveFormData(Matchers.eq(KeystoreKeys.backLinkSeventyPercentSpent),
-      Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
-      .thenReturn(Future.successful(CacheMap("", Map())))
-
-    when(mockS4lConnector.saveFormData(Matchers.eq(KeystoreKeys.backLinkShareIssueDate),
-      Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
-      .thenReturn(Future.successful(CacheMap("", Map())))
   }
 
   def setUpSubmitMocks(tradeIsvalidated:Boolean = false):Unit = {
@@ -148,7 +144,7 @@ class HasInvestmentTradeStartedControllerSpec extends BaseSpec {
   }
 
   "Sending an invalid form submission to the HasInvestmentTradeStartedController when authenticated and enrolled" should {
-    "redirect respond with BADREQUEST" in {
+    "respond with BADREQUEST" in {
       val formInput = Seq(
         "hasInvestmentTradeStarted" -> "",
         "hasInvestmentTradeStartedDay" -> "",

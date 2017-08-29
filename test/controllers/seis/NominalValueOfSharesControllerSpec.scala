@@ -18,7 +18,7 @@ package controllers.seis
 
 import auth.{MockAuthConnector, MockConfig}
 import common.KeystoreKeys
-import config.{AppConfig, FrontendAuthConnector}
+import config.{AppConfig, FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
 import models.NominalValueOfSharesModel
@@ -58,6 +58,10 @@ class NominalValueOfSharesControllerSpec extends BaseSpec {
 
     "use the correct keystore connector" in {
       NominalValueOfSharesController.s4lConnector shouldBe S4LConnector
+    }
+
+    "use the correct config" in {
+      FullTimeEmployeeCountController.applicationConfig shouldBe FrontendAppConfig
     }
 
     "use the correct enrolment connector" in {

@@ -31,7 +31,7 @@ class CheckAnswersPreviousSchemeSpec extends CheckAnswersSpec {
 
     "Verify that the Check Answers page contains the correct elements for Section 2: Previous Schemes" +
       " when a Vector of previous schemes can be retrieved" in {
-      val model = SEISCheckAnswersModel(None, None, None, None, previousSchemesValid, None, None, None, None, None,
+      val model = SEISCheckAnswersModel(None, None, None, previousSchemesValid, None, None, None, None, None,
         None, None, None, None, None, None, None, None, None, None, None, false)
       val page = CheckAnswers(model)(authorisedFakeRequest, applicationMessages)
       val document = Jsoup.parse(page.body)
@@ -79,7 +79,7 @@ class CheckAnswersPreviousSchemeSpec extends CheckAnswersSpec {
 
     "Verify that the Check Answers page contains the correct elements for Section 2: Previous Schemes" +
       " when an empty Vector is be retrieved" in new SEISSetup {
-      val model = SEISCheckAnswersModel(None, None, None, None, Vector(), None, None, None, None, None,
+      val model = SEISCheckAnswersModel(None, None, None, Vector(), None, None, None, None, None,
         None, None, None, None, None, None, None, None, None, None, None, false)
       val page = CheckAnswers(model)(authorisedFakeRequest, applicationMessages)
       val document = Jsoup.parse(page.body)

@@ -23,7 +23,6 @@ case class SEISAnswersModel(
                              natureOfBusinessModel: NatureOfBusinessModel,
                              dateOfIncorporationModel: DateOfIncorporationModel,
                              qualifyBusinessActivityModel: QualifyBusinessActivityModel,
-                             tradeStartDateModel: Option[TradeStartDateModel],
                              researchStartDateModel: Option[ResearchStartDateModel],
                              seventyPercentSpentModel: Option[SeventyPercentSpentModel],
                              shareIssueDateModel: ShareIssueDateModel,

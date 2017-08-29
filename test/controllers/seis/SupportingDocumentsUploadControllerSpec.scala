@@ -72,7 +72,8 @@ class SupportingDocumentsUploadControllerSpec extends BaseSpec {
     "Sending a GET request to SupportingDocumentsUploadController with upload feature enabled" should {
       "return a 200 OK" in {
         mockEnrolledRequest(seisSchemeTypesModel)
-        setupMocks(Some(routes.ConfirmCorrespondAddressController.show().url), Some(supportingDocumentsUploadDoUpload), true)
+        setupMocks(Some(routes.ConfirmCorrespondAddressController.show().url), Some(supportingDocumentsUploadDoUpload),
+          uploadFeatureEnabled = true)
         showWithSessionAndAuth(TestController.show)(
           result => status(result) shouldBe OK
         )
@@ -82,7 +83,7 @@ class SupportingDocumentsUploadControllerSpec extends BaseSpec {
     "Sending a GET request to SupportingDocumentsUploadController with upload feature disabled" should {
       "return a 404 NOT_FOUND" in {
         mockEnrolledRequest(seisSchemeTypesModel)
-        setupMocks(Some(routes.ConfirmCorrespondAddressController.show().url), None, false)
+        setupMocks(Some(routes.ConfirmCorrespondAddressController.show().url), None, uploadFeatureEnabled = false)
         showWithSessionAndAuth(TestController.show)(
           result => status(result) shouldBe NOT_FOUND
         )
@@ -138,7 +139,8 @@ class SupportingDocumentsUploadControllerSpec extends BaseSpec {
   "Posting to the SupportingDocumentsUploadController when authenticated and enrolled with a form with errors" should {
     "redirect to itself when a backlink is found" in {
       mockEnrolledRequest(seisSchemeTypesModel)
-      setupMocks(Some(routes.ConfirmCorrespondAddressController.show().url), Some(supportingDocumentsUploadDoUpload), true)
+      setupMocks(Some(routes.ConfirmCorrespondAddressController.show().url), Some(supportingDocumentsUploadDoUpload),
+        uploadFeatureEnabled = true)
       submitWithSessionAndAuth(TestController.submit, "doUpload" -> "") {
         result => status(result) shouldBe BAD_REQUEST
       }
@@ -146,12 +148,13 @@ class SupportingDocumentsUploadControllerSpec extends BaseSpec {
   }
 
   "Posting to the SupportingDocumentsUploadController when authenticated and enrolled with a form with errors" should {
-    "redirect to ProposedInvestment when no backlink is found" in {
+    "redirect to the ConfirmCorrespondAddressController when no backlink is found" in {
       mockEnrolledRequest(seisSchemeTypesModel)
-      setupMocks(None, Some(supportingDocumentsUploadDoUpload), true)
+      setupMocks(None, Some(supportingDocumentsUploadDoUpload),
+        uploadFeatureEnabled = true)
       submitWithSessionAndAuth(TestController.submit, "doUpload" -> "") {
         result => status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some("/investment-tax-relief-cs/seis/proposed-investment")
+          redirectLocation(result) shouldBe Some(routes.ConfirmCorrespondAddressController.show().url)
       }
     }
   }

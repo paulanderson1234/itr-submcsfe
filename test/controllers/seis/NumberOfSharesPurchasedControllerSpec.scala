@@ -18,7 +18,7 @@ package controllers.seis
 
 import auth.{MockAuthConnector, MockConfig}
 import common.{Constants, KeystoreKeys}
-import config.{AppConfig, FrontendAuthConnector}
+import config.{AppConfig, FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
 import models.ShareIssueDateModel
@@ -26,7 +26,6 @@ import models.investorDetails.InvestorDetailsModel
 import org.mockito.Matchers
 import org.mockito.Mockito._
 import play.api.test.Helpers._
-import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.frontend.auth.connectors.AuthConnector
 import utils.DateFormatter
 
@@ -71,6 +70,10 @@ class NumberOfSharesPurchasedControllerSpec extends BaseSpec with DateFormatter{
 
     "use the correct keystore connector" in {
       NumberOfSharesPurchasedController.s4lConnector shouldBe S4LConnector
+    }
+
+    "use the correct config" in {
+      NumberOfSharesPurchasedController.applicationConfig shouldBe FrontendAppConfig
     }
 
     "use the correct enrolment connector" in {

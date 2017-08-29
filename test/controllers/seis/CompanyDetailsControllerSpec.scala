@@ -18,7 +18,7 @@ package controllers.seis
 
 import auth.{MockAuthConnector, MockConfig}
 import common.{Constants, KeystoreKeys}
-import config.FrontendAuthConnector
+import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
 import models.investorDetails.InvestorDetailsModel
@@ -48,6 +48,9 @@ class CompanyDetailsControllerSpec extends BaseSpec {
     }
     "use the correct keystore connector" in {
       CompanyDetailsController.s4lConnector shouldBe S4LConnector
+    }
+    "use the correct config" in {
+      CompanyDetailsController.applicationConfig shouldBe FrontendAppConfig
     }
     "use the correct enrolment connector" in {
       CompanyDetailsController.enrolmentConnector shouldBe EnrolmentConnector
@@ -180,7 +183,7 @@ class CompanyDetailsControllerSpec extends BaseSpec {
 
 
   "Sending an invalid form submission with validation errors to the CompanyDetailsController when authenticated and enrolled" should {
-    "redirect to itself" in {
+    "respond wih a bad request" in {
       setupMocks(Some(listOfInvestorsComplete), backUrl)
       mockEnrolledRequest(seisSchemeTypesModel)
       val formInput = "companyAddressline1" -> ""

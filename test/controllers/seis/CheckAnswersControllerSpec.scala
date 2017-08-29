@@ -18,7 +18,7 @@ package controllers.seis
 
 import auth.{MockAuthConnector, MockConfig}
 import common.{Constants, KeystoreKeys}
-import config.FrontendAuthConnector
+import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
 import models.investorDetails.{InvestorDetailsModel, PreviousShareHoldingModel}
@@ -26,7 +26,6 @@ import models._
 import org.mockito.Matchers
 import org.mockito.Mockito.when
 import play.api.test.Helpers._
-import uk.gov.hmrc.http.cache.client.CacheMap
 import views.helpers.CheckAnswersSpec
 
 import scala.concurrent.Future
@@ -46,6 +45,9 @@ class CheckAnswersControllerSpec extends BaseSpec with CheckAnswersSpec {
     }
     "use the correct keystore connector" in {
       CheckAnswersController.s4lConnector shouldBe S4LConnector
+    }
+    "use the correct config" in {
+      CheckAnswersController.applicationConfig shouldBe FrontendAppConfig
     }
     "use the correct enrolment connector" in {
       CheckAnswersController.enrolmentConnector shouldBe EnrolmentConnector

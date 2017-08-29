@@ -79,7 +79,7 @@ trait ConfirmCorrespondAddressController extends FrontendController with Authori
     AuthorisedAndEnrolled.async { implicit user => implicit request =>
 
       def routeRequest: Option[String] => Future[Result] = {
-        case Some(backLink) => {
+        case Some(backLink) =>
           confirmCorrespondAddressForm.bindFromRequest().fold(
             formWithErrors => {
               Future.successful(BadRequest(ConfirmCorrespondAddress(formWithErrors, backLink)))
@@ -87,19 +87,16 @@ trait ConfirmCorrespondAddressController extends FrontendController with Authori
             validFormData => {
               s4lConnector.saveFormData(KeystoreKeys.confirmContactAddress, validFormData)
               validFormData.contactAddressUse match {
-                case Constants.StandardRadioButtonYesValue => {
+                case Constants.StandardRadioButtonYesValue =>
                   s4lConnector.saveFormData(KeystoreKeys.backLinkSupportingDocs,
-                    routes.ConfirmCorrespondAddressController.show().toString())
+                    routes.ConfirmCorrespondAddressController.show().toString)
                   s4lConnector.saveFormData(KeystoreKeys.contactAddress, validFormData.address)
                   Future.successful(Redirect(routes.SupportingDocumentsController.show()))
-                }
-                case Constants.StandardRadioButtonNoValue => {
+                case Constants.StandardRadioButtonNoValue =>
                   Future.successful(Redirect(routes.ContactAddressController.show()))
-                }
               }
             }
           )
-        }
         case _ => Future.successful(Redirect(routes.ConfirmContactDetailsController.show()))
       }
 

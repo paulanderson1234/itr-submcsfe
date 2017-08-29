@@ -18,7 +18,7 @@ package controllers.seis
 
 import auth.{MockAuthConnector, MockConfig}
 import common.{Constants, KeystoreKeys}
-import config.FrontendAuthConnector
+import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
 import models._
@@ -38,11 +38,14 @@ class QualifyBusinessActivityControllerSpec extends BaseSpec {
   }
 
   "QualifyBusinessActivityController" should {
-    "use the correct keystore connector" in {
+    "use the correct storage connector" in {
       QualifyBusinessActivityController.s4lConnector shouldBe S4LConnector
     }
     "use the correct auth connector" in {
       QualifyBusinessActivityController.authConnector shouldBe FrontendAuthConnector
+    }
+    "use the correct config" in {
+      QualifyBusinessActivityController.applicationConfig shouldBe FrontendAppConfig
     }
     "use the correct enrolment connector" in {
       QualifyBusinessActivityController.enrolmentConnector shouldBe EnrolmentConnector
@@ -57,7 +60,7 @@ class QualifyBusinessActivityControllerSpec extends BaseSpec {
   }
 
   "Sending a GET request to QualifyBusinessActivityController when authenticated and enrolled" should {
-    "return a 200 when something is fetched from keystore" in {
+    "return a 200 when something is fetched from storage" in {
       setupMocks(Some(qualifyPrepareToTrade))
       mockEnrolledRequest(seisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show())(
@@ -65,7 +68,7 @@ class QualifyBusinessActivityControllerSpec extends BaseSpec {
       )
     }
 
-    "provide an empty model and return a 200 when nothing is fetched using keystore" in {
+    "provide an empty model and return a 200 when nothing is fetched using storage" in {
       setupMocks(None)
       mockEnrolledRequest(seisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show())(
@@ -74,8 +77,8 @@ class QualifyBusinessActivityControllerSpec extends BaseSpec {
     }
   }
 
-  "Sending a valid Yes form submission to the QualifyBusinessActivityController when authenticated and enrolled" should {
-    "redirect to the HadPreviousRFI page" in {
+  "Sending a valid trade selection form submission to the QualifyBusinessActivityController when authenticated and enrolled" should {
+    "redirect to the Has Investment Trade Started page" in {
       val formInput = "isQualifyBusinessActivity" -> Constants.qualifyPrepareToTrade
       setupMocks()
       mockEnrolledRequest(seisSchemeTypesModel)
@@ -88,15 +91,14 @@ class QualifyBusinessActivityControllerSpec extends BaseSpec {
     }
   }
 
-  "Sending a valid Yes form submission to the QualifyBusinessActivityController when authenticated and enrolled" should {
-    "redirect to the NotFirstTrade page" in {
+  "Sending a valid research trade selection form submission to the QualifyBusinessActivityController when authenticated and enrolled" should {
+    "redirect to the Research Start Date page" in {
       val formInput = "isQualifyBusinessActivity" -> Constants.qualifyResearchAndDevelopment
       setupMocks()
       mockEnrolledRequest(seisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,formInput)(
         result => {
           status(result) shouldBe SEE_OTHER
-     // To navigate to NotFirstTradeError page
           redirectLocation(result) shouldBe Some(controllers.seis.routes.ResearchStartDateController.show().url)
         }
       )
@@ -104,7 +106,7 @@ class QualifyBusinessActivityControllerSpec extends BaseSpec {
   }
 
   "Sending an invalid form submission with validation errors to the QualifyBusinessActivityController when authenticated and enrolled" should {
-    "redirect to itself" in {
+    "respond with a bad request" in {
       mockEnrolledRequest(seisSchemeTypesModel)
       val formInput = "isFirstTrade" -> ""
       submitWithSessionAndAuth(TestController.submit,formInput)(
