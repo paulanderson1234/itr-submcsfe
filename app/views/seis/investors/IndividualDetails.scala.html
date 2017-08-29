@@ -1,11 +1,12 @@
 @import models.IndividualDetailsModel
+@import common.Constants
 @import uk.gov.hmrc.play.views.html.helpers.form
 @import views.html.helpers.{backButtonWithProgress, input, errorSummary, dropdown, hiddenField}
 @(individualDetailsForm: Form[IndividualDetailsModel], listOfIsoCode: List[(String, String)], backUrl: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(Messages("page.individualDetails.title")) {
 
-@backButtonWithProgress(backUrl, Messages("common.section.progress.company.details.four"))
+@backButtonWithProgress(backUrl, Messages("common.section.progress.details.four"))
 
 <div class="grid-row">
     <div class="column-two-thirds">
@@ -22,7 +23,7 @@
             '_divClass -> "form-label",
             '_labelId -> "label-forename",
             '_label -> Messages("page.individualDetails.forename.label"),
-            '_maxlength -> "35",
+            '_maxlength -> Constants.forenameLength,
             '_inputClass -> "input--medium input--cleared",
             'id -> "forename"
             )
@@ -34,7 +35,7 @@
             '_divClass -> "form-label",
             '_labelId -> "label-surname",
             '_label -> Messages("page.individualDetails.surname.label"),
-            '_maxlength -> "35",
+            '_maxlength -> Constants.surnameLength,
             '_inputClass -> "input--medium input--cleared",
             'id -> "surname"
             )
@@ -46,7 +47,7 @@
             '_divClass -> "form-label",
             '_labelId -> "label-addressline1",
             '_label -> Messages("page.individualDetails.addressline1.label"),
-            '_maxlength -> "35",
+            '_maxlength -> Constants.addressLineLength,
             '_inputClass -> "input--medium input--cleared",
             'id -> "addressline1"
             )
@@ -57,7 +58,7 @@
             '_divClass -> "form-label",
             '_labelId -> "label-addressline2",
             '_label -> Messages("page.individualDetails.addressline2.label"),
-            '_maxlength -> "35",
+            '_maxlength -> Constants.addressLineLength,
             '_inputClass -> "input--medium input--cleared",
             'id -> "addressline2"
             )
@@ -68,7 +69,7 @@
             '_divClass -> "form-label",
             '_labelId -> "label-addressline3",
             '_label -> Messages("page.individualDetails.addressline3.label"),
-            '_maxlength -> "35",
+            '_maxlength -> Constants.addressLineLength,
             '_inputClass -> "input--medium input--cleared",
             'id -> "addressline3"
             )
@@ -79,7 +80,7 @@
             '_divClass -> "form-label",
             '_labelId -> "label-addressline4",
             '_label -> Messages("page.individualDetails.addressline4.label"),
-            '_maxlength -> "35",
+            '_maxlength -> Constants.addressLineLength,
             '_inputClass -> "input--medium input--cleared",
             'id -> "addressline4"
             )

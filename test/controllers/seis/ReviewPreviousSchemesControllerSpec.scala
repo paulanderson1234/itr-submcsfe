@@ -17,8 +17,7 @@
 package controllers.seis
 
 import auth.{MockAuthConnector, MockConfig}
-import common.KeystoreKeys
-import config.FrontendAuthConnector
+import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
 import models._
@@ -54,6 +53,9 @@ class ReviewPreviousSchemesControllerSpec extends BaseSpec {
     "use the correct keystore connector" in {
       ReviewPreviousSchemesController.s4lConnector shouldBe S4LConnector
     }
+    "use the correct config" in {
+      ReviewPreviousSchemesController.applicationConfig shouldBe FrontendAppConfig
+    }
     "use the correct auth connector" in {
       ReviewPreviousSchemesController.authConnector shouldBe FrontendAuthConnector
     }
@@ -62,20 +64,15 @@ class ReviewPreviousSchemesControllerSpec extends BaseSpec {
     }
   }
 
-  def setupMocks(previousSchemes: Option[Vector[PreviousSchemeModel]] = None, backLink: Option[String] = None,
+  def setupMocks(previousSchemes: Option[Vector[PreviousSchemeModel]] = None,
                  tradeStartDate: Option[TradeStartDateModel] = None): Unit = {
     when(mockS4lConnector.fetchAndGetFormData[Vector[PreviousSchemeModel]](Matchers.any())(Matchers.any(), Matchers.any(),
       Matchers.any())).thenReturn(Future.successful(previousSchemes))
-    when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.backLinkReviewPreviousSchemes))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(backLink))
-    when(mockS4lConnector.fetchAndGetFormData[TradeStartDateModel](Matchers.eq(KeystoreKeys.tradeStartDate))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(
-      if (tradeStartDate.nonEmpty) Future.successful(Option(tradeStartDate.get)) else Future.successful(None))
   }
 
   "Sending a GET request to ReviewPreviousSchemesController when authenticated and enrolled" should {
-    "return a 200 OK when a populated vector is returned from keystore and a back link is retrieved" in {
-      setupMocks(Some(previousSchemeVectorList), Some(routes.HadPreviousRFIController.show().url))
+    "return a 200 OK when a populated vector is returned from keystore" in {
+      setupMocks(Some(previousSchemeVectorList))
       mockEnrolledRequest(seisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show)(
         result => status(result) shouldBe OK
@@ -95,7 +92,7 @@ class ReviewPreviousSchemesControllerSpec extends BaseSpec {
     }
 
     "redirect to HadPreviousRFI when no previous schemes are returned from keystore when authenticated and enrolled" in {
-      setupMocks(backLink = Some(routes.HadPreviousRFIController.show().url))
+      setupMocks()
       mockEnrolledRequest(seisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show)(
         result => {
@@ -107,7 +104,7 @@ class ReviewPreviousSchemesControllerSpec extends BaseSpec {
 
     "Posting to the continue button on the ReviewPreviousSchemesController when authenticated and enrolled" should {
       "redirect to 'Share Description' page if table is not empty" in {
-        setupMocks(Some(previousSchemeVectorList), Some("link"), Some(startDateModelModelYes))
+        setupMocks(Some(previousSchemeVectorList))
 
         mockEnrolledRequest(seisSchemeTypesModel)
         submitWithSessionAndAuth(TestController.submit)(
@@ -119,7 +116,7 @@ class ReviewPreviousSchemesControllerSpec extends BaseSpec {
       }
 
       "redirect to itself if no payments table is empty" in {
-        setupMocks(None, None, Some(startDateModelModelYes))
+        setupMocks(None)
 
         mockEnrolledRequest(seisSchemeTypesModel)
         submitWithSessionAndAuth(TestController.submit)(
@@ -138,7 +135,7 @@ class ReviewPreviousSchemesControllerSpec extends BaseSpec {
         submitWithSessionAndAuth(TestController.add)(
           result => {
             status(result) shouldBe SEE_OTHER
-            redirectLocation(result) shouldBe Some("/investment-tax-relief-cs/seis/previous-investment")
+            redirectLocation(result) shouldBe Some(routes.PreviousSchemeController.show().url)
           }
         )
       }
@@ -151,7 +148,7 @@ class ReviewPreviousSchemesControllerSpec extends BaseSpec {
         submitWithSessionAndAuth(TestController.change(testId))(
           result => {
             status(result) shouldBe SEE_OTHER
-            redirectLocation(result) shouldBe Some("/investment-tax-relief-cs/seis/previous-investment?id=" + testId)
+            redirectLocation(result) shouldBe Some(s"${routes.PreviousSchemeController.show().url}?id=" + testId)
           }
         )
       }

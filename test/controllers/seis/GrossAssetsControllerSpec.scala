@@ -112,7 +112,7 @@ class GrossAssetsControllerSpec extends BaseSpec {
   }
 
   "Sending an invalid form submission with validation errors to the GrossAssetsController" should {
-    "redirect to itself" in {
+    "respond wih a bad request" in {
       mockEnrolledRequest(seisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,
         "grossAmount" -> "")(

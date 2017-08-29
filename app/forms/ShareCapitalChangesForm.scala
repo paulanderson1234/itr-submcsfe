@@ -27,7 +27,7 @@ object ShareCapitalChangesForm {
   val shareCapitalChangesForm = Form(
     mapping(
       "hasChanges" -> nonEmptyText,
-      "changesDescription" -> optional(nonEmptyText(maxLength = Constants.shortTextLimit))
+      "descriptionTextArea" -> optional(nonEmptyText(maxLength = Constants.shortTextLimit))
     )
     (ShareCapitalChangesModel.apply)(ShareCapitalChangesModel.unapply).verifying(shareCapitalChangesDescriptionValidation)
   )

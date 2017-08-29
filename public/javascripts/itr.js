@@ -4,6 +4,10 @@ $("#ninetyPercentErrorSection").hide();
 
 $(document).ready($(function() {
 
+  $(".error-summary #descriptionTextArea-error-summary").click(function(){
+        $("#descriptionTextArea").focus()
+  })
+
   $(".removeLink").each(function()  {
 
       $( this ).on( 'focus', function() {

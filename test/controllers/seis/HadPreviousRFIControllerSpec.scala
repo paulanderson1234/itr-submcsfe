@@ -18,7 +18,7 @@ package controllers.seis
 
 import auth.{MockAuthConnector, MockConfig}
 import common.{Constants, KeystoreKeys}
-import config.FrontendAuthConnector
+import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
 import models._
@@ -41,6 +41,9 @@ class HadPreviousRFIControllerSpec extends BaseSpec {
     "use the correct keystore connector" in {
       HadPreviousRFIController.s4lConnector shouldBe S4LConnector
     }
+    "use the correct config" in {
+      HadPreviousRFIController.applicationConfig shouldBe FrontendAppConfig
+    }
     "use the correct auth connector" in {
       HadPreviousRFIController.authConnector shouldBe FrontendAuthConnector
     }
@@ -49,21 +52,14 @@ class HadPreviousRFIControllerSpec extends BaseSpec {
     }
   }
 
-  def setupMocks(hadPreviousRFIModel: Option[HadPreviousRFIModel] = None, backLink: Option[String] = None,
-                 previousSchemes: Option[Vector[PreviousSchemeModel]] = None): Unit = {
+  def setupMocks(hadPreviousRFIModel: Option[HadPreviousRFIModel] = None): Unit = {
     when(mockS4lConnector.fetchAndGetFormData[HadPreviousRFIModel](Matchers.eq(KeystoreKeys.hadPreviousRFI))(Matchers.any(), Matchers.any(), Matchers.any()))
       .thenReturn(Future.successful(hadPreviousRFIModel))
-    when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.backLinkReviewPreviousSchemes))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(backLink))
-    when(mockS4lConnector.fetchAndGetFormData[Vector[PreviousSchemeModel]](Matchers.eq(KeystoreKeys.previousSchemes))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(previousSchemes))
-    when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.backLinkSubsidiaries))(Matchers.any(), Matchers.any(),Matchers.any()))
-      .thenReturn(Future.successful(backLink))
   }
 
   "Sending a GET request to HadPreviousRFIController when authenticated and enrolled for SEIS" should {
     "return a 200 when something is fetched from keystore" in {
-      setupMocks(Some(hadPreviousRFIModelYes), Some(routes.ProposedInvestmentController.show().url))
+      setupMocks(Some(hadPreviousRFIModelYes))
       mockEnrolledRequest(seisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show())(
         result => status(result) shouldBe OK
@@ -71,7 +67,7 @@ class HadPreviousRFIControllerSpec extends BaseSpec {
     }
 
     "provide an empty model and return a 200 when nothing is fetched using keystore for SEIS" in {
-      setupMocks(None,Some(routes.ProposedInvestmentController.show().url))
+      setupMocks(None)
       mockEnrolledRequest(seisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show())(
         result => status(result) shouldBe OK
@@ -108,12 +104,7 @@ class HadPreviousRFIControllerSpec extends BaseSpec {
 
   "Sending an invalid form submission with validation errors to the HadPreviousRFIController when authenticated " +
     "and enrolled for SEIS" should {
-    "redirect to itself" in {
-      when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.backLinkReviewPreviousSchemes))
-        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(routes.ProposedInvestmentController.show().url)))
-
-      when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.backLinkSubsidiaries))(Matchers.any(), Matchers.any(),Matchers.any()))
-        .thenReturn(Future.successful(Some(routes.ProposedInvestmentController.show().url)))
+    "respond wih a bad request" in {
       mockEnrolledRequest(seisSchemeTypesModel)
       val formInput = "hadPreviousRFI" -> ""
       submitWithSessionAndAuth(TestController.submit,formInput)(

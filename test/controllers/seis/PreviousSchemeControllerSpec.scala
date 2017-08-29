@@ -143,7 +143,7 @@ class PreviousSchemeControllerSpec extends BaseSpec {
       submitWithSessionAndAuth(TestController.submit, formInput:_*)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some("/investment-tax-relief-cs/seis/review-previous-schemes")
+          redirectLocation(result) shouldBe Some(routes.ReviewPreviousSchemesController.show().url)
         }
       )
     }
@@ -168,7 +168,7 @@ class PreviousSchemeControllerSpec extends BaseSpec {
       submitWithSessionAndAuth(TestController.submit, formInput:_*)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some("/investment-tax-relief-cs/seis/invalid-scheme-type/6")
+          redirectLocation(result) shouldBe Some(routes.InvalidPreviousSchemeController.show(6).url)
         }
       )
     }
@@ -193,7 +193,7 @@ class PreviousSchemeControllerSpec extends BaseSpec {
       submitWithSessionAndAuth(TestController.submit, formInput:_*)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some("/investment-tax-relief-cs/seis/invalid-scheme-type/6")
+          redirectLocation(result) shouldBe Some(routes.InvalidPreviousSchemeController.show(6).url)
         }
       )
     }
@@ -220,6 +220,7 @@ class PreviousSchemeControllerSpec extends BaseSpec {
         result => {
           status(result) shouldBe SEE_OTHER
           redirectLocation(result) shouldBe Some("/investment-tax-relief-cs/seis/review-previous-schemes")
+          redirectLocation(result) shouldBe Some(routes.ReviewPreviousSchemesController.show().url)
         }
       )
     }

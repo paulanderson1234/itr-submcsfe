@@ -17,12 +17,13 @@
 package controllers.seis
 
 import auth.{AuthorisedAndEnrolledForTAVC, SEIS}
-import common.KeystoreKeys
+import common.{Constants, KeystoreKeys}
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.Helpers.{ControllerHelpers, PreviousInvestorsHelper}
 import controllers.predicates.FeatureSwitch
 import forms.CompanyDetailsForm._
+import models.CompanyDetailsModel
 import models.investorDetails.InvestorDetailsModel
 import play.api.Play.current
 import play.api.i18n.Messages
@@ -51,6 +52,7 @@ trait CompanyDetailsController extends FrontendController with AuthorisedAndEnro
   val subscriptionService: SubscriptionService
 
   lazy val countriesList = CountriesHelper.getIsoCodeTupleList
+  lazy val emptyModelWithUkCode = CompanyDetailsModel("", "", "", None, None, None, Constants.countyCodeGB, None)
 
   def show(id: Int): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
     AuthorisedAndEnrolled.async { implicit user =>
@@ -63,7 +65,7 @@ trait CompanyDetailsController extends FrontendController with AuthorisedAndEnro
                  redirectInvalidInvestor(itemToUpdateIndex) { index =>
                    if(data.lift(itemToUpdateIndex).get.companyOrIndividualModel.isDefined) {
                      val form = fillForm(companyDetailsForm, retrieveInvestorData(index, data)(_.companyDetailsModel))
-                     Ok(CompanyDetails(form, countriesList, backUrl.get))
+                     Ok(CompanyDetails(if(form.value.isEmpty)companyDetailsForm.fill(emptyModelWithUkCode) else form, countriesList, backUrl.get))
                    }
                    else Redirect(routes.CompanyOrIndividualController.show(id))
                  }

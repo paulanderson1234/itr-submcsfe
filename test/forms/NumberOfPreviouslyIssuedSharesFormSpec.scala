@@ -16,96 +16,96 @@
 
 package forms
 
-import models.investorDetails.NumberOfSharesPurchasedModel
+import forms.NumberOfPreviouslyIssuedSharesForm._
+import models.investorDetails.NumberOfPreviouslyIssuedSharesModel
 import org.scalatestplus.play.OneAppPerSuite
-import uk.gov.hmrc.play.test.UnitSpec
-import forms.NumberOfSharesPurchasedForm._
 import play.api.i18n.Messages
 import play.api.i18n.Messages.Implicits._
+import uk.gov.hmrc.play.test.UnitSpec
 
-class NumberOfSharesPurchasedFormSpec extends UnitSpec with OneAppPerSuite {
+class NumberOfPreviouslyIssuedSharesFormSpec extends UnitSpec with OneAppPerSuite {
 
   val minimumValue:Int = 1
 
-  "The NumberOfSharesForm" when {
+  "The NumberOfPreviouslyIssuedSharesForm" when {
 
     "provided with a model" should {
-      val model = NumberOfSharesPurchasedModel(12.3, Some(1))
-      lazy val form = numberOfSharesPurchasedForm.fill(model)
+      val model = NumberOfPreviouslyIssuedSharesModel(12.3, Some(1))
+      lazy val form = numberOfPreviouslyIssuedSharesForm.fill(model)
 
       "return a valid map" in {
-        form.data shouldBe Map("numberOfSharesPurchased" -> "12.3", "processingId" -> "1")
+        form.data shouldBe Map("numberOfPreviouslyIssuedShares" -> "12.3", "processingId" -> "1")
       }
     }
 
     "provided with a valid map with the maximum number of decimal places" should {
-      val map = Map("numberOfSharesPurchased" -> "1.1111111111111", "processingId" -> "1")
-      lazy val form = numberOfSharesPurchasedForm.bind(map)
+      val map = Map("numberOfPreviouslyIssuedShares" -> "1.1111111111111", "processingId" -> "1")
+      lazy val form = numberOfPreviouslyIssuedSharesForm.bind(map)
 
       "contain no errors" in {
         form.errors.isEmpty shouldBe true
       }
 
       "contain the correct model limited to 5 decimal places" in {
-        form.value shouldBe Some(NumberOfSharesPurchasedModel(1.11111, Some(1)))
+        form.value shouldBe Some(NumberOfPreviouslyIssuedSharesModel(1.11111, Some(1)))
       }
     }
 
     "provided with a valid map with the minimum amount" should {
-      val map = Map("numberOfSharesPurchased" -> "1.00000000000", "processingId" -> "2")
-      lazy val form = numberOfSharesPurchasedForm.bind(map)
+      val map = Map("numberOfPreviouslyIssuedShares" -> "1.00000000000", "processingId" -> "2")
+      lazy val form = numberOfPreviouslyIssuedSharesForm.bind(map)
 
       "contain no errors" in {
         form.errors.isEmpty shouldBe true
       }
 
       "contain the correct model limited to 5 decimal places" in {
-        form.value shouldBe Some(NumberOfSharesPurchasedModel(1.00000, Some(2)))
+        form.value shouldBe Some(NumberOfPreviouslyIssuedSharesModel(1.00000, Some(2)))
       }
     }
 
     "provided with a valid map with the maximum size" should {
-      val map = Map("numberOfSharesPurchased" -> "9999999999999", "processingId" -> "1")
-      lazy val form = numberOfSharesPurchasedForm.bind(map)
+      val map = Map("numberOfPreviouslyIssuedShares" -> "9999999999999", "processingId" -> "1")
+      lazy val form = numberOfPreviouslyIssuedSharesForm.bind(map)
 
       "contain no errors" in {
         form.errors.isEmpty shouldBe true
       }
 
       "contain the correct model" in {
-        form.value shouldBe Some(NumberOfSharesPurchasedModel(9999999999999.0, Some(1)))
+        form.value shouldBe Some(NumberOfPreviouslyIssuedSharesModel(9999999999999.0, Some(1)))
       }
     }
 
     "provided with an invalid map which is too large" should {
-      val map = Map("numberOfSharesPurchased" -> "9999999999999.1")
-      lazy val form = numberOfSharesPurchasedForm.bind(map)
+      val map = Map("numberOfPreviouslyIssuedShares" -> "9999999999999.1")
+      lazy val form = numberOfPreviouslyIssuedSharesForm.bind(map)
 
       "contain one error" in {
         form.errors.size shouldBe 1
       }
 
       "contain the too large error message" in {
-        form.errors.head.message shouldBe Messages("validation.error.numberOfSharesPurchased.size", minimumValue)
+        form.errors.head.message shouldBe Messages("validation.error.numberOfPreviouslyIssuedShares.size", minimumValue)
       }
     }
 
     "provided with an invalid map with a non-numeric value" should {
-      val map = Map("numberOfSharesPurchased" -> "a")
-      lazy val form = numberOfSharesPurchasedForm.bind(map)
+      val map = Map("numberOfPreviouslyIssuedShares" -> "a")
+      lazy val form = numberOfPreviouslyIssuedSharesForm.bind(map)
 
       "contain one error" in {
         form.errors.size shouldBe 1
       }
 
       "contain the not a number error message" in {
-        form.errors.head.message shouldBe Messages("validation.error.numberOfSharesPurchased.notANumber")
+        form.errors.head.message shouldBe Messages("validation.error.numberOfPreviouslyIssuedShares.notANumber")
       }
     }
 
     "provided with an invalid map with an empty value" should {
-      val map = Map("numberOfSharesPurchased" -> " ")
-      lazy val form = numberOfSharesPurchasedForm.bind(map)
+      val map = Map("numberOfPreviouslyIssuedShares" -> " ")
+      lazy val form = numberOfPreviouslyIssuedSharesForm.bind(map)
 
       "contain one error" in {
         form.errors.size shouldBe 1

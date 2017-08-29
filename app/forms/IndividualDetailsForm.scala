@@ -16,6 +16,7 @@
 
 package forms
 
+import common.Constants
 import models.IndividualDetailsModel
 import play.api.data.Form
 import play.api.data.Forms._
@@ -24,8 +25,8 @@ import utils.Validation._
 object IndividualDetailsForm {
   val individualDetailsForm = Form(
     mapping(
-      "forename" -> nonEmptyText,
-      "surname" -> nonEmptyText,
+      "forename" -> nonEmptyText(maxLength = Constants.forenameLength),
+      "surname" -> nonEmptyText(maxLength = Constants.surnameLength),
       "addressline1" -> mandatoryAddressLineCheck,
       "addressline2" -> mandatoryAddressLineCheck,
       "addressline3" -> optional(optionalAddressLineCheck),

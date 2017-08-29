@@ -18,11 +18,10 @@ package controllers.seis
 
 import auth.{MockAuthConnector, MockConfig}
 import common.{Constants, KeystoreKeys}
-import config.{AppConfig, FrontendAuthConnector}
+import config.{AppConfig, FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.{BaseSpec, FakeRequestHelper}
 import models.investorDetails.InvestorDetailsModel
-import models.{IndividualDetailsModel, NominalValueOfSharesModel}
 import org.mockito.Matchers
 import org.mockito.Mockito._
 import play.api.test.Helpers._
@@ -68,6 +67,10 @@ class IndividualDetailsControllerSpec extends BaseSpec with FakeRequestHelper{
       IndividualDetailsController.s4lConnector shouldBe S4LConnector
     }
 
+    "use the correct config" in {
+      IndividualDetailsController.applicationConfig shouldBe FrontendAppConfig
+    }
+
     "use the correct enrolment connector" in {
       IndividualDetailsController.enrolmentConnector shouldBe EnrolmentConnector
     }
@@ -101,7 +104,6 @@ class IndividualDetailsControllerSpec extends BaseSpec with FakeRequestHelper{
         }
       }
 
-      /* TODO redirect to review investor details page when the id does not exist  */
       "Redirect to the Investor Details Review page" when {
         "a 'backlink' is defined, an 'investor details list' is retrieved and an INVALID 'id' is defined" in {
           mockEnrolledRequest(seisSchemeTypesModel)
@@ -193,7 +195,7 @@ class IndividualDetailsControllerSpec extends BaseSpec with FakeRequestHelper{
 
 
     "Sending an invalid form submission with validation errors to the CompanyDetailsController when authenticated and enrolled" should {
-      "redirect to itself" in {
+      "respond with a bad request" in {
         setupMocks(Some(listOfInvestorsComplete), backUrl)
         mockEnrolledRequest(seisSchemeTypesModel)
         val formInput = Seq(

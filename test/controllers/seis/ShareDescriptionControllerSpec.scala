@@ -17,7 +17,7 @@
 package controllers.seis
 
 import auth.{MockAuthConnector, MockConfig}
-import common.{Constants, KeystoreKeys}
+import common.KeystoreKeys
 import config.FrontendAuthConnector
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
@@ -92,7 +92,7 @@ class ShareDescriptionControllerSpec extends BaseSpec {
     "redirect to the number of shares in issue page" in {
       setupMocks(None,Some(validBackLink))
       mockEnrolledRequest(seisSchemeTypesModel)
-      val formInput = "shareDescription" -> "some text so it's valid"
+      val formInput = "descriptionTextArea" -> "some text so it's valid"
 
       submitWithSessionAndAuth(TestController.submit,formInput)(
         result => {
@@ -107,7 +107,7 @@ class ShareDescriptionControllerSpec extends BaseSpec {
     "redirect to itself" in {
       setupMocks(None, Some(validBackLink))
       mockEnrolledRequest(seisSchemeTypesModel)
-      val formInput = "shareDescription" -> ""
+      val formInput = "descriptionTextArea" -> ""
       submitWithSessionAndAuth(TestController.submit,formInput)(
         result => {
           status(result) shouldBe BAD_REQUEST

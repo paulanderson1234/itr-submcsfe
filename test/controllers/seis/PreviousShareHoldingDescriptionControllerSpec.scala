@@ -18,17 +18,14 @@ package controllers.seis
 
 import auth.{MockAuthConnector, MockConfig}
 import common.{Constants, KeystoreKeys}
-import config.{AppConfig, FrontendAuthConnector}
+import config.{AppConfig, FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
-import models.{CompanyOrIndividualModel, ShareIssueDateModel}
 import models.investorDetails.InvestorDetailsModel
 import org.mockito.Matchers
 import org.mockito.Mockito._
 import play.api.test.Helpers._
-import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.frontend.auth.connectors.AuthConnector
-import utils.DateFormatter
 
 import scala.concurrent.Future
 
@@ -67,6 +64,10 @@ class PreviousShareHoldingDescriptionControllerSpec extends BaseSpec{
 
     "use the correct keystore connector" in {
       PreviousShareHoldingDescriptionController.s4lConnector shouldBe S4LConnector
+    }
+
+    "use the correct config" in {
+      PreviousShareHoldingDescriptionController.applicationConfig shouldBe FrontendAppConfig
     }
 
     "use the correct enrolment connector" in {
@@ -173,7 +174,7 @@ class PreviousShareHoldingDescriptionControllerSpec extends BaseSpec{
   "Submitting to the PreviousShareHoldingDescriptionController when authenticated and enrolled" should {
     "redirect to the PreviousShareHoldingNominalValue page if the form 'was not' previously populated" in {
 
-      val formInput = "previousShareHoldingDescription" -> "This is a description of a previous share holding"
+      val formInput = "descriptionTextArea" -> "This is a description of a previous share holding"
       setupMocks(Some(listOfInvestorsComplete), None)
       mockEnrolledRequest(seisSchemeTypesModel)
       submitWithSessionAndAuth(controller.submit(Some(Constants.typeCompany), Some(2)),formInput)(
@@ -192,7 +193,7 @@ class PreviousShareHoldingDescriptionControllerSpec extends BaseSpec{
   "Submitting to the PreviousShareHoldingDescriptionController when authenticated and enrolled" should {
     "redirect to the PreviousShareHoldingNominalValue page if the form 'was' previously populated and had a processing id" in {
 
-      val formInput = Seq("previousShareHoldingDescription" -> "This is a description of a previous share holding",
+      val formInput = Seq("descriptionTextArea" -> "This is a description of a previous share holding",
         "processingId" -> "1", "investorProcessingId" -> "2")
       setupMocks(Some(listOfInvestorsComplete), None)
       mockEnrolledRequest(seisSchemeTypesModel)
@@ -209,10 +210,10 @@ class PreviousShareHoldingDescriptionControllerSpec extends BaseSpec{
 
 
   "Sending an invalid form submission with validation errors to the PreviousShareHoldingDescriptionController when authenticated and enrolled" should {
-    "redirect to itself" in {
+    "respond with a bad request" in {
       setupMocks(Some(listOfInvestorsComplete), backUrl)
       mockEnrolledRequest(seisSchemeTypesModel)
-      val formInput = "previousShareHoldingDescription" -> ""
+      val formInput = "descriptionTextArea" -> ""
       submitWithSessionAndAuth(controller.submit(Some(Constants.typeCompany), Some(2)), formInput)(
         result => {
           status(result) shouldBe BAD_REQUEST

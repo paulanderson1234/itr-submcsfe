@@ -16,6 +16,8 @@
 
 package forms
 
+import common.Constants
+import controllers.helpers.MockDataGenerator
 import forms.CompanyDetailsForm._
 import models.CompanyDetailsModel
 import org.scalatestplus.play.OneAppPerSuite
@@ -25,21 +27,19 @@ import play.api.i18n.Messages.Implicits._
 
 class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
-  val companyNameMax56 = "testval" * 8
-
   "Creating a form using an empty model" should {
     lazy val form = companyDetailsForm
-    "return an empty string for companyName, companyAddressline1, companyAddressline2, telephone number and email" in {
+    "return an empty string for companyName, companyAddressline1, companyAddressline2, adressline3, addressLine4, postcode, countryCodeZ" in {
       form.data.isEmpty shouldBe true
     }
   }
 
   "Creating a form using a valid model" should {
     "return a form with the data specified in the model" in {
-      val model = CompanyDetailsModel("line0","line1","line2",None,None,None,"JP", Some(1))
+      val model = CompanyDetailsModel("AcmeLtd","line1","line2",None,None,None,"JP", Some(1))
       val form = companyDetailsForm.fill(model)
 
-      form.data("companyName") shouldBe "line0"
+      form.data("companyName") shouldBe "AcmeLtd"
       form.data("companyAddressline1") shouldBe "line1"
       form.data("companyAddressline2") shouldBe "line2"
       form.data("countryCode") shouldBe "JP"
@@ -78,7 +78,7 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
   "Creating a form using an invalid post" when {
     "supplied with no data for companyAddressline1" should {
       lazy val form = companyDetailsForm.bind(Map(
-        "companyName" -> "line0",
+        "companyName" -> "AcmeLtd",
         "companyAddressline1" -> "",
         "companyAddressline2" -> "line2",
         "companyAddressline3" -> "",
@@ -104,7 +104,7 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
   "Creating a form using an invalid post" when {
     "supplied with no data for companyAddressline2" should {
       lazy val form = companyDetailsForm.bind(Map(
-        "companyName" -> "line0",
+        "companyName" -> "AcmeLtd",
         "companyAddressline1" -> "line1",
         "companyAddressline2" -> "",
         "companyAddressline3" -> "",
@@ -128,7 +128,7 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
   "Creating a form using an invalid post" when {
     "supplied with no data for country" should {
       lazy val form = companyDetailsForm.bind(Map(
-        "companyName" -> "line0",
+        "companyName" -> "AcmeLtd",
         "companyAddressline1" -> "line1",
         "companyAddressline2" -> "line2",
         "companyAddressline3" -> "",
@@ -179,7 +179,7 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
   "Creating a form using an invalid post" when {
     "supplied with no data for companyAddressline1 and companyAddressline2" should {
       lazy val form = companyDetailsForm.bind(Map(
-        "companyName" -> "line0",
+        "companyName" -> "AcmeLtd",
         "companyAddressline1" -> "",
         "companyAddressline2" -> "",
         "companyAddressline3" -> "",
@@ -205,7 +205,7 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
   "Creating a form using an invalid post" when {
     "supplied with no data for companyAddressline2 and country" should {
       lazy val form = companyDetailsForm.bind(Map(
-        "companyName" -> "line0",
+        "companyName" -> "AcmeLtd",
         "companyAddressline1" -> "line1",
         "companyAddressline2" -> "",
         "companyAddressline3" -> "",
@@ -261,7 +261,7 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
   "Creating a form using an invalid post" when {
     "supplied with no data for companyAddressline1, companyAddressline2 or country" should {
       lazy val form = companyDetailsForm.bind(Map(
-        "companyName" -> "line0",
+        "companyName" -> "AcmeLtd",
         "companyAddressline1" -> "",
         "companyAddressline2" -> "",
         "companyAddressline3" -> "",
@@ -341,7 +341,7 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "supplied with empty space for companyAddressline1" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "companyName" -> "line0",
+      "companyName" -> "AcmeLtd",
       "companyAddressline1" -> "   ",
       "companyAddressline2" -> "line2",
       "companyAddressline3" -> "",
@@ -363,7 +363,7 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "supplied with empty space for companyAddressline2" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "companyName" -> "line0",
+      "companyName" -> "AcmeLtd",
       "companyAddressline1" -> "line1",
       "companyAddressline2" -> "   ",
       "companyAddressline3" -> "",
@@ -385,7 +385,7 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "supplied with empty space for companyAddressline3" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "companyName" -> "line0",
+      "companyName" -> "AcmeLtd",
       "companyAddressline1" -> "line1",
       "companyAddressline2" -> "line2",
       "companyAddressline3" -> "   ",
@@ -407,7 +407,7 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "supplied with empty space for companyAddressline4" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "companyName" -> "line0",
+      "companyName" -> "AcmeLtd",
       "companyAddressline1" -> "line1",
       "companyAddressline2" -> "line2",
       "companyAddressline3" -> "",
@@ -429,7 +429,7 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "supplied with empty space for country" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "companyName" -> "line0",
+      "companyName" -> "AcmeLtd",
       "companyAddressline1" -> "line1",
       "companyAddressline2" -> "line2",
       "companyAddressline3" -> "",
@@ -450,7 +450,7 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "supplied with empty space for companyPostcode" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "companyName" -> "line0",
+      "companyName" -> "AcmeLtd",
       "companyAddressline1" -> "line1",
       "companyAddressline2" -> "line2",
       "companyAddressline3" -> "",
@@ -471,7 +471,7 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "supplied with numeric input for companyName" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "companyName" -> "line0 260",
+      "companyName" -> "AcmeLtd 260",
       "companyAddressline1" -> "line1",
       "companyAddressline2" -> "line2",
       "companyAddressline3" -> "",
@@ -490,7 +490,7 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "supplied with numeric input for companyAddressline1" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "companyName" -> "line0",
+      "companyName" -> "AcmeLtd",
       "companyAddressline1" -> "line1 86",
       "companyAddressline2" -> "line2",
       "companyAddressline3" -> "",
@@ -508,7 +508,7 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "supplied with numeric input for companyAddressline2" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "companyName" -> "line0",
+      "companyName" -> "AcmeLtd",
       "companyAddressline1" -> "line1",
       "companyAddressline2" -> "line2 86",
       "companyAddressline3" -> "",
@@ -526,7 +526,7 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "supplied with numeric input for companyAddressline3" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "companyName" -> "line0",
+      "companyName" -> "AcmeLtd",
       "companyAddressline1" -> "line1",
       "companyAddressline2" -> "line2",
       "companyAddressline3" -> "86",
@@ -544,7 +544,7 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "supplied with numeric input for companyAddressline4" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "companyName" -> "line0",
+      "companyName" -> "AcmeLtd",
       "companyAddressline1" -> "line1",
       "companyAddressline2" -> "line2",
       "companyAddressline3" -> "",
@@ -562,7 +562,7 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "supplied with numeric input for companyPostcode" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "companyName" -> "line0",
+      "companyName" -> "AcmeLtd",
       "companyAddressline1" -> "line1",
       "companyAddressline2" -> "line2",
       "companyAddressline3" -> "",
@@ -584,7 +584,7 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "supplied with alphanumeric input for country" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "companyName" -> "line0",
+      "companyName" -> "AcmeLtd",
       "companyAddressline1" -> "line1",
       "companyAddressline2" -> "line2",
       "companyAddressline3" -> "",
@@ -627,7 +627,7 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "companyAddressline1 value supplied with the minimum allowed" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "companyName" -> "line0",
+      "companyName" -> "AcmeLtd",
       "companyAddressline1" -> "A",
       "companyAddressline2" -> "line2",
       "companyAddressline3" -> "",
@@ -645,7 +645,7 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "companyAddressline2 value supplied with the minimum allowed" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "companyName" -> "line0",
+      "companyName" -> "AcmeLtd",
       "companyAddressline1" -> "line1",
       "companyAddressline2" -> "M",
       "companyAddressline3" -> "",
@@ -663,7 +663,7 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "companyAddressline3 value supplied with the minimum allowed" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "companyName" -> "line0",
+      "companyName" -> "AcmeLtd",
       "companyAddressline1" -> "line1",
       "companyAddressline2" -> "line2",
       "companyAddressline3" -> "A",
@@ -681,7 +681,7 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "companyAddressline4 value supplied with the minimum allowed" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "companyName" -> "line0",
+      "companyName" -> "AcmeLtd",
       "companyAddressline1" -> "line1",
       "companyAddressline2" -> "line2",
       "companyAddressline3" -> "",
@@ -699,7 +699,7 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "country value supplied with the minimum allowed" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "companyName" -> "line0",
+      "companyName" -> "AcmeLtd",
       "companyAddressline1" -> "line1",
       "companyAddressline2" -> "line2",
       "companyAddressline3" -> "",
@@ -718,7 +718,7 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "companyName value supplied with the maximum allowed (on the boundary)" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "companyName" -> companyNameMax56,
+      "companyName" -> MockDataGenerator.randomAlphanumericString(Constants.CompanyDetailsMaxLength),
       "companyAddressline1" -> "line1",
       "companyAddressline2" -> "line2",
       "companyAddressline3" -> "",
@@ -735,13 +735,13 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
   }
 
 
-  "companyAddressline1 value supplied with the maximum allowed (on the boundary)" should {
+  "address lines supplied with the maximum allowed (on the boundary)" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "companyName" -> "line0",
-      "companyAddressline1" -> "line1          ",
-      "companyAddressline2" -> "line2",
-      "companyAddressline3" -> "",
-      "companyAddressline4" -> "",
+      "companyName" -> "AcmeLtd",
+      "companyAddressline1" -> MockDataGenerator.randomAlphanumericString(Constants.addressLineLength),
+      "companyAddressline2" -> MockDataGenerator.randomAlphanumericString(Constants.addressLineLength),
+      "companyAddressline3" -> MockDataGenerator.randomAlphanumericString(Constants.addressLineLength),
+      "companyAddressline4" -> MockDataGenerator.randomAlphanumericString(Constants.addressLineLength),
       "companyPostcode" -> "",
       "countryCode" -> "JP")
     )
@@ -753,63 +753,10 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
     }
   }
 
-  "companyAddressline2 value supplied with the maximum allowed (on the boundary)" should {
-    lazy val form = companyDetailsForm.bind(Map(
-      "companyName" -> "line0",
-      "companyAddressline1" -> "line1",
-      "companyAddressline2" -> "line2                  ",
-      "companyAddressline3" -> "",
-      "companyAddressline4" -> "",
-      "companyPostcode" -> "",
-      "countryCode" -> "JP")
-    )
-    "raise form error" in {
-      form.hasErrors shouldBe false
-    }
-    "raise 0 form errors" in {
-      form.errors.length shouldBe 0
-    }
-  }
-
-  "companyAddressline3 value supplied with the maximum allowed (on the boundary)" should {
-    lazy val form = companyDetailsForm.bind(Map(
-      "companyName" -> "line0",
-      "companyAddressline1" -> "line1",
-      "companyAddressline2" -> "line2",
-      "companyAddressline3" -> "A                          ",
-      "companyAddressline4" -> "",
-      "companyPostcode" -> "",
-      "countryCode" -> "JP")
-    )
-    "raise form error" in {
-      form.hasErrors shouldBe false
-    }
-    "raise 0 form errors" in {
-      form.errors.length shouldBe 0
-    }
-  }
-
-  "companyAddressline4 value supplied with the maximum allowed (on the boundary)" should {
-    lazy val form = companyDetailsForm.bind(Map(
-      "companyName" -> "line0",
-      "companyAddressline1" -> "line1",
-      "companyAddressline2" -> "line2",
-      "companyAddressline3" -> "",
-      "companyAddressline4" -> "A                 ",
-      "companyPostcode" -> "",
-      "countryCode" -> "JP")
-    )
-    "raise form error" in {
-      form.hasErrors shouldBe false
-    }
-    "raise 0 form errors" in {
-      form.errors.length shouldBe 0
-    }
-  }
 
   "companyPostcode value supplied with the maximum allowed (on the boundary)" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "companyName" -> "line0",
+      "companyName" -> "AcmeLtd",
       "companyAddressline1" -> "line1",
       "companyAddressline2" -> "line2",
       "companyAddressline3" -> "",
@@ -827,7 +774,7 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "country value supplied with the maximum allowed (on the boundary)" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "companyName" -> "line0",
+      "companyName" -> "AcmeLtd",
       "companyAddressline1" -> "line1",
       "companyAddressline2" -> "line2",
       "companyAddressline3" -> "",
@@ -845,7 +792,7 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "country value supplied over the maximum allowed (over the boundary)" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "companyName" -> "line0",
+      "companyName" -> "AcmeLtd",
       "companyAddressline1" -> "line1",
       "companyAddressline2" -> "line2",
       "companyAddressline3" -> "",
@@ -867,7 +814,7 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "companyName value supplied over the maximum allowed (over the boundary)" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "companyName" -> "123456789012345678901234567890123456789012345678932095703932",
+      "companyName" -> MockDataGenerator.randomAlphanumericString(Constants.CompanyDetailsMaxLength + 1),
       "companyAddressline1" -> "line1",
       "companyAddressline2" -> "line2",
       "companyAddressline3" -> "",
@@ -889,8 +836,8 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "companyAddressline1 value supplied over the maximum allowed (over the boundary)" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "companyName" -> "line0",
-      "companyAddressline1" -> "1234567890123456789012345678901234567890",
+      "companyName" -> "AcmeLtd",
+      "companyAddressline1" -> MockDataGenerator.randomAlphanumericString(Constants.addressLineLength + 1),
       "companyAddressline2" -> "line2",
       "companyAddressline3" -> "",
       "companyAddressline4" -> "",
@@ -911,9 +858,9 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "companyAddressline2 value supplied over the maximum allowed (over the boundary)" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "companyName" -> "line0",
+      "companyName" -> "AcmeLtd",
       "companyAddressline1" -> "line1",
-      "companyAddressline2" -> "1234567890123456789012345678901234567890",
+      "companyAddressline2" -> MockDataGenerator.randomAlphanumericString(Constants.addressLineLength + 1),
       "companyAddressline3" -> "",
       "companyAddressline4" -> "",
       "companyPostcode" -> "",
@@ -933,10 +880,10 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "companyAddressline3 value supplied over the maximum allowed (over the boundary)" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "companyName" -> "line0",
+      "companyName" -> "AcmeLtd",
       "companyAddressline1" -> "line1",
       "companyAddressline2" -> "line2",
-      "companyAddressline3" -> "1234567890123456789012345678901234567890",
+      "companyAddressline3" -> MockDataGenerator.randomAlphanumericString(Constants.addressLineLength + 1),
       "companyAddressline4" -> "",
       "companyPostcode" -> "",
       "countryCode" -> "JP")
@@ -955,11 +902,11 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "companyAddressline4 value supplied over the maximum allowed (over the boundary)" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "companyName" -> "line0",
+      "companyName" -> "AcmeLtd",
       "companyAddressline1" -> "line1",
       "companyAddressline2" -> "line2",
       "companyAddressline3" -> "",
-      "companyAddressline4" -> "1234567890123456789012345678901234567890",
+      "companyAddressline4" -> MockDataGenerator.randomAlphanumericString(Constants.addressLineLength + 1),
       "companyPostcode" -> "",
       "countryCode" -> "JP")
     )
@@ -975,9 +922,9 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
     }
   }
 
-  "companyPostcode value supplied over the maximum allowed (over the boundary) incluses whitespace in the count" should {
+  "companyPostcode value supplied over the maximum allowed (over the boundary) includes whitespace" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "companyName" -> "line0",
+      "companyName" -> "AcmeLtd",
       "companyAddressline1" -> "line1",
       "companyAddressline2" -> "line2",
       "companyAddressline3" -> "",
@@ -999,7 +946,7 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "country value supplied over the maximum allowed (over the boundary) includes whitespace in the count" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "companyName" -> "line0",
+      "companyName" -> "AcmeLtd",
       "companyAddressline1" -> "line1",
       "companyAddressline2" -> "line2",
       "companyAddressline3" -> "",
@@ -1023,7 +970,7 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "companyPostcode value supplied with multiple white space" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "companyName" -> "line0",
+      "companyName" -> "AcmeLtd",
       "companyAddressline1" -> "line1",
       "companyAddressline2" -> "line2",
       "companyAddressline3" -> "",
@@ -1045,7 +992,7 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "companyPostcode value supplied with brackets" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "companyName" -> "line0",
+      "companyName" -> "AcmeLtd",
       "companyAddressline1" -> "line1",
       "companyAddressline2" -> "line2",
       "companyAddressline3" -> "",
@@ -1067,7 +1014,7 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "companyPostcode value supplied with /" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "companyName" -> "line0",
+      "companyName" -> "AcmeLtd",
       "companyAddressline1" -> "line1",
       "companyAddressline2" -> "line2",
       "companyAddressline3" -> "",
@@ -1089,7 +1036,7 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "companyPostcode value supplied with lowercase" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "companyName" -> "line0",
+      "companyName" -> "AcmeLtd",
       "companyAddressline1" -> "line1",
       "companyAddressline2" -> "line2",
       "companyAddressline3" -> "",
@@ -1107,7 +1054,7 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "companyPostcode value supplied with no spaces" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "companyName" -> "line0",
+      "companyName" -> "AcmeLtd",
       "companyAddressline1" -> "line1",
       "companyAddressline2" -> "line2",
       "companyAddressline3" -> "",
@@ -1129,7 +1076,7 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "country value supplied with '" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "companyName" -> "line0",
+      "companyName" -> "AcmeLtd",
       "companyAddressline1" -> "line1",
       "companyAddressline2" -> "line2",
       "companyAddressline3" -> "",
@@ -1151,7 +1098,7 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "country value supplied with -" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "companyName" -> "line0",
+      "companyName" -> "AcmeLtd",
       "companyAddressline1" -> "line1",
       "companyAddressline2" -> "line2",
       "companyAddressline3" -> "",
@@ -1173,7 +1120,7 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "country value supplied with ." should {
     lazy val form = companyDetailsForm.bind(Map(
-      "companyName" -> "line0",
+      "companyName" -> "AcmeLtd",
       "companyAddressline1" -> "line1",
       "companyAddressline2" -> "line2",
       "companyAddressline3" -> "",
@@ -1195,7 +1142,7 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "country value supplied with a trailing space" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "companyName" -> "line0",
+      "companyName" -> "AcmeLtd",
       "companyAddressline1" -> "line1",
       "companyAddressline2" -> "line2",
       "companyAddressline3" -> "",
@@ -1213,7 +1160,7 @@ class CompanyDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "country value supplied with #" should {
     lazy val form = companyDetailsForm.bind(Map(
-      "companyName" -> "line0",
+      "companyName" -> "AcmeLtd",
       "companyAddressline1" -> "line1",
       "companyAddressline2" -> "line2",
       "companyAddressline3" -> "",

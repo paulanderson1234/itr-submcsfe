@@ -38,7 +38,7 @@ class WasAnyValueReceivedFormSpec extends UnitSpec with OneAppPerSuite {
       "return a form with the correct map" in {
         form.data shouldBe Map(
           "wasAnyValueReceived" -> Constants.StandardRadioButtonYesValue,
-          "aboutValueReceived" -> "text"
+          "descriptionTextArea" -> "text"
         )
       }
     }
@@ -48,7 +48,7 @@ class WasAnyValueReceivedFormSpec extends UnitSpec with OneAppPerSuite {
       "has empty data" should {
         lazy val form = wasAnyValueReceivedForm.bind(Map(
           "wasAnyValueReceived" -> "",
-          "aboutValueReceived" -> "")
+          "descriptionTextArea" -> "")
         )
 
         "have a form with one error" in {
@@ -63,7 +63,7 @@ class WasAnyValueReceivedFormSpec extends UnitSpec with OneAppPerSuite {
       "has invalid data for a 'Yes' response" should {
         lazy val form = wasAnyValueReceivedForm.bind(Map(
           "wasAnyValueReceived" -> Constants.StandardRadioButtonYesValue,
-          "aboutValueReceived" -> ""
+          "descriptionTextArea" -> ""
         ))
 
         "have a form with one error" in {
@@ -78,7 +78,7 @@ class WasAnyValueReceivedFormSpec extends UnitSpec with OneAppPerSuite {
       "has valid data for a 'Yes' response" should {
         lazy val form = wasAnyValueReceivedForm.bind(Map(
           "wasAnyValueReceived" -> Constants.StandardRadioButtonYesValue,
-          "aboutValueReceived" -> "text"
+          "descriptionTextArea" -> "text"
         ))
 
         "have no errors" in {
@@ -93,7 +93,7 @@ class WasAnyValueReceivedFormSpec extends UnitSpec with OneAppPerSuite {
       "has valid data for a 'No' response" should {
         lazy val form = wasAnyValueReceivedForm.bind(Map(
           "wasAnyValueReceived" -> Constants.StandardRadioButtonNoValue,
-          "aboutValueReceived" -> ""
+          "descriptionTextArea" -> ""
         ))
 
         "have no errors" in {
@@ -105,10 +105,10 @@ class WasAnyValueReceivedFormSpec extends UnitSpec with OneAppPerSuite {
         }
       }
 
-      "has valid data for a 'Yes' respone with aboutValueReceived at maximum allowed length" should {
+      "has valid data for a 'Yes' respone with  at maximum allowed length" should {
         lazy val form = wasAnyValueReceivedForm.bind(Map(
           "wasAnyValueReceived" -> Constants.StandardRadioButtonYesValue,
-          "aboutValueReceived" -> maxLengthText
+          "descriptionTextArea" -> maxLengthText
         ))
 
         "have no errors" in {
@@ -120,10 +120,10 @@ class WasAnyValueReceivedFormSpec extends UnitSpec with OneAppPerSuite {
         }
       }
 
-      "has valid data for a 'Yes' response with aboutValueReceived over maximum allowed length" should {
+      "has valid data for a 'Yes' response with  over maximum allowed length" should {
         lazy val form = wasAnyValueReceivedForm.bind(Map(
           "wasAnyValueReceived" -> Constants.StandardRadioButtonYesValue,
-          "aboutValueReceived" -> overMaxLengthText
+          "descriptionTextArea" -> overMaxLengthText
         ))
 
         "have no errors" in {

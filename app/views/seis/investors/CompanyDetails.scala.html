@@ -10,7 +10,7 @@
 
 @main_template(Messages("page.investment.companyDetails.title")) {
 
-@backButtonWithProgress(backUrl, Messages("common.section.progress.company.details.four"))
+@backButtonWithProgress(backUrl, Messages("common.section.progress.details.four"))
 
 <div class="grid-row">
     <div class="column-two-thirds">
@@ -26,7 +26,7 @@
             '_divClass -> "form-label",
             '_labelId -> "label-companyName",
             '_label -> Messages("page.investment.companyDetails.companyname.label"),
-            '_maxlength -> "56",
+            '_maxlength -> Constants.CompanyDetailsMaxLength,
             '_inputClass -> "input--medium input--cleared",
             'id -> "companyName"
             )
@@ -37,7 +37,7 @@
             '_divClass -> "form-label",
             '_labelId -> "label-companyAddressline1",
             '_label -> Messages("page.investment.companyDetails.addressline1.label"),
-            '_maxlength -> "35",
+            '_maxlength -> Constants.addressLineLength,
             '_inputClass -> "input--medium input--cleared",
             'id -> "companyAddressline1"
             )
@@ -48,7 +48,7 @@
             '_divClass -> "form-label",
             '_labelId -> "label-companyAddressline2",
             '_label -> Messages("page.investment.companyDetails.addressline2.label"),
-            '_maxlength -> "35",
+            '_maxlength -> Constants.addressLineLength,
             '_inputClass -> "input--medium input--cleared",
             'id -> "companyAddressline2"
             )
@@ -59,7 +59,7 @@
             '_divClass -> "form-label",
             '_labelId -> "label-companyAddressline3",
             '_label -> Messages("page.investment.companyDetails.addressline3.label"),
-            '_maxlength -> "35",
+            '_maxlength -> Constants.addressLineLength,
             '_inputClass -> "input--medium input--cleared",
             'id -> "companyAddressline3"
             )
@@ -70,7 +70,7 @@
             '_divClass -> "form-label",
             '_labelId -> "label-companyAddressline4",
             '_label -> Messages("page.investment.companyDetails.addressline4.label"),
-            '_maxlength -> "35",
+            '_maxlength -> Constants.addressLineLength,
             '_inputClass -> "input--medium input--cleared",
             'id -> "companyAddressline4"
             )

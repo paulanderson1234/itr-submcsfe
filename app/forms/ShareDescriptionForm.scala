@@ -24,7 +24,7 @@ import play.api.data.Forms._
 object ShareDescriptionForm {
   val shareDescriptionForm = Form(
     mapping(
-      "shareDescription" -> nonEmptyText(maxLength = Constants.shortTextLimit)
+      "descriptionTextArea" -> nonEmptyText(maxLength = Constants.shortTextLimit)
     )(ShareDescriptionModel.apply)(ShareDescriptionModel.unapply)
   )
 }

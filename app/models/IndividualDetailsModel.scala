@@ -25,7 +25,7 @@ case class IndividualDetailsModel( forename : String,
                                    addressline3 : Option[String]=None,
                                    addressline4 : Option[String]=None,
                                    postcode :Option[String] = None,
-                                   countryCode : String,
+                                   countryCode : String = "GB",
                                    processingId: Option[Int]) {
 
   def toArray: Array[String] = Array(Some(addressline1), Some(addressline2), addressline3, addressline4, postcode, Some(countryCode)).flatten

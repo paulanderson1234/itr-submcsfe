@@ -36,7 +36,7 @@ class TotalAmountRaisedSpec extends ViewSpec {
       val document = Jsoup.parse(page(totalAmountRaisedForm.fill(TotalAmountRaisedModel(1))).body)
       document.title() shouldBe Messages("page.shareDetails.totalAmountRaised.title")
       document.getElementById("main-heading").text() shouldBe Messages("page.shareDetails.totalAmountRaised.heading")
-      document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.company.details.three")
+      document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.three")
       document.body.getElementById("back-link").attr("href") shouldEqual routes.NominalValueOfSharesController.show().url
       document.getElementById("label-amount").select("span").hasClass("visuallyhidden") shouldBe true
       document.getElementById("label-amount").select(".visuallyhidden").text() shouldBe Messages("page.shareDetails.totalAmountRaised.heading")
@@ -50,7 +50,7 @@ class TotalAmountRaisedSpec extends ViewSpec {
       val document = Jsoup.parse(page(totalAmountRaisedForm).body)
       document.title() shouldBe Messages("page.shareDetails.totalAmountRaised.title")
       document.getElementById("main-heading").text() shouldBe Messages("page.shareDetails.totalAmountRaised.heading")
-      document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.company.details.three")
+      document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.three")
       document.body.getElementById("back-link").attr("href") shouldEqual routes.NominalValueOfSharesController.show().url
       document.getElementById("label-amount").select("span").hasClass("visuallyhidden") shouldBe true
       document.getElementById("label-amount").select(".visuallyhidden").text() shouldBe Messages("page.shareDetails.totalAmountRaised.heading")
@@ -64,7 +64,7 @@ class TotalAmountRaisedSpec extends ViewSpec {
       val document = Jsoup.parse(page(totalAmountRaisedForm.bindFromRequest()(fakeRequest.withHeaders("" -> ""))).body)
       document.title() shouldBe Messages("page.shareDetails.totalAmountRaised.title")
       document.getElementById("main-heading").text() shouldBe Messages("page.shareDetails.totalAmountRaised.heading")
-      document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.company.details.three")
+      document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.three")
       document.body.getElementById("back-link").attr("href") shouldEqual routes.NominalValueOfSharesController.show().url
       document.getElementById("label-amount").select("span").hasClass("visuallyhidden") shouldBe true
       document.getElementById("label-amount").select(".visuallyhidden").text() shouldBe Messages("page.shareDetails.totalAmountRaised.heading")

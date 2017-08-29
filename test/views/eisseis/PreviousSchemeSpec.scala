@@ -64,7 +64,7 @@ class PreviousSchemeSpec extends ViewSpec {
       }
       document.title() shouldBe Messages("page.investment.PreviousScheme.title")
       document.body.getElementById("back-link").attr("href") shouldEqual controllers.eisseis.routes.ReviewPreviousSchemesController.show().url
-      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.company.details.two")
+      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.two")
 
       document.getElementById("main-heading").text() shouldBe Messages("page.investment.PreviousScheme.heading")
 
@@ -103,7 +103,7 @@ class PreviousSchemeSpec extends ViewSpec {
 
       document.title() shouldBe Messages("page.investment.PreviousScheme.title")
       document.body.getElementById("back-link").attr("href") shouldEqual controllers.eisseis.routes.HadPreviousRFIController.show().url
-      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.company.details.two")
+      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.two")
 
       document.getElementById("main-heading").text() shouldBe Messages("page.investment.PreviousScheme.heading")
 

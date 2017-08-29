@@ -22,8 +22,7 @@ import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.Helpers.ControllerHelpers
 import controllers.predicates.FeatureSwitch
-import models.{AddInvestorOrNomineeModel, IndividualDetailsModel, CompanyDetailsModel, CompanyOrIndividualModel}
-import models.investorDetails.{IsExistingShareHolderModel, HowMuchSpentOnSharesModel, NumberOfSharesPurchasedModel, InvestorDetailsModel}
+import models.investorDetails.InvestorDetailsModel
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current

@@ -25,7 +25,7 @@ object PreviousShareHoldingDescriptionForm {
 
   val previousShareHoldingDescriptionForm = Form(
     mapping(
-      "previousShareHoldingDescription" -> nonEmptyText(maxLength = Constants.shortTextLimit),
+      "descriptionTextArea" -> nonEmptyText(maxLength = Constants.shortTextLimit),
       "processingId" -> optional(number),
       "investorProcessingId" -> optional(number)
     )(PreviousShareHoldingDescriptionModel.apply)(PreviousShareHoldingDescriptionModel.unapply)

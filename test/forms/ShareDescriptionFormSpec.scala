@@ -69,11 +69,11 @@ class ShareDescriptionFormSpec extends UnitSpec with OneAppPerSuite{
   "The share description Form" should {
     "return an error if share description is empty" in {
       val request = FakeRequest("GET", "/").withFormUrlEncodedBody(
-        "shareDescription" -> ""
+        "descriptionTextArea" -> ""
       )
       bindWithError(request) match {
         case Some(err) => {
-          err.key shouldBe "shareDescription"
+          err.key shouldBe "descriptionTextArea"
           Messages(err.message) shouldBe Messages("error.required")
           err.args shouldBe Array()
         }
@@ -87,7 +87,7 @@ class ShareDescriptionFormSpec extends UnitSpec with OneAppPerSuite{
   "The share description Form" should {
     "not return an error if entry at the borderline condition (1 character)" in {
       val request = FakeRequest("GET", "/").withFormUrlEncodedBody(
-        "shareDescription" -> "h"
+        "descriptionTextArea" -> "h"
       )
       bindWithError(request) match {
         case Some(err) => {
@@ -101,7 +101,7 @@ class ShareDescriptionFormSpec extends UnitSpec with OneAppPerSuite{
   "The share description Form" should {
     "not return an error if entry is above the suggested 20 word limit (21 words)" in {
       val request = FakeRequest("GET", "/").withFormUrlEncodedBody(
-        "shareDescription" -> "this is more than 20 words to see if that amount is suggested but not enforced"
+        "descriptionTextArea" -> "this is more than 20 words to see if that amount is suggested but not enforced"
       )
       bindWithError(request) match {
         case Some(err) => {
@@ -115,7 +115,7 @@ class ShareDescriptionFormSpec extends UnitSpec with OneAppPerSuite{
   "The share description Form" should {
     "not return an error if entry is on boundary (250)" in {
       val request = FakeRequest("GET", "/").withFormUrlEncodedBody(
-        "shareDescription" -> MockDataGenerator.randomAlphanumericString(250)
+        "descriptionTextArea" -> MockDataGenerator.randomAlphanumericString(250)
       )
       bindWithError(request) match {
         case Some(err) => {
@@ -129,11 +129,11 @@ class ShareDescriptionFormSpec extends UnitSpec with OneAppPerSuite{
   "The share description Form" should {
     "return an error if entry is greater than 250 words in length" in {
       val request = FakeRequest("GET", "/").withFormUrlEncodedBody(
-        "shareDescription" -> MockDataGenerator.randomAlphanumericString(251)
+        "descriptionTextArea" -> MockDataGenerator.randomAlphanumericString(251)
       )
       bindWithError(request) match {
         case Some(err) => {
-          err.key shouldBe "shareDescription"
+          err.key shouldBe "descriptionTextArea"
           Messages(err.message) shouldBe Messages("error.maxLength")
           err.args shouldBe Array(Constants.shortTextLimit)
         }

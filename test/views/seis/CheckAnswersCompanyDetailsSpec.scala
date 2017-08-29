@@ -16,8 +16,7 @@
 
 package views.seis
 
-import models.submission.SchemeTypesModel
-import models.{CheckAnswersModel, DateOfIncorporationModel, TradeStartDateModel}
+import models._
 import models.seis.SEISCheckAnswersModel
 import org.jsoup.Jsoup
 import play.api.i18n.Messages
@@ -27,12 +26,15 @@ import views.html.seis.checkAndSubmit.CheckAnswers
 
 class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
 
+  val grossAssets = Some(GrossAssetsModel(12345))
+  val fullTimeEmployees = Some(FullTimeEmployeeCountModel(22))
   "The Check Answers page" should {
-
     "Verify that the Check Answers page contains the correct elements for Section 1: Company details" +
       " when it is fully populated with company detail models and had trade start date is true" in {
-      val model = SEISCheckAnswersModel(Some(registeredAddressModel), Some(dateOfIncorporationModel), Some(tradeStartDateModelYes),
-        Some(natureOfBusinessModel), Some(subsidiariesModelNo), None, Vector(), None, None, None, None, None, false)
+      val model = SEISCheckAnswersModel(Some(registeredAddressModel), Some(dateOfIncorporationModel), Some(natureOfBusinessModel),
+        Vector(), None, None, Some(qualifyPrepareToTrade), Some(hasInvestmentTradeStartedModelYes),
+        Some(isSeventyPercentSpentModelYes), Some(shareIssuetDateModel), grossAssets, fullTimeEmployees, None, None, None, None, None,
+        None, None, None, false)
       val page = CheckAnswers(model)(authorisedFakeRequest, applicationMessages)
       val document = Jsoup.parse(page.body)
 
@@ -40,7 +42,7 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
 
       document.title() shouldBe Messages("page.checkAndSubmit.checkAnswers.heading")
       document.getElementById("main-heading").text() shouldBe Messages("page.checkAndSubmit.checkAnswers.heading")
-      document.getElementById("description-one").text() shouldBe Messages("page.checkAndSubmit.checkAnswers.description.one")
+      document.getElementById("description-one").text() shouldBe Messages("page.checkAndSubmit.checkAnswers.description.one") + " " + Messages("page.checkAndSubmit.checkAnswers.scheme.seis")
       document.getElementById("description-two").text() shouldBe Messages("page.checkAndSubmit.checkAnswers.description.two")
 
       //Section 1 table heading
@@ -60,18 +62,54 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
           model.dateOfIncorporationModel.get.month.get, model.dateOfIncorporationModel.get.year.get)
       companyDetailsTableTBody.select("tr").get(1).getElementById("dateOfIncorporation-link")
         .attr("href") shouldEqual controllers.seis.routes.DateOfIncorporationController.show().url
-      //Trade start date
-      companyDetailsTableTBody.select("tr").get(2).getElementById("tradeStart-Question0").text() shouldBe
-        Messages("summaryQuestion.hasTradeStartDate")
-      companyDetailsTableTBody.select("tr").get(2).getElementById("tradeStart-Answer0").text() shouldBe
-        model.tradeStartDateModel.get.hasTradeStartDate
-      companyDetailsTableTBody.select("tr").get(2).getElementById("tradeStart-Question1").text() shouldBe
-        Messages("summaryQuestion.tradeStartDate")
-      companyDetailsTableTBody.select("tr").get(2).getElementById("tradeStart-Answer1").text() shouldBe
-        TradeStartDateModel.toDateString(model.tradeStartDateModel.get.tradeStartDay.get,
-          model.tradeStartDateModel.get.tradeStartMonth.get, model.tradeStartDateModel.get.tradeStartYear.get)
-      companyDetailsTableTBody.select("tr").get(2).getElementById("tradeStart-link")
-        .attr("href") shouldEqual controllers.seis.routes.TradeStartDateController.show().url
+
+      //  qualifying business
+      companyDetailsTableTBody.select("tr").get(2).getElementById("qualifyBusinessActivity-question").text() shouldBe
+        Messages("summaryQuestion.bussinessPurpose")
+      companyDetailsTableTBody.select("tr").get(2).getElementById("qualifyBusinessActivity-answer").text() shouldBe
+        qualifyPrepareToTrade.isQualifyBusinessActivity
+      companyDetailsTableTBody.select("tr").get(2).getElementById("qualifyBusinessActivity-link")
+        .attr("href") shouldEqual controllers.seis.routes.QualifyBusinessActivityController.show().url
+      //hasInvestmentTradeStarted
+      companyDetailsTableTBody.select("tr").get(3).getElementById("hasInvestmentTradeStarted-question").text() shouldBe
+        Messages("summaryQuestion.bussinessStatus") + " " + Messages("summaryQuestion.bussinessActivityStarted")
+      companyDetailsTableTBody.select("tr").get(3).getElementById("hasInvestmentTradeStarted-answer").text() shouldBe
+        hasInvestmentTradeStartedModelYes.hasInvestmentTradeStarted + " " + HasInvestmentTradeStartedModel.toDateString(hasInvestmentTradeStartedModelYes.hasInvestmentTradeStartedDay.get,
+          hasInvestmentTradeStartedModelYes.hasInvestmentTradeStartedMonth.get, hasInvestmentTradeStartedModelYes.hasInvestmentTradeStartedYear.get)
+      companyDetailsTableTBody.select("tr").get(3).getElementById("hasInvestmentTradeStarted-link")
+        .attr("href") shouldEqual controllers.seis.routes.HasInvestmentTradeStartedController.show().url
+
+      //SeventyPercentSpent
+      companyDetailsTableTBody.select("tr").get(4).getElementById("isSeventyPercentSpent-question").text() shouldBe
+        Messages("summaryQuestion.IsSeventyPercentSpent")
+      companyDetailsTableTBody.select("tr").get(4).getElementById("isSeventyPercentSpent-answer").text() shouldBe
+        isSeventyPercentSpentModelYes.isSeventyPercentSpent
+      companyDetailsTableTBody.select("tr").get(4).getElementById("isSeventyPercentSpent-link")
+        .attr("href") shouldEqual controllers.seis.routes.SeventyPercentSpentController.show().url
+
+      //shareIssueDate
+      companyDetailsTableTBody.select("tr").get(5).getElementById("shareIssueDate-question").text() shouldBe
+        Messages("summaryQuestion.shareIssueDate")
+      companyDetailsTableTBody.select("tr").get(5).getElementById("shareIssueDate-answer").text() shouldBe
+        ShareIssueDateModel.toDateString(shareIssuetDateModel.day.get, shareIssuetDateModel.month.get, shareIssuetDateModel.year.get)
+      companyDetailsTableTBody.select("tr").get(5).getElementById("shareIssueDate-link")
+        .attr("href") shouldEqual controllers.seis.routes.ShareIssueDateController.show().url
+
+      //Gross assets
+      companyDetailsTableTBody.select("tr").get(6).getElementById("grossAssets-question").text() shouldBe
+        Messages("summaryQuestion.businessGrossAssets")
+      companyDetailsTableTBody.select("tr").get(6).getElementById("grossAssets-answer").text() shouldBe
+        GrossAssetsModel.getAmountAsFormattedString(grossAssets.get.grossAmount)
+      companyDetailsTableTBody.select("tr").get(6).getElementById("grossAssets-link")
+        .attr("href") shouldEqual controllers.seis.routes.GrossAssetsController.show().url
+
+      //Fulltime employees
+      companyDetailsTableTBody.select("tr").get(7).getElementById("fullTimeEmployees-question").text() shouldBe
+        Messages("summaryQuestion.fullTimeEmployees")
+      companyDetailsTableTBody.select("tr").get(7).getElementById("fullTimeEmployees-answer").text() shouldBe
+        fullTimeEmployees.get.employeeCount.toString()
+      companyDetailsTableTBody.select("tr").get(7).getElementById("fullTimeEmployees-link")
+        .attr("href") shouldEqual controllers.seis.routes.FullTimeEmployeeCountController.show().url
 
       document.getElementById("submit").text() shouldBe Messages("page.checkAndSubmit.checkAnswers.button.confirm")
       document.body.getElementById("back-link").attr("href") shouldEqual controllers.seis.routes.SupportingDocumentsController.show().url
@@ -79,8 +117,10 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
 
     "Verify that the Check Answers page contains the correct elements for Section 1: Company details" +
       " when it is fully populated with company detail models and had trade start date is false" in {
-      val model = SEISCheckAnswersModel(Some(registeredAddressModel), Some(dateOfIncorporationModel), Some(tradeStartDateModelNo),
-        Some(natureOfBusinessModel), Some(subsidiariesModelNo), None, Vector(), None, None, None, None, None, false)
+      val model = SEISCheckAnswersModel(Some(registeredAddressModel), Some(dateOfIncorporationModel),
+        Some(natureOfBusinessModel), Vector(), None, None, Some(qualifyPrepareToTrade), Some(hasInvestmentTradeStartedModelYes),
+        Some(isSeventyPercentSpentModelYes), Some(shareIssuetDateModel), grossAssets, fullTimeEmployees, None, None, None, None, None,
+        None, None, None, false)
       val page = CheckAnswers(model)(authorisedFakeRequest, applicationMessages)
       val document = Jsoup.parse(page.body)
 
@@ -89,7 +129,7 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
 
       document.title() shouldBe Messages("page.checkAndSubmit.checkAnswers.heading")
       document.getElementById("main-heading").text() shouldBe Messages("page.checkAndSubmit.checkAnswers.heading")
-      document.getElementById("description-one").text() shouldBe Messages("page.checkAndSubmit.checkAnswers.description.one")
+      document.getElementById("description-one").text() shouldBe Messages("page.checkAndSubmit.checkAnswers.description.one") + " " + Messages("page.checkAndSubmit.checkAnswers.scheme.seis")
       document.getElementById("description-two").text() shouldBe Messages("page.checkAndSubmit.checkAnswers.description.two")
 
       //Section 1 table heading
@@ -109,13 +149,53 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
           model.dateOfIncorporationModel.get.month.get, model.dateOfIncorporationModel.get.year.get)
       companyDetailsTableTBody.select("tr").get(1).getElementById("dateOfIncorporation-link")
         .attr("href") shouldEqual controllers.seis.routes.DateOfIncorporationController.show().url
-      //Trade start date
-      companyDetailsTableTBody.select("tr").get(2).getElementById("tradeStart-question").text() shouldBe
-        Messages("summaryQuestion.hasTradeStartDate")
-      companyDetailsTableTBody.select("tr").get(2).getElementById("tradeStart-answer").text() shouldBe
-        model.tradeStartDateModel.get.hasTradeStartDate
-      companyDetailsTableTBody.select("tr").get(2).getElementById("tradeStart-link")
-        .attr("href") shouldEqual controllers.seis.routes.TradeStartDateController.show().url
+
+      companyDetailsTableTBody.select("tr").get(2).getElementById("qualifyBusinessActivity-question").text() shouldBe
+        Messages("summaryQuestion.bussinessPurpose")
+      companyDetailsTableTBody.select("tr").get(2).getElementById("qualifyBusinessActivity-answer").text() shouldBe
+        qualifyPrepareToTrade.isQualifyBusinessActivity
+      companyDetailsTableTBody.select("tr").get(2).getElementById("qualifyBusinessActivity-link")
+        .attr("href") shouldEqual controllers.seis.routes.QualifyBusinessActivityController.show().url
+      //hasInvestmentTradeStarted
+      companyDetailsTableTBody.select("tr").get(3).getElementById("hasInvestmentTradeStarted-question").text() shouldBe
+        Messages("summaryQuestion.bussinessStatus") + " " + Messages("summaryQuestion.bussinessActivityStarted")
+      companyDetailsTableTBody.select("tr").get(3).getElementById("hasInvestmentTradeStarted-answer").text() shouldBe
+        hasInvestmentTradeStartedModelYes.hasInvestmentTradeStarted + " " + HasInvestmentTradeStartedModel.toDateString(hasInvestmentTradeStartedModelYes.hasInvestmentTradeStartedDay.get,
+          hasInvestmentTradeStartedModelYes.hasInvestmentTradeStartedMonth.get, hasInvestmentTradeStartedModelYes.hasInvestmentTradeStartedYear.get)
+      companyDetailsTableTBody.select("tr").get(3).getElementById("hasInvestmentTradeStarted-link")
+        .attr("href") shouldEqual controllers.seis.routes.HasInvestmentTradeStartedController.show().url
+
+      //SeventyPercentSpent
+      companyDetailsTableTBody.select("tr").get(4).getElementById("isSeventyPercentSpent-question").text() shouldBe
+        Messages("summaryQuestion.IsSeventyPercentSpent")
+      companyDetailsTableTBody.select("tr").get(4).getElementById("isSeventyPercentSpent-answer").text() shouldBe
+        isSeventyPercentSpentModelYes.isSeventyPercentSpent
+      companyDetailsTableTBody.select("tr").get(4).getElementById("isSeventyPercentSpent-link")
+        .attr("href") shouldEqual controllers.seis.routes.SeventyPercentSpentController.show().url
+
+      //shareIssueDate
+      companyDetailsTableTBody.select("tr").get(5).getElementById("shareIssueDate-question").text() shouldBe
+        Messages("summaryQuestion.shareIssueDate")
+      companyDetailsTableTBody.select("tr").get(5).getElementById("shareIssueDate-answer").text() shouldBe
+        ShareIssueDateModel.toDateString(shareIssuetDateModel.day.get, shareIssuetDateModel.month.get, shareIssuetDateModel.year.get)
+      companyDetailsTableTBody.select("tr").get(5).getElementById("shareIssueDate-link")
+        .attr("href") shouldEqual controllers.seis.routes.ShareIssueDateController.show().url
+
+      //Gross assets
+      companyDetailsTableTBody.select("tr").get(6).getElementById("grossAssets-question").text() shouldBe
+        Messages("summaryQuestion.businessGrossAssets")
+      companyDetailsTableTBody.select("tr").get(6).getElementById("grossAssets-answer").text() shouldBe
+        GrossAssetsModel.getAmountAsFormattedString(grossAssets.get.grossAmount)
+      companyDetailsTableTBody.select("tr").get(6).getElementById("grossAssets-link")
+        .attr("href") shouldEqual controllers.seis.routes.GrossAssetsController.show().url
+
+      //Fulltime employees
+      companyDetailsTableTBody.select("tr").get(7).getElementById("fullTimeEmployees-question").text() shouldBe
+        Messages("summaryQuestion.fullTimeEmployees")
+      companyDetailsTableTBody.select("tr").get(7).getElementById("fullTimeEmployees-answer").text() shouldBe
+        fullTimeEmployees.get.employeeCount.toString()
+      companyDetailsTableTBody.select("tr").get(7).getElementById("fullTimeEmployees-link")
+        .attr("href") shouldEqual controllers.seis.routes.FullTimeEmployeeCountController.show().url
 
       document.getElementById("submit").text() shouldBe Messages("page.checkAndSubmit.checkAnswers.button.confirm")
       document.body.getElementById("back-link").attr("href") shouldEqual controllers.seis.routes.SupportingDocumentsController.show().url
@@ -123,16 +203,16 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
 
     "Verify that the Check Answers page contains an empty table for Section 1: Company details" +
       " when an empty set of company detail models are passed" in {
-      val model = SEISCheckAnswersModel(None, None, None, None, None, None, Vector(), None, None, None, None, None, false)
+      val model = SEISCheckAnswersModel(None, None, None, Vector(), None, None, None, None,
+        None, None, None, None, None, None, None, None, None, None, None, None, false)
       val page = CheckAnswers(model)(authorisedFakeRequest, applicationMessages)
       val document = Jsoup.parse(page.body)
 
       lazy val companyDetailsTableTBody = document.getElementById("company-details-table").select("tbody")
 
-
       document.title() shouldBe Messages("page.checkAndSubmit.checkAnswers.heading")
       document.getElementById("main-heading").text() shouldBe Messages("page.checkAndSubmit.checkAnswers.heading")
-      document.getElementById("description-one").text() shouldBe Messages("page.checkAndSubmit.checkAnswers.description.one")
+      document.getElementById("description-one").text() shouldBe Messages("page.checkAndSubmit.checkAnswers.description.one") + " " + Messages("page.checkAndSubmit.checkAnswers.scheme.seis")
       document.getElementById("description-two").text() shouldBe Messages("page.checkAndSubmit.checkAnswers.description.two")
 
       //Section 1 table heading
@@ -144,12 +224,12 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
     }
   }
 
-
   "The Check Answers page" should {
 
     "Verify that the scheme description contains only SEIS" in {
 
-      val model = SEISCheckAnswersModel(None, None, None, None, None, None, Vector(), None, None, None, None, None, false)
+      val model = SEISCheckAnswersModel(None, None, None, Vector(), None, None, None, None, None, None, None, None,
+        None, None, None, None, None, None, None, None, false)
       val page = CheckAnswers(model)(authorisedFakeRequest, applicationMessages)
       val document = Jsoup.parse(page.body)
 
@@ -159,11 +239,8 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
 
       document.title() shouldBe Messages("page.checkAndSubmit.checkAnswers.heading")
       document.getElementById("main-heading").text() shouldBe Messages("page.checkAndSubmit.checkAnswers.heading")
-      document.getElementById("description-one").text() shouldBe Messages("page.checkAndSubmit.checkAnswers.description.one")
+      document.getElementById("description-one").text() shouldBe Messages("page.checkAndSubmit.checkAnswers.description.one") + " " + Messages("page.checkAndSubmit.checkAnswers.scheme.seis")
       document.getElementById("description-two").text() shouldBe Messages("page.checkAndSubmit.checkAnswers.description.two")
-
-      document.getElementById("schemes").children().size() shouldBe 1
-      document.getElementById("seis-scheme").text() shouldBe Messages("page.checkAndSubmit.checkAnswers.scheme.seis")
 
       document.getElementById("description-two").text() shouldBe Messages("page.checkAndSubmit.checkAnswers.description.two")
 

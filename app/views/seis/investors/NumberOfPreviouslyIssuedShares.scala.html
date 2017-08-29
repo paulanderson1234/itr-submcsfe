@@ -4,24 +4,24 @@
 
 @(companyOrIndividual: String, numberOfPreviouslyIssuedSharesForm: Form[NumberOfPreviouslyIssuedSharesModel], backUrl: String, investorProcessingId: Int)(implicit request: Request[_], messages: Messages)
 
-@main_template(Messages("page.seis.investors.numberOfPreviouslyIssuedShares.title", companyOrIndividual.toLowerCase())) {
+@main_template(Messages("page.investors.numberOfPreviouslyIssuedShares.title", companyOrIndividual.toLowerCase())) {
 
-@backButtonWithProgress(backUrl, Messages("common.section.progress.company.details.four"))
+@backButtonWithProgress(backUrl, Messages("common.section.progress.details.four"))
 
 @errorSummary(numberOfPreviouslyIssuedSharesForm, "number-of-previously-issued-shares", "numberOfPreviouslyIssuedSharesCount")
 
-<h1 class="heading-xlarge" id="main-heading">@Messages("page.seis.investors.numberOfPreviouslyIssuedShares.heading", companyOrIndividual.toLowerCase())</h1>
+<h1 class="heading-xlarge" id="main-heading">@Messages("page.investors.numberOfPreviouslyIssuedShares.heading", companyOrIndividual.toLowerCase())</h1>
 
 <div>
     @form(action = controllers.seis.routes.NumberOfPreviouslyIssuedSharesController.submit(Some(companyOrIndividual), Some(investorProcessingId))) {
     <fieldset>
-        <legend class="visuallyhidden">@Messages("page.seis.investors.numberOfPreviouslyIssuedShares.heading", companyOrIndividual.toLowerCase())</legend>
+        <legend class="visuallyhidden">@Messages("page.investors.numberOfPreviouslyIssuedShares.heading", companyOrIndividual.toLowerCase())</legend>
         <div class="form-group">
             @input(
             numberOfPreviouslyIssuedSharesForm("numberOfPreviouslyIssuedShares"),
             '_divClass -> "form-label",
             '_labelId -> "label-numberOfPreviouslyIssuedShares",
-            '_label -> Messages("page.seis.investors.numberOfPreviouslyIssuedShares.heading", companyOrIndividual.toLowerCase()),
+            '_label -> Messages("page.investors.numberOfPreviouslyIssuedShares.heading", companyOrIndividual.toLowerCase()),
             '_labelTextClass -> "visuallyhidden",
             '_maxlength -> "25",
             '_inputClass -> "input--fullwidth"

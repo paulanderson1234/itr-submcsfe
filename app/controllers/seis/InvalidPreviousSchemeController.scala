@@ -51,9 +51,4 @@ trait InvalidPreviousSchemeController extends FrontendController with Authorised
     }
   }
 
-  def change(schemeId: Int): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
-    AuthorisedAndEnrolled.async { implicit user => implicit request =>
-      Future.successful(Redirect(routes.ReviewPreviousSchemesController.show()))
-    }
-  }
 }

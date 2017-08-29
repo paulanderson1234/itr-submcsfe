@@ -33,7 +33,7 @@ class CompanyOrIndividualSpec extends ViewSpec{
     document.getElementById("main-heading").text() shouldBe Messages("page.investors.companyOrIndividual.title", templateText)
     document.getElementById("next").text() shouldBe Messages("common.button.snc")
     document.body.getElementById("back-link").attr("href") shouldEqual controllers.seis.routes.AddInvestorOrNomineeController.show(Some(1)).url
-    document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.company.details.four")
+    document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.four")
     document.getElementById("companyOrIndividual-companyLabel").text() shouldBe Messages("page.investors.companyOrIndividual.company")
     document.getElementById("companyOrIndividual-individualLabel").text() shouldBe Messages("page.investors.companyOrIndividual.individual")
   }
