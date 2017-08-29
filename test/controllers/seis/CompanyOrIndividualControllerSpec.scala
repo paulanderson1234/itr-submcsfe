@@ -18,7 +18,7 @@ package controllers.seis
 
 import auth.{MockAuthConnector, MockConfig}
 import common.{Constants, KeystoreKeys}
-import config.FrontendAuthConnector
+import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
 import models.investorDetails.InvestorDetailsModel
@@ -47,6 +47,9 @@ class CompanyOrIndividualControllerSpec extends BaseSpec {
     }
     "use the correct auth connector" in {
       CompanyOrIndividualController.authConnector shouldBe FrontendAuthConnector
+    }
+    "use the correct config" in {
+      CompanyOrIndividualController.applicationConfig shouldBe FrontendAppConfig
     }
     "use the correct enrolment connector" in {
       CompanyOrIndividualController.enrolmentConnector shouldBe EnrolmentConnector
@@ -91,7 +94,6 @@ class CompanyOrIndividualControllerSpec extends BaseSpec {
       }
     }
 
-    /* TODO redirect to review investor details page when the id does not exist  */
     "Redirect to the Investor Details Review page" when {
       "a 'backlink' is defined, an 'investor details list' is retrieved and an INVALID 'id' is defined" in {
         mockEnrolledRequest(seisSchemeTypesModel)
@@ -198,7 +200,7 @@ class CompanyOrIndividualControllerSpec extends BaseSpec {
 
 
   "Sending an invalid form submission with validation errors to the CompanyOrIndividualController when authenticated and enrolled" should {
-    "redirect to itself" in {
+    "respond wih a bad request" in {
       setupMocks(Some(listOfInvestorsComplete), Some(validBackLink))
       mockEnrolledRequest(seisSchemeTypesModel)
       val formInput = "companyOrIndividual" -> ""

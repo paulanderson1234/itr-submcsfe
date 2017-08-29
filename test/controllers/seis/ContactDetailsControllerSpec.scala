@@ -17,7 +17,7 @@
 package controllers.seis
 
 import auth.{MockAuthConnector, MockConfig}
-import config.FrontendAuthConnector
+import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
 import models._
@@ -42,6 +42,9 @@ class ContactDetailsControllerSpec extends BaseSpec {
     }
     "use the correct auth connector" in {
       ContactDetailsController.authConnector shouldBe FrontendAuthConnector
+    }
+    "use the correct config" in {
+      ContactDetailsController.applicationConfig shouldBe FrontendAppConfig
     }
     "use the correct enrolment connector" in {
       ContactDetailsController.enrolmentConnector shouldBe EnrolmentConnector
@@ -89,7 +92,7 @@ class ContactDetailsControllerSpec extends BaseSpec {
   }
 
   "Sending an invalid form submission with validation errors to the ContactDetailsController when authenticated and enrolled" should {
-    "redirect with a bad request" in {
+    "reespond with a bad request" in {
       mockEnrolledRequest(seisSchemeTypesModel)
       val formInput = Seq(
         "forename" -> "first",

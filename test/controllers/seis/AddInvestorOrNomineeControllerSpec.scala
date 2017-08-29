@@ -18,7 +18,7 @@ package controllers.seis
 
 import auth.{MockAuthConnector, MockConfig}
 import common.{Constants, KeystoreKeys}
-import config.FrontendAuthConnector
+import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
 import models._
@@ -47,6 +47,9 @@ class AddInvestorOrNomineeControllerSpec extends BaseSpec {
     }
     "use the correct auth connector" in {
       AddInvestorOrNomineeController.authConnector shouldBe FrontendAuthConnector
+    }
+    "use the correct config" in {
+      AddInvestorOrNomineeController.applicationConfig shouldBe FrontendAppConfig
     }
     "use the correct enrolment connector" in {
       AddInvestorOrNomineeController.enrolmentConnector shouldBe EnrolmentConnector
@@ -210,7 +213,7 @@ class AddInvestorOrNomineeControllerSpec extends BaseSpec {
 
 
   "Sending an invalid form submission with validation errors to the AddInvestorOrNomineeController when authenticated and enrolled" should {
-    "redirect to itself" in {
+    "respond wih a bad request" in {
       setupMocks(None, Some(validBackLink))
       mockEnrolledRequest(seisSchemeTypesModel)
       val formInput = "addInvestorOrNominee" -> ""

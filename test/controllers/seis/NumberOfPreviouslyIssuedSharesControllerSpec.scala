@@ -18,7 +18,7 @@ package controllers.seis
 
 import auth.{MockAuthConnector, MockConfig}
 import common.{Constants, KeystoreKeys}
-import config.{AppConfig, FrontendAuthConnector}
+import config.{AppConfig, FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
 import models.investorDetails.{InvestorDetailsModel, PreviousShareHoldingModel}
@@ -66,6 +66,10 @@ class NumberOfPreviouslyIssuedSharesControllerSpec extends BaseSpec{
 
     "use the correct keystore connector" in {
       NumberOfPreviouslyIssuedSharesController.s4lConnector shouldBe S4LConnector
+    }
+
+    "use the correct config" in {
+      NumberOfPreviouslyIssuedSharesController.applicationConfig shouldBe FrontendAppConfig
     }
 
     "use the correct enrolment connector" in {

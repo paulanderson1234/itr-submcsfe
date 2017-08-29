@@ -40,7 +40,7 @@ class NumberOfPreviouslyIssuedSharesSpec extends ViewSpec {
       }
 
       "have the correct title" in {
-        document.title() shouldBe Messages("page.seis.investors.numberOfPreviouslyIssuedShares.title", "company")
+        document.title() shouldBe Messages("page.investors.numberOfPreviouslyIssuedShares.title", "company")
       }
 
       "have the correct back link text" in {
@@ -52,7 +52,7 @@ class NumberOfPreviouslyIssuedSharesSpec extends ViewSpec {
       }
 
       "have the correct heading" in {
-        document.select("h1").text() shouldBe Messages("page.seis.investors.numberOfPreviouslyIssuedShares.title", "company")
+        document.select("h1").text() shouldBe Messages("page.investors.numberOfPreviouslyIssuedShares.title", "company")
       }
 
       "have a form posting to the correct route" in {
@@ -61,7 +61,7 @@ class NumberOfPreviouslyIssuedSharesSpec extends ViewSpec {
       }
 
       "have the correct question in a label" in {
-        document.select("fieldset label").text() shouldBe Messages("page.seis.investors.numberOfPreviouslyIssuedShares.heading", "company")
+        document.select("fieldset label").text() shouldBe Messages("page.investors.numberOfPreviouslyIssuedShares.heading", "company")
       }
 
       "have an input for NumberOfPreviouslyIssuedShares" in {
@@ -84,7 +84,7 @@ class NumberOfPreviouslyIssuedSharesSpec extends ViewSpec {
       }
 
       "have the correct title" in {
-        document.title() shouldBe Messages("page.seis.investors.numberOfPreviouslyIssuedShares.title", "company", "TODO")
+        document.title() shouldBe Messages("page.investors.numberOfPreviouslyIssuedShares.title", "company", "TODO")
       }
 
       /*TODO update back link for looping logic*/
@@ -93,7 +93,7 @@ class NumberOfPreviouslyIssuedSharesSpec extends ViewSpec {
       }
 
       "have the correct heading" in {
-        document.select("h1").text() shouldBe Messages("page.seis.investors.numberOfPreviouslyIssuedShares.heading", "company")
+        document.select("h1").text() shouldBe Messages("page.investors.numberOfPreviouslyIssuedShares.heading", "company")
       }
 
       "have a form posting to the correct route" in {
@@ -102,7 +102,7 @@ class NumberOfPreviouslyIssuedSharesSpec extends ViewSpec {
       }
 
       "have the correct question in a label" in {
-        document.select("label span.visuallyhidden").text() shouldBe Messages("page.seis.investors.numberOfPreviouslyIssuedShares.heading", "company")
+        document.select("label span.visuallyhidden").text() shouldBe Messages("page.investors.numberOfPreviouslyIssuedShares.heading", "company")
       }
 
       "have an input for numberOfPreviouslyIssuedShares" in {

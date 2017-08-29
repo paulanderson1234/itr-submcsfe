@@ -17,7 +17,7 @@
 package controllers.seis
 
 import auth.{MockAuthConnector, MockConfig}
-import config.FrontendAuthConnector
+import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
 import models._
@@ -43,6 +43,9 @@ class NatureOfBusinessControllerSpec extends BaseSpec {
     "use the correct auth connector" in {
       NatureOfBusinessController.authConnector shouldBe FrontendAuthConnector
     }
+    "use the correct config" in {
+      NatureOfBusinessController.applicationConfig shouldBe FrontendAppConfig
+    }
     "use the correct enrolment connector" in {
       NatureOfBusinessController.enrolmentConnector shouldBe EnrolmentConnector
     }
@@ -53,7 +56,7 @@ class NatureOfBusinessControllerSpec extends BaseSpec {
       .thenReturn(Future.successful(natureOfBusinessModel))
 
   "Sending a GET request to NatureOfBusinessController when authenticated and enrolled" should {
-    "return a 200 when something is fetched from keystore" in {
+    "return a 200 when something is fetched from storage" in {
       setupMocks(Some(natureOfBusinessModel))
       mockEnrolledRequest(seisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show)(
@@ -61,7 +64,7 @@ class NatureOfBusinessControllerSpec extends BaseSpec {
       )
     }
 
-    "provide an empty model and return a 200 when nothing is fetched using keystore" in {
+    "provide an empty model and return a 200 when nothing is fetched from  storage" in {
       setupMocks()
       mockEnrolledRequest(seisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show)(
@@ -71,7 +74,7 @@ class NatureOfBusinessControllerSpec extends BaseSpec {
   }
 
   "Sending a valid form submit to the NatureOfBusinessController when auththenticated and enrolled" should {
-    "redirect to the date of incorporation page" in {
+    "redirect to the expected page" in {
       mockEnrolledRequest(seisSchemeTypesModel)
       val formInput = "natureofbusiness" -> "some text so it's valid"
 
@@ -85,7 +88,7 @@ class NatureOfBusinessControllerSpec extends BaseSpec {
   }
 
   "Sending an invalid form submission with validation errors to the NatureOfBusinessController when authenticated and enrolled" should {
-    "redirect to itself" in {
+    "respond with a bad request" in {
       mockEnrolledRequest(seisSchemeTypesModel)
       val formInput = "natureofbusiness" -> ""
 

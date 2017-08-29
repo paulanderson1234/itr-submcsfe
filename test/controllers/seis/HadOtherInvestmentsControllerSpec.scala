@@ -18,7 +18,7 @@ package controllers.seis
 
 import auth.{MockAuthConnector, MockConfig}
 import common.{Constants, KeystoreKeys}
-import config.FrontendAuthConnector
+import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
 import models.{HadOtherInvestmentsModel, HadPreviousRFIModel, PreviousSchemeModel}
@@ -43,6 +43,9 @@ class HadOtherInvestmentsControllerSpec extends BaseSpec {
     }
     "use the correct auth connector" in {
       HadOtherInvestmentsController.authConnector shouldBe FrontendAuthConnector
+    }
+    "use the correct config" in {
+      HadOtherInvestmentsController.applicationConfig shouldBe FrontendAppConfig
     }
     "use the correct enrolment connector" in {
       HadOtherInvestmentsController.enrolmentConnector shouldBe EnrolmentConnector
@@ -69,7 +72,7 @@ class HadOtherInvestmentsControllerSpec extends BaseSpec {
 
   "Sending a GET request to HadOtherInvestmentsController when authenticated and enrolled for combined" should {
     "return a 200 when something is fetched from keystore" in {
-      setupMocks(Some(hadOtherInvestmentsModelYes), Some(routes.ProposedInvestmentController.show().url), None, Some(hadPreviousRFIModelYes))
+      setupMocks(Some(hadOtherInvestmentsModelYes), Some(routes.HadPreviousRFIController.show().url), None, Some(hadPreviousRFIModelYes))
       mockEnrolledRequest(seisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show())(
         result => status(result) shouldBe OK
@@ -77,7 +80,7 @@ class HadOtherInvestmentsControllerSpec extends BaseSpec {
     }
 
     "provide an empty model and return a 200 when nothing is fetched using keystore for combined" in {
-      setupMocks(None,Some(routes.ProposedInvestmentController.show().url), None, Some(hadPreviousRFIModelYes))
+      setupMocks(None,Some(routes.HadPreviousRFIController.show().url), None, Some(hadPreviousRFIModelYes))
       mockEnrolledRequest(seisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show())(
         result => status(result) shouldBe OK
@@ -132,13 +135,13 @@ class HadOtherInvestmentsControllerSpec extends BaseSpec {
 
   "Sending an invalid form submission with validation errors to the HadOtherInvestmentsController when authenticated " +
     "and enrolled for combined" should {
-    "redirect to itself" in {
+    "respond wih a bad request" in {
       setupMocks(None, None, None, Some(hadPreviousRFIModelYes))
       when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.backLinkReviewPreviousSchemes))
-        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(routes.ProposedInvestmentController.show().url)))
+        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(routes.HadPreviousRFIController.show().url)))
 
       when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.backLinkSubsidiaries))(Matchers.any(), Matchers.any(),Matchers.any()))
-        .thenReturn(Future.successful(Some(routes.ProposedInvestmentController.show().url)))
+        .thenReturn(Future.successful(Some(routes.HadPreviousRFIController.show().url)))
 
       mockEnrolledRequest(seisSchemeTypesModel)
       val formInput = "hadOtherInvestments" -> ""

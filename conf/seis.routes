@@ -4,16 +4,9 @@
 GET       /nature-of-business                       controllers.seis.NatureOfBusinessController.show
 POST      /nature-of-business                       controllers.seis.NatureOfBusinessController.submit
 
-GET       /trade-start-date                        controllers.seis.TradeStartDateController.show
-POST      /trade-start-date                        controllers.seis.TradeStartDateController.submit
-
 GET       /research-start-date                     controllers.seis.ResearchStartDateController.show
 POST      /research-start-date                     controllers.seis.ResearchStartDateController.submit
 
-GET       /is-first-trade                           controllers.seis.IsFirstTradeController.show
-POST      /is-first-trade                           controllers.seis.IsFirstTradeController.submit
-
-GET       /trade-start-date-error                  controllers.seis.TradeStartDateErrorController.show
 
 GET       /full-time-employee-count-error          controllers.seis.FullTimeEmployeeCountErrorController.show
 
@@ -69,9 +62,6 @@ POST      /supporting-documents                    controllers.seis.SupportingDo
 GET       /supporting-documents-upload             controllers.seis.SupportingDocumentsUploadController.show
 POST      /supporting-documents-upload             controllers.seis.SupportingDocumentsUploadController.submit
 
-GET       /proposed-investment                      controllers.seis.ProposedInvestmentController.show
-POST      /proposed-investment                      controllers.seis.ProposedInvestmentController.submit
-
 GET       /used-investment-scheme-before            controllers.seis.HadPreviousRFIController.show
 POST      /used-investment-scheme-before            controllers.seis.HadPreviousRFIController.submit
 
@@ -80,8 +70,6 @@ POST      /check-your-answers                       controllers.seis.CheckAnswer
 
 GET       /acknowledgement                          controllers.seis.AcknowledgementController.show
 POST      /acknowledgement                          controllers.seis.AcknowledgementController.submit
-
-GET       /not-first-trade                          controllers.seis.NotFirstTradeController.show
 
 GET       /attachments-acknowledgement             controllers.seis.AttachmentsAcknowledgementController.show
 POST      /attachments-acknowledgement             controllers.seis.AttachmentsAcknowledgementController.submit

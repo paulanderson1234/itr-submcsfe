@@ -20,7 +20,7 @@ import akka.actor.ActorSystem
 import akka.stream.ActorMaterializer
 import auth.{MockAuthConnector, MockConfig}
 import common.{Constants, KeystoreKeys}
-import config.FrontendAuthConnector
+import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
 import data.SubscriptionTestData._
@@ -64,6 +64,9 @@ class ConfirmCorrespondAddressControllerSpec extends BaseSpec {
   "ConfirmCorrespondAddressController" should {
     "use the correct auth connector" in {
       ConfirmCorrespondAddressController.authConnector shouldBe FrontendAuthConnector
+    }
+    "use the correct config" in {
+      ConfirmCorrespondAddressController.applicationConfig shouldBe FrontendAppConfig
     }
     "use the correct keystore connector" in {
       ConfirmCorrespondAddressController.s4lConnector shouldBe S4LConnector
@@ -211,7 +214,7 @@ class ConfirmCorrespondAddressControllerSpec extends BaseSpec {
   }
 
   "Submitting a invalid form submission to ConfirmCorrespondAddressController while authenticated and enrolled" should {
-    "redirect to itself when there is validation errors" in {
+    "respond wih a bad request when there is validation errors" in {
       setupSaveForLaterMocks(Some(confirmCorrespondAddressModel), Some("backLink"))
       mockEnrolledRequest(seisSchemeTypesModel)
       val formInput = Seq(

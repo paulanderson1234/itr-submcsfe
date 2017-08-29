@@ -18,15 +18,13 @@ package controllers.seis
 
 import auth.{MockAuthConnector, MockConfig}
 import common.{Constants, KeystoreKeys}
-import config.{AppConfig, FrontendAuthConnector}
+import config.{AppConfig, FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
-import models.CompanyOrIndividualModel
 import models.investorDetails._
 import org.mockito.Matchers
 import org.mockito.Mockito._
 import play.api.test.Helpers._
-import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.frontend.auth.connectors.AuthConnector
 
 import scala.concurrent.Future
@@ -60,6 +58,9 @@ class HowMuchSpentOnSharesControllerSpec extends BaseSpec  {
 
     "use the correct auth connector" in {
       HowMuchSpentOnSharesController.authConnector shouldBe FrontendAuthConnector
+    }
+    "use the correct config" in {
+      HowMuchSpentOnSharesController.applicationConfig shouldBe FrontendAppConfig
     }
 
     "use the correct keystore connector" in {
@@ -178,7 +179,7 @@ class HowMuchSpentOnSharesControllerSpec extends BaseSpec  {
 
 
     "Sending an invalid form submission with validation errors to the HowMuchSpentOnSharesController when authenticated and enrolled" should {
-      "redirect to itself" in {
+      "respond with a bad request" in {
         setupMocks(Some(listOfInvestorsComplete), backUrl)
         mockEnrolledRequest(seisSchemeTypesModel)
         val formInput = "howMuchSpentOnShares" -> ""

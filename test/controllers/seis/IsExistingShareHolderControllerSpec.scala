@@ -18,7 +18,7 @@ package controllers.seis
 
 import auth.{MockAuthConnector, MockConfig}
 import common.{Constants, KeystoreKeys}
-import config.{AppConfig, FrontendAuthConnector}
+import config.{AppConfig, FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
 import models.{CompanyOrIndividualModel, ShareIssueDateModel}
@@ -65,6 +65,10 @@ class IsExistingShareHolderControllerSpec extends BaseSpec with DateFormatter{
 
     "use the correct auth connector" in {
       IsExistingShareHolderController.authConnector shouldBe FrontendAuthConnector
+    }
+
+    "use the correct config" in {
+      FullTimeEmployeeCountController.applicationConfig shouldBe FrontendAppConfig
     }
 
     "use the correct keystore connector" in {
@@ -221,7 +225,7 @@ class IsExistingShareHolderControllerSpec extends BaseSpec with DateFormatter{
 
 
     "Sending an invalid form submission with validation errors to the IsExistingShareHolder when authenticated and enrolled" should {
-      "redirect to itself" in {
+      "respond with a bad requet" in {
         setupMocks(Some(listOfInvestorsComplete), backUrl)
         mockEnrolledRequest(seisSchemeTypesModel)
         val formInput = "isExistingShareHolder" -> ""

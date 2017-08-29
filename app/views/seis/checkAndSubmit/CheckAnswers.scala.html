@@ -38,16 +38,7 @@
         @textRowHelperBasic("dateOfIncorporation", Messages("summaryQuestion.dateOfIncorporation"), DateOfIncorporationModel.toDateString(dateOfIncorporationModel.day.get, dateOfIncorporationModel.month.get, dateOfIncorporationModel.year.get),Some(controllers.seis.routes.DateOfIncorporationController.show().url))
         }
         }
-        <!-- Trade Start Date -->
-        @if(checkAnswersModel.tradeStartDateModel.isDefined){
-        @defining(checkAnswersModel.tradeStartDateModel.get) { tradeStartDateModel =>
-        @if(tradeStartDateModel.hasTradeStartDate == Messages("common.radioYesLabel")){
-        @textRowHelperMultiLineQuestion("tradeStart", Array(Messages("summaryQuestion.hasTradeStartDate"),Messages("summaryQuestion.tradeStartDate")),Array(tradeStartDateModel.hasTradeStartDate, TradeStartDateModel.toDateString(tradeStartDateModel.tradeStartDay.get, tradeStartDateModel.tradeStartMonth.get, tradeStartDateModel.tradeStartYear.get)), Some(controllers.seis.routes.TradeStartDateController.show().url), None)
-        } else {
-        @textRowHelperBasic("tradeStart", Messages("summaryQuestion.hasTradeStartDate"), tradeStartDateModel.hasTradeStartDate, Some(controllers.seis.routes.TradeStartDateController.show().url))
-        }
-        }
-        }
+
         <!-- Qualify business activity -->
         @if(checkAnswersModel.qualifyBusinessActivity.isDefined){
         @textRowHelperBasic("qualifyBusinessActivity", Messages("summaryQuestion.bussinessPurpose"),checkAnswersModel.qualifyBusinessActivity.get.isQualifyBusinessActivity, Some(controllers.seis.routes.QualifyBusinessActivityController.show().url))

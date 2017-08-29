@@ -11,7 +11,7 @@
 
     @errorSummary(tradeStartDateForm, "trade-start-date", "tradeStartDay")
 
-    <h1 class="heading-xlarge" id="main-heading">@Messages("page.seis.companyDetails.tradeStartDate.heading")</h1>
+    <h1 class="heading-xlarge" id="main-heading">@Messages("page.eisseis.companyDetails.tradeStartDate.heading")</h1>
 
     <div class="form-hint">
         <p id="description-two" class="lede">@Messages("page.seis.companyDetails.text")</p>
@@ -23,8 +23,8 @@
     @formHiddenYesNoRadioNoError(
         tradeStartDateForm,
         "hasTradeStartDate",
-        Messages("page.seis.companyDetails.TradeStartDate.question.hint"),
-        formInlineDateInput(tradeStartDateForm,"tradeStart",Some(Messages("page.seis.companyDetails.TradeStartDate.question.hint")),
+        Messages("page.eisseis.companyDetails.TradeStartDate.question.hint"),
+        formInlineDateInput(tradeStartDateForm,"tradeStart",Some(Messages("page.eisseis.companyDetails.TradeStartDate.question.hint")),
         false, Some(Messages("common.date.hint.example")), None),
         None,
         Some("visuallyhidden")

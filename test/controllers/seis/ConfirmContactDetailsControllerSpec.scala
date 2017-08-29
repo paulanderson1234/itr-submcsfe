@@ -63,6 +63,9 @@ class ConfirmContactDetailsControllerSpec extends BaseSpec {
     "use the correct keystore connector" in {
       ConfirmContactDetailsController.s4lConnector shouldBe S4LConnector
     }
+    "use the correct config" in {
+      ConfirmCorrespondAddressController.applicationConfig shouldBe FrontendAppConfig
+    }
     "use the correct enrolment connector" in {
       ConfirmContactDetailsController.enrolmentConnector shouldBe EnrolmentConnector
     }
@@ -186,7 +189,7 @@ class ConfirmContactDetailsControllerSpec extends BaseSpec {
   }
 
   "Submitting a invalid form submission to ConfirmContactDetailsController while authenticated and enrolled" should {
-    "redirect to itself when there is validation errors" in {
+    "respond wih a bad request when there is validation errors" in {
       mockSaveForLaterResponse(Some(confirmContactDetailsModel))
       mockEnrolledRequest(seisSchemeTypesModel)
       val formInput = Seq(

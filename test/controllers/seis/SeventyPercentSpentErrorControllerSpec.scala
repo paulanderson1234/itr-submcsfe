@@ -17,8 +17,8 @@
 package controllers.seis
 
 import auth.{MockAuthConnector, MockConfig}
-import config.FrontendAuthConnector
-import connectors.EnrolmentConnector
+import config.{FrontendAppConfig, FrontendAuthConnector}
+import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
 import play.api.test.Helpers._
 
@@ -39,6 +39,14 @@ class SeventyPercentSpentErrorControllerSpec extends BaseSpec {
     "use the correct enrolment connector" in {
       SeventyPercentSpentErrorController.enrolmentConnector shouldBe EnrolmentConnector
     }
+
+    "use the correct keystore connector" in {
+      SeventyPercentSpentErrorController.s4lConnector shouldBe S4LConnector
+    }
+    "use the correct config" in {
+      SeventyPercentSpentErrorController.applicationConfig shouldBe FrontendAppConfig
+    }
+
   }
 
   "Sending a GET request to SeventyPercentSpentErrorController when authenticated and enrolled" should {
