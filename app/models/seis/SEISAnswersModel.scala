@@ -36,7 +36,7 @@ case class SEISAnswersModel(companyDetailsAnswersModel: CompanyDetailsAnswersMod
     for {
       companyCheck <- companyDetailsAnswersModel.validate(submissionConnector)
       shareCheck <- shareDetailsAnswersModel.validate(companyDetailsAnswersModel.qualifyBusinessActivityModel,
-        companyDetailsAnswersModel.tradeStartDateModel, companyDetailsAnswersModel.researchStartDateModel, submissionConnector)
+        companyDetailsAnswersModel.hasInvestmentTradeStartedModel, companyDetailsAnswersModel.researchStartDateModel, submissionConnector)
     } yield companyCheck && previousSchemesAnswersModel.validate && shareCheck && investorDetailsAnswersModel.validate
   }
 }
@@ -44,7 +44,7 @@ case class SEISAnswersModel(companyDetailsAnswersModel: CompanyDetailsAnswersMod
 case class CompanyDetailsAnswersModel(natureOfBusinessModel: NatureOfBusinessModel,
                                       dateOfIncorporationModel: DateOfIncorporationModel,
                                       qualifyBusinessActivityModel: QualifyBusinessActivityModel,
-                                      tradeStartDateModel: Option[TradeStartDateModel],
+                                      hasInvestmentTradeStartedModel: Option[HasInvestmentTradeStartedModel],
                                       researchStartDateModel: Option[ResearchStartDateModel],
                                       seventyPercentSpentModel: Option[SeventyPercentSpentModel],
                                       shareIssueDateModel: ShareIssueDateModel,
@@ -72,19 +72,19 @@ case class CompanyDetailsAnswersModel(natureOfBusinessModel: NatureOfBusinessMod
       }
     }
 
-    val validateTrade: TradeStartDateModel => Option[Future[Boolean]] = { model =>
-      validateStartCondition[TradeStartDateModel](model.hasTradeStartDate) {
+    val validateTrade: HasInvestmentTradeStartedModel => Option[Future[Boolean]] = { model =>
+      validateStartCondition[HasInvestmentTradeStartedModel](model.hasInvestmentTradeStarted) {
         for {
-          day <- model.tradeStartDay
-          month <- model.tradeStartMonth
-          year <- model.tradeStartYear
+          day <- model.hasInvestmentTradeStartedDay
+          month <- model.hasInvestmentTradeStartedMonth
+          year <- model.hasInvestmentTradeStartedYear
         } yield submissionConnector.validateHasInvestmentTradeStartedCondition(day, month, year).map(validateSeventyPercentSpent)
       }
     }
 
     qualifyBusinessActivityModel.isQualifyBusinessActivity match {
       case Constants.qualifyResearchAndDevelopment => researchStartDateModel.flatMap(validateResearch).getOrElse(Future.successful(false))
-      case Constants.qualifyPrepareToTrade => tradeStartDateModel.flatMap(validateTrade).getOrElse(Future.successful(false))
+      case Constants.qualifyPrepareToTrade => hasInvestmentTradeStartedModel.flatMap(validateTrade).getOrElse(Future.successful(false))
       case _ => Future.successful(false)
     }
   }
@@ -105,7 +105,7 @@ case class ShareDetailsAnswersModel(shareDescriptionModel: ShareDescriptionModel
                                     totalAmountRaisedModel: TotalAmountRaisedModel,
                                     totalAmountSpentModel: Option[TotalAmountSpentModel]) {
   def validate(qualifyBusinessActivityModel: QualifyBusinessActivityModel,
-               tradeStartDateModel: Option[TradeStartDateModel],
+               hasInvestmentTradeStartedModel: Option[HasInvestmentTradeStartedModel],
                researchStartDateModel: Option[ResearchStartDateModel],
                submissionConnector: SubmissionConnector)(implicit hc: HeaderCarrier): Future[Boolean] = {
 
@@ -128,19 +128,19 @@ case class ShareDetailsAnswersModel(shareDescriptionModel: ShareDescriptionModel
       }
     }
 
-    val validateTrade: TradeStartDateModel => Option[Future[Boolean]] = { model =>
-      validateStartCondition[TradeStartDateModel](model.hasTradeStartDate) {
+    val validateTrade: HasInvestmentTradeStartedModel => Option[Future[Boolean]] = { model =>
+      validateStartCondition[HasInvestmentTradeStartedModel](model.hasInvestmentTradeStarted) {
         for {
-          day <- model.tradeStartDay
-          month <- model.tradeStartMonth
-          year <- model.tradeStartYear
+          day <- model.hasInvestmentTradeStartedDay
+          month <- model.hasInvestmentTradeStartedMonth
+          year <- model.hasInvestmentTradeStartedYear
         } yield submissionConnector.validateHasInvestmentTradeStartedCondition(day, month, year).map(validateTotalAmountSpent)
       }
     }
 
     qualifyBusinessActivityModel.isQualifyBusinessActivity match {
       case Constants.qualifyResearchAndDevelopment => researchStartDateModel.flatMap(validateResearch).getOrElse(Future.successful(false))
-      case Constants.qualifyPrepareToTrade => tradeStartDateModel.flatMap(validateTrade).getOrElse(Future.successful(false))
+      case Constants.qualifyPrepareToTrade => hasInvestmentTradeStartedModel.flatMap(validateTrade).getOrElse(Future.successful(false))
       case _ => Future.successful(false)
     }
   }

@@ -41,7 +41,7 @@ trait SubmissionFixture {
       .thenReturn(Future.successful(Option(dateOfIncorporationValid)))
     when(mockS4lConnector.fetchAndGetFormData[QualifyBusinessActivityModel](Matchers.eq(KeystoreKeys.isQualifyBusinessActivity))(Matchers.any(), Matchers.any(),Matchers.any()))
         .thenReturn(Future.successful(Some(QualifyBusinessActivityModel(Constants.qualifyResearchAndDevelopment))))
-    when(mockS4lConnector.fetchAndGetFormData[TradeStartDateModel](Matchers.eq(KeystoreKeys.tradeStartDate))(Matchers.any(), Matchers.any(),Matchers.any()))
+    when(mockS4lConnector.fetchAndGetFormData[HasInvestmentTradeStartedModel](Matchers.eq(KeystoreKeys.hasInvestmentTradeStarted))(Matchers.any(), Matchers.any(),Matchers.any()))
       .thenReturn(Future.successful(None))
     when(mockS4lConnector.fetchAndGetFormData[ResearchStartDateModel](Matchers.eq(KeystoreKeys.researchStartDate))(Matchers.any(), Matchers.any(),Matchers.any()))
       .thenReturn(Future.successful(Some(ResearchStartDateModel("Yes", Some(1), Some(4), Some(2016)))))

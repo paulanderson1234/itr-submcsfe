@@ -106,7 +106,7 @@ class AcknowledgementControllerSpec extends BaseSpec {
       when(mockS4lConnector.fetchAndGetFormData[NatureOfBusinessModel](Matchers.eq(KeystoreKeys.natureOfBusiness))(Matchers.any(),
         Matchers.any(), Matchers.any())).thenReturn(Future.failed(new Exception("test error")))
 
-      intercept[Exception](Await.result(TestController.getAnswers, Duration(10.0, SECONDS))).getMessage shouldBe "test error"
+      intercept[Exception](await(TestController.getAnswers)).getMessage shouldBe "test error"
     }
 
     "return a None if any of the mandatory data is missing" in {
@@ -114,13 +114,13 @@ class AcknowledgementControllerSpec extends BaseSpec {
       when(mockS4lConnector.fetchAndGetFormData[NatureOfBusinessModel](Matchers.eq(KeystoreKeys.natureOfBusiness))(Matchers.any(),
         Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
 
-      Await.result(TestController.getAnswers, Duration(10.0, SECONDS)) shouldBe None
+      await(TestController.getAnswers) shouldBe None
     }
 
     "return a valid model if all required data is found" in {
       setupMocksCs(mockS4lConnector)
 
-      Await.result(TestController.getAnswers, Duration(10.0, SECONDS)).contains(validSEISAnswersModel) shouldBe true
+      await(TestController.getAnswers).contains(validSEISAnswersModel) shouldBe true
     }
   }
 

@@ -62,7 +62,7 @@ trait AcknowledgementController extends FrontendController with AuthorisedAndEnr
     val natureOfBusiness = s4lConnector.fetchAndGetFormData[NatureOfBusinessModel](KeystoreKeys.natureOfBusiness)
     val dateOfIncorporation = s4lConnector.fetchAndGetFormData[DateOfIncorporationModel](KeystoreKeys.dateOfIncorporation)
     val qualifyingBusinessActivity = s4lConnector.fetchAndGetFormData[QualifyBusinessActivityModel](KeystoreKeys.isQualifyBusinessActivity)
-    val tradeStartDate = s4lConnector.fetchAndGetFormData[TradeStartDateModel](KeystoreKeys.tradeStartDate)
+    val tradeStartDate = s4lConnector.fetchAndGetFormData[HasInvestmentTradeStartedModel](KeystoreKeys.hasInvestmentTradeStarted)
     val researchStartDate = s4lConnector.fetchAndGetFormData[ResearchStartDateModel](KeystoreKeys.researchStartDate)
     val seventyPercent = s4lConnector.fetchAndGetFormData[SeventyPercentSpentModel](KeystoreKeys.seventyPercentSpent)
     val shareIssueDate = s4lConnector.fetchAndGetFormData[ShareIssueDateModel](KeystoreKeys.shareIssueDate)
@@ -72,7 +72,7 @@ trait AcknowledgementController extends FrontendController with AuthorisedAndEnr
     def createModel(natureOfBusinessModel: Option[NatureOfBusinessModel],
                     dateOfIncorporationModel: Option[DateOfIncorporationModel],
                     qualifyingBusinessActivityModel: Option[QualifyBusinessActivityModel],
-                    tradeStartDateModel: Option[TradeStartDateModel],
+                    hasInvestmentTradeStartedModel: Option[HasInvestmentTradeStartedModel],
                     researchStartDateModel: Option[ResearchStartDateModel],
                     seventyPercentSpentModel: Option[SeventyPercentSpentModel],
                     shareIssueDateModel: Option[ShareIssueDateModel],
@@ -88,7 +88,7 @@ trait AcknowledgementController extends FrontendController with AuthorisedAndEnr
         fullTimeEmployeeCountModel <- fullTimeEmployeeCountModel
       } yield {
         CompanyDetailsAnswersModel(natureOfBusinessModel, dateOfIncorporationModel, qualifyingBusinessActivityModel,
-          tradeStartDateModel, researchStartDateModel, seventyPercentSpentModel, shareIssueDateModel, grossAssetsModel, fullTimeEmployeeCountModel)
+          hasInvestmentTradeStartedModel, researchStartDateModel, seventyPercentSpentModel, shareIssueDateModel, grossAssetsModel, fullTimeEmployeeCountModel)
       }
     }
 

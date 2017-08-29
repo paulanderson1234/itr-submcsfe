@@ -43,7 +43,7 @@ class CompanyDetailsAnswersModelSpec extends UnitSpec with MockitoSugar {
     val completeModel = CompanyDetailsAnswersModel(NatureOfBusinessModel(""),
       DateOfIncorporationModel(Some(1), Some(2), Some(2015)),
       QualifyBusinessActivityModel(Constants.qualifyPrepareToTrade),
-      Some(TradeStartDateModel("Yes", Some(1), Some(2), Some(2016))),
+      Some(HasInvestmentTradeStartedModel("Yes", Some(1), Some(2), Some(2016))),
       Some(ResearchStartDateModel("Yes", Some(1), Some(2), Some(2016))),
       Some(SeventyPercentSpentModel("Yes")),
       ShareIssueDateModel(Some(1), Some(2), Some(2015)),
@@ -54,17 +54,17 @@ class CompanyDetailsAnswersModelSpec extends UnitSpec with MockitoSugar {
     "return a false" when {
 
       "provided with no TradeStartDate data when the qualifying business activity is trade" in {
-        await(completeModel.copy(tradeStartDateModel = None)
+        await(completeModel.copy(hasInvestmentTradeStartedModel = None)
           .validate(setupMockConnector())) shouldBe false
       }
 
       "provided with a missing TradeStartDate when one should be present" in {
-        await(completeModel.copy(tradeStartDateModel = Some(TradeStartDateModel("Yes", None, None, None)))
+        await(completeModel.copy(hasInvestmentTradeStartedModel = Some(HasInvestmentTradeStartedModel("Yes", None, None, None)))
           .validate(setupMockConnector())) shouldBe false
       }
 
       "provided with an empty TradeStartDate and no SeventyPercentSpentModel" in {
-        await(completeModel.copy(tradeStartDateModel = Some(TradeStartDateModel("No", None, None, None)),
+        await(completeModel.copy(hasInvestmentTradeStartedModel = Some(HasInvestmentTradeStartedModel("No", None, None, None)),
           seventyPercentSpentModel = None)
           .validate(setupMockConnector())) shouldBe false
       }
@@ -103,7 +103,7 @@ class CompanyDetailsAnswersModelSpec extends UnitSpec with MockitoSugar {
     "return a true" when {
 
       "provided with an empty TradeStartDate and a SeventyPercentSpentModel" in {
-        await(completeModel.copy(tradeStartDateModel = Some(TradeStartDateModel("No", None, None, None)))
+        await(completeModel.copy(hasInvestmentTradeStartedModel = Some(HasInvestmentTradeStartedModel("No", None, None, None)))
           .validate(setupMockConnector())) shouldBe true
       }
 
