@@ -55,16 +55,9 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
         shareIssueDateForm <- fillForm[ShareIssueDateModel](KeystoreKeys.shareIssueDate, ShareIssueDateForm.shareIssueDateForm)
         natureOfBusinessForm <- fillForm[NatureOfBusinessModel](KeystoreKeys.natureOfBusiness, NatureOfBusinessForm.natureOfBusinessForm)
         dateOfIncorporationForm <- fillForm[DateOfIncorporationModel](KeystoreKeys.dateOfIncorporation, DateOfIncorporationForm.dateOfIncorporationForm)
-        tradeStartDateForm <- fillForm[TradeStartDateModel](KeystoreKeys.tradeStartDate, TradeStartDateForm.tradeStartDateForm)
-        isFirstStartDateForm <- fillForm[IsFirstTradeModel](KeystoreKeys.isFirstTrade, IsFirstTradeForm.isFirstTradeForm)
         researchStartDateForm <- fillForm[ResearchStartDateModel](KeystoreKeys.researchStartDate, ResearchStartDateForm.researchStartDateForm)
         hadPreviousRFIForm <- fillForm[HadPreviousRFIModel](KeystoreKeys.hadPreviousRFI, HadPreviousRFIForm.hadPreviousRFIForm)
         previousSchemesForm <- fillPreviousSchemesForm
-        proposedInvestmentForm <- fillForm[ProposedInvestmentModel](KeystoreKeys.proposedInvestment, ProposedInvestmentForm.proposedInvestmentForm)
-        confirmContactDetailsForm <- fillForm[ConfirmContactDetailsModel](KeystoreKeys.confirmContactDetails, ConfirmContactDetailsForm.confirmContactDetailsForm)
-        contactDetailsForm <- fillForm[ContactDetailsModel](KeystoreKeys.manualContactDetails, ContactDetailsForm.contactDetailsForm)
-        confirmCorrespondAddressForm <- fillForm[ConfirmCorrespondAddressModel](KeystoreKeys.confirmContactAddress, ConfirmCorrespondAddressForm.confirmCorrespondAddressForm)
-        contactAddressForm <- fillForm[AddressModel](KeystoreKeys.manualContactAddress, ContactAddressForm.contactAddressForm)
         hadOtherInvestmentsForm <- fillForm[HadOtherInvestmentsModel](KeystoreKeys.hadOtherInvestments, HadOtherInvestmentsForm.hadOtherInvestmentsForm)
         qualifyBusinessActivityForm <- fillForm[QualifyBusinessActivityModel](KeystoreKeys.isQualifyBusinessActivity, QualifyBusinessActivityForm.qualifyBusinessActivityForm)
         hasInvestmentTradeStarted <- fillForm[HasInvestmentTradeStartedModel](KeystoreKeys.hasInvestmentTradeStarted, HasInvestmentTradeStartedForm.hasInvestmentTradeStartedForm)
@@ -76,17 +69,10 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
           shareIssueDateForm,
           natureOfBusinessForm,
           dateOfIncorporationForm,
-          tradeStartDateForm,
-          isFirstStartDateForm,
           researchStartDateForm,
           hadPreviousRFIForm,
           previousSchemesForm,
           schemes.getOrElse(defaultPreviousSchemesSize),
-          proposedInvestmentForm,
-          confirmContactDetailsForm,
-          contactDetailsForm,
-          confirmCorrespondAddressForm,
-          contactAddressForm,
           hadOtherInvestmentsForm,
           qualifyBusinessActivityForm,
           hasInvestmentTradeStarted,
@@ -101,16 +87,9 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
     val shareIssueDate = bindForm[ShareIssueDateModel](KeystoreKeys.shareIssueDate, ShareIssueDateForm.shareIssueDateForm)
     val natureOfBusiness = bindForm[NatureOfBusinessModel](KeystoreKeys.natureOfBusiness, NatureOfBusinessForm.natureOfBusinessForm)
     val dateOfIncorporation = bindForm[DateOfIncorporationModel](KeystoreKeys.dateOfIncorporation, DateOfIncorporationForm.dateOfIncorporationForm)
-    val tradeStartDate = bindForm[TradeStartDateModel](KeystoreKeys.tradeStartDate, TradeStartDateForm.tradeStartDateForm)
-    val isFirstTrade = bindForm[IsFirstTradeModel](KeystoreKeys.isFirstTrade, IsFirstTradeForm.isFirstTradeForm)
     val researchStartDate = bindForm[ResearchStartDateModel](KeystoreKeys.researchStartDate, ResearchStartDateForm.researchStartDateForm)
     val hadPreviousRFI = bindForm[HadPreviousRFIModel](KeystoreKeys.hadPreviousRFI, HadPreviousRFIForm.hadPreviousRFIForm)
     val testPreviousSchemes = bindPreviousSchemesForm()
-    val proposedInvestment = bindForm[ProposedInvestmentModel](KeystoreKeys.proposedInvestment, ProposedInvestmentForm.proposedInvestmentForm)
-    val confirmContactDetails = bindConfirmContactDetails()
-    val contactDetails = bindForm[ContactDetailsModel](KeystoreKeys.manualContactDetails, ContactDetailsForm.contactDetailsForm)
-    val confirmCorrespondAddress = bindConfirmContactAddress()
-    val contactAddress = bindForm[AddressModel](KeystoreKeys.manualContactAddress, ContactAddressForm.contactAddressForm)
     val hadOtherInvestments = bindForm[HadOtherInvestmentsModel](KeystoreKeys.hadOtherInvestments, HadOtherInvestmentsForm.hadOtherInvestmentsForm)
     val qualifyBusinessActivityForm = bindForm[QualifyBusinessActivityModel](KeystoreKeys.isQualifyBusinessActivity,
       QualifyBusinessActivityForm.qualifyBusinessActivityForm)
@@ -127,17 +106,10 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
         shareIssueDate,
         natureOfBusiness,
         dateOfIncorporation,
-        tradeStartDate,
-        isFirstTrade,
         researchStartDate,
         hadPreviousRFI,
         testPreviousSchemes,
         defaultPreviousSchemesSize,
-        proposedInvestment,
-        confirmContactDetails,
-        contactDetails,
-        confirmCorrespondAddress,
-        contactAddress,
         hadOtherInvestments,
         qualifyBusinessActivityForm,
         hasInvestmentTradeStarted,
@@ -159,6 +131,10 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
         totalAmountSpentForm <- fillForm[TotalAmountSpentModel](KeystoreKeys.totalAmountSpent, TotalAmountSpentForm.totalAmountSpentForm)
         wasAnyValueReceivedForm <- fillForm[WasAnyValueReceivedModel](KeystoreKeys.wasAnyValueReceived, WasAnyValueReceivedForm.wasAnyValueReceivedForm)
         shareCapitalChangesForm <- fillForm[ShareCapitalChangesModel](KeystoreKeys.shareCapitalChanges, ShareCapitalChangesForm.shareCapitalChangesForm)
+        confirmContactDetailsForm <- fillForm[ConfirmContactDetailsModel](KeystoreKeys.confirmContactDetails, ConfirmContactDetailsForm.confirmContactDetailsForm)
+        contactDetailsForm <- fillForm[ContactDetailsModel](KeystoreKeys.manualContactDetails, ContactDetailsForm.contactDetailsForm)
+        confirmCorrespondAddressForm <- fillForm[ConfirmCorrespondAddressModel](KeystoreKeys.confirmContactAddress, ConfirmCorrespondAddressForm.confirmCorrespondAddressForm)
+        contactAddressForm <- fillForm[AddressModel](KeystoreKeys.manualContactAddress, ContactAddressForm.contactAddressForm)
       } yield Ok(
         testOnly.views.html.seis.testEndpointSEISPageTwo(
           testInvestorModeOptionsForm,
@@ -168,7 +144,11 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
           totalAmountRaisedForm,
           totalAmountSpentForm,
           wasAnyValueReceivedForm,
-          shareCapitalChangesForm
+          shareCapitalChangesForm,
+          confirmContactDetailsForm,
+          contactDetailsForm,
+          confirmCorrespondAddressForm,
+          contactAddressForm
         )
       )
 
@@ -183,6 +163,10 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
     val totalAmountSpent = bindForm[TotalAmountSpentModel](KeystoreKeys.totalAmountSpent, TotalAmountSpentForm.totalAmountSpentForm)
     val wasAnyValueReceived = bindForm[WasAnyValueReceivedModel](KeystoreKeys.wasAnyValueReceived, WasAnyValueReceivedForm.wasAnyValueReceivedForm)
     val shareCapitalChanges = bindForm[ShareCapitalChangesModel](KeystoreKeys.shareCapitalChanges, ShareCapitalChangesForm.shareCapitalChangesForm)
+    val confirmContactDetails = bindConfirmContactDetails()
+    val contactDetails = bindForm[ContactDetailsModel](KeystoreKeys.manualContactDetails, ContactDetailsForm.contactDetailsForm)
+    val confirmCorrespondAddress = bindConfirmContactAddress()
+    val contactAddress = bindForm[AddressModel](KeystoreKeys.manualContactAddress, ContactAddressForm.contactAddressForm)
 
     saveInvestorDetails(populateIvestorTestData(investorModelOptions.value.fold("1")(_.testInvestorModeOptions)))
     saveBackLinks()
@@ -196,7 +180,11 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
         totalAmountRaised,
         totalAmountSpent,
         wasAnyValueReceived,
-        shareCapitalChanges
+        shareCapitalChanges,
+        confirmContactDetails,
+        contactDetails,
+        confirmCorrespondAddress,
+        contactAddress
       )
     ))
   }
