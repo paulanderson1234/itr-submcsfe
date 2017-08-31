@@ -16,43 +16,27 @@
 
 package views.seis
 
-import auth.{MockConfigSingleFlow, MockConfigEISFlow, MockAuthConnector}
-import common.KeystoreKeys
-import controllers.seis.NatureOfBusinessController
-import models.NatureOfBusinessModel
+import common.Constants
+import forms.NatureOfBusinessForm._
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import org.mockito.Matchers
-import org.mockito.Mockito._
 import play.api.i18n.Messages
+import play.api.i18n.Messages.Implicits._
 import play.api.test.Helpers._
 import views.helpers.ViewSpec
-import play.api.i18n.Messages.Implicits._
-
-import scala.concurrent.Future
+import views.html.seis.companyDetails.NatureOfBusiness
 
 class NatureOfBusinessSpec extends ViewSpec {
 
-  object TestController extends NatureOfBusinessController {
-    override lazy val applicationConfig = MockConfigSingleFlow
-    override lazy val authConnector = MockAuthConnector
-    override lazy val s4lConnector = mockS4lConnector
-    override lazy val enrolmentConnector = mockEnrolmentConnector
-  }
-
-  def setupMocks(natureOfBusinessModel: Option[NatureOfBusinessModel] = None): Unit =
-    when(mockS4lConnector.fetchAndGetFormData[NatureOfBusinessModel](Matchers.eq(KeystoreKeys.natureOfBusiness))
-      (Matchers.any(), Matchers.any(),Matchers.any())).thenReturn(Future.successful(natureOfBusinessModel))
+  implicit val request = fakeRequest
 
   "The Nature of business page" should {
 
     "Verify that the page contains the correct elements when a valid NatureOfBusinessModel is passed" in new SEISSetup {
-      val document: Document = {
-        setupMocks(Some(natureOfBusinessModel))
-        val result = TestController.show.apply(authorisedFakeRequest)
-        Jsoup.parse(contentAsString(result))
-      }
+      val document: Document = Jsoup.parse(contentAsString(NatureOfBusiness(natureOfBusinessForm)))
+
       document.title() shouldBe Messages("page.companyDetails.natureofbusiness.title")
+      document.select(".error-summary--show").isEmpty shouldBe true
       document.getElementById("main-heading").text() shouldBe Messages("page.companyDetails.natureofbusiness.heading")
       document.getElementById("label-natureofbusiness").select("span").hasClass("visuallyhidden") shouldBe true
       document.getElementById("label-natureofbusiness").select(".visuallyhidden").text() shouldBe Messages("page.companyDetails.natureofbusiness.heading")
@@ -63,15 +47,15 @@ class NatureOfBusinessSpec extends ViewSpec {
       document.getElementById("bullet-three").text() shouldBe Messages("page.companyDetails.natureofbusiness.bullet.three")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       document.body.getElementById("back-link").attr("href") shouldEqual controllers.routes.ApplicationHubController.show().url
-      document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.one")
+      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.one")
+      document.select("input").attr("maxLength") shouldBe Constants.shortTextLimit.toString
+      document.select("button").attr("type") shouldBe "submit"
+      document.select("a.back-link").text() shouldBe Messages("common.button.back")
     }
 
     "Verify that the nature of business page contains the correct elements when an invalid NatureOfBusinessModel model is passed" in new SEISSetup {
-      val document: Document = {
-        setupMocks()
-        val result = TestController.submit.apply(authorisedFakeRequest)
-        Jsoup.parse(contentAsString(result))
-      }
+      val document: Document = Jsoup.parse(contentAsString(NatureOfBusiness(natureOfBusinessForm.bind(Map("natureofbusiness" -> "")))))
+
       // Check the error summary is displayed - the whole purpose of this test
       document.getElementById("error-summary-display").hasClass("error-summary--show")
       // additional page checks to make sure everything else still as expected if errors on page
@@ -86,7 +70,10 @@ class NatureOfBusinessSpec extends ViewSpec {
       document.getElementById("bullet-three").text() shouldBe Messages("page.companyDetails.natureofbusiness.bullet.three")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       document.body.getElementById("back-link").attr("href") shouldEqual controllers.routes.ApplicationHubController.show().url
-      document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.one")
+      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.one")
+      document.select("input").attr("maxLength") shouldBe Constants.shortTextLimit.toString
+      document.select("button").attr("type") shouldBe "submit"
+      document.select("a.back-link").text() shouldBe Messages("common.button.back")
     }
 
   }
