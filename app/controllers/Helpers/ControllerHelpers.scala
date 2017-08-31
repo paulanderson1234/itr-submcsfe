@@ -90,14 +90,8 @@ trait ControllerHelpers {
       case SchemeTypesModel(false, true, false, false) => controllers.seis.routes.NatureOfBusinessController.show().url
       //VCT Flow
       case SchemeTypesModel(false, false, false, true) => controllers.eis.routes.NatureOfBusinessController.show().url
-      //EIS SEIS Flow
-      case SchemeTypesModel(true, true, false, false) => controllers.eisseis.routes.NatureOfBusinessController.show().url
       //EIS VCT Flow
       case SchemeTypesModel(true, false, false, true) => controllers.eis.routes.NatureOfBusinessController.show().url
-      //SEIS VCT Flow
-      case SchemeTypesModel(false, true, false, true) => controllers.eisseis.routes.NatureOfBusinessController.show().url
-      //EIS SEIS VCT Flow
-      case SchemeTypesModel(true, true, false, true) => controllers.eisseis.routes.NatureOfBusinessController.show().url
       //Assume EIS
       case _ => controllers.eis.routes.NatureOfBusinessController.show().url
     }
@@ -109,16 +103,6 @@ trait ControllerHelpers {
       case Some(SchemeTypesModel(true, false, false, false)) => Messages("page.introduction.hub.existing.advanced.assurance.type")
       //SEIS Flow
       case Some(SchemeTypesModel(false, true, false, false)) => Messages("page.introduction.hub.existing.seis.type")
-      //VCT Flow
-      case Some(SchemeTypesModel(false, false, false, true)) => Messages("page.introduction.hub.existing.vct.type")
-      //EIS SEIS Flow
-      case Some(SchemeTypesModel(true, true, false, false)) => Messages("page.introduction.hub.existing.eis-seis.type")
-      //EIS VCT Flow
-      case Some(SchemeTypesModel(true, false, false, true)) => Messages("page.introduction.hub.existing.eis-vct.type")
-      //SEIS VCT Flow
-      case Some(SchemeTypesModel(false, true, false, true)) => Messages("page.introduction.hub.existing.seis-vct.type")
-      //EIS SEIS VCT Flow
-      case Some(SchemeTypesModel(true, true, false, true)) => Messages("page.introduction.hub.existing.eis-seis-vct.type")
       //Assume EIS
       case Some(_) => Messages("page.introduction.hub.existing.advanced.assurance.type")
       //Assume EIS

@@ -225,12 +225,7 @@ page.schemeSelection.SchemeSelection.help.eis.bullet.one=£5 million received in
 page.schemeSelection.SchemeSelection.help.eis.bullet.two=£12 million received over the company''s lifetime
 page.schemeSelection.SchemeSelection.help.eis.findOutMore=Find out more about the
 page.schemeSelection.SchemeSelection.help.eis.link=Enterprise Investment Scheme
-page.schemeSelection.SchemeSelection.help.vct.subHeading=What''s the Venture Capital Trust scheme?
-page.schemeSelection.SchemeSelection.help.vct.text=The Venture Capital Trust scheme helps companies raise finance by offering tax reliefs to individual investors who buy new shares in a Venture Capital Trust (VCT). The VCT then uses the money to invest in small & medium sized companies. Tax relief is available on a maximum investment from a VCT of:
-page.schemeSelection.SchemeSelection.help.vct.bullet.one=£5 million received in 1 year
-page.schemeSelection.SchemeSelection.help.vct.bullet.two=£12 million received over the company''s lifetime
-page.schemeSelection.SchemeSelection.help.vct.findOutMore=Find out more about the
-page.schemeSelection.SchemeSelection.help.vct.link=Venture Capital Trust scheme
+
 
 #single scheme selection page
 page.schemeSelection.SchemeSelection.singlescheme.title=Which scheme are you applying for?
