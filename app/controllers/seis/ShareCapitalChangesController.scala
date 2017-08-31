@@ -19,7 +19,7 @@ package controllers.seis
 import auth.{AuthorisedAndEnrolledForTAVC, SEIS}
 import common.{Constants, KeystoreKeys}
 import config.{FrontendAppConfig, FrontendAuthConnector}
-import connectors.{EnrolmentConnector, S4LConnector, SubmissionConnector}
+import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.predicates.FeatureSwitch
 import forms.ShareCapitalChangesForm._
 import models.{ShareCapitalChangesModel, ShareIssueDateModel}
@@ -55,7 +55,6 @@ trait ShareCapitalChangesController extends FrontendController with AuthorisedAn
           }
         }
         else {
-          //TODO: Route to the missing share issue date
           Future.successful(Redirect(routes.ShareIssueDateController.show()))
         }
       }
@@ -74,14 +73,14 @@ trait ShareCapitalChangesController extends FrontendController with AuthorisedAn
         implicit request =>
           val success: ShareCapitalChangesModel => Future[Result] = { model =>
             s4lConnector.saveFormData(KeystoreKeys.shareCapitalChanges,
-              if(model.hasChanges == Constants.StandardRadioButtonYesValue) model else model.copy(changesDescription = None)).map(_ =>
+              if (model.hasChanges == Constants.StandardRadioButtonYesValue) model else model.copy(changesDescription = None)).map(_ =>
               Redirect(controllers.seis.routes.ConfirmContactDetailsController.show())
             )
           }
 
           val failure: Form[ShareCapitalChangesModel] => Future[Result] = { form =>
             s4lConnector.fetchAndGetFormData[ShareIssueDateModel](KeystoreKeys.shareIssueDate).flatMap {
-              case backUrl => Future.successful(BadRequest(ShareCapitalChanges(form, backUrl.fold("")( shareIssueDate =>
+              case backUrl => Future.successful(BadRequest(ShareCapitalChanges(form, backUrl.fold("")(shareIssueDate =>
                 dateToStringWithNoZeroDay(shareIssueDate.day.get, shareIssueDate.month.get, shareIssueDate.year.get)))))
             }
           }

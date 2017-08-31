@@ -1,0 +1,33 @@
+@import uk.gov.hmrc.play.views.html.helpers.{form}
+@import views.html.helpers.backButtonWithProgress
+@import models.investorDetails.PreviousShareHoldingModel
+
+@(previousShareHoldingModel: PreviousShareHoldingModel)(implicit request: Request[_], messages: Messages)
+
+@main_template(Messages("page.investors.DeletePreviousShareHolder.title")) {
+@backButtonWithProgress(controllers.eis.routes.PreviousShareHoldingsReviewController.show(previousShareHoldingModel.investorProcessingId.get).url, Messages("common.section.progress.details.four"))
+
+<h1 id="main-heading" class="form-title heading-xlarge">@Messages("page.investors.DeletePreviousShareHolder.heading")</h1>
+
+@form(action = controllers.eis.routes.DeletePreviousShareHolderController.submit(previousShareHoldingModel.investorProcessingId.get, previousShareHoldingModel.processingId.get)){
+
+<div class="panel panel-border-wide">
+    <p id="share-holding-delete-hint">@Messages("page.investors.DeletePreviousShareHolder.message.one", previousShareHoldingModel.previousShareHoldingDescriptionModel.get.description)
+        @if(previousShareHoldingModel.investorShareIssueDateModel.isDefined){@Messages("page.investors.DeletePreviousShareHolder.message.two", PreviousShareHoldingModel.toDateString(previousShareHoldingModel.investorShareIssueDateModel.get.investorShareIssueDateDay.get,
+        previousShareHoldingModel.investorShareIssueDateModel.get.investorShareIssueDateMonth.get, previousShareHoldingModel.investorShareIssueDateModel.get.investorShareIssueDateYear.get))}
+        @Messages("page.investors.DeletePreviousShareHolder.message.three")
+    </p>
+</div>
+
+<div class="form-group">
+</div>
+<div class="form-group">
+    <button id="share-holding-remove" class="button button--alert" type="submit">@Messages("common.base.remove")</button>
+</div>
+}
+
+<div class="form-group">
+    <a id="share-holding-cancel" href="@controllers.eis.routes.PreviousShareHoldingsReviewController.show(previousShareHoldingModel.investorProcessingId.get)">@Messages("common.button.cancel")</a>
+</div>
+
+}

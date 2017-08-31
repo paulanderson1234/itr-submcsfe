@@ -109,3 +109,113 @@ GET        /trading-for-too-long                    controllers.eis.TradingForTo
 
 GET        /had-other-investments-before           controllers.eis.HadOtherInvestmentsController.show
 POST       /had-other-investments-before          controllers.eis.HadOtherInvestmentsController.submit
+
+GET        /add-another-investor                  controllers.eis.AddAnotherInvestorController.show
+POST       /add-another-investor                  controllers.eis.AddAnotherInvestorController.submit
+
+GET        /add-another-investor                  controllers.eis.AddAnotherInvestorController.show
+POST       /add-another-investor                  controllers.eis.AddAnotherInvestorController.submit
+
+GET        /add-investor-or-nominee               controllers.eis.AddInvestorOrNomineeController.show(id: Option[Int]?=None)
+POST       /add-investor-or-nominee               controllers.eis.AddInvestorOrNomineeController.submit
+
+GET        /company-details/:id                   controllers.eis.CompanyDetailsController.show(id: Int)
+POST       /company-details                       controllers.eis.CompanyDetailsController.submit
+
+GET        /company-or-individual/:id             controllers.eis.CompanyOrIndividualController.show(id: Int)
+POST       /company-or-individual                 controllers.eis.CompanyOrIndividualController.submit(investorOrNominee: Option[String]?=None)
+
+GET        /declaration                          controllers.eis.DeclarationController.show
+
+GET        /delete-investor/:investorId             controllers.eis.DeleteInvestorController.show(investorId: Int)
+POST       /delete-investor/:investorProcessingId             controllers.eis.DeleteInvestorController.submit(investorProcessingId: Int)
+
+GET        /review-previous-share-holdings/:investorProcessingId                 controllers.eis.PreviousShareHoldingsReviewController.show(investorProcessingId: Int)
+POST       /review-previous-share-holdings/:investorProcessingId                 controllers.eis.PreviousShareHoldingsReviewController.submit(investorProcessingId: Int)
+GET        /review-previous-investor-shareholdings-remove/:investorProcessingId/:id        controllers.eis.PreviousShareHoldingsReviewController.remove(investorProcessingId: Int, id: Int)
+
+GET        /review-previous-investor-shareholdings-change/:investorProcessingId/:Id      controllers.eis.PreviousShareHoldingsReviewController.change(investorProcessingId: Int, Id: Int)
+
+GET        /delete-previous-share-holding/:investorProcessingId/:id                controllers.eis.DeletePreviousShareHolderController.show(investorProcessingId: Int, id: Int)
+POST       /delete-previous-share-holding/:investorProcessingId/:id                controllers.eis.DeletePreviousShareHolderController.submit(investorProcessingId: Int, id: Int)
+
+GET        /full-time-employee-count               controllers.eis.FullTimeEmployeeCountController.show
+POST       /full-time-employee-count               controllers.eis.FullTimeEmployeeCountController.submit
+GET       /full-time-employee-count-error          controllers.eis.FullTimeEmployeeCountErrorController.show
+
+GET       /gross-assets                            controllers.eis.GrossAssetsController.show
+POST      /gross-assets                            controllers.eis.GrossAssetsController.submit
+
+GET       /gross-assets-error                     controllers.eis.GrossAssetsErrorController.show
+POST      /gross-assets-error                     controllers.eis.GrossAssetsErrorController.submit
+
+GET        /has-investment-trade-started           controllers.eis.HasInvestmentTradeStartedController.show
+POST       /has-investment-trade-started           controllers.eis.HasInvestmentTradeStartedController.submit
+
+GET        /how-much-spent-on-shares/:id          controllers.eis.HowMuchSpentOnSharesController.show(id: Int)
+POST       /how-much-spent-on-shares              controllers.eis.HowMuchSpentOnSharesController.submit
+
+GET        /individuals-details/:id               controllers.eis.IndividualDetailsController.show(id: Int)
+POST       /individuals-details                   controllers.eis.IndividualDetailsController.submit
+
+GET        /investor-share-issue-date/:InvestorId/:Id       controllers.eis.InvestorShareIssueDateController.show(InvestorId: Int, Id: Int)
+POST       /investor-share-issue-date                   controllers.eis.InvestorShareIssueDateController.submit(Id: Option[Int]?=None)
+
+GET        /is-existing-shareholder/:id            controllers.eis.IsExistingShareHolderController.show(id: Int)
+POST       /is-existing-shareholder               controllers.eis.IsExistingShareHolderController.submit(companyOrIndividual: Option[String]?=None)
+
+GET        /number-of-previously-issued-shares/:investorProcessingId/:id       controllers.eis.NumberOfPreviouslyIssuedSharesController.show(investorProcessingId: Int, id: Int)
+POST       /number-of-previously-issued-shares                   controllers.eis.NumberOfPreviouslyIssuedSharesController.submit(companyOrIndividual: Option[String]?=None, id: Option[Int]?=None)
+
+GET        /number-of-shares-purchased/:id        controllers.eis.NumberOfSharesPurchasedController.show(id: Int)
+POST       /number-of-shares-purchased            controllers.eis.NumberOfSharesPurchasedController.submit(shareIssueDate: Option[String]?=None)
+
+GET        /number-of-shares                      controllers.eis.NumberOfSharesController.show
+POST       /number-of-shares                      controllers.eis.NumberOfSharesController.submit
+
+GET        /previous-shareholding-description/:investorProcessingId       controllers.eis.PreviousShareHoldingDescriptionController.show(investorProcessingId: Int, id: Option[Int]?=None)
+POST       /previous-shareholding-description                   controllers.eis.PreviousShareHoldingDescriptionController.submit(companyOrIndividual: Option[String]?=None, id: Option[Int]?=None)
+
+GET        /previous-shareholding-nominal-value/:investorProcessingId/:id      controllers.eis.PreviousShareHoldingNominalValueController.show(investorProcessingId: Int, id: Int)
+POST       /previous-shareholding-nominal-value                      controllers.eis.PreviousShareHoldingNominalValueController.submit(id: Option[Int]?=None)
+
+GET        /review-previous-share-holdings/:investorProcessingId                 controllers.eis.PreviousShareHoldingsReviewController.show(investorProcessingId: Int)
+POST       /review-previous-share-holdings/:investorProcessingId                 controllers.eis.PreviousShareHoldingsReviewController.submit(investorProcessingId: Int)
+
+GET        /qualify-business-activity               controllers.eis.QualifyBusinessActivityController.show
+POST       /qualify-business-activity               controllers.eis.QualifyBusinessActivityController.submit
+
+GET       /research-start-date                     controllers.eis.ResearchStartDateController.show
+POST      /research-start-date                     controllers.eis.ResearchStartDateController.submit
+
+GET        /review-all-investors                  controllers.eis.ReviewAllInvestorsController.show
+POST       /review-all-investors                  controllers.eis.ReviewAllInvestorsController.submit
+
+GET        /review-all-investors-add             controllers.eis.ReviewAllInvestorsController.add
+GET        /review-all-investors-change/:id      controllers.eis.ReviewAllInvestorsController.change(id: Int)
+GET        /review-all-investors-remove/:id      controllers.eis.ReviewAllInvestorsController.remove(id: Int)
+
+GET        /review-investor/:investorId                 controllers.eis.ReviewInvestorDetailsController.show(investorId: Int)
+GET        /review-investor/:actionType/:investorId                 controllers.eis.ReviewInvestorDetailsController.change(actionType: String, investorId: Int)
+
+GET       /share-capital-changes                        controllers.eis.ShareCapitalChangesController.show
+POST      /share-capital-changes                        controllers.eis.ShareCapitalChangesController.submit
+
+GET        /was-any-value-received               controllers.eis.WasAnyValueReceivedController.show
+POST       /was-any-value-received               controllers.eis.WasAnyValueReceivedController.submit
+
+GET       /share-issue-date                        controllers.eis.ShareIssueDateController.show
+POST      /share-issue-date                        controllers.eis.ShareIssueDateController.submit
+
+GET        /add-another-shareholding/:investorId              controllers.eis.AddAnotherShareholdingController.show(investorId: Int)
+POST       /add-another-shareholding/:investorId              controllers.eis.AddAnotherShareholdingController.submit(investorId: Int)
+
+
+GET        /nominal-value-of-shares               controllers.eis.NominalValueOfSharesController.show
+POST       /nominal-value-of-shares               controllers.eis.NominalValueOfSharesController.submit
+
+GET        /share-description                     controllers.eis.ShareDescriptionController.show
+POST       /share-description                     controllers.eis.ShareDescriptionController.submit
+
+GET       /total-amount-raised                    controllers.eis.TotalAmountRaisedController.show
+POST      /total-amount-raised                    controllers.eis.TotalAmountRaisedController.submit

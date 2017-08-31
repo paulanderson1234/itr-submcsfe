@@ -26,7 +26,7 @@ import play.api.mvc.{Action, AnyContent, Result}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import auth.{AuthorisedAndEnrolledForTAVC, SEIS}
 import common.KeystoreKeys
-import config.{AppConfig, FrontendAppConfig, FrontendAuthConnector}
+import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.predicates.FeatureSwitch
 import models.investorDetails.InvestorDetailsModel
@@ -63,7 +63,7 @@ trait TotalAmountSpentController extends FrontendController with AuthorisedAndEn
               s4lConnector.saveFormData(KeystoreKeys.totalAmountSpent, model)
               s4lConnector.saveFormData(KeystoreKeys.backLinkAddInvestorOrNominee, routes.TotalAmountSpentController.show().url)
             s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map{
-              case Some(data) if(data.nonEmpty) => Redirect(controllers.seis.routes.ReviewAllInvestorsController.show())
+              case Some(data) if data.nonEmpty => Redirect(controllers.seis.routes.ReviewAllInvestorsController.show())
               case None => Redirect(controllers.seis.routes.AddInvestorOrNomineeController.show())
             }
           }

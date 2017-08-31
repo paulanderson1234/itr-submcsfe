@@ -135,6 +135,13 @@ trait ControllerHelpers {
     }
   }
 
+  def redirectEisNoInvestors(vector: Option[Vector[InvestorDetailsModel]])(f: Vector[InvestorDetailsModel] => Result): Result = {
+    vector match {
+      case Some(data) if data.nonEmpty => f(data)
+      case _ => Redirect(controllers.eis.routes.AddInvestorOrNomineeController.show())
+    }
+  }
+
   def getInvestorIndex(targetIndex: Int, data: Vector[InvestorDetailsModel]): Int = {
     data.indexWhere(_.processingId.getOrElse(0) == targetIndex)
   }
@@ -148,6 +155,14 @@ trait ControllerHelpers {
       f(index)
     } else {
       Redirect(routes.AddInvestorOrNomineeController.show())
+    }
+  }
+
+  def redirectEisInvalidInvestor(index: Int)(f: Int => Result): Result = {
+    if (index != Constants.notFound) {
+      f(index)
+    } else {
+      Redirect(controllers.eis.routes.AddInvestorOrNomineeController.show())
     }
   }
 
@@ -174,6 +189,17 @@ trait ControllerHelpers {
     } match {
       case Some(result: Result) => result
       case _ => Redirect(routes.AddInvestorOrNomineeController.show(Some(index)))
+    }
+  }
+
+  def redirectEisInvalidPreviousShareHolding(id: Int, index: Int, shares: Option[Vector[PreviousShareHoldingModel]])(f: Int => Result): Result = {
+    shares.map { data =>
+      if (data.nonEmpty && id != -1)
+        f(id)
+      else None
+    } match {
+      case Some(result: Result) => result
+      case _ => Redirect(controllers.eis.routes.AddInvestorOrNomineeController.show(Some(index)))
     }
   }
 }

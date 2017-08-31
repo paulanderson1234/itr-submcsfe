@@ -33,7 +33,6 @@ import views.html.introduction._
 import views.html.hubPartials._
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
-import views.html.supportingDocuments.SupportingDocumentsUpload
 
 import scala.concurrent.Future
 

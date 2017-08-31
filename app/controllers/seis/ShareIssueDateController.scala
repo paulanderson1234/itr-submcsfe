@@ -20,7 +20,7 @@ import auth.{AuthorisedAndEnrolledForTAVC, SEIS}
 import common.KeystoreKeys
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
-import controllers.Helpers.{ControllerHelpers, KnowledgeIntensiveHelper}
+import controllers.Helpers.ControllerHelpers
 import controllers.predicates.FeatureSwitch
 import forms.ShareIssueDateForm._
 import models.ShareIssueDateModel

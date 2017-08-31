@@ -30,7 +30,7 @@ import scala.concurrent.Future
 
 class CompanyOrIndividualControllerSpec extends BaseSpec {
 
-  val validBackLink = controllers.seis.routes.AddInvestorOrNomineeController.show().url
+  lazy val validBackLink = controllers.seis.routes.AddInvestorOrNomineeController.show().url
 
   val listOfInvestorsIncompleteCompanyOrIndividual =  Vector(validModelWithPrevShareHoldings.copy(companyOrIndividualModel = None))
 
@@ -69,12 +69,13 @@ class CompanyOrIndividualControllerSpec extends BaseSpec {
 
     "'REDIRECT' to TBD page" when {
       "there is no 'back link' present" in {
+        println(s"===================== $validBackLink")
         mockEnrolledRequest(seisSchemeTypesModel)
         setupMocks(None,None)
         showWithSessionAndAuth(TestController.show(Constants.obviouslyInvalidId))(
           result => {
             status(result) shouldBe SEE_OTHER
-            redirectLocation(result) shouldBe Some(validBackLink)
+            redirectLocation(result) shouldBe Some(routes.AddInvestorOrNomineeController.show().url)
           }
         )
       }
