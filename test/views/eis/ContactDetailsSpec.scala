@@ -49,7 +49,7 @@ class ContactDetailsSpec extends ViewSpec {
       document.getElementById("label-mobileNumber").text() shouldBe Messages("page.contactInformation.contactDetails.mobileNumber.label")
       document.select("#label-mobileNumber input").attr("maxlength") shouldBe Constants.phoneLength.toString
       document.getElementById("label-email").text() shouldBe Messages("page.contactInformation.contactDetails.email.label")
-      document.select("#label-email input").attr("maxlength") shouldBe Constants.emailLength.toString
+      document.select("#label-email input").attr("maxlength") shouldBe Constants.eisEmailLength.toString
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.ConfirmContactDetailsController.show().url
       document.select("a.back-link").text() shouldBe Messages("common.button.back")

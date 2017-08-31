@@ -70,8 +70,7 @@ class ContactAddressSpec extends ViewSpec {
 
     }
 
-    "Verify that the Provide Correspondence Address page contains the correct elements " +
-      "when an invalid AddressModel is passed" in {
+    "Verify that the Provide Correspondence Address page contains the correct elements when an invalid AddressModel is passed" in {
 
       lazy val document = Jsoup.parse(contentAsString(errorPage))
 
