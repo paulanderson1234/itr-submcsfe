@@ -16,61 +16,49 @@
 
 package views.eis
 
-import auth.{MockConfigEISFlow, MockAuthConnector}
-import common.KeystoreKeys
-import config.FrontendAppConfig
-import controllers.eis.ContactDetailsController
-import models.ContactDetailsModel
+import common.Constants
+import forms.ContactDetailsForm._
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import org.mockito.Matchers
-import org.mockito.Mockito._
 import play.api.i18n.Messages
 import play.api.i18n.Messages.Implicits._
 import play.api.test.Helpers._
 import views.helpers.ViewSpec
-
-import scala.concurrent.Future
+import views.html.eis.contactInformation.ContactDetails
 
 class ContactDetailsSpec extends ViewSpec {
-  
-  object TestController extends ContactDetailsController {
-    override lazy val applicationConfig = MockConfigEISFlow
-    override lazy val authConnector = MockAuthConnector
-    override lazy val s4lConnector = mockS4lConnector
-    override lazy val enrolmentConnector = mockEnrolmentConnector
-  }
 
-  def setupMocks(contactDetailsModel: Option[ContactDetailsModel] = None): Unit =
-    when(mockS4lConnector.fetchAndGetFormData[ContactDetailsModel](Matchers.eq(KeystoreKeys.manualContactDetails))
-      (Matchers.any(), Matchers.any(),Matchers.any())).thenReturn(Future.successful(contactDetailsModel))
+  implicit val request = fakeRequest
 
   "The Contact Details page" should {
 
     "Verify that the contact details page contains the correct elements when a valid ContactDetailsModel is passed" in new Setup {
-      val document: Document = {
-        setupMocks(Some(contactDetailsModel))
-        val result = TestController.show.apply(authorisedFakeRequest)
-        Jsoup.parse(contentAsString(result))
-      }
+      val document: Document = Jsoup.parse(contentAsString(ContactDetails(contactDetailsForm)))
+
       document.title() shouldBe Messages("page.contactInformation.contactDetails.title")
+      document.select("error-summary--show").isEmpty shouldBe true
       document.getElementById("main-heading").text() shouldBe Messages("page.contactInformation.contactDetails.heading")
+      document.select("form").attr("method") shouldBe "POST"
+      document.select("form").attr("action") shouldBe controllers.eis.routes.ContactDetailsController.submit().url
       document.getElementById("label-forename").text() shouldBe Messages("page.contactInformation.contactDetails.forename.label")
+      document.select("#label-forename input").attr("maxlength") shouldBe Constants.forenameLength.toString
       document.getElementById("label-surname").text() shouldBe Messages("page.contactInformation.contactDetails.surname.label")
+      document.select("#label-surname input").attr("maxlength") shouldBe Constants.surnameLength.toString
       document.getElementById("label-telephoneNumber").text() shouldBe Messages("page.contactInformation.contactDetails.phoneNumber.label")
+      document.select("#label-telephoneNumber input").attr("maxlength") shouldBe Constants.phoneLength.toString
       document.getElementById("label-mobileNumber").text() shouldBe Messages("page.contactInformation.contactDetails.mobileNumber.label")
+      document.select("#label-mobileNumber input").attr("maxlength") shouldBe Constants.phoneLength.toString
       document.getElementById("label-email").text() shouldBe Messages("page.contactInformation.contactDetails.email.label")
+      document.select("#label-email input").attr("maxlength") shouldBe Constants.emailLength.toString
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.ConfirmContactDetailsController.show().url
-      document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.four")
+      document.select("a.back-link").text() shouldBe Messages("common.button.back")
+      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.four")
     }
 
     "Verify that the proposed investment page contains the correct elements when an invalid ContactDetailsModel is passed" in new Setup {
-      val document: Document = {
-        setupMocks()
-        val result = TestController.submit.apply(authorisedFakeRequest)
-        Jsoup.parse(contentAsString(result))
-      }
+      val document: Document = Jsoup.parse(contentAsString(ContactDetails(contactDetailsForm.bind(Map("" -> "")))))
+
       document.title() shouldBe Messages("page.contactInformation.contactDetails.title")
       document.getElementById("main-heading").text() shouldBe Messages("page.contactInformation.contactDetails.heading")
       document.getElementById("label-forename").text() contains Messages("page.contactInformation.contactDetails.forename.label")
@@ -80,7 +68,7 @@ class ContactDetailsSpec extends ViewSpec {
       document.getElementById("label-email").text() contains Messages("page.contactInformation.contactDetails.email.label")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.ConfirmContactDetailsController.show().url
-      document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.four")
+      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.four")
       document.getElementById("error-summary-display").hasClass("error-summary--show")
     }
 
