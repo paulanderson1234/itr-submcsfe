@@ -23,17 +23,20 @@ import uk.gov.hmrc.play.test.UnitSpec
 import java.time.ZoneId
 import java.util.Date
 
-class DateOfIncorporationFormSpec extends UnitSpec with OneAppPerSuite{
+import play.api.i18n.Messages
+import play.api.i18n.Messages.Implicits._
+
+class DateOfIncorporationFormSpec extends UnitSpec with OneAppPerSuite {
 
   // set up border line conditions of today and future date (tomorrow)
   val date = new Date()
-  val localDate = date.toInstant.atZone(ZoneId.systemDefault()).toLocalDate;
+  val localDate = date.toInstant.atZone(ZoneId.systemDefault()).toLocalDate
   val tomorrow = localDate.plusDays(1)
   val tomorrowDay: String = tomorrow.getDayOfMonth.toString
   val tomorrowMonth: String = tomorrow.getMonthValue.toString
   val tomorrowYear: String = tomorrow.getYear.toString
 
-  val todayDay:String = localDate.getDayOfMonth.toString
+  val todayDay: String = localDate.getDayOfMonth.toString
   val todayMonth: String = localDate.getMonthValue.toString
   val todayYear: String = localDate.getYear.toString
 
@@ -93,7 +96,7 @@ class DateOfIncorporationFormSpec extends UnitSpec with OneAppPerSuite{
       form.hasErrors shouldBe false
     }
 
-    "return a None if a model with a 31st june is supplied using .bind" in {
+    "return a None if a model with a 31st june is supplied using .bind and return error message" in {
       val map = Map(("incorporationDay", "31"), ("incorporationMonth", "6"), ("incorporationYear", "1981"))
       val form = dateOfIncorporationForm.bind(map)
       form.hasErrors shouldBe true
@@ -154,4 +157,94 @@ class DateOfIncorporationFormSpec extends UnitSpec with OneAppPerSuite{
     }
 
   }
+
+  "Creating a form with an invalid map" which {
+    val form = dateOfIncorporationForm
+
+    "contains invalid day" should {
+      lazy val result = form.bind(Map(("incorporationDay", "32"), ("incorporationMonth", "1"), ("incorporationYear", "2012")))
+
+      "return a form with errors" in {
+        result.errors.isEmpty shouldBe false
+      }
+
+      "return a form with a single error" in {
+        result.errors.size shouldBe 1
+      }
+
+      "return the correct error message" in {
+        result.errors.head.message shouldBe Messages("common.date.error.invalidDate")
+      }
+    }
+
+    "contains future year" should {
+      lazy val result = form.bind(Map(("incorporationDay", "1"), ("incorporationMonth", "1"), ("incorporationYear", "9999")))
+
+      "return a form with errors" in {
+        result.errors.isEmpty shouldBe false
+      }
+
+      "return a form with a single error" in {
+        result.errors.size shouldBe 1
+      }
+
+      "return the correct error message" in {
+        result.errors.head.message shouldBe Messages("validation.error.DateOfIncorporation.Future")
+      }
+    }
+
+    "does not contain a date" should {
+      lazy val result = form.bind(Map(("incorporationDay", ""), ("incorporationMonth", ""), ("incorporationYear", "")))
+
+      "return a form with errors" in {
+        result.errors.isEmpty shouldBe false
+      }
+
+      "return a form with a single error" in {
+        result.errors.size shouldBe 1
+      }
+
+      "return the correct error message" in {
+        result.errors.head.message shouldBe Messages("validation.error.DateNotEntered")
+      }
+    }
+
+    "contains an invalid date and future year" should {
+      lazy val result = form.bind(Map(("incorporationDay", "33"), ("incorporationMonth", "15"), ("incorporationYear", "9999")))
+
+      "return a form with errors" in {
+        result.errors.isEmpty shouldBe false
+      }
+
+      "return a form with a single error" in {
+        result.errors.size shouldBe 2
+      }
+
+      "return the correct error message" in {
+        result.errors(0).message shouldBe Messages("common.date.error.invalidDate")
+        result.errors(1).message shouldBe Messages("validation.error.DateOfIncorporation.Future")
+      }
+    }
+
+  }
+
+  "Creating a form with a valid map" which {
+    val form = dateOfIncorporationForm
+
+    "contains valid date" should {
+      lazy val result = form.bind(Map(("incorporationDay", "31"), ("incorporationMonth", "12"), ("incorporationYear", "2016")))
+
+      "return a form with no errors" in {
+        result.errors.isEmpty shouldBe true
+      }
+
+      "return a form with the correct data model" in {
+        result.value shouldBe Some(DateOfIncorporationModel(Some(31),Some(12),Some(2016)))
+      }
+    }
+
+
+  }
 }
+
+
