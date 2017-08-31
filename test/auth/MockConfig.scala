@@ -39,6 +39,7 @@ trait MockConfig extends AppConfig {
   override val uploadFeatureEnabled: Boolean = false
   override val seisFlowEnabled: Boolean = true
   override val eisseisFlowEnabled: Boolean = true
+  override val eisFlowEnabled: Boolean = true
 
 
   override lazy val attachmentFileUploadUrl: (String) => String = schemeType =>
@@ -61,6 +62,7 @@ object MockConfigSingleFlow extends MockConfig{
 object MockConfigEISFlow extends MockConfig{
   override val seisFlowEnabled: Boolean = false
   override val eisseisFlowEnabled: Boolean = false
+  override val eisFlowEnabled: Boolean = false
 }
 
 object MockConfigUploadFeature extends MockConfig{
