@@ -20,7 +20,6 @@ import auth.{AuthorisedAndEnrolledForTAVC, SEIS}
 import common.Constants
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector, SubmissionConnector}
-import controllers.predicates.FeatureSwitch
 import forms.AddAnotherInvestorForm._
 import play.api.Play.current
 import play.api.i18n.Messages.Implicits._
@@ -38,37 +37,32 @@ object AddAnotherInvestorController extends AddAnotherInvestorController{
 
 }
 
-trait AddAnotherInvestorController extends FrontendController with AuthorisedAndEnrolledForTAVC with FeatureSwitch {
+trait AddAnotherInvestorController extends FrontendController with AuthorisedAndEnrolledForTAVC {
 
   override val acceptedFlows = Seq(Seq(SEIS))
 
   val submissionConnector: SubmissionConnector
 
-  val show = featureSwitch(applicationConfig.seisFlowEnabled) {
-    AuthorisedAndEnrolled.async { implicit user => implicit request =>
-      Future.successful(Ok(AddAnotherInvestor(addAnotherInvestorForm)))
-      }
-    }
-
-    val submit = featureSwitch(applicationConfig.seisFlowEnabled) {
-    AuthorisedAndEnrolled.async { implicit user => implicit request =>
-      addAnotherInvestorForm.bindFromRequest().fold(
-        formWithErrors => {
-          Future.successful(BadRequest(AddAnotherInvestor(formWithErrors)))
-        },
-        validFormData => {
-          validFormData.addAnotherInvestor match {
-
-            case Constants.StandardRadioButtonYesValue => {
-              Future.successful(Redirect(routes.AddInvestorOrNomineeController.show()))
-            }
-            case Constants.StandardRadioButtonNoValue => {
-              Future.successful(Redirect(routes.WasAnyValueReceivedController.show()))
-            }
-          }
-        }
-      )
-    }
+  val show = AuthorisedAndEnrolled.async { implicit user => implicit request =>
+    Future.successful(Ok(AddAnotherInvestor(addAnotherInvestorForm)))
   }
 
+  val submit = AuthorisedAndEnrolled.async { implicit user => implicit request =>
+    addAnotherInvestorForm.bindFromRequest().fold(
+      formWithErrors => {
+        Future.successful(BadRequest(AddAnotherInvestor(formWithErrors)))
+      },
+      validFormData => {
+        validFormData.addAnotherInvestor match {
+
+          case Constants.StandardRadioButtonYesValue => {
+            Future.successful(Redirect(routes.AddInvestorOrNomineeController.show()))
+          }
+          case Constants.StandardRadioButtonNoValue => {
+            Future.successful(Redirect(routes.WasAnyValueReceivedController.show()))
+          }
+        }
+      }
+    )
+  }
 }

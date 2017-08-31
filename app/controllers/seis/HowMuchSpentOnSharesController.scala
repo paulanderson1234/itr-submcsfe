@@ -21,7 +21,6 @@ import common.KeystoreKeys
 import config.{AppConfig, FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.Helpers.{ControllerHelpers, PreviousInvestorsHelper}
-import controllers.predicates.FeatureSwitch
 import forms.HowMuchSpentOnSharesForm._
 import models.investorDetails.{HowMuchSpentOnSharesModel, InvestorDetailsModel}
 import play.api.Play.current
@@ -41,79 +40,75 @@ object HowMuchSpentOnSharesController extends HowMuchSpentOnSharesController {
   override lazy val authConnector: AuthConnector = FrontendAuthConnector
 }
 
-trait HowMuchSpentOnSharesController extends FrontendController with AuthorisedAndEnrolledForTAVC with FeatureSwitch with ControllerHelpers {
+trait HowMuchSpentOnSharesController extends FrontendController with AuthorisedAndEnrolledForTAVC with ControllerHelpers {
 
   override val acceptedFlows = Seq(Seq(SEIS))
 
-  def show(id: Int): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
-    AuthorisedAndEnrolled.async { implicit user =>
-      implicit request =>
-        def process(backUrl: Option[String]) = {
-          if (backUrl.isDefined) {
-            s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map { vector =>
-              redirectNoInvestors(vector) { data =>
-                val itemToUpdateIndex = getInvestorIndex(id, data)
-                redirectInvalidInvestor(itemToUpdateIndex) { index =>
-                  if(data.lift(itemToUpdateIndex).get.companyOrIndividualModel.isDefined) {
-                    val form = fillForm(howMuchSpentOnSharesForm, retrieveInvestorData[HowMuchSpentOnSharesModel](index, data)(_.amountSpentModel))
-                    Ok(HowMuchSpentOnShares(retrieveInvestorData[String](index, data)(_.companyOrIndividualModel.map(_.companyOrIndividual)).get,
-                      form, backUrl.get))
-                  }
-                  else Redirect(routes.CompanyOrIndividualController.show(id))
+  def show(id: Int): Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user =>
+    implicit request =>
+      def process(backUrl: Option[String]) = {
+        if (backUrl.isDefined) {
+          s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map { vector =>
+            redirectNoInvestors(vector) { data =>
+              val itemToUpdateIndex = getInvestorIndex(id, data)
+              redirectInvalidInvestor(itemToUpdateIndex) { index =>
+                if (data.lift(itemToUpdateIndex).get.companyOrIndividualModel.isDefined) {
+                  val form = fillForm(howMuchSpentOnSharesForm, retrieveInvestorData[HowMuchSpentOnSharesModel](index, data)(_.amountSpentModel))
+                  Ok(HowMuchSpentOnShares(retrieveInvestorData[String](index, data)(_.companyOrIndividualModel.map(_.companyOrIndividual)).get,
+                    form, backUrl.get))
                 }
+                else Redirect(routes.CompanyOrIndividualController.show(id))
               }
             }
-          } else {
-            // No back URL so send them back to any page as per the requirement
-            Future.successful(Redirect(controllers.seis.routes.AddInvestorOrNomineeController.show()))
+          }
+        } else {
+          // No back URL so send them back to any page as per the requirement
+          Future.successful(Redirect(controllers.seis.routes.AddInvestorOrNomineeController.show()))
+        }
+      }
+
+      for {
+        backUrl <- s4lConnector.fetchAndGetFormData[String](KeystoreKeys.backLinkHowMuchSpentOnShares)
+        route <- process(backUrl)
+      } yield route
+  }
+
+
+  val submit = AuthorisedAndEnrolled.async {
+    implicit user =>
+      implicit request =>
+        val success: HowMuchSpentOnSharesModel => Future[Result] = { validFormData =>
+          validFormData.processingId match {
+            case Some(_) => PreviousInvestorsHelper.updateAmountSpentOnSharesDetails(s4lConnector, validFormData).map {
+              investorDetailsModel => {
+                s4lConnector.saveFormData(KeystoreKeys.backLinkIsExistingShareHolder,
+                  routes.HowMuchSpentOnSharesController.show(investorDetailsModel.processingId.get).url)
+                if (investorDetailsModel.previousShareHoldingModels.isDefined &&
+                  investorDetailsModel.previousShareHoldingModels.get.nonEmpty)
+                  Redirect(routes.PreviousShareHoldingsReviewController.show(investorDetailsModel.processingId.get))
+                else
+                  Redirect(routes.IsExistingShareHolderController.show(investorDetailsModel.processingId.get))
+              }
+            }
+            case None => PreviousInvestorsHelper.addAmountSpentOnSharesDetails(s4lConnector, validFormData).map {
+              investorDetailsModel => {
+                s4lConnector.saveFormData(KeystoreKeys.backLinkIsExistingShareHolder,
+                  routes.HowMuchSpentOnSharesController.show(investorDetailsModel.processingId.get).url)
+                Redirect(routes.IsExistingShareHolderController.show(investorDetailsModel.processingId.get))
+              }
+            }
           }
         }
 
-        for {
-          backUrl <- s4lConnector.fetchAndGetFormData[String](KeystoreKeys.backLinkHowMuchSpentOnShares)
-          route <- process(backUrl)
-        } yield route
-    }
-  }
-
-  val submit = featureSwitch(applicationConfig.seisFlowEnabled) {
-    AuthorisedAndEnrolled.async {
-      implicit user =>
-        implicit request =>
-          val success: HowMuchSpentOnSharesModel => Future[Result] = { validFormData =>
-            validFormData.processingId match {
-              case Some(_) => PreviousInvestorsHelper.updateAmountSpentOnSharesDetails(s4lConnector, validFormData).map {
-                investorDetailsModel => {
-                  s4lConnector.saveFormData(KeystoreKeys.backLinkIsExistingShareHolder,
-                    routes.HowMuchSpentOnSharesController.show(investorDetailsModel.processingId.get).url)
-                  if(investorDetailsModel.previousShareHoldingModels.isDefined &&
-                    investorDetailsModel.previousShareHoldingModels.get.nonEmpty)
-                    Redirect(routes.PreviousShareHoldingsReviewController.show(investorDetailsModel.processingId.get))
-                  else
-                    Redirect(routes.IsExistingShareHolderController.show(investorDetailsModel.processingId.get))
-                }
-              }
-              case None => PreviousInvestorsHelper.addAmountSpentOnSharesDetails(s4lConnector, validFormData).map {
-                investorDetailsModel => {
-                  s4lConnector.saveFormData(KeystoreKeys.backLinkIsExistingShareHolder,
-                    routes.HowMuchSpentOnSharesController.show(investorDetailsModel.processingId.get).url)
-                  Redirect(routes.IsExistingShareHolderController.show(investorDetailsModel.processingId.get))
-                }
-              }
-            }
-          }
-
-          val failure: Form[HowMuchSpentOnSharesModel] => Future[Result] = { formWithErrors =>
-            ControllerHelpers.getSavedBackLink(KeystoreKeys.backLinkHowMuchSpentOnShares, s4lConnector).flatMap(url =>
+        val failure: Form[HowMuchSpentOnSharesModel] => Future[Result] = { formWithErrors =>
+          ControllerHelpers.getSavedBackLink(KeystoreKeys.backLinkHowMuchSpentOnShares, s4lConnector).flatMap(url =>
             s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
               case Some(data) => {
                 val investorDetailsModel = data.last
                 BadRequest(HowMuchSpentOnShares(investorDetailsModel.companyOrIndividualModel.get.companyOrIndividual, formWithErrors, url.get))
               }
             })
-          }
-          howMuchSpentOnSharesForm.bindFromRequest().fold(failure, success)
-    }
+        }
+        howMuchSpentOnSharesForm.bindFromRequest().fold(failure, success)
   }
 }
-

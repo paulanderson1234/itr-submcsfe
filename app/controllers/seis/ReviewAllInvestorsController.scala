@@ -21,7 +21,6 @@ import common.KeystoreKeys
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.Helpers.ControllerHelpers
-import controllers.predicates.FeatureSwitch
 import models.investorDetails.InvestorDetailsModel
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import play.api.i18n.Messages.Implicits._
@@ -38,59 +37,48 @@ object ReviewAllInvestorsController extends ReviewAllInvestorsController
   override lazy val enrolmentConnector = EnrolmentConnector
 }
 
-trait ReviewAllInvestorsController extends FrontendController with AuthorisedAndEnrolledForTAVC with FeatureSwitch with ControllerHelpers{
+trait ReviewAllInvestorsController extends FrontendController with AuthorisedAndEnrolledForTAVC with ControllerHelpers {
 
   override val acceptedFlows = Seq(Seq(SEIS))
 
-  val show = featureSwitch(applicationConfig.seisFlowEnabled) {
-    AuthorisedAndEnrolled.async { implicit user => implicit request =>
-      s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
-        case Some(investors) => if(investors.nonEmpty) Ok(ReviewAllInvestors(investors)) else Redirect(routes.AddInvestorOrNomineeController.show(None))
-        case None => Redirect(routes.AddInvestorOrNomineeController.show(None))
+  val show = AuthorisedAndEnrolled.async { implicit user => implicit request =>
+    s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
+      case Some(investors) => if (investors.nonEmpty) Ok(ReviewAllInvestors(investors)) else Redirect(routes.AddInvestorOrNomineeController.show(None))
+      case None => Redirect(routes.AddInvestorOrNomineeController.show(None))
+    }
+  }
+
+  val submit = AuthorisedAndEnrolled.async { implicit user => implicit request =>
+    s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map { vector =>
+      redirectNoInvestors(vector) { data =>
+        if (data.forall(_.validate))
+          Redirect(routes.AddAnotherInvestorController.show())
+        else Redirect(routes.ReviewAllInvestorsController.show())
       }
     }
   }
 
-  val submit = featureSwitch(applicationConfig.seisFlowEnabled) {
-    AuthorisedAndEnrolled.async { implicit user => implicit request =>
-      s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map { vector =>
-        redirectNoInvestors(vector) { data =>
-          if (data.forall(_.validate))
-            Redirect(routes.AddAnotherInvestorController.show())
-          else Redirect(routes.ReviewAllInvestorsController.show())
-        }
+  def change(id: Int): Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user => implicit request =>
+    s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map { vector =>
+      redirectNoInvestors(vector) { data =>
+        if (!data(getInvestorIndex(id, data)).validate || data.forall(_.validate))
+          Redirect(routes.ReviewInvestorDetailsController.show(id))
+        else Redirect(routes.ReviewAllInvestorsController.show())
       }
     }
   }
 
-  def change(id: Int): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
-    AuthorisedAndEnrolled.async { implicit user => implicit request =>
-      s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map { vector =>
-        redirectNoInvestors(vector) { data =>
-          if(!data(getInvestorIndex(id,data)).validate || data.forall(_.validate))
-            Redirect(routes.ReviewInvestorDetailsController.show(id))
-          else Redirect(routes.ReviewAllInvestorsController.show())
-        }
-      }
-
-    }
-  }
-
-  def add: Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
-    AuthorisedAndEnrolled.async { implicit user => implicit request =>
-      s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map { vector =>
-        redirectNoInvestors(vector) { data =>
-          if (data.forall(_.validate))
-            Redirect(routes.AddInvestorOrNomineeController.show())
-          else Redirect(routes.ReviewAllInvestorsController.show())
-          }
+  def add: Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user => implicit request =>
+    s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map { vector =>
+      redirectNoInvestors(vector) { data =>
+        if (data.forall(_.validate))
+          Redirect(routes.AddInvestorOrNomineeController.show())
+        else Redirect(routes.ReviewAllInvestorsController.show())
       }
     }
   }
 
-  def remove(id: Int): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
-    AuthorisedAndEnrolled.async { implicit user => implicit request =>
-      Future.successful(Redirect(routes.DeleteInvestorController.show(id)))
-    }
+  def remove(id: Int): Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user => implicit request =>
+    Future.successful(Redirect(routes.DeleteInvestorController.show(id)))
   }
 }

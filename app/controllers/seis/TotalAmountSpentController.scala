@@ -28,7 +28,6 @@ import auth.{AuthorisedAndEnrolledForTAVC, SEIS}
 import common.KeystoreKeys
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
-import controllers.predicates.FeatureSwitch
 import models.investorDetails.InvestorDetailsModel
 
 import scala.concurrent.Future
@@ -40,41 +39,35 @@ object TotalAmountSpentController extends TotalAmountSpentController {
   override lazy val enrolmentConnector = EnrolmentConnector
 }
 
-trait TotalAmountSpentController extends FrontendController with AuthorisedAndEnrolledForTAVC with FeatureSwitch {
+trait TotalAmountSpentController extends FrontendController with AuthorisedAndEnrolledForTAVC {
 
   override val acceptedFlows = Seq(Seq(SEIS))
 
-  val show: Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
-    AuthorisedAndEnrolled.async {
-      implicit user =>
-        implicit request =>
-          s4lConnector.fetchAndGetFormData[TotalAmountSpentModel](KeystoreKeys.totalAmountSpent).map {
-            case Some(data) => Ok(views.html.seis.shareDetails.TotalAmountSpent(totalAmountSpentForm.fill(data)))
-            case None => Ok(views.html.seis.shareDetails.TotalAmountSpent(totalAmountSpentForm))
-          }
-    }
+  val show: Action[AnyContent] = AuthorisedAndEnrolled.async {
+    implicit user =>
+      implicit request =>
+        s4lConnector.fetchAndGetFormData[TotalAmountSpentModel](KeystoreKeys.totalAmountSpent).map {
+          case Some(data) => Ok(views.html.seis.shareDetails.TotalAmountSpent(totalAmountSpentForm.fill(data)))
+          case None => Ok(views.html.seis.shareDetails.TotalAmountSpent(totalAmountSpentForm))
+        }
   }
 
-  val submit: Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
-    AuthorisedAndEnrolled.async {
-      implicit user =>
-        implicit request =>
-          val success: TotalAmountSpentModel => Future[Result] = { model =>
-              s4lConnector.saveFormData(KeystoreKeys.totalAmountSpent, model)
-              s4lConnector.saveFormData(KeystoreKeys.backLinkAddInvestorOrNominee, routes.TotalAmountSpentController.show().url)
-            s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map{
-              case Some(data) if data.nonEmpty => Redirect(controllers.seis.routes.ReviewAllInvestorsController.show())
-              case None => Redirect(controllers.seis.routes.AddInvestorOrNomineeController.show())
-            }
+  val submit: Action[AnyContent] = AuthorisedAndEnrolled.async {
+    implicit user =>
+      implicit request =>
+        val success: TotalAmountSpentModel => Future[Result] = { model =>
+          s4lConnector.saveFormData(KeystoreKeys.totalAmountSpent, model)
+          s4lConnector.saveFormData(KeystoreKeys.backLinkAddInvestorOrNominee, routes.TotalAmountSpentController.show().url)
+          s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
+            case Some(data) if data.nonEmpty => Redirect(controllers.seis.routes.ReviewAllInvestorsController.show())
+            case None => Redirect(controllers.seis.routes.AddInvestorOrNomineeController.show())
           }
+        }
 
-          val failure: Form[TotalAmountSpentModel] => Future[Result] = { form =>
-            Future.successful(BadRequest(views.html.seis.shareDetails.TotalAmountSpent(form)))
-          }
+        val failure: Form[TotalAmountSpentModel] => Future[Result] = { form =>
+          Future.successful(BadRequest(views.html.seis.shareDetails.TotalAmountSpent(form)))
+        }
 
-          TotalAmountSpentForm.totalAmountSpentForm.bindFromRequest().fold(failure, success)
-    }
+        TotalAmountSpentForm.totalAmountSpentForm.bindFromRequest().fold(failure, success)
   }
 }
-
-

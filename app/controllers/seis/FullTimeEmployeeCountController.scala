@@ -20,7 +20,6 @@ import auth.{AuthorisedAndEnrolledForTAVC, SEIS}
 import common.KeystoreKeys
 import config.{AppConfig, FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
-import controllers.predicates.FeatureSwitch
 import forms.FullTimeEmployeeCountForm._
 import models.FullTimeEmployeeCountModel
 import play.api.Play.current
@@ -40,35 +39,31 @@ object FullTimeEmployeeCountController extends FullTimeEmployeeCountController {
   val submissionService = SubmissionService
 }
 
-trait FullTimeEmployeeCountController extends FrontendController with AuthorisedAndEnrolledForTAVC with FeatureSwitch {
+trait FullTimeEmployeeCountController extends FrontendController with AuthorisedAndEnrolledForTAVC {
   override val acceptedFlows = Seq(Seq(SEIS))
-  val submissionService : SubmissionService
+  val submissionService: SubmissionService
 
-  val show = featureSwitch(applicationConfig.seisFlowEnabled) {
-    AuthorisedAndEnrolled.async { implicit user =>
-      implicit request =>
-        s4lConnector.fetchAndGetFormData[FullTimeEmployeeCountModel](KeystoreKeys.fullTimeEmployeeCount).map {
-          case Some(data) => Ok(FullTimeEmployeeCount(fullTimeEmployeeCountForm.fill(data)))
-          case None => Ok(FullTimeEmployeeCount(fullTimeEmployeeCountForm))
-        }
-    }
+  val show = AuthorisedAndEnrolled.async { implicit user =>
+    implicit request =>
+      s4lConnector.fetchAndGetFormData[FullTimeEmployeeCountModel](KeystoreKeys.fullTimeEmployeeCount).map {
+        case Some(data) => Ok(FullTimeEmployeeCount(fullTimeEmployeeCountForm.fill(data)))
+        case None => Ok(FullTimeEmployeeCount(fullTimeEmployeeCountForm))
+      }
   }
 
-  val submit = featureSwitch(applicationConfig.seisFlowEnabled) {
-    AuthorisedAndEnrolled.async { implicit user =>
-      implicit request =>
-        fullTimeEmployeeCountForm.bindFromRequest().fold(
-          formWithErrors => {
-            Future.successful(BadRequest(FullTimeEmployeeCount(formWithErrors)))
-          },
-          validFormData => {
-            s4lConnector.saveFormData[FullTimeEmployeeCountModel](KeystoreKeys.fullTimeEmployeeCount, validFormData)
-            submissionService.validateFullTimeEmployeeCount(validFormData.employeeCount).map {
-              case true => Redirect(routes.HadPreviousRFIController.show())
-              case false => Redirect(routes.FullTimeEmployeeCountErrorController.show())
-            }
+  val submit = AuthorisedAndEnrolled.async { implicit user =>
+    implicit request =>
+      fullTimeEmployeeCountForm.bindFromRequest().fold(
+        formWithErrors => {
+          Future.successful(BadRequest(FullTimeEmployeeCount(formWithErrors)))
+        },
+        validFormData => {
+          s4lConnector.saveFormData[FullTimeEmployeeCountModel](KeystoreKeys.fullTimeEmployeeCount, validFormData)
+          submissionService.validateFullTimeEmployeeCount(validFormData.employeeCount).map {
+            case true => Redirect(routes.HadPreviousRFIController.show())
+            case false => Redirect(routes.FullTimeEmployeeCountErrorController.show())
           }
-        )
-    }
+        }
+      )
   }
 }

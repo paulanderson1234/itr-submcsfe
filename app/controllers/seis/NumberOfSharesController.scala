@@ -22,7 +22,6 @@ import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector, SubmissionConnector}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import play.api.mvc._
-import controllers.predicates.FeatureSwitch
 import forms.NumberOfSharesForm._
 import models.NumberOfSharesModel
 import play.api.i18n.Messages.Implicits._
@@ -39,31 +38,27 @@ object NumberOfSharesController extends NumberOfSharesController {
   override lazy val enrolmentConnector = EnrolmentConnector
 }
 
-trait NumberOfSharesController extends FrontendController with AuthorisedAndEnrolledForTAVC with FeatureSwitch {
+trait NumberOfSharesController extends FrontendController with AuthorisedAndEnrolledForTAVC {
 
   override val acceptedFlows = Seq(Seq(SEIS))
 
-  val show: Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
-    AuthorisedAndEnrolled.async { implicit user => implicit request =>
+  val show: Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user => implicit request =>
 
-      s4lConnector.fetchAndGetFormData[NumberOfSharesModel](KeystoreKeys.numberOfShares).map {
-        case Some(data) => Ok(NumberOfShares(numberOfSharesForm.fill(data)))
-        case None => Ok(NumberOfShares(numberOfSharesForm))
-      }
+    s4lConnector.fetchAndGetFormData[NumberOfSharesModel](KeystoreKeys.numberOfShares).map {
+      case Some(data) => Ok(NumberOfShares(numberOfSharesForm.fill(data)))
+      case None => Ok(NumberOfShares(numberOfSharesForm))
     }
   }
 
-  def submit: Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
-    AuthorisedAndEnrolled.async { implicit user => implicit request =>
-      numberOfSharesForm.bindFromRequest().fold(
-        formWithErrors => {
-          Future.successful(BadRequest(NumberOfShares(formWithErrors)))
-        },
-        validFormData => {
-          s4lConnector.saveFormData(KeystoreKeys.numberOfShares, validFormData)
-          Future.successful(Redirect(routes.NominalValueOfSharesController.show()))
-        }
-      )
-    }
+  def submit: Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user => implicit request =>
+    numberOfSharesForm.bindFromRequest().fold(
+      formWithErrors => {
+        Future.successful(BadRequest(NumberOfShares(formWithErrors)))
+      },
+      validFormData => {
+        s4lConnector.saveFormData(KeystoreKeys.numberOfShares, validFormData)
+        Future.successful(Redirect(routes.NominalValueOfSharesController.show()))
+      }
+    )
   }
 }
