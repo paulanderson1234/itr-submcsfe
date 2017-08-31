@@ -70,6 +70,7 @@ validation.error.crn=Please enter a valid CRN
 validation.error.invalidDate=You have not entered a valid date
 validation.error.utrTenChar=Only 10 numeric digits should be entered
 validation.common.error.fieldRequired=This field is required
+validation.common.error.shortTextSize = Enter a description of 250 characters or less
 validation.error.DateNotEntered=You must enter a valid day, month and year
 validation.error.enterDate=Please enter a date
 validation.error.operatingCosts=Please enter a value into
