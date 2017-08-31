@@ -49,7 +49,7 @@ class PreviousShareHoldingDescriptionSpec  extends BaseSpec {
       document.body.getElementById("desc-one").text() shouldBe Messages("page.investors.previousShareHoldingDescription.question.hint")
 
       document.body.getElementById("share-description-where-to-find").text() shouldBe  Messages("page.investors.previousShareHoldingDescription.location")
-      document.body.getElementById("help").text() shouldBe  Messages("page.investors.previousShareHoldingDescription.whereToFind")
+      document.body.getElementById("help").text() shouldBe  Messages("common.help.whereToFind")
 
       document.getElementById("labelTextId").text() shouldBe
         Messages("page.investors.previousShareHoldingDescription.heading", Constants.typeCompany.toLowerCase())
@@ -88,7 +88,7 @@ class PreviousShareHoldingDescriptionSpec  extends BaseSpec {
       document.body.getElementById("desc-one").text() shouldBe Messages("page.investors.previousShareHoldingDescription.question.hint")
 
       document.body.getElementById("share-description-where-to-find").text() shouldBe  Messages("page.investors.previousShareHoldingDescription.location")
-      document.body.getElementById("help").text() shouldBe  Messages("page.investors.previousShareHoldingDescription.whereToFind")
+      document.body.getElementById("help").text() shouldBe  Messages("common.help.whereToFind")
 
       document.getElementById("labelTextId").text() shouldBe
         Messages("page.investors.previousShareHoldingDescription.heading", Constants.typeIndividual.toLowerCase())
@@ -129,7 +129,7 @@ class PreviousShareHoldingDescriptionSpec  extends BaseSpec {
       document.body.getElementById("desc-one").text() shouldBe Messages("page.investors.previousShareHoldingDescription.question.hint")
 
       document.body.getElementById("share-description-where-to-find").text() shouldBe  Messages("page.investors.previousShareHoldingDescription.location")
-      document.body.getElementById("help").text() shouldBe  Messages("page.investors.previousShareHoldingDescription.whereToFind")
+      document.body.getElementById("help").text() shouldBe  Messages("common.help.whereToFind")
 
       document.getElementById("labelTextId").text() shouldBe
         Messages("page.investors.previousShareHoldingDescription.heading", upperCaseTest.toLowerCase())

@@ -62,6 +62,8 @@ common.section.progress.details.six=Section 6 of 6: Supporting documents
 common.error.help.text=Get help with this page.
 common.error.summary.heading=This page has errors
 
+## Common help link ##
+common.help.whereToFind = Where can I find this?
 
 #validation errors
 validation.error.country=Country must be no more than 20 valid characters if entered
@@ -244,7 +246,6 @@ page.companyDetails.utr.heading=What''s your Company Unique Taxpayer Reference?
 page.companyDetails.utr.title=What''s your Company Unique Taxpayer Reference?
 page.companyDetails.utr.question.hint=If your UTR is 13 digits long, only enter the last 10
 page.companyDetails.utr.help.text=You can usually find it in letters we''ve sent to you, next to headings like “Tax Reference”, “UTR” or “Official Use”.
-page.companyDetails.utr.help.link=Where can I find this?
 
 #Your company need page
 page.introduction.YourCompanyNeed.title=What does your company need?
@@ -257,8 +258,6 @@ validation.error.DateOfIncorporation.Future=Date of incorporation cannot be a fu
 page.companyDetails.DateOfIncorporation.title= When was your company incorporated?
 page.companyDetails.DateOfIncorporation.heading= When was your company incorporated?
 page.companyDetails.DateOfIncorporation.question= When was your company incorporated?
-date.hint.dateOfIncorporation= For example, 31 3 1980
-page.companyDetails.DateOfIncorporation.whereToFind=Where can I find this?
 page.companyDetails.DateOfIncorporation.location= It''s on your certificate of incorporation. You can also find it by searching for your company on the
 page.companyDetails.DateOfIncorporation.companiesHouse = Companies House database
 
@@ -992,7 +991,6 @@ page.shares.shareDescription.bullet.one=non-voting shares
 page.shares.shareDescription.bullet.two=ordinary shares
 page.shares.shareDescription.bullet.three=seed shares
 page.shares.shareDescription.question.hint=Suggested limit: 20 words
-page.shares.shareDescription.whereToFind=Where can I find this?
 page.shares.ShareDescription.location=It''s on your company''s Register of Members and share certificates.
 
 #share issue date page
@@ -1001,7 +999,6 @@ page.companyDetails.ShareIssueDate.title= When did your company issue the shares
 page.companyDetails.ShareIssueDate.heading= When did your company issue the shares in this application?
 page.companyDetails.ShareIssueDate.question= When did your company issue the shares in this application?
 date.hint.shareIssueDate= For example, 31 3 1980
-page.companyDetails.ShareIssueDate.whereToFind=Where can I find this?
 page.companyDetails.ShareIssueDate.location= It''s on your company''s Register of Members.
 
 # Total Amount Raised page
@@ -1105,7 +1102,6 @@ page.investors.previousShareHoldingDescription.title = What were the shares call
 page.investors.previousShareHoldingDescription.heading = What were the shares called that were issued to this {0}?
 page.investors.previousShareHoldingDescription.example.text = Add one type of share at a time.
 page.investors.previousShareHoldingDescription.question.hint = Suggested limit: 20 words
-page.investors.previousShareHoldingDescription.whereToFind = Where can I find this?
 page.investors.previousShareHoldingDescription.location = It''s on your company''s Register of Members.
 
 #AddAnotherInvestor
@@ -1160,7 +1156,6 @@ page.investors.previousShareHoldingDescription.title = What were the shares call
 page.investors.previousShareHoldingDescription.heading = What were the shares called that were issued to this {0}?
 page.investors.previousShareHoldingDescription.example.text = Add one type of share at a time.
 page.investors.previousShareHoldingDescription.question.hint = Suggested limit: 20 words
-page.investors.previousShareHoldingDescription.whereToFind = Where can I find this?
 page.investors.previousShareHoldingDescription.location = It''s on your company''s Register of Members.
 
 #Previous share holders review
