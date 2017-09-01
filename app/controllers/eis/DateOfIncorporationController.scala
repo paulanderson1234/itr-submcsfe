@@ -59,6 +59,7 @@ trait DateOfIncorporationController extends FrontendController with AuthorisedAn
       validFormData => {
         s4lConnector.saveFormData(KeystoreKeys.dateOfIncorporation, validFormData)
         KnowledgeIntensiveHelper.setKiDateCondition(s4lConnector, validFormData.day.get, validFormData.month.get, validFormData.year.get)
+        //TODO: needs to be amended to QualifyBusinessActivityController when available in eis.routes
         Future.successful(Redirect(routes.CommercialSaleController.show()))
       }
     )
