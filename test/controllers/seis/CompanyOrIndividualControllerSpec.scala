@@ -69,7 +69,6 @@ class CompanyOrIndividualControllerSpec extends BaseSpec {
 
     "'REDIRECT' to TBD page" when {
       "there is no 'back link' present" in {
-        println(s"===================== $validBackLink")
         mockEnrolledRequest(seisSchemeTypesModel)
         setupMocks(None,None)
         showWithSessionAndAuth(TestController.show(Constants.obviouslyInvalidId))(

@@ -53,9 +53,6 @@ trait SingleSchemeSelectionController extends FrontendController with Authorised
   def submit(): Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user => implicit request =>
     singleSchemeSelectionForm.bindFromRequest.fold(
       formWithErrors => {
-        println(s"erorr===============")
-        println(s"==============  ${formWithErrors.errors.head.message}")
-        //println(s"==========tye ====  ${formWithErrors.value.get.schemeType}")
         Future.successful(BadRequest(SingleSchemeSelection(formWithErrors)))
 
       },
