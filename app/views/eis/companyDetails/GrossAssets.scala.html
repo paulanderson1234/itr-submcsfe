@@ -1,0 +1,39 @@
+@import models.GrossAssetsModel
+@import uk.gov.hmrc.play.views.html.helpers.form
+@import views.html.helpers.{errorSummary, inputWithCurrencySymbol, backButtonWithProgress}
+
+@(grossAssetsForm: Form[GrossAssetsModel])(implicit request: Request[_], messages: Messages)
+
+@main_template(Messages("page.grossAssets.amount.title")) {
+
+@backButtonWithProgress(controllers.eis.routes.ShareIssueDateController.show().url, Messages("common.section.progress.details.one"))
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+
+        @errorSummary(grossAssetsForm, "gross-assets", "amount")
+
+        <h1 id="main-heading" class="form-title heading-xlarge">@Messages("page.grossAssets.amount.heading")</h1>
+
+        @form(action = controllers.eis.routes.GrossAssetsController.submit()) {
+        <div class="form-group">
+            @inputWithCurrencySymbol(
+            grossAssetsForm("grossAmount"),
+            '_divClass -> "form-label",
+            '_labelId -> "label-amount",
+            '_label -> Messages("page.grossAssets.amount.heading"),
+            '_labelTextClass -> "visuallyhidden",
+            '_inputClass -> "input--no-spinner input--left-padding",
+            '_type -> "text",
+            '_maxlength -> "9",
+            'id -> "amount"
+            )
+        </div>
+
+        <div class="form-group">
+            <button class="btn button" type="submit" id="next">@Messages("common.button.snc")</button>
+        </div>
+        }
+    </div>
+</div>
+}

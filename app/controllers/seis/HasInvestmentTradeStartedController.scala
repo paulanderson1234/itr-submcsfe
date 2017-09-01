@@ -21,7 +21,6 @@ import common.{Constants, KeystoreKeys}
 import config.FrontendGlobal.internalServerErrorTemplate
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector, SubmissionConnector}
-import controllers.predicates.FeatureSwitch
 import forms.HasInvestmentTradeStartedForm._
 import models.HasInvestmentTradeStartedModel
 import play.Logger
@@ -41,62 +40,58 @@ object HasInvestmentTradeStartedController extends HasInvestmentTradeStartedCont
 
 }
 
-trait HasInvestmentTradeStartedController extends FrontendController with AuthorisedAndEnrolledForTAVC with FeatureSwitch {
+trait HasInvestmentTradeStartedController extends FrontendController with AuthorisedAndEnrolledForTAVC {
 
   override val acceptedFlows = Seq(Seq(SEIS))
 
   val submissionConnector: SubmissionConnector
 
-  val show = featureSwitch(applicationConfig.seisFlowEnabled) {
-    AuthorisedAndEnrolled.async { implicit user => implicit request =>
-      s4lConnector.fetchAndGetFormData[HasInvestmentTradeStartedModel](KeystoreKeys.hasInvestmentTradeStarted).map {
-        case Some(data) => Ok(HasInvestmentTradeStarted(hasInvestmentTradeStartedForm.fill(data)))
-        case None => Ok(HasInvestmentTradeStarted(hasInvestmentTradeStartedForm))
-      }
+  val show = AuthorisedAndEnrolled.async { implicit user => implicit request =>
+    s4lConnector.fetchAndGetFormData[HasInvestmentTradeStartedModel](KeystoreKeys.hasInvestmentTradeStarted).map {
+      case Some(data) => Ok(HasInvestmentTradeStarted(hasInvestmentTradeStartedForm.fill(data)))
+      case None => Ok(HasInvestmentTradeStarted(hasInvestmentTradeStartedForm))
     }
   }
 
-  val submit = featureSwitch(applicationConfig.seisFlowEnabled) {
-    AuthorisedAndEnrolled.async { implicit user => implicit request =>
-      hasInvestmentTradeStartedForm.bindFromRequest().fold(
-        formWithErrors => {
-          Future.successful(BadRequest(HasInvestmentTradeStarted(formWithErrors)))
-        },
-        validFormData => {
-          s4lConnector.saveFormData(KeystoreKeys.hasInvestmentTradeStarted, validFormData)
-          validFormData.hasInvestmentTradeStarted match {
-            case Constants.StandardRadioButtonYesValue => {
-              submissionConnector.validateHasInvestmentTradeStartedCondition(validFormData.hasInvestmentTradeStartedDay.get,
-                validFormData.hasInvestmentTradeStartedMonth.get, validFormData.hasInvestmentTradeStartedYear.get).map {
-                case Some(validated) =>
-                  if (validated) {
-                    s4lConnector.saveFormData(KeystoreKeys.backLinkShareIssueDate,
-                      routes.HasInvestmentTradeStartedController.show().url)
+  val submit = AuthorisedAndEnrolled.async { implicit user => implicit request =>
+    hasInvestmentTradeStartedForm.bindFromRequest().fold(
+      formWithErrors => {
+        Future.successful(BadRequest(HasInvestmentTradeStarted(formWithErrors)))
+      },
+      validFormData => {
+        s4lConnector.saveFormData(KeystoreKeys.hasInvestmentTradeStarted, validFormData)
+        validFormData.hasInvestmentTradeStarted match {
+          case Constants.StandardRadioButtonYesValue => {
+            submissionConnector.validateHasInvestmentTradeStartedCondition(validFormData.hasInvestmentTradeStartedDay.get,
+              validFormData.hasInvestmentTradeStartedMonth.get, validFormData.hasInvestmentTradeStartedYear.get).map {
+              case Some(validated) =>
+                if (validated) {
+                  s4lConnector.saveFormData(KeystoreKeys.backLinkShareIssueDate,
+                    routes.HasInvestmentTradeStartedController.show().url)
 
-                    Redirect(routes.ShareIssueDateController.show())
-                  }
-                  else {
-                    s4lConnector.saveFormData(KeystoreKeys.backLinkSeventyPercentSpent, routes.HasInvestmentTradeStartedController.show().url)
-                    Redirect(routes.SeventyPercentSpentController.show())
-                  }
-                case _ => {
-                  Logger.warn(s"[HasInvestmentTradeStartedController][submit] - Call to validate investment trade start date in backend failed")
-                  InternalServerError(internalServerErrorTemplate)
+                  Redirect(routes.ShareIssueDateController.show())
                 }
-              }.recover {
-                case e: Exception => {
-                  Logger.warn(s"[HasInvestmentTradeStartedController][submit] - Exception: ${e.getMessage}")
-                  InternalServerError(internalServerErrorTemplate)
+                else {
+                  s4lConnector.saveFormData(KeystoreKeys.backLinkSeventyPercentSpent, routes.HasInvestmentTradeStartedController.show().url)
+                  Redirect(routes.SeventyPercentSpentController.show())
                 }
+              case _ => {
+                Logger.warn(s"[HasInvestmentTradeStartedController][submit] - Call to validate investment trade start date in backend failed")
+                InternalServerError(internalServerErrorTemplate)
+              }
+            }.recover {
+              case e: Exception => {
+                Logger.warn(s"[HasInvestmentTradeStartedController][submit] - Exception: ${e.getMessage}")
+                InternalServerError(internalServerErrorTemplate)
               }
             }
-            case Constants.StandardRadioButtonNoValue => {
-              s4lConnector.saveFormData(KeystoreKeys.backLinkSeventyPercentSpent, routes.HasInvestmentTradeStartedController.show().url)
-              Future.successful(Redirect(routes.SeventyPercentSpentController.show()))
-            }
+          }
+          case Constants.StandardRadioButtonNoValue => {
+            s4lConnector.saveFormData(KeystoreKeys.backLinkSeventyPercentSpent, routes.HasInvestmentTradeStartedController.show().url)
+            Future.successful(Redirect(routes.SeventyPercentSpentController.show()))
           }
         }
-      )
-    }
+      }
+    )
   }
 }

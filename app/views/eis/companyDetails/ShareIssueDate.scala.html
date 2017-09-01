@@ -1,0 +1,32 @@
+@import models.ShareIssueDateModel
+@import uk.gov.hmrc.play.views.html.helpers.form
+@import views.html.helpers.{externalLink, backButtonWithProgress, errorSummary, formInlineDateInput}
+
+@(shareIssueDateForm: Form[ShareIssueDateModel],backLink:String)(implicit request: Request[_], messages: Messages)
+
+@main_template(Messages("page.companyDetails.ShareIssueDate.title")) {
+
+    @backButtonWithProgress(backLink, Messages("common.section.progress.details.one"))
+
+    @errorSummary(shareIssueDateForm, "share-issue-date", "shareIssueDay")
+
+    <h1 class="heading-xlarge" id="main-heading">@Messages("page.companyDetails.ShareIssueDate.heading")</h1>
+
+    @form(action = controllers.eis.routes.ShareIssueDateController.submit()) {
+
+        @formInlineDateInput(shareIssueDateForm, "shareIssue", Some(Messages("page.companyDetails.ShareIssueDate.heading")),
+          true, Some(Messages("common.date.hint.example")), None)
+
+        <details>
+            <summary><span id="help" class="summary">@Messages("page.companyDetails.ShareIssueDate.whereToFind")</span></summary>
+            <div class="panel panel-indent panel-border-narrow">
+                <p id = "date-of-shareIssue-where-to-find">@Messages("page.companyDetails.ShareIssueDate.location")</p>
+            </div>
+        </details>
+
+        <div class="form-group">
+            <button class="btn button" type="submit" id="next">@Messages("common.button.snc")</button>
+        </div>
+
+    }
+}

@@ -21,7 +21,6 @@ import common.KeystoreKeys
 import config.{AppConfig, FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.Helpers.ControllerHelpers
-import controllers.predicates.FeatureSwitch
 import forms.AddAnotherShareholdingForm._
 import models.AddAnotherShareholdingModel
 import models.investorDetails.InvestorDetailsModel
@@ -42,42 +41,37 @@ object AddAnotherShareholdingController extends AddAnotherShareholdingController
   override lazy val authConnector: AuthConnector = FrontendAuthConnector
 }
 
-trait AddAnotherShareholdingController extends FrontendController with AuthorisedAndEnrolledForTAVC with FeatureSwitch with ControllerHelpers {
+trait AddAnotherShareholdingController extends FrontendController with AuthorisedAndEnrolledForTAVC with ControllerHelpers {
   override lazy val acceptedFlows: Seq[Seq[Flow]] = Seq(Seq(SEIS))
 
-  def show(investorId: Int): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
-    AuthorisedAndEnrolled.async { implicit user => implicit request =>
-      Future.successful(Ok(AddAnotherShareholding(addAnotherShareholdingForm, investorId)))
-    }
+  def show(investorId: Int): Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user => implicit request =>
+    Future.successful(Ok(AddAnotherShareholding(addAnotherShareholdingForm, investorId)))
   }
 
-  def submit(investorId: Int): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
-    AuthorisedAndEnrolled.async { implicit user => implicit request =>
+  def submit(investorId: Int): Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user => implicit request =>
 
-      val checkValidShareholdings: Result => Future[Result] = { result =>
-        s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map(vector =>
-          redirectNoInvestors(vector) { data =>
-            redirectInvalidInvestor(getInvestorIndex(investorId, data)) { investorIndex =>
-              if (data.apply(investorIndex).validateShareHoldings) result
-              else Redirect(routes.ReviewInvestorDetailsController.show(investorId))
-            }
+    val checkValidShareholdings: Result => Future[Result] = { result =>
+      s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map(vector =>
+        redirectNoInvestors(vector) { data =>
+          redirectInvalidInvestor(getInvestorIndex(investorId, data)) { investorIndex =>
+            if (data.apply(investorIndex).validateShareHoldings) result
+            else Redirect(routes.ReviewInvestorDetailsController.show(investorId))
           }
-        )
-      }
-
-      val errorAction: Form[AddAnotherShareholdingModel] => Future[Result] = { form =>
-        Future.successful(BadRequest(AddAnotherShareholding(form, investorId)))
-      }
-
-      val successAction: AddAnotherShareholdingModel => Future[Result] = {
-        case AddAnotherShareholdingModel(true) => Future.successful(Redirect(routes.PreviousShareHoldingDescriptionController.show(investorId)))
-        case AddAnotherShareholdingModel(false) => checkValidShareholdings {
-          Redirect(routes.ReviewInvestorDetailsController.show(investorId))
         }
-      }
-
-      addAnotherShareholdingForm.bindFromRequest().fold(errorAction, successAction)
+      )
     }
-  }
 
+    val errorAction: Form[AddAnotherShareholdingModel] => Future[Result] = { form =>
+      Future.successful(BadRequest(AddAnotherShareholding(form, investorId)))
+    }
+
+    val successAction: AddAnotherShareholdingModel => Future[Result] = {
+      case AddAnotherShareholdingModel(true) => Future.successful(Redirect(routes.PreviousShareHoldingDescriptionController.show(investorId)))
+      case AddAnotherShareholdingModel(false) => checkValidShareholdings {
+        Redirect(routes.ReviewInvestorDetailsController.show(investorId))
+      }
+    }
+
+    addAnotherShareholdingForm.bindFromRequest().fold(errorAction, successAction)
+  }
 }

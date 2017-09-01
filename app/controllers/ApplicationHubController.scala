@@ -16,7 +16,7 @@
 
 package controllers
 
-import auth.{AuthorisedAndEnrolledForTAVC, EIS, TAVCUser}
+import auth.{AuthorisedAndEnrolledForTAVC, TAVCUser}
 import common.KeystoreKeys
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import config.FrontendGlobal.internalServerErrorTemplate
@@ -33,7 +33,6 @@ import views.html.introduction._
 import views.html.hubPartials._
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
-import views.html.supportingDocuments.SupportingDocumentsUpload
 
 import scala.concurrent.Future
 
@@ -93,21 +92,7 @@ trait ApplicationHubController extends FrontendController with AuthorisedAndEnro
   }
 
   val newApplication = AuthorisedAndEnrolled.async { implicit user => implicit request =>
-    if(applicationConfig.eisseisFlowEnabled) {
-      Future.successful(Redirect(controllers.schemeSelection.routes.SchemeSelectionController.show()))
-    } else if(applicationConfig.seisFlowEnabled) {
-      Future.successful(Redirect(controllers.schemeSelection.routes.SingleSchemeSelectionController.show()))
-    }else {
-      (for {
-        saveApplication <- s4lConnector.saveFormData(KeystoreKeys.applicationInProgress, true)
-        saveSchemes <- s4lConnector.saveFormData(KeystoreKeys.selectedSchemes, SchemeTypesModel(eis = true))
-      } yield (saveApplication, saveSchemes)).map {
-        result => Redirect(eis.routes.NatureOfBusinessController.show())
-      }.recover {
-        case e: Exception => Logger.warn(s"[ApplicationHubController][newApplication] Exception when calling saveFormData: ${e.getMessage}")
-          Redirect(eis.routes.NatureOfBusinessController.show())
-      }
-    }
+    Future.successful(Redirect(controllers.schemeSelection.routes.SingleSchemeSelectionController.show()))
   }
 
   val delete = AuthorisedAndEnrolled.async { implicit user => implicit request =>

@@ -22,7 +22,6 @@ import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector, SubmissionConnector}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import play.api.mvc._
-import controllers.predicates.FeatureSwitch
 import forms.GrossAssetsForm._
 import models.GrossAssetsModel
 import play.api.Logger
@@ -41,56 +40,52 @@ object GrossAssetsController extends GrossAssetsController {
   override lazy val enrolmentConnector = EnrolmentConnector
 }
 
-trait GrossAssetsController extends FrontendController with AuthorisedAndEnrolledForTAVC with FeatureSwitch {
+trait GrossAssetsController extends FrontendController with AuthorisedAndEnrolledForTAVC {
 
   override val acceptedFlows = Seq(Seq(SEIS))
 
   val submissionConnector: SubmissionConnector
 
-  val show: Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
-    AuthorisedAndEnrolled.async { implicit user => implicit request =>
+  val show: Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user => implicit request =>
 
-      s4lConnector.fetchAndGetFormData[GrossAssetsModel](KeystoreKeys.grossAssets).map {
-        case Some(data) => Ok(GrossAssets(grossAssetsForm.fill(data)))
-        case None => Ok(GrossAssets(grossAssetsForm))
-      }
+    s4lConnector.fetchAndGetFormData[GrossAssetsModel](KeystoreKeys.grossAssets).map {
+      case Some(data) => Ok(GrossAssets(grossAssetsForm.fill(data)))
+      case None => Ok(GrossAssets(grossAssetsForm))
     }
   }
 
-  def submit: Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
-    AuthorisedAndEnrolled.async { implicit user => implicit request =>
+  def submit: Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user => implicit request =>
 
-      def routeRequest(grossAssetsExceeded: Option[Boolean]): Future[Result] = {
-        if (grossAssetsExceeded.nonEmpty) {
-          grossAssetsExceeded match {
-            case Some(false) => Future.successful(Redirect(routes.FullTimeEmployeeCountController.show()))
-            case _ => Future.successful(Redirect(routes.GrossAssetsErrorController.show()))
-          }
-        }
-        else {
-          // no expected true/false from service returned
-          Logger.warn("[GrossAssetsController][submit] - API call to checkGrossAssetsAmountExceeded did not return expected true/false answer")
-          Future.successful(InternalServerError(internalServerErrorTemplate))
+    def routeRequest(grossAssetsExceeded: Option[Boolean]): Future[Result] = {
+      if (grossAssetsExceeded.nonEmpty) {
+        grossAssetsExceeded match {
+          case Some(false) => Future.successful(Redirect(routes.FullTimeEmployeeCountController.show()))
+          case _ => Future.successful(Redirect(routes.GrossAssetsErrorController.show()))
         }
       }
+      else {
+        // no expected true/false from service returned
+        Logger.warn("[GrossAssetsController][submit] - API call to checkGrossAssetsAmountExceeded did not return expected true/false answer")
+        Future.successful(InternalServerError(internalServerErrorTemplate))
+      }
+    }
 
-      grossAssetsForm.bindFromRequest().fold(
-        formWithErrors => {
-          Future.successful(BadRequest(GrossAssets(formWithErrors)))
-        },
-        validFormData => {
-          s4lConnector.saveFormData(KeystoreKeys.grossAssets, validFormData)
-          (for {
-            grossAssetsExceeded <- submissionConnector.checkGrossAssetsAmountExceeded(validFormData)
-            route <- routeRequest(grossAssetsExceeded)
-          } yield route) recover {
-            case e: Exception => {
-              Logger.warn(s"[GrossAssetsController][submit] - submit Exception: ${e.getMessage}")
-              InternalServerError(internalServerErrorTemplate)
-            }
+    grossAssetsForm.bindFromRequest().fold(
+      formWithErrors => {
+        Future.successful(BadRequest(GrossAssets(formWithErrors)))
+      },
+      validFormData => {
+        s4lConnector.saveFormData(KeystoreKeys.grossAssets, validFormData)
+        (for {
+          grossAssetsExceeded <- submissionConnector.checkGrossAssetsAmountExceeded(validFormData)
+          route <- routeRequest(grossAssetsExceeded)
+        } yield route) recover {
+          case e: Exception => {
+            Logger.warn(s"[GrossAssetsController][submit] - submit Exception: ${e.getMessage}")
+            InternalServerError(internalServerErrorTemplate)
           }
         }
-      )
-    }
+      }
+    )
   }
 }

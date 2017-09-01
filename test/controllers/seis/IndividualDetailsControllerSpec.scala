@@ -39,8 +39,8 @@ class IndividualDetailsControllerSpec extends BaseSpec with FakeRequestHelper{
     override lazy val authConnector: AuthConnector = MockAuthConnector
   }
 
-  val backUrl = Some(controllers.seis.routes.CompanyOrIndividualController.show(1).url)
-  val listOfInvestorsCompleteIndividualDetails = Vector(validModelWithPrevShareHoldings.copy(companyDetailsModel = None,
+  lazy val backUrl = Some(controllers.seis.routes.CompanyOrIndividualController.show(1).url)
+  lazy val listOfInvestorsCompleteIndividualDetails = Vector(validModelWithPrevShareHoldings.copy(companyDetailsModel = None,
     individualDetailsModel = Some(individualDetailsModel)))
   val listOfInvestorsIncompleteIndividualDetails = Vector(validModelWithPrevShareHoldings.copy(individualDetailsModel = None))
 

@@ -39,11 +39,11 @@ class PreviousShareHoldingNominalValueControllerSpec extends BaseSpec{
     override lazy val authConnector: AuthConnector = MockAuthConnector
   }
 
-  val backUrl = Some(controllers.seis.routes.PreviousShareHoldingDescriptionController.show(2).url)
+  lazy val backUrl = Some(controllers.seis.routes.PreviousShareHoldingDescriptionController.show(2).url)
   val obviouslyInvalidId = 9999
 
-  val listOfInvestorsEmptyShareHoldings =  Vector(validModelWithPrevShareHoldings.copy(previousShareHoldingModels = Some(Vector())))
-  val listOfInvestorsWithShareHoldings =  Vector(validModelWithPrevShareHoldings)
+  lazy val listOfInvestorsEmptyShareHoldings =  Vector(validModelWithPrevShareHoldings.copy(previousShareHoldingModels = Some(Vector())))
+  lazy val listOfInvestorsWithShareHoldings =  Vector(validModelWithPrevShareHoldings)
 
   def setupMocks(investorDetailsModel: Option[Vector[InvestorDetailsModel]], backURL : Option[String]): Unit = {
     mockEnrolledRequest(seisSchemeTypesModel)

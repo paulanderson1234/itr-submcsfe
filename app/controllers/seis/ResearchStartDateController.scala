@@ -21,7 +21,6 @@ import common.{Constants, KeystoreKeys}
 import config.FrontendGlobal.internalServerErrorTemplate
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector, SubmissionConnector}
-import controllers.predicates.FeatureSwitch
 import forms.ResearchStartDateForm._
 import models.ResearchStartDateModel
 import play.Logger
@@ -41,62 +40,59 @@ object ResearchStartDateController extends ResearchStartDateController{
 
 }
 
-trait ResearchStartDateController extends FrontendController with AuthorisedAndEnrolledForTAVC with FeatureSwitch {
+trait ResearchStartDateController extends FrontendController with AuthorisedAndEnrolledForTAVC {
 
   override val acceptedFlows = Seq(Seq(SEIS))
 
   val submissionConnector: SubmissionConnector
 
-  val show = featureSwitch(applicationConfig.seisFlowEnabled) {
-    AuthorisedAndEnrolled.async { implicit user => implicit request =>
-      s4lConnector.fetchAndGetFormData[ResearchStartDateModel](KeystoreKeys.researchStartDate).map {
-        case Some(data) => Ok(ResearchStartDate(researchStartDateForm.fill(data)))
-        case _ => Ok(ResearchStartDate(researchStartDateForm))
-      }
+  val show = AuthorisedAndEnrolled.async { implicit user => implicit request =>
+    s4lConnector.fetchAndGetFormData[ResearchStartDateModel](KeystoreKeys.researchStartDate).map {
+      case Some(data) => Ok(ResearchStartDate(researchStartDateForm.fill(data)))
+      case _ => Ok(ResearchStartDate(researchStartDateForm))
     }
   }
 
-  val submit = featureSwitch(applicationConfig.seisFlowEnabled) {
-    AuthorisedAndEnrolled.async { implicit user => implicit request =>
-      researchStartDateForm.bindFromRequest().fold(
-        formWithErrors => {
-          Future.successful(BadRequest(ResearchStartDate(formWithErrors)))
-        },
-        validFormData => {
-          s4lConnector.saveFormData(KeystoreKeys.researchStartDate, validFormData)
-          validFormData.hasStartedResearch match {
-            case Constants.StandardRadioButtonYesValue => {
-              submissionConnector.validateHasInvestmentTradeStartedCondition(validFormData.researchStartDay.get,
-                validFormData.researchStartMonth.get, validFormData.researchStartYear.get).map {
-                case Some(validated) =>
-                  if (validated) {
-                    s4lConnector.saveFormData(KeystoreKeys.backLinkShareIssueDate,
-                      routes.ResearchStartDateController.show().url)
 
-                    Redirect(routes.ShareIssueDateController.show())
-                  }
-                  else {
-                    s4lConnector.saveFormData(KeystoreKeys.backLinkSeventyPercentSpent, routes.ResearchStartDateController.show().url)
-                    Redirect(routes.SeventyPercentSpentController.show())
-                  }
-                case _ => {
-                  Logger.warn(s"[ResearchStartDateController][submit] - Call to validate investment trade start date in backend failed")
-                  InternalServerError(internalServerErrorTemplate)
+  val submit = AuthorisedAndEnrolled.async { implicit user => implicit request =>
+    researchStartDateForm.bindFromRequest().fold(
+      formWithErrors => {
+        Future.successful(BadRequest(ResearchStartDate(formWithErrors)))
+      },
+      validFormData => {
+        s4lConnector.saveFormData(KeystoreKeys.researchStartDate, validFormData)
+        validFormData.hasStartedResearch match {
+          case Constants.StandardRadioButtonYesValue => {
+            submissionConnector.validateHasInvestmentTradeStartedCondition(validFormData.researchStartDay.get,
+              validFormData.researchStartMonth.get, validFormData.researchStartYear.get).map {
+              case Some(validated) =>
+                if (validated) {
+                  s4lConnector.saveFormData(KeystoreKeys.backLinkShareIssueDate,
+                    routes.ResearchStartDateController.show().url)
+
+                  Redirect(routes.ShareIssueDateController.show())
                 }
-              }.recover {
-                case e: Exception => {
-                  Logger.warn(s"[ResearchStartDateController][submit] - Exception: ${e.getMessage}")
-                  InternalServerError(internalServerErrorTemplate)
+                else {
+                  s4lConnector.saveFormData(KeystoreKeys.backLinkSeventyPercentSpent, routes.ResearchStartDateController.show().url)
+                  Redirect(routes.SeventyPercentSpentController.show())
                 }
+              case _ => {
+                Logger.warn(s"[ResearchStartDateController][submit] - Call to validate investment trade start date in backend failed")
+                InternalServerError(internalServerErrorTemplate)
+              }
+            }.recover {
+              case e: Exception => {
+                Logger.warn(s"[ResearchStartDateController][submit] - Exception: ${e.getMessage}")
+                InternalServerError(internalServerErrorTemplate)
               }
             }
-            case Constants.StandardRadioButtonNoValue => {
-              s4lConnector.saveFormData(KeystoreKeys.backLinkSeventyPercentSpent, routes.ResearchStartDateController.show().url)
-              Future.successful(Redirect(routes.SeventyPercentSpentController.show()))
-            }
+          }
+          case Constants.StandardRadioButtonNoValue => {
+            s4lConnector.saveFormData(KeystoreKeys.backLinkSeventyPercentSpent, routes.ResearchStartDateController.show().url)
+            Future.successful(Redirect(routes.SeventyPercentSpentController.show()))
           }
         }
-      )
-    }
+      }
+    )
   }
 }

@@ -18,7 +18,6 @@ package controllers
 
 import auth.AuthorisedAndEnrolledForTAVC
 import common.KeystoreKeys
-import config.FrontendGlobal.internalServerErrorTemplate
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import play.api.Play.current

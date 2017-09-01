@@ -1,0 +1,39 @@
+@import views.html.helpers.backButtonWithProgress
+@import uk.gov.hmrc.play.views.html.helpers.form
+@import views.html.helpers.inputWithCurrencySymbol
+@import views.html.helpers.errorSummary
+
+@(nominalValueOfSharesForm: Form[NominalValueOfSharesModel])(implicit request: Request[_], messages: Messages)
+
+@main_template(Messages("page.nominalValueOfShares.title")) {
+    @backButtonWithProgress(controllers.eis.routes.NumberOfSharesController.show().url, Messages("common.section.progress.details.three"))
+
+    @errorSummary(nominalValueOfSharesForm, "nominal-value-of-shares", "nominalValueOfShares")
+
+    <h1 class="heading-xlarge">@Messages("page.nominalValueOfShares.title")</h1>
+
+    <div class = "form-group">
+        <p>@Messages("page.nominalValueOfShares.hint")</p>
+    </div>
+
+    @form(action = controllers.eis.routes.NominalValueOfSharesController.submit()) {
+        <div class="form-group">
+            @inputWithCurrencySymbol(
+            nominalValueOfSharesForm("nominalValueOfShares"),
+            '_divClass -> "form-label",
+            '_labelId -> "label-nominalValueOfShares",
+            '_label -> Messages("page.nominalValueOfShares.title"),
+            '_labelTextClass -> "visuallyhidden",
+            '_inputClass -> "input--no-spinner input--left-padding",
+            '_type -> "text",
+            '_maxlength -> "11",
+            'id -> "totalAmountSpent"
+            )
+
+        </div>
+
+        <div>
+            <button class="btn button" type="submit" id="next">@Messages("common.button.snc")</button>
+        </div>
+    }
+}

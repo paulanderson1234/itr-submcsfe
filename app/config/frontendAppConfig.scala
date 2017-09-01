@@ -39,8 +39,6 @@ trait AppConfig {
   val attachmentsFrontEndServiceBaseUrl: String
   val uploadFeatureEnabled: Boolean
   val submissionFrontendServiceBaseUrl: String
-  val seisFlowEnabled: Boolean
-  val eisseisFlowEnabled: Boolean
   val attachmentsServiceUrl: String
   val attachmentFileUploadOutsideUrl: String
 }
@@ -79,8 +77,6 @@ object FrontendAppConfig extends AppConfig with ServicesConfig {
       s"/$schemeType/check-your-answers&backUrl=$submissionFrontendServiceBaseUrl/$schemeType/supporting-documents-upload"
   }
   override lazy val uploadFeatureEnabled: Boolean = getFeature(s"$env.features.UploadEnabled")
-  override lazy val seisFlowEnabled: Boolean = getFeature(s"$env.features.seisFlowEnabled")
-  override lazy val eisseisFlowEnabled: Boolean = getFeature(s"$env.features.eisseisFlowEnabled")
 
   override lazy val attachmentsServiceUrl: String = baseUrl("investment-tax-relief-attachments")
 

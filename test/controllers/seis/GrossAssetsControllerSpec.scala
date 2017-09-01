@@ -38,7 +38,7 @@ class GrossAssetsControllerSpec extends BaseSpec {
     override lazy val enrolmentConnector = mockEnrolmentConnector
   }
 
-  val grossAssets = GrossAssetsModel(12345)
+  lazy val grossAssets = GrossAssetsModel(12345)
 
   "GrossAssetsController" should {
     "use the correct keystore connector" in {

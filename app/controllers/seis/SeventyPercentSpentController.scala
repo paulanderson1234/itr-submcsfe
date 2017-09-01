@@ -21,7 +21,6 @@ import common.{Constants, KeystoreKeys}
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.Helpers.ControllerHelpers
-import controllers.predicates.FeatureSwitch
 import forms.SeventyPercentSpentForm._
 import models.SeventyPercentSpentModel
 import uk.gov.hmrc.play.frontend.controller.FrontendController
@@ -38,52 +37,49 @@ object SeventyPercentSpentController extends SeventyPercentSpentController{
   override lazy val enrolmentConnector = EnrolmentConnector
 }
 
-trait SeventyPercentSpentController extends FrontendController with AuthorisedAndEnrolledForTAVC with FeatureSwitch {
+trait SeventyPercentSpentController extends FrontendController with AuthorisedAndEnrolledForTAVC {
 
   override val acceptedFlows = Seq(Seq(SEIS))
 
-  val show = featureSwitch(applicationConfig.seisFlowEnabled) {
-    AuthorisedAndEnrolled.async { implicit user => implicit request =>
+  val show = AuthorisedAndEnrolled.async { implicit user => implicit request =>
 
-      def routeRequest(backUrl: Option[String]) = {
-        if (backUrl.isDefined) {
-          s4lConnector.fetchAndGetFormData[SeventyPercentSpentModel](KeystoreKeys.seventyPercentSpent).map {
-            case Some(data) => Ok(SeventyPercentSpent(seventyPercentSpentForm.fill(data), backUrl.getOrElse("")))
-            case None => Ok(SeventyPercentSpent(seventyPercentSpentForm, backUrl.getOrElse("")))
-          }
+    def routeRequest(backUrl: Option[String]) = {
+      if (backUrl.isDefined) {
+        s4lConnector.fetchAndGetFormData[SeventyPercentSpentModel](KeystoreKeys.seventyPercentSpent).map {
+          case Some(data) => Ok(SeventyPercentSpent(seventyPercentSpentForm.fill(data), backUrl.getOrElse("")))
+          case None => Ok(SeventyPercentSpent(seventyPercentSpentForm, backUrl.getOrElse("")))
         }
-        else Future.successful(Redirect(routes.QualifyBusinessActivityController.show()))
       }
-      for {
-        link <- ControllerHelpers.getSavedBackLink(KeystoreKeys.backLinkSeventyPercentSpent, s4lConnector)
-        route <- routeRequest(link)
-      } yield route
+      else Future.successful(Redirect(routes.QualifyBusinessActivityController.show()))
     }
+    for {
+      link <- ControllerHelpers.getSavedBackLink(KeystoreKeys.backLinkSeventyPercentSpent, s4lConnector)
+      route <- routeRequest(link)
+    } yield route
   }
 
-  val submit = featureSwitch(applicationConfig.seisFlowEnabled) {
-    AuthorisedAndEnrolled.async { implicit user => implicit request =>
-      seventyPercentSpentForm.bindFromRequest().fold(
-        formWithErrors => {
-          ControllerHelpers.getSavedBackLink(KeystoreKeys.backLinkSeventyPercentSpent, s4lConnector).flatMap {
-            case Some(data) => Future.successful(BadRequest(SeventyPercentSpent(formWithErrors, data)))
-            case None => Future.successful(Redirect(routes.QualifyBusinessActivityController.show()))
-          }
-        },
-        validFormData => {
-          s4lConnector.saveFormData(KeystoreKeys.seventyPercentSpent, validFormData)
-          validFormData.isSeventyPercentSpent match {
-            case Constants.StandardRadioButtonYesValue => {
-              s4lConnector.saveFormData(KeystoreKeys.backLinkShareIssueDate,
-                routes.SeventyPercentSpentController.show().url)
-              
-              Future.successful(Redirect(routes.ShareIssueDateController.show()))
-            }
-            case Constants.StandardRadioButtonNoValue =>
-              Future.successful(Redirect(routes.SeventyPercentSpentErrorController.show()))
-          }
+
+  val submit = AuthorisedAndEnrolled.async { implicit user => implicit request =>
+    seventyPercentSpentForm.bindFromRequest().fold(
+      formWithErrors => {
+        ControllerHelpers.getSavedBackLink(KeystoreKeys.backLinkSeventyPercentSpent, s4lConnector).flatMap {
+          case Some(data) => Future.successful(BadRequest(SeventyPercentSpent(formWithErrors, data)))
+          case None => Future.successful(Redirect(routes.QualifyBusinessActivityController.show()))
         }
-      )
-    }
+      },
+      validFormData => {
+        s4lConnector.saveFormData(KeystoreKeys.seventyPercentSpent, validFormData)
+        validFormData.isSeventyPercentSpent match {
+          case Constants.StandardRadioButtonYesValue => {
+            s4lConnector.saveFormData(KeystoreKeys.backLinkShareIssueDate,
+              routes.SeventyPercentSpentController.show().url)
+
+            Future.successful(Redirect(routes.ShareIssueDateController.show()))
+          }
+          case Constants.StandardRadioButtonNoValue =>
+            Future.successful(Redirect(routes.SeventyPercentSpentErrorController.show()))
+        }
+      }
+    )
   }
 }

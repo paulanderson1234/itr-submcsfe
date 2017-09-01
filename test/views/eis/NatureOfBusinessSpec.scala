@@ -52,13 +52,14 @@ class NatureOfBusinessSpec extends ViewSpec {
       document.body.getElementById("back-link").attr("href") shouldEqual routes.ApplicationHubController.show().url
       document.select("a.back-link").text() shouldBe Messages("common.button.back")
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.one")
+      document.select(".error-summary").isEmpty shouldBe true
     }
 
     "Verify that the nature of business page contains the correct elements when an invalid NatureOfBusinessModel model is passed" in {
       val document: Document = Jsoup.parse(contentAsString(NatureOfBusiness(natureOfBusinessForm.bind(Map("natureOfBusiness" -> "")))))
 
       // Check the error summary is displayed - the whole purpose of this test
-      document.getElementById("error-summary-display").hasClass("error-summary--show")
+      document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe true
       // additional page checks to make sure everything else still as expected if errors on page
       document.title() shouldBe Messages("page.companyDetails.natureofbusiness.title")
       document.getElementById("main-heading").text() shouldBe Messages("page.companyDetails.natureofbusiness.heading")

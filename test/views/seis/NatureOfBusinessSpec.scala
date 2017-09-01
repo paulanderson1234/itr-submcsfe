@@ -51,13 +51,14 @@ class NatureOfBusinessSpec extends ViewSpec {
       document.select("input").attr("maxLength") shouldBe Constants.shortTextLimit.toString
       document.select("button").attr("type") shouldBe "submit"
       document.select("a.back-link").text() shouldBe Messages("common.button.back")
+      document.select(".error-summary").isEmpty shouldBe true
     }
 
     "Verify that the nature of business page contains the correct elements when an invalid NatureOfBusinessModel model is passed" in new SEISSetup {
       val document: Document = Jsoup.parse(contentAsString(NatureOfBusiness(natureOfBusinessForm.bind(Map("natureofbusiness" -> "")))))
 
       // Check the error summary is displayed - the whole purpose of this test
-      document.getElementById("error-summary-display").hasClass("error-summary--show")
+      document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe true
       // additional page checks to make sure everything else still as expected if errors on page
       document.title() shouldBe Messages("page.companyDetails.natureofbusiness.title")
       document.getElementById("main-heading").text() shouldBe Messages("page.companyDetails.natureofbusiness.heading")

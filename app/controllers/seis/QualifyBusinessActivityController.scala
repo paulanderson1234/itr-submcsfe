@@ -20,7 +20,6 @@ import auth.{AuthorisedAndEnrolledForTAVC, SEIS}
 import common.{Constants, KeystoreKeys}
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
-import controllers.predicates.FeatureSwitch
 import forms.QualifyBusinessActivityForm
 import models.QualifyBusinessActivityModel
 import uk.gov.hmrc.play.frontend.controller.FrontendController
@@ -38,42 +37,37 @@ object QualifyBusinessActivityController extends QualifyBusinessActivityControll
   override lazy val enrolmentConnector = EnrolmentConnector
 }
 
-trait QualifyBusinessActivityController extends FrontendController with AuthorisedAndEnrolledForTAVC with FeatureSwitch {
+trait QualifyBusinessActivityController extends FrontendController with AuthorisedAndEnrolledForTAVC {
 
   override val acceptedFlows = Seq(Seq(SEIS))
 
-  val show = featureSwitch(applicationConfig.seisFlowEnabled) {
-    AuthorisedAndEnrolled.async {
-      implicit user =>
-        implicit request => {
-          s4lConnector.fetchAndGetFormData[QualifyBusinessActivityModel](KeystoreKeys.isQualifyBusinessActivity).map {
-            case Some(data) => Ok(QualifyBusinessActivity(QualifyBusinessActivityForm.qualifyBusinessActivityForm.fill(data)))
-            case None => Ok(QualifyBusinessActivity(QualifyBusinessActivityForm.qualifyBusinessActivityForm))
-          }
+  val show = AuthorisedAndEnrolled.async {
+    implicit user =>
+      implicit request => {
+        s4lConnector.fetchAndGetFormData[QualifyBusinessActivityModel](KeystoreKeys.isQualifyBusinessActivity).map {
+          case Some(data) => Ok(QualifyBusinessActivity(QualifyBusinessActivityForm.qualifyBusinessActivityForm.fill(data)))
+          case None => Ok(QualifyBusinessActivity(QualifyBusinessActivityForm.qualifyBusinessActivityForm))
         }
-    }
-
+      }
   }
 
-  val submit = featureSwitch(applicationConfig.seisFlowEnabled) {
-    AuthorisedAndEnrolled.async { implicit user => implicit request =>
-      QualifyBusinessActivityForm.qualifyBusinessActivityForm.bindFromRequest().fold(
-        formWithErrors => {
-          Future.successful(BadRequest(QualifyBusinessActivity(formWithErrors)))
-        },
-        validFormData => {
-          s4lConnector.saveFormData(KeystoreKeys.isQualifyBusinessActivity, validFormData)
-          validFormData.isQualifyBusinessActivity match {
+  val submit = AuthorisedAndEnrolled.async { implicit user => implicit request =>
+    QualifyBusinessActivityForm.qualifyBusinessActivityForm.bindFromRequest().fold(
+      formWithErrors => {
+        Future.successful(BadRequest(QualifyBusinessActivity(formWithErrors)))
+      },
+      validFormData => {
+        s4lConnector.saveFormData(KeystoreKeys.isQualifyBusinessActivity, validFormData)
+        validFormData.isQualifyBusinessActivity match {
 
-            case Constants.qualifyPrepareToTrade => {
-              Future.successful(Redirect(routes.HasInvestmentTradeStartedController.show()))
-            }
-            case Constants.qualifyResearchAndDevelopment => {
-              Future.successful(Redirect(routes.ResearchStartDateController.show()))
-            }
+          case Constants.qualifyPrepareToTrade => {
+            Future.successful(Redirect(routes.HasInvestmentTradeStartedController.show()))
+          }
+          case Constants.qualifyResearchAndDevelopment => {
+            Future.successful(Redirect(routes.ResearchStartDateController.show()))
           }
         }
-      )
-    }
+      }
+    )
   }
 }
