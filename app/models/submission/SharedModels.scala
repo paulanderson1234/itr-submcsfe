@@ -51,7 +51,7 @@ case class UnitIssueModel(
 
 object SharedImplicits {
 
-  implicit val formatSubmiKitModel = Json.format[KiModel]
+  implicit val formatSubmitKiModel = Json.format[KiModel]
   implicit val formatSubmitCostModel = Json.format[CostModel]
   implicit val formatSubmitAnnualCostModel = Json.format[AnnualCostModel]
   implicit val formatSubmitTurnoverCostModel = Json.format[TurnoverCostModel]
