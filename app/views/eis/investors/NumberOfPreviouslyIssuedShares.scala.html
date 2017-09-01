@@ -1,0 +1,52 @@
+@import models.investorDetails.NumberOfPreviouslyIssuedSharesModel
+@import uk.gov.hmrc.play.views.html.helpers.form
+@import views.html.helpers.{backButtonWithProgress, input, errorSummary, hiddenField}
+
+@(companyOrIndividual: String, numberOfPreviouslyIssuedSharesForm: Form[NumberOfPreviouslyIssuedSharesModel], backUrl: String, investorProcessingId: Int)(implicit request: Request[_], messages: Messages)
+
+@main_template(Messages("page.investors.numberOfPreviouslyIssuedShares.title", companyOrIndividual.toLowerCase())) {
+
+@backButtonWithProgress(backUrl, Messages("common.section.progress.details.four"))
+
+@errorSummary(numberOfPreviouslyIssuedSharesForm, "number-of-previously-issued-shares", "numberOfPreviouslyIssuedSharesCount")
+
+<h1 class="heading-xlarge" id="main-heading">@Messages("page.investors.numberOfPreviouslyIssuedShares.heading", companyOrIndividual.toLowerCase())</h1>
+
+<div>
+    @form(action = controllers.eis.routes.NumberOfPreviouslyIssuedSharesController.submit(Some(companyOrIndividual), Some(investorProcessingId))) {
+    <fieldset>
+        <legend class="visuallyhidden">@Messages("page.investors.numberOfPreviouslyIssuedShares.heading", companyOrIndividual.toLowerCase())</legend>
+        <div class="form-group">
+            @input(
+            numberOfPreviouslyIssuedSharesForm("numberOfPreviouslyIssuedShares"),
+            '_divClass -> "form-label",
+            '_labelId -> "label-numberOfPreviouslyIssuedShares",
+            '_label -> Messages("page.investors.numberOfPreviouslyIssuedShares.heading", companyOrIndividual.toLowerCase()),
+            '_labelTextClass -> "visuallyhidden",
+            '_maxlength -> "25",
+            '_inputClass -> "input--fullwidth"
+            )
+        </div>
+    </fieldset>
+
+    <div>
+        @hiddenField(
+            numberOfPreviouslyIssuedSharesForm("processingId"),
+        'id -> "processingId"
+        )
+    </div>
+
+    <div>
+        @hiddenField(
+        numberOfPreviouslyIssuedSharesForm("investorProcessingId"),
+        'id -> "investorProcessingId"
+        )
+    </div>
+
+    <div class="form-group">
+        <button class="btn button" type="submit" id="next">@Messages("common.button.snc")</button>
+    </div>
+
+    }
+</div>
+}

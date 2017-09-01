@@ -38,8 +38,8 @@ class HowMuchSpentOnSharesControllerSpec extends BaseSpec  {
     override lazy val authConnector: AuthConnector = MockAuthConnector
   }
 
-  val backUrl = Some(controllers.seis.routes.NumberOfSharesPurchasedController.show(1).url)
-  val listOfInvestorsIncompleteHowMuchSpentOnShares =  Vector(validModelWithPrevShareHoldings.copy(amountSpentModel = None))
+  lazy val backUrl = Some(controllers.seis.routes.NumberOfSharesPurchasedController.show(1).url)
+  lazy val listOfInvestorsIncompleteHowMuchSpentOnShares =  Vector(validModelWithPrevShareHoldings.copy(amountSpentModel = None))
 
   def setupMocks(investorDetailsModel: Option[Vector[InvestorDetailsModel]], backURL : Option[String]): Unit = {
     mockEnrolledRequest(seisSchemeTypesModel)

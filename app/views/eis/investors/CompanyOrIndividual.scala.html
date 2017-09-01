@@ -1,0 +1,48 @@
+@import models.CompanyOrIndividualModel
+@import uk.gov.hmrc.play.views.html.helpers.form
+@import common.Constants
+@import views.html.helpers.{backButtonWithProgress, formInputRadioGroup, errorSummary, hiddenField}
+
+@(investorOrNominee: String, companyOrIndividualForm: Form[CompanyOrIndividualModel], backUrl: String)(implicit request: Request[_], messages: Messages)
+
+@main_template(Messages("page.investors.companyOrIndividual.title", investorOrNominee)) {
+
+@backButtonWithProgress(backUrl, Messages("common.section.progress.details.four"))
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+
+        @errorSummary(companyOrIndividualForm, "company-or-individual", "companyOrIndividual")
+
+        <h1 id="main-heading" class="form-title heading-xlarge">@Messages("page.investors.companyOrIndividual.heading", investorOrNominee)</h1>
+
+        @form(action = controllers.eis.routes.CompanyOrIndividualController.submit(Some(investorOrNominee))) {
+        <div class="form-group">
+            @formInputRadioGroup(
+            field = companyOrIndividualForm("companyOrIndividual"),
+            Seq(
+            Constants.typeCompany -> Messages("page.investors.companyOrIndividual.company"),
+            Constants.typeIndividual -> Messages("page.investors.companyOrIndividual.individual")),
+            '_legend -> Messages("page.investors.companyOrIndividual.heading", investorOrNominee),
+            '_legendClass -> "visuallyhidden",
+            '_labelAfter -> true,
+            '_labelClass -> "block-label",
+            '_legendID -> "companyOrIndividual",
+            '_groupClass -> "block"
+            )
+        </div>
+
+        <div>
+            @hiddenField(
+            companyOrIndividualForm("processingId"),
+            'id -> "processingId"
+            )
+        </div>
+
+        <div class="form-group">
+            <button class="btn button" type="submit" id="next">@Messages("common.button.snc")</button>
+        </div>
+        }
+    </div>
+</div>
+}

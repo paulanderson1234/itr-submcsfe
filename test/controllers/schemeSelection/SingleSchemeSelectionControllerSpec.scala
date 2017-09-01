@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers.eisseis
+package controllers.schemeSelection
 
 import auth.{MockConfigSingleFlow, MockAuthConnector, MockConfig}
 import common.{Constants, KeystoreKeys}
@@ -84,7 +84,7 @@ class SingleSchemeSelectionControllerSpec extends BaseSpec {
         (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(eisSchemeTypesModel)
       when(mockS4lConnector.saveFormData(Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(cacheMapSchemeTypesEis)
       val formInput = "singleSchemeSelection" -> Constants.schemeTypeEis
-      submitWithSessionAndAuth(TestController.submit,formInput)(
+      submitWithSessionAndAuth(TestController.submit(),formInput)(
         result => {
           status(result) shouldBe SEE_OTHER
           redirectLocation(result) shouldBe Some(controllers.eis.routes.NatureOfBusinessController.show().url)
@@ -100,7 +100,7 @@ class SingleSchemeSelectionControllerSpec extends BaseSpec {
         (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(seisSchemeTypesModel)
       when(mockS4lConnector.saveFormData(Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(cacheMapSchemeTypesSeis)
       val formInput = "singleSchemeSelection" -> Constants.schemeTypeSeis
-      submitWithSessionAndAuth(TestController.submit,formInput)(
+      submitWithSessionAndAuth(TestController.submit(),formInput)(
         result => {
           status(result) shouldBe SEE_OTHER
           redirectLocation(result) shouldBe Some(controllers.seis.routes.NatureOfBusinessController.show().url)
@@ -108,18 +108,33 @@ class SingleSchemeSelectionControllerSpec extends BaseSpec {
       )
     }
   }
+//
+//  "Sending a valid 'SEIS' form submit to the SingleSchemeSelectionController when authenticated and enrolled" should {
+//    "redirect to review schemes page" in {
+//      mockEnrolledRequest(None)
+//      when(mockS4lConnector.fetchAndGetFormData[SchemeTypesModel](Matchers.eq(KeystoreKeys.selectedSchemes))
+//        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(seisSchemeTypesModel)
+//      when(mockS4lConnector.saveFormData(Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(cacheMapSchemeTypesSeis)
+//      val formInput = "singleSchemeSelection" -> Constants.schemeTypeSeis
+//      submitWithSessionAndAuth(TestController.submit(),formInput)(
+//        result => {
+//          status(result) shouldBe SEE_OTHER
+//          redirectLocation(result) shouldBe Some(controllers.seis.routes.NatureOfBusinessController.show().url)
+//        }
+//      )
+//    }
+//  }
 
-  "Sending a valid 'VCT' form submit to the SingleSchemeSelectionController when authenticated and enrolled" should {
-    "redirect to review schemes page" in {
+  "Sending an invlaid 'VCT' form submit to the SingleSchemeSelectionController when authenticated and enrolled" should {
+    "respond with a bad request" in {
       mockEnrolledRequest(None)
       when(mockS4lConnector.fetchAndGetFormData[SchemeTypesModel](Matchers.eq(KeystoreKeys.selectedSchemes))
         (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(vctSchemeTypesModel)
       when(mockS4lConnector.saveFormData(Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(cacheMapSchemeTypesVct)
       val formInput = "singleSchemeSelection" -> Constants.schemeTypeVct
-      submitWithSessionAndAuth(TestController.submit,formInput)(
+      submitWithSessionAndAuth(TestController.submit(),formInput)(
         result => {
-          status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(controllers.eis.routes.NatureOfBusinessController.show().url)
+          status(result) shouldBe BAD_REQUEST
         }
       )
     }
@@ -129,7 +144,7 @@ class SingleSchemeSelectionControllerSpec extends BaseSpec {
     "redirect to itself" in {
       mockEnrolledRequest(None)
       val formInput = "singleSchemeSelection" -> ""
-      submitWithSessionAndAuth(TestController.submit,formInput)(
+      submitWithSessionAndAuth(TestController.submit(),formInput)(
         result => {
           status(result) shouldBe BAD_REQUEST
         }

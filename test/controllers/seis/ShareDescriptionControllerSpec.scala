@@ -30,7 +30,7 @@ import scala.concurrent.Future
 
 class ShareDescriptionControllerSpec extends BaseSpec {
 
-  val validBackLink = controllers.seis.routes.HadOtherInvestmentsController.show().toString
+  lazy val validBackLink = controllers.seis.routes.HadOtherInvestmentsController.show().toString
 
   object TestController extends ShareDescriptionController {
     override lazy val applicationConfig = MockConfig

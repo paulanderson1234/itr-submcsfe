@@ -21,7 +21,6 @@ import common.KeystoreKeys
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.Helpers.{ControllerHelpers, PreviousInvestorsHelper}
-import controllers.predicates.FeatureSwitch
 import models.investorDetails._
 import play.api.Play.current
 import play.api.i18n.Messages.Implicits._
@@ -35,31 +34,26 @@ object DeleteInvestorController extends DeleteInvestorController {
   override lazy val enrolmentConnector = EnrolmentConnector
 }
 
-trait DeleteInvestorController extends FrontendController with AuthorisedAndEnrolledForTAVC with FeatureSwitch with ControllerHelpers {
+trait DeleteInvestorController extends FrontendController with AuthorisedAndEnrolledForTAVC with ControllerHelpers {
 
   override val acceptedFlows = Seq(Seq(SEIS))
 
-  val show: Int => Action[AnyContent] = id => featureSwitch(applicationConfig.seisFlowEnabled) {
-    AuthorisedAndEnrolled.async { implicit user => implicit request =>
-      s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map { vector =>
-        redirectNoInvestors(vector) { data =>
-          val itemToUpdateIndex = getInvestorIndex(id, data)
-          redirectInvalidInvestor(itemToUpdateIndex) { index =>
-            Ok(views.html.seis.investors.DeleteInvestor(retrieveInvestorData(index, data)(model =>
-              Option(model.copy(previousShareHoldingModels = None))).get))
-          }
+  val show: Int => Action[AnyContent] = id => AuthorisedAndEnrolled.async { implicit user => implicit request =>
+    s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map { vector =>
+      redirectNoInvestors(vector) { data =>
+        val itemToUpdateIndex = getInvestorIndex(id, data)
+        redirectInvalidInvestor(itemToUpdateIndex) { index =>
+          Ok(views.html.seis.investors.DeleteInvestor(retrieveInvestorData(index, data)(model =>
+            Option(model.copy(previousShareHoldingModels = None))).get))
         }
       }
     }
   }
 
-
-  def submit(investorProcessingId: Int): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
-    AuthorisedAndEnrolled.async { implicit user =>
-      implicit request =>
-        PreviousInvestorsHelper.removeKeystorePreviousInvestment(s4lConnector, investorProcessingId).map{
-          data => Redirect(controllers.seis.routes.ReviewAllInvestorsController.show())
-        }
-    }
+  def submit(investorProcessingId: Int): Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user =>
+    implicit request =>
+      PreviousInvestorsHelper.removeKeystorePreviousInvestment(s4lConnector, investorProcessingId).map {
+        data => Redirect(controllers.seis.routes.ReviewAllInvestorsController.show())
+      }
   }
 }

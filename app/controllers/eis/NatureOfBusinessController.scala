@@ -16,21 +16,20 @@
 
 package controllers.eis
 
-import auth.{AuthorisedAndEnrolledForTAVC, EIS, VCT}
+import auth.{AuthorisedAndEnrolledForTAVC, EIS}
+import common.KeystoreKeys
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
-import uk.gov.hmrc.play.frontend.controller.FrontendController
-import models.NatureOfBusinessModel
-import common.KeystoreKeys
 import forms.NatureOfBusinessForm._
-import play.api.i18n.Messages.Implicits._
+import models.NatureOfBusinessModel
 import play.api.Play.current
-
-import scala.concurrent.Future
+import play.api.i18n.Messages.Implicits._
+import uk.gov.hmrc.play.frontend.controller.FrontendController
 import views.html.eis.companyDetails.NatureOfBusiness
 
-object NatureOfBusinessController extends NatureOfBusinessController
-{
+import scala.concurrent.Future
+
+object NatureOfBusinessController extends NatureOfBusinessController {
   override lazy val s4lConnector = S4LConnector
   override lazy val applicationConfig = FrontendAppConfig
   override lazy val authConnector = FrontendAuthConnector
@@ -39,7 +38,7 @@ object NatureOfBusinessController extends NatureOfBusinessController
 
 trait NatureOfBusinessController extends FrontendController with AuthorisedAndEnrolledForTAVC {
 
-  override val acceptedFlows = Seq(Seq(EIS),Seq(VCT),Seq(EIS,VCT))
+  override val acceptedFlows = Seq(Seq(EIS))
 
   val show = AuthorisedAndEnrolled.async { implicit user => implicit request =>
     s4lConnector.fetchAndGetFormData[NatureOfBusinessModel](KeystoreKeys.natureOfBusiness).map {

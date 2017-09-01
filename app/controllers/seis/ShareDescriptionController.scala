@@ -23,7 +23,6 @@ import auth.{AuthorisedAndEnrolledForTAVC, SEIS}
 import common.KeystoreKeys
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
-import controllers.predicates.FeatureSwitch
 import forms.ShareDescriptionForm._
 import models.ShareDescriptionModel
 import uk.gov.hmrc.play.frontend.controller.FrontendController
@@ -39,43 +38,39 @@ object ShareDescriptionController extends ShareDescriptionController {
 
 }
 
-trait ShareDescriptionController extends FrontendController with AuthorisedAndEnrolledForTAVC with FeatureSwitch {
+trait ShareDescriptionController extends FrontendController with AuthorisedAndEnrolledForTAVC {
 
   override val acceptedFlows = Seq(Seq(SEIS))
 
-  val show = featureSwitch(applicationConfig.seisFlowEnabled) {
-    AuthorisedAndEnrolled.async { implicit user => implicit request =>
-      def routeRequest(backUrl: Option[String]) = {
-        if (backUrl.isDefined) {
-          s4lConnector.fetchAndGetFormData[ShareDescriptionModel](KeystoreKeys.shareDescription).map {
-            case Some(data) => Ok(ShareDescription(shareDescriptionForm.fill(data), backUrl.get))
-            case None => Ok(ShareDescription(shareDescriptionForm, backUrl.get))
-          }
-        }
-        else {
-          Future.successful(Redirect(controllers.seis.routes.HadOtherInvestmentsController.show()))
+  val show = AuthorisedAndEnrolled.async { implicit user => implicit request =>
+    def routeRequest(backUrl: Option[String]) = {
+      if (backUrl.isDefined) {
+        s4lConnector.fetchAndGetFormData[ShareDescriptionModel](KeystoreKeys.shareDescription).map {
+          case Some(data) => Ok(ShareDescription(shareDescriptionForm.fill(data), backUrl.get))
+          case None => Ok(ShareDescription(shareDescriptionForm, backUrl.get))
         }
       }
-
-      for {
-        link <- ControllerHelpers.getSavedBackLink(KeystoreKeys.backLinkShareDescription, s4lConnector)
-        route <- routeRequest(link)
-      } yield route
+      else {
+        Future.successful(Redirect(controllers.seis.routes.HadOtherInvestmentsController.show()))
+      }
     }
+
+    for {
+      link <- ControllerHelpers.getSavedBackLink(KeystoreKeys.backLinkShareDescription, s4lConnector)
+      route <- routeRequest(link)
+    } yield route
   }
 
-  val submit = featureSwitch(applicationConfig.seisFlowEnabled) {
-    AuthorisedAndEnrolled.async { implicit user => implicit request =>
-      shareDescriptionForm.bindFromRequest().fold(
-        formWithErrors => {
-          ControllerHelpers.getSavedBackLink(KeystoreKeys.backLinkShareDescription, s4lConnector).flatMap(url =>
-            Future.successful(BadRequest(ShareDescription(formWithErrors,url.get))))
-        },
-        validFormData => {
-          s4lConnector.saveFormData(KeystoreKeys.shareDescription, validFormData)
-          Future.successful(Redirect(controllers.seis.routes.NumberOfSharesController.show()))
-        }
-      )
-    }
+  val submit = AuthorisedAndEnrolled.async { implicit user => implicit request =>
+    shareDescriptionForm.bindFromRequest().fold(
+      formWithErrors => {
+        ControllerHelpers.getSavedBackLink(KeystoreKeys.backLinkShareDescription, s4lConnector).flatMap(url =>
+          Future.successful(BadRequest(ShareDescription(formWithErrors, url.get))))
+      },
+      validFormData => {
+        s4lConnector.saveFormData(KeystoreKeys.shareDescription, validFormData)
+        Future.successful(Redirect(controllers.seis.routes.NumberOfSharesController.show()))
+      }
+    )
   }
 }

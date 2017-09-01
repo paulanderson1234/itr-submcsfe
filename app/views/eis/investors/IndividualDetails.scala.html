@@ -1,0 +1,123 @@
+@import models.IndividualDetailsModel
+@import common.Constants
+@import uk.gov.hmrc.play.views.html.helpers.form
+@import views.html.helpers.{backButtonWithProgress, input, errorSummary, dropdown, hiddenField}
+@(individualDetailsForm: Form[IndividualDetailsModel], listOfIsoCode: List[(String, String)], backUrl: String)(implicit request: Request[_], messages: Messages)
+
+@main_template(Messages("page.individualDetails.title")) {
+
+@backButtonWithProgress(backUrl, Messages("common.section.progress.details.four"))
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+
+        @errorSummary(individualDetailsForm, "individual-details", "postcode")
+
+        <h1 id="main-heading" class="form-title heading-xlarge">@Messages("page.individualDetails.title")</h1>
+
+        @form(action = controllers.eis.routes.IndividualDetailsController.submit()) {
+        <div class="form-group">
+
+            @input(
+            individualDetailsForm("forename"),
+            '_divClass -> "form-label",
+            '_labelId -> "label-forename",
+            '_label -> Messages("page.individualDetails.forename.label"),
+            '_maxlength -> Constants.forenameLength,
+            '_inputClass -> "input--medium input--cleared",
+            'id -> "forename"
+            )
+        </div>
+
+        <div class="form-group">
+            @input(
+            individualDetailsForm("surname"),
+            '_divClass -> "form-label",
+            '_labelId -> "label-surname",
+            '_label -> Messages("page.individualDetails.surname.label"),
+            '_maxlength -> Constants.surnameLength,
+            '_inputClass -> "input--medium input--cleared",
+            'id -> "surname"
+            )
+        </div>
+
+        <div class="form-group">
+            @input(
+            individualDetailsForm("addressline1"),
+            '_divClass -> "form-label",
+            '_labelId -> "label-addressline1",
+            '_label -> Messages("page.individualDetails.addressline1.label"),
+            '_maxlength -> Constants.addressLineLength,
+            '_inputClass -> "input--medium input--cleared",
+            'id -> "addressline1"
+            )
+        </div>
+        <div class="form-group">
+            @input(
+            individualDetailsForm("addressline2"),
+            '_divClass -> "form-label",
+            '_labelId -> "label-addressline2",
+            '_label -> Messages("page.individualDetails.addressline2.label"),
+            '_maxlength -> Constants.addressLineLength,
+            '_inputClass -> "input--medium input--cleared",
+            'id -> "addressline2"
+            )
+        </div>
+        <div class="form-group">
+            @input(
+            individualDetailsForm("addressline3"),
+            '_divClass -> "form-label",
+            '_labelId -> "label-addressline3",
+            '_label -> Messages("page.individualDetails.addressline3.label"),
+            '_maxlength -> Constants.addressLineLength,
+            '_inputClass -> "input--medium input--cleared",
+            'id -> "addressline3"
+            )
+        </div>
+        <div class="form-group">
+            @input(
+            individualDetailsForm("addressline4"),
+            '_divClass -> "form-label",
+            '_labelId -> "label-addressline4",
+            '_label -> Messages("page.individualDetails.addressline4.label"),
+            '_maxlength -> Constants.addressLineLength,
+            '_inputClass -> "input--medium input--cleared",
+            'id -> "addressline4"
+            )
+        </div>
+        <div class="form-group">
+            @input(
+            individualDetailsForm("postcode"),
+            '_divClass -> "form-label",
+            '_labelId -> "label-postcode",
+            '_label -> Messages("page.individualDetails.postcode.label"),
+            '_maxlength -> "10",
+            '_inputClass -> "input--small input--cleared",
+            'id -> "postcode"
+            )
+        </div>
+        <div class="form-group">
+            @dropdown(individualDetailsForm("countryCode"),
+            elementOptions = listOfIsoCode,
+            displayEmptyValue = true,
+            '_emptyValueText -> Messages("page.address.country.select"),
+            '_labelId -> "label-country",
+            '_id -> "countryCode",
+            '_inputClass -> "input--medium input--cleared",
+            '_label -> Html(Messages("page.contactInformation.ProvideContactAddress.country.label")))
+        </div>
+
+        <div>
+            @hiddenField(
+            individualDetailsForm("processingId"),
+            'id -> "processingId"
+            )
+        </div>
+
+        <div class="form-group">
+            <button class="btn button" id="next">@Messages("common.button.snc")</button>
+        </div>
+        }
+    </div>
+</div>
+}

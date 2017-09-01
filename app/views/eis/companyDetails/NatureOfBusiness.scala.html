@@ -7,18 +7,18 @@
 
 @main_template(Messages("page.companyDetails.natureofbusiness.title")) {
 
-@backButtonWithProgress(controllers.routes.ApplicationHubController.show().url, Messages("common.section.progress.details.one"))
+    @backButtonWithProgress(controllers.routes.ApplicationHubController.show().url, Messages("common.section.progress.details.one"))
 
     @errorSummary(natureOfbusinessForm, "nature-of-business", "natureofbusiness")
 
     <h1 id="main-heading" class="form-title heading-xlarge">@Messages("page.companyDetails.natureofbusiness.heading")</h1>
 
-    <div class="form-hint">
+    <div>
         <p id="description-two" class="lede">@Messages("page.companyDetails.natureofbusiness.example.text")</p>
     </div>
 
 
-    <div class="form-hint">
+    <div>
         <ul class="list list-bullet">
             <li id="bullet-one">@Messages("page.companyDetails.natureofbusiness.bullet.one")</li>
             <li id="bullet-two">@Messages("page.companyDetails.natureofbusiness.bullet.two")</li>
@@ -29,26 +29,27 @@
 
     @form(action = controllers.eis.routes.NatureOfBusinessController.submit()) {
 
-    <fieldset>
-        <legend class="visuallyhidden">@Messages("page.companyDetails.natureofbusiness.heading")</legend>
-        <div class="form-group">
-            @input(
-            natureOfbusinessForm("natureofbusiness"),
-            '_divClass -> "form-label",
-            '_labelId -> "label-natureofbusiness",
-            '_hintId -> "label-natureofbusiness-hint",
-            '_label -> Messages("page.companyDetails.natureofbusiness.heading"),
-            '_labelTextClass -> "visuallyhidden",
-            '_inputClass -> "input--fullwidth",
-            '_maxlength-> Constants.shortTextLimit,
-            '_inputHint -> Messages("page.companyDetails.natureofbusiness.question.hint"),
-            'id -> "utr"
-            )
+        <fieldset>
+            <legend class="visuallyhidden">@Messages("page.companyDetails.natureofbusiness.heading")</legend>
+            <div class="form-group">
+                @input(
+                    natureOfbusinessForm("natureofbusiness"),
+                    '_divClass -> "form-label",
+                    '_labelId -> "label-natureofbusiness",
+                    '_hintId -> "label-natureofbusiness-hint",
+                    '_label -> Messages("page.companyDetails.natureofbusiness.heading"),
+                    '_labelTextClass -> "visuallyhidden",
+                    '_inputClass -> "input--fullwidth",
+                    '_maxlength-> Constants.shortTextLimit,
+                    '_inputHint -> Messages("page.companyDetails.natureofbusiness.question.hint"),
+                    'id -> "utr"
+                )
 
+            </div>
+        </fieldset>
+        <div class="form-group">
+            <button class="btn button" type="submit" id="next">@Messages("common.button.snc")</button>
         </div>
-    </fieldset>
-    <div class="form-group">
-        <button class="btn button" type="submit" id="next">@Messages("common.button.snc")</button>
-    </div>
+
     }
 }

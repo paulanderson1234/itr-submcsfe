@@ -21,7 +21,6 @@ import common.KeystoreKeys
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.Helpers.{ControllerHelpers, PreviousInvestorShareHoldersHelper}
-import controllers.predicates.FeatureSwitch
 import forms.PreviousShareHoldingDescriptionForm._
 import models.investorDetails.{InvestorDetailsModel, PreviousShareHoldingDescriptionModel}
 import play.api.Play.current
@@ -39,51 +38,47 @@ object PreviousShareHoldingDescriptionController extends PreviousShareHoldingDes
   override lazy val enrolmentConnector = EnrolmentConnector
 }
 
-trait PreviousShareHoldingDescriptionController extends FrontendController with AuthorisedAndEnrolledForTAVC with FeatureSwitch with ControllerHelpers {
+trait PreviousShareHoldingDescriptionController extends FrontendController with AuthorisedAndEnrolledForTAVC with ControllerHelpers {
 
   override val acceptedFlows = Seq(Seq(SEIS))
 
-  def show(investorProcessingId: Int, id: Option[Int]): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
-    AuthorisedAndEnrolled.async { implicit user =>
-      implicit request =>
+  def show(investorProcessingId: Int, id: Option[Int]): Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user =>
+    implicit request =>
 
-        def process(backUrl: Option[String]) = {
-          if (backUrl.isDefined) {
-            s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
-              vector =>
+      def process(backUrl: Option[String]) = {
+        if (backUrl.isDefined) {
+          s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
+            vector =>
               redirectNoInvestors(vector) {
                 data => redirectInvalidInvestor(getInvestorIndex(investorProcessingId, data)) { investorIdVal =>
-                  val previousShares = retrieveInvestorData(investorIdVal,data)(_.previousShareHoldingModels)
+                  val previousShares = retrieveInvestorData(investorIdVal, data)(_.previousShareHoldingModels)
                   val form = fillForm[PreviousShareHoldingDescriptionModel](previousShareHoldingDescriptionForm,
-                    id.flatMap (idVal =>
+                    id.flatMap(idVal =>
                       retrieveShareData(getShareIndex(idVal, previousShares.getOrElse(Vector.empty)),
-                      previousShares)(_.previousShareHoldingDescriptionModel)))
-                  if(data.lift(getInvestorIndex(investorProcessingId, data)).get.companyOrIndividualModel.isDefined)
+                        previousShares)(_.previousShareHoldingDescriptionModel)))
+                  if (data.lift(getInvestorIndex(investorProcessingId, data)).get.companyOrIndividualModel.isDefined)
                     Ok(PreviousShareHoldingDescription(retrieveInvestorData(investorIdVal,
                       data)(_.companyOrIndividualModel.map(_.companyOrIndividual)).get,
                       form, backUrl.get, investorProcessingId))
                   else Redirect(routes.CompanyOrIndividualController.show(investorProcessingId))
                 }
               }
-            }
           }
-          else Future.successful(Redirect(controllers.seis.routes.AddInvestorOrNomineeController.show()))
         }
-        for {
-          backUrl <- s4lConnector.fetchAndGetFormData[String](KeystoreKeys.backLinkShareClassAndDescription)
-          route <- process(backUrl)
-        } yield route
-    }
+        else Future.successful(Redirect(controllers.seis.routes.AddInvestorOrNomineeController.show()))
+      }
+      for {
+        backUrl <- s4lConnector.fetchAndGetFormData[String](KeystoreKeys.backLinkShareClassAndDescription)
+        route <- process(backUrl)
+      } yield route
   }
 
-  def submit(companyOrIndividual: Option[String], investorProcessingId: Option[Int]): Action[AnyContent] =
-    featureSwitch(applicationConfig.seisFlowEnabled) {
-    AuthorisedAndEnrolled.async { implicit user =>
+  def submit(companyOrIndividual: Option[String], investorProcessingId: Option[Int]): Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user =>
       implicit request =>
         previousShareHoldingDescriptionForm.bindFromRequest().fold(
           formWithErrors => {
             ControllerHelpers.getSavedBackLink(KeystoreKeys.backLinkShareClassAndDescription, s4lConnector).flatMap(url =>
-            Future.successful(BadRequest(PreviousShareHoldingDescription(companyOrIndividual.get, formWithErrors, url.get, investorProcessingId.get))))
+              Future.successful(BadRequest(PreviousShareHoldingDescription(companyOrIndividual.get, formWithErrors, url.get, investorProcessingId.get))))
           },
           validFormData => {
             validFormData.processingId match {
@@ -97,7 +92,7 @@ trait PreviousShareHoldingDescriptionController extends FrontendController with 
               case None => PreviousInvestorShareHoldersHelper.addShareClassAndDescription(s4lConnector, validFormData, investorProcessingId.get).map {
                 data => {
                   s4lConnector.saveFormData(KeystoreKeys.backLinkShareClassAndDescription,
-                      routes.PreviousShareHoldingsReviewController.show(data.investorProcessingId.get).url)
+                    routes.PreviousShareHoldingsReviewController.show(data.investorProcessingId.get).url)
                   s4lConnector.saveFormData(KeystoreKeys.backLinkIsPreviousShareHoldingNominalValue,
                     routes.PreviousShareHoldingDescriptionController.show(data.investorProcessingId.get, data.processingId).url)
                   Redirect(routes.PreviousShareHoldingNominalValueController.show(data.investorProcessingId.get, data.processingId.get))
@@ -107,5 +102,4 @@ trait PreviousShareHoldingDescriptionController extends FrontendController with 
           }
         )
     }
-  }
 }

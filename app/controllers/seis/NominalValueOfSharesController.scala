@@ -20,7 +20,6 @@ import auth.{AuthorisedAndEnrolledForTAVC, SEIS}
 import common.KeystoreKeys
 import config.{AppConfig, FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
-import controllers.predicates.FeatureSwitch
 import forms.NominalValueOfSharesForm._
 import models.NominalValueOfSharesModel
 import play.api.Play.current
@@ -39,36 +38,32 @@ object NominalValueOfSharesController extends NominalValueOfSharesController {
   override lazy val authConnector: AuthConnector = FrontendAuthConnector
 }
 
-trait NominalValueOfSharesController extends FrontendController with AuthorisedAndEnrolledForTAVC with FeatureSwitch {
+trait NominalValueOfSharesController extends FrontendController with AuthorisedAndEnrolledForTAVC {
 
   override val acceptedFlows = Seq(Seq(SEIS))
 
-  val show: Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
-    AuthorisedAndEnrolled.async {
-      implicit user =>
-        implicit request =>
-          s4lConnector.fetchAndGetFormData[NominalValueOfSharesModel](KeystoreKeys.nominalValueOfShares).map {
-            case Some(data) => Ok(views.html.seis.shareDetails.NominalValueOfShares(nominalValueOfSharesForm.fill(data)))
-            case None => Ok(views.html.seis.shareDetails.NominalValueOfShares(nominalValueOfSharesForm))
-          }
-    }
+  val show: Action[AnyContent] = AuthorisedAndEnrolled.async {
+    implicit user =>
+      implicit request =>
+        s4lConnector.fetchAndGetFormData[NominalValueOfSharesModel](KeystoreKeys.nominalValueOfShares).map {
+          case Some(data) => Ok(views.html.seis.shareDetails.NominalValueOfShares(nominalValueOfSharesForm.fill(data)))
+          case None => Ok(views.html.seis.shareDetails.NominalValueOfShares(nominalValueOfSharesForm))
+        }
   }
 
-  val submit: Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
-    AuthorisedAndEnrolled.async {
-      implicit user =>
-        implicit request =>
-          val success: NominalValueOfSharesModel => Future[Result] = { model =>
-            s4lConnector.saveFormData(KeystoreKeys.nominalValueOfShares, model).map(_ =>
-              Redirect(controllers.seis.routes.TotalAmountRaisedController.show())
-            )
-          }
+  val submit: Action[AnyContent] = AuthorisedAndEnrolled.async {
+    implicit user =>
+      implicit request =>
+        val success: NominalValueOfSharesModel => Future[Result] = { model =>
+          s4lConnector.saveFormData(KeystoreKeys.nominalValueOfShares, model).map(_ =>
+            Redirect(controllers.seis.routes.TotalAmountRaisedController.show())
+          )
+        }
 
-          val failure: Form[NominalValueOfSharesModel] => Future[Result] = { form =>
-            Future.successful(BadRequest(views.html.seis.shareDetails.NominalValueOfShares(form)))
-          }
+        val failure: Form[NominalValueOfSharesModel] => Future[Result] = { form =>
+          Future.successful(BadRequest(views.html.seis.shareDetails.NominalValueOfShares(form)))
+        }
 
-          nominalValueOfSharesForm.bindFromRequest().fold(failure, success)
-    }
+        nominalValueOfSharesForm.bindFromRequest().fold(failure, success)
   }
 }

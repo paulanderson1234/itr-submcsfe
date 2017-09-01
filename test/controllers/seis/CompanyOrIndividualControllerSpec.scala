@@ -30,7 +30,7 @@ import scala.concurrent.Future
 
 class CompanyOrIndividualControllerSpec extends BaseSpec {
 
-  val validBackLink = controllers.seis.routes.AddInvestorOrNomineeController.show().url
+  lazy val validBackLink = controllers.seis.routes.AddInvestorOrNomineeController.show().url
 
   val listOfInvestorsIncompleteCompanyOrIndividual =  Vector(validModelWithPrevShareHoldings.copy(companyOrIndividualModel = None))
 
@@ -74,7 +74,7 @@ class CompanyOrIndividualControllerSpec extends BaseSpec {
         showWithSessionAndAuth(TestController.show(Constants.obviouslyInvalidId))(
           result => {
             status(result) shouldBe SEE_OTHER
-            redirectLocation(result) shouldBe Some(validBackLink)
+            redirectLocation(result) shouldBe Some(routes.AddInvestorOrNomineeController.show().url)
           }
         )
       }

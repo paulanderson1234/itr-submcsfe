@@ -19,7 +19,6 @@ package controllers.seis
 import auth.{AuthorisedAndEnrolledForTAVC, Flow, SEIS}
 import config.{AppConfig, FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
-import controllers.predicates.FeatureSwitch
 import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.play.frontend.auth.connectors.AuthConnector
 import uk.gov.hmrc.play.frontend.controller.FrontendController
@@ -36,12 +35,10 @@ object FullTimeEmployeeCountErrorController extends FullTimeEmployeeCountErrorCo
   override lazy val authConnector: AuthConnector = FrontendAuthConnector
 }
 
-trait FullTimeEmployeeCountErrorController extends FrontendController with AuthorisedAndEnrolledForTAVC with FeatureSwitch {
+trait FullTimeEmployeeCountErrorController extends FrontendController with AuthorisedAndEnrolledForTAVC {
   val acceptedFlows: Seq[Seq[Flow]] = Seq(Seq(SEIS))
 
-  val show: Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
-    AuthorisedAndEnrolled.async { implicit user => implicit request =>
-      Future.successful(Ok(FullTimeEmployeeCountError()))
-    }
+  val show: Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user => implicit request =>
+    Future.successful(Ok(FullTimeEmployeeCountError()))
   }
 }
