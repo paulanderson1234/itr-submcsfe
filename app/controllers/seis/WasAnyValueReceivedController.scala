@@ -20,7 +20,6 @@ import auth.{AuthorisedAndEnrolledForTAVC, SEIS}
 import common.{Constants, KeystoreKeys}
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
-import controllers.predicates.FeatureSwitch
 import forms.WasAnyValueReceivedForm._
 import models.WasAnyValueReceivedModel
 import play.api.Play.current
@@ -38,31 +37,27 @@ object WasAnyValueReceivedController extends WasAnyValueReceivedController {
   override lazy val enrolmentConnector = EnrolmentConnector
 }
 
-trait WasAnyValueReceivedController extends FrontendController with AuthorisedAndEnrolledForTAVC with FeatureSwitch {
+trait WasAnyValueReceivedController extends FrontendController with AuthorisedAndEnrolledForTAVC {
 
   override val acceptedFlows = Seq(Seq(SEIS))
 
-  val show = featureSwitch(applicationConfig.seisFlowEnabled) {
-    AuthorisedAndEnrolled.async { implicit user => implicit request =>
-      s4lConnector.fetchAndGetFormData[WasAnyValueReceivedModel](KeystoreKeys.wasAnyValueReceived).map {
-        case Some(data) => Ok(views.html.seis.investors.WasAnyValueReceived(wasAnyValueReceivedForm.fill(data)))
-        case None => Ok(views.html.seis.investors.WasAnyValueReceived(wasAnyValueReceivedForm))
-      }
+  val show = AuthorisedAndEnrolled.async { implicit user => implicit request =>
+    s4lConnector.fetchAndGetFormData[WasAnyValueReceivedModel](KeystoreKeys.wasAnyValueReceived).map {
+      case Some(data) => Ok(views.html.seis.investors.WasAnyValueReceived(wasAnyValueReceivedForm.fill(data)))
+      case None => Ok(views.html.seis.investors.WasAnyValueReceived(wasAnyValueReceivedForm))
     }
   }
 
-  val submit = featureSwitch(applicationConfig.seisFlowEnabled) {
-    AuthorisedAndEnrolled.async { implicit user => implicit request =>
-      val errorResponse: Form[WasAnyValueReceivedModel] => Future[Result] = form =>
-        Future(BadRequest(views.html.seis.investors.WasAnyValueReceived(form)))
+  val submit = AuthorisedAndEnrolled.async { implicit user => implicit request =>
+    val errorResponse: Form[WasAnyValueReceivedModel] => Future[Result] = form =>
+      Future(BadRequest(views.html.seis.investors.WasAnyValueReceived(form)))
 
-      val successResponse: WasAnyValueReceivedModel => Future[Result] = model =>
-        s4lConnector.saveFormData(KeystoreKeys.wasAnyValueReceived,
-          if(model.wasAnyValueReceived == Constants.StandardRadioButtonYesValue) model else model.copy(aboutValueReceived = None)).map { _ =>
-          Redirect(controllers.seis.routes.ShareCapitalChangesController.show())
-        }
-      wasAnyValueReceivedForm.bindFromRequest().fold(errorResponse, successResponse)
-    }
+    val successResponse: WasAnyValueReceivedModel => Future[Result] = model =>
+      s4lConnector.saveFormData(KeystoreKeys.wasAnyValueReceived,
+        if (model.wasAnyValueReceived == Constants.StandardRadioButtonYesValue) model else model.copy(aboutValueReceived = None)).map { _ =>
+        Redirect(controllers.seis.routes.ShareCapitalChangesController.show())
+      }
+    wasAnyValueReceivedForm.bindFromRequest().fold(errorResponse, successResponse)
   }
 }
 

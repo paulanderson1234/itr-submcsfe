@@ -42,10 +42,10 @@ class IsExistingShareHolderControllerSpec extends BaseSpec with DateFormatter{
     override lazy val authConnector: AuthConnector = MockAuthConnector
   }
 
-  val backUrl = Some(controllers.seis.routes.HowMuchSpentOnSharesController.show(1).url)
+  lazy val backUrl = Some(controllers.seis.routes.HowMuchSpentOnSharesController.show(1).url)
 
-  val listOfInvestorsIncompleteIsExistingShareModelMissing =  Vector(validModelWithPrevShareHoldings.copy(isExistingShareHolderModel = None))
-  val listOfInvestorsIncompleteCompanyOrIndividualMissing =  Vector(validModelWithPrevShareHoldings.copy(companyOrIndividualModel = None,
+  lazy val listOfInvestorsIncompleteIsExistingShareModelMissing =  Vector(validModelWithPrevShareHoldings.copy(isExistingShareHolderModel = None))
+  lazy val listOfInvestorsIncompleteCompanyOrIndividualMissing =  Vector(validModelWithPrevShareHoldings.copy(companyOrIndividualModel = None,
     isExistingShareHolderModel = None))
 
   def setupMocks(investorDetailsModel: Option[Vector[InvestorDetailsModel]],

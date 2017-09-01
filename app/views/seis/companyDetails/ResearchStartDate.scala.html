@@ -4,22 +4,22 @@
 
 @(researchStartDateForm: Form[ResearchStartDateModel])(implicit request: Request[_], messages: Messages)
 
-@main_template(Messages("page.seis.companyDetails.researchStartDate.title")) {
+@main_template(Messages("page.companyDetails.researchStartDate.title")) {
 
     @backButtonWithProgress(controllers.seis.routes.QualifyBusinessActivityController.show().url, Messages("common.section.progress.details.one"))
 
     @errorSummary(researchStartDateForm, "research-start-date", "researchStartDay")
 
-    <h1 class="heading-xlarge" id="main-heading">@Messages("page.seis.companyDetails.researchStartDate.heading")</h1>
+    <h1 class="heading-xlarge" id="main-heading">@Messages("page.companyDetails.researchStartDate.heading")</h1>
 
     @form(action = controllers.seis.routes.ResearchStartDateController.submit()) {
 
         @formHiddenYesNoRadioNoError(
             researchStartDateForm,
             "hasStartedResearch",
-            Messages("page.seis.companyDetails.researchStartDate.heading"),
+            Messages("page.companyDetails.researchStartDate.heading"),
             formInlineDateInput(researchStartDateForm, "researchStart",
-                Some(Messages("page.seis.companyDetails.researchStartDate.question")), false,
+                Some(Messages("page.companyDetails.researchStartDate.question")), false,
                 Some(Messages("common.date.hint.example")), None),
             None,
             Some("visuallyhidden")

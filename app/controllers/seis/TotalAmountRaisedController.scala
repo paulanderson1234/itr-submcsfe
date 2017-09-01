@@ -30,7 +30,6 @@ import play.api.Play.current
 import views.html.seis.shareDetails.TotalAmountRaised
 
 import scala.concurrent.Future
-import controllers.predicates.FeatureSwitch
 import models.investorDetails.InvestorDetailsModel
 import play.Logger
 import play.api.mvc.Result
@@ -43,75 +42,70 @@ object TotalAmountRaisedController extends TotalAmountRaisedController{
   override lazy val submissionConnector = SubmissionConnector
 }
 
-trait TotalAmountRaisedController extends FrontendController with AuthorisedAndEnrolledForTAVC with FeatureSwitch {
+trait TotalAmountRaisedController extends FrontendController with AuthorisedAndEnrolledForTAVC {
 
   override val acceptedFlows = Seq(Seq(SEIS))
 
   val submissionConnector: SubmissionConnector
 
-  val show = featureSwitch(applicationConfig.seisFlowEnabled) {
-    AuthorisedAndEnrolled.async { implicit user =>
-      implicit request =>
-        s4lConnector.fetchAndGetFormData[TotalAmountRaisedModel](KeystoreKeys.totalAmountRaised).map {
-          case Some(data) => Ok(TotalAmountRaised(totalAmountRaisedForm.fill(data)))
-          case None => Ok(TotalAmountRaised(totalAmountRaisedForm))
-        }
-    }
+  val show = AuthorisedAndEnrolled.async { implicit user =>
+    implicit request =>
+      s4lConnector.fetchAndGetFormData[TotalAmountRaisedModel](KeystoreKeys.totalAmountRaised).map {
+        case Some(data) => Ok(TotalAmountRaised(totalAmountRaisedForm.fill(data)))
+        case None => Ok(TotalAmountRaised(totalAmountRaisedForm))
+      }
   }
 
-  val submit = featureSwitch(applicationConfig.seisFlowEnabled) {
-    AuthorisedAndEnrolled.async { implicit user =>
-      implicit request =>
+  val submit = AuthorisedAndEnrolled.async { implicit user => implicit request =>
 
-        def routeRequest(dateForActivity: Option[HasInvestmentTradeStartedModel]): Future[Result] = {
-          if (dateForActivity.isDefined) {
-            if (dateForActivity.get.hasInvestmentTradeStarted == Constants.StandardRadioButtonYesValue) {
-              val validationFlag = for {
-                startDateValid <- submissionConnector.validateHasInvestmentTradeStartedCondition(dateForActivity.get.hasInvestmentTradeStartedDay.get,
-                  dateForActivity.get.hasInvestmentTradeStartedMonth.get, dateForActivity.get.hasInvestmentTradeStartedYear.get)
-                investorDetails <- s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails)
-              } yield (startDateValid, investorDetails)
+    def routeRequest(dateForActivity: Option[HasInvestmentTradeStartedModel]): Future[Result] = {
+      if (dateForActivity.isDefined) {
+        if (dateForActivity.get.hasInvestmentTradeStarted == Constants.StandardRadioButtonYesValue) {
+          val validationFlag = for {
+            startDateValid <- submissionConnector.validateHasInvestmentTradeStartedCondition(dateForActivity.get.hasInvestmentTradeStartedDay.get,
+              dateForActivity.get.hasInvestmentTradeStartedMonth.get, dateForActivity.get.hasInvestmentTradeStartedYear.get)
+            investorDetails <- s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails)
+          } yield (startDateValid, investorDetails)
 
-              validationFlag.map {
-                case (Some(startDateValid) ,investorDetails)  if startDateValid => {
-                  s4lConnector.saveFormData(KeystoreKeys.backLinkAddInvestorOrNominee, routes.TotalAmountRaisedController.show().url)
-                  if(investorDetails.isDefined && investorDetails.get.nonEmpty)
-                    Redirect(controllers.seis.routes.ReviewAllInvestorsController.show())
-                  else Redirect(controllers.seis.routes.AddInvestorOrNomineeController.show())
-                }
-                case (Some(startDateValid), _) if !startDateValid => Redirect(routes.TotalAmountSpentController.show())
-                case (None, _) =>
-                  Logger.warn("[TotalAmountRaisedController][submit] - validateHasInvestmentTradeStartedCondition did not return expected true/false answer")
-                  InternalServerError(internalServerErrorTemplate)
-              }
+          validationFlag.map {
+            case (Some(startDateValid), investorDetails) if startDateValid => {
+              s4lConnector.saveFormData(KeystoreKeys.backLinkAddInvestorOrNominee, routes.TotalAmountRaisedController.show().url)
+              if (investorDetails.isDefined && investorDetails.get.nonEmpty)
+                Redirect(controllers.seis.routes.ReviewAllInvestorsController.show())
+              else Redirect(controllers.seis.routes.AddInvestorOrNomineeController.show())
             }
-            else
-            // trade not started so treat as less than 4 months trading
-              Future.successful(Redirect(routes.TotalAmountSpentController.show()))
+            case (Some(startDateValid), _) if !startDateValid => Redirect(routes.TotalAmountSpentController.show())
+            case (None, _) =>
+              Logger.warn("[TotalAmountRaisedController][submit] - validateHasInvestmentTradeStartedCondition did not return expected true/false answer")
+              InternalServerError(internalServerErrorTemplate)
           }
-          else
-          // inconsistent date. User page skipping etc. Send to start of flow.
-            Future.successful(Redirect(routes.QualifyBusinessActivityController.show()))
+        }
+        else
+        // trade not started so treat as less than 4 months trading
+          Future.successful(Redirect(routes.TotalAmountSpentController.show()))
+      }
+      else
+      // inconsistent date. User page skipping etc. Send to start of flow.
+        Future.successful(Redirect(routes.QualifyBusinessActivityController.show()))
+    }
+
+    totalAmountRaisedForm.bindFromRequest().fold(
+      formWithErrors => {
+        Future.successful(BadRequest(TotalAmountRaised(formWithErrors)))
+      },
+      validFormData => {
+        s4lConnector.saveFormData(KeystoreKeys.totalAmountRaised, validFormData)
+        (for {
+          dateForActivity <- ControllerHelpers.getTradeStartDateForBusinessActivity(s4lConnector)
+          route <- routeRequest(dateForActivity)
+        } yield route) recover {
+          case e: Exception => {
+            Logger.warn(s"[TotalAmountRaisedController][submit]- Exception occurred: ${e.getMessage}")
+            InternalServerError(internalServerErrorTemplate)
+          }
         }
 
-        totalAmountRaisedForm.bindFromRequest().fold(
-          formWithErrors => {
-            Future.successful(BadRequest(TotalAmountRaised(formWithErrors)))
-          },
-          validFormData => {
-            s4lConnector.saveFormData(KeystoreKeys.totalAmountRaised, validFormData)
-            (for {
-              dateForActivity <- ControllerHelpers.getTradeStartDateForBusinessActivity(s4lConnector)
-              route <- routeRequest(dateForActivity)
-            } yield route) recover {
-              case e: Exception => {
-                Logger.warn(s"[TotalAmountRaisedController][submit]- Exception occurred: ${e.getMessage}")
-                InternalServerError(internalServerErrorTemplate)
-              }
-            }
-
-          }
-        )
-    }
+      }
+    )
   }
 }

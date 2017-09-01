@@ -41,9 +41,9 @@ class NumberOfSharesPurchasedControllerSpec extends BaseSpec with DateFormatter{
     override lazy val authConnector: AuthConnector = MockAuthConnector
   }
 
-  val backUrl = Some(controllers.seis.routes.CompanyDetailsController.show(1).url)
-  val listOfInvestorsIncompleteNumberOfSharesPurchased =  Vector(validModelWithPrevShareHoldings.copy(numberOfSharesPurchasedModel = None))
-  val shareIssueDate = Some(dateToStringWithNoZeroDay(shareIssuetDateModel.day.get, shareIssuetDateModel.month.get, shareIssuetDateModel.year.get))
+  lazy val backUrl = Some(controllers.seis.routes.CompanyDetailsController.show(1).url)
+  lazy val listOfInvestorsIncompleteNumberOfSharesPurchased =  Vector(validModelWithPrevShareHoldings.copy(numberOfSharesPurchasedModel = None))
+  lazy val shareIssueDate = Some(dateToStringWithNoZeroDay(shareIssuetDateModel.day.get, shareIssuetDateModel.month.get, shareIssuetDateModel.year.get))
 
   def setupMocks(investorDetailsModel: Option[Vector[InvestorDetailsModel]], shareIssueDateModel: Option[ShareIssueDateModel],
                  backURL : Option[String]): Unit = {

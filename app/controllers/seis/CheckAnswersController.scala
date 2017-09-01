@@ -21,7 +21,6 @@ import common.KeystoreKeys
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.Helpers.PreviousSchemesHelper
-import controllers.predicates.FeatureSwitch
 import models._
 import models.investorDetails.InvestorDetailsModel
 import models.seis.SEISCheckAnswersModel
@@ -41,8 +40,7 @@ object CheckAnswersController extends CheckAnswersController{
   override lazy val enrolmentConnector = EnrolmentConnector
 }
 
-trait CheckAnswersController extends FrontendController with AuthorisedAndEnrolledForTAVC with PreviousSchemesHelper
-  with FeatureSwitch {
+trait CheckAnswersController extends FrontendController with AuthorisedAndEnrolledForTAVC with PreviousSchemesHelper {
 
   override val acceptedFlows = Seq(Seq(SEIS))
 
@@ -72,20 +70,15 @@ trait CheckAnswersController extends FrontendController with AuthorisedAndEnroll
     grossAssets, fullTimeEmployees, shareDescription, numberOfShares, totalAmountRaised, totalAmountSpent, investorDetails,
     valueReceived, shareCapitalChanges, supportingDocumentsUpload, applicationConfig.uploadFeatureEnabled)
 
-  def show(envelopeId: Option[String]): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
-    AuthorisedAndEnrolled.async { implicit user => implicit request =>
-      if (envelopeId.fold("")(_.toString).length > 0) {
-        s4lConnector.saveFormData(KeystoreKeys.envelopeId, envelopeId.getOrElse(""))
-      }
-
-      checkAnswersModel.flatMap(checkAnswers => Future.successful(Ok(CheckAnswers(checkAnswers))))
+  def show(envelopeId: Option[String]): Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user => implicit request =>
+    if (envelopeId.fold("")(_.toString).length > 0) {
+      s4lConnector.saveFormData(KeystoreKeys.envelopeId, envelopeId.getOrElse(""))
     }
+
+    checkAnswersModel.flatMap(checkAnswers => Future.successful(Ok(CheckAnswers(checkAnswers))))
   }
 
-  val submit = featureSwitch(applicationConfig.seisFlowEnabled) {
-    AuthorisedAndEnrolled.async { implicit user => implicit request =>
-      Future.successful(Redirect(controllers.seis.routes.DeclarationController.show()))
-    }
+  val submit = AuthorisedAndEnrolled.async { implicit user => implicit request =>
+    Future.successful(Redirect(controllers.seis.routes.DeclarationController.show()))
   }
-
 }

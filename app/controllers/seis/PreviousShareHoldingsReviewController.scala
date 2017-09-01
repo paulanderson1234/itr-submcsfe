@@ -21,7 +21,6 @@ import common.KeystoreKeys
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.Helpers.ControllerHelpers
-import controllers.predicates.FeatureSwitch
 import models.investorDetails.InvestorDetailsModel
 import play.api.Play.current
 import play.api.i18n.Messages.Implicits._
@@ -38,50 +37,41 @@ object PreviousShareHoldingsReviewController extends PreviousShareHoldingsReview
   override lazy val enrolmentConnector = EnrolmentConnector
 }
 
-trait PreviousShareHoldingsReviewController extends FrontendController with AuthorisedAndEnrolledForTAVC with FeatureSwitch with ControllerHelpers{
+trait PreviousShareHoldingsReviewController extends FrontendController with AuthorisedAndEnrolledForTAVC with ControllerHelpers {
 
   override val acceptedFlows = Seq(Seq(SEIS))
 
-  def show(investorProcessingId: Int): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
-    AuthorisedAndEnrolled.async {
-      implicit user =>
-        implicit request =>
-          s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map { vector =>
-            redirectNoInvestors(vector) { data =>
-              redirectInvalidInvestor(getInvestorIndex(investorProcessingId, data)) { investorIdVal =>
-                val shareHoldings = retrieveInvestorData(investorIdVal, data)(_.previousShareHoldingModels)
-                if (shareHoldings.getOrElse(Vector.empty).nonEmpty) {
-                  Ok(PreviousShareHoldingsReview(data.lift(getInvestorIndex(investorProcessingId, data)).get))
-                }
-                else Redirect(controllers.seis.routes.IsExistingShareHolderController.show(investorProcessingId))
+  def show(investorProcessingId: Int): Action[AnyContent] = AuthorisedAndEnrolled.async {
+    implicit user =>
+      implicit request =>
+        s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map { vector =>
+          redirectNoInvestors(vector) { data =>
+            redirectInvalidInvestor(getInvestorIndex(investorProcessingId, data)) { investorIdVal =>
+              val shareHoldings = retrieveInvestorData(investorIdVal, data)(_.previousShareHoldingModels)
+              if (shareHoldings.getOrElse(Vector.empty).nonEmpty) {
+                Ok(PreviousShareHoldingsReview(data.lift(getInvestorIndex(investorProcessingId, data)).get))
               }
+              else Redirect(controllers.seis.routes.IsExistingShareHolderController.show(investorProcessingId))
             }
           }
-    }
+        }
   }
 
-  def remove(investorProcessingId: Int, id: Int): Action[AnyContent] =
-    featureSwitch(applicationConfig.seisFlowEnabled) {
-      AuthorisedAndEnrolled.async { implicit user =>
-        implicit request =>
-          Future.successful(Redirect(controllers.seis.routes.DeletePreviousShareHolderController.show(investorProcessingId, id)))
-      }
+  def remove(investorProcessingId: Int, id: Int): Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user =>
+    implicit request =>
+      Future.successful(Redirect(controllers.seis.routes.DeletePreviousShareHolderController.show(investorProcessingId, id)))
   }
 
-  def change(investorProcessingId: Int, id: Int): Action[AnyContent] =
-    featureSwitch(applicationConfig.seisFlowEnabled) {
-      AuthorisedAndEnrolled.async { implicit user =>
-        implicit request =>
-          s4lConnector.saveFormData(KeystoreKeys.backLinkShareClassAndDescription,
-            routes.PreviousShareHoldingsReviewController.show(investorProcessingId).url)
-          Future.successful(Redirect(controllers.seis.routes.PreviousShareHoldingDescriptionController.show(investorProcessingId, Some(id))))
-      }
-    }
+  def change(investorProcessingId: Int, id: Int): Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user =>
+    implicit request =>
+      s4lConnector.saveFormData(KeystoreKeys.backLinkShareClassAndDescription,
+        routes.PreviousShareHoldingsReviewController.show(investorProcessingId).url)
+      Future.successful(Redirect(controllers.seis.routes.PreviousShareHoldingDescriptionController.show(investorProcessingId, Some(id))))
+  }
 
-  def submit(investorProcessingId: Int): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
-    AuthorisedAndEnrolled.async { implicit user =>
-      implicit request =>
-        Future.successful(Redirect(controllers.seis.routes.AddAnotherShareholdingController.show(investorProcessingId)))
-    }
+
+  def submit(investorProcessingId: Int): Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user =>
+    implicit request =>
+      Future.successful(Redirect(controllers.seis.routes.AddAnotherShareholdingController.show(investorProcessingId)))
   }
 }

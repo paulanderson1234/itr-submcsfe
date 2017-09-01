@@ -32,7 +32,7 @@ import scala.concurrent.Future
 
 class AddInvestorOrNomineeControllerSpec extends BaseSpec {
 
-  val validBackLink = controllers.seis.routes.TotalAmountSpentController.show().toString
+  lazy val validBackLink = controllers.seis.routes.TotalAmountSpentController.show().toString
 
   object TestController extends AddInvestorOrNomineeController {
     override lazy val applicationConfig = MockConfig
@@ -104,7 +104,6 @@ class AddInvestorOrNomineeControllerSpec extends BaseSpec {
       }
     }
 
-    /* TODO redirect to review investor details page when the id does not exist  */
     "Redirect to the Investor Details Review page" when {
       "a 'backlink' is defined, an 'investor details list' is retrieved and an INVALID 'id' is defined" in {
         mockEnrolledRequest(seisSchemeTypesModel)

@@ -1,0 +1,33 @@
+@import models.investorDetails.InvestorDetailsModel
+@import views.html.helpers.backButtonWithProgress
+@import uk.gov.hmrc.play.views.html.helpers.{form}
+
+
+@(investor: InvestorDetailsModel)(implicit request: Request[_], messages: Messages)
+
+@main_template(Messages("page.investors.deleteInvestor.title", investor.investorOrNomineeModel.get.addInvestorOrNominee.toLowerCase())) {
+
+@backButtonWithProgress(controllers.eis.routes.ReviewAllInvestorsController.show().url, Messages("common.section.progress.details.four"))
+
+
+<h1 id="main-heading" class="form-title heading-xlarge">@Messages("page.investors.deleteInvestor.title", investor.investorOrNomineeModel.get.addInvestorOrNominee.toLowerCase())</h1>
+
+<p class="lede" id="info">
+    @if(investor.investorNomineeDescription.isEmpty){@Messages("page.investors.deleteInvestor.confirm.noName", investor.investorOrNomineeModel.get.addInvestorOrNominee.toLowerCase())} else {@Messages("page.investors.deleteInvestor.confirm", investor.investorNomineeDescription)}
+</p>
+
+
+@form(action = controllers.eis.routes.DeleteInvestorController.submit(investor.processingId.get)){
+   <div class="form-group"></div>
+    <div class="form-group">
+        <button id="remove-button" class="button button--alert" type="submit">@Messages("common.base.remove")</button>
+    </div>
+}
+
+<div class="form-group">
+    <a id="delete-investor-cancel"
+       href="@controllers.eis.routes.ReviewAllInvestorsController.show().url">
+        @Messages("common.button.cancel")</a>
+</div>
+
+}

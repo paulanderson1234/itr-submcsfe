@@ -39,8 +39,8 @@ class ReviewPreviousSchemesControllerSpec extends BaseSpec {
     override lazy val enrolmentConnector = mockEnrolmentConnector
   }
 
-  val previousSchemeVectorListDeleted = Vector(previousSchemeModel2, previousSchemeModel3)
-  val backLink = "/investment-tax-relief-cs/eis/previous-investment"
+  lazy val previousSchemeVectorListDeleted = Vector(previousSchemeModel2, previousSchemeModel3)
+  lazy val backLink = "/investment-tax-relief-cs/eis/previous-investment"
 
   val cacheMap: CacheMap = CacheMap("", Map("" -> Json.toJson(previousSchemeVectorList)))
   val cacheMapEmpty: CacheMap = CacheMap("", Map("" -> Json.toJson(emptyVectorList)))

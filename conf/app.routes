@@ -13,8 +13,6 @@ GET        /                                        controllers.ApplicationHubCo
 GET         /session-timeout         controllers.TimeoutController.timeout
 #####################################################################################################################
 
-GET        /select-schemes                          controllers.schemeSelection.SchemeSelectionController.show
-POST       /select-schemes                          controllers.schemeSelection.SchemeSelectionController.submit
 
 GET        /select-scheme                           controllers.schemeSelection.SingleSchemeSelectionController.show
 POST       /select-scheme                           controllers.schemeSelection.SingleSchemeSelectionController.submit

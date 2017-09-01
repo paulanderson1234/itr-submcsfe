@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package views.eisseis
+package views.schemeSelection
 
 import controllers.routes
 import org.jsoup.Jsoup
@@ -23,7 +23,6 @@ import views.helpers.ViewSpec
 import play.api.i18n.Messages.Implicits._
 import views.html.schemeSelection.SingleSchemeSelection
 import forms.schemeSelection.SingleSchemeSelectionForm._
-import models.submission.SingleSchemeTypesModel
 
 import scala.concurrent.Future
 
@@ -50,12 +49,6 @@ class SingleSchemeSelectionSpec extends ViewSpec {
       document.getElementById("SEIS-help").text() shouldBe Messages("page.schemeSelection.SchemeSelection.help.seis.subHeading")
       document.getElementById("SEIS-help-text").text() shouldBe Messages("page.schemeSelection.SchemeSelection.help.seis.text")
 
-      document.select("#singleSchemeSelection-vct").size() shouldBe 1
-      document.getElementById("singleSchemeSelection-vctLabel").text() shouldBe Messages("page.schemeSelection.SchemeSelection.radiobutton.vct")
-      document.getElementById("VCT-help").text() shouldBe Messages("page.schemeSelection.SchemeSelection.help.vct.subHeading")
-      document.getElementById("VCT-help-text").text() shouldBe Messages("page.schemeSelection.SchemeSelection.help.vct.text")
-      document.getElementById("VCT-bullet-one").text() shouldBe Messages("page.schemeSelection.SchemeSelection.help.vct.bullet.one")
-      document.getElementById("VCT-bullet-two").text() shouldBe Messages("page.schemeSelection.SchemeSelection.help.vct.bullet.two")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
 
     }
