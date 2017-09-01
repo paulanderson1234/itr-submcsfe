@@ -58,5 +58,6 @@ trait NatureOfBusinessController extends FrontendController with AuthorisedAndEn
         Future.successful(Redirect(routes.DateOfIncorporationController.show()))
       }
     )
+
   }
 }
