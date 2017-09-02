@@ -16,68 +16,50 @@
 
 package views.eis
 
-import auth.{MockConfigEISFlow, MockAuthConnector}
-import common.KeystoreKeys
-import config.FrontendAppConfig
-import controllers.eis.NatureOfBusinessController
+import common.Constants
 import controllers.routes
-import models.NatureOfBusinessModel
+import forms.NatureOfBusinessForm._
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import org.mockito.Matchers
-import org.mockito.Mockito._
 import play.api.i18n.Messages
+import play.api.i18n.Messages.Implicits._
 import play.api.test.Helpers._
 import views.helpers.ViewSpec
-import play.api.i18n.Messages.Implicits._
-
-import scala.concurrent.Future
+import views.html.eis.companyDetails.NatureOfBusiness
 
 class NatureOfBusinessSpec extends ViewSpec {
 
-  object TestController extends NatureOfBusinessController {
-    override lazy val applicationConfig = MockConfigEISFlow
-    override lazy val authConnector = MockAuthConnector
-    override lazy val s4lConnector = mockS4lConnector
-    override lazy val enrolmentConnector = mockEnrolmentConnector
-  }
-
-
-  def setupMocks(natureOfBusinessModel: Option[NatureOfBusinessModel] = None): Unit =
-
-    when(mockS4lConnector.fetchAndGetFormData[NatureOfBusinessModel](Matchers.eq(KeystoreKeys.natureOfBusiness))
-      (Matchers.any(), Matchers.any(),Matchers.any())).thenReturn(Future.successful(natureOfBusinessModel))
+  implicit val request = fakeRequest
 
   "The Nature of business page" should {
 
-    "Verify that the page contains the correct elements when a valid NatureOfBusinessModel is passed" in new Setup {
-      val document: Document = {
-        setupMocks(Some(natureOfBusinessModel))
-        val result = TestController.show.apply(authorisedFakeRequest)
-        Jsoup.parse(contentAsString(result))
-      }
+    "Verify that the page contains the correct elements when a valid NatureOfBusinessModel is passed" in {
+      val document: Document = Jsoup.parse(contentAsString(NatureOfBusiness(natureOfBusinessForm)))
+
+      document.select(".error-summary--show").isEmpty shouldBe true
       document.title() shouldBe Messages("page.companyDetails.natureofbusiness.title")
       document.getElementById("main-heading").text() shouldBe Messages("page.companyDetails.natureofbusiness.heading")
-      document.getElementById("label-natureofbusiness").select("span").hasClass("visuallyhidden") shouldBe true
-      document.getElementById("label-natureofbusiness").select(".visuallyhidden").text() shouldBe Messages("page.companyDetails.natureofbusiness.heading")
-      document.getElementById("label-natureofbusiness-hint").text() shouldBe Messages("page.companyDetails.natureofbusiness.question.hint")
       document.getElementById("description-two").text() shouldBe Messages("page.companyDetails.natureofbusiness.example.text")
       document.getElementById("bullet-one").text() shouldBe Messages("page.companyDetails.natureofbusiness.bullet.one")
       document.getElementById("bullet-two").text() shouldBe Messages("page.companyDetails.natureofbusiness.bullet.two")
       document.getElementById("bullet-three").text() shouldBe Messages("page.companyDetails.natureofbusiness.bullet.three")
+      document.getElementById("label-natureofbusiness").select("span").hasClass("visuallyhidden") shouldBe true
+      document.getElementById("label-natureofbusiness").select(".visuallyhidden").text() shouldBe Messages("page.companyDetails.natureofbusiness.heading")
+      document.getElementById("label-natureofbusiness-hint").text() shouldBe Messages("page.companyDetails.natureofbusiness.question.hint")
+      document.select("input").attr("maxLength") shouldBe Constants.shortTextLimit.toString
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
+      document.select("button").attr("type") shouldBe "submit"
       document.body.getElementById("back-link").attr("href") shouldEqual routes.ApplicationHubController.show().url
-      document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.one")
+      document.select("a.back-link").text() shouldBe Messages("common.button.back")
+      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.one")
+      document.select(".error-summary").isEmpty shouldBe true
     }
 
-    "Verify that the nature of business page contains the correct elements when an invalid NatureOfBusinessModel model is passed" in new Setup {
-      val document: Document = {
-        setupMocks()
-        val result = TestController.submit.apply(authorisedFakeRequest)
-        Jsoup.parse(contentAsString(result))
-      }
+    "Verify that the nature of business page contains the correct elements when an invalid NatureOfBusinessModel model is passed" in {
+      val document: Document = Jsoup.parse(contentAsString(NatureOfBusiness(natureOfBusinessForm.bind(Map("natureOfBusiness" -> "")))))
+
       // Check the error summary is displayed - the whole purpose of this test
-      document.getElementById("error-summary-display").hasClass("error-summary--show")
+      document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe true
       // additional page checks to make sure everything else still as expected if errors on page
       document.title() shouldBe Messages("page.companyDetails.natureofbusiness.title")
       document.getElementById("main-heading").text() shouldBe Messages("page.companyDetails.natureofbusiness.heading")
@@ -88,9 +70,12 @@ class NatureOfBusinessSpec extends ViewSpec {
       document.getElementById("bullet-one").text() shouldBe Messages("page.companyDetails.natureofbusiness.bullet.one")
       document.getElementById("bullet-two").text() shouldBe Messages("page.companyDetails.natureofbusiness.bullet.two")
       document.getElementById("bullet-three").text() shouldBe Messages("page.companyDetails.natureofbusiness.bullet.three")
+      document.select("input").attr("maxLength") shouldBe Constants.shortTextLimit.toString
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
+      document.select("button").attr("type") shouldBe "submit"
       document.body.getElementById("back-link").attr("href") shouldEqual routes.ApplicationHubController.show().url
-      document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.one")
+      document.select("a.back-link").text() shouldBe Messages("common.button.back")
+      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.one")
     }
 
   }

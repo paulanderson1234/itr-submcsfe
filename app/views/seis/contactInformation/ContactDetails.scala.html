@@ -1,4 +1,5 @@
 @import models.ContactDetailsModel
+@import common.Constants
 @import uk.gov.hmrc.play.views.html.helpers.form
 @import views.html.helpers.{backButtonWithProgress, input, errorSummary}
 
@@ -23,7 +24,7 @@
             '_divClass -> "form-label",
             '_labelId -> "label-forename",
             '_label -> Messages("page.contactInformation.contactDetails.forename.label"),
-            '_maxlength -> "35",
+            '_maxlength -> Constants.forenameLength,
             '_inputClass -> "input--medium input--cleared",
             'id -> "forename"
             )
@@ -33,7 +34,7 @@
             '_divClass -> "form-label",
             '_labelId -> "label-surname",
             '_label -> Messages("page.contactInformation.contactDetails.surname.label"),
-            '_maxlength -> "35",
+            '_maxlength -> Constants.surnameLength,
             '_inputClass -> "input--medium input--cleared",
             'id -> "surname"
             )
@@ -43,7 +44,7 @@
             '_divClass -> "form-label",
             '_labelId -> "label-telephoneNumber",
             '_label -> Messages("page.contactInformation.contactDetails.phoneNumber.label"),
-            '_maxlength -> "24",
+            '_maxlength -> Constants.phoneLength,
             '_inputClass -> "input--medium input--cleared",
             'id -> "phoneNumber"
             )
@@ -53,7 +54,7 @@
             '_divClass -> "form-label",
             '_labelId -> "label-mobileNumber",
             '_label -> Messages("page.contactInformation.contactDetails.mobileNumber.label"),
-            '_maxlength -> "24",
+            '_maxlength -> Constants.phoneLength,
             '_inputClass -> "input--medium input--cleared",
             'id -> "mobileNumber"
             )
@@ -64,7 +65,7 @@
             '_labelId -> "label-email",
             '_label -> Messages("page.contactInformation.contactDetails.email.label"),
             '_inputClass -> "input--medium input--cleared",
-            '_maxlength -> "132",
+            '_maxlength -> Constants.emailLength,
             'id -> "email"
             )
 

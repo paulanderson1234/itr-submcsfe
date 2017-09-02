@@ -67,6 +67,29 @@ class ConfirmContactDetailsSpec extends UnitSpec with OneAppPerSuite{
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
     }
 
+    "have a form" which {
+      lazy val form = document.select("form")
+
+      "has a POST method" in {
+        form.attr("method") shouldBe "POST"
+      }
+
+      "has an action to the correct post method" in {
+        form.attr("action") shouldBe controllers.eis.routes.ConfirmContactDetailsController.submit().url
+      }
+    }
+
+    "have a legend" which {
+      lazy val legend = document.select("legend")
+      "has the correct content" in {
+        legend.text() shouldBe Messages("page.contactInformation.ConfirmContactDetails.heading")
+      }
+
+      "is visually hidden" in {
+        legend.hasClass("visuallyhidden") shouldBe true
+      }
+    }
+
     "have radio options" which {
 
       "include a 'Yes' option" in {
@@ -97,6 +120,28 @@ class ConfirmContactDetailsSpec extends UnitSpec with OneAppPerSuite{
         document.body.getElementById("email").text shouldBe contactDetailsNoMobile.email
       }
 
+      "has a set of hidden fields" which {
+
+        "includes a forename field" in {
+          document.select("input[id=contactDetails.forename]").attr("value") shouldBe contactDetailsNoMobile.forename
+        }
+
+        "includes a surname field" in {
+          document.select("input[id=contactDetails.surname]").attr("value") shouldBe contactDetailsNoMobile.surname
+        }
+
+        "includes a phone number field" in {
+          document.select("input[id=contactDetails.telephoneNumber]").attr("value") shouldBe contactDetailsNoMobile.telephoneNumber.get
+        }
+
+        "includes a mobile number field" in {
+          document.select("input[id=contactDetails.mobileNumber]").attr("value") shouldBe ""
+        }
+
+        "includes an email field" in {
+          document.select("input[id=contactDetails.email]").attr("value") shouldBe contactDetailsNoMobile.email
+        }
+      }
     }
 
     "for a user with mobile contact details should have a section for the contact details" which {
@@ -117,6 +162,28 @@ class ConfirmContactDetailsSpec extends UnitSpec with OneAppPerSuite{
         documentWithMobile.body.getElementById("email").text shouldBe contactDetailsNoMobile.email
       }
 
+      "has a set of hidden fields" which {
+
+        "includes a forename field" in {
+          documentWithMobile.select("input[id=contactDetails.forename]").attr("value") shouldBe contactDetailsMobile.forename
+        }
+
+        "includes a surname field" in {
+          documentWithMobile.select("input[id=contactDetails.surname]").attr("value") shouldBe contactDetailsMobile.surname
+        }
+
+        "includes a phone number field" in {
+          documentWithMobile.select("input[id=contactDetails.telephoneNumber]").attr("value") shouldBe contactDetailsMobile.telephoneNumber.get
+        }
+
+        "includes a mobile number field" in {
+          documentWithMobile.select("input[id=contactDetails.mobileNumber]").attr("value") shouldBe contactDetailsMobile.mobileNumber.get
+        }
+
+        "includes an email field" in {
+          documentWithMobile.select("input[id=contactDetails.email]").attr("value") shouldBe contactDetailsMobile.email
+        }
+      }
     }
   }
 }
