@@ -21,7 +21,6 @@ import common.KeystoreKeys
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.Helpers.{ControllerHelpers, PreviousInvestorsHelper}
-import controllers.predicates.FeatureSwitch
 import forms.NumberOfSharesPurchasedForm._
 import models.ShareIssueDateModel
 import models.investorDetails.InvestorDetailsModel
@@ -41,50 +40,46 @@ object NumberOfSharesPurchasedController extends NumberOfSharesPurchasedControll
   override lazy val enrolmentConnector = EnrolmentConnector
 }
 
-trait NumberOfSharesPurchasedController extends FrontendController with AuthorisedAndEnrolledForTAVC with FeatureSwitch
-  with ControllerHelpers with DateFormatter {
+trait NumberOfSharesPurchasedController extends FrontendController with AuthorisedAndEnrolledForTAVC with ControllerHelpers with DateFormatter {
 
   override val acceptedFlows = Seq(Seq(SEIS))
 
-  def show(id: Int): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
-    AuthorisedAndEnrolled.async { implicit user => implicit request =>
+  def show(id: Int): Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user => implicit request =>
 
-      def process(shareIssueDate: Option[ShareIssueDateModel], backUrl: Option[String]) = {
-        if (backUrl.isDefined) {
-          s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map { vector =>
-            redirectNoInvestors(vector) { data =>
-              val itemToUpdateIndex = getInvestorIndex(id, data)
-              redirectInvalidInvestor(itemToUpdateIndex) { index =>
-                val form = fillForm(numberOfSharesPurchasedForm, retrieveInvestorData(index, data)(_.numberOfSharesPurchasedModel))
-                if (shareIssueDate.isDefined && data.lift(itemToUpdateIndex).get.companyOrIndividualModel.isDefined)
-                  Ok(NumberOfSharesPurchased(retrieveInvestorData(index, data)(_.companyOrIndividualModel.map(_.companyOrIndividual)).get,
-                    dateToStringWithNoZeroDay(shareIssueDate.get.day.get, shareIssueDate.get.month.get, shareIssueDate.get.year.get),
-                    form, backUrl.get))
-                else if(data.lift(itemToUpdateIndex).get.companyOrIndividualModel.isDefined)
-                  Redirect(controllers.seis.routes.ShareIssueDateController.show())
-                else Redirect(controllers.seis.routes.CompanyOrIndividualController.show(id))
-              }
+    def process(shareIssueDate: Option[ShareIssueDateModel], backUrl: Option[String]) = {
+      if (backUrl.isDefined) {
+        s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map { vector =>
+          redirectNoInvestors(vector) { data =>
+            val itemToUpdateIndex = getInvestorIndex(id, data)
+            redirectInvalidInvestor(itemToUpdateIndex) { index =>
+              val form = fillForm(numberOfSharesPurchasedForm, retrieveInvestorData(index, data)(_.numberOfSharesPurchasedModel))
+              if (shareIssueDate.isDefined && data.lift(itemToUpdateIndex).get.companyOrIndividualModel.isDefined)
+                Ok(NumberOfSharesPurchased(retrieveInvestorData(index, data)(_.companyOrIndividualModel.map(_.companyOrIndividual)).get,
+                  dateToStringWithNoZeroDay(shareIssueDate.get.day.get, shareIssueDate.get.month.get, shareIssueDate.get.year.get),
+                  form, backUrl.get))
+              else if (data.lift(itemToUpdateIndex).get.companyOrIndividualModel.isDefined)
+                Redirect(controllers.seis.routes.ShareIssueDateController.show())
+              else Redirect(controllers.seis.routes.CompanyOrIndividualController.show(id))
             }
           }
         }
-        else Future.successful(Redirect(routes.AddInvestorOrNomineeController.show()))
       }
-
-      for {
-        shareIssueDate <- s4lConnector.fetchAndGetFormData[ShareIssueDateModel](KeystoreKeys.shareIssueDate)
-        backUrl <- s4lConnector.fetchAndGetFormData[String](KeystoreKeys.backLinkNumberOfSharesPurchased)
-        route <- process(shareIssueDate, backUrl)
-      } yield route
-
+      else Future.successful(Redirect(routes.AddInvestorOrNomineeController.show()))
     }
+
+    for {
+      shareIssueDate <- s4lConnector.fetchAndGetFormData[ShareIssueDateModel](KeystoreKeys.shareIssueDate)
+      backUrl <- s4lConnector.fetchAndGetFormData[String](KeystoreKeys.backLinkNumberOfSharesPurchased)
+      route <- process(shareIssueDate, backUrl)
+    } yield route
+
   }
 
-  def submit(shareIssueDate: Option[String]): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
-    AuthorisedAndEnrolled.async { implicit user =>
-      implicit request =>
-        numberOfSharesPurchasedForm.bindFromRequest().fold(
-          formWithErrors => {
-            ControllerHelpers.getSavedBackLink(KeystoreKeys.backLinkNumberOfSharesPurchased, s4lConnector).flatMap(url =>
+  def submit(shareIssueDate: Option[String]): Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user =>
+    implicit request =>
+      numberOfSharesPurchasedForm.bindFromRequest().fold(
+        formWithErrors => {
+          ControllerHelpers.getSavedBackLink(KeystoreKeys.backLinkNumberOfSharesPurchased, s4lConnector).flatMap(url =>
             s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
               case Some(data) => {
                 val investorDetailsModel = data.last
@@ -92,26 +87,25 @@ trait NumberOfSharesPurchasedController extends FrontendController with Authoris
                   shareIssueDate.get, formWithErrors, url.get))
               }
             })
-          },
-          validFormData => {
-            validFormData.processingId match {
-              case Some(_) => PreviousInvestorsHelper.updateNumOfSharesPurchasedDetails(s4lConnector, validFormData).map {
-                investorDetailsModel => {
-                  s4lConnector.saveFormData(KeystoreKeys.backLinkHowMuchSpentOnShares,
-                    routes.NumberOfSharesPurchasedController.show(investorDetailsModel.processingId.get).url)
-                  Redirect(routes.HowMuchSpentOnSharesController.show(investorDetailsModel.processingId.get))
-                }
+        },
+        validFormData => {
+          validFormData.processingId match {
+            case Some(_) => PreviousInvestorsHelper.updateNumOfSharesPurchasedDetails(s4lConnector, validFormData).map {
+              investorDetailsModel => {
+                s4lConnector.saveFormData(KeystoreKeys.backLinkHowMuchSpentOnShares,
+                  routes.NumberOfSharesPurchasedController.show(investorDetailsModel.processingId.get).url)
+                Redirect(routes.HowMuchSpentOnSharesController.show(investorDetailsModel.processingId.get))
               }
-              case None => PreviousInvestorsHelper.addNumOfSharesPurchasedDetails(s4lConnector, validFormData).map {
-                investorDetailsModel => {
-                  s4lConnector.saveFormData(KeystoreKeys.backLinkHowMuchSpentOnShares,
-                    routes.NumberOfSharesPurchasedController.show(investorDetailsModel.processingId.get).url)
-                  Redirect(routes.HowMuchSpentOnSharesController.show(investorDetailsModel.processingId.get))
-                }
+            }
+            case None => PreviousInvestorsHelper.addNumOfSharesPurchasedDetails(s4lConnector, validFormData).map {
+              investorDetailsModel => {
+                s4lConnector.saveFormData(KeystoreKeys.backLinkHowMuchSpentOnShares,
+                  routes.NumberOfSharesPurchasedController.show(investorDetailsModel.processingId.get).url)
+                Redirect(routes.HowMuchSpentOnSharesController.show(investorDetailsModel.processingId.get))
               }
             }
           }
-        )
-    }
+        }
+      )
   }
 }

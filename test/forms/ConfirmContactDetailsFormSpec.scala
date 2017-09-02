@@ -16,6 +16,8 @@
 
 package forms
 
+import common.Constants
+import controllers.helpers.MockDataGenerator
 import org.scalatestplus.play.OneAppPerSuite
 import play.api.i18n.Messages
 import uk.gov.hmrc.play.test.UnitSpec
@@ -25,7 +27,13 @@ import play.api.i18n.Messages.Implicits._
 
 class ConfirmContactDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
-  val chars132 = "thisxx@" + ("12345678911" * 11) + ".com"
+  val maxEmail = "thisxx@" + ("12345678911" * 11) + ".com"
+
+  "The test max length email" should {
+    "be the ccorrect length" in {
+      maxEmail.length shouldBe Constants.emailLength
+    }
+  }
 
   "Creating a form using an empty model" should {
     lazy val form = confirmContactDetailsForm
@@ -36,9 +44,10 @@ class ConfirmContactDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "Creating a form using a valid model" should {
     "return a form with the data specified in the model" in {
-      val model = ConfirmContactDetailsModel("Yes", ContactDetailsModel("firstname", "lastname", Some("07000 111222"), None, "test@test.com"))
+      val model = ConfirmContactDetailsModel(Constants.StandardRadioButtonYesValue,
+        ContactDetailsModel("firstname", "lastname", Some("07000 111222"), None, "test@test.com"))
       val form = confirmContactDetailsForm.fill(model)
-      form.data("contactDetailsUse") shouldBe "Yes"
+      form.data("contactDetailsUse") shouldBe Constants.StandardRadioButtonYesValue
       form.data("contactDetails.forename") shouldBe "firstname"
       form.data("contactDetails.surname") shouldBe "lastname"
       form.data("contactDetails.telephoneNumber") shouldBe "07000 111222"
@@ -50,7 +59,7 @@ class ConfirmContactDetailsFormSpec extends UnitSpec with OneAppPerSuite{
   "Creating a form using an invalid post" when {
     "supplied with no data for forename" should {
       lazy val form = confirmContactDetailsForm.bind(Map(
-        "contactDetailsUse" -> "Yes",
+        "contactDetailsUse" -> Constants.StandardRadioButtonYesValue,
         "contactDetails.forename" -> "",
         "contactDetails.surname" -> "lastname",
         "contactDetails.telephoneNumber" -> "07000 111222",
@@ -72,7 +81,7 @@ class ConfirmContactDetailsFormSpec extends UnitSpec with OneAppPerSuite{
   "Creating a form using an invalid post" when {
     "supplied with no data for surname" should {
       lazy val form = confirmContactDetailsForm.bind(Map(
-        "contactDetailsUse" -> "Yes",
+        "contactDetailsUse" -> Constants.StandardRadioButtonYesValue,
         "contactDetails.forename" -> "firstname",
         "contactDetails.surname" -> "",
         "contactDetails.telephoneNumber" -> "07000 111222",
@@ -94,7 +103,7 @@ class ConfirmContactDetailsFormSpec extends UnitSpec with OneAppPerSuite{
   "Creating a form using an invalid post" when {
     "supplied with no data for email" should {
       lazy val form = confirmContactDetailsForm.bind(Map(
-        "contactDetailsUse" -> "Yes",
+        "contactDetailsUse" -> Constants.StandardRadioButtonYesValue,
         "contactDetails.forename" -> "firstname",
         "contactDetails.surname" -> "lastname",
         "contactDetails.telephoneNumber" -> "07000 111222",
@@ -116,7 +125,7 @@ class ConfirmContactDetailsFormSpec extends UnitSpec with OneAppPerSuite{
   "Creating a form using an invalid post" when {
     "supplied with no data for forename and surname" should {
       lazy val form = confirmContactDetailsForm.bind(Map(
-        "contactDetailsUse" -> "Yes",
+        "contactDetailsUse" -> Constants.StandardRadioButtonYesValue,
         "contactDetails.forename" -> "",
         "contactDetails.surname" -> "",
         "contactDetails.telephoneNumber" -> "07000 111222",
@@ -140,7 +149,7 @@ class ConfirmContactDetailsFormSpec extends UnitSpec with OneAppPerSuite{
   "Creating a form using an invalid post" when {
     "supplied with no data for telephone number and email" should {
       lazy val form = confirmContactDetailsForm.bind(Map(
-        "contactDetailsUse" -> "Yes",
+        "contactDetailsUse" -> Constants.StandardRadioButtonYesValue,
         "contactDetails.forename" -> "firstname",
         "contactDetails.surname" -> "lastname",
         "contactDetails.telephoneNumber" -> "",
@@ -162,7 +171,7 @@ class ConfirmContactDetailsFormSpec extends UnitSpec with OneAppPerSuite{
   "Creating a form using an invalid post" when {
     "supplied with no data for forename, surname or telephone number" should {
       lazy val form = confirmContactDetailsForm.bind(Map(
-        "contactDetailsUse" -> "Yes",
+        "contactDetailsUse" -> Constants.StandardRadioButtonYesValue,
         "contactDetails.forename" -> "",
         "contactDetails.surname" -> "",
         "contactDetails.telephoneNumber" -> "",
@@ -185,7 +194,7 @@ class ConfirmContactDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "supplied with empty space for forename" should {
     lazy val form = confirmContactDetailsForm.bind(Map(
-      "contactDetailsUse" -> "Yes",
+      "contactDetailsUse" -> Constants.StandardRadioButtonYesValue,
       "contactDetails.forename" -> "    ",
       "contactDetails.surname" -> "lastname",
       "contactDetails.telephoneNumber" -> "07000 111222",
@@ -205,7 +214,7 @@ class ConfirmContactDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "supplied with empty space for surname" should {
     lazy val form = confirmContactDetailsForm.bind(Map(
-      "contactDetailsUse" -> "Yes",
+      "contactDetailsUse" -> Constants.StandardRadioButtonYesValue,
       "contactDetails.forename" -> "firstname",
       "contactDetails.surname" -> "   ",
       "contactDetails.telephoneNumber" -> "07000 111222",
@@ -225,7 +234,7 @@ class ConfirmContactDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "supplied with empty space for telephoneNumber" should {
     lazy val form = confirmContactDetailsForm.bind(Map(
-      "contactDetailsUse" -> "Yes",
+      "contactDetailsUse" -> Constants.StandardRadioButtonYesValue,
       "contactDetails.forename" -> "firstname",
       "contactDetails.surname" -> "lastname",
       "contactDetails.telephoneNumber" -> "     ",
@@ -238,7 +247,7 @@ class ConfirmContactDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "supplied with empty space for email" should {
     lazy val form = confirmContactDetailsForm.bind(Map(
-      "contactDetailsUse" -> "Yes",
+      "contactDetailsUse" -> Constants.StandardRadioButtonYesValue,
       "contactDetails.forename" -> "firstname",
       "contactDetails.surname" -> "lastname",
       "contactDetails.telephoneNumber" -> "07000 111222",
@@ -258,7 +267,7 @@ class ConfirmContactDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "supplied with numeric input for forename" should {
     lazy val form = confirmContactDetailsForm.bind(Map(
-      "contactDetailsUse" -> "Yes",
+      "contactDetailsUse" -> Constants.StandardRadioButtonYesValue,
       "contactDetails.forename" -> "firstn4me",
       "contactDetails.surname" -> "lastname",
       "contactDetails.telephoneNumber" -> "07000 111222",
@@ -274,7 +283,7 @@ class ConfirmContactDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "supplied with numeric input for surname" should {
     lazy val form = confirmContactDetailsForm.bind(Map(
-      "contactDetailsUse" -> "Yes",
+      "contactDetailsUse" -> Constants.StandardRadioButtonYesValue,
       "contactDetails.forename" -> "firstname",
       "contactDetails.surname" -> "lastnam3",
       "contactDetails.telephoneNumber" -> "07000 111222",
@@ -290,7 +299,7 @@ class ConfirmContactDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "supplied with alphanumeric input for telephone number" should {
     lazy val form = confirmContactDetailsForm.bind(Map(
-      "contactDetailsUse" -> "Yes",
+      "contactDetailsUse" -> Constants.StandardRadioButtonYesValue,
       "contactDetails.forename" -> "firstname",
       "contactDetails.surname" -> "lastname",
       "contactDetails.telephoneNumber" -> "0000 O0000I",
@@ -303,7 +312,7 @@ class ConfirmContactDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "supplied with alphanumeric input for email" should {
     lazy val form = confirmContactDetailsForm.bind(Map(
-      "contactDetailsUse" -> "Yes",
+      "contactDetailsUse" -> Constants.StandardRadioButtonYesValue,
       "contactDetails.forename" -> "firstname",
       "contactDetails.surname" -> "lastname",
       "contactDetails.telephoneNumber" -> "07000 111222",
@@ -321,7 +330,7 @@ class ConfirmContactDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "forename value supplied with the minimum allowed" should {
     lazy val form = confirmContactDetailsForm.bind(Map(
-      "contactDetailsUse" -> "Yes",
+      "contactDetailsUse" -> Constants.StandardRadioButtonYesValue,
       "contactDetails.forename" -> "F",
       "contactDetails.surname" -> "lastname",
       "contactDetails.telephoneNumber" -> "07000 111222",
@@ -337,7 +346,7 @@ class ConfirmContactDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "surname value supplied with the minimum allowed" should {
     lazy val form = confirmContactDetailsForm.bind(Map(
-      "contactDetailsUse" -> "Yes",
+      "contactDetailsUse" -> Constants.StandardRadioButtonYesValue,
       "contactDetails.forename" -> "firstname",
       "contactDetails.surname" -> "L",
       "contactDetails.telephoneNumber" -> "07000 111222",
@@ -353,7 +362,7 @@ class ConfirmContactDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "telephoneNumber value supplied with the minimum allowed" should {
     lazy val form = confirmContactDetailsForm.bind(Map(
-      "contactDetailsUse" -> "Yes",
+      "contactDetailsUse" -> Constants.StandardRadioButtonYesValue,
       "contactDetails.forename" -> "firstname",
       "contactDetails.surname" -> "lastname",
       "contactDetails.telephoneNumber" -> "0",
@@ -369,7 +378,7 @@ class ConfirmContactDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "email value supplied with the minimum allowed" should {
     lazy val form = confirmContactDetailsForm.bind(Map(
-      "contactDetailsUse" -> "Yes",
+      "contactDetailsUse" -> Constants.StandardRadioButtonYesValue,
       "contactDetails.forename" -> "firstname",
       "contactDetails.surname" -> "lastname",
       "contactDetails.telephoneNumber" -> "07000 111222",
@@ -383,10 +392,30 @@ class ConfirmContactDetailsFormSpec extends UnitSpec with OneAppPerSuite{
     }
   }
 
+  "email value supplied over the maximum allowed (over the boundary)" should {
+    lazy val form = confirmContactDetailsForm.bind(Map(
+      "contactDetailsUse" -> Constants.StandardRadioButtonYesValue,
+      "contactDetails.forename" -> "firstname",
+      "contactDetails.surname" -> "lastname",
+      "contactDetails.telephoneNumber" -> "07000 111222",
+      "contactDetails.email" -> ("f" + maxEmail))
+    )
+    "raise form error" in {
+      form.hasErrors shouldBe true
+    }
+    "raise 1 form error" in {
+      form.errors.length shouldBe 1
+      form.errors.head.key shouldBe "contactDetails.email"
+    }
+    "associate the correct error message to the error" in {
+      form.error("contactDetails.email").get.message shouldBe Messages("validation.error.email")
+    }
+  }
+
   "forename value supplied with the maximum allowed (on the boundary)" should {
     lazy val form = confirmContactDetailsForm.bind(Map(
-      "contactDetailsUse" -> "Yes",
-      "contactDetails.forename" -> "Thisnameisthirtyfivecharacterslongg",
+      "contactDetailsUse" -> Constants.StandardRadioButtonYesValue,
+      "contactDetails.forename" -> MockDataGenerator.randomAlphanumericString(Constants.forenameLength),
       "contactDetails.surname" -> "lastname",
       "contactDetails.telephoneNumber" -> "07000 111222",
       "contactDetails.email" -> "test@test.com")
@@ -396,14 +425,36 @@ class ConfirmContactDetailsFormSpec extends UnitSpec with OneAppPerSuite{
     }
     "raise 0 form errors" in {
       form.errors.length shouldBe 0
+    }
+  }
+
+  "forename value supplied over the maximum allowed (over the boundary)" should {
+    lazy val form = confirmContactDetailsForm.bind(Map(
+      "contactDetailsUse" -> Constants.StandardRadioButtonYesValue,
+      "contactDetails.forename" -> MockDataGenerator.randomNumberString(Constants.forenameLength + 1),
+      "contactDetails.surname" -> "lastname",
+      "contactDetails.telephoneNumber" -> "07000 111222",
+      "contactDetails.email" -> "test@test.com")
+    )
+    "raise form error" in {
+      form.hasErrors shouldBe true
+    }
+    "raise 1 form error" in {
+      form.errors.length shouldBe 1
+      form.errors.head.key shouldBe "contactDetails.forename"
+
+    }
+    "associate the correct error message to the error" in {
+      form.errors.head.message shouldBe "error.maxLength"
+      form.errors.head.args shouldBe Array(Constants.forenameLength)
     }
   }
 
   "surname value supplied with the maximum allowed (on the boundary)" should {
     lazy val form = confirmContactDetailsForm.bind(Map(
-      "contactDetailsUse" -> "Yes",
+      "contactDetailsUse" -> Constants.StandardRadioButtonYesValue,
       "contactDetails.forename" -> "firstname",
-      "contactDetails.surname" -> "Thisnameisthirtyfivecharacterslongg",
+      "contactDetails.surname" -> MockDataGenerator.randomAlphanumericString(Constants.surnameLength),
       "contactDetails.telephoneNumber" -> "07000 111222",
       "contactDetails.email" -> "test@test.com")
     )
@@ -415,12 +466,33 @@ class ConfirmContactDetailsFormSpec extends UnitSpec with OneAppPerSuite{
     }
   }
 
+  "surname value supplied over the maximum allowed (over the boundary)" should {
+    lazy val form = confirmContactDetailsForm.bind(Map(
+      "contactDetailsUse" -> Constants.StandardRadioButtonYesValue,
+      "contactDetails.forename" -> "firstname",
+      "contactDetails.surname" -> MockDataGenerator.randomNumberString(Constants.surnameLength + 1),
+      "contactDetails.telephoneNumber" -> "07000 111222",
+      "contactDetails.email" -> "test@test.com")
+    )
+    "raise form error" in {
+      form.hasErrors shouldBe true
+    }
+    "raise 1 form error" in {
+      form.errors.length shouldBe 1
+      form.errors.head.key shouldBe "contactDetails.surname"
+    }
+    "associate the correct error message to the error" in {
+      form.errors.head.message shouldBe "error.maxLength"
+      form.errors.head.args shouldBe Array(Constants.surnameLength)
+    }
+  }
+
   "telephoneNumber value supplied with the maximum allowed (on the boundary)" should {
     lazy val form = confirmContactDetailsForm.bind(Map(
-      "contactDetailsUse" -> "Yes",
+      "contactDetailsUse" -> Constants.StandardRadioButtonYesValue,
       "contactDetails.forename" -> "firstname",
       "contactDetails.surname" -> "lastname",
-      "contactDetails.telephoneNumber" -> "000000000000000000000005",
+      "contactDetails.telephoneNumber" -> MockDataGenerator.randomNumberString(Constants.phoneLength),
       "contactDetails.email" -> "test@test.com")
     )
     "raise form error" in {
@@ -433,10 +505,10 @@ class ConfirmContactDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "telephoneNumber value supplied over the maximum allowed (over the boundary)" should {
     lazy val form = confirmContactDetailsForm.bind(Map(
-      "contactDetailsUse" -> "Yes",
+      "contactDetailsUse" -> Constants.StandardRadioButtonYesValue,
       "contactDetails.forename" -> "firstname",
       "contactDetails.surname" -> "lastname",
-      "contactDetails.telephoneNumber" -> "0000000000000000000000006",
+      "contactDetails.telephoneNumber" -> MockDataGenerator.randomNumberString(Constants.phoneLength + 1),
       "contactDetails.email" -> "test@test.com")
     )
     "raise form error" in {
@@ -453,10 +525,10 @@ class ConfirmContactDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "telephoneNumber value supplied over the maximum allowed (over the boundary) incluses whitespace in the count" should {
     lazy val form = confirmContactDetailsForm.bind(Map(
-      "contactDetailsUse" -> "Yes",
+      "contactDetailsUse" -> Constants.StandardRadioButtonYesValue,
       "contactDetails.forename" -> "firstname",
       "contactDetails.surname" -> "lastname",
-      "contactDetails.telephoneNumber" -> "0000000000000 0000000 00003",
+      "contactDetails.telephoneNumber" -> (MockDataGenerator.randomNumberString(Constants.phoneLength) + " "),
       "contactDetails.email" -> "test@test.com")
     )
     "raise form error" in {
@@ -475,7 +547,7 @@ class ConfirmContactDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "telephoneNumber value supplied with multiple white space" should {
     lazy val form = confirmContactDetailsForm.bind(Map(
-      "contactDetailsUse" -> "Yes",
+      "contactDetailsUse" -> Constants.StandardRadioButtonYesValue,
       "contactDetails.forename" -> "firstname",
       "contactDetails.surname" -> "lastname",
       "contactDetails.telephoneNumber" -> "0 00 0 0 0 0 0 0 0 7",
@@ -491,7 +563,7 @@ class ConfirmContactDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "telephoneNumber value supplied with brackets" should {
     lazy val form = confirmContactDetailsForm.bind(Map(
-      "contactDetailsUse" -> "Yes",
+      "contactDetailsUse" -> Constants.StandardRadioButtonYesValue,
       "contactDetails.forename" -> "firstname",
       "contactDetails.surname" -> "lastname",
       "contactDetails.telephoneNumber" -> "(00000) 000006",
@@ -507,7 +579,7 @@ class ConfirmContactDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "telephoneNumber value supplied with +44" should {
     lazy val form = confirmContactDetailsForm.bind(Map(
-      "contactDetailsUse" -> "Yes",
+      "contactDetailsUse" -> Constants.StandardRadioButtonYesValue,
       "contactDetails.forename" -> "firstname",
       "contactDetails.surname" -> "lastname",
       "contactDetails.telephoneNumber" -> "+440000000005",
@@ -523,7 +595,7 @@ class ConfirmContactDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "telephoneNumber value supplied with /" should {
     lazy val form = confirmContactDetailsForm.bind(Map(
-      "contactDetailsUse" -> "Yes",
+      "contactDetailsUse" -> Constants.StandardRadioButtonYesValue,
       "contactDetails.forename" -> "firstname",
       "contactDetails.surname" -> "lastname",
       "contactDetails.telephoneNumber" -> "0/13/84/55/33/82",
@@ -536,7 +608,7 @@ class ConfirmContactDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "telephoneNumber value supplied with #" should {
     lazy val form = confirmContactDetailsForm.bind(Map(
-      "contactDetailsUse" -> "Yes",
+      "contactDetailsUse" -> Constants.StandardRadioButtonYesValue,
       "contactDetails.forename" -> "firstname",
       "contactDetails.surname" -> "lastname",
       "contactDetails.telephoneNumber" -> "#00000000007",
@@ -549,7 +621,7 @@ class ConfirmContactDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "telephoneNumber value supplied with *" should {
     lazy val form = confirmContactDetailsForm.bind(Map(
-      "contactDetailsUse" -> "Yes",
+      "contactDetailsUse" -> Constants.StandardRadioButtonYesValue,
       "contactDetails.forename" -> "firstname",
       "contactDetails.surname" -> "lastname",
       "contactDetails.telephoneNumber" -> "#00000000008",
@@ -562,7 +634,7 @@ class ConfirmContactDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "telephoneNumber value supplied with :" should {
     lazy val form = confirmContactDetailsForm.bind(Map(
-      "contactDetailsUse" -> "Yes",
+      "contactDetailsUse" -> Constants.StandardRadioButtonYesValue,
       "contactDetails.forename" -> "firstname",
       "contactDetails.surname" -> "lastname",
       "contactDetails.telephoneNumber" -> "00000:000007",
@@ -582,7 +654,7 @@ class ConfirmContactDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "telephoneNumber value supplied with - (American)" should {
     lazy val form = confirmContactDetailsForm.bind(Map(
-      "contactDetailsUse" -> "Yes",
+      "contactDetailsUse" -> Constants.StandardRadioButtonYesValue,
       "contactDetails.forename" -> "firstname",
       "contactDetails.surname" -> "lastname",
       "contactDetails.telephoneNumber" -> "+1 000-000-0007",
@@ -602,7 +674,7 @@ class ConfirmContactDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "telephoneNumber value supplied with - (France)" should {
     lazy val form = confirmContactDetailsForm.bind(Map(
-      "contactDetailsUse" -> "Yes",
+      "contactDetailsUse" -> Constants.StandardRadioButtonYesValue,
       "contactDetails.forename" -> "firstname",
       "contactDetails.surname" -> "lastname",
       "contactDetails.telephoneNumber" -> "+00(0)000000008",
@@ -622,7 +694,7 @@ class ConfirmContactDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "telephoneNumber value supplied with ext (extensions)" should {
     lazy val form = confirmContactDetailsForm.bind(Map(
-      "contactDetailsUse" -> "Yes",
+      "contactDetailsUse" -> Constants.StandardRadioButtonYesValue,
       "contactDetails.forename" -> "firstname",
       "contactDetails.surname" -> "lastname",
       "contactDetails.telephoneNumber" -> "+44 0000000000 ext 123",
@@ -642,7 +714,7 @@ class ConfirmContactDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "telephoneNumber value supplied with . " should {
     lazy val form = confirmContactDetailsForm.bind(Map(
-      "contactDetailsUse" -> "Yes",
+      "contactDetailsUse" -> Constants.StandardRadioButtonYesValue,
       "contactDetails.forename" -> "firstname",
       "contactDetails.surname" -> "lastname",
       "contactDetails.telephoneNumber" -> "00000.00.00.00.00",
@@ -662,7 +734,7 @@ class ConfirmContactDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "telephoneNumber value supplied with a leading space " should {
     lazy val form = confirmContactDetailsForm.bind(Map(
-      "contactDetailsUse" -> "Yes",
+      "contactDetailsUse" -> Constants.StandardRadioButtonYesValue,
       "contactDetails.forename" -> "firstname",
       "contactDetails.surname" -> "lastname",
       "contactDetails.telephoneNumber" -> " 07000 111222",
@@ -678,7 +750,7 @@ class ConfirmContactDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "telephoneNumber value supplied with a trailing space " should {
     lazy val form = confirmContactDetailsForm.bind(Map(
-      "contactDetailsUse" -> "Yes",
+      "contactDetailsUse" -> Constants.StandardRadioButtonYesValue,
       "contactDetails.forename" -> "firstname",
       "contactDetails.surname" -> "lastname",
       "contactDetails.telephoneNumber" -> "07000 111222 ",
@@ -693,7 +765,7 @@ class ConfirmContactDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "email supplied with multiple white spaces" should {
     lazy val form = confirmContactDetailsForm.bind(Map(
-      "contactDetailsUse" -> "Yes",
+      "contactDetailsUse" -> Constants.StandardRadioButtonYesValue,
       "contactDetails.forename" -> "firstname",
       "contactDetails.surname" -> "lastname",
       "contactDetails.telephoneNumber" -> "07000 111222",
@@ -713,7 +785,7 @@ class ConfirmContactDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "email supplied with multiple @" should {
     lazy val form = confirmContactDetailsForm.bind(Map(
-      "contactDetailsUse" -> "Yes",
+      "contactDetailsUse" -> Constants.StandardRadioButtonYesValue,
       "contactDetails.forename" -> "firstname",
       "contactDetails.surname" -> "lastname",
       "contactDetails.telephoneNumber" -> "07000 111222",
@@ -733,7 +805,7 @@ class ConfirmContactDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "email supplied without @" should {
     lazy val form = confirmContactDetailsForm.bind(Map(
-      "contactDetailsUse" -> "Yes",
+      "contactDetailsUse" -> Constants.StandardRadioButtonYesValue,
       "contactDetails.forename" -> "firstname",
       "contactDetails.surname" -> "lastname",
       "contactDetails.telephoneNumber" -> "07000 111222",
@@ -753,7 +825,7 @@ class ConfirmContactDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "email supplied with sub domain" should {
     lazy val form = confirmContactDetailsForm.bind(Map(
-      "contactDetailsUse" -> "Yes",
+      "contactDetailsUse" -> Constants.StandardRadioButtonYesValue,
       "contactDetails.forename" -> "firstname",
       "contactDetails.surname" -> "lastname",
       "contactDetails.telephoneNumber" -> "07000 111222",
@@ -769,7 +841,7 @@ class ConfirmContactDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "email supplied with firstname.lastname@" should {
     lazy val form = confirmContactDetailsForm.bind(Map(
-      "contactDetailsUse" -> "Yes",
+      "contactDetailsUse" -> Constants.StandardRadioButtonYesValue,
       "contactDetails.forename" -> "firstname",
       "contactDetails.surname" -> "lastname",
       "contactDetails.telephoneNumber" -> "07000 111222",
@@ -785,7 +857,7 @@ class ConfirmContactDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "email supplied with forename surname <email@example.com>" should {
     lazy val form = confirmContactDetailsForm.bind(Map(
-      "contactDetailsUse" -> "Yes",
+      "contactDetailsUse" -> Constants.StandardRadioButtonYesValue,
       "contactDetails.forename" -> "firstname",
       "contactDetails.surname" -> "lastname",
       "contactDetails.telephoneNumber" -> "07000 111222",
@@ -805,7 +877,7 @@ class ConfirmContactDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "email supplied with firstname_lastname@" should {
     lazy val form = confirmContactDetailsForm.bind(Map(
-      "contactDetailsUse" -> "Yes",
+      "contactDetailsUse" -> Constants.StandardRadioButtonYesValue,
       "contactDetails.forename" -> "firstname",
       "contactDetails.surname" -> "lastname",
       "contactDetails.telephoneNumber" -> "07000 111222",
@@ -821,7 +893,7 @@ class ConfirmContactDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "Part 1 - minimum allowed supplied for email (on boundary) " should {
     lazy val form = confirmContactDetailsForm.bind(Map(
-      "contactDetailsUse" -> "Yes",
+      "contactDetailsUse" -> Constants.StandardRadioButtonYesValue,
       "contactDetails.forename" -> "firstname",
       "contactDetails.surname" -> "lastname",
       "contactDetails.telephoneNumber" -> "00000 000001",
@@ -837,7 +909,7 @@ class ConfirmContactDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "Part 1 - nothing supplied for first part of the email (under the boundary) " should {
     lazy val form = confirmContactDetailsForm.bind(Map(
-      "contactDetailsUse" -> "Yes",
+      "contactDetailsUse" -> Constants.StandardRadioButtonYesValue,
       "contactDetails.forename" -> "firstname",
       "contactDetails.surname" -> "lastname",
       "contactDetails.telephoneNumber" -> "00000 000002",
@@ -857,11 +929,11 @@ class ConfirmContactDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "Part 1 - maximum allowed supplied for email (on boundary) " should {
     lazy val form = confirmContactDetailsForm.bind(Map(
-      "contactDetailsUse" -> "Yes",
+      "contactDetailsUse" -> Constants.StandardRadioButtonYesValue,
       "contactDetails.forename" -> "firstname",
       "contactDetails.surname" -> "lastname",
       "contactDetails.telephoneNumber" -> "07000 111222",
-      "contactDetails.email" -> chars132)
+      "contactDetails.email" -> maxEmail)
     )
     "raise form error" in {
       form.hasErrors shouldBe false
@@ -873,11 +945,11 @@ class ConfirmContactDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "Part 1 - too many characters supplied for the first part of the email (over the boundary) " should {
     lazy val form = confirmContactDetailsForm.bind(Map(
-      "contactDetailsUse" -> "Yes",
+      "contactDetailsUse" -> Constants.StandardRadioButtonYesValue,
       "contactDetails.forename" -> "firstname",
       "contactDetails.surname" -> "lastname",
       "contactDetails.telephoneNumber" -> "07000 111222",
-      "contactDetails.email" -> s"1$chars132")
+      "contactDetails.email" -> s"1$maxEmail")
     )
     "raise form error" in {
       form.hasErrors shouldBe true
@@ -893,7 +965,7 @@ class ConfirmContactDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "Part 2 - minimum allowed supplied for email (on boundary)" should {
     lazy val form = confirmContactDetailsForm.bind(Map(
-      "contactDetailsUse" -> "Yes",
+      "contactDetailsUse" -> Constants.StandardRadioButtonYesValue,
       "contactDetails.forename" -> "firstname",
       "contactDetails.surname" -> "lastname",
       "contactDetails.telephoneNumber" -> "07000 111222",
@@ -909,7 +981,7 @@ class ConfirmContactDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "Part 2 - nothing supplied for second part of the email (under the boundary) " should {
     lazy val form = confirmContactDetailsForm.bind(Map(
-      "contactDetailsUse" -> "Yes",
+      "contactDetailsUse" -> Constants.StandardRadioButtonYesValue,
       "contactDetails.forename" -> "firstname",
       "contactDetails.surname" -> "lastname",
       "contactDetails.telephoneNumber" -> "07000 111222",

@@ -1,0 +1,51 @@
+@import models.FullTimeEmployeeCountModel
+@import views.html.helpers.backButtonWithProgress
+@import views.html.helpers.errorSummary
+@import views.html.helpers.input
+@import uk.gov.hmrc.play.views.html.helpers.form
+@import common.Constants
+
+@(fullTimeEmployeeCountForm: Form[FullTimeEmployeeCountModel])(implicit request: Request[_], messages: Messages)
+
+@main_template(Messages("page.companyDetails.fullTimeEmployeeCount.title")) {
+
+    @backButtonWithProgress(controllers.eis.routes.GrossAssetsController.show().url, Messages("common.section.progress.details.one"))
+
+    @errorSummary(fullTimeEmployeeCountForm, "full-time-employee-count", "fullTimeEmployeeCount")
+
+    <h1 class="heading-xlarge" id="main-heading">@Messages("page.companyDetails.fullTimeEmployeeCount.heading")</h1>
+
+    <div>
+        <p>@Messages("page.companyDetails.fullTimeEmployeeCount.guidance.one")</p>
+
+        <details>
+            <summary class="summary">
+                @Messages("page.companyDetails.fullTimeEmployeeCount.guidance.progressive")
+            </summary>
+            <div class="panel panel-indent panel-border-narrow">
+                <p>@Messages("page.companyDetails.fullTimeEmployeeCount.guidance.two")</p>
+                <p>@Messages("page.companyDetails.fullTimeEmployeeCount.guidance.three")</p>
+            </div>
+        </details>
+    </div>
+
+    @form(action = controllers.eis.routes.FullTimeEmployeeCountController.submit()) {
+        <fieldset>
+            <legend class="visuallyhidden">@Messages("page.companyDetails.fullTimeEmployeeCount.heading")</legend>
+            <div class="form-group">
+                @input(
+                fullTimeEmployeeCountForm("employeeCount"),
+                '_divClass -> "form-label",
+                '_labelId -> "label-fullTimeEmployeeCount",
+                '_label -> Messages("page.companyDetails.fullTimeEmployeeCount.heading"),
+                '_labelTextClass -> "visuallyhidden",
+                '_maxlength -> "9",
+                '_inputClass -> "input--normal"
+                )
+            </div>
+        </fieldset>
+        <div class="form-group">
+            <button class="btn button" type="submit" id="next">@Messages("common.button.snc")</button>
+        </div>
+    }
+}

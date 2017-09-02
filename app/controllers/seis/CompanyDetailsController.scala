@@ -21,7 +21,6 @@ import common.{Constants, KeystoreKeys}
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.Helpers.{ControllerHelpers, PreviousInvestorsHelper}
-import controllers.predicates.FeatureSwitch
 import forms.CompanyDetailsForm._
 import models.CompanyDetailsModel
 import models.investorDetails.InvestorDetailsModel
@@ -36,7 +35,7 @@ import views.html.seis.investors.CompanyDetails
 
 import scala.concurrent.Future
 
-object CompanyDetailsController extends CompanyDetailsController with AuthorisedAndEnrolledForTAVC with FeatureSwitch {
+object CompanyDetailsController extends CompanyDetailsController with AuthorisedAndEnrolledForTAVC {
 
   val subscriptionService = SubscriptionService
   override lazy val s4lConnector = S4LConnector
@@ -45,7 +44,7 @@ object CompanyDetailsController extends CompanyDetailsController with Authorised
   override lazy val enrolmentConnector = EnrolmentConnector
 }
 
-trait CompanyDetailsController extends FrontendController with AuthorisedAndEnrolledForTAVC with FeatureSwitch with ControllerHelpers{
+trait CompanyDetailsController extends FrontendController with AuthorisedAndEnrolledForTAVC with ControllerHelpers {
 
   override val acceptedFlows = Seq(Seq(SEIS))
 
@@ -54,62 +53,58 @@ trait CompanyDetailsController extends FrontendController with AuthorisedAndEnro
   lazy val countriesList = CountriesHelper.getIsoCodeTupleList
   lazy val emptyModelWithUkCode = CompanyDetailsModel("", "", "", None, None, None, Constants.countyCodeGB, None)
 
-  def show(id: Int): Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
-    AuthorisedAndEnrolled.async { implicit user =>
-      implicit request =>
-        def process(backUrl: Option[String]) = {
-          if (backUrl.isDefined) {
-            s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map { vector =>
-               redirectNoInvestors(vector) { data =>
-                 val itemToUpdateIndex = getInvestorIndex(id, data)
-                 redirectInvalidInvestor(itemToUpdateIndex) { index =>
-                   if(data.lift(itemToUpdateIndex).get.companyOrIndividualModel.isDefined) {
-                     val form = fillForm(companyDetailsForm, retrieveInvestorData(index, data)(_.companyDetailsModel))
-                     Ok(CompanyDetails(if(form.value.isEmpty)companyDetailsForm.fill(emptyModelWithUkCode) else form, countriesList, backUrl.get))
-                   }
-                   else Redirect(routes.CompanyOrIndividualController.show(id))
-                 }
+  def show(id: Int): Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user =>
+    implicit request =>
+      def process(backUrl: Option[String]) = {
+        if (backUrl.isDefined) {
+          s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map { vector =>
+            redirectNoInvestors(vector) { data =>
+              val itemToUpdateIndex = getInvestorIndex(id, data)
+              redirectInvalidInvestor(itemToUpdateIndex) { index =>
+                if (data.lift(itemToUpdateIndex).get.companyOrIndividualModel.isDefined) {
+                  val form = fillForm(companyDetailsForm, retrieveInvestorData(index, data)(_.companyDetailsModel))
+                  Ok(CompanyDetails(if (form.value.isEmpty) companyDetailsForm.fill(emptyModelWithUkCode) else form, countriesList, backUrl.get))
+                }
+                else Redirect(routes.CompanyOrIndividualController.show(id))
               }
             }
           }
-          else Future.successful(Redirect(routes.AddInvestorOrNomineeController.show()))
         }
-        for {
-          backUrl <- s4lConnector.fetchAndGetFormData[String](KeystoreKeys.backLinkCompanyAndIndividualBoth)
-          route <- process(backUrl)
-        } yield route
-    }
+        else Future.successful(Redirect(routes.AddInvestorOrNomineeController.show()))
+      }
+      for {
+        backUrl <- s4lConnector.fetchAndGetFormData[String](KeystoreKeys.backLinkCompanyAndIndividualBoth)
+        route <- process(backUrl)
+      } yield route
   }
 
-  val submit = featureSwitch(applicationConfig.seisFlowEnabled) {
-    AuthorisedAndEnrolled.async { implicit user =>
-      implicit request =>
-        companyDetailsForm.bindFromRequest().fold(
-          formWithErrors => {
-            ControllerHelpers.getSavedBackLink(KeystoreKeys.backLinkCompanyAndIndividualBoth, s4lConnector).flatMap(url =>
+  val submit = AuthorisedAndEnrolled.async { implicit user =>
+    implicit request =>
+      companyDetailsForm.bindFromRequest().fold(
+        formWithErrors => {
+          ControllerHelpers.getSavedBackLink(KeystoreKeys.backLinkCompanyAndIndividualBoth, s4lConnector).flatMap(url =>
             Future.successful(BadRequest(CompanyDetails(if (formWithErrors.hasGlobalErrors)
               formWithErrors.discardingErrors.withError("companyPostcode", Messages("validation.error.countrypostcode"))
             else formWithErrors, countriesList, url.get))))
-          },
-          validFormData => {
-            validFormData.processingId match {
-              case Some(_) => PreviousInvestorsHelper.updateCompanyDetails(s4lConnector, validFormData).map {
-                investorDetailsModel => {
-                  s4lConnector.saveFormData(KeystoreKeys.backLinkNumberOfSharesPurchased,
-                    routes.CompanyDetailsController.show(investorDetailsModel.processingId.get).url)
-                  Redirect(routes.NumberOfSharesPurchasedController.show(investorDetailsModel.processingId.get))
-                }
+        },
+        validFormData => {
+          validFormData.processingId match {
+            case Some(_) => PreviousInvestorsHelper.updateCompanyDetails(s4lConnector, validFormData).map {
+              investorDetailsModel => {
+                s4lConnector.saveFormData(KeystoreKeys.backLinkNumberOfSharesPurchased,
+                  routes.CompanyDetailsController.show(investorDetailsModel.processingId.get).url)
+                Redirect(routes.NumberOfSharesPurchasedController.show(investorDetailsModel.processingId.get))
               }
-              case None => PreviousInvestorsHelper.addCompanyDetails(s4lConnector, validFormData).map {
-                investorDetailsModel => {
-                  s4lConnector.saveFormData(KeystoreKeys.backLinkNumberOfSharesPurchased,
-                    routes.CompanyDetailsController.show(investorDetailsModel.processingId.get).url)
-                  Redirect(routes.NumberOfSharesPurchasedController.show(investorDetailsModel.processingId.get))
-                }
+            }
+            case None => PreviousInvestorsHelper.addCompanyDetails(s4lConnector, validFormData).map {
+              investorDetailsModel => {
+                s4lConnector.saveFormData(KeystoreKeys.backLinkNumberOfSharesPurchased,
+                  routes.CompanyDetailsController.show(investorDetailsModel.processingId.get).url)
+                Redirect(routes.NumberOfSharesPurchasedController.show(investorDetailsModel.processingId.get))
               }
             }
           }
-        )
-    }
+        }
+      )
   }
 }

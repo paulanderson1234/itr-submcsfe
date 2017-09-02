@@ -37,7 +37,7 @@ class InvestmentGrowControllerSpec extends BaseSpec {
     override lazy val enrolmentConnector = mockEnrolmentConnector
   }
 
-  val validBackLink = routes.SubsidiariesNinetyOwnedController.show().url
+  lazy val validBackLink = routes.SubsidiariesNinetyOwnedController.show().url
 
   def setup(investmentGrowModel: Option[InvestmentGrowModel], newGeographicalMarketModel: Option[NewGeographicalMarketModel],
                 newProductModel: Option[NewProductModel], backLink: Option[String]): Unit = {

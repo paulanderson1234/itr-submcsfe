@@ -33,7 +33,6 @@ import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
 import config.FrontendGlobal.internalServerErrorTemplate
 import controllers.feedback
-import controllers.predicates.FeatureSwitch
 
 import scala.concurrent.Future
 
@@ -47,7 +46,7 @@ object AttachmentsAcknowledgementController extends AttachmentsAcknowledgementCo
   override lazy val fileUploadService = FileUploadService
 }
 
-trait AttachmentsAcknowledgementController extends FrontendController with AuthorisedAndEnrolledForTAVC with FeatureSwitch {
+trait AttachmentsAcknowledgementController extends FrontendController with AuthorisedAndEnrolledForTAVC {
 
   override val acceptedFlows = Seq(Seq(SEIS))
 
@@ -57,41 +56,37 @@ trait AttachmentsAcknowledgementController extends FrontendController with Autho
 
 
   //noinspection ScalaStyle
-  val show = featureSwitch(applicationConfig.seisFlowEnabled) {
-    AuthorisedAndEnrolled.async { implicit user => implicit request =>
-      (for {
-      // minimum required fields to continue
-        natureOfBusiness <- s4lConnector.fetchAndGetFormData[NatureOfBusinessModel](KeystoreKeys.natureOfBusiness)
-        contactDetails <- s4lConnector.fetchAndGetFormData[ContactDetailsModel](KeystoreKeys.contactDetails)
-        proposedInvestment <- s4lConnector.fetchAndGetFormData[ProposedInvestmentModel](KeystoreKeys.proposedInvestment)
-        dateOfIncorporation <- s4lConnector.fetchAndGetFormData[DateOfIncorporationModel](KeystoreKeys.dateOfIncorporation)
-        contactAddress <- s4lConnector.fetchAndGetFormData[AddressModel](KeystoreKeys.contactAddress)
-        tavcRef <- getTavCReferenceNumber()
-        tradeStartDate <- s4lConnector.fetchAndGetFormData[TradeStartDateModel](KeystoreKeys.tradeStartDate)
-        schemeType <- s4lConnector.fetchAndGetFormData[SchemeTypesModel](KeystoreKeys.selectedSchemes)
-        registrationDetailsModel <- registrationDetailsService.getRegistrationDetails(tavcRef)
+  val show = AuthorisedAndEnrolled.async { implicit user => implicit request =>
+    (for {
+    // minimum required fields to continue
+      natureOfBusiness <- s4lConnector.fetchAndGetFormData[NatureOfBusinessModel](KeystoreKeys.natureOfBusiness)
+      contactDetails <- s4lConnector.fetchAndGetFormData[ContactDetailsModel](KeystoreKeys.contactDetails)
+      proposedInvestment <- s4lConnector.fetchAndGetFormData[ProposedInvestmentModel](KeystoreKeys.proposedInvestment)
+      dateOfIncorporation <- s4lConnector.fetchAndGetFormData[DateOfIncorporationModel](KeystoreKeys.dateOfIncorporation)
+      contactAddress <- s4lConnector.fetchAndGetFormData[AddressModel](KeystoreKeys.contactAddress)
+      tavcRef <- getTavCReferenceNumber()
+      tradeStartDate <- s4lConnector.fetchAndGetFormData[TradeStartDateModel](KeystoreKeys.tradeStartDate)
+      schemeType <- s4lConnector.fetchAndGetFormData[SchemeTypesModel](KeystoreKeys.selectedSchemes)
+      registrationDetailsModel <- registrationDetailsService.getRegistrationDetails(tavcRef)
 
-        // potentially optional or required
-        subsidiariesSpendInvest <- s4lConnector.fetchAndGetFormData[SubsidiariesSpendingInvestmentModel](KeystoreKeys.subsidiariesSpendingInvestment)
-        subsidiariesNinetyOwned <- s4lConnector.fetchAndGetFormData[SubsidiariesNinetyOwnedModel](KeystoreKeys.subsidiariesNinetyOwned)
-        previousSchemes <- PreviousSchemesHelper.getAllInvestmentFromKeystore(s4lConnector)
+      // potentially optional or required
+      subsidiariesSpendInvest <- s4lConnector.fetchAndGetFormData[SubsidiariesSpendingInvestmentModel](KeystoreKeys.subsidiariesSpendingInvestment)
+      subsidiariesNinetyOwned <- s4lConnector.fetchAndGetFormData[SubsidiariesNinetyOwnedModel](KeystoreKeys.subsidiariesNinetyOwned)
+      previousSchemes <- PreviousSchemesHelper.getAllInvestmentFromKeystore(s4lConnector)
 
-        result <- createSubmissionDetailsModel(natureOfBusiness, contactDetails, proposedInvestment,
-          dateOfIncorporation, contactAddress, tavcRef, tradeStartDate, schemeType, subsidiariesSpendInvest, subsidiariesNinetyOwned,
-          previousSchemes.toList, registrationDetailsModel)
-      } yield result) recover {
-        case e: Exception => {
-          Logger.warn(s"[AcknowledgementController][submit] - Exception: ${e.getMessage}")
-          InternalServerError(internalServerErrorTemplate)
-        }
+      result <- createSubmissionDetailsModel(natureOfBusiness, contactDetails, proposedInvestment,
+        dateOfIncorporation, contactAddress, tavcRef, tradeStartDate, schemeType, subsidiariesSpendInvest, subsidiariesNinetyOwned,
+        previousSchemes.toList, registrationDetailsModel)
+    } yield result) recover {
+      case e: Exception => {
+        Logger.warn(s"[AcknowledgementController][submit] - Exception: ${e.getMessage}")
+        InternalServerError(internalServerErrorTemplate)
       }
     }
   }
 
-  def submit: Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
-    AuthorisedAndEnrolled.apply { implicit user => implicit request =>
-      Redirect(feedback.routes.FeedbackController.show().url)
-    }
+  def submit: Action[AnyContent] = AuthorisedAndEnrolled.apply { implicit user => implicit request =>
+    Redirect(feedback.routes.FeedbackController.show().url)
   }
 
   private def getTradeStartDate(tradeStartDateModel: TradeStartDateModel): String = {

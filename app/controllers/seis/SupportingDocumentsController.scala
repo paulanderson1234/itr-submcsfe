@@ -40,7 +40,7 @@ object SupportingDocumentsController extends SupportingDocumentsController
   override lazy val enrolmentConnector = EnrolmentConnector
 }
 
-trait SupportingDocumentsController extends FrontendController with AuthorisedAndEnrolledForTAVC with FeatureSwitch {
+trait SupportingDocumentsController extends FrontendController with AuthorisedAndEnrolledForTAVC {
 
   override val acceptedFlows = Seq(Seq(SEIS))
 
@@ -48,23 +48,19 @@ trait SupportingDocumentsController extends FrontendController with AuthorisedAn
   val attachmentsFrontEndUrl: String
   val fileUploadService: FileUploadService
 
-  val show = featureSwitch(applicationConfig.seisFlowEnabled) {
-    AuthorisedAndEnrolled.async { implicit user => implicit request =>
-      if (fileUploadService.getUploadFeatureEnabled) {
-        Future.successful(Redirect(routes.SupportingDocumentsUploadController.show()))
-      }
-      else {
-        ControllerHelpers.getSavedBackLink(KeystoreKeys.backLinkSupportingDocs, s4lConnector).flatMap {
-          case Some(backlink) => Future.successful(Ok(SupportingDocuments(backlink)))
-          case None => Future.successful(Redirect(routes.ConfirmCorrespondAddressController.show()))
-        }
+  val show = AuthorisedAndEnrolled.async { implicit user => implicit request =>
+    if (fileUploadService.getUploadFeatureEnabled) {
+      Future.successful(Redirect(routes.SupportingDocumentsUploadController.show()))
+    }
+    else {
+      ControllerHelpers.getSavedBackLink(KeystoreKeys.backLinkSupportingDocs, s4lConnector).flatMap {
+        case Some(backlink) => Future.successful(Ok(SupportingDocuments(backlink)))
+        case None => Future.successful(Redirect(routes.ConfirmCorrespondAddressController.show()))
       }
     }
   }
 
-  val submit = featureSwitch(applicationConfig.seisFlowEnabled) {
-    AuthorisedAndEnrolled.async { implicit user => implicit request =>
-      Future.successful(Redirect(routes.CheckAnswersController.show()))
-    }
+  val submit = AuthorisedAndEnrolled.async { implicit user => implicit request =>
+    Future.successful(Redirect(routes.CheckAnswersController.show()))
   }
 }

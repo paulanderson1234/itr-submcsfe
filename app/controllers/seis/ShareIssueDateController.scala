@@ -20,8 +20,7 @@ import auth.{AuthorisedAndEnrolledForTAVC, SEIS}
 import common.KeystoreKeys
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
-import controllers.Helpers.{ControllerHelpers, KnowledgeIntensiveHelper}
-import controllers.predicates.FeatureSwitch
+import controllers.Helpers.ControllerHelpers
 import forms.ShareIssueDateForm._
 import models.ShareIssueDateModel
 import uk.gov.hmrc.play.frontend.controller.FrontendController
@@ -38,44 +37,40 @@ object ShareIssueDateController extends ShareIssueDateController{
   override lazy val enrolmentConnector = EnrolmentConnector
 }
 
-trait ShareIssueDateController extends FrontendController with AuthorisedAndEnrolledForTAVC with FeatureSwitch {
+trait ShareIssueDateController extends FrontendController with AuthorisedAndEnrolledForTAVC {
 
   override val acceptedFlows = Seq(Seq(SEIS))
 
-  val show = featureSwitch(applicationConfig.seisFlowEnabled) {
-    AuthorisedAndEnrolled.async { implicit user => implicit request =>
+  val show = AuthorisedAndEnrolled.async { implicit user => implicit request =>
 
-      def routeRequest(backUrl: Option[String]) = {
-        if (backUrl.isDefined) {
-          s4lConnector.fetchAndGetFormData[ShareIssueDateModel](KeystoreKeys.shareIssueDate).map {
-            case Some(data) => Ok(ShareIssueDate(shareIssueDateForm.fill(data), backUrl.getOrElse("")))
-            case None => Ok(ShareIssueDate(shareIssueDateForm, backUrl.getOrElse("")))
-          }
+    def routeRequest(backUrl: Option[String]) = {
+      if (backUrl.isDefined) {
+        s4lConnector.fetchAndGetFormData[ShareIssueDateModel](KeystoreKeys.shareIssueDate).map {
+          case Some(data) => Ok(ShareIssueDate(shareIssueDateForm.fill(data), backUrl.getOrElse("")))
+          case None => Ok(ShareIssueDate(shareIssueDateForm, backUrl.getOrElse("")))
         }
-        else Future.successful(Redirect(routes.QualifyBusinessActivityController.show()))
       }
-      for {
-        link <- ControllerHelpers.getSavedBackLink(KeystoreKeys.backLinkShareIssueDate, s4lConnector)
-        route <- routeRequest(link)
-      } yield route
+      else Future.successful(Redirect(routes.QualifyBusinessActivityController.show()))
     }
+    for {
+      link <- ControllerHelpers.getSavedBackLink(KeystoreKeys.backLinkShareIssueDate, s4lConnector)
+      route <- routeRequest(link)
+    } yield route
   }
 
-  val submit = featureSwitch(applicationConfig.seisFlowEnabled) {
-    AuthorisedAndEnrolled.async { implicit user => implicit request =>
-      shareIssueDateForm.bindFromRequest().fold(
-        formWithErrors => {
+  val submit = AuthorisedAndEnrolled.async { implicit user => implicit request =>
+    shareIssueDateForm.bindFromRequest().fold(
+      formWithErrors => {
 
-          ControllerHelpers.getSavedBackLink(KeystoreKeys.backLinkShareIssueDate, s4lConnector).flatMap {
-            case Some(data) => Future.successful(BadRequest(ShareIssueDate(formWithErrors, data)))
-            case None => Future.successful(Redirect(routes.QualifyBusinessActivityController.show()))
-          }
-        },
-        validFormData => {
-          s4lConnector.saveFormData(KeystoreKeys.shareIssueDate, validFormData)
-          Future.successful(Redirect(routes.GrossAssetsController.show()))
+        ControllerHelpers.getSavedBackLink(KeystoreKeys.backLinkShareIssueDate, s4lConnector).flatMap {
+          case Some(data) => Future.successful(BadRequest(ShareIssueDate(formWithErrors, data)))
+          case None => Future.successful(Redirect(routes.QualifyBusinessActivityController.show()))
         }
-      )
-    }
+      },
+      validFormData => {
+        s4lConnector.saveFormData(KeystoreKeys.shareIssueDate, validFormData)
+        Future.successful(Redirect(routes.GrossAssetsController.show()))
+      }
+    )
   }
 }

@@ -1,0 +1,52 @@
+@import common.Constants
+@import models.ShareCapitalChangesModel
+@import uk.gov.hmrc.play.views.html.helpers.form
+@import views.html.helpers.{externalLink, backButtonWithProgress, errorSummary,formHiddenYesNoRadioNoError,formHiddenYesNoRadio, textArea}
+
+
+@(shareCapitalChangesForm: Form[ShareCapitalChangesModel], shareIssueDate: String)(implicit request: Request[_], messages: Messages)
+
+@main_template(Messages("page.shareCapitalChanges.heading", shareIssueDate)) {
+
+    @backButtonWithProgress(controllers.eis.routes.WasAnyValueReceivedController.show().url, Messages("common.section.progress.details.four"))
+
+    @errorSummary(shareCapitalChangesForm, "share-capital-changes", "descriptionTextArea")
+
+    <h1 class="heading-xlarge" id="main-heading">@Messages("page.shareCapitalChanges.heading", shareIssueDate)</h1>
+
+    <div class="form-group">
+        <p id="help-text">@Messages("page.shareCapitalChanges.info.title")</p>
+        <ul class="list list-bullet">
+            <li id="help-bullet-one">@Messages("page.shareCapitalChanges.info.bullet.one")</li>
+            <li id="help-bullet-two">@Messages("page.shareCapitalChanges.info.bullet.two")</li>
+            <li id="help-bullet-three">@Messages("page.shareCapitalChanges.info.bullet.three")</li>
+        </ul>
+    </div>
+
+    @form(action = controllers.eis.routes.ShareCapitalChangesController.submit()) {
+
+    @formHiddenYesNoRadio(
+    shareCapitalChangesForm,
+    "hasChanges",
+    Messages("page.shareCapitalChanges.heading", shareIssueDate),
+    textArea(
+    shareCapitalChangesForm("descriptionTextArea"),
+    '_cols -> "45",
+    '_rows -> "4",
+    '_maxLength-> Constants.shortTextLimit,
+    '_label-> Messages("page.shareCapitalChanges.question"),
+    '_labelTextClass -> "h2-heading",
+    '_info-> Messages("page.shareCapitalChanges.suggested"),
+    '_infoTextClass-> "form-hint"
+    ),
+    None,
+    Some("visuallyhidden")
+    )
+
+
+    <div class="form-group">
+        <button class="btn button" type="submit" id="next">@Messages("common.button.snc")</button>
+    </div>
+
+    }
+}

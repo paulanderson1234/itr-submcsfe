@@ -1,0 +1,44 @@
+@import models.investorDetails.NumberOfSharesPurchasedModel
+@import uk.gov.hmrc.play.views.html.helpers.form
+@import common.Constants
+@import views.html.helpers.{backButtonWithProgress, input, errorSummary, hiddenField}
+
+@(companyOrIndividual: String, shareIssueDate: String, numberOfSharesPurchasedForm: Form[NumberOfSharesPurchasedModel], backUrl: String)(implicit request: Request[_], messages: Messages)
+
+@main_template(Messages("page.investors.numberOfSharesPurchased.title", companyOrIndividual.toLowerCase(), shareIssueDate)) {
+
+@backButtonWithProgress(backUrl, Messages("common.section.progress.details.four"))
+
+@errorSummary(numberOfSharesPurchasedForm, "number-of-shares-purchased", "numberOfSharesPurchased")
+
+<h1 class="heading-xlarge" id="main-heading">@Html(Messages("page.investors.numberOfSharesPurchased.heading", companyOrIndividual.toLowerCase() , shareIssueDate))</h1>
+
+    @form(action = controllers.eis.routes.NumberOfSharesPurchasedController.submit(Some(shareIssueDate))) {
+    <fieldset>
+        <legend class="visuallyhidden">@Messages("page.investors.numberOfSharesPurchased.heading", companyOrIndividual.toLowerCase(), shareIssueDate)</legend>
+        <div class="form-group">
+            @input(
+            numberOfSharesPurchasedForm("numberOfSharesPurchased"),
+            '_divClass -> "form-label",
+            '_labelId -> "label-numberOfSharesPurchased",
+            '_label -> Messages("page.investors.numberOfSharesPurchased.heading", companyOrIndividual.toLowerCase(), shareIssueDate),
+            '_labelTextClass -> "visuallyhidden",
+            '_maxlength -> "25",
+            '_inputClass -> "input--fullwidth"
+            )
+        </div>
+    </fieldset>
+
+    <div>
+        @hiddenField(
+        numberOfSharesPurchasedForm("processingId"),
+        'id -> "processingId"
+        )
+    </div>
+
+    <div class="form-group">
+        <button class="btn button" type="submit" id="next">@Messages("common.button.snc")</button>
+    </div>
+
+    }
+}

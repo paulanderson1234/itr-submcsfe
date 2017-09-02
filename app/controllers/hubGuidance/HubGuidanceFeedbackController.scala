@@ -21,6 +21,7 @@ import common.KeystoreKeys
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.eis
+import controllers.schemeSelection.SingleSchemeSelectionController
 import models.submission.SchemeTypesModel
 import play.Logger
 import play.api.Play.current
@@ -51,19 +52,21 @@ trait HubGuidanceFeedbackController extends FrontendController with AuthorisedAn
   val submit:Action[AnyContent]  = AuthorisedAndEnrolled.async { implicit user =>
     implicit request =>
 
+      Future.successful(Redirect(controllers.schemeSelection.routes.SingleSchemeSelectionController.show()))
+
       // TODO: Temporary fix. Store the fact we are starting an application and set the type to SESI
       // when scheme types page is incorporated that page will do this work
-      if (applicationConfig.seisFlowEnabled) {
-        s4lConnector.saveFormData(KeystoreKeys.selectedSchemes,
-          SchemeTypesModel(seis = true))
-        s4lConnector.saveFormData(KeystoreKeys.applicationInProgress, true)
-        Future.successful(Redirect(controllers.seis.routes.NatureOfBusinessController.show()))
-      }
-      else {
-        //TODO: go to 9635 hub on sub FE - how are we going to show them the app in progress and option to delete
-        // this app in progress? Presumably we need the SUB FE Hub to call this repo to know if user has one in progress
-        Future.successful(Redirect(controllers.routes.ApplicationHubController.show()))
-      }
+//      if (applicationConfig.seisFlowEnabled) {
+//        s4lConnector.saveFormData(KeystoreKeys.selectedSchemes,
+//          SchemeTypesModel(seis = true))
+//        s4lConnector.saveFormData(KeystoreKeys.applicationInProgress, true)
+//        Future.successful(Redirect(controllers.seis.routes.NatureOfBusinessController.show()))
+//      }
+//      else {
+//        //TODO: go to 9635 hub on sub FE - how are we going to show them the app in progress and option to delete
+//        // this app in progress? Presumably we need the SUB FE Hub to call this repo to know if user has one in progress
+//        Future.successful(Redirect(controllers.routes.ApplicationHubController.show()))
+//      }
   }
 
 }

@@ -16,7 +16,6 @@
 
 package views.seis
 
-import controllers.seis.ReviewPreviousSchemesController
 import forms.ResearchStartDateForm._
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -40,15 +39,15 @@ class ResearchStartDateSpec extends ViewSpec with OneAppPerSuite{
       }
 
       "have the correct title" in {
-        document.title() shouldBe Messages("page.seis.companyDetails.researchStartDate.title")
+        document.title() shouldBe Messages("page.companyDetails.researchStartDate.title")
       }
 
       "have the correct heading" in {
-        document.select("h1").text() shouldBe Messages("page.seis.companyDetails.researchStartDate.heading")
+        document.select("h1").text() shouldBe Messages("page.companyDetails.researchStartDate.heading")
       }
 
       "have the correct question in a legend" in {
-        document.select("legend").first().text() shouldBe Messages("page.seis.companyDetails.researchStartDate.heading")
+        document.select("legend").first().text() shouldBe Messages("page.companyDetails.researchStartDate.heading")
       }
 
       "have the question visually hidden" in {
@@ -64,7 +63,7 @@ class ResearchStartDateSpec extends ViewSpec with OneAppPerSuite{
       }
 
       "have the secondary question" in {
-        document.select("legend span.h2-heading").text() shouldBe Messages("page.seis.companyDetails.researchStartDate.question")
+        document.select("legend span.h2-heading").text() shouldBe Messages("page.companyDetails.researchStartDate.question")
       }
 
       "have the secondary question visually hidden" in {
@@ -116,11 +115,11 @@ class ResearchStartDateSpec extends ViewSpec with OneAppPerSuite{
       }
 
       "have the correct title" in {
-        document.title() shouldBe Messages("page.seis.companyDetails.researchStartDate.title")
+        document.title() shouldBe Messages("page.companyDetails.researchStartDate.title")
       }
 
       "have the correct heading" in {
-        document.select("h1").text() shouldBe Messages("page.seis.companyDetails.researchStartDate.heading")
+        document.select("h1").text() shouldBe Messages("page.companyDetails.researchStartDate.heading")
       }
 
       "have a form posting to the correct route" in {
@@ -128,7 +127,7 @@ class ResearchStartDateSpec extends ViewSpec with OneAppPerSuite{
       }
 
       "have the correct question in a legend" in {
-        document.select("legend").first().text() shouldBe Messages("page.seis.companyDetails.researchStartDate.heading")
+        document.select("legend").first().text() shouldBe Messages("page.companyDetails.researchStartDate.heading")
       }
 
       "have the question visually hidden" in {
@@ -144,7 +143,7 @@ class ResearchStartDateSpec extends ViewSpec with OneAppPerSuite{
       }
 
       "have the secondary question" in {
-        document.select("legend span.h2-heading").text() shouldBe Messages("page.seis.companyDetails.researchStartDate.question")
+        document.select("legend span.h2-heading").text() shouldBe Messages("page.companyDetails.researchStartDate.question")
       }
 
       "have the secondary question visually hidden" in {
