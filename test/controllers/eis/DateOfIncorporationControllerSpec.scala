@@ -18,9 +18,10 @@ package controllers.eis
 
 import auth.{MockAuthConnector, MockConfig}
 import common.KeystoreKeys
-import config.FrontendAuthConnector
+import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
+import controllers.seis.DateOfIncorporationController
 import models.{DateOfIncorporationModel, KiProcessingModel}
 import org.mockito.Matchers
 import org.mockito.Mockito._
@@ -48,6 +49,9 @@ class DateOfIncorporationControllerSpec extends BaseSpec {
     "use the correct auth connector" in {
       DateOfIncorporationController.authConnector shouldBe FrontendAuthConnector
     }
+    "use the correct config" in {
+      DateOfIncorporationController.applicationConfig shouldBe FrontendAppConfig
+    }
     "use the correct enrolment connector" in {
       DateOfIncorporationController.enrolmentConnector shouldBe EnrolmentConnector
     }
@@ -72,7 +76,7 @@ class DateOfIncorporationControllerSpec extends BaseSpec {
   }
 
   "Sending a valid form submit to the DateOfIncorporationController when authenticated and enrolled" should {
-    "redirect to first commercial sale page" in {
+    "redirect to expected controller" in {
       when(mockS4lConnector.fetchAndGetFormData[KiProcessingModel](Matchers.eq(KeystoreKeys.kiProcessingModel))
         (Matchers.any(), Matchers.any(),Matchers.any())).thenReturn(Future.successful(Option(kiProcessingModelMet)))
       setupMocks(Some(dateOfIncorporationModel))
@@ -86,6 +90,7 @@ class DateOfIncorporationControllerSpec extends BaseSpec {
       submitWithSessionAndAuth(DateOfIncorporationControllerTest.submit,formInput:_*)(
         result => {
           status(result) shouldBe SEE_OTHER
+          //TODO: needs to be amended to QualifyBusinessActivityController when available in eis.routes
           redirectLocation(result) shouldBe Some(routes.CommercialSaleController.show().url)
         }
       )

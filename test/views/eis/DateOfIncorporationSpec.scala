@@ -19,7 +19,7 @@ package views.eis
 import auth.{MockConfigEISFlow, MockAuthConnector}
 import common.KeystoreKeys
 import config.FrontendAppConfig
-import controllers.eis.DateOfIncorporationController
+import controllers.eis.{DateOfIncorporationController, routes}
 import models.DateOfIncorporationModel
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -59,13 +59,18 @@ class DateOfIncorporationSpec extends ViewSpec {
       document.body.getElementById("incorporationDay").parent.text shouldBe Messages("common.date.fields.day")
       document.body.getElementById("incorporationMonth").parent.text shouldBe Messages("common.date.fields.month")
       document.body.getElementById("incorporationYear").parent.text shouldBe Messages("common.date.fields.year")
+      document.body.getElementById("question-date-text-legend-id").hasClass("visuallyhidden") shouldBe true
+      document.body.getElementById("question-date-text-legend-id").text shouldBe Messages("page.companyDetails.DateOfIncorporation.heading")
+      document.body.getElementById("help").hasClass("summary") shouldBe true
+      document.body.getElementById("help").text shouldBe Messages("common.help.whereToFind")
       document.body.getElementById("date-of-incorporation-where-to-find").parent.text should include
         Messages("page.companyDetails.DateOfIncorporation.location")
       document.body.getElementById("company-house-db").text() shouldEqual getExternalLinkText(Messages("page.companyDetails.DateOfIncorporation.companiesHouse"))
       document.body.getElementById("company-house-db").attr("href") shouldEqual "https://www.gov.uk/get-information-about-a-company"
+      document.body.getElementById("company-house-db").hasClass("external-link") shouldBe true
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
-      document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.NatureOfBusinessController.show().url
-      document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.one")
+      document.body.getElementById("back-link").attr("href") shouldEqual routes.NatureOfBusinessController.show().url
+      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.one")
     }
 
     "Verify that the date of incorporation page contains the correct elements when an invalid DateOfIncorporationModel is passed" in new Setup {
@@ -80,14 +85,23 @@ class DateOfIncorporationSpec extends ViewSpec {
       document.body.getElementById("incorporationDay").parent.text shouldBe Messages("common.date.fields.day")
       document.body.getElementById("incorporationMonth").parent.text shouldBe Messages("common.date.fields.month")
       document.body.getElementById("incorporationYear").parent.text shouldBe Messages("common.date.fields.year")
+      document.body.getElementById("question-date-text-legend-id").hasClass("visuallyhidden") shouldBe true
+      document.body.getElementById("question-date-text-legend-id").text shouldBe Messages("page.companyDetails.DateOfIncorporation.heading")
+      document.body.getElementById("help").hasClass("summary") shouldBe true
+      document.body.getElementById("help").text shouldBe Messages("common.help.whereToFind")
       document.body.getElementById("date-of-incorporation-where-to-find").parent.text should include
         Messages("page.companyDetails.DateOfIncorporation.location")
       document.body.getElementById("company-house-db").text() shouldEqual getExternalLinkText(Messages("page.companyDetails.DateOfIncorporation.companiesHouse"))
       document.body.getElementById("company-house-db").attr("href") shouldEqual "https://www.gov.uk/get-information-about-a-company"
+      document.body.getElementById("company-house-db").hasClass("external-link") shouldBe true
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
-      document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.NatureOfBusinessController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual routes.NatureOfBusinessController.show().url
       document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.one")
-      document.getElementById("error-summary-display").hasClass("error-summary--show")
+      document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe true
+      document.getElementById("error-summary-heading").text shouldBe Messages("common.error.summary.heading")
+      document.getElementById("incorporationDay-error-summary").text shouldBe Messages("validation.error.DateNotEntered")
+      document.getElementsByClass("error-notification").text shouldBe Messages("validation.error.DateNotEntered")
+
 
     }
 

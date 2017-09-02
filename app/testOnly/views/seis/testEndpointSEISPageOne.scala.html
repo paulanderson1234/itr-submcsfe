@@ -35,7 +35,7 @@ fullTimeEmployeeCountForm : Form[FullTimeEmployeeCountModel])(implicit request: 
     <h2>Date of Incorporation</h2>
     <div class="form-group">
         @formInlineDateInput(dateOfIncorporationForm, "incorporation", Some(Messages("page.companyDetails.DateOfIncorporation.heading")),
-        true, Some(Messages("date.hint.dateOfIncorporation")), None)
+        true, Some(Messages("common.date.hint.example")), None)
     </div>
 
     <h2>What will the money your company has raised be used for?</h2>
