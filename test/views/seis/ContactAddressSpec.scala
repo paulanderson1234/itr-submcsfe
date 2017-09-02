@@ -16,6 +16,7 @@
 
 package views.seis
 
+import common.Constants
 import controllers.seis.routes
 import forms.ContactAddressForm._
 import models.AddressModel
@@ -28,22 +29,6 @@ import views.html.seis.contactInformation.ContactAddress
 
 class ContactAddressSpec extends ViewSpec {
 
-  val emptyAddressModel = new AddressModel("", "", countryCode = "")
-
-  lazy val form = contactAddressForm.bind(Map("addressline1" -> "ABC XYZ",
-    "addressline2" -> "1 ABCDE Street",
-    "addressline3" -> "",
-    "addressline4" -> "",
-    "postcode" -> "",
-    "countryCode" -> "JP"))
-
-  lazy val emptyForm = contactAddressForm.bind(Map("addressline1" -> "",
-    "addressline2" -> "",
-    "addressline3" -> "",
-    "addressline4" -> "",
-    "postcode" -> "",
-    "countryCode" -> ""))
-
   lazy val errorForm = contactAddressForm.bind(Map("addressline1" -> "ABC XYZ",
     "addressline2" -> "1 ABCDE Street",
     "addressline3" -> "",
@@ -52,34 +37,12 @@ class ContactAddressSpec extends ViewSpec {
     "countryCode" -> ""))
 
   val countriesList: List[(String, String)] = List(("JP", "Japan"), ("GB", "United Kingdom"))
-  lazy val page = ContactAddress(form, countriesList)(authorisedFakeRequest,applicationMessages)
-  lazy val emptyPage = ContactAddress(emptyForm, countriesList)(authorisedFakeRequest, applicationMessages)
+  lazy val emptyPage = ContactAddress(contactAddressForm, countriesList)(authorisedFakeRequest, applicationMessages)
   lazy val errorPage = ContactAddress(errorForm, countriesList)(authorisedFakeRequest, applicationMessages)
 
   "The Provide Correspondence Address page" should {
 
     "Verify that the Provide Correspondence Address page contains the correct elements when a valid AddressModel is passed" in {
-
-      lazy val document = {
-        Jsoup.parse(contentAsString(page))
-      }
-
-      document.title() shouldBe Messages("page.contactInformation.ProvideContactAddress.title")
-      document.getElementById("main-heading").text() shouldBe Messages("page.contactInformation.ProvideContactAddress.heading")
-      document.getElementById("next").text() shouldBe Messages("common.button.snc")
-      document.body.getElementById("back-link").attr("href") shouldEqual routes.ConfirmCorrespondAddressController.show().url
-      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.five")
-      document.body.getElementById("addressline1").`val`() shouldBe contactAddressModel.addressline1
-      document.body.getElementById("addressline2").`val`() shouldBe contactAddressModel.addressline2
-      document.body.getElementById("addressline3").`val`() shouldBe ""
-      document.body.getElementById("addressline4").`val`() shouldBe ""
-      document.body.getElementById("postcode").`val`() shouldBe ""
-      document.body.select("select[name=countryCode] option[selected]").`val`() shouldBe contactAddressModel.countryCode
-      document.body.getElementById("get-help-action").text shouldBe Messages("common.error.help.text")
-    }
-
-    "Verify that the Provide Correspondence Address page contains the correct elements " +
-      "when an empty AddressModel is passed" in {
 
       lazy val document = {
         Jsoup.parse(contentAsString(emptyPage))
@@ -88,17 +51,27 @@ class ContactAddressSpec extends ViewSpec {
       document.title() shouldBe Messages("page.contactInformation.ProvideContactAddress.title")
       document.getElementById("main-heading").text() shouldBe Messages("page.contactInformation.ProvideContactAddress.heading")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
-      document.body.getElementById("back-link").attr("href") shouldEqual routes.ConfirmCorrespondAddressController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual controllers.seis.routes.ConfirmCorrespondAddressController.show().url
+      document.select("a.back-link").text() shouldBe Messages("common.button.back")
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.five")
       document.body.getElementById("get-help-action").text shouldBe Messages("common.error.help.text")
-      document.getElementById("error-summary-display").hasClass("error-summary--show")
-      document.getElementById("countryCode-error-summary").text should include(Messages("validation.error.countryCode"))
-      document.getElementById("addressline1-error-summary").text should include(Messages("validation.error.mandatoryaddresssline"))
-      document.getElementById("addressline2-error-summary").text should include(Messages("validation.error.mandatoryaddresssline"))
+      document.select("form").attr("method") shouldBe "POST"
+      document.select("form").attr("action") shouldBe controllers.seis.routes.ContactAddressController.submit().url
+      document.select("label#label-addressline1").text() shouldBe Messages("page.contactInformation.ProvideContactAddress.addressline1.label")
+      document.select("label#label-addressline1 input").attr("maxlength") shouldBe Constants.addressLineLength.toString
+      document.select("label#label-addressline2").text() shouldBe Messages("page.contactInformation.ProvideContactAddress.addressline2.label")
+      document.select("label#label-addressline2 input").attr("maxlength") shouldBe Constants.addressLineLength.toString
+      document.select("label#label-addressline3").text() shouldBe Messages("page.contactInformation.ProvideContactAddress.addressline3.label")
+      document.select("label#label-addressline3 input").attr("maxlength") shouldBe Constants.addressLineLength.toString
+      document.select("label#label-addressline4").text() shouldBe Messages("page.contactInformation.ProvideContactAddress.addressline4.label")
+      document.select("label#label-addressline4 input").attr("maxlength") shouldBe Constants.addressLineLength.toString
+      document.select("label#label-postcode").text() shouldBe Messages("page.contactInformation.ProvideContactAddress.postcode.label")
+      document.select("label#label-postcode input").attr("maxlength") shouldBe Constants.postcodeLength.toString
+      document.select("label#countryCode_field").text() shouldBe Messages("page.contactInformation.ProvideContactAddress.country.label")
+      document.select("error-summary--show").isEmpty shouldBe true
     }
 
-    "Verify that the Provide Correspondence Address page contains the correct elements " +
-      "when an invalid AddressModel is passed" in {
+    "Verify that the Provide Correspondence Address page contains the correct elements when an invalid AddressModel is passed" in {
 
       lazy val document = {
         Jsoup.parse(contentAsString(errorPage))
