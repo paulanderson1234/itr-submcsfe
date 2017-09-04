@@ -16,6 +16,7 @@
 
 package forms
 
+import common.Constants
 import models.ContactDetailsModel
 import play.api.data.Form
 import play.api.data.Forms._
@@ -23,8 +24,8 @@ import play.api.data.Forms._
 object ContactDetailsForm {
   val contactDetailsForm = Form(
     mapping(
-      "forename" -> nonEmptyText,
-      "surname" -> nonEmptyText,
+      "forename" -> nonEmptyText(maxLength = Constants.forenameLength),
+      "surname" -> nonEmptyText(maxLength = Constants.surnameLength),
       "telephoneNumber" -> optional(utils.Validation.telephoneNumberCheck),
       "mobileNumber" -> optional(utils.Validation.telephoneNumberCheck),
       "email" -> utils.Validation.emailCheck()
