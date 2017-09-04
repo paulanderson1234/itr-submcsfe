@@ -51,7 +51,7 @@ class ShareDescriptionSpec extends ViewSpec {
         document.getElementById("bullet-two").text() shouldBe Messages("page.shares.shareDescription.bullet.two")
         document.getElementById("bullet-three").text() shouldBe Messages("page.shares.shareDescription.bullet.three")
         document.getElementById("labelTextId").text() shouldBe Messages("page.shares.shareDescription.heading")
-        document.getElementById("help").text() shouldBe Messages("page.shares.shareDescription.whereToFind")
+        document.getElementById("help").text() shouldBe Messages("common.help.whereToFind")
         document.getElementById("share-description-where-to-find").text() shouldBe Messages("page.shares.ShareDescription.location")
       }
 
@@ -68,7 +68,7 @@ class ShareDescriptionSpec extends ViewSpec {
         document.getElementById("bullet-two").text() shouldBe Messages("page.shares.shareDescription.bullet.two")
         document.getElementById("bullet-three").text() shouldBe Messages("page.shares.shareDescription.bullet.three")
         document.getElementById("labelTextId").text() shouldBe Messages("page.shares.shareDescription.heading")
-        document.getElementById("help").text() shouldBe Messages("page.shares.shareDescription.whereToFind")
+        document.getElementById("help").text() shouldBe Messages("common.help.whereToFind")
         document.getElementById("share-description-where-to-find").text() shouldBe Messages("page.shares.ShareDescription.location")
       }
     }

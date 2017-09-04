@@ -16,14 +16,19 @@
 
 package forms
 
+import common.Constants
 import models.NatureOfBusinessModel
 import play.api.data.Form
 import play.api.data.Forms._
+import play.api.i18n.Messages
+import play.api.i18n.Messages.Implicits._
+import play.api.Play.current
 
 object NatureOfBusinessForm {
   val natureOfBusinessForm = Form(
     mapping(
       "natureofbusiness" -> nonEmptyText
+        .verifying(Messages("validation.common.error.shortTextSize"), _.length <= Constants.shortTextLimit)
     )(NatureOfBusinessModel.apply)(NatureOfBusinessModel.unapply)
   )
 }

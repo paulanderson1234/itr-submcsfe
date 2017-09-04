@@ -16,105 +16,54 @@
 
 package forms
 
+import common.Constants
 import forms.NatureOfBusinessForm.natureOfBusinessForm
 import models.NatureOfBusinessModel
 import org.scalatestplus.play.OneAppPerSuite
-import play.api.data.FormError
 import play.api.i18n.Messages
-import play.api.libs.json.Json
-import play.api.mvc.AnyContentAsFormUrlEncoded
-import play.api.test.FakeRequest
-import uk.gov.hmrc.play.test.UnitSpec
 import play.api.i18n.Messages.Implicits._
+import uk.gov.hmrc.play.test.UnitSpec
 
-class NatureOfBusinessFormSpec extends UnitSpec with OneAppPerSuite{
+import scala.util.Random
 
-  private def bindSuccess(request: FakeRequest[AnyContentAsFormUrlEncoded]) = {
-    natureOfBusinessForm.bindFromRequest()(request).fold(
-      formWithErrors => None,
-      userData => Some(userData)
-    )
-  }
+class NatureOfBusinessFormSpec extends UnitSpec with OneAppPerSuite {
 
-  private def bindWithError(request: FakeRequest[AnyContentAsFormUrlEncoded]): Option[FormError] = {
-    natureOfBusinessForm.bindFromRequest()(request).fold(
-      formWithErrors => Some(formWithErrors.errors(0)),
-      userData => None
-    )
-  }
+  val natureOfBusinessModel = NatureOfBusinessModel("I sell cars to car warehouse outlets in major towns")
+  val invalidSizeString = s"${Random.alphanumeric take Constants.shortTextLimit + 1 mkString}"
+  val validSizeString = s"${Random.alphanumeric take Constants.shortTextLimit mkString}"
 
-  val natureOfBusinessJson = """{"natureofbusiness":"I sell cars to car warehouse outets in major towns"}"""
-  val natureOfBusinessModel = NatureOfBusinessModel("I sell cars to car warehouse outets in major towns")
-  
   "The nature of business Form" should {
     "return an error if natureofbusiness is empty" in {
-      val request = FakeRequest("GET", "/").withFormUrlEncodedBody(
-        "natureofbusiness" -> ""
-      )
-      bindWithError(request) match {
-        case Some(err) => {
-          err.key shouldBe "natureofbusiness"
-          Messages(err.message) shouldBe Messages("error.required")
-          err.args shouldBe Array()
-        }
-        case _ => {
-          fail("Missing error")
-        }
-      }
+      val err = natureOfBusinessForm.bind(Map("natureofbusiness" -> "")).errors.head
+      err.key shouldBe "natureofbusiness"
+      Messages(err.message) shouldBe Messages("error.required")
+      err.args shouldBe Array()
+    }
+
+    s"return an error if natureofbusiness is longer than ${Constants.shortTextLimit} characters" in {
+      val err = natureOfBusinessForm.bind(Map("natureofbusiness" -> invalidSizeString)).errors.head
+      err.key shouldBe "natureofbusiness"
+      Messages(err.message) shouldBe Messages("validation.common.error.shortTextSize")
+      err.args shouldBe Array()
+    }
+
+    s"return a valid model if natureofbusiness is ${Constants.shortTextLimit} characters long" in {
+      val form = natureOfBusinessForm.bind(Map("natureofbusiness" -> validSizeString))
+      form.errors.isEmpty shouldBe true
+      form.value shouldBe Some(NatureOfBusinessModel(validSizeString))
+    }
+
+    "return a valid model if entry at the borderline condition (1 character)" in {
+      val form = natureOfBusinessForm.bind(Map("natureofbusiness" -> "h"))
+      form.errors.isEmpty shouldBe true
+      form.value shouldBe Some(NatureOfBusinessModel("h"))
     }
   }
 
-  "The nature of business Form" should {
-    "not return an error if entry at the borderline condition (1 character)" in {
-      val request = FakeRequest("GET", "/").withFormUrlEncodedBody(
-        "natureofbusiness" -> "h"
-      )
-      bindWithError(request) match {
-        case Some(err) => {
-          fail("Validation error not expected")
-        }
-        case _ => ()
-      }
-    }
-  }
-
-  "The nature of business Form" should {
-    "not return an error if entry is above the suggested 15 word limit (16 words)" in {
-      val request = FakeRequest("GET", "/").withFormUrlEncodedBody(
-        "natureofbusiness" -> "this is more than 15 words to see if that amount is suggested but not enforced"
-      )
-      bindWithError(request) match {
-        case Some(err) => {
-          fail("Validation error not expected")
-        }
-        case _ => ()
-      }
-    }
-  }
-
-  // model to json
-  "The utr Form model" should {
-    "load convert to JSON successfully" in {
-      implicit val formats = Json.format[NatureOfBusinessModel]
-      val utrJson = Json.toJson(natureOfBusinessModel).toString()
-      utrJson shouldBe natureOfBusinessJson
-    }
-  }
-
-  // form model to json - apply
   "The utr Form model" should {
     "call apply correctly on the model" in {
-      implicit val formats = Json.format[NatureOfBusinessModel]
       val form = natureOfBusinessForm.fill(natureOfBusinessModel)
-      form.get.natureofbusiness shouldBe "I sell cars to car warehouse outets in major towns"
-    }
-
-    // form json to model - unapply
-    "call unapply successfully to create expected Json" in {
-      implicit val formats = Json.format[NatureOfBusinessModel]
-      val form = natureOfBusinessForm.fill(natureOfBusinessModel)
-      val formJson = Json.toJson(form.get).toString()
-      formJson shouldBe natureOfBusinessJson
+      form.data shouldBe Map("natureofbusiness" -> "I sell cars to car warehouse outlets in major towns")
     }
   }
 }

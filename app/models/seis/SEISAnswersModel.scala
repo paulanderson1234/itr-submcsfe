@@ -146,7 +146,7 @@ case class ShareDetailsAnswersModel(shareDescriptionModel: ShareDescriptionModel
   }
 }
 
-case class InvestorDetailsAnswersModel(investors: List[InvestorDetailsModel],
+case class InvestorDetailsAnswersModel(investors: Vector[InvestorDetailsModel],
                                        valueReceivedModel: WasAnyValueReceivedModel,
                                        shareCapitalChangesModel: ShareCapitalChangesModel) {
   def validate: Boolean = investors.forall(_.validate)

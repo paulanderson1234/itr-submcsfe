@@ -19,8 +19,7 @@ package controllers.seis
 import auth.{AuthorisedAndEnrolledForTAVC, SEIS}
 import common.{Constants, KeystoreKeys}
 import config.{FrontendAppConfig, FrontendAuthConnector}
-import connectors.{EnrolmentConnector, S4LConnector, SubmissionConnector}
-import controllers.predicates.FeatureSwitch
+import connectors.{EnrolmentConnector, S4LConnector}
 import forms.ShareCapitalChangesForm._
 import models.{ShareCapitalChangesModel, ShareIssueDateModel}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
@@ -40,53 +39,47 @@ object ShareCapitalChangesController extends ShareCapitalChangesController {
   override lazy val enrolmentConnector = EnrolmentConnector
 }
 
-trait ShareCapitalChangesController extends FrontendController with AuthorisedAndEnrolledForTAVC with FeatureSwitch with DateFormatter {
+trait ShareCapitalChangesController extends FrontendController with AuthorisedAndEnrolledForTAVC with DateFormatter {
 
   override val acceptedFlows = Seq(Seq(SEIS))
 
-  val show = featureSwitch(applicationConfig.seisFlowEnabled) {
-    AuthorisedAndEnrolled.async { implicit user => implicit request =>
-      def routeRequest(shareIssueDate: Option[ShareIssueDateModel]) = {
-        if (shareIssueDate.isDefined) {
-          val date = dateToStringWithNoZeroDay(shareIssueDate.get.day.get, shareIssueDate.get.month.get, shareIssueDate.get.year.get)
-          s4lConnector.fetchAndGetFormData[ShareCapitalChangesModel](KeystoreKeys.shareCapitalChanges).map {
-            case Some(data) => Ok(ShareCapitalChanges(shareCapitalChangesForm.fill(data), date))
-            case None => Ok(ShareCapitalChanges(shareCapitalChangesForm, date))
-          }
-        }
-        else {
-          //TODO: Route to the missing share issue date
-          Future.successful(Redirect(routes.ShareIssueDateController.show()))
+  val show = AuthorisedAndEnrolled.async { implicit user => implicit request =>
+    def routeRequest(shareIssueDate: Option[ShareIssueDateModel]) = {
+      if (shareIssueDate.isDefined) {
+        val date = dateToStringWithNoZeroDay(shareIssueDate.get.day.get, shareIssueDate.get.month.get, shareIssueDate.get.year.get)
+        s4lConnector.fetchAndGetFormData[ShareCapitalChangesModel](KeystoreKeys.shareCapitalChanges).map {
+          case Some(data) => Ok(ShareCapitalChanges(shareCapitalChangesForm.fill(data), date))
+          case None => Ok(ShareCapitalChanges(shareCapitalChangesForm, date))
         }
       }
-
-      for {
-        shareIssueDate <- s4lConnector.fetchAndGetFormData[ShareIssueDateModel](KeystoreKeys.shareIssueDate)
-        route <- routeRequest(shareIssueDate)
-      } yield route
+      else {
+        Future.successful(Redirect(routes.ShareIssueDateController.show()))
+      }
     }
+
+    for {
+      shareIssueDate <- s4lConnector.fetchAndGetFormData[ShareIssueDateModel](KeystoreKeys.shareIssueDate)
+      route <- routeRequest(shareIssueDate)
+    } yield route
   }
 
 
-  val submit: Action[AnyContent] = featureSwitch(applicationConfig.seisFlowEnabled) {
-    AuthorisedAndEnrolled.async {
-      implicit user =>
-        implicit request =>
-          val success: ShareCapitalChangesModel => Future[Result] = { model =>
-            s4lConnector.saveFormData(KeystoreKeys.shareCapitalChanges,
-              if(model.hasChanges == Constants.StandardRadioButtonYesValue) model else model.copy(changesDescription = None)).map(_ =>
-              Redirect(controllers.seis.routes.ConfirmContactDetailsController.show())
-            )
-          }
+  val submit: Action[AnyContent] = AuthorisedAndEnrolled.async {
+    implicit user =>
+      implicit request =>
+        val success: ShareCapitalChangesModel => Future[Result] = { model =>
+          s4lConnector.saveFormData(KeystoreKeys.shareCapitalChanges,
+            if (model.hasChanges == Constants.StandardRadioButtonYesValue) model else model.copy(changesDescription = None)).map(_ =>
+            Redirect(controllers.seis.routes.ConfirmContactDetailsController.show())
+          )
+        }
 
-          val failure: Form[ShareCapitalChangesModel] => Future[Result] = { form =>
-            s4lConnector.fetchAndGetFormData[ShareIssueDateModel](KeystoreKeys.shareIssueDate).flatMap {
-              case backUrl => Future.successful(BadRequest(ShareCapitalChanges(form, backUrl.fold("")( shareIssueDate =>
-                dateToStringWithNoZeroDay(shareIssueDate.day.get, shareIssueDate.month.get, shareIssueDate.year.get)))))
-            }
+        val failure: Form[ShareCapitalChangesModel] => Future[Result] = { form =>
+          s4lConnector.fetchAndGetFormData[ShareIssueDateModel](KeystoreKeys.shareIssueDate).flatMap {
+            case backUrl => Future.successful(BadRequest(ShareCapitalChanges(form, backUrl.fold("")(shareIssueDate =>
+              dateToStringWithNoZeroDay(shareIssueDate.day.get, shareIssueDate.month.get, shareIssueDate.year.get)))))
           }
-          shareCapitalChangesForm.bindFromRequest().fold(failure, success)
-    }
+        }
+        shareCapitalChangesForm.bindFromRequest().fold(failure, success)
   }
-
 }

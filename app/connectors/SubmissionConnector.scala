@@ -16,13 +16,15 @@
 
 package connectors
 import config.{FrontendAppConfig, WSHttp}
-import models.submission.{DesSubmitAdvancedAssuranceModel, Submission}
+import models.seis.SEISAnswersModel
+import models.submission.{DesSubmissionCSModel, DesSubmitAdvancedAssuranceModel, Submission}
 import models.{AnnualTurnoverCostsModel, GrossAssetsModel, ProposedInvestmentModel}
 import play.api.Logger
 import play.api.http.Status.OK
 import play.api.libs.json.{JsValue, Json}
 import uk.gov.hmrc.play.config.ServicesConfig
 import uk.gov.hmrc.play.http._
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -85,6 +87,15 @@ trait SubmissionConnector {
     val json = Json.toJson(submissionRequest)
     val targetSubmissionModel = Json.parse(json.toString()).as[DesSubmitAdvancedAssuranceModel]
     http.POST[JsValue, HttpResponse](s"$serviceUrl/investment-tax-relief/advanced-assurance/$tavcReferenceNumber/submit", Json.toJson(targetSubmissionModel))
+  }
+
+  def submitComplainceStatement(submissionRequest: SEISAnswersModel, tavcReferenceNumber: String)(implicit hc: HeaderCarrier): Future[HttpResponse] = {
+    if(tavcReferenceNumber.isEmpty) {
+      Logger.warn("[SubmissionConnector][submitComplainceStatement] An empty tavcReferenceNumber was passed")
+    }
+    require(tavcReferenceNumber.nonEmpty, "[SubmissionConnector][submitComplainceStatement] An empty tavcReferenceNumber was passed")
+
+    http.POST[JsValue, HttpResponse](s"$serviceUrl/investment-tax-relief/compliance-statement/$tavcReferenceNumber/submit", Json.toJson(DesSubmissionCSModel.readDesSubmissionCSModel(submissionRequest)))
   }
 
   def getAASubmissionDetails(tavcReferenceNumber: String)(implicit hc: HeaderCarrier): Future[HttpResponse] = {

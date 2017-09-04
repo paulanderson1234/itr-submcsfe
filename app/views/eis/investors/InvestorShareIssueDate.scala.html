@@ -1,0 +1,39 @@
+@import models.investorDetails.InvestorShareIssueDateModel
+@import uk.gov.hmrc.play.views.html.helpers.form
+@import views.html.helpers.{externalLink, backButtonWithProgress, errorSummary, formInlineDateInput, hiddenField}
+
+@(investorShareIssueDateForm: Form[InvestorShareIssueDateModel], backLink:String, investorProcessingId: Int)(implicit request: Request[_], messages: Messages)
+
+@main_template(Messages("page.investors.investorShareIssueDate.title")) {
+
+    @backButtonWithProgress(backLink, Messages("common.section.progress.details.four"))
+
+    @errorSummary(investorShareIssueDateForm, "share-issue-date", "investorShareIssueDateDay")
+
+    <h1 class="heading-xlarge" id="main-heading">@Messages("page.investors.investorShareIssueDate.heading")</h1>
+
+    @form(action = controllers.eis.routes.InvestorShareIssueDateController.submit(Some(investorProcessingId))) {
+
+        @formInlineDateInput(investorShareIssueDateForm, "investorShareIssueDate", Some(Messages("page.investors.investorShareIssueDate.heading")),
+        true, Some(Messages("common.date.hint.example")), None)
+
+        <div>
+            @hiddenField(
+            investorShareIssueDateForm("processingId"),
+            'id -> "processingId"
+            )
+        </div>
+
+        <div>
+            @hiddenField(
+            investorShareIssueDateForm("investorProcessingId"),
+            'id -> "investorProcessingId"
+            )
+        </div>
+
+        <div class="form-group">
+            <button class="btn button" type="submit" id="next">@Messages("common.button.snc")</button>
+        </div>
+
+    }
+}

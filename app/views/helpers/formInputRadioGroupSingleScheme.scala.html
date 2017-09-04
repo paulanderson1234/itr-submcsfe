@@ -46,45 +46,43 @@
     @radioOptions.map { case (value, label) =>
     @defining(s"${elements.field.name}-${value.toLowerCase.replace(" ","_")}")  { inputId =>
     <div class = "form-field-single">
-    <label for="@inputId" id="@inputId@Label"
-           @elements.args.get('_labelClass).map{labelClass => class="@labelClass@field.value.filter( _ == value).map{_ => selected}"}>
-    @if(!labelAfter) {
-    @if(elements.args.get('_stackedLabel)) {
-    @if(label.split(" ").length < 2) {<br>@label
-    } else {
-    @for( (l, index) <- label.split(" ").zipWithIndex) {
-    @if(index != 0) {<br>}@l
-    }
-    }
-    } else { @label }
-    }
-    <input
-            type="radio"
-            id="@inputId"
-            name="@elements.field.name"
-            value="@value"
-            @elements.args.get('_inputClass).map{inputClass => class="@inputClass"}
-    @if(elements.args.contains('_dataAttributes) ){ @elements.args.get('_dataAttributes)}
-    @field.value.filter( _ == value).map{_ => checked="checked"}/>
-    @if(labelAfter) {
-    @if(elements.args.get('_stackedLabel)) {
-    @if(label.split(" ").length < 2) {<br>@label
-    } else {
-    @for( (l, index) <- label.split(" ").zipWithIndex) {
-    @if(index != 0) {<br>}@l
-    }
-    }
-    } else { @label }
-    }
-    </label>
+        <label for="@inputId" id="@inputId@Label"
+               @elements.args.get('_labelClass).map{labelClass => class="@labelClass@field.value.filter( _ == value).map{_ => selected}"}>
+        @if(!labelAfter) {
+        @if(elements.args.get('_stackedLabel)) {
+        @if(label.split(" ").length < 2) {<br>@label
+        } else {
+        @for( (l, index) <- label.split(" ").zipWithIndex) {
+        @if(index != 0) {<br>}@l
+        }
+        }
+        } else { @label }
+        }
+        <input
+                type="radio"
+                id="@inputId"
+                name="@elements.field.name"
+                value="@value"
+                @elements.args.get('_inputClass).map{inputClass => class="@inputClass"}
+        @if(elements.args.contains('_dataAttributes) ){ @elements.args.get('_dataAttributes)}
+        @field.value.filter( _ == value).map{_ => checked="checked"}/>
+        @if(labelAfter) {
+        @if(elements.args.get('_stackedLabel)) {
+        @if(label.split(" ").length < 2) {<br>@label
+        } else {
+        @for( (l, index) <- label.split(" ").zipWithIndex) {
+        @if(index != 0) {<br>}@l
+        }
+        }
+        } else { @label }
+        }
+        </label>
     </div>
     }
     @if(value.equals(Constants.schemeTypeEis)){
     @eisDescription
     }else{ @if(value.equals(Constants.schemeTypeSeis)){
     @seisDescription
-    }else{
-    @vctDescription
     }}
     }
     </fieldset>

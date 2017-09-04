@@ -23,61 +23,40 @@ import models.{CompanyDetailsModel, IndividualDetailsModel, PreviousSchemeModel}
 import play.api.libs.json.Json
 import utils.{Transformers, Validation}
 
-case class DesSubmissionCSModel (
-                                  acknowledgementReference: Option[String] = None,
-                                  submissionType: DesSubmissionModel
-                                )
 
-case class DesSubmissionModel(
-                               agentReferenceNumber: Option[String],
-                               correspondenceDetails: DesCorrespondenceDetails,
-                               organisationType: String,
-                               submission: DesSubmission
-                            )
-
-case class DesCorrespondenceDetails(
-                                     contactName: DesContactName,
-                                     contactDetails: DesContactDetails,
-                                     contactAddress: DesAddressType
-                                   )
-
-case class DesContactName(
-                           name1: String,
-                           name2: String
-                         )
-
-case class DesContactDetails(
-                              phoneNumber: Option[String],
-                              mobileNumber: Option[String],
-                              faxNumber: Option[String],
-                              emailAddress: Option[String]
-                            )
-
-case class DesAddressType(
-                           addressLine1: String,
-                           addressLine2: String,
-                           addressLine3: Option[String],
-                           addressLine4: Option[String],
-                           postalCode: Option[String],
-                           countryCode: String
-                         )
-
-case class DesSubmission(
-                          notRequired: Option[String],
-                          complianceStatement: DesComplianceStatement
-                        )
-
-case class DesComplianceStatement(
-                                   schemeType: String,
-                                   trade: DesTradeModel, //
-                                   investment: DesInvestmentDetailsModel, // Not required for CS but required in DES scheme
-                                   subsidiaryPerformingTrade: Option[DesSubsidiaryPerformingTrade],
-                                   knowledgeIntensive: Option[KiModel],
-                                   investorsDetails: DesInvestorDetailsModel,
-                                   repayments: DesRepaymentsModel, // Not required for CS SEIS flow but required in DES scheme
-                                   valueReceived: Option[String],
-                                   organisation: DesOrganisationModel
+case class DesIndividualDetailsModel(
+                                      individualName: DesContactName,
+                                      individualAddress: DesAddressType
+                                    )
+object DesIndividualDetailsModel{
+  implicit val formats = Json.format[DesIndividualDetailsModel]
+}
+case class DesCompanyDetailsModel(
+                                   organisationName: String,
+                                   ctUtr:Option[String],
+                                   crn:Option[String],
+                                   companyAddress: Option[DesAddressType]
                                  )
+object DesCompanyDetailsModel{
+  implicit val formats = Json.format[DesCompanyDetailsModel]
+}
+
+case class DesCompanyOrIndividualDetailsModel(
+                                               individualDetails: Option[DesIndividualDetailsModel],
+                                               companyDetails: Option[DesCompanyDetailsModel]
+                                             )
+object DesCompanyOrIndividualDetailsModel{
+  implicit val formats = Json.format[DesCompanyOrIndividualDetailsModel]
+}
+
+case class DesPreviousOwnershipModel(
+                                      dateAcquired: String,
+                                      prevOwnerStartDate: Option[String],
+                                      previousOwner: DesCompanyOrIndividualDetailsModel
+                                    )
+object DesPreviousOwnershipModel{
+  implicit val formats = Json.format[DesPreviousOwnershipModel]
+}
 
 case class DesTradeModel(
                           businessActivity: Option[String],
@@ -90,51 +69,10 @@ case class DesTradeModel(
                           previousOwnership: Option[DesPreviousOwnershipModel]
                         )
 
-case class DesMarketInfo(
-                          newGeographicMarket: Boolean,
-                          newProductMarket: Boolean,
-                          marketDescription: Option[String]
-                        )
+object DesTradeModel{
+  implicit val formats = Json.format[DesTradeModel]
+}
 
-case class DesAnnualCostsModel(
-                             nodata:Option[String],
-                             annualCost: Seq[AnnualCostModel]
-                           )
-
-case class DesAnnualTurnoversModel(
-                                 nodata:Option[String],
-                                 annualTurnover: Seq[TurnoverCostModel]
-                               )
-
-case class DesPreviousOwnershipModel(
-                                      dateAcquired: String,
-                                      prevOwnerStartDate: Option[String],
-                                      previousOwner: DesCompanyOrIndividualDetailsModel
-                                    )
-
-case class DesCompanyOrIndividualDetailsModel(
-                                               individualDetails: Option[DesIndividualDetailsModel],
-                                               companyDetails: Option[DesCompanyDetailsModel]
-                                             )
-
-case class DesIndividualDetailsModel(
-                                      individualName: DesContactName,
-                                      individualAddress: DesAddressType
-                                    )
-
-case class DesCompanyDetailsModel(
-                                   organisationName: String,
-                                   ctUtr:Option[String],
-                                   crn:Option[String],
-                                   companyAddress: Option[DesAddressType]
-                                 )
-
-case class DesInvestmentDetailsModel(
-                                      growthJustification: String, // required as per DES scheme but not in CS Flow
-                                      unitIssue: UnitIssueModel,
-                                      amountSpent: Option[CostModel],
-                                      organisationStatus: Option[DesOrganisationStatusModel]
-                                    )
 
 case class DesOrganisationStatusModel(
                                        numberOfFTEmployees: BigDecimal,
@@ -142,97 +80,153 @@ case class DesOrganisationStatusModel(
                                        grossAssetBefore: CostModel,
                                        grossAssetAfter: CostModel
                                      )
+object DesOrganisationStatusModel{
+  implicit val formats = Json.format[DesOrganisationStatusModel]
+}
+
+case class DesInvestmentDetailsModel(
+                                      growthJustification: String, // required as per DES scheme but not in CS Flow
+                                      unitIssue: UnitIssueModel,
+                                      amountSpent: Option[CostModel],
+                                      organisationStatus: Option[DesOrganisationStatusModel]
+                                    )
+object DesInvestmentDetailsModel{
+  implicit val formats = Json.format[DesInvestmentDetailsModel]
+}
 
 case class DesSubsidiaryPerformingTrade(
                                          ninetyPercentOwned: Boolean,
                                          companyDetails: DesCompanyDetailsModel
                                        )
-
-case class DesInvestorDetailsModel(
-                                    investor: Seq[DesInvestorModel]
-                                  )
-
-case class DesInvestorModel(
-                             investorType: String,
-                             investorInfo: DesInvestorInfoModel
-                           )
-
+object DesSubsidiaryPerformingTrade{
+  implicit val formats = Json.format[DesSubsidiaryPerformingTrade]
+}
+case class DesGroupHoldingsModel(
+                                  nodata:Option[String],
+                                  groupHolding: Seq[UnitIssueModel]
+                                )
+object DesGroupHoldingsModel{
+  implicit val formats = Json.format[DesGroupHoldingsModel]
+}
 case class DesInvestorInfoModel(
                                  investorDetails: DesCompanyOrIndividualDetailsModel,
                                  numberOfUnitsHeld: BigDecimal,
                                  investmentAmount: CostModel,
                                  existingGroupHoldings: Option[DesGroupHoldingsModel]
                                )
+object DesInvestorInfoModel{
+  implicit val formats = Json.format[DesInvestorInfoModel]
+}
 
-case class DesGroupHoldingsModel(
-                                  nodata:Option[String],
-                                  groupHolding: Seq[UnitIssueModel]
-                                )
+case class DesInvestorModel(
+                             investorType: String,
+                             investorInfo: DesInvestorInfoModel
+                           )
+object DesInvestorModel{
+  implicit val formats = Json.format[DesInvestorModel]
+}
 
-case class DesRepaymentsModel(
-                               repayment: Seq[DesRepaymentModel]
-                             )
-
+case class DesInvestorDetailsModel(
+                                    investor: Seq[DesInvestorModel]
+                                  )
+object DesInvestorDetailsModel{
+  implicit val formats = Json.format[DesInvestorDetailsModel]
+}
 case class DesRepaymentModel(
                               repaymentDate: Option[String],
                               repaymentAmount: CostModel,
                               unitType: Option[String],
                               holdersName: Option[DesContactName],
                               subsidiaryName: Option[String]
+                            )
+object DesRepaymentModel{
+  implicit val formats = Json.format[DesRepaymentModel]
+}
+
+case class DesRepaymentsModel(
+                               repayment: Seq[DesRepaymentModel]
                              )
-
-case class DesOrganisationModel(
-                            utr:Option[String],
-                            chrn:Option[String],
-                            startDate:String,
-                            firstDateOfCommercialSale:Option[String],
-                            orgDetails: DesCompanyDetailsModel,
-                            previousRFIs: Option[DesRFICostsModel]
-                          )
-
+object DesRepaymentsModel{
+  implicit val formats = Json.format[DesRepaymentsModel]
+}
+case class DesRFIModel(
+                        schemeType: String,
+                        name: Option[String],
+                        issueDate: String,
+                        amount: CostModel,
+                        amountSpent: Option[CostModel]
+                      )
+object DesRFIModel{
+  implicit val formats = Json.format[DesRFIModel]
+}
 case class DesRFICostsModel(
                              nodata:Option[String],
                              previousRFI: Seq[DesRFIModel]
                            )
-
-case class DesRFIModel(
-                     schemeType: String,
-                     name: Option[String],
-                     issueDate: String,
-                     amount: CostModel,
-                     amountSpent: Option[CostModel]
-                   )
-
-object SchemeType extends Enumeration {
-  type SchemeType = Value
-  val seis = Value("SEIS")
-  val eis = Value("EIS")
+object DesRFICostsModel{
+  implicit val formats = Json.format[DesRFICostsModel]
 }
 
-object OrganisationType extends Enumeration {
-  type OrganisationType = Value
-  val limited = Value("Limited")
-  val communityInterestCompany = Value("Community Interest Company")
-  val communityBenefitsSociety = Value("Community Benefits Society")
-  val charityCompany = Value("Charity - Company")
-  val charityTrust = Value("Charity - Trust")
-  val partnership = Value("Partnership")
-  val other = Value("Other")
+case class DesOrganisationModel(
+                                 utr:Option[String],
+                                 chrn:Option[String],
+                                 startDate:String,
+                                 firstDateOfCommercialSale:Option[String],
+                                 orgDetails: DesCompanyDetailsModel,
+                                 previousRFIs: Option[DesRFICostsModel]
+                               )
+object DesOrganisationModel{
+  implicit val formats = Json.format[DesOrganisationModel]
+}
+case class KiModel(
+                    skilledEmployeesConditionMet: Boolean,
+                    innovationConditionMet: Option[String],
+                    kiConditionMet: Option[Boolean]
+                  )
+object KiModel{
+  implicit val formats = Json.format[KiModel]
 }
 
-object UnitType extends Enumeration {
-  type UnitType = Value
-  val shares = Value("Shares")
-  val debentures = Value("Debentures")
+case class DesComplianceStatement(
+                                   schemeType: String,
+                                   trade: DesTradeModel, //
+                                   investment: DesInvestmentDetailsModel, // Not required for CS SEIS but required in DES scheme
+                                   subsidiaryPerformingTrade: Option[DesSubsidiaryPerformingTrade],
+                                   knowledgeIntensive: Option[KiModel],
+                                   investorsDetails: DesInvestorDetailsModel,
+                                   repayments: DesRepaymentsModel, // Not required for CS SEIS flow but required in DES scheme
+                                   valueReceived: Option[String],
+                                   organisation: DesOrganisationModel
+                                 )
+
+object DesComplianceStatement{
+  implicit val formats = Json.format[DesComplianceStatement]
 }
 
-object InvestorType extends Enumeration {
-  type InvestorType = Value
-  val investor = Value("Named Investor")
-  val nominee = Value("Nominee")
+case class DesSubmission(
+                          notRequired: Option[String],
+                          complianceStatement: DesComplianceStatement
+                        )
+object DesSubmission{
+  implicit val formats = Json.format[DesSubmission]
 }
 
+case class DesSubmissionModel(
+                               agentReferenceNumber: Option[String],
+                               correspondenceDetails: DesCorrespondenceDetails,
+                               organisationType: String,
+                               submission: DesSubmission
+                             )
+object DesSubmissionModel{
+  implicit val formats = Json.format[DesSubmissionModel]
+}
+
+case class DesSubmissionCSModel (
+                                  acknowledgementReference: Option[String] = None,
+                                  submissionType: DesSubmissionModel
+                                )
 object DesSubmissionCSModel {
+  implicit val formatCSSubmission = Json.format[DesSubmissionCSModel]
 
   def readDesSubmissionCSModel(seisAnswersModel: SEISAnswersModel): DesSubmissionCSModel = {
     DesSubmissionCSModel.apply(None, readDesSubmissionModel(seisAnswersModel))
@@ -406,7 +400,7 @@ object DesSubmissionCSModel {
     investorDetailsAnswersModel.investors.foldLeft(Vector.empty[DesInvestorModel]){
       (desInvestorModel , investorDetailsModel) =>
         desInvestorModel :+ DesInvestorModel.apply(readinvestorOrNominee(investorDetailsModel.investorOrNomineeModel.get.addInvestorOrNominee),
-        readDesInvestorInfoModel(investorDetailsModel))
+          readDesInvestorInfoModel(investorDetailsModel))
     }
   }
 
@@ -527,11 +521,11 @@ object DesSubmissionCSModel {
     if (previousSchemesAnswersModel.previousSchemeModel.isDefined
       && previousSchemesAnswersModel.previousSchemeModel.nonEmpty) {
       previousSchemesAnswersModel.previousSchemeModel.get.foldLeft(Vector.empty[DesRFIModel]) {
-      (desRFIModel, previousSchemeModel) =>
-        desRFIModel :+ DesRFIModel.apply(previousSchemeModel.schemeTypeDesc, previousSchemeModel.otherSchemeName,
-          readPreviousRFIIssueDate(previousSchemeModel),
-          CostModel.apply(Transformers.poundToPence(Left(previousSchemeModel.investmentAmount.toString)), "GBP"),
-          readPreviousSchemesInvestmentAmountSpent(previousSchemeModel))
+        (desRFIModel, previousSchemeModel) =>
+          desRFIModel :+ DesRFIModel.apply(previousSchemeModel.schemeTypeDesc, previousSchemeModel.otherSchemeName,
+            readPreviousRFIIssueDate(previousSchemeModel),
+            CostModel.apply(Transformers.poundToPence(Left(previousSchemeModel.investmentAmount.toString)), "GBP"),
+            readPreviousSchemesInvestmentAmountSpent(previousSchemeModel))
       }
     }
     else
@@ -540,7 +534,7 @@ object DesSubmissionCSModel {
 
   def readPreviousRFIIssueDate(previousSchemeModel: PreviousSchemeModel): String = {
     if(previousSchemeModel.day.isDefined && previousSchemeModel.month.isDefined
-        && previousSchemeModel.year.isDefined)
+      && previousSchemeModel.year.isDefined)
       Validation.dateToDesFormat(previousSchemeModel.day.get, previousSchemeModel.month.get, previousSchemeModel.year.get)
     else Constants.standardIgnoreYearValue
   }

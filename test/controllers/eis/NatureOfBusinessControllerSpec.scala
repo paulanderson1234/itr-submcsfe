@@ -24,6 +24,7 @@ import models.NatureOfBusinessModel
 import org.mockito.Matchers
 import org.mockito.Mockito._
 import play.api.test.Helpers._
+import uk.gov.hmrc.http.cache.client.CacheMap
 
 import scala.concurrent.Future
 
@@ -70,10 +71,12 @@ class NatureOfBusinessControllerSpec extends BaseSpec {
     }
   }
 
-  "Sending a valid form submit to the NatureOfBusinessController when auththenticated and enrolled" should {
+  "Sending a valid form submit to the NatureOfBusinessController when authenticated and enrolled" should {
     "redirect to the date of incorporation page" in {
       mockEnrolledRequest(eisSchemeTypesModel)
       val formInput = "natureofbusiness" -> "some text so it's valid"
+      when(mockS4lConnector.saveFormData(Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(mock[CacheMap]))
 
       submitWithSessionAndAuth(TestController.submit,formInput)(
         result => {

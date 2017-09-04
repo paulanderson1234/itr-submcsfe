@@ -23,6 +23,10 @@ object MockDataGenerator {
   def randomString(alphabet: String)(n: Int): String =
     Stream.continually(random.nextInt(alphabet.size)).map(alphabet).take(n).mkString
 
+  def randomNumberString(n: Int): String =
+    randomString("1234567890")(n)
+
+
   def randomAlphanumericString(n: Int): String =
     randomString("abcdefghijklmnopqrstuvwxyz0123456789")(n)
 }

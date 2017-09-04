@@ -29,6 +29,9 @@ trait Constants {
   val addressLineLength = 35
   val forenameLength = 35
   val surnameLength = 35
+  val phoneLength = 24
+  val emailLength = 132
+  val postcodeLength = 10
 
   val shortTextLimit: Int = 250
 

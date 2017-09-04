@@ -1,0 +1,42 @@
+@import uk.gov.hmrc.play.views.html.helpers.form
+@import views.html.helpers.{backButtonWithProgress, inputWithCurrencySymbol, errorSummary, hiddenField}
+@import models.investorDetails.HowMuchSpentOnSharesModel
+
+@(howMuchSpentOnShares: String, howMuchSpentOnSharesForm: Form[HowMuchSpentOnSharesModel], backUrl: String)(implicit request: Request[_], messages: Messages)
+
+@main_template(Messages("page.investors.howMuchSpentOnShares.title", howMuchSpentOnShares.toLowerCase)) {
+
+@backButtonWithProgress(backUrl, Messages("common.section.progress.details.four"))
+
+@errorSummary(howMuchSpentOnSharesForm, "how-much-spent-on-shares", "howMuchSpentOnShares")
+
+<h1 class="heading-xlarge">@Messages("page.investors.howMuchSpentOnShares.title", howMuchSpentOnShares.toLowerCase())</h1>
+
+@form(action = controllers.eis.routes.HowMuchSpentOnSharesController.submit()) {
+<div class="form-group">
+    @inputWithCurrencySymbol(
+    howMuchSpentOnSharesForm("howMuchSpentOnShares"),
+    '_divClass -> "form-label",
+    '_labelId -> "label-howMuchSpentOnShares",
+    '_label -> Messages("page.investors.howMuchSpentOnShares.title", howMuchSpentOnShares.toLowerCase()),
+    '_labelTextClass -> "visuallyhidden",
+    '_inputClass -> "input--no-spinner input--left-padding",
+    '_type -> "text",
+    '_maxlength -> "11",
+    'id -> "howMuchSpent"
+    )
+
+</div>
+
+<div>
+    @hiddenField(
+    howMuchSpentOnSharesForm("processingId"),
+    'id -> "processingId"
+    )
+</div>
+
+<div>
+    <button class="btn button" type="submit" id="next">@Messages("common.button.snc")</button>
+</div>
+}
+}

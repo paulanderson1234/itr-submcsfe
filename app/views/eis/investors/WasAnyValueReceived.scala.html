@@ -1,0 +1,71 @@
+@import models.WasAnyValueReceivedModel
+@import views.html.helpers.backButtonWithProgress
+@import views.html.helpers.errorSummary
+@import views.html.helpers.formHiddenYesNoRadio
+@import views.html.helpers.textArea
+@import common.Constants
+@import uk.gov.hmrc.play.views.html.helpers.form
+
+@(wasAnyValueReceivedForm: Form[WasAnyValueReceivedModel])(implicit request: Request[_], messages: Messages)
+
+@additionalContent() = {
+    <h2 class="heading-medium">@Messages("page.investors.wasAnyValueReceived.subHeading")</h2>
+
+    <p>@Messages("page.investors.wasAnyValueReceived.additionalGuidance.title")</p>
+
+    <ul class="list list-bullet">
+        <li>@Messages("page.investors.wasAnyValueReceived.additionalGuidance.list.one")</li>
+        <li>@Messages("page.investors.wasAnyValueReceived.additionalGuidance.list.two")</li>
+        <li>@Messages("page.investors.wasAnyValueReceived.additionalGuidance.list.three")</li>
+        <li>@Messages("page.investors.wasAnyValueReceived.additionalGuidance.list.four")</li>
+        <li>@Messages("page.investors.wasAnyValueReceived.additionalGuidance.list.five")</li>
+    </ul>
+
+    <div class="form-group">
+        <span class = "form-hint" id="desc-one">@Messages("page.investors.previousShareHoldingDescription.question.hint")</span>
+        @textArea(
+        wasAnyValueReceivedForm("descriptionTextArea"),
+            '_cols -> "45",
+            '_rows -> "5",
+            '_maxLength-> Constants.shortTextLimit,
+            '_label-> Messages("page.investors.wasAnyValueReceived.title"),
+            '_labelTextClass-> "visuallyhidden"
+        )
+    </div>
+}
+
+@main_template(Messages("page.investors.wasAnyValueReceived.title")) {
+
+    @backButtonWithProgress(controllers.eis.routes.ReviewAllInvestorsController.show().url, Messages("common.section.progress.details.four"))
+
+    @errorSummary(wasAnyValueReceivedForm, "was-any-value-received", "descriptionTextArea")
+
+    <h1 class="heading-xlarge">@Messages("page.investors.wasAnyValueReceived.title")</h1>
+
+    <div class="form-group">
+        <p>@Messages("page.investors.wasAnyValueReceived.guidance.definition")</p>
+        <p>@Messages("page.investors.wasAnyValueReceived.guidance.title")</p>
+        <ul class="list list-bullet">
+            <li>@Messages("page.investors.wasAnyValueReceived.guidance.list.one")</li>
+            <li>@Messages("page.investors.wasAnyValueReceived.guidance.list.two")</li>
+            <li>@Messages("page.investors.wasAnyValueReceived.guidance.list.three")</li>
+            <li>@Messages("page.investors.wasAnyValueReceived.guidance.list.four")</li>
+        </ul>
+        <p>@Messages("page.investors.wasAnyValueReceived.guidance.hint")</p>
+    </div>
+
+    @form(action = controllers.eis.routes.WasAnyValueReceivedController.submit()) {
+        @formHiddenYesNoRadio(
+            wasAnyValueReceivedForm,
+            "wasAnyValueReceived",
+            Messages("page.investors.wasAnyValueReceived.title"),
+            additionalContent(),
+            None,
+            Some("visuallyhidden")
+        )
+
+        <div class="form-group">
+            <button class="btn button" type="submit" id="next">@Messages("common.button.snc")</button>
+        </div>
+    }
+}

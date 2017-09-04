@@ -29,7 +29,6 @@ import utils.DateFormatter
 import views.html.historicSubmissions.HistoricAASubmission
 
 
-
 object  HistoricAASubmissionController extends HistoricAASubmissionController
 {
   override lazy val applicationConfig = FrontendAppConfig

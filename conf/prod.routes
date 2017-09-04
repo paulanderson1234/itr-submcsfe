@@ -2,7 +2,6 @@
 ->         /investment-tax-relief-cs              app.Routes
 ->         /investment-tax-relief-cs/seis              seis.Routes
 ->         /investment-tax-relief-cs/eis               eis.Routes
-->         /investment-tax-relief-cs/eisseis           eisseis.Routes
 ->         /                          health.Routes
 ->     	   /template                  template.Routes
 

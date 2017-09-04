@@ -39,8 +39,8 @@ class CompanyDetailsControllerSpec extends BaseSpec {
     val subscriptionService = SubscriptionService
   }
 
-  val backUrl = Some(controllers.seis.routes.CompanyDetailsController.show(1).url)
-  val listOfInvestorsIncompleteCompanyDetails =  Vector(validModelWithPrevShareHoldings.copy(companyDetailsModel = None))
+  lazy val backUrl = Some(controllers.seis.routes.CompanyDetailsController.show(1).url)
+  lazy val listOfInvestorsIncompleteCompanyDetails =  Vector(validModelWithPrevShareHoldings.copy(companyDetailsModel = None))
 
   "CompanyDetailsController" should {
     "use the correct auth connector" in {

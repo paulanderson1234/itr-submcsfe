@@ -1,0 +1,83 @@
+@import models.investorDetails.{PreviousShareHoldingModel, InvestorDetailsModel}
+@import config.FrontendAppConfig
+@import uk.gov.hmrc.play.views.html.helpers.form
+@import views.html.helpers.{errorSummary, formInputRadioGroup, backButtonWithProgress, input, inputWithCurrencySymbol, formInlineDateInput, hiddenField}
+
+@(investor: InvestorDetailsModel)(implicit request: Request[_], messages: Messages)
+
+@main_template(Messages("page.investors.previousShareHoldingReview.title"), articleLayout=false) {
+
+@Messages("common.section.progress.details.four")
+
+<div class="grid-column">
+    <div class="full-width">
+        <h1 class="form-title heading-xlarge" id="main-heading">@Messages("page.investors.previousShareHoldingReview.heading")</h1>
+        <table id="previous-share-holdings-table">
+            <thead>
+                <tr>
+                    <th id="share-holdings-table-heading">@Messages("page.investors.previousShareHoldingReview.heading.one")</th>
+                    <th id="amount-raised-table-heading">@Messages("page.investors.previousShareHoldingReview.heading.two")</th>
+                    <th id="date-table-heading">@Messages("page.investors.previousShareHoldingReview.heading.three")</th>
+                    <th id="count-table-heading">@Messages("page.investors.previousShareHoldingReview.heading.four")</th>
+                    <th>
+                        <span class="visuallyhidden">
+                            @Messages("common.base.change")
+                        </span>
+                    </th>
+                    <th>
+                        <span class="visuallyhidden">
+                            @Messages("common.base.remove")
+                        </span>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+            @for((previousShareHoldingModel, index) <- investor.previousShareHoldingModels.get.zipWithIndex) {
+            <tr>
+                @if(previousShareHoldingModel.previousShareHoldingDescriptionModel.isDefined){
+                <td id="share-desc-@{index}">@previousShareHoldingModel.previousShareHoldingDescriptionModel.get.description</td>
+                }else{<td>Incomplete</td>}
+                @if(previousShareHoldingModel.previousShareHoldingNominalValueModel.isDefined){
+                <td id="share-nominal-value-@{index}">@PreviousShareHoldingModel.getAmountAsFormattedString(previousShareHoldingModel.previousShareHoldingNominalValueModel.get.nominalValue)</td>
+                }else{<td>Incomplete</td>}
+                @if(previousShareHoldingModel.investorShareIssueDateModel.isDefined){
+                <td id="share-purchase-date-@{index}">@PreviousShareHoldingModel.toDateString(previousShareHoldingModel.investorShareIssueDateModel.get.investorShareIssueDateDay.get,
+                    previousShareHoldingModel.investorShareIssueDateModel.get.investorShareIssueDateMonth.get, previousShareHoldingModel.investorShareIssueDateModel.get.investorShareIssueDateYear.get)</td>
+                }else{<td>Incomplete</td>}
+                @if(previousShareHoldingModel.numberOfPreviouslyIssuedSharesModel.isDefined){
+                <td id="share-purchase-count-@{index}">@previousShareHoldingModel.numberOfPreviouslyIssuedSharesModel.get.previouslyIssuedShares</td>
+                }else{<td>Incomplete</td>}
+                @if(previousShareHoldingModel.validate){
+                <td id="change-@{index}"><a id="change-ref-@{index}"
+                                            href="@controllers.eis.routes.PreviousShareHoldingsReviewController.change(previousShareHoldingModel.investorProcessingId.get,previousShareHoldingModel.processingId.get).toString">@Messages("common.base.change")</a></td>
+                }else{
+                <td id="continue-@{index}"> @form(action = controllers.eis.routes.PreviousShareHoldingsReviewController.change(previousShareHoldingModel.investorProcessingId.get,previousShareHoldingModel.processingId.get)) {
+                    <button class="button--link-style font-xsmall removeLink" type="submit" id="continue-link-@{index}"> @Messages("common.button.continue")</button>
+                    }</td>
+                }
+                <td id="remove-@{index}"> @form(action = controllers.eis.routes.PreviousShareHoldingsReviewController.remove(previousShareHoldingModel.investorProcessingId.get,previousShareHoldingModel.processingId.get)) {
+                    <button class="button--link-style font-xsmall removeLink" type="submit" id="remove-link-@{index}"> @Messages("common.base.remove")</button>
+                    }</td>
+            </tr>
+            }
+            @if(investor.validate){
+            <tr>
+                <td colspan="6"><a id="add-share-holder"
+                                   href=@controllers.eis.routes.PreviousShareHoldingDescriptionController.show(investor.processingId.get).toString>@Messages("page.investors.previousShareHoldingReview.add")</a></td>
+            </tr>
+            }
+
+
+            </tbody>
+        </table>
+        @if(investor.validate){
+        @form(action = controllers.eis.routes.PreviousShareHoldingsReviewController.submit(investor.processingId.get)) {
+        <div class="form-group">
+            <button class="btn button" type="submit" id="next">@Messages("common.button.snc")</button>
+        </div>
+        }
+        }
+
+    </div>
+</div>
+}
