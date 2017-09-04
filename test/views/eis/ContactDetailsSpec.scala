@@ -53,7 +53,7 @@ class ContactDetailsSpec extends ViewSpec {
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.ConfirmContactDetailsController.show().url
       document.select("a.back-link").text() shouldBe Messages("common.button.back")
-      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.four")
+      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.five")
     }
 
     "Verify that the proposed investment page contains the correct elements when an invalid ContactDetailsModel is passed" in new Setup {
@@ -68,7 +68,7 @@ class ContactDetailsSpec extends ViewSpec {
       document.getElementById("label-email").text() contains Messages("page.contactInformation.contactDetails.email.label")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.ConfirmContactDetailsController.show().url
-      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.four")
+      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.five")
       document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe true
     }
 
