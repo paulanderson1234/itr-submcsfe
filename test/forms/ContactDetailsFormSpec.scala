@@ -16,6 +16,8 @@
 
 package forms
 
+import common.Constants
+import controllers.helpers.MockDataGenerator
 import forms.ContactDetailsForm._
 import models.ContactDetailsModel
 import org.scalatestplus.play.OneAppPerSuite
@@ -25,7 +27,13 @@ import play.api.i18n.Messages.Implicits._
 
 class ContactDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
-  val chars132 = "thisxx@" + ("12345678911" * 11) + ".com"
+  val maxEmail = "thisxx@" + ("12345678911" * 11) + ".com"
+
+  "The test max length email" should {
+    "be the ccorrect length" in {
+      maxEmail.length shouldBe Constants.emailLength
+    }
+  }
 
   "Creating a form using an empty model" should {
     lazy val form = contactDetailsForm
@@ -302,7 +310,6 @@ class ContactDetailsFormSpec extends UnitSpec with OneAppPerSuite{
     }
   }
 
-//  BVA
 
   "forename value supplied with the minimum allowed" should {
     lazy val form = contactDetailsForm.bind(Map(
@@ -366,7 +373,7 @@ class ContactDetailsFormSpec extends UnitSpec with OneAppPerSuite{
 
   "forename value supplied with the maximum allowed (on the boundary)" should {
     lazy val form = contactDetailsForm.bind(Map(
-      "forename" -> "Thisnameisthirtyfivecharacterslongg",
+      "forename" -> MockDataGenerator.randomAlphanumericString(Constants.forenameLength),
       "surname" -> "lastname",
       "telephoneNumber" -> "07000 111222",
       "email" -> "test@test.com")
@@ -379,10 +386,31 @@ class ContactDetailsFormSpec extends UnitSpec with OneAppPerSuite{
     }
   }
 
+  "forename value supplied over the maximum allowed (over the boundary)" should {
+    lazy val form = contactDetailsForm.bind(Map(
+      "forename" -> MockDataGenerator.randomAlphanumericString(Constants.forenameLength + 1),
+      "surname" -> "lastname",
+      "telephoneNumber" -> "07000 111222",
+      "email" -> "test@test.com")
+    )
+    "raise form error" in {
+      form.hasErrors shouldBe true
+    }
+    "raise 1 form error" in {
+      form.errors.length shouldBe 1
+      form.errors.head.key shouldBe "forename"
+
+    }
+    "associate the correct error message to the error" in {
+      form.errors.head.message shouldBe "error.maxLength"
+      form.errors.head.args shouldBe Array(Constants.forenameLength)
+    }
+  }
+
   "surname value supplied with the maximum allowed (on the boundary)" should {
     lazy val form = contactDetailsForm.bind(Map(
       "forename" -> "firstname",
-      "surname" -> "Thisnameisthirtyfivecharacterslongg",
+      "surname" -> MockDataGenerator.randomAlphanumericString(Constants.surnameLength),
       "telephoneNumber" -> "07000 111222",
       "email" -> "test@test.com")
     )
@@ -391,6 +419,27 @@ class ContactDetailsFormSpec extends UnitSpec with OneAppPerSuite{
     }
     "raise 0 form errors" in {
       form.errors.length shouldBe 0
+    }
+  }
+
+  "surname value supplied over the maximum allowed (over the boundary)" should {
+    lazy val form = contactDetailsForm.bind(Map(
+      "forename" -> MockDataGenerator.randomAlphanumericString(Constants.surnameLength + 1),
+      "surname" -> "lastname",
+      "telephoneNumber" -> "07000 111222",
+      "email" -> "test@test.com")
+    )
+    "raise form error" in {
+      form.hasErrors shouldBe true
+    }
+    "raise 1 form error" in {
+      form.errors.length shouldBe 1
+      form.errors.head.key shouldBe "forename"
+
+    }
+    "associate the correct error message to the error" in {
+      form.errors.head.message shouldBe "error.maxLength"
+      form.errors.head.args shouldBe Array(Constants.surnameLength)
     }
   }
 
@@ -398,7 +447,7 @@ class ContactDetailsFormSpec extends UnitSpec with OneAppPerSuite{
     lazy val form = contactDetailsForm.bind(Map(
       "forename" -> "firstname",
       "surname" -> "lastname",
-      "telephoneNumber" -> "000000000000000000000005",
+      "telephoneNumber" -> MockDataGenerator.randomNumberString(Constants.phoneLength),
       "email" -> "test@test.com")
     )
     "raise form error" in {
@@ -413,7 +462,7 @@ class ContactDetailsFormSpec extends UnitSpec with OneAppPerSuite{
     lazy val form = contactDetailsForm.bind(Map(
       "forename" -> "firstname",
       "surname" -> "lastname",
-      "telephoneNumber" -> "0000000000000000000000006",
+      "telephoneNumber" -> MockDataGenerator.randomNumberString(Constants.phoneLength + 1),
       "email" -> "test@test.com")
     )
     "raise form error" in {
@@ -428,11 +477,28 @@ class ContactDetailsFormSpec extends UnitSpec with OneAppPerSuite{
     }
   }
 
-  "telephoneNumber value supplied over the maximum allowed (over the boundary) incluses whitespace in the count" should {
+  "mobileNumber value supplied with the maximum allowed (on the boundary)" should {
     lazy val form = contactDetailsForm.bind(Map(
       "forename" -> "firstname",
       "surname" -> "lastname",
-      "telephoneNumber" -> "0000000000000 0000000 00003",
+      "telephoneNumber" -> "07000 111222",
+      "mobileNumber" -> MockDataGenerator.randomNumberString(Constants.phoneLength),
+      "email" -> "test@test.com")
+    )
+    "raise form error" in {
+      form.hasErrors shouldBe false
+    }
+    "raise 0 form errors" in {
+      form.errors.length shouldBe 0
+    }
+  }
+
+  "mobileNumber value supplied over the maximum allowed (over the boundary)" should {
+    lazy val form = contactDetailsForm.bind(Map(
+      "forename" -> "firstname",
+      "surname" -> "lastname",
+      "telephoneNumber" -> "07000 111222",
+      "mobileNumber" -> MockDataGenerator.randomNumberString(Constants.phoneLength + 1),
       "email" -> "test@test.com")
     )
     "raise form error" in {
@@ -440,10 +506,10 @@ class ContactDetailsFormSpec extends UnitSpec with OneAppPerSuite{
     }
     "raise 1 form error" in {
       form.errors.length shouldBe 1
-      form.errors.head.key shouldBe "telephoneNumber"
+      form.errors.head.key shouldBe "mobileNumber"
     }
     "associate the correct error message to the error" in {
-      form.error("telephoneNumber").get.message shouldBe Messages("validation.error.telephoneNumber")
+      form.error("mobileNumber").get.message shouldBe Messages("validation.error.telephoneNumber")
     }
   }
 
@@ -814,7 +880,7 @@ class ContactDetailsFormSpec extends UnitSpec with OneAppPerSuite{
       "forename" -> "firstname",
       "surname" -> "lastname",
       "telephoneNumber" -> "07000 111222",
-      "email" -> chars132)
+      "email" -> maxEmail)
     )
     "raise form error" in {
       form.hasErrors shouldBe false
@@ -829,7 +895,7 @@ class ContactDetailsFormSpec extends UnitSpec with OneAppPerSuite{
       "forename" -> "firstname",
       "surname" -> "lastname",
       "telephoneNumber" -> "07000 111222",
-      "email" -> s"1$chars132")
+      "email" -> s"1$maxEmail")
     )
     "raise form error" in {
       form.hasErrors shouldBe true
