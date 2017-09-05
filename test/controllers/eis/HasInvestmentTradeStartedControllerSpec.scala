@@ -102,7 +102,7 @@ class HasInvestmentTradeStartedControllerSpec extends BaseSpec {
       submitWithSessionAndAuth(TestController.submit,formInput: _*)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(controllers.eis.routes.ShareIssueDateController.show().url)
+          redirectLocation(result) shouldBe Some(controllers.eis.routes.CommercialSaleController.show().url)
         }
       )
     }
@@ -119,7 +119,7 @@ class HasInvestmentTradeStartedControllerSpec extends BaseSpec {
       submitWithSessionAndAuth(TestController.submit,formInput: _*)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(controllers.eis.routes.CommercialSaleController.show().url)
+          redirectLocation(result) shouldBe Some(controllers.eis.routes.HasInvestmentTradeStartedController.show().url)
         }
       )
     }
@@ -137,7 +137,7 @@ class HasInvestmentTradeStartedControllerSpec extends BaseSpec {
       submitWithSessionAndAuth(TestController.submit,formInput:_*)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(controllers.eis.routes.CommercialSaleController.show().url)
+          redirectLocation(result) shouldBe Some(controllers.eis.routes.HasInvestmentTradeStartedController.show().url)
         }
       )
     }
