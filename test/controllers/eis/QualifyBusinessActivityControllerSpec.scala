@@ -108,7 +108,7 @@ class QualifyBusinessActivityControllerSpec extends BaseSpec {
   "Sending an invalid form submission with validation errors to the QualifyBusinessActivityController when authenticated and enrolled" should {
     "respond with a bad request" in {
       mockEnrolledRequest(eisSchemeTypesModel)
-      val formInput = "isFirstTrade" -> ""
+      val formInput = "isQualifyBusinessActivity" -> ""
       submitWithSessionAndAuth(TestController.submit,formInput)(
         result => {
           status(result) shouldBe BAD_REQUEST
