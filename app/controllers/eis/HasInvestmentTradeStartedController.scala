@@ -66,7 +66,8 @@ trait HasInvestmentTradeStartedController extends FrontendController with Author
               validFormData.hasInvestmentTradeStartedMonth.get, validFormData.hasInvestmentTradeStartedYear.get).map {
               case Some(validated) =>
                 if (validated) {
-                  s4lConnector.saveFormData(KeystoreKeys.backLinkShareIssueDate,
+                  // fi x test HULL
+                  s4lConnector.saveFormData(KeystoreKeys.backLinkCommercialSale,
                     routes.HasInvestmentTradeStartedController.show().url)
 
                   Redirect(routes.CommercialSaleController.show())

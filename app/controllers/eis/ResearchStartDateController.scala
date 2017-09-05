@@ -66,7 +66,10 @@ trait ResearchStartDateController extends FrontendController with AuthorisedAndE
               validFormData.researchStartMonth.get, validFormData.researchStartYear.get).map {
               case Some(validated) =>
                 if (validated) {
-                  s4lConnector.saveFormData(KeystoreKeys.backLinkShareIssueDate,
+                  // HULL
+                  //todo makle ssure commerical sale reads back link and any opage going to Com sale sets it's baclkin
+                  // i.e trade has date
+                  s4lConnector.saveFormData(KeystoreKeys.backLinkCommercialSale,
                     routes.ResearchStartDateController.show().url)
 
                   Redirect(routes.CommercialSaleController.show())
