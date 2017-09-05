@@ -69,11 +69,12 @@ trait ResearchStartDateController extends FrontendController with AuthorisedAndE
                   s4lConnector.saveFormData(KeystoreKeys.backLinkShareIssueDate,
                     routes.ResearchStartDateController.show().url)
 
-                  Redirect(routes.ShareIssueDateController.show())
+                  Redirect(routes.CommercialSaleController.show())
                 }
                 else {
                   s4lConnector.saveFormData(KeystoreKeys.backLinkSeventyPercentSpent, routes.ResearchStartDateController.show().url)
-                  Redirect(routes.CommercialSaleController.show())
+                  //TODO Should route to Research start date error page once completed, if less than 4 months
+                  Redirect(routes.ResearchStartDateController.show())
                 }
               case _ => {
                 Logger.warn(s"[ResearchStartDateController][submit] - Call to validate investment trade start date in backend failed")
@@ -86,9 +87,10 @@ trait ResearchStartDateController extends FrontendController with AuthorisedAndE
               }
             }
           }
+          //TODO Should route to Research start date error page once completed, if no button selected
           case Constants.StandardRadioButtonNoValue => {
             s4lConnector.saveFormData(KeystoreKeys.backLinkSeventyPercentSpent, routes.ResearchStartDateController.show().url)
-            Future.successful(Redirect(routes.CommercialSaleController.show()))
+            Future.successful(Redirect(routes.ResearchStartDateController.show()))
           }
         }
       }
