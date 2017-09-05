@@ -52,7 +52,6 @@ class ConfirmCorrespondAddressSpec extends ViewSpec {
       document.body.getElementById("contactAddressUse-noLabel").text shouldBe Messages("common.radioNoLabel")
       document.body.select("#contactAddressUse-yes").size() shouldBe 1
       document.body.select("#contactAddressUse-no").size() shouldBe 1
-      document.body.getElementById("storedAddressDiv")
       document.body.getElementById("get-help-action").text shouldBe Messages("common.error.help.text")
       document.body.getElementById("line1-display").text shouldBe expectedContactAddressFull.addressline1
       document.body.getElementById("line2-display").text shouldBe expectedContactAddressFull.addressline2
@@ -80,9 +79,8 @@ class ConfirmCorrespondAddressSpec extends ViewSpec {
       document.body.getElementById("contactAddressUse-noLabel").text shouldBe Messages("common.radioNoLabel")
       document.body.select("#contactAddressUse-yes").size() shouldBe 1
       document.body.select("#contactAddressUse-no").size() shouldBe 1
-      document.body.getElementById("storedAddressDiv")
       document.body.getElementById("get-help-action").text shouldBe Messages("common.error.help.text")
-      document.getElementById("error-summary-display").hasClass("error-summary--show")
+      document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe true
       document.body.getElementById("line1-display").text shouldBe ""
       document.body.getElementById("line2-display").text shouldBe ""
       document.body.getElementById("line3-display").text shouldBe ""

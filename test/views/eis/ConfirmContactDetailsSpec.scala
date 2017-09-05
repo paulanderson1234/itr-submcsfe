@@ -50,7 +50,7 @@ class ConfirmContactDetailsSpec extends UnitSpec with OneAppPerSuite{
     }
 
     "have a back-link" which {
-      s"has the text '${Messages("common.section.progress.details.four")}" in {
+      s"has the text '${Messages("common.section.progress.details.five")}" in {
         document.body.getElementById("back-link").text shouldEqual Messages("common.button.back")
       }
 
@@ -59,7 +59,7 @@ class ConfirmContactDetailsSpec extends UnitSpec with OneAppPerSuite{
       }
 
       s"has a Section heading next to it of '${Messages("common.section.progress.details.four")}" in {
-        document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.four")
+        document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.five")
       }
     }
 
