@@ -16,6 +16,7 @@
 
 package connectors
 import config.{FrontendAppConfig, WSHttp}
+import models.registration.RegistrationDetailsModel
 import models.seis.SEISAnswersModel
 import models.submission.{DesSubmissionCSModel, DesSubmitAdvancedAssuranceModel, Submission}
 import models.{AnnualTurnoverCostsModel, GrossAssetsModel, ProposedInvestmentModel}
@@ -89,13 +90,17 @@ trait SubmissionConnector {
     http.POST[JsValue, HttpResponse](s"$serviceUrl/investment-tax-relief/advanced-assurance/$tavcReferenceNumber/submit", Json.toJson(targetSubmissionModel))
   }
 
-  def submitComplainceStatement(submissionRequest: SEISAnswersModel, tavcReferenceNumber: String)(implicit hc: HeaderCarrier): Future[HttpResponse] = {
+  def submitComplainceStatement(submissionRequest: SEISAnswersModel, tavcReferenceNumber: String,
+                                registrationDetailsModel: Option[RegistrationDetailsModel])(implicit hc: HeaderCarrier): Future[HttpResponse] = {
     if(tavcReferenceNumber.isEmpty) {
       Logger.warn("[SubmissionConnector][submitComplainceStatement] An empty tavcReferenceNumber was passed")
     }
     require(tavcReferenceNumber.nonEmpty, "[SubmissionConnector][submitComplainceStatement] An empty tavcReferenceNumber was passed")
 
-    http.POST[JsValue, HttpResponse](s"$serviceUrl/investment-tax-relief/compliance-statement/$tavcReferenceNumber/submit", Json.toJson(DesSubmissionCSModel.readDesSubmissionCSModel(submissionRequest)))
+    println(" ***************************** POSTING TO SUBMISSION BACKEND *************************** ")
+    println(Json.toJson(DesSubmissionCSModel.readDesSubmissionCSModel(submissionRequest, registrationDetailsModel)))
+    http.POST[JsValue, HttpResponse](s"$serviceUrl/investment-tax-relief/compliance-statement/$tavcReferenceNumber/submit",
+      Json.toJson(DesSubmissionCSModel.readDesSubmissionCSModel(submissionRequest, registrationDetailsModel)))
   }
 
   def getAASubmissionDetails(tavcReferenceNumber: String)(implicit hc: HeaderCarrier): Future[HttpResponse] = {

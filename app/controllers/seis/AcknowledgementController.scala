@@ -31,6 +31,7 @@ import models.submission._
 import play.Logger
 import play.api.Play.current
 import play.api.i18n.Messages.Implicits._
+import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, Request, Result}
 import services.{FileUploadService, RegistrationDetailsService}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
@@ -230,9 +231,10 @@ trait AcknowledgementController extends FrontendController with AuthorisedAndEnr
     )
   }
 
-  def processResult(seisAnswersModel: SEISAnswersModel, tavcReferenceNumber: String)
+  def processResult(seisAnswersModel: SEISAnswersModel, tavcReferenceNumber: String,
+                    registrationDetailsModel: Option[RegistrationDetailsModel])
                    (implicit hc: HeaderCarrier, user: TAVCUser, request: Request[AnyContent]): Future[Result] = {
-    submissionConnector.submitComplainceStatement(seisAnswersModel, tavcReferenceNumber).map { submissionResponse =>
+    submissionConnector.submitComplainceStatement(seisAnswersModel, tavcReferenceNumber, registrationDetailsModel).map { submissionResponse =>
       submissionResponse.status match {
         case OK =>
           s4lConnector.clearCache()
@@ -251,9 +253,10 @@ trait AcknowledgementController extends FrontendController with AuthorisedAndEnr
     }
   }
 
-  def processResultUpload(seisAnswersModel: SEISAnswersModel, tavcReferenceNumber: String)
+  def processResultUpload(seisAnswersModel: SEISAnswersModel, tavcReferenceNumber: String,
+                          registrationDetailsModel: Option[RegistrationDetailsModel])
                          (implicit hc: HeaderCarrier, user: TAVCUser, request: Request[AnyContent]): Future[Result] = {
-    submissionConnector.submitComplainceStatement(seisAnswersModel, tavcReferenceNumber).flatMap { submissionResponse =>
+    submissionConnector.submitComplainceStatement(seisAnswersModel, tavcReferenceNumber, registrationDetailsModel).flatMap { submissionResponse =>
       submissionResponse.status match {
         case OK =>
           s4lConnector.fetchAndGetFormData[String](KeystoreKeys.envelopeId).flatMap {
@@ -283,13 +286,15 @@ trait AcknowledgementController extends FrontendController with AuthorisedAndEnr
         tavcReferenceNumber <- getTavCReferenceNumber()
         seisAnswersModel <- getAnswers
         isValid <- seisAnswersModel.get.validate(submissionConnector)
-      } yield if (isValid) (seisAnswersModel, tavcReferenceNumber) else (None, tavcReferenceNumber)
+        registrationDetailsModel <- registrationDetailsService.getRegistrationDetails(tavcReferenceNumber)
+      } yield if (isValid) (seisAnswersModel, tavcReferenceNumber, registrationDetailsModel) else (None, tavcReferenceNumber, registrationDetailsModel)
 
       sourceWithRef.flatMap{
-        case (Some(seisAnswersModel), tavcReferenceNumber) =>
-          if (fileUploadService.getUploadFeatureEnabled) processResultUpload(seisAnswersModel, tavcReferenceNumber)
-          else processResult(seisAnswersModel, tavcReferenceNumber)
-        case (None, _) => Future.successful(Redirect(controllers.routes.ApplicationHubController.show()))
+        case (Some(seisAnswersModel), tavcReferenceNumber, registrationDetailsModel) => {
+          if (fileUploadService.getUploadFeatureEnabled) processResultUpload(seisAnswersModel, tavcReferenceNumber, registrationDetailsModel)
+          else processResult(seisAnswersModel, tavcReferenceNumber, registrationDetailsModel)
+        }
+        case (None, _, _) => Future.successful(Redirect(controllers.routes.ApplicationHubController.show()))
       }
 
   }

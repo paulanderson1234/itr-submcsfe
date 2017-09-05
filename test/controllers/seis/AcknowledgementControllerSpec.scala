@@ -97,7 +97,7 @@ class AcknowledgementControllerSpec extends BaseSpec {
     when(mockS4lConnector.fetchAndGetFormData[ShareIssueDateModel](Matchers.eq(KeystoreKeys.shareIssueDate))
       (Matchers.any(), Matchers.any(), Matchers.any()))
       .thenReturn(Future.successful(Some(shareIssuetDateModel)))
-    when(mockSubmissionConnector.submitComplainceStatement(Matchers.any(), Matchers.any())(Matchers.any()))
+    when(mockSubmissionConnector.submitComplainceStatement(Matchers.any(), Matchers.any(), Matchers.any())(Matchers.any()))
       .thenReturn(Future.successful(HttpResponse(OK, Some(Json.toJson(submissionResponse)))))
     when(mockS4lConnector.fetchAndGetFormData[TradeStartDateModel](Matchers.eq(KeystoreKeys.tradeStartDate))
       (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Some(tradeStartDateModelYes))
@@ -327,7 +327,7 @@ class AcknowledgementControllerSpec extends BaseSpec {
     "return a 5xx when an invalid email is submitted" in new SetupPageFull {
       when(mockS4lConnector.fetchAndGetFormData[SchemeTypesModel](Matchers.eq(KeystoreKeys.selectedSchemes))
         (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Some(schemeTypesEIS))
-      when(mockSubmissionConnector.submitComplainceStatement(Matchers.any(), Matchers.any())(Matchers.any()))
+      when(mockSubmissionConnector.submitComplainceStatement(Matchers.any(), Matchers.any(), Matchers.any())(Matchers.any()))
         .thenReturn(Future.successful(HttpResponse(INTERNAL_SERVER_ERROR)))
       mockEnrolledRequest(seisSchemeTypesModel)
       setupMocks()

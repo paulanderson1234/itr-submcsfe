@@ -18,8 +18,9 @@ package models.submission
 
 import common.Constants
 import models.investorDetails._
+import models.registration.RegistrationDetailsModel
 import models.seis._
-import models.{CompanyDetailsModel, IndividualDetailsModel, PreviousSchemeModel}
+import models.{AddressModel, CompanyDetailsModel, IndividualDetailsModel, PreviousSchemeModel}
 import play.api.libs.json.Json
 import utils.{Transformers, Validation}
 
@@ -193,7 +194,7 @@ case class DesComplianceStatement(
                                    investment: DesInvestmentDetailsModel, // Not required for CS SEIS but required in DES scheme
                                    subsidiaryPerformingTrade: Option[DesSubsidiaryPerformingTrade],
                                    knowledgeIntensive: Option[KiModel],
-                                   investorsDetails: DesInvestorDetailsModel,
+                                   investorDetails: DesInvestorDetailsModel,
                                    repayments: DesRepaymentsModel, // Not required for CS SEIS flow but required in DES scheme
                                    valueReceived: Option[String],
                                    organisation: DesOrganisationModel
@@ -228,13 +229,15 @@ case class DesSubmissionCSModel (
 object DesSubmissionCSModel {
   implicit val formatCSSubmission = Json.format[DesSubmissionCSModel]
 
-  def readDesSubmissionCSModel(seisAnswersModel: SEISAnswersModel): DesSubmissionCSModel = {
-    DesSubmissionCSModel.apply(None, readDesSubmissionModel(seisAnswersModel))
+  def readDesSubmissionCSModel(seisAnswersModel: SEISAnswersModel,
+                               registrationDetailsModel: Option[RegistrationDetailsModel]): DesSubmissionCSModel = {
+    DesSubmissionCSModel.apply(None, readDesSubmissionModel(seisAnswersModel, registrationDetailsModel))
   }
 
-  def readDesSubmissionModel(seisAnswersModel: SEISAnswersModel): DesSubmissionModel = {
+  def readDesSubmissionModel(seisAnswersModel: SEISAnswersModel,
+                             registrationDetailsModel: Option[RegistrationDetailsModel]): DesSubmissionModel = {
     DesSubmissionModel.apply(None, readDesCorrespondenceDetails(seisAnswersModel.contactDetailsAnswersModel),
-      OrganisationType.limited.toString, readDesSubmission(seisAnswersModel))
+      OrganisationType.limited.toString, readDesSubmission(seisAnswersModel, registrationDetailsModel))
   }
 
   def readDesCorrespondenceDetails(contactDetailsAnswersModel: ContactDetailsAnswersModel): DesCorrespondenceDetails = {
@@ -263,17 +266,19 @@ object DesSubmissionCSModel {
       contactDetailsAnswersModel.correspondAddressModel.address.countryCode)
   }
 
-  def readDesSubmission(seisAnswersModel: SEISAnswersModel): DesSubmission = {
-    DesSubmission.apply(None, readDesComplianceStatement(seisAnswersModel))
+  def readDesSubmission(seisAnswersModel: SEISAnswersModel,
+                        registrationDetailsModel: Option[RegistrationDetailsModel]): DesSubmission = {
+    DesSubmission.apply(None, readDesComplianceStatement(seisAnswersModel, registrationDetailsModel))
   }
 
-  def readDesComplianceStatement(seisAnswersModel: SEISAnswersModel): DesComplianceStatement = {
+  def readDesComplianceStatement(seisAnswersModel: SEISAnswersModel,
+                                 registrationDetailsModel: Option[RegistrationDetailsModel]): DesComplianceStatement = {
     DesComplianceStatement.apply(SchemeType.seis.toString, readDesTradeModel(seisAnswersModel),
       readDesInvestmentDetailsModel(seisAnswersModel),
       readDesSubsidiaryPerformingTrade(seisAnswersModel), readDesKnowledgeIncentice(seisAnswersModel),
       readDesInvestorDetailsModel(seisAnswersModel), readDesRepaymentsModel(seisAnswersModel),
       readDesValueReceived(seisAnswersModel.investorDetailsAnswersModel),
-      readDesOrganisationModel(seisAnswersModel))
+      readDesOrganisationModel(seisAnswersModel, registrationDetailsModel))
   }
 
   def readDesTradeModel(seisAnswersModel: SEISAnswersModel): DesTradeModel = {
@@ -286,7 +291,11 @@ object DesSubmissionCSModel {
   }
 
   def readDesBussinessActivity(companyDetailsAnswersModel: CompanyDetailsAnswersModel): Option[String] = {
-    Some(companyDetailsAnswersModel.qualifyBusinessActivityModel.isQualifyBusinessActivity)
+    companyDetailsAnswersModel.qualifyBusinessActivityModel.isQualifyBusinessActivity match {
+      case Constants.qualifyPrepareToTrade => Some(BusinessActivity.preparingToTrade.toString)
+      case Constants.qualifyResearchAndDevelopment => Some(BusinessActivity.researchAndDevelopment.toString)
+      case _ => Some(BusinessActivity.trade.toString)
+    }
   }
 
   def readDesBaDescription(companyDetailsAnswersModel: CompanyDetailsAnswersModel): String = {
@@ -361,7 +370,7 @@ object DesSubmissionCSModel {
   }
 
   def readNominalValue(): CostModel = {
-    CostModel.apply("amount", "GBP")  // Missing in the source model needs to be removed
+    CostModel.apply("0", "GBP")  // Missing in the source model needs to be removed
   }
 
   def readTotalAmountRaised(shareDetailsAnswersModel: ShareDetailsAnswersModel): CostModel = {
@@ -497,9 +506,10 @@ object DesSubmissionCSModel {
     investorDetailsAnswersModel.valueReceivedModel.aboutValueReceived
   }
 
-  def readDesOrganisationModel(seisAnswersModel: SEISAnswersModel): DesOrganisationModel = {
+  def readDesOrganisationModel(seisAnswersModel: SEISAnswersModel,
+                               registrationDetailsModel: Option[RegistrationDetailsModel]): DesOrganisationModel = {
     DesOrganisationModel.apply(None, None, readDateOfIncorporation(seisAnswersModel.companyDetailsAnswersModel),
-      None, readDesOrganisationDetails(seisAnswersModel), readPreviousRFICostModel(seisAnswersModel))
+      None, readDesOrganisationDetails(registrationDetailsModel), readPreviousRFICostModel(seisAnswersModel))
   }
 
   def readDateOfIncorporation(companyDetailsAnswersModel: CompanyDetailsAnswersModel) : String = {
@@ -509,8 +519,18 @@ object DesSubmissionCSModel {
     else Constants.standardIgnoreYearValue
   }
 
-  def readDesOrganisationDetails(seisAnswersModel: SEISAnswersModel): DesCompanyDetailsModel = {
-    DesCompanyDetailsModel.apply("", None, None, None)
+  def readDesOrganisationDetails(registrationDetailsModel: Option[RegistrationDetailsModel]): DesCompanyDetailsModel = {
+    if(registrationDetailsModel.isDefined)
+      DesCompanyDetailsModel.apply(registrationDetailsModel.get.organisationName, None, None,
+        readOrgAddress(registrationDetailsModel.get.addressModel))
+    else
+      DesCompanyDetailsModel.apply("COMPANY", None, None, None)
+  }
+
+  def readOrgAddress(addressModel: AddressModel): Option[DesAddressType] = {
+    Some(DesAddressType.apply(addressModel.addressline1, addressModel.addressline2,
+      addressModel.addressline3, addressModel.addressline4,
+      addressModel.postcode, addressModel.countryCode))
   }
 
   def readPreviousRFICostModel(seisAnswersModel: SEISAnswersModel) : Option[DesRFICostsModel] = {

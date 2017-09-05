@@ -144,3 +144,10 @@ object InvestorType extends Enumeration {
   val investor = Value("Named Investor")
   val nominee = Value("Nominee")
 }
+
+object BusinessActivity extends Enumeration {
+  type BusinessActivity = Value
+  val preparingToTrade = Value("Preparing To Trade")
+  val researchAndDevelopment = Value("Research And Development")
+  val trade = Value("Trade")
+}
