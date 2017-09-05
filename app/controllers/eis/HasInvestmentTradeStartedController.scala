@@ -67,9 +67,7 @@ trait HasInvestmentTradeStartedController extends FrontendController with Author
               case Some(validated) =>
                 if (validated) {
                   // fi x test HULL
-                  s4lConnector.saveFormData(KeystoreKeys.backLinkCommercialSale,
-                    routes.HasInvestmentTradeStartedController.show().url)
-
+                  s4lConnector.saveFormData(KeystoreKeys.backLinkCommercialSale, routes.HasInvestmentTradeStartedController.show().url)
                   Redirect(routes.CommercialSaleController.show())
                 }
                 else {

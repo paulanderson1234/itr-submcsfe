@@ -2,11 +2,11 @@
 @import uk.gov.hmrc.play.views.html.helpers.form
 @import views.html.helpers.{backButtonWithProgress, errorSummary, formHiddenYesNoRadioNoError, formInlineDateInput}
 
-@(commercialSaleForm: Form[CommercialSaleModel])(implicit request: Request[_], messages: Messages)
+@(commercialSaleForm: Form[CommercialSaleModel], backLink:String)(implicit request: Request[_], messages: Messages)
 
 @main_template(Messages("page.companyDetails.CommercialSale.title")) {
 
-@backButtonWithProgress(controllers.eis.routes.DateOfIncorporationController.show().url, Messages("common.section.progress.details.one"))
+@backButtonWithProgress(backLink, Messages("common.section.progress.details.one"))
 
 @errorSummary(commercialSaleForm, "commercial-sale", "commercialSaleDay")
 
