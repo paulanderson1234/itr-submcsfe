@@ -756,8 +756,8 @@ page.PreviouslySubmitted.heading=Previously submitted applications
 page.introduction.hub.viewPrevious.AdvancedAssurance=View all of your Advance Assurance applications
 
 # SEIS Research Start Date
-page.companyDetails.researchStartDate.title = Have you started research and development to do with the business activity you got investment for?
-page.companyDetails.researchStartDate.heading = Have you started research and development to do with the business activity you got investment for?
+page.companyDetails.researchStartDate.title = Have you started research and development to do with the business activity you raised money for?
+page.companyDetails.researchStartDate.heading = Have you started research and development to do with the business activity you raised money for?
 page.companyDetails.researchStartDate.question = When did this research and development start?
 validation.error.researchStartDate.Future = Research and development start date cannot be a future date
 
@@ -1041,8 +1041,8 @@ page.companyDetails.qualifyBusinessActivity.help.text.five=renting an office
 page.companyDetails.qualifyBusinessActivity.help.text.six=Research and development is work you do to improve existing products and create new products.
 
 #Has Investment Trade Started
-page.companyDetails.HasInvestmentTradeStarted.title=Has the business activity you got investment for started?
-page.companyDetails.HasInvestmentTradeStarted.heading=Has the business activity you got investment for started?
+page.companyDetails.HasInvestmentTradeStarted.title=Has the business activity you raised money for started?
+page.companyDetails.HasInvestmentTradeStarted.heading=Has the business activity you raised money for started?
 page.companyDetails.HasInvestmentTradeStarted.question.hint=When did this business activity start?
 page.companyDetails.HasInvestmentTradeStarted.descriptionOne.text=The business activity has started if your goods or services are available to the public. You may not have made a sale yet.
 validation.error.HasInvestmentTradeStarted.Future = Business activity start date cannot be a future date
