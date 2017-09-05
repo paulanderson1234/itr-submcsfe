@@ -69,11 +69,12 @@ trait HasInvestmentTradeStartedController extends FrontendController with Author
                   s4lConnector.saveFormData(KeystoreKeys.backLinkShareIssueDate,
                     routes.HasInvestmentTradeStartedController.show().url)
 
-                  Redirect(routes.ShareIssueDateController.show())
+                  Redirect(routes.CommercialSaleController.show())
                 }
                 else {
                   s4lConnector.saveFormData(KeystoreKeys.backLinkSeventyPercentSpent, routes.HasInvestmentTradeStartedController.show().url)
-                  Redirect(routes.CommercialSaleController.show())
+                  //TODO Should route to Investment Trade start date error page once completed, if less than 4 months
+                  Redirect(routes.HasInvestmentTradeStartedController.show())
                 }
               case _ => {
                 Logger.warn(s"[HasInvestmentTradeStartedController][submit] - Call to validate investment trade start date in backend failed")
@@ -86,9 +87,10 @@ trait HasInvestmentTradeStartedController extends FrontendController with Author
               }
             }
           }
+          //TODO Should route to Investment Trade start date error page once completed, if no button selected
           case Constants.StandardRadioButtonNoValue => {
             s4lConnector.saveFormData(KeystoreKeys.backLinkSeventyPercentSpent, routes.HasInvestmentTradeStartedController.show().url)
-            Future.successful(Redirect(routes.CommercialSaleController.show()))
+            Future.successful(Redirect(routes.HasInvestmentTradeStartedController.show()))
           }
         }
       }

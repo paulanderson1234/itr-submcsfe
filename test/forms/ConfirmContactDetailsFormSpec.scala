@@ -487,6 +487,47 @@ class ConfirmContactDetailsFormSpec extends UnitSpec with OneAppPerSuite{
     }
   }
 
+
+
+  "mobileNumber value supplied with the maximum allowed (on the boundary)" should {
+    lazy val form = confirmContactDetailsForm.bind(Map(
+      "contactDetailsUse" -> Constants.StandardRadioButtonYesValue,
+      "contactDetails.forename" -> "firstname",
+      "contactDetails.surname" -> "lastname",
+      "contactDetails.telephoneNumber" -> "07000 111222",
+      "contactDetails.mobileNumber" -> MockDataGenerator.randomNumberString(Constants.phoneLength),
+      "contactDetails.email" -> "test@test.com")
+    )
+    "raise form error" in {
+      form.hasErrors shouldBe false
+    }
+    "raise 0 form errors" in {
+      form.errors.length shouldBe 0
+    }
+  }
+
+  "mobileNumber value supplied over the maximum allowed (over the boundary)" should {
+    lazy val form = confirmContactDetailsForm.bind(Map(
+      "contactDetailsUse" -> Constants.StandardRadioButtonYesValue,
+      "contactDetails.forename" -> "firstname",
+      "contactDetails.surname" -> "lastname",
+      "contactDetails.telephoneNumber" -> "07000 111222",
+      "contactDetails.mobileNumber" -> MockDataGenerator.randomNumberString(Constants.phoneLength + 1),
+      "contactDetails.email" -> "test@test.com")
+    )
+    "raise form error" in {
+      form.hasErrors shouldBe true
+    }
+    "raise 1 form error" in {
+      form.errors.length shouldBe 1
+      form.errors.head.key shouldBe "contactDetails.mobileNumber"
+    }
+    "associate the correct error message to the error" in {
+      form.error("contactDetails.mobileNumber").get.message shouldBe Messages("validation.error.telephoneNumber")
+    }
+  }
+
+
   "telephoneNumber value supplied with the maximum allowed (on the boundary)" should {
     lazy val form = confirmContactDetailsForm.bind(Map(
       "contactDetailsUse" -> Constants.StandardRadioButtonYesValue,

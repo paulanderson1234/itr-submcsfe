@@ -76,7 +76,7 @@ class ContactDetailsSpec extends ViewSpec {
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       document.body.getElementById("back-link").attr("href") shouldEqual routes.ConfirmContactDetailsController.show().url
       document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.five")
-      document.getElementById("error-summary-display").hasClass("error-summary--show")
+      document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe true
     }
 
   }

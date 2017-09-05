@@ -614,8 +614,8 @@ page.address.country.select = Select one country
 #page.address.country.instruction = The ISO country code is internationally recognised and identifies a specific country e.g. United States = ''US''; Germany = ''DE''
 
 #contact details page
-page.contactInformation.contactDetails.title=Who should we contact about your application?
-page.contactInformation.contactDetails.heading=Who should we contact about your application?
+page.contactInformation.contactDetails.title=Who should we contact?
+page.contactInformation.contactDetails.heading=Who should we contact?
 page.contactInformation.contactDetails.forename.label=First name
 page.contactInformation.contactDetails.surname.label=Last name
 page.contactInformation.contactDetails.phoneNumber.label=Landline (optional)
@@ -756,8 +756,8 @@ page.PreviouslySubmitted.heading=Previously submitted applications
 page.introduction.hub.viewPrevious.AdvancedAssurance=View all of your Advance Assurance applications
 
 # SEIS Research Start Date
-page.companyDetails.researchStartDate.title = Have you started research and development to do with the business activity you got investment for?
-page.companyDetails.researchStartDate.heading = Have you started research and development to do with the business activity you got investment for?
+page.companyDetails.researchStartDate.title = Have you started research and development to do with the business activity you raised money for?
+page.companyDetails.researchStartDate.heading = Have you started research and development to do with the business activity you raised money for?
 page.companyDetails.researchStartDate.question = When did this research and development start?
 validation.error.researchStartDate.Future = Research and development start date cannot be a future date
 
@@ -1034,15 +1034,15 @@ page.companyDetails.qualifyBusinessActivity.bullet.one=Doing business or getting
 page.companyDetails.qualifyBusinessActivity.bullet.two=Research and development to do with your business activity
 page.companyDetails.qualifyBusinessActivity.help.heading=What''s the difference?
 page.companyDetails.qualifyBusinessActivity.help.text.one=You''re doing business when your goods or services are available to the public. You may not have made a sale yet.
-page.companyDetails.qualifyBusinessActivity.help.text.two=Getting ready is anything you do to prepare for doing business, for example:
+page.companyDetails.qualifyBusinessActivity.help.text.two=Getting ready is anything you do to prepare for doing business or to trade, for example:
 page.companyDetails.qualifyBusinessActivity.help.text.three=advertising
 page.companyDetails.qualifyBusinessActivity.help.text.four=building a website
 page.companyDetails.qualifyBusinessActivity.help.text.five=renting an office
 page.companyDetails.qualifyBusinessActivity.help.text.six=Research and development is work you do to improve existing products and create new products.
 
 #Has Investment Trade Started
-page.companyDetails.HasInvestmentTradeStarted.title=Has the business activity you got investment for started?
-page.companyDetails.HasInvestmentTradeStarted.heading=Has the business activity you got investment for started?
+page.companyDetails.HasInvestmentTradeStarted.title=Has the business activity you raised money for started?
+page.companyDetails.HasInvestmentTradeStarted.heading=Has the business activity you raised money for started?
 page.companyDetails.HasInvestmentTradeStarted.question.hint=When did this business activity start?
 page.companyDetails.HasInvestmentTradeStarted.descriptionOne.text=The business activity has started if your goods or services are available to the public. You may not have made a sale yet.
 validation.error.HasInvestmentTradeStarted.Future = Business activity start date cannot be a future date

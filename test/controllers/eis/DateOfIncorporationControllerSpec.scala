@@ -90,8 +90,7 @@ class DateOfIncorporationControllerSpec extends BaseSpec {
       submitWithSessionAndAuth(DateOfIncorporationControllerTest.submit,formInput:_*)(
         result => {
           status(result) shouldBe SEE_OTHER
-          //TODO: needs to be amended to QualifyBusinessActivityController when available in eis.routes
-          redirectLocation(result) shouldBe Some(routes.CommercialSaleController.show().url)
+          redirectLocation(result) shouldBe Some(routes.QualifyBusinessActivityController.show().url)
         }
       )
     }

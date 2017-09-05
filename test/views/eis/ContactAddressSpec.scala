@@ -51,7 +51,7 @@ class ContactAddressSpec extends ViewSpec {
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.ConfirmCorrespondAddressController.show().url
       document.select("a.back-link").text() shouldBe Messages("common.button.back")
-      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.four")
+      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.five")
       document.body.getElementById("get-help-action").text shouldBe Messages("common.error.help.text")
       document.select("form").attr("method") shouldBe "POST"
       document.select("form").attr("action") shouldBe controllers.eis.routes.ContactAddressController.submit().url
@@ -78,7 +78,7 @@ class ContactAddressSpec extends ViewSpec {
       document.getElementById("main-heading").text() shouldBe Messages("page.contactInformation.ProvideContactAddress.heading")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.ConfirmCorrespondAddressController.show().url
-      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.four")
+      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.five")
       document.body.getElementById("get-help-action").text shouldBe Messages("common.error.help.text")
       document.getElementById("error-summary-display").hasClass("error-summary--show")
       document.getElementById("countryCode-error-summary").text should include(Messages("validation.error.countryCode"))
