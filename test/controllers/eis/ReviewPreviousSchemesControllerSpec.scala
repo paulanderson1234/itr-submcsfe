@@ -37,6 +37,7 @@ class ReviewPreviousSchemesControllerSpec extends BaseSpec {
     override lazy val authConnector = MockAuthConnector
     override lazy val s4lConnector = mockS4lConnector
     override lazy val enrolmentConnector = mockEnrolmentConnector
+    override lazy val submissionConnector = mockSubmissionConnector
   }
 
   lazy val previousSchemeVectorListDeleted = Vector(previousSchemeModel2, previousSchemeModel3)
@@ -101,13 +102,13 @@ class ReviewPreviousSchemesControllerSpec extends BaseSpec {
   }
 
   "Posting to the continue button on the ReviewPreviousSchemesController when authenticated and enrolled" should {
-    "redirect to 'Proposed Investment' page if table is not empty" in {
+    "redirect to 'Share Description' page if table is not empty" in {
       setupMocks(Some(previousSchemeVectorList))
       mockEnrolledRequest(eisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(routes.ProposedInvestmentController.show().url)
+          redirectLocation(result) shouldBe Some(routes.ShareDescriptionController.show().url)
         }
       )
     }

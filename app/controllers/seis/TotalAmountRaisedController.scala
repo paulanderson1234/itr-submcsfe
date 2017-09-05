@@ -32,7 +32,7 @@ import views.html.seis.shareDetails.TotalAmountRaised
 import scala.concurrent.Future
 import models.investorDetails.InvestorDetailsModel
 import play.Logger
-import play.api.mvc.Result
+import play.api.mvc.{Action, AnyContent, Result}
 
 object TotalAmountRaisedController extends TotalAmountRaisedController{
   override lazy val s4lConnector = S4LConnector
@@ -48,7 +48,7 @@ trait TotalAmountRaisedController extends FrontendController with AuthorisedAndE
 
   val submissionConnector: SubmissionConnector
 
-  val show = AuthorisedAndEnrolled.async { implicit user =>
+    val show: Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user =>
     implicit request =>
       s4lConnector.fetchAndGetFormData[TotalAmountRaisedModel](KeystoreKeys.totalAmountRaised).map {
         case Some(data) => Ok(TotalAmountRaised(totalAmountRaisedForm.fill(data)))
@@ -56,7 +56,7 @@ trait TotalAmountRaisedController extends FrontendController with AuthorisedAndE
       }
   }
 
-  val submit = AuthorisedAndEnrolled.async { implicit user => implicit request =>
+  val submit: Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user =>implicit request =>
 
     def routeRequest(dateForActivity: Option[HasInvestmentTradeStartedModel]): Future[Result] = {
       if (dateForActivity.isDefined) {

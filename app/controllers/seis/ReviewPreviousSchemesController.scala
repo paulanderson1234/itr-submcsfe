@@ -21,7 +21,6 @@ import common.KeystoreKeys
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector, SubmissionConnector}
 import controllers.Helpers.PreviousSchemesHelper
-import controllers.predicates.FeatureSwitch
 import models.HadPreviousRFIModel
 import play.api.Play.current
 import play.api.i18n.Messages.Implicits._
@@ -46,7 +45,7 @@ trait ReviewPreviousSchemesController extends FrontendController with Authorised
 
   val submissionConnector: SubmissionConnector
 
-  val show = AuthorisedAndEnrolled.async { implicit user =>
+  val show: Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user =>
     implicit request =>
       PreviousSchemesHelper.getAllInvestmentFromKeystore(s4lConnector).flatMap {
         previousSchemes =>
@@ -76,7 +75,7 @@ trait ReviewPreviousSchemesController extends FrontendController with Authorised
       Future.successful(Redirect(routes.DeletePreviousSchemeController.show(id)))
   }
 
-  val submit = AuthorisedAndEnrolled.async { implicit user =>
+  val submit: Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user =>
     implicit request =>
 
       def routeRequest(previousSchemesExist: Boolean): Future[Result] = {
