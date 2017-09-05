@@ -89,7 +89,7 @@ class ContactDetailsControllerSpec extends BaseSpec {
   }
 
   "Sending an invalid form submission with validation errors to the ContactDetailsController when authenticated and enrolled" should {
-    "redirect with a bad request" in {
+    "respond with a bad request" in {
       mockEnrolledRequest(eisSchemeTypesModel)
       val formInput = Seq(
         "forename" -> "first",

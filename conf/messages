@@ -614,8 +614,8 @@ page.address.country.select = Select one country
 #page.address.country.instruction = The ISO country code is internationally recognised and identifies a specific country e.g. United States = ''US''; Germany = ''DE''
 
 #contact details page
-page.contactInformation.contactDetails.title=Who should we contact about your application?
-page.contactInformation.contactDetails.heading=Who should we contact about your application?
+page.contactInformation.contactDetails.title=Who should we contact?
+page.contactInformation.contactDetails.heading=Who should we contact?
 page.contactInformation.contactDetails.forename.label=First name
 page.contactInformation.contactDetails.surname.label=Last name
 page.contactInformation.contactDetails.phoneNumber.label=Landline (optional)

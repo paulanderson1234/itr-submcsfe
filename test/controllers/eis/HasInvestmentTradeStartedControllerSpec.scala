@@ -119,6 +119,7 @@ class HasInvestmentTradeStartedControllerSpec extends BaseSpec {
       submitWithSessionAndAuth(TestController.submit,formInput: _*)(
         result => {
           status(result) shouldBe SEE_OTHER
+
           //TODO Should route to Investment Trade start date error page once completed
           redirectLocation(result) shouldBe Some(controllers.eis.routes.HasInvestmentTradeStartedController.show().url)
         }
@@ -138,6 +139,7 @@ class HasInvestmentTradeStartedControllerSpec extends BaseSpec {
       submitWithSessionAndAuth(TestController.submit,formInput:_*)(
         result => {
           status(result) shouldBe SEE_OTHER
+
           //TODO Should route to Investment Trade start date error page once completed
           redirectLocation(result) shouldBe Some(controllers.eis.routes.HasInvestmentTradeStartedController.show().url)
         }
