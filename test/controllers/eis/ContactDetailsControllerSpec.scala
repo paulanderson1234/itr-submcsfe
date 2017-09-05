@@ -92,7 +92,7 @@ class ContactDetailsControllerSpec extends BaseSpec {
     "respond with a bad request" in {
       mockEnrolledRequest(eisSchemeTypesModel)
       val formInput = Seq(
-        "freorename" -> "first",
+        "forename" -> "first",
         "surname" -> "",
         "telephoneNumber" -> "",
         "mobileNumber" -> "",
