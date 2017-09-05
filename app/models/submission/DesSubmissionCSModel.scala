@@ -370,16 +370,16 @@ object DesSubmissionCSModel {
   }
 
   def readNominalValue(): CostModel = {
-    CostModel.apply("0", "GBP")  // Missing in the source model needs to be removed
+    CostModel.apply("0")  // Missing in the source model needs to be removed
   }
 
   def readTotalAmountRaised(shareDetailsAnswersModel: ShareDetailsAnswersModel): CostModel = {
-    CostModel.apply(Transformers.poundToPence(Left(shareDetailsAnswersModel.totalAmountRaisedModel.amount.toString())), "GBP")
+    CostModel.apply(Transformers.poundToPence(Left(shareDetailsAnswersModel.totalAmountRaisedModel.amount.toString())))
   }
 
   def readTotalAmountSpent(shareDetailsAnswersModel: ShareDetailsAnswersModel): Option[CostModel] = {
     if(shareDetailsAnswersModel.totalAmountSpentModel.isDefined)
-      Some(CostModel.apply(Transformers.poundToPence(Left(shareDetailsAnswersModel.totalAmountSpentModel.get.totalAmountSpent.toString())), "GBP"))
+      Some(CostModel.apply(Transformers.poundToPence(Left(shareDetailsAnswersModel.totalAmountSpentModel.get.totalAmountSpent.toString()))))
     else None
   }
 
@@ -387,8 +387,8 @@ object DesSubmissionCSModel {
     if(seisAnswersModel.investorDetailsAnswersModel.shareCapitalChangesModel.changesDescription.isDefined)
       Some(DesOrganisationStatusModel.apply(seisAnswersModel.companyDetailsAnswersModel.fullTimeEmployeeCountModel.employeeCount,
         seisAnswersModel.investorDetailsAnswersModel.shareCapitalChangesModel.changesDescription.get,
-        CostModel.apply(Transformers.poundToPence(Left(seisAnswersModel.companyDetailsAnswersModel.grossAssetsModel.grossAmount.toString())), "GBP"),
-        CostModel.apply("0", "GBP")))
+        CostModel.apply(Transformers.poundToPence(Left(seisAnswersModel.companyDetailsAnswersModel.grossAssetsModel.grossAmount.toString()))),
+        CostModel.apply("0")))
     else
       None
   }
@@ -408,12 +408,12 @@ object DesSubmissionCSModel {
   def readDesInvestorModel(investorDetailsAnswersModel: InvestorDetailsAnswersModel): Vector[DesInvestorModel] = {
     investorDetailsAnswersModel.investors.foldLeft(Vector.empty[DesInvestorModel]){
       (desInvestorModel , investorDetailsModel) =>
-        desInvestorModel :+ DesInvestorModel.apply(readinvestorOrNominee(investorDetailsModel.investorOrNomineeModel.get.addInvestorOrNominee),
+        desInvestorModel :+ DesInvestorModel.apply(readInvestorOrNominee(investorDetailsModel.investorOrNomineeModel.get.addInvestorOrNominee),
           readDesInvestorInfoModel(investorDetailsModel))
     }
   }
 
-  def readinvestorOrNominee(investorOrNominee: String) : String = {
+  def readInvestorOrNominee(investorOrNominee: String) : String = {
     investorOrNominee match {
       case Constants.nominee => InvestorType.nominee.toString
       case _ => InvestorType.investor.toString
@@ -462,7 +462,7 @@ object DesSubmissionCSModel {
   }
 
   def readInvestmentAmount(investorDetailsModel: InvestorDetailsModel): CostModel = {
-    CostModel.apply(Transformers.poundToPence(Left(investorDetailsModel.amountSpentModel.get.amount.toString())), "GBP")
+    CostModel.apply(Transformers.poundToPence(Left(investorDetailsModel.amountSpentModel.get.amount.toString())))
   }
 
   def readDesGroupHoldingsModel(investorDetailsModel: InvestorDetailsModel): Option[DesGroupHoldingsModel] = {
@@ -479,7 +479,7 @@ object DesSubmissionCSModel {
         UnitType.shares.toString,
         readShareHoldingNominalValue(shareHoldings.previousShareHoldingNominalValueModel.get),
         shareHoldings.numberOfPreviouslyIssuedSharesModel.get.previouslyIssuedShares,
-        CostModel.apply("0", "GBP"))
+        CostModel.apply("0"))
     }
   }
 
@@ -495,7 +495,7 @@ object DesSubmissionCSModel {
   }
 
   def readShareHoldingNominalValue(previousShareHoldingNominalValueModel: PreviousShareHoldingNominalValueModel): CostModel = {
-    CostModel.apply(Transformers.poundToPence(Left(previousShareHoldingNominalValueModel.nominalValue.toString())), "GBP")
+    CostModel.apply(Transformers.poundToPence(Left(previousShareHoldingNominalValueModel.nominalValue.toString())))
   }
 
   def readDesRepaymentsModel(seisAnswersModel: SEISAnswersModel) : DesRepaymentsModel = {
@@ -544,7 +544,7 @@ object DesSubmissionCSModel {
         (desRFIModel, previousSchemeModel) =>
           desRFIModel :+ DesRFIModel.apply(previousSchemeModel.schemeTypeDesc, previousSchemeModel.otherSchemeName,
             readPreviousRFIIssueDate(previousSchemeModel),
-            CostModel.apply(Transformers.poundToPence(Left(previousSchemeModel.investmentAmount.toString)), "GBP"),
+            CostModel.apply(Transformers.poundToPence(Left(previousSchemeModel.investmentAmount.toString))),
             readPreviousSchemesInvestmentAmountSpent(previousSchemeModel))
       }
     }
@@ -561,7 +561,7 @@ object DesSubmissionCSModel {
 
   def readPreviousSchemesInvestmentAmountSpent(previousSchemeModel: PreviousSchemeModel): Option[CostModel] = {
     if(previousSchemeModel.investmentSpent.isDefined)
-      Some(CostModel.apply(Transformers.poundToPence(Left(previousSchemeModel.investmentSpent.get.toString)),"GBP"))
+      Some(CostModel.apply(Transformers.poundToPence(Left(previousSchemeModel.investmentSpent.get.toString))))
     else
       None
   }
