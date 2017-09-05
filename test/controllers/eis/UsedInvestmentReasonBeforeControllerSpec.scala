@@ -54,7 +54,7 @@ class UsedInvestmentReasonBeforeControllerSpec extends BaseSpec {
   }
 
   "Sending a GET request to UsedInvestmentReasonBeforeController when authenticated and enrolled" should {
-    "return a 200 when something is fetched from keystore" in {
+    "return a OK when something is fetched from keystore" in {
       setupMocks(Some(usedInvestmentReasonBeforeModelYes))
       mockEnrolledRequest(eisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show)(
@@ -62,7 +62,7 @@ class UsedInvestmentReasonBeforeControllerSpec extends BaseSpec {
       )
     }
 
-    "provide an empty model and return a 200 when nothing is fetched using keystore" in {
+    "provide an empty model and return an OK when nothing is fetched using keystore" in {
       setupMocks()
       mockEnrolledRequest(eisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show)(
