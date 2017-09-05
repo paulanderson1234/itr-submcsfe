@@ -57,9 +57,7 @@ class ResearchStartDateControllerSpec extends BaseSpec {
   def setupShowMocks(hasStartedResearchModel: Option[ResearchStartDateModel] = None): Unit = {
     when(mockS4lConnector.fetchAndGetFormData[ResearchStartDateModel](Matchers.any())(Matchers.any(), Matchers.any(),
       Matchers.any())).thenReturn(Future.successful(hasStartedResearchModel))
-    when(mockS4lConnector.saveFormData(Matchers.eq(KeystoreKeys.backLinkSeventyPercentSpent),
-      Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
-      .thenReturn(Future.successful(CacheMap("", Map())))
+
     when(mockS4lConnector.saveFormData(Matchers.eq(KeystoreKeys.backLinkShareIssueDate),
       Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
       .thenReturn(Future.successful(CacheMap("", Map())))
@@ -67,11 +65,7 @@ class ResearchStartDateControllerSpec extends BaseSpec {
   }
 
   def setUpSubmitMocks(tradeIsvalidated:Boolean = false):Unit = {
-    when(mockS4lConnector.saveFormData(Matchers.eq(KeystoreKeys.backLinkSeventyPercentSpent),
-      Matchers.any())(Matchers.any(), Matchers.any(),Matchers.any()))
-      .thenReturn(Future.successful(CacheMap("", Map())))
-
-    when(mockS4lConnector.saveFormData(Matchers.eq(KeystoreKeys.backLinkShareIssueDate),
+   when(mockS4lConnector.saveFormData(Matchers.eq(KeystoreKeys.backLinkShareIssueDate),
       Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
       .thenReturn(Future.successful(CacheMap("", Map())))
 
@@ -98,7 +92,7 @@ class ResearchStartDateControllerSpec extends BaseSpec {
   }
 
   "Sending a valid Yes form submission to the ResearchStartDateController when authenticated and enrolled" should {
-    "redirect to share issue date when the investment start date is greater than 4 months" in {
+    "redirect to share issue date when the backend investment start date check returns true (greater than 4 months)" in {
      setUpSubmitMocks(true)
       val formInput = Seq("hasStartedResearch" -> Constants.StandardRadioButtonYesValue,
         "researchStartDay" -> "23",
@@ -115,7 +109,7 @@ class ResearchStartDateControllerSpec extends BaseSpec {
   }
 
   "Sending a valid Yes form submission to the ResearchStartDateController when authenticated and enrolled" should {
-    "redirect to the expected controller if the investment start date is less than 4 months" in {
+    "redirect to the expected controller when the backend investment start date check returns false (less than 4 months)" in {
       setUpSubmitMocks(false)
       val formInput = Seq("hasStartedResearch" -> Constants.StandardRadioButtonYesValue,
         "researchStartDay" -> "29",
