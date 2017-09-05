@@ -346,7 +346,7 @@ object DesSubmissionCSModel {
 
 
   def readDesInvestmentDetailsModel(seisAnswersModel: SEISAnswersModel): DesInvestmentDetailsModel = {
-    DesInvestmentDetailsModel.apply("growthJustification", readUnitIssueModel(seisAnswersModel),
+    DesInvestmentDetailsModel.apply("NA", readUnitIssueModel(seisAnswersModel),
       readTotalAmountSpent(seisAnswersModel.shareDetailsAnswersModel), readDesOrganisationStatusDetails(seisAnswersModel))
   }
 
