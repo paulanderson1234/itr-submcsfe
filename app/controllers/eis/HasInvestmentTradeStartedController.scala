@@ -66,13 +66,11 @@ trait HasInvestmentTradeStartedController extends FrontendController with Author
               validFormData.hasInvestmentTradeStartedMonth.get, validFormData.hasInvestmentTradeStartedYear.get).map {
               case Some(validated) =>
                 if (validated) {
-                  // fi x test HULL
                   s4lConnector.saveFormData(KeystoreKeys.backLinkCommercialSale, routes.HasInvestmentTradeStartedController.show().url)
                   Redirect(routes.CommercialSaleController.show())
                 }
                 else {
-                  s4lConnector.saveFormData(KeystoreKeys.backLinkSeventyPercentSpent, routes.HasInvestmentTradeStartedController.show().url)
-                  //TODO Should route to Investment Trade start date error page once completed, if less than 4 months
+                  //TODO Should route to Investment Trade start date ERROR page once completed, if less than 4 months
                   Redirect(routes.HasInvestmentTradeStartedController.show())
                 }
               case _ => {
@@ -88,7 +86,6 @@ trait HasInvestmentTradeStartedController extends FrontendController with Author
           }
           //TODO Should route to Investment Trade start date error page once completed, if no button selected
           case Constants.StandardRadioButtonNoValue => {
-            s4lConnector.saveFormData(KeystoreKeys.backLinkSeventyPercentSpent, routes.HasInvestmentTradeStartedController.show().url)
             Future.successful(Redirect(routes.HasInvestmentTradeStartedController.show()))
           }
         }

@@ -60,12 +60,8 @@ class HasInvestmentTradeStartedControllerSpec extends BaseSpec {
   }
 
   def setUpSubmitMocks(tradeIsvalidated:Boolean = false):Unit = {
-    when(mockS4lConnector.saveFormData(Matchers.eq(KeystoreKeys.backLinkSeventyPercentSpent),
+    when(mockS4lConnector.saveFormData(Matchers.eq(KeystoreKeys.backLinkCommercialSale),
       Matchers.any())(Matchers.any(), Matchers.any(),Matchers.any()))
-      .thenReturn(Future.successful(CacheMap("", Map())))
-
-    when(mockS4lConnector.saveFormData(Matchers.eq(KeystoreKeys.backLinkShareIssueDate),
-      Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
       .thenReturn(Future.successful(CacheMap("", Map())))
 
     when(TestController.submissionConnector.validateHasInvestmentTradeStartedCondition(Matchers.any(),
