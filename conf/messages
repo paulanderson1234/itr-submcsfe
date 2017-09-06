@@ -413,6 +413,7 @@ page.percentageStaffWithMasters.yes.hint=You''ll need to meet this condition whe
 #used investment reason before page
 page.investment.UsedInvestmentReasonBefore.title=Has your company used a tax relief investment for the same purpose before?
 page.investment.UsedInvestmentReasonBefore.heading=Has your company used a tax relief investment for the same purpose before?
+page.investment.UsedInvestmentReasonBefore.legend=Has your company used a tax relief investment for the same purpose before?
 
 #New product page
 page.investment.NewProduct.title=Will you use this investment to enter a new product market?

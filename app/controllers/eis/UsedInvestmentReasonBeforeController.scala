@@ -22,6 +22,7 @@ import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import forms.UsedInvestmentReasonBeforeForm._
 import models.UsedInvestmentReasonBeforeModel
+import play.api.mvc.Action
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
@@ -47,7 +48,7 @@ trait UsedInvestmentReasonBeforeController extends FrontendController with Autho
     }
   }
 
-  val submit = AuthorisedAndEnrolled.async { implicit userr => implicit request =>
+  val submit = AuthorisedAndEnrolled.async { implicit user => implicit request =>
     usedInvestmentReasonBeforeForm.bindFromRequest().fold(
       formWithErrors => {
         Future.successful(BadRequest(UsedInvestmentReasonBefore(formWithErrors)))

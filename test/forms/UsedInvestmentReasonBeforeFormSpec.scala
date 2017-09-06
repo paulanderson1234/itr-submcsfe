@@ -48,7 +48,7 @@ class UsedInvestmentReasonBeforeFormSpec extends UnitSpec with OneAppPerSuite{
 
   "The Used Investment Reason Before Form" should {
     "Return an error if no radio button is selected" in {
-      val request = FakeRequest("GET", "/").withFormUrlEncodedBody(
+      val request = FakeRequest("POST", "/").withFormUrlEncodedBody(
         "usedInvestmentReasonBefore" -> ""
       )
       bindWithError(request) match {
@@ -66,7 +66,7 @@ class UsedInvestmentReasonBeforeFormSpec extends UnitSpec with OneAppPerSuite{
 
   "The Used Investment Reason Before Form" should {
     "not return an error if the 'Yes' option is selected" in {
-      val request = FakeRequest("GET", "/").withFormUrlEncodedBody(
+      val request = FakeRequest("POST", "/").withFormUrlEncodedBody(
         "usedInvestmentReasonBefore" -> Constants.StandardRadioButtonYesValue
       )
       bindWithError(request) match {
@@ -80,7 +80,7 @@ class UsedInvestmentReasonBeforeFormSpec extends UnitSpec with OneAppPerSuite{
 
   "The Used Investment Reason Before Form" should {
     "not return an error if the 'No' option is selected" in {
-      val request = FakeRequest("GET", "/").withFormUrlEncodedBody(
+      val request = FakeRequest("POST", "/").withFormUrlEncodedBody(
         "usedInvestmentReasonBefore" -> Constants.StandardRadioButtonNoValue
       )
       bindWithError(request) match {

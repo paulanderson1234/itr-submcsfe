@@ -52,7 +52,7 @@ class UsedInvestmentReasonBeforeSpec extends ViewSpec {
       val result = TestController.show.apply(authorisedFakeRequest)
       Jsoup.parse(contentAsString(result))
     }
-    document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.ProposedInvestmentController.show().url
+    document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.TotalAmountRaisedController.show().url
     document.title() shouldBe Messages("page.investment.UsedInvestmentReasonBefore.title")
     document.getElementById("main-heading").text() shouldBe Messages("page.investment.UsedInvestmentReasonBefore.heading")
     document.select("#usedInvestmentReasonBefore-yes").size() shouldBe 1
@@ -61,6 +61,7 @@ class UsedInvestmentReasonBeforeSpec extends ViewSpec {
     document.getElementById("usedInvestmentReasonBefore-noLabel").text() shouldBe Messages("common.radioNoLabel")
     document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.three")
     document.getElementById("next").text() shouldBe Messages("common.button.snc")
+    document.getElementById("usedInvestmentReasonBefore-legend").hasClass("visuallyhidden") shouldBe true
   }
 
   "Verify that UsedInvestmentReasonBefore page contains the correct elements when an empty model " +
@@ -70,7 +71,7 @@ class UsedInvestmentReasonBeforeSpec extends ViewSpec {
       val result = TestController.show.apply(authorisedFakeRequest)
       Jsoup.parse(contentAsString(result))
     }
-    document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.ProposedInvestmentController.show().url
+    document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.TotalAmountRaisedController.show().url
     document.title() shouldBe Messages("page.investment.UsedInvestmentReasonBefore.title")
     document.getElementById("main-heading").text() shouldBe Messages("page.investment.UsedInvestmentReasonBefore.heading")
     document.select("#usedInvestmentReasonBefore-yes").size() shouldBe 1
@@ -79,6 +80,7 @@ class UsedInvestmentReasonBeforeSpec extends ViewSpec {
     document.getElementById("usedInvestmentReasonBefore-noLabel").text() shouldBe Messages("common.radioNoLabel")
     document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.three")
     document.getElementById("next").text() shouldBe Messages("common.button.snc")
+    document.getElementById("usedInvestmentReasonBefore-legend").hasClass("visuallyhidden") shouldBe true
   }
 
   "Verify that UsedInvestmentReasonBefore page contains error summary when invalid model is submitted" in new Setup {
@@ -87,8 +89,10 @@ class UsedInvestmentReasonBeforeSpec extends ViewSpec {
       val result = TestController.submit.apply(authorisedFakeRequest)
       Jsoup.parse(contentAsString(result))
     }
-    // Make sure we have the expected error summary displayed
-    document.getElementById("error-summary-display").hasClass("error-summary--show")
+    document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe true
+    document.getElementById("error-summary-heading").text shouldBe Messages("common.error.summary.heading")
+    document.getElementById("usedInvestmentReasonBefore-error-summary").text shouldBe Messages("validation.common.error.fieldRequired")
+    document.getElementsByClass("error-notification").text shouldBe Messages("validation.common.error.fieldRequired")
     document.title() shouldBe Messages("page.investment.UsedInvestmentReasonBefore.title")
   }
 }

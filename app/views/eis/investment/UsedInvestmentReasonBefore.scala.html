@@ -7,9 +7,9 @@
 
 @main_template(Messages("page.investment.UsedInvestmentReasonBefore.title")) {
 
-@backButtonWithProgress(controllers.eis.routes.ProposedInvestmentController.show().toString, Messages("common.section.progress.details.three"))
+@backButtonWithProgress(controllers.eis.routes.TotalAmountRaisedController.show().toString, Messages("common.section.progress.details.three"))
 
-    @errorSummary(usedInvestmentReasonBeforeForm, "used-investment-reason-before", "usedUsedInvestmentReasonBefore")
+    @errorSummary(usedInvestmentReasonBeforeForm, "used-investment-reason-before", "usedInvestmentReasonBefore")
 
     <h1 class="heading-xlarge" id="main-heading">@Messages("page.investment.UsedInvestmentReasonBefore.heading")</h1>
 
@@ -21,10 +21,11 @@
             Seq(
             Constants.StandardRadioButtonYesValue -> Messages("common.radioYesLabel"),
             Constants.StandardRadioButtonNoValue -> Messages("common.radioNoLabel")),
-            '_legend -> Messages("page.investment.UsedInvestmentReasonBefore.heading"),
+            '_legend -> Messages("page.investment.UsedInvestmentReasonBefore.legend"),
             '_legendClass -> "visuallyhidden",
             '_labelAfter -> true,
             '_labelClass -> "block-label",
+            '_legendID -> "usedInvestmentReasonBefore",
             '_groupClass -> "inline"
             )
         </div>
