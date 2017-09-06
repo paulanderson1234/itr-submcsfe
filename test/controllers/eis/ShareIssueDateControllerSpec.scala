@@ -50,7 +50,7 @@ class ShareIssueDateControllerSpec extends BaseSpec {
     }
   }
 
-  def setupMocks(shareIssueDateModel: Option[ShareIssueDateModel] = None, backLink: Option[String] = None): Unit = {
+  def setupMocks(shareIssueDateModel: Option[ShareIssueDateModel] = None): Unit = {
     when(mockS4lConnector.fetchAndGetFormData[ShareIssueDateModel](Matchers.eq(KeystoreKeys.shareIssueDate))
       (Matchers.any(), Matchers.any(), Matchers.any()))
       .thenReturn(Future.successful(shareIssueDateModel))
@@ -58,8 +58,6 @@ class ShareIssueDateControllerSpec extends BaseSpec {
     when(mockS4lConnector.saveFormData(Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
       .thenReturn(Future.successful(CacheMap("", Map())))
 
-    when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.backLinkShareIssueDate))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(backLink))
 
     when(mockS4lConnector.saveFormData(Matchers.eq(KeystoreKeys.backLinkShareIssueDate),
       Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
@@ -68,27 +66,19 @@ class ShareIssueDateControllerSpec extends BaseSpec {
   }
 
   "Sending a GET request to ShareIssueDateController when authenticated and enrolled" should {
-    "return a 200 when something is fetched from keystore and back link returned" in {
-      setupMocks(Some(shareIssuetDateModel), Some("/test/test"))
-      mockEnrolledRequest(eisSchemeTypesModel)
-      showWithSessionAndAuth(TestController.show())(
-        result => status(result) shouldBe OK
-      )
-    }
 
-    "return a 200 when something is fetched from keystore and back link is None" in {
-      setupMocks(Some(shareIssuetDateModel), None)
+    "return a 200 when something is fetched from keystore" in {
+      setupMocks(Some(shareIssuetDateModel))
       mockEnrolledRequest(eisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show())(
         result => {
-          status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(controllers.eis.routes.QualifyBusinessActivityController.show().url)
+          status(result) shouldBe OK
         }
       )
     }
 
     "provide an empty model and return a 200 when nothing is fetched using keystore" in {
-      setupMocks(None, Some("/test/test/"))
+      setupMocks(None)
       mockEnrolledRequest(eisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show())(
         result => status(result) shouldBe OK
@@ -117,7 +107,7 @@ class ShareIssueDateControllerSpec extends BaseSpec {
 
   "Sending an invalid form submission with validation errors to the ShareIssueDateController when authenticated and enrolled" should {
     "return a bad request" in {
-      setupMocks(None, Some("/test/test"))
+      setupMocks(None)
       mockEnrolledRequest(eisSchemeTypesModel)
       val formInput = Seq(
         "shareIssueDay" -> "",

@@ -24,7 +24,7 @@ import org.mockito.Matchers
 import org.mockito.Mockito._
 import auth.AuthEnrolledTestController.{INTERNAL_SERVER_ERROR => _, OK => _, SEE_OTHER => _, _}
 import models.investorDetails.{HowMuchSpentOnSharesModel, InvestorDetailsModel, IsExistingShareHolderModel, NumberOfSharesPurchasedModel}
-import models.seis.{ContactDetailsAnswersModel, _}
+import models.seis.{_}
 import models.submission._
 import services.RegistrationDetailsService
 
@@ -35,6 +35,8 @@ trait SubmissionFixture {
 
   def setupMocksCs(mockS4lConnector: S4LConnector): Unit = {
 
+    when(mockS4lConnector.fetchAndGetFormData[SchemeTypesModel](Matchers.eq(KeystoreKeys.selectedSchemes))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(schemeTypesSEIS)))
     when(mockS4lConnector.fetchAndGetFormData[NatureOfBusinessModel](Matchers.eq(KeystoreKeys.natureOfBusiness))(Matchers.any(), Matchers.any(),Matchers.any()))
       .thenReturn(Future.successful(Option(natureOfBusinessValid)))
     when(mockS4lConnector.fetchAndGetFormData[DateOfIncorporationModel](Matchers.eq(KeystoreKeys.dateOfIncorporation))(Matchers.any(), Matchers.any(),Matchers.any()))
@@ -67,7 +69,7 @@ trait SubmissionFixture {
       .thenReturn(Future.successful(Some(TotalAmountRaisedModel(5))))
     when(mockS4lConnector.fetchAndGetFormData[TotalAmountSpentModel](Matchers.eq(KeystoreKeys.totalAmountSpent))(Matchers.any(), Matchers.any(),Matchers.any()))
       .thenReturn(Future.successful(Some(TotalAmountSpentModel(5))))
-    when(mockS4lConnector.fetchAndGetFormData[List[InvestorDetailsModel]](Matchers.eq(KeystoreKeys.investorDetails))(Matchers.any(), Matchers.any(),Matchers.any()))
+    when(mockS4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](Matchers.eq(KeystoreKeys.investorDetails))(Matchers.any(), Matchers.any(),Matchers.any()))
       .thenReturn(Future.successful(Some(validInvestors)))
     when(mockS4lConnector.fetchAndGetFormData[WasAnyValueReceivedModel](Matchers.eq(KeystoreKeys.wasAnyValueReceived))(Matchers.any(), Matchers.any(),Matchers.any()))
       .thenReturn(Future.successful(Some(WasAnyValueReceivedModel("No", None))))
@@ -79,6 +81,7 @@ trait SubmissionFixture {
       .thenReturn(Future.successful(Some(ConfirmCorrespondAddressModel("Yes", fullCorrespondenceAddress))))
     when(mockS4lConnector.fetchAndGetFormData[SupportingDocumentsUploadModel](Matchers.eq(KeystoreKeys.supportingDocumentsUpload))(Matchers.any(), Matchers.any(),Matchers.any()))
       .thenReturn(Future.successful(Some(SupportingDocumentsUploadModel("Yes"))))
+
   }
 
   def setUpMocks(mockS4lConnector: S4LConnector) {
@@ -310,7 +313,7 @@ trait SubmissionFixture {
     annualTurnover = Some(turnover),
     proposedInvestmentModel = ProposedInvestmentModel(250000),
     investmentGrowModel = InvestmentGrowModel("It will help me invest in new equipment and R&D"),
-    knowledgeIntensive = Some(KiModel(skilledEmployeesConditionMet = true, innovationConditionMet = Some("reason met"), kiConditionMet = true)),
+    knowledgeIntensive = Some(KiModel(skilledEmployeesConditionMet = true, innovationConditionMet = Some("reason met"), kiConditionMet = Some(true))),
     subsidiaryPerformingTrade = Some(subsidiaryPerformingTradeWithFull),
     organisationDetails = organisationFull
   )
@@ -337,12 +340,12 @@ trait SubmissionFixture {
   val operatingCostsValid = OperatingCostsModel("12", "13", "14", "15", "16", "17", "2005", "2004", "2003")
   val turnoverCostsValid = AnnualTurnoverCostsModel("12", "13", "14", "15", "16", "2003", "2004", "2005", "2006", "2007")
 
-  val validInvestors = List(InvestorDetailsModel(Some(AddInvestorOrNomineeModel("Investor", Some(1))),
+  val validInvestors = Vector(InvestorDetailsModel(Some(AddInvestorOrNomineeModel("Investor", Some(1))),
     Some(CompanyOrIndividualModel("Individual", Some(1))), None, Some(IndividualDetailsModel("", "", "", "", None, None, None, "UK", Some(1))),
     Some(NumberOfSharesPurchasedModel(1, Some(1))), Some(HowMuchSpentOnSharesModel(1, Some(1))), Some(IsExistingShareHolderModel("No", Some(1))),
     None, Some(1)))
 
-  val validSEISAnswersModel = SEISAnswersModel(
+  val validSEISAnswersModel = ComplianceStatementAnswersModel(
     CompanyDetailsAnswersModel(natureOfBusinessValid, dateOfIncorporationValid, QualifyBusinessActivityModel(Constants.qualifyResearchAndDevelopment),
       None, Some(ResearchStartDateModel("Yes", Some(1), Some(4), Some(2016))), None, shareIssueDateModel, GrossAssetsModel(1000),
       FullTimeEmployeeCountModel(1)),
@@ -354,5 +357,6 @@ trait SubmissionFixture {
       WasAnyValueReceivedModel("No", None), ShareCapitalChangesModel("No", None)),
     ContactDetailsAnswersModel(ContactDetailsModel("", "", None, None, ""),
       ConfirmCorrespondAddressModel("Yes", fullCorrespondenceAddress)),
-    SupportingDocumentsUploadModel("Yes"))
+    SupportingDocumentsUploadModel("Yes"),
+    SchemeTypesModel(eis = false, seis = true))
 }

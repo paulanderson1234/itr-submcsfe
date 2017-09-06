@@ -16,7 +16,7 @@
 
 package models
 
-import models.seis.PreviousSchemesAnswersModel
+import models.submission.PreviousSchemesAnswersModel
 import uk.gov.hmrc.play.test.UnitSpec
 
 class PreviousSchemesAnswersModelSpec extends UnitSpec {

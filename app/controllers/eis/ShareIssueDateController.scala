@@ -43,30 +43,18 @@ trait ShareIssueDateController extends FrontendController with AuthorisedAndEnro
 
   val show = AuthorisedAndEnrolled.async { implicit user => implicit request =>
 
-    def routeRequest(backUrl: Option[String]) = {
-      if (backUrl.isDefined) {
         s4lConnector.fetchAndGetFormData[ShareIssueDateModel](KeystoreKeys.shareIssueDate).map {
-          case Some(data) => Ok(ShareIssueDate(shareIssueDateForm.fill(data), backUrl.getOrElse("")))
-          case None => Ok(ShareIssueDate(shareIssueDateForm, backUrl.getOrElse("")))
+          case Some(data) => Ok(ShareIssueDate(shareIssueDateForm.fill(data)))
+          case None => Ok(ShareIssueDate(shareIssueDateForm))
         }
       }
-      else Future.successful(Redirect(routes.QualifyBusinessActivityController.show()))
-    }
-    for {
-      link <- ControllerHelpers.getSavedBackLink(KeystoreKeys.backLinkShareIssueDate, s4lConnector)
-      route <- routeRequest(link)
-    } yield route
-  }
+
 
   val submit = AuthorisedAndEnrolled.async { implicit user => implicit request =>
     shareIssueDateForm.bindFromRequest().fold(
       formWithErrors => {
-
-        ControllerHelpers.getSavedBackLink(KeystoreKeys.backLinkShareIssueDate, s4lConnector).flatMap {
-          case Some(data) => Future.successful(BadRequest(ShareIssueDate(formWithErrors, data)))
-          case None => Future.successful(Redirect(routes.QualifyBusinessActivityController.show()))
-        }
-      },
+        Future.successful(BadRequest(ShareIssueDate(formWithErrors)))
+        },
       validFormData => {
         s4lConnector.saveFormData(KeystoreKeys.shareIssueDate, validFormData)
         Future.successful(Redirect(routes.GrossAssetsController.show()))

@@ -429,6 +429,7 @@ page.investment.NewGeographicalMarket.title=Will you use this investment to laun
 page.investment.NewGeographicalMarket.heading=Will you use this investment to launch one of your products somewhere new?
 page.investment.NewGeographicalMarket.hint=It''s sometimes called launching in a
 page.investment.NewGeographicalMarket.hint.link=new geographic market
+page.investment.NewGeographicalMarket.legend=Will you use this investment to launch one of your products somewhere new?
 
 #ten year plan page
 page.knowledgeIntensive.TenYearPlan.title = Does your company plan to develop a product that you''ll own the rights to?

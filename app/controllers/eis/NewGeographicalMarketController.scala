@@ -49,7 +49,7 @@ trait NewGeographicalMarketController extends FrontendController with Authorised
           case None => Ok(NewGeographicalMarket(newGeographicalMarketForm, backUrl.get))
         }
       }
-      else Future.successful(Redirect(routes.ProposedInvestmentController.show()))
+      else Future.successful(Redirect(routes.TotalAmountRaisedController.show()))
     }
 
     for {
@@ -63,7 +63,7 @@ trait NewGeographicalMarketController extends FrontendController with Authorised
       invalidForm =>
         ControllerHelpers.getSavedBackLink(KeystoreKeys.backLinkNewGeoMarket, s4lConnector).flatMap {
           case Some(data) => Future.successful(BadRequest(NewGeographicalMarket(invalidForm, data)))
-          case None => Future.successful(Redirect(routes.ProposedInvestmentController.show()))
+          case None => Future.successful(Redirect(routes.TotalAmountRaisedController.show()))
 
       },
       validForm => {

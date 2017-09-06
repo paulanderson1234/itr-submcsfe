@@ -9,7 +9,7 @@
 
     @backButtonWithProgress(backlinkUrl, Messages("common.section.progress.details.three"))
 
-    @errorSummary(newGeographicalMarketForm, "used-investment-reason-before", "usedNewGeographicalMarket")
+    @errorSummary(newGeographicalMarketForm, "is-new-geographical-market", "isNewGeographicalMarket")
 
     <h1 class="heading-xlarge" id="main-heading">@Messages("page.investment.NewGeographicalMarket.heading")</h1>
 
@@ -27,8 +27,9 @@
             Seq(
             Constants.StandardRadioButtonYesValue -> Messages("common.radioYesLabel"),
             Constants.StandardRadioButtonNoValue -> Messages("common.radioNoLabel")),
-            '_legend -> Messages("page.investment.NewGeographicalMarket.heading"),
+            '_legend -> Messages("page.investment.NewGeographicalMarket.legend"),
             '_legendClass -> "visuallyhidden",
+            '_legendID -> "isNewGeographicalMarket",
             '_labelAfter -> true,
             '_labelClass -> "block-label",
             '_groupClass -> "inline"
