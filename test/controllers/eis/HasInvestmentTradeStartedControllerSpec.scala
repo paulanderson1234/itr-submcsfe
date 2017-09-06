@@ -88,7 +88,7 @@ class HasInvestmentTradeStartedControllerSpec extends BaseSpec {
   }
 
   "Sending a valid Yes form submission to the HasInvestmentTradeStartedController when authenticated and enrolled" should {
-    "redirect to share issue date when the investment start date is greater than 4 months" in {
+    "redirect to commercial sale page when the investment start date is greater than 4 months" in {
       setUpSubmitMocks(true)
       val formInput = Seq("hasInvestmentTradeStarted" -> Constants.StandardRadioButtonYesValue,
         "hasInvestmentTradeStartedDay" -> "23",

@@ -17,8 +17,7 @@
 package connectors
 import config.{FrontendAppConfig, WSHttp}
 import models.registration.RegistrationDetailsModel
-import models.seis.SEISAnswersModel
-import models.submission.{DesSubmissionCSModel, DesSubmitAdvancedAssuranceModel, Submission}
+import models.submission.{ComplianceStatementAnswersModel, DesSubmissionCSModel, DesSubmitAdvancedAssuranceModel, Submission}
 import models.{AnnualTurnoverCostsModel, GrossAssetsModel, ProposedInvestmentModel}
 import play.api.Logger
 import play.api.http.Status.OK
@@ -90,15 +89,13 @@ trait SubmissionConnector {
     http.POST[JsValue, HttpResponse](s"$serviceUrl/investment-tax-relief/advanced-assurance/$tavcReferenceNumber/submit", Json.toJson(targetSubmissionModel))
   }
 
-  def submitComplainceStatement(submissionRequest: SEISAnswersModel, tavcReferenceNumber: String,
+  def submitComplainceStatement(submissionRequest: ComplianceStatementAnswersModel, tavcReferenceNumber: String,
                                 registrationDetailsModel: Option[RegistrationDetailsModel])(implicit hc: HeaderCarrier): Future[HttpResponse] = {
     if(tavcReferenceNumber.isEmpty) {
       Logger.warn("[SubmissionConnector][submitComplainceStatement] An empty tavcReferenceNumber was passed")
     }
     require(tavcReferenceNumber.nonEmpty, "[SubmissionConnector][submitComplainceStatement] An empty tavcReferenceNumber was passed")
 
-    println(" ***************************** POSTING TO SUBMISSION BACKEND *************************** ")
-    println(Json.toJson(DesSubmissionCSModel.readDesSubmissionCSModel(submissionRequest, registrationDetailsModel)))
     http.POST[JsValue, HttpResponse](s"$serviceUrl/investment-tax-relief/compliance-statement/$tavcReferenceNumber/submit",
       Json.toJson(DesSubmissionCSModel.readDesSubmissionCSModel(submissionRequest, registrationDetailsModel)))
   }

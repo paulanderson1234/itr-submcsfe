@@ -194,20 +194,22 @@ trait AcknowledgementController extends FrontendController with AuthorisedAndEnr
     } yield createModel(contactDetailsModel, correspondenceAddressModel)
   }
 
-  def getAnswers(implicit hc: HeaderCarrier, user: TAVCUser): Future[Option[SEISAnswersModel]] = {
+  def getAnswers(implicit hc: HeaderCarrier, user: TAVCUser): Future[Option[ComplianceStatementAnswersModel]] = {
     val companyDetailsAnswers = getCompanyDetailsAnswers
     val previousSchemesAnswers = getPreviousSchemesAnswersModel
     val shareDetailsAnswers = getShareDetailsAnswersModel
     val investorDetailsAnswers = getInvestorDetailsAnswersModel
     val contactDetailsAnswers = getContactDetailsAnswerModel
     val supportingDocumentsUpload = s4lConnector.fetchAndGetFormData[SupportingDocumentsUploadModel](KeystoreKeys.supportingDocumentsUpload)
+    val schemeType = s4lConnector.fetchAndGetFormData[SchemeTypesModel](KeystoreKeys.selectedSchemes)
 
     def createModel(companyDetailsAnswersModel: Option[CompanyDetailsAnswersModel],
                     previousSchemesAnswersModel: Option[PreviousSchemesAnswersModel],
                     shareDetailsAnswersModel: Option[ShareDetailsAnswersModel],
                     investorDetailsAnswersModel: Option[InvestorDetailsAnswersModel],
                     contactDetailsAnswersModel: Option[ContactDetailsAnswersModel],
-                    supportingDocumentsUploadModel: Option[SupportingDocumentsUploadModel]) = {
+                    supportingDocumentsUploadModel: Option[SupportingDocumentsUploadModel],
+                    schemeTypeModel:Option[SchemeTypesModel]) = {
       for {
         companyDetailsAnswersModel <- companyDetailsAnswersModel
         previousSchemesAnswersModel <- previousSchemesAnswersModel
@@ -215,8 +217,9 @@ trait AcknowledgementController extends FrontendController with AuthorisedAndEnr
         investorDetailsAnswersModel <- investorDetailsAnswersModel
         contactDetailsAnswersModel <- contactDetailsAnswersModel
         supportingDocumentsUploadModel <- supportingDocumentsUploadModel
-      } yield SEISAnswersModel(companyDetailsAnswersModel, previousSchemesAnswersModel, shareDetailsAnswersModel, investorDetailsAnswersModel,
-        contactDetailsAnswersModel, supportingDocumentsUploadModel)
+        schemeTypeModel <- schemeTypeModel
+      } yield ComplianceStatementAnswersModel(companyDetailsAnswersModel, previousSchemesAnswersModel, shareDetailsAnswersModel, investorDetailsAnswersModel,
+        contactDetailsAnswersModel, supportingDocumentsUploadModel,schemeTypeModel)
     }
 
     for {
@@ -226,12 +229,13 @@ trait AcknowledgementController extends FrontendController with AuthorisedAndEnr
       investorDetailsAnswersModel <- investorDetailsAnswers
       contactDetailsAnswersModel <- contactDetailsAnswers
       supportingDocumentsUploadModel <- supportingDocumentsUpload
+      schemeTypeModel <- schemeType
     } yield createModel(companyDetailsAnswersModel, previousSchemesAnswersModel, shareDetailsAnswersModel, investorDetailsAnswersModel,
-      contactDetailsAnswersModel, supportingDocumentsUploadModel
+      contactDetailsAnswersModel, supportingDocumentsUploadModel, schemeTypeModel
     )
   }
 
-  def processResult(seisAnswersModel: SEISAnswersModel, tavcReferenceNumber: String,
+  def processResult(seisAnswersModel: ComplianceStatementAnswersModel, tavcReferenceNumber: String,
                     registrationDetailsModel: Option[RegistrationDetailsModel])
                    (implicit hc: HeaderCarrier, user: TAVCUser, request: Request[AnyContent]): Future[Result] = {
     submissionConnector.submitComplainceStatement(seisAnswersModel, tavcReferenceNumber, registrationDetailsModel).map { submissionResponse =>
@@ -253,7 +257,7 @@ trait AcknowledgementController extends FrontendController with AuthorisedAndEnr
     }
   }
 
-  def processResultUpload(seisAnswersModel: SEISAnswersModel, tavcReferenceNumber: String,
+  def processResultUpload(seisAnswersModel: ComplianceStatementAnswersModel, tavcReferenceNumber: String,
                           registrationDetailsModel: Option[RegistrationDetailsModel])
                          (implicit hc: HeaderCarrier, user: TAVCUser, request: Request[AnyContent]): Future[Result] = {
     submissionConnector.submitComplainceStatement(seisAnswersModel, tavcReferenceNumber, registrationDetailsModel).flatMap { submissionResponse =>
@@ -285,7 +289,7 @@ trait AcknowledgementController extends FrontendController with AuthorisedAndEnr
       val sourceWithRef = for {
         tavcReferenceNumber <- getTavCReferenceNumber()
         seisAnswersModel <- getAnswers
-        isValid <- seisAnswersModel.get.validate(submissionConnector)
+        isValid <- seisAnswersModel.get.validateSeis(submissionConnector)
         registrationDetailsModel <- registrationDetailsService.getRegistrationDetails(tavcReferenceNumber)
       } yield if (isValid) (seisAnswersModel, tavcReferenceNumber, registrationDetailsModel) else (None, tavcReferenceNumber, registrationDetailsModel)
 

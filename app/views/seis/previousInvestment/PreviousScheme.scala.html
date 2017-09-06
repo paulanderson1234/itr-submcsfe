@@ -14,7 +14,7 @@
     <h1 class="heading-xlarge" id="main-heading">@Messages("page.investment.PreviousScheme.heading")</h1>
 
     <div class="form-group">
-        <span class = "form-hint" id="guideline">@Messages("page.investment.PreviousScheme.oneAtATime")</span>
+        <span class = "form" id="guideline">@Messages("page.investment.PreviousScheme.oneAtATime")</span>
     </div>
 
     @form(action = controllers.seis.routes.PreviousSchemeController.submit()) {
@@ -97,7 +97,7 @@
             <details>
                 <summary><span id="help" class="summary">@Messages("page.investment.PreviousScheme.howToFind")</span></summary>
                 <div class="panel panel-indent panel-border-narrow">
-                    <span class = "form-hint" id = "date-of-share-issue-where-to-find">@Messages("page.investment.PreviousScheme.location")
+                    <span class = "form" id = "date-of-share-issue-where-to-find">@Messages("page.investment.PreviousScheme.location")
                         @externalLink(Messages("page.investment.PreviousScheme.companiesHouse"),
                         "https://www.gov.uk/get-information-about-a-company", Some("company-house-db"))
                     </span>

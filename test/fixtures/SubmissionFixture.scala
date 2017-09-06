@@ -24,7 +24,7 @@ import org.mockito.Matchers
 import org.mockito.Mockito._
 import auth.AuthEnrolledTestController.{INTERNAL_SERVER_ERROR => _, OK => _, SEE_OTHER => _, _}
 import models.investorDetails.{HowMuchSpentOnSharesModel, InvestorDetailsModel, IsExistingShareHolderModel, NumberOfSharesPurchasedModel}
-import models.seis.{ContactDetailsAnswersModel, _}
+import models.seis.{_}
 import models.submission._
 import services.RegistrationDetailsService
 
@@ -35,6 +35,8 @@ trait SubmissionFixture {
 
   def setupMocksCs(mockS4lConnector: S4LConnector): Unit = {
 
+    when(mockS4lConnector.fetchAndGetFormData[SchemeTypesModel](Matchers.eq(KeystoreKeys.selectedSchemes))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(schemeTypesSEIS)))
     when(mockS4lConnector.fetchAndGetFormData[NatureOfBusinessModel](Matchers.eq(KeystoreKeys.natureOfBusiness))(Matchers.any(), Matchers.any(),Matchers.any()))
       .thenReturn(Future.successful(Option(natureOfBusinessValid)))
     when(mockS4lConnector.fetchAndGetFormData[DateOfIncorporationModel](Matchers.eq(KeystoreKeys.dateOfIncorporation))(Matchers.any(), Matchers.any(),Matchers.any()))
@@ -79,6 +81,7 @@ trait SubmissionFixture {
       .thenReturn(Future.successful(Some(ConfirmCorrespondAddressModel("Yes", fullCorrespondenceAddress))))
     when(mockS4lConnector.fetchAndGetFormData[SupportingDocumentsUploadModel](Matchers.eq(KeystoreKeys.supportingDocumentsUpload))(Matchers.any(), Matchers.any(),Matchers.any()))
       .thenReturn(Future.successful(Some(SupportingDocumentsUploadModel("Yes"))))
+
   }
 
   def setUpMocks(mockS4lConnector: S4LConnector) {
@@ -342,7 +345,7 @@ trait SubmissionFixture {
     Some(NumberOfSharesPurchasedModel(1, Some(1))), Some(HowMuchSpentOnSharesModel(1, Some(1))), Some(IsExistingShareHolderModel("No", Some(1))),
     None, Some(1)))
 
-  val validSEISAnswersModel = SEISAnswersModel(
+  val validSEISAnswersModel = ComplianceStatementAnswersModel(
     CompanyDetailsAnswersModel(natureOfBusinessValid, dateOfIncorporationValid, QualifyBusinessActivityModel(Constants.qualifyResearchAndDevelopment),
       None, Some(ResearchStartDateModel("Yes", Some(1), Some(4), Some(2016))), None, shareIssueDateModel, GrossAssetsModel(1000),
       FullTimeEmployeeCountModel(1)),
@@ -354,5 +357,6 @@ trait SubmissionFixture {
       WasAnyValueReceivedModel("No", None), ShareCapitalChangesModel("No", None)),
     ContactDetailsAnswersModel(ContactDetailsModel("", "", None, None, ""),
       ConfirmCorrespondAddressModel("Yes", fullCorrespondenceAddress)),
-    SupportingDocumentsUploadModel("Yes"))
+    SupportingDocumentsUploadModel("Yes"),
+    SchemeTypesModel(eis = false, seis = true))
 }

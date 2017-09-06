@@ -18,6 +18,7 @@ package models
 
 import connectors.SubmissionConnector
 import models.seis._
+import models.submission._
 import org.mockito.Matchers
 import org.scalatest.mock.MockitoSugar
 import org.mockito.Mockito._
@@ -34,7 +35,7 @@ class SEISAnswersModelSpec extends UnitSpec with MockitoSugar {
   def setupMockModel(validCompany: Boolean = true,
                      validSchemes: Boolean = true,
                      validShares: Boolean = true,
-                     validInvestors: Boolean = true): SEISAnswersModel = {
+                     validInvestors: Boolean = true): ComplianceStatementAnswersModel = {
 
     val mockCompany = mock[CompanyDetailsAnswersModel]
     val mockSchemes = mock[PreviousSchemesAnswersModel]
@@ -50,7 +51,8 @@ class SEISAnswersModelSpec extends UnitSpec with MockitoSugar {
     when(mockInvestors.validate)
       .thenReturn(validInvestors)
 
-    SEISAnswersModel(mockCompany, mockSchemes, mockShares, mockInvestors, mock[ContactDetailsAnswersModel], mock[SupportingDocumentsUploadModel])
+    ComplianceStatementAnswersModel(mockCompany, mockSchemes, mockShares, mockInvestors, mock[ContactDetailsAnswersModel], mock[SupportingDocumentsUploadModel],
+      mock[SchemeTypesModel])
   }
 
   "Calling .validate on SEISAnswersModel" should {
@@ -58,24 +60,24 @@ class SEISAnswersModelSpec extends UnitSpec with MockitoSugar {
     "return a false" when {
 
       "the company details validation returns a false" in {
-        await(setupMockModel(validCompany = false).validate(mockSubmissionConnector)) shouldBe false
+        await(setupMockModel(validCompany = false).validateSeis(mockSubmissionConnector)) shouldBe false
       }
 
       "the previous schemes validation returns a false" in {
-        await(setupMockModel(validSchemes = false).validate(mockSubmissionConnector)) shouldBe false
+        await(setupMockModel(validSchemes = false).validateSeis(mockSubmissionConnector)) shouldBe false
       }
 
       "the share details validation returns a false" in {
-        await(setupMockModel(validShares = false).validate(mockSubmissionConnector)) shouldBe false
+        await(setupMockModel(validShares = false).validateSeis(mockSubmissionConnector)) shouldBe false
       }
 
       "the investor details validation returns a false" in {
-        await(setupMockModel(validInvestors = false).validate(mockSubmissionConnector)) shouldBe false
+        await(setupMockModel(validInvestors = false).validateSeis(mockSubmissionConnector)) shouldBe false
       }
     }
 
     "return a true when all validation returns a true" in {
-      await(setupMockModel().validate(mockSubmissionConnector)) shouldBe true
+      await(setupMockModel().validateSeis(mockSubmissionConnector)) shouldBe true
     }
   }
 }

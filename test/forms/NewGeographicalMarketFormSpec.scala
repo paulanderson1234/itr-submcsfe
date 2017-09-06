@@ -46,9 +46,9 @@ class NewGeographicalMarketFormSpec extends UnitSpec with OneAppPerSuite{
   val newGeographicalMarketJson = """{"isNewGeographicalMarket":"Yes"}"""
   val newGeographicalMarketModel = NewGeographicalMarketModel("Yes")
 
-  "TheNew Product Before Form" should {
+  "The New Geographical Market  Form" should {
     "Return an error if no radio button is selected" in {
-      val request = FakeRequest("GET", "/").withFormUrlEncodedBody(
+      val request = FakeRequest("POST", "/").withFormUrlEncodedBody(
         "isNewGeographicalMarket" -> ""
       )
       bindWithError(request) match {
@@ -64,9 +64,9 @@ class NewGeographicalMarketFormSpec extends UnitSpec with OneAppPerSuite{
     }
   }
 
-  "TheNew Product Before Form" should {
+  "The New Geographical Market Form" should {
     "not return an error if the 'Yes' option is selected" in {
-      val request = FakeRequest("GET", "/").withFormUrlEncodedBody(
+      val request = FakeRequest("POST", "/").withFormUrlEncodedBody(
         "isNewGeographicalMarket" -> Constants.StandardRadioButtonYesValue
       )
       bindWithError(request) match {
@@ -78,9 +78,9 @@ class NewGeographicalMarketFormSpec extends UnitSpec with OneAppPerSuite{
     }
   }
 
-  "TheNew Product Before Form" should {
+  "The New Geographical Market  Form" should {
     "not return an error if the 'No' option is selected" in {
-      val request = FakeRequest("GET", "/").withFormUrlEncodedBody(
+      val request = FakeRequest("POST", "/").withFormUrlEncodedBody(
         "isNewGeographicalMarket" -> Constants.StandardRadioButtonNoValue
       )
       bindWithError(request) match {
@@ -93,7 +93,7 @@ class NewGeographicalMarketFormSpec extends UnitSpec with OneAppPerSuite{
   }
 
   // model to json
-  "TheNew Product Before Form model" should {
+  "The New Geographical Market  Form model" should {
     "load convert to JSON successfully" in {
 
       implicit val formats = Json.format[NewGeographicalMarketModel]
@@ -105,7 +105,7 @@ class NewGeographicalMarketFormSpec extends UnitSpec with OneAppPerSuite{
   }
 
   // form model to json - apply
-  "TheNew Product Before Form model" should {
+  "The New Geographical Market  Form model" should {
     "call apply correctly on the model" in {
       implicit val formats = Json.format[NewGeographicalMarketModel]
       val newGeographicalMarketForm = NewGeographicalMarketForm.newGeographicalMarketForm.fill(newGeographicalMarketModel)

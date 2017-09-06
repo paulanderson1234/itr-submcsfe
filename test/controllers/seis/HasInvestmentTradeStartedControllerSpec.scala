@@ -109,7 +109,7 @@ class HasInvestmentTradeStartedControllerSpec extends BaseSpec {
   }
 
   "Sending a valid Yes form submission to the HasInvestmentTradeStartedController when authenticated and enrolled" should {
-    "redirect to itself(todo) if the investment start date is less than 4 months" in {
+    "redirect to seventy percent spent page if the investment start date is less than 4 months" in {
       setUpSubmitMocks(false)
       val formInput = Seq("hasInvestmentTradeStarted" -> Constants.StandardRadioButtonYesValue,
         "hasInvestmentTradeStartedDay" -> "29",
@@ -126,7 +126,7 @@ class HasInvestmentTradeStartedControllerSpec extends BaseSpec {
   }
 
   "Sending a valid No form submission to the HasInvestmentTradeStartedController when authenticated and enrolled" should {
-    "redirect to itself(todo)" in {
+    "redirect to seventy percent spent" in {
       setUpSubmitMocks(true)
       val formInput = Seq(
         "hasInvestmentTradeStarted" -> Constants.StandardRadioButtonNoValue,

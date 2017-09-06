@@ -57,36 +57,36 @@ class NewGeographicalMarketControllerSpec extends BaseSpec {
   }
 
   "Sending a GET request to NewGeographicalMarketController when authenticated and enrolled" should {
-    "return a 200 when something is fetched from keystore" in {
-      setupMocks(Some(newGeographicalMarketModelYes), Some(routes.ProposedInvestmentController.show().url))
+    "return a OK when something is fetched from keystore" in {
+      setupMocks(Some(newGeographicalMarketModelYes), Some(routes.TotalAmountRaisedController.show().url))
       mockEnrolledRequest(eisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show)(
         result => status(result) shouldBe OK
       )
     }
 
-    "provide an empty model and return a 200 when nothing is fetched using keystore when authenticated and enrolled"  in {
-      setupMocks(backLink = Some(routes.ProposedInvestmentController.show().url))
+    "provide an empty model and return a OK when nothing is fetched using keystore when authenticated and enrolled"  in {
+      setupMocks(backLink = Some(routes.TotalAmountRaisedController.show().url))
       mockEnrolledRequest(eisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show)(
         result => status(result) shouldBe OK
       )
     }
 
-    "provide an empty model and return a 300 when no back link is fetched using keystore when authenticated and enrolled" in {
+    "REDIRECT when no back link is fetched using keystore when authenticated and enrolled" in {
       setupMocks()
       mockEnrolledRequest(eisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some("/investment-tax-relief-cs/eis/proposed-investment")
+          redirectLocation(result) shouldBe Some("/investment-tax-relief-cs/eis/total-amount-raised")
         }
       )
     }
   }
 
   "Sending a valid 'Yes' form submit to the NewGeographicalMarketController when authenticated and enrolled" should {
-    "redirect to the subsidiaries page" in {
+    "redirect to the NewProductMarket page" in {
       mockEnrolledRequest(eisSchemeTypesModel)
       val formInput = "isNewGeographicalMarket" -> Constants.StandardRadioButtonYesValue
       submitWithSessionAndAuth(TestController.submit, formInput)(
@@ -99,7 +99,7 @@ class NewGeographicalMarketControllerSpec extends BaseSpec {
   }
 
   "Sending a valid 'No' form submit to the NewGeographicalMarketController when authenticated and enrolled" should {
-    "redirect the ten year plan page" in {
+    "redirect the NewProductMarket" in {
       mockEnrolledRequest(eisSchemeTypesModel)
       val formInput = "isNewGeographicalMarket" -> Constants.StandardRadioButtonNoValue
       submitWithSessionAndAuth(TestController.submit, formInput)(
@@ -113,14 +113,14 @@ class NewGeographicalMarketControllerSpec extends BaseSpec {
 
   "Sending an invalid form submission with validation errors to the NewGeographicalMarketController " +
     "with no backlink and when authenticated and enrolled" should {
-    "redirect to WhatWillUseFor page" in {
+    "redirect to TotalAmountRaised page" in {
       setupMocks()
       mockEnrolledRequest(eisSchemeTypesModel)
       val formInput = "isNewGeographicalMarket" -> ""
       submitWithSessionAndAuth(TestController.submit, formInput)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some("/investment-tax-relief-cs/eis/proposed-investment")
+          redirectLocation(result) shouldBe Some("/investment-tax-relief-cs/eis/total-amount-raised")
         }
       )
     }
@@ -128,7 +128,7 @@ class NewGeographicalMarketControllerSpec extends BaseSpec {
 
   "Sending an invalid form submission with validation errors to the NewGeographicalMarketController when authenticated and enrolled" should {
     "redirect to itself with errors" in {
-      setupMocks(backLink = Some(routes.ProposedInvestmentController.show().url))
+      setupMocks(backLink = Some(routes.TotalAmountRaisedController.show().url))
       mockEnrolledRequest(eisSchemeTypesModel)
       val formInput = "isNewGeographicalMarket" -> ""
       submitWithSessionAndAuth(TestController.submit, formInput)(

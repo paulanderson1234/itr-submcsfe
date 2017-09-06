@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package models.seis
+package models.submission
 
 import common.Constants
 import connectors.SubmissionConnector
@@ -22,21 +22,36 @@ import models._
 import models.investorDetails.InvestorDetailsModel
 import uk.gov.hmrc.play.http.HeaderCarrier
 
-import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
-case class SEISAnswersModel(companyDetailsAnswersModel: CompanyDetailsAnswersModel,
-                            previousSchemesAnswersModel: PreviousSchemesAnswersModel,
-                            shareDetailsAnswersModel: ShareDetailsAnswersModel,
-                            investorDetailsAnswersModel: InvestorDetailsAnswersModel,
-                            contactDetailsAnswersModel: ContactDetailsAnswersModel,
-                            supportingDocumentsUploadModel: SupportingDocumentsUploadModel) {
+case class ComplianceStatementAnswersModel(companyDetailsAnswersModel: CompanyDetailsAnswersModel,
+                                           previousSchemesAnswersModel: PreviousSchemesAnswersModel,
+                                           shareDetailsAnswersModel: ShareDetailsAnswersModel,
+                                           investorDetailsAnswersModel: InvestorDetailsAnswersModel,
+                                           contactDetailsAnswersModel: ContactDetailsAnswersModel,
+                                           supportingDocumentsUploadModel: SupportingDocumentsUploadModel,
+                                           //TODO: add other models required for EIS as below when EIS is submitted
+                                           schemeTypes: SchemeTypesModel,
+                                           kiModel: Option[KiModel] = None,
+                                           investmentGrow: Option[InvestmentGrowModel] = None
+                                          ) {
 
-  def validate(submissionConnector: SubmissionConnector)(implicit hc: HeaderCarrier): Future[Boolean] = {
+
+  def validateSeis(submissionConnector: SubmissionConnector)(implicit hc: HeaderCarrier): Future[Boolean] = {
     for {
       companyCheck <- companyDetailsAnswersModel.validate(submissionConnector)
       shareCheck <- shareDetailsAnswersModel.validate(companyDetailsAnswersModel.qualifyBusinessActivityModel,
-        companyDetailsAnswersModel.hasInvestmentTradeStartedModel, companyDetailsAnswersModel.researchStartDateModel, submissionConnector)
+      companyDetailsAnswersModel.hasInvestmentTradeStartedModel, companyDetailsAnswersModel.researchStartDateModel, submissionConnector)
+    } yield companyCheck && previousSchemesAnswersModel.validate && shareCheck && investorDetailsAnswersModel.validate
+  }
+
+  //TODO: implement this validate method fully to validate what is required for EIS when story  is played
+  def validateEis(submissionConnector: SubmissionConnector)(implicit hc: HeaderCarrier): Future[Boolean] = {
+    for {
+      companyCheck <- companyDetailsAnswersModel.validate(submissionConnector)
+      shareCheck <- shareDetailsAnswersModel.validate(companyDetailsAnswersModel.qualifyBusinessActivityModel,
+      companyDetailsAnswersModel.hasInvestmentTradeStartedModel, companyDetailsAnswersModel.researchStartDateModel, submissionConnector)
     } yield companyCheck && previousSchemesAnswersModel.validate && shareCheck && investorDetailsAnswersModel.validate
   }
 }
@@ -154,3 +169,4 @@ case class InvestorDetailsAnswersModel(investors: Vector[InvestorDetailsModel],
 
 case class ContactDetailsAnswersModel(contactDetailsModel: ContactDetailsModel,
                                       correspondAddressModel: ConfirmCorrespondAddressModel)
+
