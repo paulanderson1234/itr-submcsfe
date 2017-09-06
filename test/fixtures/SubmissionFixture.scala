@@ -35,6 +35,8 @@ trait SubmissionFixture {
 
   def setupMocksCs(mockS4lConnector: S4LConnector): Unit = {
 
+    when(mockS4lConnector.fetchAndGetFormData[SchemeTypesModel](Matchers.eq(KeystoreKeys.selectedSchemes))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(schemeTypesSEIS)))
     when(mockS4lConnector.fetchAndGetFormData[NatureOfBusinessModel](Matchers.eq(KeystoreKeys.natureOfBusiness))(Matchers.any(), Matchers.any(),Matchers.any()))
       .thenReturn(Future.successful(Option(natureOfBusinessValid)))
     when(mockS4lConnector.fetchAndGetFormData[DateOfIncorporationModel](Matchers.eq(KeystoreKeys.dateOfIncorporation))(Matchers.any(), Matchers.any(),Matchers.any()))
@@ -79,6 +81,7 @@ trait SubmissionFixture {
       .thenReturn(Future.successful(Some(ConfirmCorrespondAddressModel("Yes", fullCorrespondenceAddress))))
     when(mockS4lConnector.fetchAndGetFormData[SupportingDocumentsUploadModel](Matchers.eq(KeystoreKeys.supportingDocumentsUpload))(Matchers.any(), Matchers.any(),Matchers.any()))
       .thenReturn(Future.successful(Some(SupportingDocumentsUploadModel("Yes"))))
+
   }
 
   def setUpMocks(mockS4lConnector: S4LConnector) {
@@ -354,5 +357,6 @@ trait SubmissionFixture {
       WasAnyValueReceivedModel("No", None), ShareCapitalChangesModel("No", None)),
     ContactDetailsAnswersModel(ContactDetailsModel("", "", None, None, ""),
       ConfirmCorrespondAddressModel("Yes", fullCorrespondenceAddress)),
-    SupportingDocumentsUploadModel("Yes"))
+    SupportingDocumentsUploadModel("Yes"),
+    SchemeTypesModel(eis = false, seis = true))
 }

@@ -538,22 +538,22 @@ object DesSubmissionCSModel {
   }
 
   private def readPreviousRFICostModel(answerModel: ComplianceStatementAnswersModel) : Option[DesRFICostsModel] = {
-    Some(DesRFICostsModel(None, readPreviousRFI(answerModel.previousSchemesAnswersModel)))
+    if (answerModel.previousSchemesAnswersModel.previousSchemeModel.isDefined
+      && answerModel.previousSchemesAnswersModel.previousSchemeModel.nonEmpty)
+      Some(DesRFICostsModel(None, readPreviousRFI(answerModel.previousSchemesAnswersModel)))
+    else
+      None
+
   }
 
   private def readPreviousRFI(previousSchemesAnswersModel: PreviousSchemesAnswersModel) : Vector[DesRFIModel] = {
-    if (previousSchemesAnswersModel.previousSchemeModel.isDefined
-      && previousSchemesAnswersModel.previousSchemeModel.nonEmpty) {
-      previousSchemesAnswersModel.previousSchemeModel.get.foldLeft(Vector.empty[DesRFIModel]) {
+    previousSchemesAnswersModel.previousSchemeModel.get.foldLeft(Vector.empty[DesRFIModel]) {
         (desRFIModel, previousSchemeModel) =>
           desRFIModel :+ DesRFIModel(previousSchemeModel.schemeTypeDesc, previousSchemeModel.otherSchemeName,
             readPreviousRFIIssueDate(previousSchemeModel),
             CostModel(Transformers.poundToPence(Left(previousSchemeModel.investmentAmount.toString))),
             readPreviousSchemesInvestmentAmountSpent(previousSchemeModel))
-      }
     }
-    else
-      Vector.empty
   }
 
   private def readPreviousRFIIssueDate(previousSchemeModel: PreviousSchemeModel): String = {

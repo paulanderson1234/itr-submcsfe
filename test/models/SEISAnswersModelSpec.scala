@@ -51,7 +51,8 @@ class SEISAnswersModelSpec extends UnitSpec with MockitoSugar {
     when(mockInvestors.validate)
       .thenReturn(validInvestors)
 
-    ComplianceStatementAnswersModel(mockCompany, mockSchemes, mockShares, mockInvestors, mock[ContactDetailsAnswersModel], mock[SupportingDocumentsUploadModel])
+    ComplianceStatementAnswersModel(mockCompany, mockSchemes, mockShares, mockInvestors, mock[ContactDetailsAnswersModel], mock[SupportingDocumentsUploadModel],
+      mock[SchemeTypesModel])
   }
 
   "Calling .validate on SEISAnswersModel" should {

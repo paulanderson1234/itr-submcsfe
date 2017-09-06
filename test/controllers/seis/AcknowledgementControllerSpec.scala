@@ -156,6 +156,8 @@ class AcknowledgementControllerSpec extends BaseSpec {
     when(mockS4lConnector.fetchAndGetFormData[SeventyPercentSpentModel](Matchers.eq(KeystoreKeys.seventyPercentSpent))
       (Matchers.any(), Matchers.any(), Matchers.any()))
       .thenReturn(Future.successful(Some(isSeventyPercentSpentModelYes)))
+    when(mockS4lConnector.fetchAndGetFormData[SchemeTypesModel](Matchers.eq(KeystoreKeys.selectedSchemes))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(schemeTypesSEIS)))
   }
 
   "AcknowledgementController" should {
@@ -182,12 +184,15 @@ class AcknowledgementControllerSpec extends BaseSpec {
       setupMocksCs(mockS4lConnector)
       when(mockS4lConnector.fetchAndGetFormData[NatureOfBusinessModel](Matchers.eq(KeystoreKeys.natureOfBusiness))(Matchers.any(),
         Matchers.any(), Matchers.any())).thenReturn(Future.failed(new Exception("test error")))
-
+      when(mockS4lConnector.fetchAndGetFormData[SchemeTypesModel](Matchers.eq(KeystoreKeys.selectedSchemes))
+        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(schemeTypesSEIS)))
       intercept[Exception](await(TestController.getAnswers)).getMessage shouldBe "test error"
     }
 
     "return a None if any of the mandatory data is missing" in {
       setupMocksCs(mockS4lConnector)
+      when(mockS4lConnector.fetchAndGetFormData[SchemeTypesModel](Matchers.eq(KeystoreKeys.selectedSchemes))
+        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(schemeTypesSEIS)))
       when(mockS4lConnector.fetchAndGetFormData[NatureOfBusinessModel](Matchers.eq(KeystoreKeys.natureOfBusiness))(Matchers.any(),
         Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
 
