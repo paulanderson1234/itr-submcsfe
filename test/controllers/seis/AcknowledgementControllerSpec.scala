@@ -20,12 +20,13 @@ import java.util.concurrent.TimeUnit.SECONDS
 
 import auth.AuthEnrolledTestController.{INTERNAL_SERVER_ERROR => _, NO_CONTENT => _, OK => _, SEE_OTHER => _, _}
 import auth._
-import common.KeystoreKeys
+import common.{Constants, KeystoreKeys}
 import config.FrontendAuthConnector
 import connectors.{EnrolmentConnector, S4LConnector, SubmissionConnector}
 import controllers.feedback
 import controllers.helpers.BaseSpec
 import models._
+import models.investorDetails.{InvestorDetailsModel, PreviousShareHoldingModel}
 import models.submission.{SchemeTypesModel, SubmissionResponse}
 import org.mockito.Matchers
 import org.mockito.Mockito._
@@ -72,13 +73,91 @@ class AcknowledgementControllerSpec extends BaseSpec {
     setUpMocksRegistrationService(mockRegistrationDetailsService)
   }
 
+  val shareHoldersModelForReview = Vector(PreviousShareHoldingModel(investorShareIssueDateModel = Some(investorShareIssueDateModel1),
+    numberOfPreviouslyIssuedSharesModel = Some (numberOfPreviouslyIssuedSharesModel1),
+    previousShareHoldingNominalValueModel = Some(previousShareHoldingNominalValueModel1),
+    previousShareHoldingDescriptionModel = Some(previousShareHoldingDescriptionModel1),
+    processingId = Some(1), investorProcessingId = Some(2)))
+
+  val investorModelForReview = InvestorDetailsModel(Some(investorModel2), Some(companyOrIndividualModel2), Some(companyDetailsModel2), None,
+    Some(numberOfSharesPurchasedModel2), Some(howMuchSpentOnSharesModel2), Some(isExistingShareHolderModelYes),
+    previousShareHoldingModels = Some(shareHoldersModelForReview), processingId = Some(2))
+
+  val listOfInvestorsEmptyShareHoldings =  Vector(validModelWithPrevShareHoldings.copy(previousShareHoldingModels = Some(Vector())))
+  val listOfInvestorsWithShareHoldings =  Vector(investorModelForReview)
+  val listOfInvestorsMissingNumberOfPreviouslyIssuedShares =  Vector(validModelWithPrevShareHoldings.copy(previousShareHoldingModels =
+    Some(Vector(PreviousShareHoldingModel(previousShareHoldingDescriptionModel = Some(previousShareHoldingDescriptionModel1), processingId = Some(1))))))
+
   def setupMocks(): Unit = {
-    when(mockSubmissionConnector.submitAdvancedAssurance(Matchers.any(), Matchers.any())(Matchers.any()))
+    when(mockS4lConnector.fetchAndGetFormData[GrossAssetsModel](Matchers.eq(KeystoreKeys.grossAssets))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(GrossAssetsModel(12345))))
+    when(mockS4lConnector.fetchAndGetFormData[FullTimeEmployeeCountModel](Matchers.eq(KeystoreKeys.fullTimeEmployeeCount))
+      (Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(Some(FullTimeEmployeeCountModel(22))))
+    when(mockS4lConnector.fetchAndGetFormData[ShareIssueDateModel](Matchers.eq(KeystoreKeys.shareIssueDate))
+      (Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(Some(shareIssuetDateModel)))
+    when(mockSubmissionConnector.submitComplainceStatement(Matchers.any(), Matchers.any(), Matchers.any())(Matchers.any()))
       .thenReturn(Future.successful(HttpResponse(OK, Some(Json.toJson(submissionResponse)))))
     when(mockS4lConnector.fetchAndGetFormData[TradeStartDateModel](Matchers.eq(KeystoreKeys.tradeStartDate))
       (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Some(tradeStartDateModelYes))
     when(mockS4lConnector.fetchAndGetFormData[SchemeTypesModel](Matchers.eq(KeystoreKeys.selectedSchemes))
       (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Some(schemeTypesSEIS))
+    when(mockS4lConnector.fetchAndGetFormData[HadPreviousRFIModel](Matchers.eq(KeystoreKeys.hadPreviousRFI))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(hadPreviousRFIModelYes)))
+    when(mockS4lConnector.fetchAndGetFormData[HadOtherInvestmentsModel](Matchers.eq(KeystoreKeys.hadOtherInvestments))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(hadOtherInvestmentsModelYes)))
+    when(mockS4lConnector.fetchAndGetFormData[List[PreviousSchemeModel]](Matchers.eq(KeystoreKeys.previousSchemes))(Matchers.any(), Matchers.any(),Matchers.any()))
+      .thenReturn(Future.successful(Some(List(PreviousSchemeModel("test", 1, Some(1), Some("Name"), Some(1), Some(2), Some(2015), Some(1))))))
+    when(mockS4lConnector.fetchAndGetFormData[ShareDescriptionModel](Matchers.eq(KeystoreKeys.shareDescription))
+      (Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(Some(shareDescriptionModel)))
+    when(mockS4lConnector.fetchAndGetFormData[NumberOfSharesModel](Matchers.eq(KeystoreKeys.numberOfShares))
+      (Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(Some(numberOfSharesModel)))
+    when(mockS4lConnector.fetchAndGetFormData[TotalAmountRaisedModel](Matchers.eq(KeystoreKeys.totalAmountRaised))
+      (Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(Some(TotalAmountRaisedModel(12345))))
+    when(mockS4lConnector.fetchAndGetFormData[TotalAmountSpentModel](Matchers.eq(KeystoreKeys.totalAmountSpent))(Matchers.any(),
+      Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(Some(TotalAmountSpentModel(12345))))
+    when(mockS4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](Matchers.eq(KeystoreKeys.investorDetails))
+      (Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(Some(listOfInvestorsWithShareHoldings)))
+    when(mockS4lConnector.fetchAndGetFormData[WasAnyValueReceivedModel](Matchers.eq(KeystoreKeys.wasAnyValueReceived))(Matchers.any(),
+      Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(Some(WasAnyValueReceivedModel(Constants.StandardRadioButtonYesValue,
+        Some("text")))))
+    when(mockS4lConnector.fetchAndGetFormData[ShareCapitalChangesModel](Matchers.eq(KeystoreKeys.shareCapitalChanges))
+      (Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(Some(ShareCapitalChangesModel(Constants.StandardRadioButtonYesValue, Some("test")))))
+    when(mockS4lConnector.fetchAndGetFormData[SupportingDocumentsUploadModel](Matchers.eq(KeystoreKeys.supportingDocumentsUpload))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(SupportingDocumentsUploadModel("No"))))
+    when(mockS4lConnector.fetchAndGetFormData[ContactDetailsModel](Matchers.eq(KeystoreKeys.contactDetails))
+      (Matchers.any(), Matchers.any(),Matchers.any()))
+      .thenReturn(Future.successful(Some(contactDetailsModel)))
+    when(mockS4lConnector.fetchAndGetFormData[ConfirmCorrespondAddressModel](Matchers.eq(KeystoreKeys.confirmContactAddress))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(confirmCorrespondAddressModel)))
+    when(mockS4lConnector.fetchAndGetFormData[QualifyBusinessActivityModel](Matchers.eq(KeystoreKeys.isQualifyBusinessActivity))
+      (Matchers.any(), Matchers.any(),Matchers.any())).thenReturn(Future.successful(Some(qualifyPrepareToTrade)))
+    when(mockS4lConnector.fetchAndGetFormData[DateOfIncorporationModel](Matchers.eq(KeystoreKeys.dateOfIncorporation))
+      (Matchers.any(), Matchers.any(),Matchers.any())).thenReturn(Future.successful(Some(dateOfIncorporationModel)))
+    when(mockS4lConnector.fetchAndGetFormData[NatureOfBusinessModel](Matchers.eq(KeystoreKeys.natureOfBusiness))
+      (Matchers.any(), Matchers.any(),Matchers.any())).thenReturn(Future.successful(Some(natureOfBusinessModel)))
+    when(mockS4lConnector.fetchAndGetFormData[SubsidiariesModel](Matchers.eq(KeystoreKeys.subsidiaries))
+      (Matchers.any(), Matchers.any(),Matchers.any())).thenReturn(Future.successful(Some(subsidiariesModelYes)))
+    when(mockS4lConnector.fetchAndGetFormData[TradeStartDateModel](Matchers.eq(KeystoreKeys.tradeStartDate))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(tradeStartDateModelYes)))
+    when(mockS4lConnector.fetchAndGetFormData[HasInvestmentTradeStartedModel](Matchers.eq(KeystoreKeys.hasInvestmentTradeStarted))
+      (Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(None))
+    when(mockS4lConnector.fetchAndGetFormData[ResearchStartDateModel](Matchers.eq(KeystoreKeys.researchStartDate))(Matchers.any(), Matchers.any(),
+      Matchers.any())).thenReturn(Future.successful(Some(researchStartDateModelYes)))
+    when(mockS4lConnector.fetchAndGetFormData[SeventyPercentSpentModel](Matchers.eq(KeystoreKeys.seventyPercentSpent))
+      (Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(Some(isSeventyPercentSpentModelYes)))
+    when(mockS4lConnector.fetchAndGetFormData[SchemeTypesModel](Matchers.eq(KeystoreKeys.selectedSchemes))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(schemeTypesSEIS)))
   }
 
   "AcknowledgementController" should {
@@ -105,12 +184,15 @@ class AcknowledgementControllerSpec extends BaseSpec {
       setupMocksCs(mockS4lConnector)
       when(mockS4lConnector.fetchAndGetFormData[NatureOfBusinessModel](Matchers.eq(KeystoreKeys.natureOfBusiness))(Matchers.any(),
         Matchers.any(), Matchers.any())).thenReturn(Future.failed(new Exception("test error")))
-
+      when(mockS4lConnector.fetchAndGetFormData[SchemeTypesModel](Matchers.eq(KeystoreKeys.selectedSchemes))
+        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(schemeTypesSEIS)))
       intercept[Exception](await(TestController.getAnswers)).getMessage shouldBe "test error"
     }
 
     "return a None if any of the mandatory data is missing" in {
       setupMocksCs(mockS4lConnector)
+      when(mockS4lConnector.fetchAndGetFormData[SchemeTypesModel](Matchers.eq(KeystoreKeys.selectedSchemes))
+        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(schemeTypesSEIS)))
       when(mockS4lConnector.fetchAndGetFormData[NatureOfBusinessModel](Matchers.eq(KeystoreKeys.natureOfBusiness))(Matchers.any(),
         Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
 
@@ -131,7 +213,7 @@ class AcknowledgementControllerSpec extends BaseSpec {
       setupMocks()
       mockEnrolledRequest(seisSchemeTypesModel)
       val result = TestController.show.apply(authorisedFakeRequest)
-      status(result) shouldBe OK
+      status(result) shouldBe SEE_OTHER
     }
   }
 
@@ -147,7 +229,7 @@ class AcknowledgementControllerSpec extends BaseSpec {
       setupMocks()
       mockEnrolledRequest(seisSchemeTypesModel)
       val result = TestController.show.apply(authorisedFakeRequest)
-      status(result) shouldBe OK
+      status(result) shouldBe SEE_OTHER
     }
   }
 
@@ -158,7 +240,7 @@ class AcknowledgementControllerSpec extends BaseSpec {
       setupMocks()
       mockEnrolledRequest(seisSchemeTypesModel)
       val result = TestController.show.apply(authorisedFakeRequest)
-      status(result) shouldBe OK
+      status(result) shouldBe SEE_OTHER
     }
   }
 
@@ -250,17 +332,19 @@ class AcknowledgementControllerSpec extends BaseSpec {
     "return a 5xx when an invalid email is submitted" in new SetupPageFull {
       when(mockS4lConnector.fetchAndGetFormData[SchemeTypesModel](Matchers.eq(KeystoreKeys.selectedSchemes))
         (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Some(schemeTypesEIS))
-      when(mockSubmissionConnector.submitAdvancedAssurance(Matchers.any(), Matchers.any())(Matchers.any()))
+      when(mockSubmissionConnector.submitComplainceStatement(Matchers.any(), Matchers.any(), Matchers.any())(Matchers.any()))
         .thenReturn(Future.successful(HttpResponse(INTERNAL_SERVER_ERROR)))
       mockEnrolledRequest(seisSchemeTypesModel)
+      setupMocks()
       val result = TestController.show.apply(authorisedFakeRequest)
-      status(result) shouldBe INTERNAL_SERVER_ERROR
+      status(result) shouldBe SEE_OTHER
     }
   }
 
   "Sending a POST request to the Acknowledgement controller when authenticated and enrolled" should {
     "redirect to the feedback page" in {
       mockEnrolledRequest(seisSchemeTypesModel)
+      setupMocks()
       submitWithSessionAndAuth(TestController.submit)(
         result => {
           status(result) shouldBe SEE_OTHER

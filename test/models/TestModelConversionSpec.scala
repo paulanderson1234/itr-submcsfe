@@ -102,7 +102,7 @@ val subsidiaryPerformingTradeWithAddress = SubsidiaryPerformingTradeModel(ninety
     annualTurnover = Some(turnover),
     proposedInvestmentModel = ProposedInvestmentModel(250000),
     investmentGrowModel = InvestmentGrowModel("It will help me invest in new equipment and R&D"),
-    knowledgeIntensive = Some(KiModel(skilledEmployeesConditionMet = true, innovationConditionMet = Some("reason met"), kiConditionMet = true)),
+    knowledgeIntensive = Some(KiModel(skilledEmployeesConditionMet = true, innovationConditionMet = Some("reason met"), kiConditionMet = Some(true))),
     subsidiaryPerformingTrade = Some(subsidiaryPerformingTradeWithFull),
     organisationDetails = organisationFull
     )
