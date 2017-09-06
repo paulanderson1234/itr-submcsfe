@@ -31,6 +31,10 @@ import play.api.i18n.Messages.Implicits._
 
 class ShareDescriptionFormSpec extends UnitSpec with OneAppPerSuite{
 
+  lazy val maxLengthText: String = MockDataGenerator.randomAlphanumericString(Constants.shortTextLimit)
+  lazy val overMaxLengthText: String = MockDataGenerator.randomAlphanumericString(Constants.shortTextLimit  + 1)
+  lazy val wordsTwentyOne: String = Constants.textAreaTwentyOne
+
   private def bindSuccess(request: FakeRequest[AnyContentAsFormUrlEncoded]) = {
     shareDescriptionForm.bindFromRequest()(request).fold(
       formWithErrors => None,
@@ -47,23 +51,6 @@ class ShareDescriptionFormSpec extends UnitSpec with OneAppPerSuite{
 
   val shareDescriptionJson = """{"shareDescription":"Ordinary shares"}"""
   val shareDescriptionModel = ShareDescriptionModel("Ordinary shares")
-
-  val shareDescriptionExceedsMaxJson =
-    """{"shareDescription":"Arise, arise, Riders of Théoden
-      |Fell deeds awake: fire and slaughter!
-      |Spear shall be shaken, shield be splintered,
-      |A sword-day, a red day, ere the sun rises!
-      |Ride now, ride now! Ride to Gondor!
-      |Arise, arise, Riders of Théoden
-      |Fell deeds awake: fire and slaughter!
-      |Spear shall be shaken, shield be splintered,
-      |A sword-day, a red day, ere the sun rises!
-      |Ride now, ride now! Ride to Gondor!
-      |Arise, arise, Riders of Théoden
-      |Fell deeds awake: fire and slaughter!
-      |Spear shall be shaken, shield be splintered,
-      |A sword-day, a red day, ere the sun rises!
-      |Ride now, ride now! Ride to Gondor!"}""".stripMargin
 
 
   "The share description Form" should {
@@ -101,7 +88,7 @@ class ShareDescriptionFormSpec extends UnitSpec with OneAppPerSuite{
   "The share description Form" should {
     "not return an error if entry is above the suggested 20 word limit (21 words)" in {
       val request = FakeRequest("GET", "/").withFormUrlEncodedBody(
-        "descriptionTextArea" -> "this is more than 20 words to see if that amount is suggested but not enforced"
+        "descriptionTextArea" -> wordsTwentyOne
       )
       bindWithError(request) match {
         case Some(err) => {
@@ -115,7 +102,7 @@ class ShareDescriptionFormSpec extends UnitSpec with OneAppPerSuite{
   "The share description Form" should {
     "not return an error if entry is on boundary (250)" in {
       val request = FakeRequest("GET", "/").withFormUrlEncodedBody(
-        "descriptionTextArea" -> MockDataGenerator.randomAlphanumericString(250)
+        "descriptionTextArea" -> maxLengthText
       )
       bindWithError(request) match {
         case Some(err) => {
@@ -129,7 +116,7 @@ class ShareDescriptionFormSpec extends UnitSpec with OneAppPerSuite{
   "The share description Form" should {
     "return an error if entry is greater than 250 words in length" in {
       val request = FakeRequest("GET", "/").withFormUrlEncodedBody(
-        "descriptionTextArea" -> MockDataGenerator.randomAlphanumericString(251)
+        "descriptionTextArea" -> overMaxLengthText
       )
       bindWithError(request) match {
         case Some(err) => {

@@ -56,7 +56,7 @@ class NatureOfBusinessSpec extends ViewSpec {
     }
 
     "Verify that the nature of business page contains the correct elements when an invalid NatureOfBusinessModel model is passed" in {
-      val document: Document = Jsoup.parse(contentAsString(NatureOfBusiness(natureOfBusinessForm.bind(Map("natureOfBusiness" -> "")))))
+      val document: Document = Jsoup.parse(contentAsString(NatureOfBusiness(natureOfBusinessForm.bind(Map("natureofbusiness" -> "")))))
 
       // Check the error summary is displayed - the whole purpose of this test
       document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe true
