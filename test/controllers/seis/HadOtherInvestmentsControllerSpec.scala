@@ -112,7 +112,7 @@ class HadOtherInvestmentsControllerSpec extends BaseSpec {
       submitWithSessionAndAuth(TestController.submit,formInput)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some("/investment-tax-relief-cs/seis/share-description")
+          redirectLocation(result) shouldBe Some(routes.ShareDescriptionController.show().url)
         }
       )
     }

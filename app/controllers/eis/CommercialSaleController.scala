@@ -16,10 +16,11 @@
 
 package controllers.eis
 
-import auth.{AuthorisedAndEnrolledForTAVC, EIS, VCT}
+import auth.{AuthorisedAndEnrolledForTAVC, EIS}
 import common.KeystoreKeys
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
+import controllers.Helpers.ControllerHelpers
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import play.api.mvc._
 import models.{CommercialSaleModel, KiProcessingModel}
@@ -39,43 +40,36 @@ object CommercialSaleController extends CommercialSaleController {
 
 trait CommercialSaleController extends FrontendController with AuthorisedAndEnrolledForTAVC {
 
-  override val acceptedFlows = Seq(Seq(EIS),Seq(VCT),Seq(EIS,VCT))
+  override val acceptedFlows = Seq(Seq(EIS))
 
   val show = AuthorisedAndEnrolled.async { implicit user => implicit request =>
-    s4lConnector.fetchAndGetFormData[CommercialSaleModel](KeystoreKeys.commercialSale).map {
-      case Some(data) => Ok(CommercialSale(commercialSaleForm.fill(data)))
-      case None => Ok(CommercialSale(commercialSaleForm))
+
+    def routeRequest(backUrl: Option[String]) = {
+      if (backUrl.isDefined) {
+        s4lConnector.fetchAndGetFormData[CommercialSaleModel](KeystoreKeys.commercialSale).map {
+          case Some(data) => Ok(CommercialSale(commercialSaleForm.fill(data), backUrl.getOrElse("")))
+          case None => Ok(CommercialSale(commercialSaleForm, backUrl.getOrElse("")))
+        }
+      }
+      else Future.successful(Redirect(routes.QualifyBusinessActivityController.show()))
     }
+    for {
+      link <- ControllerHelpers.getSavedBackLink(KeystoreKeys.backLinkCommercialSale, s4lConnector)
+      route <- routeRequest(link)
+    } yield route
   }
 
   val submit = AuthorisedAndEnrolled.async { implicit user => implicit request =>
 
-    def routeRequest(kiModel: Option[KiProcessingModel]): Future[Result] = {
-      kiModel match {
-        case Some(data) if data.dateConditionMet.isEmpty =>
-          Future.successful(Redirect(routes.DateOfIncorporationController.show()))
-        case Some(dataWithDateCondition) =>
-          if (dataWithDateCondition.dateConditionMet.get) {
-            Future.successful(Redirect(routes.IsKnowledgeIntensiveController.show()))
-          }
-          else {
-            s4lConnector.saveFormData(KeystoreKeys.backLinkSubsidiaries, routes.CommercialSaleController.show().url)
-            Future.successful(Redirect(routes.SubsidiariesController.show()))
-          }
-        case None => Future.successful(Redirect(routes.DateOfIncorporationController.show()))
-      }
-    }
-
     commercialSaleForm.bindFromRequest().fold(
       formWithErrors => {
-        Future.successful(BadRequest(CommercialSale(formWithErrors)))
+        s4lConnector.fetchAndGetFormData[String](KeystoreKeys.backLinkCommercialSale).flatMap {
+          case backUrl => Future.successful(BadRequest(CommercialSale(formWithErrors, backUrl.fold("")(_.self))))
+        }
       },
       validFormData => {
         s4lConnector.saveFormData(KeystoreKeys.commercialSale, validFormData)
-        for {
-          model <- s4lConnector.fetchAndGetFormData[KiProcessingModel](KeystoreKeys.kiProcessingModel)
-          route <- routeRequest(model)
-        } yield route
+        Future.successful(Redirect(routes.ShareIssueDateController.show()))
       }
     )
   }

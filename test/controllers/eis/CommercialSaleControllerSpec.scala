@@ -30,6 +30,8 @@ import scala.concurrent.Future
 
 class CommercialSaleControllerSpec extends BaseSpec {
 
+  val testBackUrl = "/test/testing"
+
   object TestController extends CommercialSaleController {
     override lazy val applicationConfig = MockConfig
     override lazy val authConnector = MockAuthConnector
@@ -49,20 +51,22 @@ class CommercialSaleControllerSpec extends BaseSpec {
     }
   }
 
-  def setupShowMocks(commercialSaleModel: Option[CommercialSaleModel] = None): Unit =
-  when(mockS4lConnector.fetchAndGetFormData[CommercialSaleModel](Matchers.any())(Matchers.any(), Matchers.any(),Matchers.any()))
-    .thenReturn(Future.successful(commercialSaleModel))
+  def setupShowMocks(commercialSaleModel: Option[CommercialSaleModel] = None, backUrl: Option[String] = None): Unit = {
+    when(mockS4lConnector.fetchAndGetFormData[CommercialSaleModel](Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(commercialSaleModel))
+    when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.backLinkCommercialSale))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(backUrl))
+  }
 
-  def setupSubmitMocks(kiProcessingModel: Option[KiProcessingModel] = None, dateOfIncorporationModel: Option[DateOfIncorporationModel] = None): Unit = {
-    when(mockS4lConnector.fetchAndGetFormData[KiProcessingModel](Matchers.eq(KeystoreKeys.kiProcessingModel))
-      (Matchers.any(), Matchers.any(),Matchers.any())).thenReturn(Future.successful(kiProcessingModel))
-    when(mockS4lConnector.fetchAndGetFormData[DateOfIncorporationModel](Matchers.eq(KeystoreKeys.dateOfIncorporation))
-      (Matchers.any(), Matchers.any(),Matchers.any())).thenReturn(Future.successful(dateOfIncorporationModel))
+  def setupSubmitMocks(backUrl: Option[String] = None): Unit = {
+
+    when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.backLinkCommercialSale))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(backUrl))
   }
 
   "Sending a GET request to CommercialSaleController when authenticated and enrolled" should {
     "return a 200 when something is fetched from keystore" in {
-      setupShowMocks(Some(commercialSaleModelYes))
+      setupShowMocks(Some(commercialSaleModelYes), Some(testBackUrl))
       mockEnrolledRequest(eisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show)(
         result => status(result) shouldBe OK
@@ -70,7 +74,7 @@ class CommercialSaleControllerSpec extends BaseSpec {
     }
 
     "provide an empty model and return a 200 when nothing is fetched using keystore" in {
-      setupShowMocks()
+      setupShowMocks(None, Some(testBackUrl))
       mockEnrolledRequest(eisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show)(
         result => status(result) shouldBe OK
@@ -78,107 +82,85 @@ class CommercialSaleControllerSpec extends BaseSpec {
     }
   }
 
-  "Sending a valid Yes form submission to the CommercialSaleController when authenticated and enrolled" should {
-    "redirect to the KI page if the KI date condition is met" in {
+  "Sending a GET request to CommercialSaleController when authenticated and enrolled" should {
+    "redirects to the expected beginning of the flow if no backlink is found in storage" in {
+      setupShowMocks(Some(commercialSaleModelYes), None)
+      mockEnrolledRequest(eisSchemeTypesModel)
+      showWithSessionAndAuth(TestController.show)(
+        result => {
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(routes.QualifyBusinessActivityController.show().url)
+        }
+      )
+    }
+  }
+
+
+  "Sending an invalid form submission to the CommercialSaleController when authenticated and enrolled" should {
+    "respond with a bad requests if the back link is found in storage" in {
+      // submit with no data
       val formInput = Seq("hasCommercialSale" -> Constants.StandardRadioButtonYesValue,
-        "commercialSaleDay" -> "23",
-        "commercialSaleMonth" -> "11",
-        "commercialSaleYear" -> "1993")
-      setupSubmitMocks(Some(kiProcessingModelMet), Some(dateOfIncorporationModel))
+        "commercialSaleDay" -> "",
+        "commercialSaleMonth" -> "",
+        "commercialSaleYear" -> "")
+      setupSubmitMocks(Some(testBackUrl))
       mockEnrolledRequest(eisSchemeTypesModel)
-      submitWithSessionAndAuth(TestController.submit,formInput: _*)(
+      submitWithSessionAndAuth(TestController.submit, formInput: _*)(
         result => {
-          status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(routes.IsKnowledgeIntensiveController.show().url)
+          status(result) shouldBe BAD_REQUEST
+        }
+      )
+    }
+  }
+
+  "Sending an invalid form submission to the CommercialSaleController when authenticated and enrolled" should {
+    "respond with a bad request even if no back link is found in storage as it is checked on show instead" in {
+      // submit with no data
+      val formInput = Seq("hasCommercialSale" -> Constants.StandardRadioButtonYesValue,
+        "commercialSaleDay" -> "",
+        "commercialSaleMonth" -> "",
+        "commercialSaleYear" -> "")
+      setupSubmitMocks(None)
+      mockEnrolledRequest(eisSchemeTypesModel)
+      submitWithSessionAndAuth(TestController.submit, formInput: _*)(
+        result => {
+          status(result) shouldBe BAD_REQUEST
         }
       )
     }
   }
 
   "Sending a valid Yes form submission to the CommercialSaleController when authenticated and enrolled" should {
-    "redirect to the subsidiaries page if the KI date condition is not met" in {
+    "redirect to the date of share issue page" in {
       val formInput = Seq(
         "hasCommercialSale" -> Constants.StandardRadioButtonYesValue,
         "commercialSaleDay" -> "23",
         "commercialSaleMonth" -> "11",
         "commercialSaleYear" -> "1993")
-      setupSubmitMocks(Some(kiProcessingModelNotMet), Some(dateOfIncorporationModel))
+      setupSubmitMocks(Some(testBackUrl))
       mockEnrolledRequest(eisSchemeTypesModel)
-      submitWithSessionAndAuth(TestController.submit,formInput:_*)(
+      submitWithSessionAndAuth(TestController.submit, formInput: _*)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(routes.SubsidiariesController.show().url)
-        }
-      )
-    }
-  }
-
-  "Sending a valid No form submission with a empty KI Model to the CommercialSaleController when authenticated and enrolled" should {
-    "redirect to the date of incorporation page" in {
-      val formInput = Seq(
-        "hasCommercialSale" -> Constants.StandardRadioButtonYesValue,
-        "commercialSaleDay" -> "23",
-        "commercialSaleMonth" -> "11",
-        "commercialSaleYear" -> "1993")
-      setupSubmitMocks(dateOfIncorporationModel = Some(dateOfIncorporationModel))
-      mockEnrolledRequest(eisSchemeTypesModel)
-      submitWithSessionAndAuth(TestController.submit,formInput:_*)(
-        result => {
-          status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(routes.DateOfIncorporationController.show().url)
+          redirectLocation(result) shouldBe Some(routes.ShareIssueDateController.show().url)
         }
       )
     }
   }
 
   "Sending a valid No form submission to the CommercialSaleController when authenticated and enrolled" should {
-    "redirect to the KI page if the KI date condition is met" in {
+    "redirect to the date of share issue page" in {
       val formInput = Seq(
         "hasCommercialSale" -> Constants.StandardRadioButtonNoValue,
         "commercialSaleDay" -> "",
         "commercialSaleMonth" -> "",
         "commercialSaleYear" -> "")
-      setupSubmitMocks(Some(kiProcessingModelMet), Some(dateOfIncorporationModel))
+      setupSubmitMocks(Some(testBackUrl))
       mockEnrolledRequest(eisSchemeTypesModel)
-      submitWithSessionAndAuth(TestController.submit,formInput:_*)(
+      submitWithSessionAndAuth(TestController.submit, formInput: _*)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(routes.IsKnowledgeIntensiveController.show().url)
-        }
-      )
-    }
-  }
-
-  "Sending a valid No form submission with a Ki Model which has missing data to the CommercialSaleController when authenticated and enrolled" should {
-    "redirect to the date of incorporation page" in {
-      val formInput = Seq(
-        "hasCommercialSale" -> Constants.StandardRadioButtonNoValue,
-        "commercialSaleDay" -> "",
-        "commercialSaleMonth" -> "",
-        "commercialSaleYear" -> "")
-      setupSubmitMocks(dateOfIncorporationModel = Some(dateOfIncorporationModel))
-      mockEnrolledRequest(eisSchemeTypesModel)
-      submitWithSessionAndAuth(TestController.submit,formInput:_*)(
-        result => {
-          status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(routes.DateOfIncorporationController.show().url)
-        }
-      )
-    }
-  }
-
-  "Sending a valid No form submission to the CommercialSaleController when authenticated and enrolled" should {
-    "redirect to the subsidiaries page if the KI date condition is not met" in {
-      val formInput = Seq(
-        "hasCommercialSale" -> Constants.StandardRadioButtonNoValue,
-        "commercialSaleDay" -> "",
-        "commercialSaleMonth" -> "",
-        "commercialSaleYear" -> "")
-      setupSubmitMocks(Some(kiProcessingModelNotMet), Some(dateOfIncorporationModel))
-      mockEnrolledRequest(eisSchemeTypesModel)
-      submitWithSessionAndAuth(TestController.submit,formInput:_*)(
-        result => {
-          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(routes.ShareIssueDateController.show().url)
         }
       )
     }

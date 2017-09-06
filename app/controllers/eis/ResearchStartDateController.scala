@@ -61,32 +61,27 @@ trait ResearchStartDateController extends FrontendController with AuthorisedAndE
       validFormData => {
         s4lConnector.saveFormData(KeystoreKeys.researchStartDate, validFormData)
         validFormData.hasStartedResearch match {
-          case Constants.StandardRadioButtonYesValue => {
+          case Constants.StandardRadioButtonYesValue =>
             submissionConnector.validateHasInvestmentTradeStartedCondition(validFormData.researchStartDay.get,
               validFormData.researchStartMonth.get, validFormData.researchStartYear.get).map {
               case Some(validated) =>
                 if (validated) {
-                  s4lConnector.saveFormData(KeystoreKeys.backLinkShareIssueDate,
-                    routes.ResearchStartDateController.show().url)
+                  s4lConnector.saveFormData(KeystoreKeys.backLinkCommercialSale, routes.ResearchStartDateController.show().url)
 
                   Redirect(routes.CommercialSaleController.show())
                 }
                 else {
-                  s4lConnector.saveFormData(KeystoreKeys.backLinkSeventyPercentSpent, routes.ResearchStartDateController.show().url)
                   //TODO Should route to Research start date error page once completed, if less than 4 months
                   Redirect(routes.ResearchStartDateController.show())
                 }
-              case _ => {
+              case _ =>
                 Logger.warn(s"[ResearchStartDateController][submit] - Call to validate investment trade start date in backend failed")
                 InternalServerError(internalServerErrorTemplate)
-              }
             }.recover {
-              case e: Exception => {
+              case e: Exception =>
                 Logger.warn(s"[ResearchStartDateController][submit] - Exception: ${e.getMessage}")
                 InternalServerError(internalServerErrorTemplate)
-              }
             }
-          }
           //TODO Should route to Research start date error page once completed, if no button selected
           case Constants.StandardRadioButtonNoValue => {
             s4lConnector.saveFormData(KeystoreKeys.backLinkSeventyPercentSpent, routes.ResearchStartDateController.show().url)

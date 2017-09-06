@@ -111,7 +111,7 @@ class ResearchStartDateSpec extends ViewSpec with OneAppPerSuite{
       }
 
       "have an error summary" in {
-        document.getElementById("error-summary-display").hasClass("error-summary--show")
+        document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe true
       }
 
       "have the correct title" in {

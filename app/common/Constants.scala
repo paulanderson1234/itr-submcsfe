@@ -102,4 +102,6 @@ trait Constants {
   val NumberOfSharesPurchasedController = "NumberOfSharesPurchasedController"
   val HowMuchSpentOnSharesController = "HowMuchSpentOnSharesController"
   val IsExistingShareHolderController = "IsExistingShareHolderController"
+
+  val textAreaTwentyOne = "this is more than 20 words to see if that amount is suggested but not enforced when populating Description Text Area"
 }

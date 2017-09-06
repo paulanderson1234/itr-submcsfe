@@ -192,7 +192,7 @@ trait PreviousInvestorShareHoldersHelper extends ControllerHelpers {
                   investorProcessingId = investorDetailsModel.processingId)))))))
         }
         else throw new InternalServerException("No valid Investor information passed")
-        
+
       case None => throw new InternalServerException("No valid Investor information passed")
     }
 

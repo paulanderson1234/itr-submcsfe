@@ -39,6 +39,7 @@ class ReviewPreviousSchemesSpec extends ViewSpec {
     override lazy val authConnector = MockAuthConnector
     override lazy val s4lConnector = mockS4lConnector
     override lazy val enrolmentConnector = mockEnrolmentConnector
+    override lazy val submissionConnector = mockSubmissionConnector
   }
 
   def setupMocks(previousSchemeVectorList: Option[Vector[PreviousSchemeModel]] = None, backLink: Option[String] = None): Unit = {
@@ -63,7 +64,7 @@ class ReviewPreviousSchemesSpec extends ViewSpec {
 
       document.title shouldBe Messages("page.previousInvestment.reviewPreviousSchemes.title")
       document.getElementById("main-heading").text() shouldBe Messages("page.previousInvestment.reviewPreviousSchemes.heading")
-      document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.PreviousSchemeController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.HadPreviousRFIController.show().url
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.two")
 
       lazy val reviewSchemesTableHead = document.getElementById("previous-schemes-table").select("thead")

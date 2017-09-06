@@ -35,6 +35,8 @@ import scala.concurrent.Future
 class CommercialSaleSpec extends ViewSpec {
 
   val commercialSaleModelInvalidYes = new CommercialSaleModel(Constants.StandardRadioButtonYesValue, None, Some(25), Some(2015))
+  val testUrl = "/test/testing"
+  val testUrlAnother = "/test/testing/another"
 
   object TestController extends CommercialSaleController {
     override lazy val applicationConfig = MockConfigEISFlow
@@ -43,15 +45,18 @@ class CommercialSaleSpec extends ViewSpec {
     override lazy val enrolmentConnector = mockEnrolmentConnector
   }
 
-  def setupMocks(commercialSaleModel: Option[CommercialSaleModel] = None): Unit =
-    when(mockS4lConnector.fetchAndGetFormData[CommercialSaleModel](Matchers.eq(KeystoreKeys.commercialSale))(Matchers.any(), Matchers.any(),Matchers.any()))
+  def setupMocks(commercialSaleModel: Option[CommercialSaleModel] = None, backUrl: Option[String]): Unit = {
+    when(mockS4lConnector.fetchAndGetFormData[CommercialSaleModel](Matchers.eq(KeystoreKeys.commercialSale))(Matchers.any(), Matchers.any(), Matchers.any()))
       .thenReturn(Future.successful(commercialSaleModel))
+    when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.backLinkCommercialSale))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(backUrl))
+  }
 
   "The Contact Details page" should {
 
     "Verify that the commercial sale page contains the correct elements when a valid 'Yes' CommercialSaleModel is passed" in new Setup {
       val document: Document = {
-        setupMocks(Some(commercialSaleModelYes))
+        setupMocks(Some(commercialSaleModelYes), Some(testUrl))
         val result = TestController.show.apply(authorisedFakeRequest)
         Jsoup.parse(contentAsString(result))
       }
@@ -59,11 +64,11 @@ class CommercialSaleSpec extends ViewSpec {
       document.getElementById("main-heading").text() shouldBe Messages("page.companyDetails.CommercialSale.heading")
       document.getElementById("form-hint-id").text() shouldBe Messages("common.date.hint.example")
       document.getElementById("question-text-id").text() shouldBe Messages("page.companyDetails.CommercialSale.question.hint")
-      document.getElementById("question-text-id").hasClass("h2-heading")
-      document.getElementById("question-date-text-legend-id").hasClass("visuallyhidden")
+      document.getElementById("question-text-id").hasClass("h2-heading") shouldBe true
+      document.body.getElementById("question-date-text-legend-id").text shouldBe Messages("page.companyDetails.CommercialSale.question.hint")
       document.getElementById("hasCommercialSale-yesLabel").text() shouldBe Messages("common.radioYesLabel")
       document.getElementById("hasCommercialSale-noLabel").text() shouldBe Messages("common.radioNoLabel")
-      document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.DateOfIncorporationController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual testUrl
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.one")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
     }
@@ -71,7 +76,7 @@ class CommercialSaleSpec extends ViewSpec {
 
     "Verify that the commercial sale page contains the correct elements when a valid 'No' CommercialSaleModel is passed" in new Setup {
       val document: Document = {
-        setupMocks(Some(commercialSaleModelNo))
+        setupMocks(Some(commercialSaleModelNo), Some(testUrlAnother))
         val result = TestController.show.apply(authorisedFakeRequest)
         Jsoup.parse(contentAsString(result))
       }
@@ -79,18 +84,18 @@ class CommercialSaleSpec extends ViewSpec {
       document.getElementById("main-heading").text() shouldBe Messages("page.companyDetails.CommercialSale.heading")
       document.getElementById("form-hint-id").text() shouldBe Messages("common.date.hint.example")
       document.getElementById("question-text-id").text() shouldBe Messages("page.companyDetails.CommercialSale.question.hint")
-      document.getElementById("question-text-id").hasClass("h2-heading")
-      document.getElementById("question-date-text-legend-id").hasClass("visuallyhidden")
+      document.getElementById("question-text-id").hasClass("h2-heading")  shouldBe true
+      document.body.getElementById("question-date-text-legend-id").text shouldBe Messages("page.companyDetails.CommercialSale.question.hint")
       document.getElementById("hasCommercialSale-yesLabel").text() shouldBe Messages("common.radioYesLabel")
       document.getElementById("hasCommercialSale-noLabel").text() shouldBe Messages("common.radioNoLabel")
-      document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.DateOfIncorporationController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual testUrlAnother
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.one")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
     }
 
     "Verify that the commercial sale page contains the correct elements when an invalid CommercialSaleModel is passed" in new Setup {
       val document: Document = {
-        setupMocks()
+        setupMocks(None,  Some(testUrl))
         val result = TestController.submit.apply(authorisedFakeRequest)
         Jsoup.parse(contentAsString(result))
       }
@@ -98,19 +103,19 @@ class CommercialSaleSpec extends ViewSpec {
       document.getElementById("main-heading").text() shouldBe Messages("page.companyDetails.CommercialSale.heading")
       document.getElementById("form-hint-id").text() shouldBe Messages("common.date.hint.example")
       document.getElementById("question-text-id").text() shouldBe Messages("page.companyDetails.CommercialSale.question.hint")
-      document.getElementById("question-text-id").hasClass("h2-heading")
-      document.getElementById("question-date-text-legend-id").hasClass("visuallyhidden")
+      document.getElementById("question-text-id").hasClass("h2-heading") shouldBe true
+      document.body.getElementById("question-date-text-legend-id").text shouldBe Messages("page.companyDetails.CommercialSale.question.hint")
       document.getElementById("hasCommercialSale-yesLabel").text() shouldBe Messages("common.radioYesLabel")
       document.getElementById("hasCommercialSale-noLabel").text() shouldBe Messages("common.radioNoLabel")
-      document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.DateOfIncorporationController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual testUrl
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.one")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
-      document.getElementById("error-summary-display").hasClass("error-summary--show")
+      document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe true
     }
 
     "Verify that the commercial sale page contains the correct elements when an invalid CommercialSaleYesModel is passed" in new Setup {
       val document: Document = {
-        setupMocks(Some(commercialSaleModelInvalidYes))
+        setupMocks(Some(commercialSaleModelInvalidYes), Some(testUrl))
         val result = TestController.submit.apply(authorisedFakeRequest)
         Jsoup.parse(contentAsString(result))
       }
@@ -118,14 +123,14 @@ class CommercialSaleSpec extends ViewSpec {
       document.getElementById("main-heading").text() shouldBe Messages("page.companyDetails.CommercialSale.heading")
       document.getElementById("form-hint-id").text() shouldBe Messages("common.date.hint.example")
       document.getElementById("question-text-id").text() shouldBe Messages("page.companyDetails.CommercialSale.question.hint")
-      document.getElementById("question-text-id").hasClass("h2-heading")
-      document.getElementById("question-date-text-legend-id").hasClass("visuallyhidden")
+      document.getElementById("question-text-id").hasClass("h2-heading") shouldBe true
+      document.body.getElementById("question-date-text-legend-id").text shouldBe Messages("page.companyDetails.CommercialSale.question.hint")
       document.getElementById("hasCommercialSale-yesLabel").text() shouldBe Messages("common.radioYesLabel")
       document.getElementById("hasCommercialSale-noLabel").text() shouldBe Messages("common.radioNoLabel")
-      document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.DateOfIncorporationController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual testUrl
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.one")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
-      document.getElementById("error-summary-display").hasClass("error-summary--show")
+      document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe true
     }
 
   }
