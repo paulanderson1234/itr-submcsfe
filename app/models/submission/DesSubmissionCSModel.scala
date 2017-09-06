@@ -539,7 +539,7 @@ object DesSubmissionCSModel {
 
   private def readPreviousRFICostModel(answerModel: ComplianceStatementAnswersModel) : Option[DesRFICostsModel] = {
     if (answerModel.previousSchemesAnswersModel.previousSchemeModel.isDefined
-      && answerModel.previousSchemesAnswersModel.previousSchemeModel.nonEmpty)
+      && answerModel.previousSchemesAnswersModel.previousSchemeModel.get.nonEmpty)
       Some(DesRFICostsModel(None, readPreviousRFI(answerModel.previousSchemesAnswersModel)))
     else
       None
