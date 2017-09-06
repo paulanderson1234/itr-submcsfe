@@ -32,9 +32,6 @@ import views.helpers.ViewSpec
 
 import scala.concurrent.Future
 
-/**
-  * Created by rob on 23/06/17.
-  */
 class HasInvestmentTradeStartedSpec extends ViewSpec {
 
   object TestController extends HasInvestmentTradeStartedController {
