@@ -18,7 +18,7 @@ package models
 
 import common.Constants
 import connectors.SubmissionConnector
-import models.seis.ShareDetailsAnswersModel
+import models.submission.ShareDetailsAnswersModel
 import org.mockito.Matchers
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
