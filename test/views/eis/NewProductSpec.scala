@@ -62,6 +62,7 @@ class NewProductSpec extends ViewSpec {
     document.body.getElementById("external-hint").text shouldBe
       s"${Messages("page.investment.NewProduct.hint")} ${Messages("page.investment.NewProduct.hint.link")} opens in a new window"
     document.getElementById("next").text() shouldBe Messages("common.button.snc")
+    document.getElementById("isNewProduct-legend").hasClass("visuallyhidden") shouldBe true
   }
 
   "Verify that NewProduct page contains the correct elements when an empty model " +
@@ -81,6 +82,7 @@ class NewProductSpec extends ViewSpec {
     document.body.getElementById("external-hint").text shouldBe
       s"${Messages("page.investment.NewProduct.hint")} ${Messages("page.investment.NewProduct.hint.link")} opens in a new window"
     document.getElementById("next").text() shouldBe Messages("common.button.snc")
+    document.getElementById("isNewProduct-legend").hasClass("visuallyhidden") shouldBe true
   }
 
   "Verify that NewProduct page contains error summary when invalid model is submitted" in new Setup {
@@ -91,7 +93,10 @@ class NewProductSpec extends ViewSpec {
       Jsoup.parse(contentAsString(result))
     }
     // Make sure we have the expected error summary displayed
-    document.getElementById("error-summary-display").hasClass("error-summary--show")
+    document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe true
+    document.getElementById("error-summary-heading").text shouldBe Messages("common.error.summary.heading")
+    document.getElementById("isNewProduct-error-summary").text shouldBe Messages("validation.common.error.fieldRequired")
+    document.getElementsByClass("error-notification").text shouldBe Messages("validation.common.error.fieldRequired")
     document.title() shouldBe Messages("page.investment.NewProduct.title")
   }
 }

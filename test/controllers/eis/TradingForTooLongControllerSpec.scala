@@ -42,18 +42,22 @@ class TradingForTooLongControllerSpec extends BaseSpec {
   }
 
   "Sending a GET request to TradingForTooLongController when authenticated and enrolled" should {
-    "return a 200 OK Swhen something is fetched from keystore" in {
-       mockEnrolledRequest(eisSchemeTypesModel)
+    "retun an OK and load the page" in {
+      mockEnrolledRequest(eisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show)(
         result => status(result) shouldBe OK
       )
     }
+  }
 
-    "provide an empty model and return a 200 OK when nothing is fetched using keystore" in {
-   
+  "Sending a POST request to TradingForTooLongController when authenticated and enrolled" should {
+    "REDIRECT to the TurnoverCostsController" in {
       mockEnrolledRequest(eisSchemeTypesModel)
-      showWithSessionAndAuth(TestController.show)(
-        result => status(result) shouldBe OK
+      showWithSessionAndAuth(TestController.submit)(
+        result => {
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(routes.TurnoverCostsController.show().url)
+        }
       )
     }
   }
