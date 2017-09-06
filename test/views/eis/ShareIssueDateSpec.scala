@@ -44,7 +44,7 @@ class ShareIssueDateSpec extends ViewSpec {
     override lazy val enrolmentConnector = mockEnrolmentConnector
   }
 
-  def setupMocks(shareIssueDateModel: Option[ShareIssueDateModel] = None, backLink: Option[String] = None): Unit = {
+  def setupMocks(shareIssueDateModel: Option[ShareIssueDateModel] = None): Unit = {
     when(mockS4lConnector.fetchAndGetFormData[ShareIssueDateModel](Matchers.eq(KeystoreKeys.shareIssueDate))
       (Matchers.any(), Matchers.any(), Matchers.any()))
       .thenReturn(Future.successful(shareIssueDateModel))
@@ -52,8 +52,6 @@ class ShareIssueDateSpec extends ViewSpec {
     when(mockS4lConnector.saveFormData(Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
       .thenReturn(Future.successful(CacheMap("", Map())))
 
-    when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.backLinkShareIssueDate))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(backLink))
 
     when(mockS4lConnector.saveFormData(Matchers.eq(KeystoreKeys.backLinkShareIssueDate),
       Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
@@ -64,7 +62,7 @@ class ShareIssueDateSpec extends ViewSpec {
 
     "Verify that Share Issue Date page contains the correct elements when a valid ShareIssueDateModel is passed with expected url" in new Setup {
       val document: Document = {
-        setupMocks(Some(shareIssuetDateModel), Some(testUrl))
+        setupMocks(Some(shareIssuetDateModel))
         val result = TestController.show.apply(authorisedFakeRequest)
         Jsoup.parse(contentAsString(result))
       }
@@ -78,33 +76,33 @@ class ShareIssueDateSpec extends ViewSpec {
         Messages("page.companyDetails.ShareIssueDate.location")
 
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
-      document.body.getElementById("back-link").attr("href") shouldEqual testUrl
+      document.body.getElementById("back-link").attr("href") shouldEqual routes.CommercialSaleController.show().url
       document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.one")
     }
 
-    "Verify that Share Issue Date page contains the correct elements when a valid ShareIssueDateModel is passed with alternate url" in new Setup {
-      val document: Document = {
-        setupMocks(Some(shareIssuetDateModel), Some(testUrlOther))
-        val result = TestController.show.apply(authorisedFakeRequest)
-        Jsoup.parse(contentAsString(result))
-      }
-      document.title() shouldBe Messages("page.companyDetails.ShareIssueDate.title")
-      document.getElementById("main-heading").text() shouldBe Messages("page.companyDetails.ShareIssueDate.heading")
-      document.body.getElementsByClass("form-hint").text should include(Messages("common.date.hint.example"))
-      document.body.getElementById("shareIssueDay").parent.text shouldBe Messages("common.date.fields.day")
-      document.body.getElementById("shareIssueMonth").parent.text shouldBe Messages("common.date.fields.month")
-      document.body.getElementById("shareIssueYear").parent.text shouldBe Messages("common.date.fields.year")
-      document.body.getElementById("date-of-shareIssue-where-to-find").parent.text should include
-      Messages("page.companyDetails.ShareIssueDate.location")
-
-      document.getElementById("next").text() shouldBe Messages("common.button.snc")
-      document.body.getElementById("back-link").attr("href") shouldEqual testUrlOther
-      document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.one")
-    }
+//    "Verify that Share Issue Date page contains the correct elements when a valid ShareIssueDateModel is passed with alternate url" in new Setup {
+//      val document: Document = {
+//        setupMocks(Some(shareIssuetDateModel), Some(testUrlOther))
+//        val result = TestController.show.apply(authorisedFakeRequest)
+//        Jsoup.parse(contentAsString(result))
+//      }
+//      document.title() shouldBe Messages("page.companyDetails.ShareIssueDate.title")
+//      document.getElementById("main-heading").text() shouldBe Messages("page.companyDetails.ShareIssueDate.heading")
+//      document.body.getElementsByClass("form-hint").text should include(Messages("common.date.hint.example"))
+//      document.body.getElementById("shareIssueDay").parent.text shouldBe Messages("common.date.fields.day")
+//      document.body.getElementById("shareIssueMonth").parent.text shouldBe Messages("common.date.fields.month")
+//      document.body.getElementById("shareIssueYear").parent.text shouldBe Messages("common.date.fields.year")
+//      document.body.getElementById("date-of-shareIssue-where-to-find").parent.text should include
+//      Messages("page.companyDetails.ShareIssueDate.location")
+//
+//      document.getElementById("next").text() shouldBe Messages("common.button.snc")
+//      document.body.getElementById("back-link").attr("href") shouldEqual testUrlOther
+//      document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.one")
+//    }
 
     "Verify that the Share Issue Date page contains the correct elements when an invalid ShareIssueDateModel is passed" in new Setup {
       val document: Document = {
-        setupMocks(None, Some(testUrl))
+        setupMocks(None)
         val result = TestController.submit.apply(authorisedFakeRequest)
         Jsoup.parse(contentAsString(result))
       }
@@ -117,9 +115,12 @@ class ShareIssueDateSpec extends ViewSpec {
       document.body.getElementById("date-of-shareIssue-where-to-find").parent.text should include
         Messages("page.companyDetails.ShareIssueDate.location")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
-      document.body.getElementById("back-link").attr("href") shouldEqual testUrl
+      document.body.getElementById("back-link").attr("href") shouldEqual routes.CommercialSaleController.show().url
       document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.one")
       document.getElementById("error-summary-display").hasClass("error-summary--show")
+      document.getElementById("error-summary-heading").text shouldBe Messages("common.error.summary.heading")
+      document.getElementById("shareIssueDay-error-summary").text shouldBe Messages("validation.error.DateNotEntered")
+      document.getElementsByClass("error-notification").text shouldBe Messages("validation.error.DateNotEntered")
 
     }
 
