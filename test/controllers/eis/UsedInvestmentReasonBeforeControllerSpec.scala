@@ -42,7 +42,7 @@ class UsedInvestmentReasonBeforeControllerSpec extends BaseSpec {
       .thenReturn(Future.successful(usedInvestmentReasonBeforeModel))
 
   "UsedInvestmentReasonBeforeController" should {
-    "use the correct keystore connector" in {
+    "use the correct storage connector" in {
       UsedInvestmentReasonBeforeController.s4lConnector shouldBe S4LConnector
     }
     "use the correct auth connector" in {
@@ -54,7 +54,7 @@ class UsedInvestmentReasonBeforeControllerSpec extends BaseSpec {
   }
 
   "Sending a GET request to UsedInvestmentReasonBeforeController when authenticated and enrolled" should {
-    "return a OK when something is fetched from keystore" in {
+    "return a OK when something is fetched from storage" in {
       setupMocks(Some(usedInvestmentReasonBeforeModelYes))
       mockEnrolledRequest(eisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show)(
@@ -62,7 +62,7 @@ class UsedInvestmentReasonBeforeControllerSpec extends BaseSpec {
       )
     }
 
-    "provide an empty model and return an OK when nothing is fetched using keystore" in {
+    "provide an empty model and return an OK when nothing is fetched using storage" in {
       setupMocks()
       mockEnrolledRequest(eisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show)(
@@ -72,7 +72,7 @@ class UsedInvestmentReasonBeforeControllerSpec extends BaseSpec {
   }
 
   "Sending a valid 'Yes' form submit to the UsedInvestmentReasonBeforeController when authenticated and enrolled" should {
-    "redirect to the subsidiaries page" in {
+    "redirect to the expected page" in {
       mockEnrolledRequest(eisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,
         "usedInvestmentReasonBefore" -> Constants.StandardRadioButtonYesValue)(
@@ -85,7 +85,7 @@ class UsedInvestmentReasonBeforeControllerSpec extends BaseSpec {
   }
 
   "Sending a valid 'No' form submit to the UsedInvestmentReasonBeforeController when authenticated and enrolled" should {
-    "redirect the ten year plan page" in {
+    "redirect the expected page" in {
       mockEnrolledRequest(eisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,
         "usedInvestmentReasonBefore" -> Constants.StandardRadioButtonNoValue)(
@@ -98,7 +98,7 @@ class UsedInvestmentReasonBeforeControllerSpec extends BaseSpec {
   }
 
   "Sending an invalid form submission with validation errors to the UsedInvestmentReasonBeforeController" should {
-    "redirect to itself" in {
+    "respond with a bad request" in {
       mockEnrolledRequest(eisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,
         "usedInvestmentReasonBefore" -> "")(

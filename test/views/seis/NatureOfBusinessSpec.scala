@@ -51,6 +51,7 @@ class NatureOfBusinessSpec extends ViewSpec {
       document.select("input").attr("maxLength") shouldBe Constants.shortTextLimit.toString
       document.select("button").attr("type") shouldBe "submit"
       document.select("a.back-link").text() shouldBe Messages("common.button.back")
+      document.getElementsByTag("legend").select(".visuallyhidden").text() shouldBe Messages("page.companyDetails.natureofbusiness.heading")
       document.select(".error-summary").isEmpty shouldBe true
     }
 
@@ -74,6 +75,7 @@ class NatureOfBusinessSpec extends ViewSpec {
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.one")
       document.select("input").attr("maxLength") shouldBe Constants.shortTextLimit.toString
       document.select("button").attr("type") shouldBe "submit"
+      document.getElementsByTag("legend").select(".visuallyhidden").text() shouldBe Messages("page.companyDetails.natureofbusiness.heading")
       document.select("a.back-link").text() shouldBe Messages("common.button.back")
     }
 

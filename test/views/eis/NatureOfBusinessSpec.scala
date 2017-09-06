@@ -52,6 +52,7 @@ class NatureOfBusinessSpec extends ViewSpec {
       document.body.getElementById("back-link").attr("href") shouldEqual routes.ApplicationHubController.show().url
       document.select("a.back-link").text() shouldBe Messages("common.button.back")
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.one")
+      document.getElementsByTag("legend").select(".visuallyhidden").text() shouldBe Messages("page.companyDetails.natureofbusiness.heading")
       document.select(".error-summary").isEmpty shouldBe true
     }
 
@@ -75,6 +76,7 @@ class NatureOfBusinessSpec extends ViewSpec {
       document.select("button").attr("type") shouldBe "submit"
       document.body.getElementById("back-link").attr("href") shouldEqual routes.ApplicationHubController.show().url
       document.select("a.back-link").text() shouldBe Messages("common.button.back")
+      document.getElementsByTag("legend").select(".visuallyhidden").text() shouldBe Messages("page.companyDetails.natureofbusiness.heading")
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.one")
     }
 
