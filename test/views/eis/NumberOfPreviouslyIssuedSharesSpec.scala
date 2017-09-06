@@ -46,7 +46,7 @@ class NumberOfPreviouslyIssuedSharesSpec extends ViewSpec {
       "have the correct back link text" in {
         document.select("a.back-link").text() shouldBe Messages("common.button.back")
       }
-      /*TODO update back link for looping logic*/
+
       "have the correct back link url" in {
         document.select("a.back-link").attr("href") shouldBe backUrl
       }
@@ -87,7 +87,6 @@ class NumberOfPreviouslyIssuedSharesSpec extends ViewSpec {
         document.title() shouldBe Messages("page.investors.numberOfPreviouslyIssuedShares.title", "company", "TODO")
       }
 
-      /*TODO update back link for looping logic*/
       "have the correct back link url" in {
         document.select("a.back-link").attr("href") shouldBe backUrl
       }

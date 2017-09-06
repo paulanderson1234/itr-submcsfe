@@ -16,14 +16,12 @@
 
 package views.eis
 
-import controllers.eis.routes
 import forms.CompanyOrIndividualForm._
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import play.api.data.FormError
 import play.api.i18n.Messages
-import views.helpers.ViewSpec
 import play.api.i18n.Messages.Implicits._
+import views.helpers.ViewSpec
 import views.html.eis.investors.CompanyOrIndividual
 
 class CompanyOrIndividualSpec extends ViewSpec{

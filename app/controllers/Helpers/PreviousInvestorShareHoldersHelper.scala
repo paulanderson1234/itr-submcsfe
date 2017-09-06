@@ -41,7 +41,7 @@ trait PreviousInvestorShareHoldersHelper extends ControllerHelpers {
         val itemToUpdateIndex = data.indexWhere(_.processingId.getOrElse(0) == investorProcessingId)
         if (itemToUpdateIndex != -1) {
           val shareHoldings = data.lift(itemToUpdateIndex).get.previousShareHoldingModels.getOrElse(Vector.empty)
-          if(shareHoldings.size > 0) {
+          if(shareHoldings.nonEmpty) {
             data.updated(itemToUpdateIndex,
               data.lift(itemToUpdateIndex).get.copy(previousShareHoldingModels =
                 Some(shareHoldings.filter(_.processingId.getOrElse(0) != processingId))))
@@ -192,6 +192,7 @@ trait PreviousInvestorShareHoldersHelper extends ControllerHelpers {
                   investorProcessingId = investorDetailsModel.processingId)))))))
         }
         else throw new InternalServerException("No valid Investor information passed")
+        
       case None => throw new InternalServerException("No valid Investor information passed")
     }
 
@@ -263,7 +264,7 @@ trait PreviousInvestorShareHoldersHelper extends ControllerHelpers {
                                          (implicit hc: HeaderCarrier, user: TAVCUser): Future[PreviousShareHoldingModel] = {
 
     val result = s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
-      case Some(data) => {
+      case Some(data) =>
         val itemToUpdateIndex = getInvestorIndex(investorProcessingId, data)
         val investorDetailsModel = getInvestorDataModel(itemToUpdateIndex, data)
         if (investorDetailsModel.previousShareHoldingModels.isDefined
@@ -276,7 +277,6 @@ trait PreviousInvestorShareHoldersHelper extends ControllerHelpers {
                   investorProcessingId = investorDetailsModel.processingId)))))))
         }
         else throw new InternalServerException("No valid Investor information passed")
-      }
       case None => throw new InternalServerException("No valid Investor information passed")
     }
 
@@ -295,14 +295,14 @@ trait PreviousInvestorShareHoldersHelper extends ControllerHelpers {
                                             (implicit hc: HeaderCarrier, user: TAVCUser): Future[PreviousShareHoldingModel] = {
 
     val result = s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
-      case Some(data) => {
+      case Some(data) =>
         val itemToUpdateIndex = data.indexWhere(_.processingId.getOrElse(0) ==
           previousShareHoldingNominalValueModel.investorProcessingId.getOrElse(0))
         if (itemToUpdateIndex != -1) {
           updatePreviousIssuedNominalValue(data, itemToUpdateIndex, previousShareHoldingNominalValueModel)
         }
         else throw new InternalServerException("No valid Investor information passed")
-      }
+
       case None => throw new InternalServerException("No valid Investor information passed")
     }
 

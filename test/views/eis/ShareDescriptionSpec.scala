@@ -16,23 +16,13 @@
 
 package views.eis
 
-import auth.{MockAuthConnector, MockConfigEISFlow, MockConfigSingleFlow}
-import common.KeystoreKeys
-import controllers.eis.ShareDescriptionController
+import forms.ShareDescriptionForm._
 import models.ShareDescriptionModel
 import org.jsoup.Jsoup
-import org.jsoup.nodes.Document
-import org.mockito.Matchers
-import org.mockito.Mockito._
 import play.api.i18n.Messages
-import play.api.test.Helpers._
-import views.helpers.ViewSpec
 import play.api.i18n.Messages.Implicits._
-import forms.ShareDescriptionForm._
-import views.html.eis.checkAndSubmit.CheckAnswers
+import views.helpers.ViewSpec
 import views.html.eis.shareDetails.ShareDescription
-
-import scala.concurrent.Future
 
 
 class ShareDescriptionSpec extends ViewSpec {
