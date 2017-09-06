@@ -42,79 +42,84 @@ class NewGeographicalMarketSpec extends ViewSpec {
   }
 
   def setupMocks(backLink: Option[String] = None, newGeographicalMarketModel: Option[NewGeographicalMarketModel] = None): Unit = {
-    when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.backLinkNewGeoMarket))(Matchers.any(), Matchers.any(),Matchers.any()))
+    when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.backLinkNewGeoMarket))(Matchers.any(), Matchers.any(), Matchers.any()))
       .thenReturn(Future.successful(backLink))
     when(mockS4lConnector.fetchAndGetFormData[NewGeographicalMarketModel](Matchers.eq(KeystoreKeys.newGeographicalMarket))
       (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(newGeographicalMarketModel))
   }
 
-  "The NewGeographicalMarket Page" +
-    "Verify that the correct elements are loaded when navigating from WhatWillUse page" in new Setup {
-    val document: Document = {
-      setupMocks(Some(controllers.eis.routes.ProposedInvestmentController.show().url),Some(newGeographicalMarketModelYes))
-      val result = TestController.show.apply(authorisedFakeRequestToPOST("isNewGeographicalMarket" -> Constants.StandardRadioButtonYesValue))
-      Jsoup.parse(contentAsString(result))
+  "The NewGeographicalMarket Page" should {
+    "Verify that the correct elements are loaded when navigating from TotalAmountRaised page" in new Setup {
+      val document: Document = {
+        setupMocks(Some(controllers.eis.routes.TotalAmountRaisedController.show().url), Some(newGeographicalMarketModelYes))
+        val result = TestController.show.apply(authorisedFakeRequestToPOST("isNewGeographicalMarket" -> Constants.StandardRadioButtonYesValue))
+        Jsoup.parse(contentAsString(result))
+      }
+      document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.TotalAmountRaisedController.show().url
+      document.title() shouldBe Messages("page.investment.NewGeographicalMarket.title")
+      document.getElementById("main-heading").text() shouldBe Messages("page.investment.NewGeographicalMarket.heading")
+      document.select("#isNewGeographicalMarket-yes").size() shouldBe 1
+      document.select("#isNewGeographicalMarket-no").size() shouldBe 1
+      document.getElementById("isNewGeographicalMarket-yesLabel").text() shouldBe Messages("common.radioYesLabel")
+      document.getElementById("isNewGeographicalMarket-noLabel").text() shouldBe Messages("common.radioNoLabel")
+      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.three")
+      document.body.getElementById("external-hint").text shouldBe
+        s"${Messages("page.investment.NewGeographicalMarket.hint")} ${Messages("page.investment.NewGeographicalMarket.hint.link")} opens in a new window"
+      document.getElementById("next").text() shouldBe Messages("common.button.snc")
+      document.getElementById("isNewGeographicalMarket-legend").hasClass("visuallyhidden") shouldBe true
     }
-    document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.ProposedInvestmentController.show().url
-    document.title() shouldBe Messages("page.investment.NewGeographicalMarket.title")
-    document.getElementById("main-heading").text() shouldBe Messages("page.investment.NewGeographicalMarket.heading")
-    document.select("#isNewGeographicalMarket-yes").size() shouldBe 1
-    document.select("#isNewGeographicalMarket-no").size() shouldBe 1
-    document.getElementById("isNewGeographicalMarket-yesLabel").text() shouldBe Messages("common.radioYesLabel")
-    document.getElementById("isNewGeographicalMarket-noLabel").text() shouldBe Messages("common.radioNoLabel")
-    document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.three")
-    document.body.getElementById("external-hint").text shouldBe
-      s"${Messages("page.investment.NewGeographicalMarket.hint")} ${Messages("page.investment.NewGeographicalMarket.hint.link")} opens in a new window"
-    document.getElementById("next").text() shouldBe Messages("common.button.snc")
-  }
 
-  "The NewGeographicalMarket Page" +
     "Verify that the correct elements are loaded when navigating from UsedInvestmentReasonBefore page" in new Setup {
-    val document: Document = {
-      setupMocks(Some(controllers.eis.routes.UsedInvestmentReasonBeforeController.show().url),Some(newGeographicalMarketModelYes))
-      val result = TestController.show.apply(authorisedFakeRequest)
-      Jsoup.parse(contentAsString(result))
+      val document: Document = {
+        setupMocks(Some(controllers.eis.routes.UsedInvestmentReasonBeforeController.show().url), Some(newGeographicalMarketModelYes))
+        val result = TestController.show.apply(authorisedFakeRequest)
+        Jsoup.parse(contentAsString(result))
+      }
+      document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.UsedInvestmentReasonBeforeController.show().url
+      document.title() shouldBe Messages("page.investment.NewGeographicalMarket.title")
+      document.getElementById("main-heading").text() shouldBe Messages("page.investment.NewGeographicalMarket.heading")
+      document.select("#isNewGeographicalMarket-yes").size() shouldBe 1
+      document.select("#isNewGeographicalMarket-no").size() shouldBe 1
+      document.getElementById("isNewGeographicalMarket-yesLabel").text() shouldBe Messages("common.radioYesLabel")
+      document.getElementById("isNewGeographicalMarket-noLabel").text() shouldBe Messages("common.radioNoLabel")
+      document.body.getElementById("external-hint").text shouldBe
+        s"${Messages("page.investment.NewGeographicalMarket.hint")} ${Messages("page.investment.NewGeographicalMarket.hint.link")} opens in a new window"
+      document.getElementById("next").text() shouldBe Messages("common.button.snc")
+      document.getElementById("isNewGeographicalMarket-legend").hasClass("visuallyhidden") shouldBe true
     }
-    document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.UsedInvestmentReasonBeforeController.show().url
-    document.title() shouldBe Messages("page.investment.NewGeographicalMarket.title")
-    document.getElementById("main-heading").text() shouldBe Messages("page.investment.NewGeographicalMarket.heading")
-    document.select("#isNewGeographicalMarket-yes").size() shouldBe 1
-    document.select("#isNewGeographicalMarket-no").size() shouldBe 1
-    document.getElementById("isNewGeographicalMarket-yesLabel").text() shouldBe Messages("common.radioYesLabel")
-    document.getElementById("isNewGeographicalMarket-noLabel").text() shouldBe Messages("common.radioNoLabel")
-    document.body.getElementById("external-hint").text shouldBe
-      s"${Messages("page.investment.NewGeographicalMarket.hint")} ${Messages("page.investment.NewGeographicalMarket.hint.link")} opens in a new window"
-    document.getElementById("next").text() shouldBe Messages("common.button.snc")
-  }
 
-  "The NewGeographicalMarket Page" +
     "Verify that the correct elements are loaded when navigating from PreviousBeforeDOFCS page" in new Setup {
-    val document: Document = {
-      setupMocks(Some(controllers.eis.routes.PreviousBeforeDOFCSController.show().url),Some(newGeographicalMarketModelYes))
-      val result = TestController.show.apply(authorisedFakeRequest)
-      Jsoup.parse(contentAsString(result))
+      val document: Document = {
+        setupMocks(Some(controllers.eis.routes.PreviousBeforeDOFCSController.show().url), Some(newGeographicalMarketModelYes))
+        val result = TestController.show.apply(authorisedFakeRequest)
+        Jsoup.parse(contentAsString(result))
+      }
+      document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.PreviousBeforeDOFCSController.show().url
+      document.title() shouldBe Messages("page.investment.NewGeographicalMarket.title")
+      document.getElementById("main-heading").text() shouldBe Messages("page.investment.NewGeographicalMarket.heading")
+      document.select("#isNewGeographicalMarket-yes").size() shouldBe 1
+      document.select("#isNewGeographicalMarket-no").size() shouldBe 1
+      document.getElementById("isNewGeographicalMarket-yesLabel").text() shouldBe Messages("common.radioYesLabel")
+      document.getElementById("isNewGeographicalMarket-noLabel").text() shouldBe Messages("common.radioNoLabel")
+      document.body.getElementById("external-hint").text shouldBe
+        s"${Messages("page.investment.NewGeographicalMarket.hint")} ${Messages("page.investment.NewGeographicalMarket.hint.link")} opens in a new window"
+      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.three")
+      document.getElementById("next").text() shouldBe Messages("common.button.snc")
+      document.getElementById("isNewGeographicalMarket-legend").hasClass("visuallyhidden") shouldBe true
     }
-    document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.PreviousBeforeDOFCSController.show().url
-    document.title() shouldBe Messages("page.investment.NewGeographicalMarket.title")
-    document.getElementById("main-heading").text() shouldBe Messages("page.investment.NewGeographicalMarket.heading")
-    document.select("#isNewGeographicalMarket-yes").size() shouldBe 1
-    document.select("#isNewGeographicalMarket-no").size() shouldBe 1
-    document.getElementById("isNewGeographicalMarket-yesLabel").text() shouldBe Messages("common.radioYesLabel")
-    document.getElementById("isNewGeographicalMarket-noLabel").text() shouldBe Messages("common.radioNoLabel")
-    document.body.getElementById("external-hint").text shouldBe
-      s"${Messages("page.investment.NewGeographicalMarket.hint")} ${Messages("page.investment.NewGeographicalMarket.hint.link")} opens in a new window"
-    document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.three")
-    document.getElementById("next").text() shouldBe Messages("common.button.snc")
-  }
 
-  "Verify that NewGeographicalMarket page contains error summary when no model is submitted" in new Setup {
-    val document : Document = {
-      setupMocks(Some(controllers.eis.routes.UsedInvestmentReasonBeforeController.show().url))
-      val result = TestController.submit.apply(authorisedFakeRequest)
-      Jsoup.parse(contentAsString(result))
+    "Verify that NewGeographicalMarket page contains error summary when no model is submitted" in new Setup {
+      val document: Document = {
+        setupMocks(Some(controllers.eis.routes.UsedInvestmentReasonBeforeController.show().url))
+        val result = TestController.submit.apply(authorisedFakeRequest)
+        Jsoup.parse(contentAsString(result))
+      }
+      // Make sure we have the expected error summary displayed
+      document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe true
+      document.getElementById("error-summary-heading").text shouldBe Messages("common.error.summary.heading")
+      document.getElementById("isNewGeographicalMarket-error-summary").text shouldBe Messages("validation.common.error.fieldRequired")
+      document.getElementsByClass("error-notification").text shouldBe Messages("validation.common.error.fieldRequired")
+      document.title() shouldBe Messages("page.investment.NewGeographicalMarket.title")
     }
-    // Make sure we have the expected error summary displayed
-    document.getElementById("error-summary-display").hasClass("error-summary--show")
-    document.title() shouldBe Messages("page.investment.NewGeographicalMarket.title")
   }
 }
