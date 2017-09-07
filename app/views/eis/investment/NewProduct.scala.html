@@ -9,7 +9,7 @@
 
 @backButtonWithProgress(controllers.eis.routes.NewGeographicalMarketController.show().toString, Messages("common.section.progress.details.three"))
 
-    @errorSummary(newProductForm, "used-investment-reason-before", "usedNewProduct")
+    @errorSummary(newProductForm, "new-product", "newProduct")
 
     <h1 class="heading-xlarge" id="main-heading">@Messages("page.investment.NewProduct.heading")</h1>
 
@@ -29,6 +29,7 @@
             Constants.StandardRadioButtonNoValue -> Messages("common.radioNoLabel")),
             '_legend -> Messages("page.investment.NewProduct.heading"),
             '_legendClass -> "visuallyhidden",
+            '_legendID -> "isNewProduct",
             '_labelAfter -> true,
             '_labelClass -> "block-label",
             '_groupClass -> "inline"

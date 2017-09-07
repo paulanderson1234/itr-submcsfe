@@ -50,7 +50,6 @@ class PreviousShareHoldingNominalValueSpec extends ViewSpec {
 
       "have the correct back link url" in {
         document.select("a.back-link").attr("href") shouldBe backUrl
-        //TODO change route to Previous Shareholdings Share Description page
       }
 
       "have the progress details" in {
@@ -100,7 +99,6 @@ class PreviousShareHoldingNominalValueSpec extends ViewSpec {
 
       "have the correct back link url" in {
         document.select("a.back-link").attr("href") shouldBe backUrl
-        //TODO change route to Previous Shareholdings Share Description page
       }
 
       "have the progress details" in {

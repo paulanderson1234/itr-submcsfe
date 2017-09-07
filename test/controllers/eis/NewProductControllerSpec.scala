@@ -72,7 +72,7 @@ class NewProductControllerSpec extends BaseSpec {
       (Matchers.any(), Matchers.any(),Matchers.any())).thenReturn(Future.successful(newProductModel))
 
   "Sending a GET request to NewProductController when authenticated and enrolled" should {
-    "return a 200 when something is fetched from keystore" in {
+    "return a OK when something is fetched from keystore" in {
       setupMocks(Some(newProductMarketModelYes))
       mockEnrolledRequest(eisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show)(
@@ -80,7 +80,7 @@ class NewProductControllerSpec extends BaseSpec {
       )
     }
 
-    "provide an empty model and return a 200 when nothing is fetched using keystore when authenticated and enrolled" in {
+    "provide an empty model and return a OK when nothing is fetched using keystore when authenticated and enrolled" in {
       setupMocks()
       mockEnrolledRequest(eisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show)(
@@ -113,7 +113,7 @@ class NewProductControllerSpec extends BaseSpec {
   "Sending a valid 'No' form submit to the NewProductController" when {
     "NewGeograhic is 'No' and the request is authenticated and enrolled" should {
 
-      "redirect to the annual turnover page" in {
+      "redirect to the error page (TradingForTooLong)" in {
         mockEnrolledRequest(eisSchemeTypesModel)
         setupSubmitMocksFalse()
         val formInput = "isNewProduct" -> Constants.StandardRadioButtonNoValue
@@ -130,7 +130,7 @@ class NewProductControllerSpec extends BaseSpec {
   "Sending a valid form submit to the NewProductController" when {
     "NewGeograhic is empty and the request is authenticated and enrolled" should {
 
-      "output an INTERNAL_SERVER_ERROR" in {
+      "throw an INTERNAL_SERVER_ERROR" in {
         mockEnrolledRequest(eisSchemeTypesModel)
         when(mockS4lConnector.fetchAndGetFormData[NewGeographicalMarketModel](Matchers.eq(KeystoreKeys.newGeographicalMarket))
           (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
@@ -147,7 +147,7 @@ class NewProductControllerSpec extends BaseSpec {
   "Sending a valid form submit to the NewProductController" when {
     "the API response is empty and the request is authenticated and enrolled" should {
 
-      "output an INTERNAL_SERVER_ERROR" in {
+      "throw an INTERNAL_SERVER_ERROR" in {
         mockEnrolledRequest(eisSchemeTypesModel)
         when(mockS4lConnector.fetchAndGetFormData[NewGeographicalMarketModel](Matchers.eq(KeystoreKeys.newGeographicalMarket))
           (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(newGeographicMarketNo)))

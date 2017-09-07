@@ -39,6 +39,8 @@ common.notAvailableAcronym=N/A
 common.address.postcode=Postcode
 common.address.findUKAddress=Find UK address
 common.back.dashboard=Dashboard
+common.changeAnswers.text=If this information is incorrect you can
+common.changeAnswers.link=change your answers
 
 ## Common date Messages ##
 common.date.fields.day=Day
@@ -420,6 +422,7 @@ page.investment.NewProduct.title=Will you use this investment to enter a new pro
 page.investment.NewProduct.heading=Will you use this investment to enter a new product market?
 page.investment.NewProduct.hint=Read more about
 page.investment.NewProduct.hint.link=new product markets
+page.investment.NewProduct.legend=Will you use this investment to enter a new product market?
 
 #New Geographical market page
 page.investment.NewGeographicalMarket.title=Will you use this investment to launch one of your products somewhere new?
@@ -883,8 +886,6 @@ page.eisseis.previousInvestment.InvalidPreviousScheme.next.heading=What happens 
 page.eisseis.previousInvestment.InvalidPreviousScheme.next.text=You can continue with your application for:
 page.eisseis.previousInvestment.InvalidPreviousScheme.next.eis=the Enterprise Investment Scheme
 page.eisseis.previousInvestment.InvalidPreviousScheme.next.vct=the Venture Capital Trust scheme
-page.eisseis.previousInvestment.InvalidPreviousScheme.change-text=If this information is incorrect you can
-page.eisseis.previousInvestment.InvalidPreviousScheme.change-link=change your answers
 
 # EIS SEIS lifetime allowance exceeded page
 page.eisseis.investment.LifetimeAllowanceExceeded.title=You don''t qualify for any of the schemes

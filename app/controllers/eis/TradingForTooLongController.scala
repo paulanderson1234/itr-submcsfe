@@ -41,4 +41,8 @@ trait TradingForTooLongController extends FrontendController with AuthorisedAndE
   val show = AuthorisedAndEnrolled.async { implicit user => implicit request =>
     Future.successful(Ok(TradingForTooLong()))
   }
+
+  val submit = AuthorisedAndEnrolled.async { implicit user => implicit request =>
+    Future.successful(Redirect(routes.TurnoverCostsController.show()))
+  }
 }
