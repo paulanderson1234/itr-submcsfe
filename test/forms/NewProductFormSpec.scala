@@ -46,9 +46,9 @@ class NewProductFormSpec extends UnitSpec with OneAppPerSuite{
   val newProductJson = """{"isNewProduct":"Yes"}"""
   val newProductModel = NewProductModel("Yes")
 
-  "TheNew Product Before Form" should {
+  "The NewProductMarket Form" should {
     "Return an error if no radio button is selected" in {
-      val request = FakeRequest("GET", "/").withFormUrlEncodedBody(
+      val request = FakeRequest("POST", "/").withFormUrlEncodedBody(
         "isNewProduct" -> ""
       )
       bindWithError(request) match {
@@ -64,7 +64,7 @@ class NewProductFormSpec extends UnitSpec with OneAppPerSuite{
     }
   }
 
-  "TheNew Product Before Form" should {
+  "The NewProductMarket Form" should {
     "not return an error if the 'Yes' option is selected" in {
       val request = FakeRequest("GET", "/").withFormUrlEncodedBody(
         "isNewProduct" -> "Yes"
@@ -78,7 +78,7 @@ class NewProductFormSpec extends UnitSpec with OneAppPerSuite{
     }
   }
 
-  "TheNew Product Before Form" should {
+  "The NewProductMarket Form" should {
     "not return an error if the 'No' option is selected" in {
       val request = FakeRequest("GET", "/").withFormUrlEncodedBody(
         "isNewProduct" -> Constants.StandardRadioButtonNoValue
@@ -93,7 +93,7 @@ class NewProductFormSpec extends UnitSpec with OneAppPerSuite{
   }
 
   // model to json
-  "TheNew Product Before Form model" should {
+  "The NewProductMarket Form model" should {
     "load convert to JSON successfully" in {
 
       implicit val formats = Json.format[NewProductModel]
@@ -105,7 +105,7 @@ class NewProductFormSpec extends UnitSpec with OneAppPerSuite{
   }
 
   // form model to json - apply
-  "TheNew Product Before Form model" should {
+  "The NewProductMarket Form model" should {
     "call apply correctly on the model" in {
       implicit val formats = Json.format[NewProductModel]
       val newProductForm = NewProductForm.newProductForm.fill(newProductModel)

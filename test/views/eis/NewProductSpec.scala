@@ -62,6 +62,7 @@ class NewProductSpec extends ViewSpec {
     document.body.getElementById("external-hint").text shouldBe
       s"${Messages("page.investment.NewProduct.hint")} ${Messages("page.investment.NewProduct.hint.link")} opens in a new window"
     document.getElementById("next").text() shouldBe Messages("common.button.snc")
+    document.getElementById("isNewProduct-legend").hasClass("visuallyhidden") shouldBe true
     document.getElementById("isNewProduct").select(".visuallyhidden").text() shouldBe Messages("page.investment.NewProduct.heading")
     document.select(".error-summary").isEmpty shouldBe true
   }
@@ -83,6 +84,7 @@ class NewProductSpec extends ViewSpec {
     document.body.getElementById("external-hint").text shouldBe
       s"${Messages("page.investment.NewProduct.hint")} ${Messages("page.investment.NewProduct.hint.link")} opens in a new window"
     document.getElementById("next").text() shouldBe Messages("common.button.snc")
+    document.getElementById("isNewProduct-legend").hasClass("visuallyhidden") shouldBe true
     document.getElementById("isNewProduct").select(".visuallyhidden").text() shouldBe Messages("page.investment.NewProduct.heading")
     document.select(".error-summary").isEmpty shouldBe true
   }
@@ -96,6 +98,9 @@ class NewProductSpec extends ViewSpec {
     }
     // Make sure we have the expected error summary displayed
     document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe true
+    document.getElementById("error-summary-heading").text shouldBe Messages("common.error.summary.heading")
+    document.getElementById("isNewProduct-error-summary").text shouldBe Messages("validation.common.error.fieldRequired")
+    document.getElementsByClass("error-notification").text shouldBe Messages("validation.common.error.fieldRequired")
     document.title() shouldBe Messages("page.investment.NewProduct.title")
   }
 }

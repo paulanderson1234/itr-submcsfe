@@ -68,12 +68,12 @@ class InvalidPreviousSchemeSpec extends ViewSpec with FakeRequestHelper {
       lazy val changeLink = document.select("article div p").get(2)
 
       "has the correct sentence" in {
-        changeLink.text() shouldBe Messages("page.previousInvestment.InvalidPreviousScheme.change-text") +
-          " " + Messages("page.previousInvestment.InvalidPreviousScheme.change-link") + "."
+        changeLink.text() shouldBe Messages("common.changeAnswers.text") +
+          " " + Messages("common.changeAnswers.link") + "."
       }
 
       "contains the correct link text" in {
-        changeLink.select("a").text() shouldBe Messages("page.previousInvestment.InvalidPreviousScheme.change-link")
+        changeLink.select("a").text() shouldBe Messages("common.changeAnswers.link")
       }
 
       "contains a link to the review-previous-schemes-change page" in {

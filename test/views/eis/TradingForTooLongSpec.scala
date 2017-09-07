@@ -19,6 +19,7 @@ package views.eis
 import auth.{MockConfigEISFlow, MockAuthConnector}
 import config.FrontendAppConfig
 import controllers.eis.TradingForTooLongController
+import controllers.seis.routes
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.i18n.Messages
@@ -36,8 +37,7 @@ class TradingForTooLongSpec extends ViewSpec {
   }
 
   "The Trading for too long error page" should {
-
-    "Verify that start page contains the correct elements" in new Setup {
+    "contain the correct elements" in new Setup {
       val document: Document = {
         val result = TestController.show.apply(authorisedFakeRequest)
         Jsoup.parse(contentAsString(result))
@@ -49,7 +49,11 @@ class TradingForTooLongSpec extends ViewSpec {
       document.body.getElementById("not-new-business").text() shouldEqual Messages("page.investment.TradingForTooLong.bullet.two")
       document.body.getElementById("link-text-one").attr("href") shouldEqual "https://www.gov.uk/hmrc-internal-manuals/venture-capital-schemes-manual/8154"
       document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.NewProductController.show().url
-
+      document.select("article div p").get(2).text() shouldBe Messages("common.changeAnswers.text") + " " + Messages("common.changeAnswers.link") + "."
+      document.select("article div p").get(2).select("a").text() shouldBe Messages("common.changeAnswers.link")
+      document.select("article div p").get(2).select("a").attr("href") shouldBe controllers.eis.routes.NewProductController.show().url
+      document.getElementById("submit").text() shouldBe Messages("common.button.continue")
+      document.select("form").attr("action") shouldBe controllers.eis.routes.TradingForTooLongController.submit().url
     }
   }
 }
