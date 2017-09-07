@@ -91,7 +91,7 @@ class HasInvestmentTradeStartedSpec extends ViewSpec {
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.one")
       document.getElementById("hasInvestmentTradeStarted").select(".visuallyhidden").text() shouldBe Messages("page.companyDetails.HasInvestmentTradeStarted.question.hint")
       document.body.getElementById("question-date-text-legend-id").text shouldBe Messages("page.companyDetails.HasInvestmentTradeStarted.question.hint")
-      document.getElementById("error-summary-display").hasClass("error-summary--show")
+      document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe true
     }
   }
 }

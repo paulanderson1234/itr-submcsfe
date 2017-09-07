@@ -1,7 +1,7 @@
 @import uk.gov.hmrc.play.views.html.helpers.form
 @import models.InvestmentGrowModel
 @import common.Constants
-@import views.html.helpers.{backButtonWithProgress, errorSummary,formTextInput, textArea}
+@import views.html.helpers.{backButtonWithProgress, errorSummary,formTextInput, textArea, externalLink}
 
 @(investmentGrowForm: Form[InvestmentGrowModel], backUrl: String, hasGeoMarket: Boolean, hasNewProduct: Boolean)(implicit request: Request[_], messages: Messages)
 
@@ -39,12 +39,20 @@
         <p id="description-three">@Messages("page.investment.InvestmentGrow.description.three")</p>
     </div>
 
+    <div class="form-group">
+        <p id = "how-to-write-business-plan">@Messages("page.investment.InvestmentGrow.businessplan.readmore")
+            @externalLink(Messages("page.investment.InvestmentGrow.businessplan.link"),
+            "https://www.gov.uk/write-business-plan",
+            Some("business-plan")).
+        </p>
+    </div>
+
     @form(action = controllers.eis.routes.InvestmentGrowController.submit()) {
 
             <div class="form-group">
             <span class = "form-hint" id="desc-one">@Messages("page.investment.InvestmentGrow.question.hint")</span>
             @textArea(
-                investmentGrowForm("investmentGrowDesc"),
+                investmentGrowForm("descriptionTextArea"),
                 '_cols -> "50",
                 '_rows -> "10",
                 '_maxLength-> Constants.SuggestedTextMaxLength,

@@ -37,7 +37,7 @@ class InvestmentGrowControllerSpec extends BaseSpec {
     override lazy val enrolmentConnector = mockEnrolmentConnector
   }
 
-  lazy val validBackLink = routes.SubsidiariesNinetyOwnedController.show().url
+  lazy val validBackLink = routes.NatureOfBusinessController.show().url
 
   def setup(investmentGrowModel: Option[InvestmentGrowModel], newGeographicalMarketModel: Option[NewGeographicalMarketModel],
                 newProductModel: Option[NewProductModel], backLink: Option[String]): Unit = {
@@ -172,7 +172,7 @@ class InvestmentGrowControllerSpec extends BaseSpec {
     "redirect to Contact Details Controller" in {
       setup(None,Some(newGeographicalMarketModelYes),Some(newProductMarketModelYes),Some(validBackLink))
       mockEnrolledRequest(eisSchemeTypesModel)
-      val formInput = "investmentGrowDesc" -> "some text so it's valid"
+      val formInput = "descriptionTextArea" -> "some text so it's valid"
       submitWithSessionAndAuth(TestController.submit,formInput)(
         result => {
           status(result) shouldBe SEE_OTHER
@@ -187,7 +187,7 @@ class InvestmentGrowControllerSpec extends BaseSpec {
     "return a SEE_OTHER" in {
       setup(None,Some(newGeographicalMarketModelYes),Some(newProductMarketModelYes),None)
       mockEnrolledRequest(eisSchemeTypesModel)
-      val formInput = "investmentGrowDesc" -> ""
+      val formInput = "descriptionTextArea" -> ""
       submitWithSessionAndAuth(TestController.submit,formInput)(
         result => {
           status(result) shouldBe SEE_OTHER
@@ -198,7 +198,7 @@ class InvestmentGrowControllerSpec extends BaseSpec {
     "redirect to WhatWillUseFor page" in {
       setup(None,Some(newGeographicalMarketModelYes),Some(newProductMarketModelYes),None)
       mockEnrolledRequest(eisSchemeTypesModel)
-      val formInput = "investmentGrowDesc" -> ""
+      val formInput = "descriptionTextArea" -> ""
       submitWithSessionAndAuth(TestController.submit,formInput)(
         result => {
           redirectLocation(result) shouldBe Some(routes.ProposedInvestmentController.show().url)
@@ -211,7 +211,7 @@ class InvestmentGrowControllerSpec extends BaseSpec {
     "redirect to itself with errors" in {
       setup(None,Some(newGeographicalMarketModelYes),Some(newProductMarketModelYes),Some(validBackLink))
       mockEnrolledRequest(eisSchemeTypesModel)
-      val formInput = "investmentGrowDesc" -> ""
+      val formInput = "descriptionTextArea" -> ""
       submitWithSessionAndAuth(TestController.submit,formInput)(
         result => {
           status(result) shouldBe BAD_REQUEST
