@@ -92,7 +92,7 @@ trait Constants {
 
   val countyCodeGB = "GB"
 
-  val notFound = -1
+  val notFound: Int = -1
   val obviouslyInvalidId = 9999999
 
   val AddInvestorOrNomineeController = "AddInvestorOrNomineeController"
@@ -104,4 +104,6 @@ trait Constants {
   val IsExistingShareHolderController = "IsExistingShareHolderController"
 
   val textAreaTwentyOne = "this is more than 20 words to see if that amount is suggested but not enforced when populating Description Text Area"
+
+
 }
