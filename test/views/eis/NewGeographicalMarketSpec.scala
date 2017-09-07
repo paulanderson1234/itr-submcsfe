@@ -67,6 +67,7 @@ class NewGeographicalMarketSpec extends ViewSpec {
         s"${Messages("page.investment.NewGeographicalMarket.hint")} ${Messages("page.investment.NewGeographicalMarket.hint.link")} opens in a new window"
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       document.getElementById("isNewGeographicalMarket-legend").hasClass("visuallyhidden") shouldBe true
+      document.getElementById("isNewGeographicalMarket-legend").text shouldBe Messages("page.investment.NewGeographicalMarket.legend")
     }
 
     "Verify that the correct elements are loaded when navigating from UsedInvestmentReasonBefore page" in new Setup {
@@ -86,6 +87,8 @@ class NewGeographicalMarketSpec extends ViewSpec {
         s"${Messages("page.investment.NewGeographicalMarket.hint")} ${Messages("page.investment.NewGeographicalMarket.hint.link")} opens in a new window"
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       document.getElementById("isNewGeographicalMarket-legend").hasClass("visuallyhidden") shouldBe true
+      document.getElementById("isNewGeographicalMarket-legend").text shouldBe Messages("page.investment.NewGeographicalMarket.legend")
+      document.select(".error-summary").isEmpty shouldBe true
     }
 
     "Verify that the correct elements are loaded when navigating from PreviousBeforeDOFCS page" in new Setup {
@@ -106,6 +109,8 @@ class NewGeographicalMarketSpec extends ViewSpec {
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.three")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       document.getElementById("isNewGeographicalMarket-legend").hasClass("visuallyhidden") shouldBe true
+      document.getElementById("isNewGeographicalMarket-legend").text shouldBe Messages("page.investment.NewGeographicalMarket.legend")
+      document.select(".error-summary").isEmpty shouldBe true
     }
 
     "Verify that NewGeographicalMarket page contains error summary when no model is submitted" in new Setup {

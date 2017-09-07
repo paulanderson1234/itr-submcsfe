@@ -104,7 +104,7 @@ class ShareDescriptionControllerSpec extends BaseSpec {
   }
 
   "Sending an invalid form submission with validation errors to the ShareDescriptionController when authenticated and enrolled" should {
-    "redirect to itself" in {
+    "respond with a bad reques" in {
       setupMocks(None, Some(validBackLink))
       mockEnrolledRequest(eisSchemeTypesModel)
       val formInput = "descriptionTextArea" -> ""

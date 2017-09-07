@@ -79,7 +79,7 @@ class NewGeographicalMarketControllerSpec extends BaseSpec {
       showWithSessionAndAuth(TestController.show)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some("/investment-tax-relief-cs/eis/total-amount-raised")
+          redirectLocation(result) shouldBe Some(controllers.eis.routes.TotalAmountRaisedController.show().url)
         }
       )
     }
@@ -92,7 +92,7 @@ class NewGeographicalMarketControllerSpec extends BaseSpec {
       submitWithSessionAndAuth(TestController.submit, formInput)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some("/investment-tax-relief-cs/eis/new-product")
+          redirectLocation(result) shouldBe Some(controllers.eis.routes.NewProductController.show().url)
         }
       )
     }
@@ -105,7 +105,7 @@ class NewGeographicalMarketControllerSpec extends BaseSpec {
       submitWithSessionAndAuth(TestController.submit, formInput)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some("/investment-tax-relief-cs/eis/new-product")
+          redirectLocation(result) shouldBe Some(controllers.eis.routes.NewProductController.show().url)
         }
       )
     }
@@ -120,14 +120,14 @@ class NewGeographicalMarketControllerSpec extends BaseSpec {
       submitWithSessionAndAuth(TestController.submit, formInput)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some("/investment-tax-relief-cs/eis/total-amount-raised")
+          redirectLocation(result) shouldBe Some(controllers.eis.routes.TotalAmountRaisedController.show().url)
         }
       )
     }
   }
 
   "Sending an invalid form submission with validation errors to the NewGeographicalMarketController when authenticated and enrolled" should {
-    "redirect to itself with errors" in {
+    "respond with as a bad request with form errors" in {
       setupMocks(backLink = Some(routes.TotalAmountRaisedController.show().url))
       mockEnrolledRequest(eisSchemeTypesModel)
       val formInput = "isNewGeographicalMarket" -> ""

@@ -66,6 +66,9 @@ class HasInvestmentTradeStartedSpec extends ViewSpec {
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.QualifyBusinessActivityController.show().url
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.one")
+      document.getElementById("hasInvestmentTradeStarted").select(".visuallyhidden").text() shouldBe Messages("page.companyDetails.HasInvestmentTradeStarted.question.hint")
+      document.body.getElementById("question-date-text-legend-id").text shouldBe Messages("page.companyDetails.HasInvestmentTradeStarted.question.hint")
+      document.select(".error-summary").isEmpty shouldBe true
 
     }
 
@@ -86,6 +89,8 @@ class HasInvestmentTradeStartedSpec extends ViewSpec {
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.QualifyBusinessActivityController.show().url
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.one")
+      document.getElementById("hasInvestmentTradeStarted").select(".visuallyhidden").text() shouldBe Messages("page.companyDetails.HasInvestmentTradeStarted.question.hint")
+      document.body.getElementById("question-date-text-legend-id").text shouldBe Messages("page.companyDetails.HasInvestmentTradeStarted.question.hint")
       document.getElementById("error-summary-display").hasClass("error-summary--show")
     }
   }
