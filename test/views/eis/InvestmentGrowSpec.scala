@@ -72,9 +72,13 @@ class InvestmentGrowSpec extends ViewSpec {
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.ProposedInvestmentController.show().url
       document.body.getElementById("get-help-action").text shouldBe Messages("common.error.help.text")
-      document.body.getElementById("investmentGrowDesc").hasClass("form-control")
+
       document.getElementById("labelTextId").text() shouldBe Messages("page.investment.InvestmentGrow.heading")
-      document.getElementById("labelTextId").hasClass("visuallyhidden")
+      document.getElementById("labelTextId").hasClass("visuallyhidden") shouldBe true
+      document.getElementById("how-to-write-business-plan").text() should include (Messages("page.investment.InvestmentGrow.businessplan.readmore"))
+      document.body.getElementById("business-plan").text() shouldEqual getExternalLinkText(Messages("page.investment.InvestmentGrow.businessplan.link"))
+      document.body.getElementById("business-plan").attr("href") shouldEqual "https://www.gov.uk/write-business-plan"
+      document.body.getElementById("business-plan").hasClass("external-link") shouldBe true
     }
 
     "Verify that the correct elements are loaded when coming from PreviousBeforeDOFCS page" in new Setup {
@@ -93,9 +97,12 @@ class InvestmentGrowSpec extends ViewSpec {
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.PreviousBeforeDOFCSController.show().url
       document.body.getElementById("get-help-action").text shouldBe Messages("common.error.help.text")
-      document.body.getElementById("investmentGrowDesc").hasClass("form-control")
       document.getElementById("labelTextId").text() shouldBe Messages("page.investment.InvestmentGrow.heading")
-      document.getElementById("labelTextId").hasClass("visuallyhidden")
+      document.getElementById("labelTextId").hasClass("visuallyhidden") shouldBe true
+      document.getElementById("how-to-write-business-plan").text() should include (Messages("page.investment.InvestmentGrow.businessplan.readmore"))
+      document.body.getElementById("business-plan").text() shouldEqual getExternalLinkText(Messages("page.investment.InvestmentGrow.businessplan.link"))
+      document.body.getElementById("business-plan").attr("href") shouldEqual "https://www.gov.uk/write-business-plan"
+      document.body.getElementById("business-plan").hasClass("external-link") shouldBe true
     }
 
     "Verify that the correct elements are loaded when coming from NewProduct page" in new Setup {
@@ -114,9 +121,13 @@ class InvestmentGrowSpec extends ViewSpec {
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.NewProductController.show().url
       document.body.getElementById("get-help-action").text shouldBe Messages("common.error.help.text")
-      document.body.getElementById("investmentGrowDesc").hasClass("form-control")
       document.getElementById("labelTextId").text() shouldBe Messages("page.investment.InvestmentGrow.heading")
-      document.getElementById("labelTextId").hasClass("visuallyhidden")
+      document.getElementById("labelTextId").hasClass("visuallyhidden") shouldBe true
+      document.getElementById("how-to-write-business-plan").text() should include (Messages("page.investment.InvestmentGrow.businessplan.readmore"))
+      document.body.getElementById("business-plan").text() shouldEqual getExternalLinkText(Messages("page.investment.InvestmentGrow.businessplan.link"))
+      document.body.getElementById("business-plan").attr("href") shouldEqual "https://www.gov.uk/write-business-plan"
+      document.body.getElementById("business-plan").hasClass("external-link") shouldBe true
+
     }
 
     "Verify that the correct elements are loaded when coming from the SubsidiariesSpendingInvestment page)" in new Setup {
@@ -135,9 +146,13 @@ class InvestmentGrowSpec extends ViewSpec {
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.SubsidiariesSpendingInvestmentController.show().url
       document.body.getElementById("get-help-action").text shouldBe Messages("common.error.help.text")
-      document.body.getElementById("investmentGrowDesc").hasClass("form-control")
       document.getElementById("labelTextId").text() shouldBe Messages("page.investment.InvestmentGrow.heading")
-      document.getElementById("labelTextId").hasClass("visuallyhidden")
+      document.getElementById("labelTextId").hasClass("visuallyhidden") shouldBe true
+      document.getElementById("how-to-write-business-plan").text() should include (Messages("page.investment.InvestmentGrow.businessplan.readmore"))
+      document.body.getElementById("business-plan").text() shouldEqual getExternalLinkText(Messages("page.investment.InvestmentGrow.businessplan.link"))
+      document.body.getElementById("business-plan").attr("href") shouldEqual "https://www.gov.uk/write-business-plan"
+      document.body.getElementById("business-plan").hasClass("external-link") shouldBe true
+
     }
 
 
@@ -157,9 +172,13 @@ class InvestmentGrowSpec extends ViewSpec {
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.SubsidiariesNinetyOwnedController.show().url
       document.body.getElementById("get-help-action").text shouldBe Messages("common.error.help.text")
-      document.body.getElementById("investmentGrowDesc").hasClass("form-control")
       document.getElementById("labelTextId").text() shouldBe Messages("page.investment.InvestmentGrow.heading")
-      document.getElementById("labelTextId").hasClass("visuallyhidden")
+      document.getElementById("labelTextId").hasClass("visuallyhidden") shouldBe true
+      document.getElementById("how-to-write-business-plan").text() should include (Messages("page.investment.InvestmentGrow.businessplan.readmore"))
+      document.body.getElementById("business-plan").text() shouldEqual getExternalLinkText(Messages("page.investment.InvestmentGrow.businessplan.link"))
+      document.body.getElementById("business-plan").attr("href") shouldEqual "https://www.gov.uk/write-business-plan"
+      document.body.getElementById("business-plan").hasClass("external-link") shouldBe true
+
     }
 
     "Verify that the correct elements are loaded when hasGeoMarket is true and hasNewProduct is true" in new Setup{
@@ -185,9 +204,13 @@ class InvestmentGrowSpec extends ViewSpec {
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.ProposedInvestmentController.show().url
       document.body.getElementById("get-help-action").text shouldBe  Messages("common.error.help.text")
-      document.body.getElementById("investmentGrowDesc").hasClass("form-control")
       document.getElementById("labelTextId").text() shouldBe Messages("page.investment.InvestmentGrow.heading")
-      document.getElementById("labelTextId").hasClass("visuallyhidden")
+      document.getElementById("labelTextId").hasClass("visuallyhidden") shouldBe true
+      document.getElementById("how-to-write-business-plan").text() should include (Messages("page.investment.InvestmentGrow.businessplan.readmore"))
+      document.body.getElementById("business-plan").text() shouldEqual getExternalLinkText(Messages("page.investment.InvestmentGrow.businessplan.link"))
+      document.body.getElementById("business-plan").attr("href") shouldEqual "https://www.gov.uk/write-business-plan"
+      document.body.getElementById("business-plan").hasClass("external-link") shouldBe true
+
     }
 
     "Verify that the correct elements are loaded when hasGeoMarket is true and hasNewProduct is false" in new Setup{
@@ -211,9 +234,13 @@ class InvestmentGrowSpec extends ViewSpec {
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.ProposedInvestmentController.show().url
       document.body.getElementById("get-help-action").text shouldBe  Messages("common.error.help.text")
-      document.body.getElementById("investmentGrowDesc").hasClass("form-control")
       document.getElementById("labelTextId").text() shouldBe Messages("page.investment.InvestmentGrow.heading")
-      document.getElementById("labelTextId").hasClass("visuallyhidden")
+      document.getElementById("labelTextId").hasClass("visuallyhidden") shouldBe true
+      document.getElementById("how-to-write-business-plan").text() should include (Messages("page.investment.InvestmentGrow.businessplan.readmore"))
+      document.body.getElementById("business-plan").text() shouldEqual getExternalLinkText(Messages("page.investment.InvestmentGrow.businessplan.link"))
+      document.body.getElementById("business-plan").attr("href") shouldEqual "https://www.gov.uk/write-business-plan"
+      document.body.getElementById("business-plan").hasClass("external-link") shouldBe true
+
     }
 
     "Verify that the correct elements are loaded when hasGeoMarket is false and hasNewProduct is true" in new Setup{
@@ -237,9 +264,13 @@ class InvestmentGrowSpec extends ViewSpec {
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.ProposedInvestmentController.show().url
       document.body.getElementById("get-help-action").text shouldBe  Messages("common.error.help.text")
-      document.body.getElementById("investmentGrowDesc").hasClass("form-control")
       document.getElementById("labelTextId").text() shouldBe Messages("page.investment.InvestmentGrow.heading")
-      document.getElementById("labelTextId").hasClass("visuallyhidden")
+      document.getElementById("labelTextId").hasClass("visuallyhidden") shouldBe true
+      document.getElementById("how-to-write-business-plan").text() should include (Messages("page.investment.InvestmentGrow.businessplan.readmore"))
+      document.body.getElementById("business-plan").text() shouldEqual getExternalLinkText(Messages("page.investment.InvestmentGrow.businessplan.link"))
+      document.body.getElementById("business-plan").attr("href") shouldEqual "https://www.gov.uk/write-business-plan"
+      document.body.getElementById("business-plan").hasClass("external-link") shouldBe true
+
     }
 
     "Verify that the correct elements are loaded when hasGeoMarket is false and hasNewProduct is false" in new Setup{
@@ -260,9 +291,13 @@ class InvestmentGrowSpec extends ViewSpec {
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.ProposedInvestmentController.show().url
       document.body.getElementById("get-help-action").text shouldBe  Messages("common.error.help.text")
-      document.body.getElementById("investmentGrowDesc").hasClass("form-control")
       document.getElementById("labelTextId").text() shouldBe Messages("page.investment.InvestmentGrow.heading")
-      document.getElementById("labelTextId").hasClass("visuallyhidden")
+      document.getElementById("labelTextId").hasClass("visuallyhidden") shouldBe true
+      document.getElementById("how-to-write-business-plan").text() should include (Messages("page.investment.InvestmentGrow.businessplan.readmore"))
+      document.body.getElementById("business-plan").text() shouldEqual getExternalLinkText(Messages("page.investment.InvestmentGrow.businessplan.link"))
+      document.body.getElementById("business-plan").attr("href") shouldEqual "https://www.gov.uk/write-business-plan"
+      document.body.getElementById("business-plan").hasClass("external-link") shouldBe true
+
     }
 
     "Verify that the correct elements are loaded when newGeoMarket is not defined and hasNewProduct is not defined" in new Setup{
@@ -282,9 +317,13 @@ class InvestmentGrowSpec extends ViewSpec {
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.ProposedInvestmentController.show().url
       document.body.getElementById("get-help-action").text shouldBe  Messages("common.error.help.text")
-      document.body.getElementById("investmentGrowDesc").hasClass("form-control")
       document.getElementById("labelTextId").text() shouldBe Messages("page.investment.InvestmentGrow.heading")
-      document.getElementById("labelTextId").hasClass("visuallyhidden")
+      document.getElementById("labelTextId").hasClass("visuallyhidden") shouldBe true
+      document.getElementById("how-to-write-business-plan").text() should include (Messages("page.investment.InvestmentGrow.businessplan.readmore"))
+      document.body.getElementById("business-plan").text() shouldEqual getExternalLinkText(Messages("page.investment.InvestmentGrow.businessplan.link"))
+      document.body.getElementById("business-plan").attr("href") shouldEqual "https://www.gov.uk/write-business-plan"
+      document.body.getElementById("business-plan").hasClass("external-link") shouldBe true
+
     }
 
     "show an error no data entered" in new Setup {
@@ -303,10 +342,16 @@ class InvestmentGrowSpec extends ViewSpec {
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.ProposedInvestmentController.show().url
       document.body.getElementById("get-help-action").text shouldBe Messages("common.error.help.text")
-      document.body.getElementById("investmentGrowDesc").hasClass("form-control")
       document.getElementById("labelTextId").text() shouldBe Messages("page.investment.InvestmentGrow.heading")
-      document.getElementById("labelTextId").hasClass("visuallyhidden")
-      document.getElementById("error-summary-display").hasClass("error-summary--show")
+      document.getElementById("labelTextId").hasClass("visuallyhidden") shouldBe true
+      document.getElementById("how-to-write-business-plan").text() should include (Messages("page.investment.InvestmentGrow.businessplan.readmore"))
+      document.body.getElementById("business-plan").text() shouldEqual getExternalLinkText(Messages("page.investment.InvestmentGrow.businessplan.link"))
+      document.body.getElementById("business-plan").attr("href") shouldEqual "https://www.gov.uk/write-business-plan"
+      document.body.getElementById("business-plan").hasClass("external-link") shouldBe true
+      document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe true
+      document.getElementById("error-summary-heading").text shouldBe Messages("common.error.summary.heading")
+      document.getElementById("investmentGrowDesc-error-summary").text shouldBe Messages("common.error.fieldRequired")
+      document.getElementsByClass("error-notification").text shouldBe Messages("common.error.fieldRequired")
     }
   }
 }

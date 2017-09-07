@@ -477,7 +477,7 @@ page.investment.SubsidiariesNinetyOwned.error.two=If your answer''s correct you 
 page.investment.InvestmentGrow.heading=How will this investment help your company grow and develop?
 page.investment.InvestmentGrow.title=How will this investment help your company grow and develop?
 page.investment.InvestmentGrow.question.hint=Suggested limit: 200 words
-page.investment.InvestmentGrow.example.text=For example you may be planning to:
+page.investment.InvestmentGrow.example.text=For example, you may be planning to:
 page.investment.InvestmentGrow.bullet.one=hire more employees
 page.investment.InvestmentGrow.bullet.two=attract new customers
 page.investment.InvestmentGrow.bullet.three=develop a new product
@@ -486,7 +486,7 @@ page.investment.InvestmentGrow.bullet.geographicalMarket=to launch your product 
 page.investment.InvestmentGrow.bullet.productMarket=to enter a new product market
 page.investment.InvestmentGrow.description.three=You should also send a copy of your business plan with your supporting documents.
 page.investment.InvestmentGrow.businessplan.readmore=Read more about
-page.investment.InvestmentGrow.businessplan.link=how to write a business plan.
+page.investment.InvestmentGrow.businessplan.link=how to write a business plan
 
 #supporting documents page
 page.supportingDocuments.SupportingDocuments.title=Supporting documents
