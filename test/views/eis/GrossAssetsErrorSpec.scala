@@ -16,32 +16,84 @@
 
 package views.eis
 
+import controllers.helpers.FakeRequestHelper
 import controllers.eis.routes
 import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
 import play.api.i18n.Messages
-import views.helpers.ViewSpec
 import play.api.i18n.Messages.Implicits._
+import views.helpers.ViewSpec
 import views.html.eis.companyDetails.GrossAssetsError
+import views.html.eis.investment._
 
-class GrossAssetsErrorSpec extends ViewSpec {
+class GrossAssetsErrorSpec extends ViewSpec with FakeRequestHelper {
+
+  implicit val request = fakeRequest
 
   "The Gross Assets error page" should {
+    lazy val view = GrossAssetsError()
+    lazy val document: Document = Jsoup.parse(view.body)
 
-    "Verify that page has the expected eleemnts" in {
-      val page = GrossAssetsError()(fakeRequest, applicationMessages)
-      val document = Jsoup.parse(page.body)
+    "contain the correct title" in {
+      document.title shouldBe Messages("common.error.soft.title")
+    }
 
-      document.title shouldEqual Messages("page.companyDetails.grossAssetsError.title")
-      document.body.getElementById("main-heading").text() shouldEqual Messages("page.companyDetails.grossAssetsError.heading")
-      document.body.getElementById("error-description").text() shouldEqual Messages("page.companyDetails.grossAssetsError.description.eis")
-      document.body.getElementById("what-next-heading").text() shouldEqual Messages("page.companyDetails.grossAssetsError.whatNext.heading")
-      document.body.getElementById("continue-text").text() shouldEqual Messages("page.companyDetails.grossAssetsError.whatNext.continue")
+    "contain a back link" which {
+      lazy val backLink = document.select("article > a")
 
-      document.body.getElementById("incorrect-info").text() shouldEqual Messages("page.companyDetails.grossAssetsError.incorrect.info") +
-        " " + Messages("page.companyDetails.grossAssetsError.link.changeAnswers") + "."
-      document.body.getElementById("change-answers").attr("href") shouldEqual routes.GrossAssetsController.show().url
-      document.body.getElementById("back-link").attr("href") shouldEqual routes.GrossAssetsController.show().url
-      document.getElementById("next").text() shouldBe Messages("common.button.continue")
+      "has the correct text" in {
+        backLink.text() shouldBe Messages("common.button.back")
+      }
+
+      "has the correct link" in {
+        backLink.attr("href") shouldBe routes.GrossAssetsController.show().url
+      }
+    }
+
+    "contain the correct heading" in {
+      document.select("h1").text() shouldBe Messages("common.error.soft.heading")
+    }
+
+    "contain a description of the error" in {
+      document.select("article div p").first().text() shouldBe Messages("page.companyDetails.grossAssetsError.description.eis")
+    }
+
+    "contain a change link" which {
+      lazy val changeLink = document.select("article div p").get(1)
+
+      "has the correct sentence" in {
+        changeLink.text() shouldBe Messages("common.changeAnswers.text") +
+          " " + Messages("common.changeAnswers.link") + "."
+      }
+
+      "contains the correct link text" in {
+        changeLink.select("a").text() shouldBe Messages("common.changeAnswers.link")
+      }
+
+      "contains a link to the next page" in {
+        changeLink.select("a").attr("href") shouldBe routes.GrossAssetsController.show().url
+      }
+    }
+
+    "contain the correct secondary heading" in {
+      document.select("h2").text().trim shouldBe Messages("common.error.soft.secondaryHeading")
+    }
+
+    "contains the correct what next information" in {
+      document.select("article div p").get(2).text() shouldBe Messages("common.error.soft.whatNext")
+    }
+
+
+    "contain a continue button" which {
+      lazy val button = document.getElementById("next")
+
+      "contains the correct message" in {
+        button.text() shouldBe Messages("common.button.continue")
+      }
+
+      "have a form posting to the correct route" in {
+        document.select("form").attr("action") shouldBe routes.GrossAssetsController.submit().url
+      }
     }
   }
 }

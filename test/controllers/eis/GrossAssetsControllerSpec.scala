@@ -38,7 +38,8 @@ class GrossAssetsControllerSpec extends BaseSpec {
     override lazy val enrolmentConnector = mockEnrolmentConnector
   }
 
-  val grossAssets = GrossAssetsModel(12345)
+  lazy val validGrossAssetsAmount = 15000000
+  lazy val invalidGrossAssetsAmount = 15000001
 
   "GrossAssetsController" should {
     "use the correct keystore connector" in {
@@ -63,7 +64,7 @@ class GrossAssetsControllerSpec extends BaseSpec {
     "return a 200 when something is fetched from keystore" in {
       mockEnrolledRequest(eisSchemeTypesModel)
       when(mockS4lConnector.fetchAndGetFormData[GrossAssetsModel](Matchers.eq(KeystoreKeys.grossAssets))
-        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(grossAssets)))
+        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(GrossAssetsModel(validGrossAssetsAmount))))
       showWithSessionAndAuth(TestController.show)(
         result => status(result) shouldBe OK
       )
@@ -86,7 +87,7 @@ class GrossAssetsControllerSpec extends BaseSpec {
       (Matchers.any())).thenReturn(Future.successful(Option(false)))
       mockEnrolledRequest(eisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,
-        "grossAmount" -> "200000")(
+        "grossAmount" -> validGrossAssetsAmount.toString)(
         result => {
           status(result) shouldBe SEE_OTHER
           //todo Redirect to GrossAssetsAfter page when complete
@@ -103,7 +104,7 @@ class GrossAssetsControllerSpec extends BaseSpec {
       (Matchers.any())).thenReturn(Future.successful(Option(true)))
       mockEnrolledRequest(eisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,
-        "grossAmount" -> "2000001")(
+        "grossAmount" -> invalidGrossAssetsAmount.toString)(
         result => {
           status(result) shouldBe SEE_OTHER
           redirectLocation(result) shouldBe Some(routes.GrossAssetsErrorController.show().url)

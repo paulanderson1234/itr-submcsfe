@@ -1,45 +1,42 @@
 @import uk.gov.hmrc.play.views.html.helpers.{form}
-@import helpers.backButton
+@import helpers.{externalLink, backButton}
 
 @()(implicit request: Request[_], messages: Messages)
 
-@main_template(title = Messages("page.companyDetails.grossAssetsError.title"), bodyClasses = None) {
+@import config.FrontendAppConfig
 
-@backButton(controllers.eis.routes.GrossAssetsController.show().url)
+@main_template(title = Messages("common.error.soft.title"), bodyClasses = None) {
+
+@backButton(controllers.eis.routes.GrossAssetsController.show().toString)
 
 <div class="grid-row">
     <div class="column-two-thirds">
         <div id="main">
-            <h1 class="form-title heading-xlarge" id="main-heading">
-                @Messages("page.companyDetails.grossAssetsError.title")</h1>
+            <h1 class="form-title heading-xlarge" id="main-heading" >@Messages("common.error.soft.heading")</h1>
         </div>
 
         <div class="form-group">
-            <p id="error-description">
-                @Messages("page.companyDetails.grossAssetsError.description.eis")</p>
+            <p id="gross-assets-exceeded-desc">@Messages("page.companyDetails.grossAssetsError.description.eis")</p>
         </div>
 
         <div class="form-group">
-            <span id="what-next-heading" class="heading-medium">
-                @Messages("page.companyDetails.grossAssetsError.whatNext.heading")
-            </span>
-            <p id="continue-text">
-                @Messages("page.companyDetails.grossAssetsError.whatNext.continue")
+            <p>
+                @Messages("common.changeAnswers.text")
+                <a id="change-answers-link" class="link"
+                   href="@controllers.eis.routes.GrossAssetsController.show().url">@Messages("common.changeAnswers.link")</a>.
             </p>
+        </div>
 
+        <h2 class="heading-medium">@Messages("common.error.soft.secondaryHeading")</h2>
+
+        <div class="form-group">
+            <p>@Messages("common.error.soft.whatNext")</p>
         </div>
 
         <div class="form-group">
-            @form(action = controllers.eis.routes.GrossAssetsErrorController.submit()) {
+            @form(action = controllers.eis.routes.GrossAssetsController.submit()) {
             <button class="btn button" id="next" type="submit">@Messages("common.button.continue")</button>
             }
-        </div>
-
-        <div class="form-group">
-            <p id="incorrect-info">@Messages("page.companyDetails.grossAssetsError.incorrect.info")
-                <a href="@controllers.eis.routes.GrossAssetsController.show().url" class="link-style"
-                   id="change-answers">
-                    @Messages("page.companyDetails.grossAssetsError.link.changeAnswers")</a>.</p>
         </div>
 
     </div>
