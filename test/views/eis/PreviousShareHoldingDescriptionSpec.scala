@@ -27,7 +27,7 @@ import views.html.eis.investors.PreviousShareHoldingDescription
 
 class PreviousShareHoldingDescriptionSpec  extends BaseSpec {
 
-  "The previous shareholding dscription page" should {
+  "The previous shareholding description page" should {
 
     "contain the correct elements for an investor (company)" in {
 
@@ -37,23 +37,23 @@ class PreviousShareHoldingDescriptionSpec  extends BaseSpec {
 
       //title and heading
       document.title() shouldBe Messages("page.investors.previousShareHoldingDescription.heading", Constants.typeCompany.toLowerCase())
-      document.title() shouldBe "What were the shares called that were issued to this company?"
+      document.title() shouldBe "What were the shares issued to this company called?"
 
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.four")
 
       document.select("h1").text() shouldBe
         Messages("page.investors.previousShareHoldingDescription.heading", Constants.typeCompany.toLowerCase())
-      document.select("h1").text() shouldBe "What were the shares called that were issued to this company?"
+      document.select("h1").text() shouldBe "What were the shares issued to this company called?"
 
       document.body.getElementById("description-one").text() shouldBe Messages("page.investors.previousShareHoldingDescription.example.text")
       document.body.getElementById("desc-one").text() shouldBe Messages("page.investors.previousShareHoldingDescription.question.hint")
 
       document.body.getElementById("share-description-where-to-find").text() shouldBe  Messages("page.investors.previousShareHoldingDescription.location")
-      document.body.getElementById("help").text() shouldBe  Messages("page.investors.previousShareHoldingDescription.whereToFind")
+      document.body.getElementById("help").text() shouldBe  Messages("common.help.whereToFind")
 
       document.getElementById("labelTextId").text() shouldBe
         Messages("page.investors.previousShareHoldingDescription.heading", Constants.typeCompany.toLowerCase())
-      document.getElementById("labelTextId").text() shouldBe "What were the shares called that were issued to this company?"
+      document.getElementById("labelTextId").text() shouldBe "What were the shares issued to this company called?"
 
       document.select("fieldset legend").text() shouldBe Messages("page.investors.previousShareHoldingDescription.heading", Constants.typeCompany.toLowerCase())
       document.select("fieldset legend")hasClass "visuallyhidden" shouldBe true
@@ -76,23 +76,23 @@ class PreviousShareHoldingDescriptionSpec  extends BaseSpec {
 
       //title and heading
       document.title() shouldBe Messages("page.investors.previousShareHoldingDescription.heading", Constants.typeIndividual.toLowerCase())
-      document.title() shouldBe "What were the shares called that were issued to this individual?"
+      document.title() shouldBe "What were the shares issued to this individual called?"
 
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.four")
 
       document.select("h1").text() shouldBe
         Messages("page.investors.previousShareHoldingDescription.heading", Constants.typeIndividual.toLowerCase())
-      document.select("h1").text() shouldBe "What were the shares called that were issued to this individual?"
+      document.select("h1").text() shouldBe "What were the shares issued to this individual called?"
 
       document.body.getElementById("description-one").text() shouldBe Messages("page.investors.previousShareHoldingDescription.example.text")
       document.body.getElementById("desc-one").text() shouldBe Messages("page.investors.previousShareHoldingDescription.question.hint")
 
       document.body.getElementById("share-description-where-to-find").text() shouldBe  Messages("page.investors.previousShareHoldingDescription.location")
-      document.body.getElementById("help").text() shouldBe  Messages("page.investors.previousShareHoldingDescription.whereToFind")
+      document.body.getElementById("help").text() shouldBe  Messages("common.help.whereToFind")
 
       document.getElementById("labelTextId").text() shouldBe
         Messages("page.investors.previousShareHoldingDescription.heading", Constants.typeIndividual.toLowerCase())
-      document.getElementById("labelTextId").text() shouldBe "What were the shares called that were issued to this individual?"
+      document.getElementById("labelTextId").text() shouldBe "What were the shares issued to this individual called?"
 
       document.select("fieldset legend").text() shouldBe Messages("page.investors.previousShareHoldingDescription.heading", Constants.typeIndividual.toLowerCase())
       document.select("fieldset legend")hasClass "visuallyhidden" shouldBe true
@@ -117,23 +117,23 @@ class PreviousShareHoldingDescriptionSpec  extends BaseSpec {
 
       //title and heading
       document.title() shouldBe Messages("page.investors.previousShareHoldingDescription.heading", upperCaseTest.toLowerCase())
-      document.title() shouldBe "What were the shares called that were issued to this individual?"
+      document.title() shouldBe "What were the shares issued to this individual called?"
 
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.four")
 
       document.select("h1").text() shouldBe
         Messages("page.investors.previousShareHoldingDescription.heading", upperCaseTest.toLowerCase())
-      document.select("h1").text() shouldBe "What were the shares called that were issued to this individual?"
+      document.select("h1").text() shouldBe "What were the shares issued to this individual called?"
 
       document.body.getElementById("description-one").text() shouldBe Messages("page.investors.previousShareHoldingDescription.example.text")
       document.body.getElementById("desc-one").text() shouldBe Messages("page.investors.previousShareHoldingDescription.question.hint")
 
       document.body.getElementById("share-description-where-to-find").text() shouldBe  Messages("page.investors.previousShareHoldingDescription.location")
-      document.body.getElementById("help").text() shouldBe  Messages("page.investors.previousShareHoldingDescription.whereToFind")
+      document.body.getElementById("help").text() shouldBe  Messages("common.help.whereToFind")
 
       document.getElementById("labelTextId").text() shouldBe
         Messages("page.investors.previousShareHoldingDescription.heading", upperCaseTest.toLowerCase())
-      document.getElementById("labelTextId").text() shouldBe "What were the shares called that were issued to this individual?"
+      document.getElementById("labelTextId").text() shouldBe "What were the shares issued to this individual called?"
 
       document.select("fieldset legend").text() shouldBe Messages("page.investors.previousShareHoldingDescription.heading", upperCaseTest.toLowerCase())
       document.select("fieldset legend")hasClass "visuallyhidden" shouldBe true
