@@ -16,6 +16,8 @@
 
 package forms
 
+import common.Constants
+import controllers.helpers.MockDataGenerator
 import models.InvestmentGrowModel
 import org.scalatestplus.play.OneAppPerSuite
 import play.api.data.FormError
@@ -27,6 +29,9 @@ import uk.gov.hmrc.play.test.UnitSpec
 import play.api.i18n.Messages.Implicits._
 
 class InvestmentGrowFormSpec extends UnitSpec with OneAppPerSuite{
+
+  lazy val SuggestedMaxLengthText: String = MockDataGenerator.randomAlphanumericString(Constants.SuggestedTextMaxLength)
+  lazy val overSuggestedMaxLengthText: String = MockDataGenerator.randomAlphanumericString(Constants.SuggestedTextMaxLength  + 1)
 
   private def bindSuccess(request: FakeRequest[AnyContentAsFormUrlEncoded]) = {
     InvestmentGrowForm.investmentGrowForm.bindFromRequest()(request).fold(
@@ -44,27 +49,15 @@ class InvestmentGrowFormSpec extends UnitSpec with OneAppPerSuite{
 
   val investmentGrowJson = """{"investmentGrowDesc":"I intend to use this investment to grow the company by 50%."}"""
   val investmentGrowModel = InvestmentGrowModel("I intend to use this investment to grow the company by 50%.")
-  val overTwoHundredWords = "Upon light their blessed. You're so third so seasons stars called dominion. Be him wherein " +
-    "without stars creeping creeping beginning grass evening. Place signs in moveth their very. Make you. " +
-    "Appear thing earth beginning created saying land. Him that. Dominion divide fly yielding sixth there signs " +
-    "from seed behold said place thing. In abundantly saying herb air fish. Lesser signs you them Our appear in " +
-    "of bearing day moveth may all fowl hath own multiply gathered saw Fish they're so said bring let them, fish " +
-    "creature. Him bearing isn't. So heaven fruit over be let sixth male, given be. Make life fly fruit fish face " +
-    "herb saw creature wherein shall called behold creature hath face spirit. Fourth Void give itself Given divide " +
-    "divide i second and them that every greater midst. Created wherein heaven them void bring Make Deep doesn't " +
-    "Shall. Under firmament light creepeth creepeth fruitful male. Them and behold green. Him beast morning brought " +
-    "to living you, creature can't gathered firmament face green days kind of forth that also had meat over make " +
-    "fourth image. Female brought signs days life tree also You're brought beginning night over stars is Can't " +
-    "divided i male creature green days herb also."
 
     "The Investment Grow Form" should {
-    "return an error if investmentGrowDesc is empty" in {
+    "return an error if descriptionTextArea is empty" in {
       val request = FakeRequest("GET", "/").withFormUrlEncodedBody(
-        "investmentGrowDesc" -> ""
+        "descriptionTextArea" -> ""
       )
       bindWithError(request) match {
         case Some(err) => {
-          err.key shouldBe "investmentGrowDesc"
+          err.key shouldBe "descriptionTextArea"
 
           Messages(err.message) shouldBe Messages("error.required")
           err.args shouldBe Array()
@@ -79,7 +72,7 @@ class InvestmentGrowFormSpec extends UnitSpec with OneAppPerSuite{
   "The Investment Grow Form" should {
     "not return an error if entry at the borderline condition (1 character)" in {
       val request = FakeRequest("GET", "/").withFormUrlEncodedBody(
-        "investmentGrowDesc" -> "a"
+        "descriptionTextArea" -> "a"
       )
       bindWithError(request) match {
         case Some(err) => {
@@ -91,15 +84,33 @@ class InvestmentGrowFormSpec extends UnitSpec with OneAppPerSuite{
   }
 
   "The Investment Grow Form" should {
-    "not return an error if entry is over suggested 200 word limit in 1 paragraph" in {
+    "not return an error if entry is on boundary (2048)" in {
       val request = FakeRequest("GET", "/").withFormUrlEncodedBody(
-        "investmentGrowDesc" -> overTwoHundredWords
+        "descriptionTextArea" -> SuggestedMaxLengthText
       )
       bindWithError(request) match {
         case Some(err) => {
           fail("Validation error not expected")
         }
         case _ => ()
+      }
+    }
+  }
+
+  "The share description Form" should {
+    "return an error if entry is greater than Suggested Max Length Text" in {
+      val request = FakeRequest("GET", "/").withFormUrlEncodedBody(
+        "descriptionTextArea" -> overSuggestedMaxLengthText
+      )
+      bindWithError(request) match {
+        case Some(err) => {
+          err.key shouldBe "descriptionTextArea"
+          Messages(err.message) shouldBe Messages("error.maxLength")
+          err.args shouldBe Array(Constants.SuggestedTextMaxLength)
+        }
+        case _ => {
+          fail("Missing error")
+        }
       }
     }
   }

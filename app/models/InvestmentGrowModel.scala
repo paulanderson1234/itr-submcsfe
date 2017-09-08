@@ -16,12 +16,10 @@
 
 package models
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 case class InvestmentGrowModel (investmentGrowDesc : String)
 
 object InvestmentGrowModel {
-  implicit val format = Json.format[InvestmentGrowModel]
-  implicit val writes = Json.writes[InvestmentGrowModel]
-
+  implicit val format: OFormat[InvestmentGrowModel] = Json.format[InvestmentGrowModel]
 }

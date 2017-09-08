@@ -42,9 +42,9 @@ object InvestmentGrowController extends InvestmentGrowController
 
 trait InvestmentGrowController extends FrontendController with AuthorisedAndEnrolledForTAVC {
 
-  override val acceptedFlows = Seq(Seq(EIS), Seq(VCT), Seq(EIS, VCT))
+  override val acceptedFlows = Seq(Seq(EIS))
 
-  val show = AuthorisedAndEnrolled.async { implicit user => implicit request =>
+    val show: Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user =>implicit request =>
 
     def routeRequest(backUrl: Option[String]) = {
       if (backUrl.isDefined) {
@@ -62,7 +62,7 @@ trait InvestmentGrowController extends FrontendController with AuthorisedAndEnro
     } yield route
   }
 
-  val submit = AuthorisedAndEnrolled.async { implicit user => implicit request =>
+  val submit: Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user =>implicit request =>
     investmentGrowForm.bindFromRequest.fold(
       invalidForm =>
         ControllerHelpers.getSavedBackLink(KeystoreKeys.backLinkInvestmentGrow, s4lConnector).flatMap {

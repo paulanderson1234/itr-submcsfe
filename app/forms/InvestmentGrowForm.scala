@@ -24,7 +24,7 @@ import play.api.data.Forms._
 object InvestmentGrowForm {
   val investmentGrowForm = Form(
     mapping(
-      "investmentGrowDesc" -> nonEmptyText(maxLength = Constants.SuggestedTextMaxLength)
+      "descriptionTextArea" -> nonEmptyText(maxLength = Constants.SuggestedTextMaxLength)
     )(InvestmentGrowModel.apply)(InvestmentGrowModel.unapply)
   )
 }
