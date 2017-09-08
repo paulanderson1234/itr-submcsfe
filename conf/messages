@@ -41,6 +41,9 @@ common.address.findUKAddress=Find UK address
 common.back.dashboard=Dashboard
 common.changeAnswers.text=If this information is incorrect you can
 common.changeAnswers.link=change your answers
+common.error.soft.heading=You don''t qualify for the scheme
+common.error.soft.secondaryHeading=What happens next
+common.error.soft.whatNext=You can continue with your application if you think that you should qualify.
 
 ## Common date Messages ##
 common.date.fields.day=Day
@@ -719,9 +722,7 @@ page.eisseis.investment.AnnualTurnoverError.incorrect.info=If this information i
 page.eisseis.investment.AnnualTurnoverError.change.link=change your answers
 
 
-#trading for too long error
-page.investment.TradingForTooLong.title=You don''t qualify for the scheme
-page.investment.TradingForTooLong.heading=You don''t qualify for the scheme
+#Trading For Too Long long error
 page.investment.TradingForTooLong.reason=Your company:
 page.investment.TradingForTooLong.bullet.one=has been trading for too long to get tax relief on investment
 page.investment.TradingForTooLong.bullet.two=is not starting a new business activity that needs investment

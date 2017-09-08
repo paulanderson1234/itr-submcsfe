@@ -24,24 +24,24 @@
             <li id="not-new-business">@Messages("page.investment.TradingForTooLong.bullet.two")</li>
         </ul>
 
-        <p id="guidance-link">
-            @externalLink(Messages("page.investment.TradingForTooLong.link.schemeGuidance"),
-            "https://www.gov.uk/hmrc-internal-manuals/venture-capital-schemes-manual/8154",
-            Some("link-text-one"))
-        </p>
-
-        @form(action = controllers.eis.routes.TradingForTooLongController.submit()) {
-        <div class="form-group">
-            <button class="btn button" type="submit" id="submit">@Messages("common.button.continue")</button>
-        </div>
-        }
-
         <div class="form-group">
             <p>
                 @Messages("common.changeAnswers.text")
                 <a id="change-answers-link" class="link"
                    href="@controllers.eis.routes.NewProductController.show().url">@Messages("common.changeAnswers.link")</a>.
             </p>
+        </div>
+
+        <h2 class="heading-medium">@Messages("common.error.soft.secondaryHeading")</h2>
+
+        <div class="form-group">
+            <p>@Messages("common.error.soft.whatNext")</p>
+        </div>
+
+        <div class="form-group">
+            @form(action = controllers.eis.routes.TradingForTooLongController.submit()) {
+            <button class="btn button" id="next" type="submit">@Messages("common.button.continue")</button>
+            }
         </div>
 
     </div>
