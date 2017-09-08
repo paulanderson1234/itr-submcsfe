@@ -82,7 +82,7 @@ class GrossAssetsControllerSpec extends BaseSpec {
 
   "Sending a valid form submit to the GrossAssetsController" should {
     "redirect to the correct next page if the allowed amount is not exceeded from API" in {
-      when(mockSubmissionConnector.checkGrossAssetsAmountExceeded(Matchers.any())
+      when(mockSubmissionConnector.checkGrossAssetsAmountExceeded(Matchers.any(), Matchers.any())
       (Matchers.any())).thenReturn(Future.successful(Option(false)))
       mockEnrolledRequest(seisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,
@@ -98,7 +98,7 @@ class GrossAssetsControllerSpec extends BaseSpec {
 
   "Sending a valid form submit to the GrossAssetsController" should {
     "redirect to the correct next page if the allowed amount is exceeded from API" in {
-      when(mockSubmissionConnector.checkGrossAssetsAmountExceeded(Matchers.any())
+      when(mockSubmissionConnector.checkGrossAssetsAmountExceeded(Matchers.any(), Matchers.any())
       (Matchers.any())).thenReturn(Future.successful(Option(true)))
       mockEnrolledRequest(seisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,

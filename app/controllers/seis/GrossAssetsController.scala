@@ -29,7 +29,7 @@ import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
 import views.html.seis.companyDetails.GrossAssets
 import config.FrontendGlobal._
-
+import common.Constants._
 import scala.concurrent.Future
 
 object GrossAssetsController extends GrossAssetsController {
@@ -77,7 +77,7 @@ trait GrossAssetsController extends FrontendController with AuthorisedAndEnrolle
       validFormData => {
         s4lConnector.saveFormData(KeystoreKeys.grossAssets, validFormData)
         (for {
-          grossAssetsExceeded <- submissionConnector.checkGrossAssetsAmountExceeded(validFormData)
+          grossAssetsExceeded <- submissionConnector.checkGrossAssetsAmountExceeded(schemeTypeSeis, validFormData)
           route <- routeRequest(grossAssetsExceeded)
         } yield route) recover {
           case e: Exception => {
