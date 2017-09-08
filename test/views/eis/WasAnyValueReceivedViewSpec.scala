@@ -84,9 +84,6 @@ class WasAnyValueReceivedViewSpec extends ViewSpec with FakeRequestHelper {
             list.select("li").get(2).text() shouldBe Messages("page.investors.wasAnyValueReceived.guidance.list.three")
           }
 
-          "has the correct entry for the fourth bullet point" in {
-            list.select("li").get(3).text() shouldBe Messages("page.investors.wasAnyValueReceived.guidance.list.four")
-          }
         }
 
         "has an instruction for how to answer the question" in {

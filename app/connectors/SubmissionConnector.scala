@@ -70,11 +70,11 @@ trait SubmissionConnector {
       s"/${annualTurnoverCostsModel.amount2}/${annualTurnoverCostsModel.amount3}/${annualTurnoverCostsModel.amount4}/${annualTurnoverCostsModel.amount5}")
   }
 
-  def checkGrossAssetsAmountExceeded(grossAssetAmount: GrossAssetsModel)
+  def checkGrossAssetsAmountExceeded(schemeType: String, grossAssetAmount: GrossAssetsModel)
                                     (implicit hc: HeaderCarrier): Future[Option[Boolean]] = {
 
     http.GET[Option[Boolean]](s"$serviceUrl/investment-tax-relief/gross-assets/gross-assets-checker/check-total/gross-amount/" +
-      s"${grossAssetAmount.grossAmount.toIntExact}")
+      s"$schemeType/${grossAssetAmount.grossAmount.toIntExact}")
 
   }
 

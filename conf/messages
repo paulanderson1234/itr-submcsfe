@@ -41,6 +41,9 @@ common.address.findUKAddress=Find UK address
 common.back.dashboard=Dashboard
 common.changeAnswers.text=If this information is incorrect you can
 common.changeAnswers.link=change your answers
+common.error.soft.heading=You don''t appear to qualify for this scheme
+common.error.soft.secondaryHeading=What happens next
+common.error.soft.whatNext=You can continue with your application if you think that you should qualify.
 
 ## Common date Messages ##
 common.date.fields.day=Day
@@ -719,9 +722,7 @@ page.eisseis.investment.AnnualTurnoverError.incorrect.info=If this information i
 page.eisseis.investment.AnnualTurnoverError.change.link=change your answers
 
 
-#trading for too long error
-page.investment.TradingForTooLong.title=You don''t qualify for the scheme
-page.investment.TradingForTooLong.heading=You don''t qualify for the scheme
+#Trading For Too Long long error
 page.investment.TradingForTooLong.reason=Your company:
 page.investment.TradingForTooLong.bullet.one=has been trading for too long to get tax relief on investment
 page.investment.TradingForTooLong.bullet.two=is not starting a new business activity that needs investment
@@ -768,8 +769,8 @@ validation.error.researchStartDate.Future = Research and development start date 
 
 
 # SEIS Company Details
-page.investment.companyDetails.heading=What are this company''s details?
-page.investment.companyDetails.title=What are this company''s details?
+page.investment.companyDetails.heading=Company details
+page.investment.companyDetails.title=Company details
 page.investment.companyDetails.companyname.label=Company name
 page.investment.companyDetails.addressline1.label=Address line 1
 page.investment.companyDetails.addressline2.label=Address line 2
@@ -840,7 +841,7 @@ page.nominalValueOfShares.title = What was the nominal value of each share when 
 page.nominalValueOfShares.hint = The nominal value is the amount shown on the share certificate.
 
 # SEIS Individual Details Page
-page.individualDetails.title =What are this individual''s details?
+page.individualDetails.title =Individual''s details
 page.individualDetails.forename.label= First Name
 page.individualDetails.surname.label= Last Name
 page.individualDetails.addressline1.label= Address line 1
@@ -966,7 +967,8 @@ page.grossAssets.help.link.text=You might still be eligible for the scheme, as l
 #gross assets error
 page.companyDetails.grossAssetsError.title=You don''t appear to qualify for this scheme
 page.companyDetails.grossAssetsError.heading=You don''t appear to qualify for this scheme
-page.companyDetails.grossAssetsError.description=This is because your company''s gross assets were worth more than £200,000 when the shares were issued.
+page.companyDetails.grossAssetsError.description.seis=This is because your company''s gross assets were worth more than £200,000 when the shares were issued.
+page.companyDetails.grossAssetsError.description.eis=This is because your company''s gross assets were worth more than £15,000,000 when the shares were issued.
 page.companyDetails.grossAssetsError.whatNext.heading=What happens next
 page.companyDetails.grossAssetsError.whatNext.continue=You can continue with your application if you think that you should qualify.
 page.companyDetails.grossAssetsError.incorrect.info=If this information is incorrect you can
@@ -1099,8 +1101,8 @@ page.investors.numberOfPreviouslyIssuedShares.heading=How many shares were previ
 page.investors.numberOfPreviouslyIssuedShares.title=How many shares were previously issued to this {0}?
 
 #PreviousShareHoldingsDescription
-page.investors.previousShareHoldingDescription.title = What were the shares called that were issued to this {0}?
-page.investors.previousShareHoldingDescription.heading = What were the shares called that were issued to this {0}?
+page.investors.previousShareHoldingDescription.title = What were the shares issued to this {0} called?
+page.investors.previousShareHoldingDescription.heading = What were the shares issued to this {0} called?
 page.investors.previousShareHoldingDescription.example.text = Add one type of share at a time.
 page.investors.previousShareHoldingDescription.question.hint = Suggested limit: 20 words
 page.investors.previousShareHoldingDescription.location = It''s on your company''s Register of Members.
@@ -1151,13 +1153,6 @@ page.investors.reviewAllInvestors.investorName=Name
 page.investors.reviewAllInvestors.numberOfShares=Number of shares
 page.investors.reviewAllInvestors.amountSpent=Amount spent
 page.investors.reviewAllInvestors.add=Add another investor or nominee
-
-#PreviousShareHoldingsDescription
-page.investors.previousShareHoldingDescription.title = What were the shares called that were issued to this {0}?
-page.investors.previousShareHoldingDescription.heading = What were the shares called that were issued to this {0}?
-page.investors.previousShareHoldingDescription.example.text = Add one type of share at a time.
-page.investors.previousShareHoldingDescription.question.hint = Suggested limit: 20 words
-page.investors.previousShareHoldingDescription.location = It''s on your company''s Register of Members.
 
 #Previous share holders review
 page.investors.previousShareHoldingReview.title = Check previous shareholdings
