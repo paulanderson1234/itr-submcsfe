@@ -77,7 +77,7 @@ trait GrossAssetsController extends FrontendController with AuthorisedAndEnrolle
       validFormData => {
         s4lConnector.saveFormData(KeystoreKeys.grossAssets, validFormData)
         (for {
-          grossAssetsExceeded <- submissionConnector.checkGrossAssetsAmountExceeded(schemeTypeEis, validFormData)
+          grossAssetsExceeded <- submissionConnector.checkGrossAssetsAmountExceeded(schemeTypeSeis, validFormData)
           route <- routeRequest(grossAssetsExceeded)
         } yield route) recover {
           case e: Exception => {
