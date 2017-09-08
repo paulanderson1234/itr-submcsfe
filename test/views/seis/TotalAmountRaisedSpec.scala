@@ -24,6 +24,7 @@ import play.api.i18n.Messages
 import views.helpers.ViewSpec
 import play.api.i18n.Messages.Implicits._
 import controllers.seis.routes
+import utils.Validation
 import views.html.seis.shareDetails.TotalAmountRaised
 
 class TotalAmountRaisedSpec extends ViewSpec {
@@ -41,9 +42,10 @@ class TotalAmountRaisedSpec extends ViewSpec {
       document.getElementById("label-amount").select("span").hasClass("visuallyhidden") shouldBe true
       document.getElementById("label-amount").select(".visuallyhidden").text() shouldBe Messages("page.shareDetails.totalAmountRaised.heading")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
-      
+      document.select("input").attr("maxLength") shouldBe Validation.financialMaxAmountLength.toString
       // secondary paragraph:
       document.body.getElementById("description-one").text shouldBe Messages("page.shareDetails.totalAmountRaised.descriptionOne.text")
+      document.select(".error-summary").isEmpty shouldBe true
     }
 	
     "contain the correct elements when the model is empty and no TotalAmountRaisedModel is loaded" in new SEISSetup {
@@ -55,9 +57,10 @@ class TotalAmountRaisedSpec extends ViewSpec {
       document.getElementById("label-amount").select("span").hasClass("visuallyhidden") shouldBe true
       document.getElementById("label-amount").select(".visuallyhidden").text() shouldBe Messages("page.shareDetails.totalAmountRaised.heading")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
-      
+      document.select("input").attr("maxLength") shouldBe Validation.financialMaxAmountLength.toString
       // secondary paragraph:
       document.body.getElementById("description-one").text shouldBe Messages("page.shareDetails.totalAmountRaised.descriptionOne.text")
+      document.select(".error-summary").isEmpty shouldBe true
     }
 
     "contain the correct elements including an error sumary when an invalid TotalAmountRaisedModel is loaded" in new SEISSetup {
@@ -71,7 +74,7 @@ class TotalAmountRaisedSpec extends ViewSpec {
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       // Check error present:
       document.getElementById("error-summary-display").hasClass("error-summary--show")
-      
+      document.select("input").attr("maxLength") shouldBe Validation.financialMaxAmountLength.toString
       // secondary paragraph:
       document.body.getElementById("description-one").text shouldBe Messages("page.shareDetails.totalAmountRaised.descriptionOne.text")
      
