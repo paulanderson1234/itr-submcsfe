@@ -44,7 +44,6 @@ trait GrossAssetsErrorController extends FrontendController with AuthorisedAndEn
   }
 
   val submit = AuthorisedAndEnrolled.async { implicit user => implicit request =>
-    //todo Redirect to GrossAssetsAfter when complete
-    Future.successful(Redirect(routes.GrossAssetsController.show()))
+    Future.successful(Redirect(routes.FullTimeEmployeeCountController.show()))
   }
 }

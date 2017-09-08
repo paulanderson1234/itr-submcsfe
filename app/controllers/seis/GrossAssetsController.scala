@@ -59,8 +59,7 @@ trait GrossAssetsController extends FrontendController with AuthorisedAndEnrolle
     def routeRequest(grossAssetsExceeded: Option[Boolean]): Future[Result] = {
       if (grossAssetsExceeded.nonEmpty) {
         grossAssetsExceeded match {
-            //todo Route to GrosssAssetsAfter when complete
-          case Some(false) => Future.successful(Redirect(routes.GrossAssetsController.show()))
+          case Some(false) => Future.successful(Redirect(routes.FullTimeEmployeeCountController.show()))
           case _ => Future.successful(Redirect(routes.GrossAssetsErrorController.show()))
         }
       }
@@ -78,7 +77,7 @@ trait GrossAssetsController extends FrontendController with AuthorisedAndEnrolle
       validFormData => {
         s4lConnector.saveFormData(KeystoreKeys.grossAssets, validFormData)
         (for {
-          grossAssetsExceeded <- submissionConnector.checkGrossAssetsAmountExceeded(schemeTypeSeis, validFormData)
+          grossAssetsExceeded <- submissionConnector.checkGrossAssetsAmountExceeded(schemeTypeEis, validFormData)
           route <- routeRequest(grossAssetsExceeded)
         } yield route) recover {
           case e: Exception => {
