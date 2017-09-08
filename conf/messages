@@ -829,9 +829,11 @@ page.shareDetails.totalAmountSpent.title=How much of the investment from this sh
 page.companyDetails.fullTimeEmployeeCountError.title = You don''t appear to qualify for this scheme
 page.companyDetails.fullTimeEmployeeCountError.error = This is because your company had 25 or more full-time equivalent employees on the share issue date.
 page.companyDetails.fullTimeEmployeeCountError.whatNext = What happens next
-page.companyDetails.fullTimeEmployeeCountError.guidance = You can continue with your application if you think that you should qualify.
-page.companyDetails.fullTimeEmployeeCountError.incorrect = If this information is incorrect you can
+page.companyDetails.fullTimeEmployeeCountError.guidance = You can continue with your Compliance Statement if you think that you should qualify.
+page.companyDetails.fullTimeEmployeeCountError.incorrect = If this is incorrect you can
 page.companyDetails.fullTimeEmployeeCountError.incorrect.link = change your answers
+
+page.eis.companyDetails.fullTimeEmployeeCountError.error = This is because your company had 250 or more full-time equivalent employees on the share issue date.
 
 # SEIS Nominal Value of Shares
 page.nominalValueOfShares.title = What was the nominal value of each share when they were issued?
