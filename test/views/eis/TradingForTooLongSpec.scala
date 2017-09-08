@@ -50,7 +50,7 @@ class TradingForTooLongSpec extends ViewSpec with FakeRequestHelper {
     }
 
     "contain the correct heading" in {
-      document.select("h1").text() shouldBe Messages("page.investment.TradingForTooLong.heading")
+      document.select("h1").text() shouldBe Messages("common.error.soft.heading")
     }
 
     "contain a description of the error" in {
