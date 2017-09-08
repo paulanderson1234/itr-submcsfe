@@ -55,6 +55,7 @@ trait Constants {
   val schemeTypeSitr = "SITR"
   val schemeTypeVct = "VCT"
   val schemeTypeOther = "Other"
+  val schemeTypeEisKi = "EISKI"
 
   val PageInvestmentSchemeEisValue : String = "Enterprise Investment Scheme"
   val PageInvestmentSchemeSeisValue : String = "Seed Enterprise Investment Scheme"
@@ -105,5 +106,10 @@ trait Constants {
 
   val textAreaTwentyOne = "this is more than 20 words to see if that amount is suggested but not enforced when populating Description Text Area"
 
-
+  val fullTimeEquivalenceSEISLimit = 25
+  val fullTimeEquivalenceEISLimit = 250
+  val fullTimeEquivalenceEISInvalidLimit = 280
+  val fullTimeEquivalenceEISWithKILimit = 500
+  val fullTimeEquivalenceEISWithKIInvalidLimit = 580
+  val fullTimeEquivalenceInvalidLimit = -0.001
 }

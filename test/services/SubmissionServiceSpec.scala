@@ -17,19 +17,18 @@
 package services
 
 import auth.TAVCUser
-import models.submission.{Scheme, AASubmissionDetailsModel, SubmissionDetailsModel}
-
-import org.scalatestplus.play.OneServerPerSuite
-import auth.TAVCUser
 import auth.ggUser.allowedAuthContext
+import common.Constants
 import connectors.SubmissionConnector
+import models.submission.{AASubmissionDetailsModel, Scheme, SubmissionDetailsModel}
 import org.mockito.Matchers
-import org.scalatest.mock.MockitoSugar
 import org.mockito.Mockito._
-import play.api.libs.json.{Json, JsString}
+import org.scalatest.mock.MockitoSugar
+import org.scalatestplus.play.OneServerPerSuite
+import play.api.http.Status.OK
+import play.api.libs.json.{JsValue, Json}
 import uk.gov.hmrc.play.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.test.UnitSpec
-import play.api.test.Helpers._
 
 class SubmissionServiceSpec extends UnitSpec with MockitoSugar with OneServerPerSuite{
 
@@ -107,6 +106,9 @@ class SubmissionServiceSpec extends UnitSpec with MockitoSugar with OneServerPer
       |}
     """.stripMargin)
 
+  val successResponse: Boolean => JsValue = bool => Json.toJson(bool)
+  val failedResponse: String => JsValue = reason => Json.toJson(Map("error"->"Invalid URL parameter",
+    "reason" -> reason))
 
   "Submission service" should {
     "use the correct submission connector" in {
@@ -141,4 +143,29 @@ class SubmissionServiceSpec extends UnitSpec with MockitoSugar with OneServerPer
     }
   }
 
+  "Calling validateFullTimeEmployeeCount" should {
+    "return true with valid employee count" in {
+      when(TestSubmiisionService.submissionConnector.validateFullTimeEmployeeCount(Matchers.any(), Matchers.any())(Matchers.any())).
+        thenReturn(HttpResponse(OK, Some(successResponse(true))))
+      lazy val result = TestSubmiisionService.validateFullTimeEmployeeCount(Constants.schemeTypeEis,
+        Constants.fullTimeEquivalenceEISLimit)
+      await(result) shouldBe true
+    }
+
+    "return true with invalid employee count" in {
+      when(TestSubmiisionService.submissionConnector.validateFullTimeEmployeeCount(Matchers.any(), Matchers.any())(Matchers.any())).
+        thenReturn(HttpResponse(OK, Some(successResponse(false))))
+      lazy val result = TestSubmiisionService.validateFullTimeEmployeeCount(Constants.schemeTypeEis,
+        Constants.fullTimeEquivalenceEISInvalidLimit)
+      await(result) shouldBe false
+    }
+
+    "return false with invalid negative employee count" in {
+      when(TestSubmiisionService.submissionConnector.validateFullTimeEmployeeCount(Matchers.any(), Matchers.any())(Matchers.any())).
+        thenReturn(HttpResponse(OK, Some(failedResponse("Negative Number"))))
+      lazy val result = TestSubmiisionService.validateFullTimeEmployeeCount(Constants.schemeTypeEis,
+        Constants.fullTimeEquivalenceInvalidLimit)
+      await(result) shouldBe false
+    }
+  }
 }

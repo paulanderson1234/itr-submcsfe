@@ -44,8 +44,8 @@ trait SubmissionService {
     }
   }
 
-  def validateFullTimeEmployeeCount(employeeCount: BigDecimal)(implicit hc: HeaderCarrier, user: TAVCUser): Future[Boolean] ={
-    submissionConnector.validateFullTimeEmployeeCount(employeeCount) map {
+  def validateFullTimeEmployeeCount(schemeType: String, employeeCount: BigDecimal)(implicit hc: HeaderCarrier, user: TAVCUser): Future[Boolean] ={
+    submissionConnector.validateFullTimeEmployeeCount(schemeType, employeeCount) map {
       employeeCountValidation =>
         employeeCountValidation.json.validate[Boolean] match {
           case data: JsSuccess[Boolean] => data.value

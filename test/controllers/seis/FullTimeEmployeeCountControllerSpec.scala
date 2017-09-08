@@ -17,7 +17,7 @@
 package controllers.seis
 
 import auth.{MockAuthConnector, MockConfig}
-import common.KeystoreKeys
+import common.{Constants, KeystoreKeys}
 import config.{AppConfig, FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
@@ -40,14 +40,15 @@ class FullTimeEmployeeCountControllerSpec extends BaseSpec {
     val submissionService = mock[SubmissionService]
   }
 
-  val validFullTimeEmploymentCount = Some(FullTimeEmployeeCountModel(22))
-  val invalidFullTimeEmploymentCount = Some(FullTimeEmployeeCountModel(28))
+  val validFullTimeEmploymentCount = Some(FullTimeEmployeeCountModel(Constants.fullTimeEquivalenceSEISLimit))
+  val invalidFullTimeEmploymentCount = Some(FullTimeEmployeeCountModel(Constants.fullTimeEquivalenceInvalidLimit))
 
   def setupMocks(fullTimeEmployeeCountModel: Option[FullTimeEmployeeCountModel] = None, validCount : Boolean): Unit = {
     when(mockS4lConnector.fetchAndGetFormData[FullTimeEmployeeCountModel](Matchers.eq(KeystoreKeys.fullTimeEmployeeCount))
       (Matchers.any(), Matchers.any(), Matchers.any()))
       .thenReturn(Future.successful(fullTimeEmployeeCountModel))
-    when(controller.submissionService.validateFullTimeEmployeeCount(Matchers.anyDouble())
+
+    when(controller.submissionService.validateFullTimeEmployeeCount(Matchers.any(), Matchers.any())
       (Matchers.any(), Matchers.any()))
       .thenReturn(validCount)
   }
@@ -111,6 +112,7 @@ class FullTimeEmployeeCountControllerSpec extends BaseSpec {
     "Sending an invalid employee count form submission to the FullTimeEmployeeCountController when authenticated and enrolled" should {
       "rsepond with a bad request" in {
         mockEnrolledRequest(seisSchemeTypesModel)
+        setupMocks(invalidFullTimeEmploymentCount, validCount = false)
         val formInput = "isFirstTrade" -> ""
         submitWithSessionAndAuth(controller.submit,formInput)(
           result => {
