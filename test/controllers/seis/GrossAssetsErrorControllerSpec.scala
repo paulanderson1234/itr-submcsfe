@@ -62,7 +62,8 @@ class GrossAssetsErrorControllerSpec extends BaseSpec {
       submitWithSessionAndAuth(TestController.submit)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(controllers.seis.routes.FullTimeEmployeeCountController.show().url)
+          //todo Redirect to GrossAssets after page when complete
+          redirectLocation(result) shouldBe Some(routes.GrossAssetsController.show().url)
         }
       )
     }

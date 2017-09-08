@@ -35,7 +35,8 @@ package connectors
 import java.util.UUID
 
 import auth.MockConfig
-import models.{AddressModel, AnnualTurnoverCostsModel, ProposedInvestmentModel}
+import common.Constants._
+import models.{GrossAssetsModel, AddressModel, AnnualTurnoverCostsModel, ProposedInvestmentModel}
 import play.api.test.Helpers._
 import fixtures.SubmissionFixture
 import models.registration.RegistrationDetailsModel
@@ -70,6 +71,7 @@ class SubmissionConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndA
   val tradeStartMonthNo = false
   val tradeStartYearYes = true
   val tradeStartYearNo = false
+  val grossAssetsAmount = 1000
 
   object TargetSubmissionConnector extends SubmissionConnector with FrontendController {
     override val serviceUrl = MockConfig.submissionUrl
@@ -328,4 +330,15 @@ class SubmissionConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndA
     }
   }
 
+  "Calling checkGrossAssetsAmountExceeded" should {
+
+    lazy val result = TargetSubmissionConnector.checkGrossAssetsAmountExceeded(schemeTypeEis,GrossAssetsModel(grossAssetsAmount))
+
+    "return a valid Boolean" in {
+      when(mockHttp.GET[Option[Boolean]](Matchers.eq(
+        s"${TargetSubmissionConnector.serviceUrl}/investment-tax-relief/gross-assets/gross-assets-checker/check-total/gross-amount/$schemeTypeEis/$grossAssetsAmount"))
+        (Matchers.any(),Matchers.any())).thenReturn(Some(validResponse))
+      await(result) shouldBe Some(validResponse)
+    }
+  }
 }

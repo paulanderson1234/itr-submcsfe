@@ -82,14 +82,15 @@ class GrossAssetsControllerSpec extends BaseSpec {
 
   "Sending a valid form submit to the GrossAssetsController" should {
     "redirect to the correct next page if the allowed amount is not exceeded from API" in {
-      when(mockSubmissionConnector.checkGrossAssetsAmountExceeded(Matchers.any())
+      when(mockSubmissionConnector.checkGrossAssetsAmountExceeded(Matchers.any(), Matchers.any())
       (Matchers.any())).thenReturn(Future.successful(Option(false)))
       mockEnrolledRequest(seisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,
         "grossAmount" -> "200000")(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(routes.FullTimeEmployeeCountController.show().url)
+          //todo Redirect to GrossAssetsAfter page when complete
+          redirectLocation(result) shouldBe Some(routes.GrossAssetsController.show().url)
         }
       )
     }
@@ -98,7 +99,7 @@ class GrossAssetsControllerSpec extends BaseSpec {
 
   "Sending a valid form submit to the GrossAssetsController" should {
     "redirect to the correct next page if the allowed amount is exceeded from API" in {
-      when(mockSubmissionConnector.checkGrossAssetsAmountExceeded(Matchers.any())
+      when(mockSubmissionConnector.checkGrossAssetsAmountExceeded(Matchers.any(), Matchers.any())
       (Matchers.any())).thenReturn(Future.successful(Option(true)))
       mockEnrolledRequest(seisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,
