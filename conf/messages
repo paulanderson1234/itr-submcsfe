@@ -41,7 +41,7 @@ common.address.findUKAddress=Find UK address
 common.back.dashboard=Dashboard
 common.changeAnswers.text=If this information is incorrect you can
 common.changeAnswers.link=change your answers
-common.error.soft.heading=You don''t qualify for the scheme
+common.error.soft.heading=You don''t appear to qualify for this scheme
 common.error.soft.secondaryHeading=What happens next
 common.error.soft.whatNext=You can continue with your application if you think that you should qualify.
 
