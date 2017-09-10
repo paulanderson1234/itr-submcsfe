@@ -17,6 +17,10 @@ POST       /is-company-knowledge-intensive          controllers.eis.IsCompanyKno
 GET        /ineligible-for-knowledge-intensive      controllers.eis.IneligibleForKIController.show
 POST       /ineligible-for-knowledge-intensive      controllers.eis.IneligibleForKIController.submit
 
+GET        /ineligible-for-knowledge-intensive-secondary      controllers.eis.IneligibleForKISecondaryConditionController.show
+POST       /ineligible-for-knowledge-intensive-secondary      controllers.eis.IneligibleForKISecondaryConditionController.submit
+
+
 GET        /subsidiaries                            controllers.eis.SubsidiariesController.show
 POST       /subsidiaries                            controllers.eis.SubsidiariesController.submit
 

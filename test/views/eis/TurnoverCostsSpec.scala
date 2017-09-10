@@ -18,7 +18,6 @@ package views.eis
 
 import auth.{MockConfigEISFlow, MockAuthConnector}
 import common.KeystoreKeys
-import config.FrontendAppConfig
 import controllers.eis.TurnoverCostsController
 import models.AnnualTurnoverCostsModel
 import org.jsoup.Jsoup
@@ -57,20 +56,28 @@ class TurnoverCostsSpec extends ViewSpec {
     document.title() shouldBe Messages("page.companyDetails.TurnoverCosts.title")
     document.getElementById("main-heading").text() shouldBe Messages("page.companyDetails.TurnoverCosts.heading")
     document.getElementById("turnover-costs-hint-one").text() shouldBe Messages("page.companyDetails.TurnoverCosts.hint.one")
-    document.getElementById("col-heading-one").hasClass("visuallyhidden")
+    document.getElementById("col-heading-one").hasClass("visuallyhidden") shouldBe true
     document.getElementById("col-heading-one").text() shouldBe Messages("page.companyDetails.TurnoverCosts.col.heading.one")
-    document.getElementById("col-heading-two").hasClass("visuallyhidden")
     document.getElementById("col-heading-two").text() shouldBe Messages("page.companyDetails.TurnoverCosts.col.heading.two")
-
     document.getElementById("help").text() shouldBe Messages("page.companyDetails.TurnoverCosts.help.link")
     document.getElementById("help-text").text() shouldBe Messages("page.companyDetails.TurnoverCosts.help.text")
-
     document.getElementById("row-heading-one").text() shouldBe Messages("page.companyDetails.TurnoverCosts.row.heading.one")
     document.getElementById("row-heading-two").text() shouldBe Messages("page.companyDetails.TurnoverCosts.row.heading.two")
     document.getElementById("row-heading-three").text() shouldBe Messages("page.companyDetails.TurnoverCosts.row.heading.three")
     document.getElementById("row-heading-four").text() shouldBe Messages("page.companyDetails.TurnoverCosts.row.heading.four")
     document.getElementById("row-heading-five").text() shouldBe Messages("page.companyDetails.TurnoverCosts.row.heading.five")
     document.getElementById("next").text() shouldBe Messages("common.button.snc")
+    document.getElementById("label-firstYear").select(".visuallyhidden").text() shouldBe Messages("page.companyDetails.TurnoverCosts.row.one.label.year")
+    document.getElementById("label-amount-one").select(".visuallyhidden").text() shouldBe Messages("page.companyDetails.TurnoverCosts.row.one.label.turnover")
+    document.getElementById("label-secondYear").select(".visuallyhidden").text() shouldBe Messages("page.companyDetails.TurnoverCosts.row.two.label.year")
+    document.getElementById("label-amount-two").select(".visuallyhidden").text() shouldBe Messages("page.companyDetails.TurnoverCosts.row.two.label.turnover")
+    document.getElementById("label-thirdYear").select(".visuallyhidden").text() shouldBe Messages("page.companyDetails.TurnoverCosts.row.three.label.year")
+    document.getElementById("label-amount-three").select(".visuallyhidden").text() shouldBe Messages("page.companyDetails.TurnoverCosts.row.three.label.turnover")
+    document.getElementById("label-fourthYear").select(".visuallyhidden").text() shouldBe Messages("page.companyDetails.TurnoverCosts.row.four.label.year")
+    document.getElementById("label-amount-four").select(".visuallyhidden").text() shouldBe Messages("page.companyDetails.TurnoverCosts.row.four.label.turnover")
+    document.getElementById("label-fifthYear").select(".visuallyhidden").text() shouldBe Messages("page.companyDetails.TurnoverCosts.row.five.label.year")
+    document.getElementById("label-amount-five").select(".visuallyhidden").text() shouldBe Messages("page.companyDetails.TurnoverCosts.row.five.label.turnover")
+    document.select(".error-summary").isEmpty shouldBe true
 
   }
 
@@ -85,20 +92,28 @@ class TurnoverCostsSpec extends ViewSpec {
     document.title() shouldBe Messages("page.companyDetails.TurnoverCosts.title")
     document.getElementById("main-heading").text() shouldBe Messages("page.companyDetails.TurnoverCosts.heading")
     document.getElementById("turnover-costs-hint-one").text() shouldBe Messages("page.companyDetails.TurnoverCosts.hint.one")
-    document.getElementById("col-heading-one").hasClass("visuallyhidden")
+    document.getElementById("col-heading-one").hasClass("visuallyhidden") shouldBe true
     document.getElementById("col-heading-one").text() shouldBe Messages("page.companyDetails.TurnoverCosts.col.heading.one")
-    document.getElementById("col-heading-two").hasClass("visuallyhidden")
     document.getElementById("col-heading-two").text() shouldBe Messages("page.companyDetails.TurnoverCosts.col.heading.two")
-
     document.getElementById("help").text() shouldBe Messages("page.companyDetails.TurnoverCosts.help.link")
     document.getElementById("help-text").text() shouldBe Messages("page.companyDetails.TurnoverCosts.help.text")
-
     document.getElementById("row-heading-one").text() shouldBe Messages("page.companyDetails.TurnoverCosts.row.heading.one")
     document.getElementById("row-heading-two").text() shouldBe Messages("page.companyDetails.TurnoverCosts.row.heading.two")
     document.getElementById("row-heading-three").text() shouldBe Messages("page.companyDetails.TurnoverCosts.row.heading.three")
     document.getElementById("row-heading-four").text() shouldBe Messages("page.companyDetails.TurnoverCosts.row.heading.four")
     document.getElementById("row-heading-five").text() shouldBe Messages("page.companyDetails.TurnoverCosts.row.heading.five")
     document.getElementById("next").text() shouldBe Messages("common.button.snc")
+    document.getElementById("label-firstYear").select(".visuallyhidden").text() shouldBe Messages("page.companyDetails.TurnoverCosts.row.one.label.year")
+    document.getElementById("label-amount-one").select(".visuallyhidden").text() shouldBe Messages("page.companyDetails.TurnoverCosts.row.one.label.turnover")
+    document.getElementById("label-secondYear").select(".visuallyhidden").text() shouldBe Messages("page.companyDetails.TurnoverCosts.row.two.label.year")
+    document.getElementById("label-amount-two").select(".visuallyhidden").text() shouldBe Messages("page.companyDetails.TurnoverCosts.row.two.label.turnover")
+    document.getElementById("label-thirdYear").select(".visuallyhidden").text() shouldBe Messages("page.companyDetails.TurnoverCosts.row.three.label.year")
+    document.getElementById("label-amount-three").select(".visuallyhidden").text() shouldBe Messages("page.companyDetails.TurnoverCosts.row.three.label.turnover")
+    document.getElementById("label-fourthYear").select(".visuallyhidden").text() shouldBe Messages("page.companyDetails.TurnoverCosts.row.four.label.year")
+    document.getElementById("label-amount-four").select(".visuallyhidden").text() shouldBe Messages("page.companyDetails.TurnoverCosts.row.four.label.turnover")
+    document.getElementById("label-fifthYear").select(".visuallyhidden").text() shouldBe Messages("page.companyDetails.TurnoverCosts.row.five.label.year")
+    document.getElementById("label-amount-five").select(".visuallyhidden").text() shouldBe Messages("page.companyDetails.TurnoverCosts.row.five.label.turnover")
+    document.select(".error-summary").isEmpty shouldBe true
   }
 
   "Verify that TurnoverCosts page contains show the error summary when an invalid model (no data) is submitted" in new Setup {
@@ -108,7 +123,7 @@ class TurnoverCostsSpec extends ViewSpec {
       Jsoup.parse(contentAsString(result))
     }
     // Make sure we have the expected error summary displayed
-    document.getElementById("error-summary-display").hasClass("error-summary--show")
+    document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe true
     document.title() shouldBe Messages("page.companyDetails.TurnoverCosts.title")
   }
 }

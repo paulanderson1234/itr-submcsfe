@@ -40,7 +40,7 @@ object PreviousSchemeController extends PreviousSchemeController
 
 trait PreviousSchemeController extends FrontendController with AuthorisedAndEnrolledForTAVC {
 
-  override val acceptedFlows = Seq(Seq(EIS),Seq(VCT),Seq(EIS,VCT))
+  override val acceptedFlows = Seq(Seq(EIS))
 
   def show(id: Option[Int]): Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user => implicit request =>
     def routeRequest(backUrl: Option[String]) = {

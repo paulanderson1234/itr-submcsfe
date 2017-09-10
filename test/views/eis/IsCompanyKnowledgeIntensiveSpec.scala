@@ -18,7 +18,6 @@ package views.eis
 
 import auth.{MockConfigEISFlow, MockAuthConnector}
 import common.KeystoreKeys
-import config.FrontendAppConfig
 import controllers.eis.IsCompanyKnowledgeIntensiveController
 import models.IsCompanyKnowledgeIntensiveModel
 import org.jsoup.Jsoup
@@ -66,6 +65,8 @@ class IsCompanyKnowledgeIntensiveSpec extends ViewSpec {
     document.getElementById("isCompanyKnowledgeIntensive-yesLabel").text() shouldBe Messages("common.radioYesLabel")
     document.getElementById("isCompanyKnowledgeIntensive-noLabel").text() shouldBe Messages("common.radioNoLabel")
     document.getElementById("next").text() shouldBe Messages("common.button.snc")
+    document.getElementsByTag("legend").select(".visuallyhidden").text() shouldBe Messages("page.companyDetails.IsCompanyKnowledgeIntensive.heading")
+    document.select(".error-summary").isEmpty shouldBe true
   }
 
   "Verify that isCompanyKnowledgeIntensive page contains the correct elements when an empty model " +
@@ -89,6 +90,8 @@ class IsCompanyKnowledgeIntensiveSpec extends ViewSpec {
     document.getElementById("isCompanyKnowledgeIntensive-yesLabel").text() shouldBe Messages("common.radioYesLabel")
     document.getElementById("isCompanyKnowledgeIntensive-noLabel").text() shouldBe Messages("common.radioNoLabel")
     document.getElementById("next").text() shouldBe Messages("common.button.snc")
+    document.getElementsByTag("legend").select(".visuallyhidden").text() shouldBe Messages("page.companyDetails.IsCompanyKnowledgeIntensive.heading")
+    document.select(".error-summary").isEmpty shouldBe true
   }
 
   "Verify that IsCompanyKnowledgeIntensive page contains show the error summary when an invalid model (no radio button selection) is submitted" in new Setup {
@@ -98,7 +101,7 @@ class IsCompanyKnowledgeIntensiveSpec extends ViewSpec {
       Jsoup.parse(contentAsString(result))
     }
     // Make sure we have the expected error summary displayed
-    document.getElementById("error-summary-display").hasClass("error-summary--show")
+    document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe true
     document.title() shouldBe Messages("page.companyDetails.IsCompanyKnowledgeIntensive.title")
   }
 }

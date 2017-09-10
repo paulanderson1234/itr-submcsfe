@@ -144,7 +144,7 @@ class TenYearPlanControllerSpec extends BaseSpec {
         "descriptionTextArea" -> "")(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(routes.IneligibleForKIController.show().url)
+          redirectLocation(result) shouldBe Some(routes.IneligibleForKISecondaryConditionController.show().url)
         }
       )
     }

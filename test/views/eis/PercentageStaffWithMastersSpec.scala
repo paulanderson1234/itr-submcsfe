@@ -18,7 +18,6 @@ package views.eis
 
 import auth.{MockConfigEISFlow, MockAuthConnector}
 import common.KeystoreKeys
-import config.FrontendAppConfig
 import controllers.eis.PercentageStaffWithMastersController
 import models.PercentageStaffWithMastersModel
 import org.jsoup.Jsoup
@@ -47,7 +46,7 @@ class PercentageStaffWithMastersSpec extends ViewSpec {
       (Matchers.any(), Matchers.any(),Matchers.any())).thenReturn(Future.successful(percentageStaffWithMastersModel))
 
   "Verify that the PercentageStaffWithMasters page contains the correct elements " +
-    "when a valid PercentageStaffWithMastersModel is passed as returned from keystore" in new Setup {
+    "when a valid PercentageStaffWithMastersModel is passed as returned from storage" in new Setup {
     val document : Document = {
       setupMocks(Some(percentageStaffWithMastersModelYes))
       val result = TestController.show.apply(authorisedFakeRequest)
@@ -62,12 +61,14 @@ class PercentageStaffWithMastersSpec extends ViewSpec {
     document.getElementById("staffWithMasters-yesLabel").text() shouldBe Messages("common.radioYesLabel")
     document.getElementById("staffWithMasters-noLabel").text() shouldBe Messages("common.radioNoLabel")
     document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.one")
-    document.getElementById("yes-hint").text() shouldBe Messages("page.percentageStaffWithMasters.yes.hint")
+    document.getElementById("desc-one").text() shouldBe Messages("page.percentageStaffWithMasters.yes.hint")
     document.getElementById("next").text() shouldBe Messages("common.button.snc")
+    document.getElementsByTag("legend").select(".visuallyhidden").text() shouldBe Messages("page.knowledgeIntensive.PercentageStaffWithMasters.hint")
+    document.select(".error-summary").isEmpty shouldBe true
   }
 
   "Verify that PercentageStaffWithMasters page contains the correct elements when an empty model " +
-    "is passed because nothing was returned from keystore" in new Setup {
+    "is passed because nothing was returned from storage" in new Setup {
     val document : Document = {
       setupMocks()
       val result = TestController.show.apply(authorisedFakeRequest)
@@ -82,7 +83,10 @@ class PercentageStaffWithMastersSpec extends ViewSpec {
     document.getElementById("staffWithMasters-yesLabel").text() shouldBe Messages("common.radioYesLabel")
     document.getElementById("staffWithMasters-noLabel").text() shouldBe Messages("common.radioNoLabel")
     document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.one")
+    document.getElementById("desc-one").text() shouldBe Messages("page.percentageStaffWithMasters.yes.hint")
     document.getElementById("next").text() shouldBe Messages("common.button.snc")
+    document.getElementsByTag("legend").select(".visuallyhidden").text() shouldBe Messages("page.knowledgeIntensive.PercentageStaffWithMasters.hint")
+    document.select(".error-summary").isEmpty shouldBe true
   }
 
 
@@ -93,7 +97,7 @@ class PercentageStaffWithMastersSpec extends ViewSpec {
       Jsoup.parse(contentAsString(result))
     }
     // Make sure we have the expected error summary displayed
-    document.getElementById("error-summary-display").hasClass("error-summary--show")
+    document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe true
     document.title() shouldBe Messages("page.knowledgeIntensive.PercentageStaffWithMasters.title")
   }
 }
