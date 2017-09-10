@@ -33,7 +33,7 @@ class GrossAssetsErrorSpec extends ViewSpec {
 
       document.title shouldEqual Messages("page.companyDetails.grossAssetsError.title")
       document.body.getElementById("main-heading").text() shouldEqual Messages("page.companyDetails.grossAssetsError.heading")
-      document.body.getElementById("error-description").text() shouldEqual Messages("page.companyDetails.grossAssetsError.description")
+      document.body.getElementById("error-description").text() shouldEqual Messages("page.companyDetails.grossAssetsError.description.seis")
       document.body.getElementById("what-next-heading").text() shouldEqual Messages("page.companyDetails.grossAssetsError.whatNext.heading")
       document.body.getElementById("continue-text").text() shouldEqual Messages("page.companyDetails.grossAssetsError.whatNext.continue")
 
