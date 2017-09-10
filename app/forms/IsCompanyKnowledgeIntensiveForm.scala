@@ -16,16 +16,14 @@
 
 package forms
 
-import models.TenYearPlanModel
+import models.IsCompanyKnowledgeIntensiveModel
 import play.api.data.Form
 import play.api.data.Forms._
-import utils.Validation._
 
-object TenYearPlanForm {
-  val tenYearPlanForm = Form(
+object IsCompanyKnowledgeIntensiveForm {
+  val isCompanyKnowledgeIntensiveForm = Form(
     mapping(
-      "hasTenYearPlan" -> nonEmptyText,
-      "descriptionTextArea" -> optional(nonEmptyText)
-    )(TenYearPlanModel.apply)(TenYearPlanModel.unapply).verifying(tenYearPlanDescValidation)
+      "isCompanyKnowledgeIntensive" -> nonEmptyText
+    )(IsCompanyKnowledgeIntensiveModel.apply)(IsCompanyKnowledgeIntensiveModel.unapply)
   )
 }

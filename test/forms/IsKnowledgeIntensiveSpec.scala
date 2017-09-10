@@ -46,41 +46,41 @@ class IsKnowledgeIntensiveSpec extends ViewSpec {
       (Matchers.any(), Matchers.any(),Matchers.any())).thenReturn(Future.successful(isKnowledgeIntensiveModel))
 
   "Verify that the isKnowledgeIntensive page contains the correct elements " +
-    "when a valid IsKnowledgeIntensiveModel is passed as returned from storage" in new Setup {
+    "when a valid IsKnowledgeIntensiveModel is passed as returned from keystore" in new Setup {
     val document : Document = {
       setupMocks(Some(isKnowledgeIntensiveModelYes))
       val result = TestController.show.apply(authorisedFakeRequest)
       Jsoup.parse(contentAsString(result))
     }
-    document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.CommercialSaleController.show().url
-    document.title() shouldBe Messages("page.companyDetails.IsKnowledgeIntensive.title")
-    document.getElementById("main-heading").text() shouldBe Messages("page.companyDetails.IsKnowledgeIntensive.heading")
-    document.select("#isKnowledgeIntensive-yes").size() shouldBe 1
+    document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.IsCompanyKnowledgeIntensiveController.show().url
+    document.title() shouldBe Messages("page.companyDetails.ApplyForKI.title")
+    document.getElementById("main-heading").text() shouldBe Messages("page.companyDetails.ApplyForKI.heading")
+    document.getElementById("description-ki").text() shouldBe Messages("page.companyDetails.ApplyForKI.description.1")
+    document.getElementById("knowledge-intensive-hint").text() shouldBe Messages("page.companyDetails.ApplyForKI.hint")
+    document.select("#isKnowledgeIntensive-no").size() shouldBe 1
     document.select("#isKnowledgeIntensive-yes").size() shouldBe 1
     document.getElementById("isKnowledgeIntensive-yesLabel").text() shouldBe Messages("common.radioYesLabel")
     document.getElementById("isKnowledgeIntensive-noLabel").text() shouldBe Messages("common.radioNoLabel")
     document.getElementById("next").text() shouldBe Messages("common.button.snc")
-    document.getElementsByTag("legend").select(".visuallyhidden").text() shouldBe Messages("page.companyDetails.IsKnowledgeIntensive.heading")
-    document.select(".error-summary").isEmpty shouldBe true
   }
 
   "Verify that isKnowledgeIntensive page contains the correct elements when an empty model " +
-    "is passed because nothing was returned from storage" in new Setup {
+    "is passed because nothing was returned from keystore" in new Setup {
     val document : Document = {
       setupMocks()
       val result = TestController.show.apply(authorisedFakeRequest)
       Jsoup.parse(contentAsString(result))
     }
-    document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.CommercialSaleController.show().url
-    document.title() shouldBe Messages("page.companyDetails.IsKnowledgeIntensive.title")
-    document.getElementById("main-heading").text() shouldBe Messages("page.companyDetails.IsKnowledgeIntensive.heading")
+    document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.IsCompanyKnowledgeIntensiveController.show().url
+    document.title() shouldBe Messages("page.companyDetails.ApplyForKI.title")
+    document.getElementById("main-heading").text() shouldBe Messages("page.companyDetails.ApplyForKI.heading")
+    document.getElementById("description-ki").text() shouldBe Messages("page.companyDetails.ApplyForKI.description.1")
+    document.getElementById("knowledge-intensive-hint").text() shouldBe Messages("page.companyDetails.ApplyForKI.hint")
     document.select("#isKnowledgeIntensive-yes").size() shouldBe 1
     document.select("#isKnowledgeIntensive-yes").size() shouldBe 1
     document.getElementById("isKnowledgeIntensive-yesLabel").text() shouldBe Messages("common.radioYesLabel")
     document.getElementById("isKnowledgeIntensive-noLabel").text() shouldBe Messages("common.radioNoLabel")
     document.getElementById("next").text() shouldBe Messages("common.button.snc")
-    document.getElementsByTag("legend").select(".visuallyhidden").text() shouldBe Messages("page.companyDetails.IsKnowledgeIntensive.heading")
-    document.select(".error-summary").isEmpty shouldBe true
   }
 
   "Verify that IsKnowledgeIntensive page contains show the error summary when an invalid model (no radio button selection) is submitted" in new Setup {
@@ -90,7 +90,7 @@ class IsKnowledgeIntensiveSpec extends ViewSpec {
       Jsoup.parse(contentAsString(result))
     }
     // Make sure we have the expected error summary displayed
-    document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe true
-    document.title() shouldBe Messages("page.companyDetails.IsKnowledgeIntensive.title")
+    document.getElementById("error-summary-display").hasClass("error-summary--show")
+    document.title() shouldBe Messages("page.companyDetails.ApplyForKI.title")
   }
 }

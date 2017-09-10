@@ -10,6 +10,10 @@ POST       /commercial-sale                         controllers.eis.CommercialSa
 GET        /is-knowledge-intensive                  controllers.eis.IsKnowledgeIntensiveController.show
 POST       /is-knowledge-intensive                  controllers.eis.IsKnowledgeIntensiveController.submit
 
+GET        /is-company-knowledge-intensive          controllers.eis.IsCompanyKnowledgeIntensiveController.show
+POST       /is-company-knowledge-intensive          controllers.eis.IsCompanyKnowledgeIntensiveController.submit
+
+
 GET        /ineligible-for-knowledge-intensive      controllers.eis.IneligibleForKIController.show
 POST       /ineligible-for-knowledge-intensive      controllers.eis.IneligibleForKIController.submit
 
