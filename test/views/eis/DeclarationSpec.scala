@@ -16,36 +16,22 @@
 
 package views.eis
 
-import auth.{MockConfigSingleFlow, MockAuthConnector}
-import common.KeystoreKeys
-import controllers.eis.{DeclarationController, routes}
+import controllers.eis.{routes}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import org.mockito.Matchers
-import org.mockito.Mockito._
 import play.api.i18n.Messages
 import play.api.i18n.Messages.Implicits._
-import play.api.test.Helpers._
 import views.helpers.ViewSpec
-
-import scala.concurrent.Future
+import views.html.eis.checkAndSubmit.Declaration
 
 class DeclarationSpec extends ViewSpec {
 
-  object TestController extends DeclarationController {
-    override lazy val applicationConfig = MockConfigSingleFlow
-    override lazy val authConnector = MockAuthConnector
-    override lazy val s4lConnector = mockS4lConnector
-    override lazy val enrolmentConnector = mockEnrolmentConnector
-  }
-
-
   "The Declaration page" should {
 
-    "Verify that the declaration page has the correct elements" in new Setup {
+    "Verify that the declaration page has the correct elements" in {
       val document: Document = {
-        val result = TestController.show.apply(authorisedFakeRequest)
-        Jsoup.parse(contentAsString(result))
+        val page = Declaration()(fakeRequest, applicationMessages)
+        Jsoup.parse(page.body)
       }
       document.title() shouldBe Messages("page.declaration.title")
       document.getElementById("main-heading").text() shouldBe Messages("page.declaration.heading")
@@ -54,7 +40,7 @@ class DeclarationSpec extends ViewSpec {
       document.getElementById("warningMessage").text() shouldBe Messages("page.declaration.warning")
       document.getElementById("next").text() shouldBe Messages("page.declaration.submit")
       document.select("form").attr("method") shouldBe "GET"
-      document.select("form").attr("action") shouldBe controllers.eis.routes.AcknowledgementController.show().url
+      document.select("form").attr("action") shouldBe routes.AcknowledgementController.show().url
       document.getElementById("do-not-agree").text() shouldBe Messages("page.declaration.doNotAgree")
       document.getElementById("do-not-agree").attr("href") shouldBe controllers.routes.ApplicationHubController.show().toString
     }

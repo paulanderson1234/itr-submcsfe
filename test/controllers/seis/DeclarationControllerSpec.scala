@@ -50,7 +50,7 @@ class DeclarationControllerSpec extends BaseSpec {
   }
 
   "Sending a GET request to DeclarationController when authenticated and enrolled" should {
-    "return a 200" in {
+    "return an OK" in {
       mockEnrolledRequest(seisSchemeTypesModel)
       showWithSessionAndAuth(DeclarationControllerTest.show())(
         result => status(result) shouldBe OK
