@@ -25,7 +25,7 @@ import org.mockito.Matchers
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
 import org.scalatestplus.play.OneServerPerSuite
-import play.api.http.Status.OK
+import play.api.http.Status._
 import play.api.libs.json.{JsValue, Json}
 import uk.gov.hmrc.play.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.test.UnitSpec
@@ -152,7 +152,7 @@ class SubmissionServiceSpec extends UnitSpec with MockitoSugar with OneServerPer
       await(result) shouldBe true
     }
 
-    "return true with invalid employee count" in {
+    "return false with invalid employee count" in {
       when(TestSubmiisionService.submissionConnector.validateFullTimeEmployeeCount(Matchers.any(), Matchers.any())(Matchers.any())).
         thenReturn(HttpResponse(OK, Some(successResponse(false))))
       lazy val result = TestSubmiisionService.validateFullTimeEmployeeCount(Constants.schemeTypeEis,
@@ -162,7 +162,7 @@ class SubmissionServiceSpec extends UnitSpec with MockitoSugar with OneServerPer
 
     "return false with invalid negative employee count" in {
       when(TestSubmiisionService.submissionConnector.validateFullTimeEmployeeCount(Matchers.any(), Matchers.any())(Matchers.any())).
-        thenReturn(HttpResponse(OK, Some(failedResponse("Negative Number"))))
+        thenReturn(HttpResponse(BAD_REQUEST, Some(failedResponse("Negative Number"))))
       lazy val result = TestSubmiisionService.validateFullTimeEmployeeCount(Constants.schemeTypeEis,
         Constants.fullTimeEquivalenceInvalidLimit)
       await(result) shouldBe false
