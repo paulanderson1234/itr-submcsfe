@@ -20,6 +20,7 @@ import auth.{AuthorisedAndEnrolledForTAVC, EIS, TAVCUser}
 import common.{Constants, KeystoreKeys}
 import config.{AppConfig, FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
+import controllers.Helpers.ControllerHelpers
 import forms.FullTimeEmployeeCountForm._
 import models.{FullTimeEmployeeCountModel, KiProcessingModel}
 import play.api.Play.current
@@ -46,21 +47,32 @@ trait FullTimeEmployeeCountController extends FrontendController with Authorised
 
   val show = AuthorisedAndEnrolled.async { implicit user =>
     implicit request =>
-      s4lConnector.fetchAndGetFormData[FullTimeEmployeeCountModel](KeystoreKeys.fullTimeEmployeeCount).map {
-        case Some(data) => Ok(FullTimeEmployeeCount(fullTimeEmployeeCountForm.fill(data)))
-        case None => Ok(FullTimeEmployeeCount(fullTimeEmployeeCountForm))
+      def routeRequest(backUrl: Option[String]) = {
+        if (backUrl.isDefined) {
+          s4lConnector.fetchAndGetFormData[FullTimeEmployeeCountModel](KeystoreKeys.fullTimeEmployeeCount).map {
+            case Some(data) => Ok(FullTimeEmployeeCount(fullTimeEmployeeCountForm.fill(data), backUrl.get))
+            case None => Ok(FullTimeEmployeeCount(fullTimeEmployeeCountForm, backUrl.get))
+          }
+        }
+        else
+          Future.successful(Redirect(controllers.eis.routes.GrossAssetsController.show()))
       }
+      for {
+        link <- ControllerHelpers.getSavedBackLink(KeystoreKeys.backLinkFullTimeEmployeeCount, s4lConnector)
+        route <- routeRequest(link)
+      } yield route
   }
 
   val submit = AuthorisedAndEnrolled.async { implicit user =>
     implicit request =>
       fullTimeEmployeeCountForm.bindFromRequest().fold(
         formWithErrors => {
-          Future.successful(BadRequest(FullTimeEmployeeCount(formWithErrors)))
+          ControllerHelpers.getSavedBackLink(KeystoreKeys.backLinkFullTimeEmployeeCount, s4lConnector).flatMap(url =>
+            Future.successful(BadRequest(FullTimeEmployeeCount(formWithErrors, url.get))))
         },
         validFormData => {
           s4lConnector.saveFormData[FullTimeEmployeeCountModel](KeystoreKeys.fullTimeEmployeeCount, validFormData)
-
+          s4lConnector.saveFormData(KeystoreKeys.backLinkHadRFI, routes.HadPreviousRFIController.show().url)
           val fteStatus = getSchemeType(s4lConnector).flatMap (schemeType => {
             schemeType match {
               case Constants.schemeTypeEisKi =>

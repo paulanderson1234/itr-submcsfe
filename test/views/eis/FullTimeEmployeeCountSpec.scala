@@ -32,9 +32,10 @@ class FullTimeEmployeeCountSpec extends ViewSpec {
   "FullTimeEmployeeCount view" when {
     implicit lazy val request = FakeRequest("GET", "")
 
-    "not supplied with form errors" should {
+    "not supplied with form errors from IsCompanyKnowledgeIntensive page" should {
       lazy val document: Document = {
-        val result = FullTimeEmployeeCount(fullTimeEmployeeCountForm)
+        val result = FullTimeEmployeeCount(fullTimeEmployeeCountForm,
+          controllers.eis.routes.IsCompanyKnowledgeIntensiveController.submit().url)
         Jsoup.parse(contentAsString(result))
       }
 
@@ -47,7 +48,167 @@ class FullTimeEmployeeCountSpec extends ViewSpec {
       }
 
       "have the correct back link url" in {
-        document.select("a.back-link").attr("href") shouldBe "/investment-tax-relief-cs/eis/gross-assets"
+        document.select("a.back-link").attr("href") shouldBe "/investment-tax-relief-cs/eis/is-company-knowledge-intensive"
+      }
+
+      "have the progress details" in {
+        document.select("article span").first().text shouldBe Messages("common.section.progress.details.one")
+      }
+
+      "have the correct heading" in {
+        document.select("h1").text() shouldBe Messages("page.companyDetails.fullTimeEmployeeCount.heading")
+      }
+
+      "have a paragraph for guidance" in {
+        document.select("article p").first().text() shouldBe Messages("page.companyDetails.fullTimeEmployeeCount.guidance.one")
+      }
+
+      "have some progressive disclosure" in {
+        document.select("summary").text() shouldBe Messages("page.companyDetails.fullTimeEmployeeCount.guidance.progressive")
+      }
+
+      "have a first paragraph of disclosed text" in {
+        document.select("details p").get(0).text() shouldBe Messages("page.companyDetails.fullTimeEmployeeCount.guidance.two")
+      }
+
+      "have a second paragraph of disclosed text" in {
+        document.select("details p").get(1).text() shouldBe Messages("page.companyDetails.fullTimeEmployeeCount.guidance.three")
+      }
+
+      "have a legend" which {
+        lazy val legend = document.select("legend")
+
+        "has the correct message" in {
+          legend.text() shouldBe Messages("page.companyDetails.fullTimeEmployeeCount.title")
+        }
+
+        "has a class of visuallyhidden" in {
+          legend.hasClass("visuallyhidden") shouldBe true
+        }
+      }
+
+      "have a form posting to the correct route" in {
+        document.select("form").attr("action") shouldBe controllers.eis.routes.FullTimeEmployeeCountController.submit().url
+      }
+
+      "have the correct question in a label" in {
+        document.select("fieldset label").text() shouldBe Messages("page.companyDetails.fullTimeEmployeeCount.heading")
+      }
+
+      "have an input for employeeCount" in {
+        document.select("input").attr("name") shouldBe "employeeCount"
+      }
+
+      "have max length for the employeeCount input field" in {
+        document.select("input").attr("maxlength") shouldBe Constants.fullTimeEquivalenceFieldMaxLength
+      }
+
+      "have an error summary" in {
+        document.select(".error-summary").isEmpty shouldBe true
+      }
+
+      "have a next button" in {
+        document.select("button").text() shouldBe Messages("common.button.snc")
+      }
+    }
+
+    "not supplied with form errors from TenYearPlan page" should {
+      lazy val document: Document = {
+        val result = FullTimeEmployeeCount(fullTimeEmployeeCountForm,
+          controllers.eis.routes.TenYearPlanController.submit().url)
+        Jsoup.parse(contentAsString(result))
+      }
+
+      "have the correct title" in {
+        document.title() shouldBe Messages("page.companyDetails.fullTimeEmployeeCount.title")
+      }
+
+      "have the correct back link text" in {
+        document.select("a.back-link").text() shouldBe Messages("common.button.back")
+      }
+
+      "have the correct back link url" in {
+        document.select("a.back-link").attr("href") shouldBe "/investment-tax-relief-cs/eis/ten-year-plan"
+      }
+
+      "have the progress details" in {
+        document.select("article span").first().text shouldBe Messages("common.section.progress.details.one")
+      }
+
+      "have the correct heading" in {
+        document.select("h1").text() shouldBe Messages("page.companyDetails.fullTimeEmployeeCount.heading")
+      }
+
+      "have a paragraph for guidance" in {
+        document.select("article p").first().text() shouldBe Messages("page.companyDetails.fullTimeEmployeeCount.guidance.one")
+      }
+
+      "have some progressive disclosure" in {
+        document.select("summary").text() shouldBe Messages("page.companyDetails.fullTimeEmployeeCount.guidance.progressive")
+      }
+
+      "have a first paragraph of disclosed text" in {
+        document.select("details p").get(0).text() shouldBe Messages("page.companyDetails.fullTimeEmployeeCount.guidance.two")
+      }
+
+      "have a second paragraph of disclosed text" in {
+        document.select("details p").get(1).text() shouldBe Messages("page.companyDetails.fullTimeEmployeeCount.guidance.three")
+      }
+
+      "have a legend" which {
+        lazy val legend = document.select("legend")
+
+        "has the correct message" in {
+          legend.text() shouldBe Messages("page.companyDetails.fullTimeEmployeeCount.title")
+        }
+
+        "has a class of visuallyhidden" in {
+          legend.hasClass("visuallyhidden") shouldBe true
+        }
+      }
+
+      "have a form posting to the correct route" in {
+        document.select("form").attr("action") shouldBe controllers.eis.routes.FullTimeEmployeeCountController.submit().url
+      }
+
+      "have the correct question in a label" in {
+        document.select("fieldset label").text() shouldBe Messages("page.companyDetails.fullTimeEmployeeCount.heading")
+      }
+
+      "have an input for employeeCount" in {
+        document.select("input").attr("name") shouldBe "employeeCount"
+      }
+
+      "have max length for the employeeCount input field" in {
+        document.select("input").attr("maxlength") shouldBe Constants.fullTimeEquivalenceFieldMaxLength
+      }
+
+      "have an error summary" in {
+        document.select(".error-summary").isEmpty shouldBe true
+      }
+
+      "have a next button" in {
+        document.select("button").text() shouldBe Messages("common.button.snc")
+      }
+    }
+
+    "not supplied with form errors from ineligible KI error page" should {
+      lazy val document: Document = {
+        val result = FullTimeEmployeeCount(fullTimeEmployeeCountForm,
+          controllers.eis.routes.OperatingCostsController.submit().url)
+        Jsoup.parse(contentAsString(result))
+      }
+
+      "have the correct title" in {
+        document.title() shouldBe Messages("page.companyDetails.fullTimeEmployeeCount.title")
+      }
+
+      "have the correct back link text" in {
+        document.select("a.back-link").text() shouldBe Messages("common.button.back")
+      }
+
+      "have the correct back link url" in {
+        document.select("a.back-link").attr("href") shouldBe "/investment-tax-relief-cs/eis/operating-costs"
       }
 
       "have the progress details" in {
@@ -114,7 +275,8 @@ class FullTimeEmployeeCountSpec extends ViewSpec {
     "supplied with form errors" should {
       lazy val document: Document = {
         val map = Map("employeeCount" -> "")
-        val result = FullTimeEmployeeCount(fullTimeEmployeeCountForm.bind(map))
+        val result = FullTimeEmployeeCount(fullTimeEmployeeCountForm.bind(map),
+          controllers.eis.routes.IsKnowledgeIntensiveController.submit().url)
         Jsoup.parse(contentAsString(result))
       }
 
@@ -131,7 +293,7 @@ class FullTimeEmployeeCountSpec extends ViewSpec {
       }
 
       "have the correct back link url" in {
-        document.select("a.back-link").attr("href") shouldBe "/investment-tax-relief-cs/eis/gross-assets"
+        document.select("a.back-link").attr("href") shouldBe "/investment-tax-relief-cs/eis/is-knowledge-intensive"
       }
 
       "have the progress details" in {

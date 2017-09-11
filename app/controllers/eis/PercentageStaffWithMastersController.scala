@@ -69,9 +69,9 @@ trait PercentageStaffWithMastersController extends FrontendController with Autho
 
           if (updatedModel.isKi) {
             // it's all good - no need to ask more KI questions
-            s4lConnector.saveFormData(KeystoreKeys.backLinkSubsidiaries,
+            s4lConnector.saveFormData(KeystoreKeys.backLinkFullTimeEmployeeCount,
               routes.PercentageStaffWithMastersController.show().url)
-            Future.successful(Redirect(routes.SubsidiariesController.show()))
+            Future.successful(Redirect(routes.FullTimeEmployeeCountController.show()))
           }
           else {
             // Non cost KI condition not met. Try other conditions.
