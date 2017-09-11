@@ -17,7 +17,7 @@
 package controllers.seis
 
 import auth.{AuthorisedAndEnrolledForTAVC, SEIS}
-import common.KeystoreKeys
+import common.{Constants, KeystoreKeys}
 import config.{AppConfig, FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import forms.FullTimeEmployeeCountForm._
@@ -59,7 +59,7 @@ trait FullTimeEmployeeCountController extends FrontendController with Authorised
         },
         validFormData => {
           s4lConnector.saveFormData[FullTimeEmployeeCountModel](KeystoreKeys.fullTimeEmployeeCount, validFormData)
-          submissionService.validateFullTimeEmployeeCount(validFormData.employeeCount).map {
+          submissionService.validateFullTimeEmployeeCount(Constants.schemeTypeSeis, validFormData.employeeCount).map {
             case true => Redirect(routes.HadPreviousRFIController.show())
             case false => Redirect(routes.FullTimeEmployeeCountErrorController.show())
           }

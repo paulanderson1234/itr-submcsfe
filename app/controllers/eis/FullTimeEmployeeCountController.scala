@@ -16,17 +16,18 @@
 
 package controllers.eis
 
-import auth.{AuthorisedAndEnrolledForTAVC, EIS}
-import common.KeystoreKeys
+import auth.{AuthorisedAndEnrolledForTAVC, EIS, TAVCUser}
+import common.{Constants, KeystoreKeys}
 import config.{AppConfig, FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import forms.FullTimeEmployeeCountForm._
-import models.FullTimeEmployeeCountModel
+import models.{FullTimeEmployeeCountModel, KiProcessingModel}
 import play.api.Play.current
 import play.api.i18n.Messages.Implicits._
 import services.SubmissionService
 import uk.gov.hmrc.play.frontend.auth.connectors.AuthConnector
 import uk.gov.hmrc.play.frontend.controller.FrontendController
+import uk.gov.hmrc.play.http.HeaderCarrier
 import views.html.eis.companyDetails.FullTimeEmployeeCount
 
 import scala.concurrent.Future
@@ -59,11 +60,28 @@ trait FullTimeEmployeeCountController extends FrontendController with Authorised
         },
         validFormData => {
           s4lConnector.saveFormData[FullTimeEmployeeCountModel](KeystoreKeys.fullTimeEmployeeCount, validFormData)
-          submissionService.validateFullTimeEmployeeCount(validFormData.employeeCount).map {
+
+          val fteStatus = getSchemeType(s4lConnector).flatMap (schemeType => {
+            schemeType match {
+              case Constants.schemeTypeEisKi =>
+                submissionService.validateFullTimeEmployeeCount(Constants.schemeTypeEisKi, validFormData.employeeCount)
+              case Constants.schemeTypeEis =>
+                submissionService.validateFullTimeEmployeeCount(Constants.schemeTypeEis, validFormData.employeeCount)
+            }
+          })
+
+          fteStatus.map {
             case true => Redirect(routes.HadPreviousRFIController.show())
             case false => Redirect(routes.FullTimeEmployeeCountErrorController.show())
           }
         }
       )
+  }
+
+  def getSchemeType(s4lConnector: connectors.S4LConnector) (implicit hc: HeaderCarrier, user: TAVCUser): Future[String] = {
+    s4lConnector.fetchAndGetFormData[KiProcessingModel](KeystoreKeys.kiProcessingModel).map {
+      case Some(data) if(data.isKi)=> Constants.schemeTypeEisKi
+      case _ => Constants.schemeTypeEis
+    }
   }
 }

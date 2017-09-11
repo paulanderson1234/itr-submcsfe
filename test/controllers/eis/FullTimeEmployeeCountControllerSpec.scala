@@ -17,11 +17,11 @@
 package controllers.eis
 
 import auth.{MockAuthConnector, MockConfig}
-import common.KeystoreKeys
+import common.{Constants, KeystoreKeys}
 import config.{AppConfig, FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
-import models.FullTimeEmployeeCountModel
+import models.{FullTimeEmployeeCountModel, KiProcessingModel}
 import org.mockito.Matchers
 import org.mockito.Mockito._
 import play.api.test.Helpers._
@@ -40,14 +40,21 @@ class FullTimeEmployeeCountControllerSpec extends BaseSpec {
     val submissionService = mock[SubmissionService]
   }
 
-  val validFullTimeEmploymentCount = Some(FullTimeEmployeeCountModel(22))
-  val invalidFullTimeEmploymentCount = Some(FullTimeEmployeeCountModel(28))
+  val validFullTimeEmploymentEISCount = Some(FullTimeEmployeeCountModel(Constants.fullTimeEquivalenceEISLimit))
+  val invalidFullTimeEmploymentEISCount = Some(FullTimeEmployeeCountModel(Constants.fullTimeEquivalenceEISInvalidLimit))
+  val invalidFullTimeEmploymentCount = Some(FullTimeEmployeeCountModel(Constants.fullTimeEquivalenceInvalidLimit))
+  val validFullTimeEmploymentEISWithKICount = Some(FullTimeEmployeeCountModel(Constants.fullTimeEquivalenceEISWithKILimit))
+  val invalidFullTimeEmploymentEISWithKICount = Some(FullTimeEmployeeCountModel(Constants.fullTimeEquivalenceEISWithKIInvalidLimit))
 
-  def setupMocks(fullTimeEmployeeCountModel: Option[FullTimeEmployeeCountModel] = None, validCount : Boolean): Unit = {
+  def setupMocks(fullTimeEmployeeCountModel: Option[FullTimeEmployeeCountModel] = None,
+                 validCount : Boolean, kiProcessingModel: Option[KiProcessingModel]): Unit = {
     when(mockS4lConnector.fetchAndGetFormData[FullTimeEmployeeCountModel](Matchers.eq(KeystoreKeys.fullTimeEmployeeCount))
       (Matchers.any(), Matchers.any(), Matchers.any()))
       .thenReturn(Future.successful(fullTimeEmployeeCountModel))
-    when(controller.submissionService.validateFullTimeEmployeeCount(Matchers.anyDouble())
+    when(mockS4lConnector.fetchAndGetFormData[KiProcessingModel](Matchers.eq(KeystoreKeys.kiProcessingModel))
+      (Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(kiProcessingModel))
+    when(controller.submissionService.validateFullTimeEmployeeCount(Matchers.any(), Matchers.any())
       (Matchers.any(), Matchers.any()))
       .thenReturn(validCount)
   }
@@ -70,8 +77,8 @@ class FullTimeEmployeeCountControllerSpec extends BaseSpec {
       FullTimeEmployeeCountController.authConnector shouldBe FrontendAuthConnector
     }
 
-    "return a valid 200 response from a show GET request when authorised" in {
-      setupMocks(validFullTimeEmploymentCount, validCount = false)
+    "return a valid 200 response from a show GET request when authorised with filled FullTimeEmployeeCount form" in {
+      setupMocks(validFullTimeEmploymentEISCount, validCount = true, None)
       mockEnrolledRequest(eisSchemeTypesModel)
       showWithSessionAndAuth(controller.show)(
         result => {
@@ -80,10 +87,20 @@ class FullTimeEmployeeCountControllerSpec extends BaseSpec {
       )
     }
 
-    "Sending a valid employee count form submission to the FullTimeEmployeeCountController when authenticated and enrolled" should {
-      "redirect to the HadPreviousRFI page" in {
-        val formInput = "employeeCount" -> "22"
-        setupMocks(fullTimeEmployeeCountModel = validFullTimeEmploymentCount, validCount = true)
+    "return a valid 200 response from a show GET request when authorised with empty form" in {
+      setupMocks(None, validCount = true, None)
+      mockEnrolledRequest(eisSchemeTypesModel)
+      showWithSessionAndAuth(controller.show)(
+        result => {
+          status(result) shouldBe OK
+        }
+      )
+    }
+
+    "Submitting the form to the FullTimeEmployeeCountController when authenticated and enrolled" should {
+      "redirect to the HadPreviousRFI page with valid count" in {
+        val formInput = "employeeCount" -> "220"
+        setupMocks(validFullTimeEmploymentEISCount, validCount = true, None)
         mockEnrolledRequest(eisSchemeTypesModel)
         submitWithSessionAndAuth(controller.submit,formInput)(
           result => {
@@ -92,12 +109,9 @@ class FullTimeEmployeeCountControllerSpec extends BaseSpec {
           }
         )
       }
-    }
-
-    "Sending a employee count form that fails API validation submission to the FullTimeEmployeeCountController when authenticated and enrolled" should {
-      "redirect to the FullTimeEmployeeCountError page" in {
-        val formInput = "employeeCount" -> "44"
-        setupMocks(validFullTimeEmploymentCount, validCount = false)
+      "redirect to the FullTimeEmployeeCountErrorController page with invalid count" in {
+        val formInput = "employeeCount" -> "280"
+        setupMocks(invalidFullTimeEmploymentEISCount, validCount = false, None)
         mockEnrolledRequest(eisSchemeTypesModel)
         submitWithSessionAndAuth(controller.submit,formInput)(
           result => {
@@ -108,8 +122,35 @@ class FullTimeEmployeeCountControllerSpec extends BaseSpec {
       }
     }
 
+    "Submitting the form to the FullTimeEmployeeCountController with KI process when authenticated and enrolled" should {
+      "redirect to the HadPreviousRFI page with valid KI count" in {
+        val formInput = "employeeCount" -> "500"
+        setupMocks(validFullTimeEmploymentEISWithKICount, validCount = true, Some(trueKIModel))
+        mockEnrolledRequest(eisSchemeTypesModel)
+        submitWithSessionAndAuth(controller.submit,formInput)(
+          result => {
+            status(result) shouldBe SEE_OTHER
+            redirectLocation(result) shouldBe Some(controllers.eis.routes.HadPreviousRFIController.show().url)
+          }
+        )
+      }
+      "redirect to the FullTimeEmployeeCountErrorController page with invalid KI count" in {
+        val formInput = "employeeCount" -> "580"
+        setupMocks(invalidFullTimeEmploymentEISWithKICount, validCount = false, Some(trueKIModel))
+        mockEnrolledRequest(eisSchemeTypesModel)
+        submitWithSessionAndAuth(controller.submit,formInput)(
+          result => {
+            status(result) shouldBe SEE_OTHER
+            redirectLocation(result) shouldBe Some(controllers.eis.routes.FullTimeEmployeeCountErrorController.show().url)
+          }
+        )
+      }
+    }
+
+
     "Sending an invalid employee count form submission to the FullTimeEmployeeCountController when authenticated and enrolled" should {
-      "rsepond with a bad request" in {
+      "respond with a bad request" in {
+        setupMocks(invalidFullTimeEmploymentCount, validCount = false, None)
         mockEnrolledRequest(eisSchemeTypesModel)
         val formInput = "isFirstTrade" -> ""
         submitWithSessionAndAuth(controller.submit,formInput)(
