@@ -48,7 +48,7 @@ class FullTimeEmployeeCountErrorSpec extends ViewSpec {
     }
 
     "contain a paragraph explaining the error" in {
-      doc.select("article p").first().text() shouldBe Messages("page.companyDetails.fullTimeEmployeeCountError.error")
+      doc.select("article p").first().text() shouldBe Messages("page.eis.companyDetails.fullTimeEmployeeCountError.error")
     }
 
     "contain a sub-heading for what to do next" in {
