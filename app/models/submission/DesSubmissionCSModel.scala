@@ -19,7 +19,7 @@ package models.submission
 import common.Constants
 import models.investorDetails._
 import models.registration.RegistrationDetailsModel
-import models.{AddressModel, CompanyDetailsModel, IndividualDetailsModel, PreviousSchemeModel}
+import models._
 import play.api.libs.json.Json
 import utils.{Transformers, Validation}
 
@@ -315,11 +315,28 @@ object DesSubmissionCSModel {
   }
 
   private def readDesTradeDateCommenced(companyDetailsAnswersModel: CompanyDetailsAnswersModel): String = {
+    companyDetailsAnswersModel.qualifyBusinessActivityModel.isQualifyBusinessActivity match {
+      case Constants.qualifyPrepareToTrade => readPrepareToTradeDateCommenced(companyDetailsAnswersModel)
+      case Constants.qualifyResearchAndDevelopment => readResearchTradeDateCommenced(companyDetailsAnswersModel)
+      case _ => Constants.standardIgnoreYearValue
+    }
+  }
+
+  private def readPrepareToTradeDateCommenced(companyDetailsAnswersModel: CompanyDetailsAnswersModel): String = {
     if(companyDetailsAnswersModel.hasInvestmentTradeStartedModel.isDefined
       && companyDetailsAnswersModel.hasInvestmentTradeStartedModel.get.hasDate)
       Validation.dateToDesFormat(companyDetailsAnswersModel.hasInvestmentTradeStartedModel.get.hasInvestmentTradeStartedDay.get,
         companyDetailsAnswersModel.hasInvestmentTradeStartedModel.get.hasInvestmentTradeStartedMonth.get,
         companyDetailsAnswersModel.hasInvestmentTradeStartedModel.get.hasInvestmentTradeStartedYear.get)
+    else
+      Constants.standardIgnoreYearValue
+  }
+
+  private def readResearchTradeDateCommenced(companyDetailsAnswersModel: CompanyDetailsAnswersModel): String = {
+    if(companyDetailsAnswersModel.researchStartDateModel.isDefined)
+      Validation.dateToDesFormat(companyDetailsAnswersModel.researchStartDateModel.get.researchStartDay.get,
+        companyDetailsAnswersModel.researchStartDateModel.get.researchStartMonth.get,
+        companyDetailsAnswersModel.researchStartDateModel.get.researchStartYear.get)
     else
       Constants.standardIgnoreYearValue
   }
@@ -347,10 +364,8 @@ object DesSubmissionCSModel {
     None
   }
 
-
-
   private def readDesInvestmentDetailsModel(answerModel: ComplianceStatementAnswersModel): DesInvestmentDetailsModel = {
-    DesInvestmentDetailsModel("NA", readUnitIssueModel(answerModel),
+    DesInvestmentDetailsModel(Constants.notApplicable, readUnitIssueModel(answerModel),
       readTotalAmountSpent(answerModel.shareDetailsAnswersModel), readDesOrganisationStatusDetails(answerModel))
   }
 
@@ -388,13 +403,20 @@ object DesSubmissionCSModel {
   }
 
   private def readDesOrganisationStatusDetails(answerModel: ComplianceStatementAnswersModel): Option[DesOrganisationStatusModel] = {
-    if(answerModel.investorDetailsAnswersModel.shareCapitalChangesModel.changesDescription.isDefined)
-      Some(DesOrganisationStatusModel(answerModel.companyDetailsAnswersModel.fullTimeEmployeeCountModel.employeeCount,
-        answerModel.investorDetailsAnswersModel.shareCapitalChangesModel.changesDescription.get,
+    Some(DesOrganisationStatusModel(readFTECount(answerModel.companyDetailsAnswersModel),
+      readShareChangesDescription(answerModel.investorDetailsAnswersModel.shareCapitalChangesModel),
         CostModel(Transformers.poundToPence(Left(answerModel.companyDetailsAnswersModel.grossAssetsModel.grossAmount.toString()))),
         CostModel("0")))
-    else
-      None
+  }
+
+  def readFTECount(companyDetailsAnswersModel: CompanyDetailsAnswersModel): BigDecimal ={
+    companyDetailsAnswersModel.fullTimeEmployeeCountModel.employeeCount
+  }
+
+  def readShareChangesDescription(shareCapitalChangesModel: ShareCapitalChangesModel): String ={
+    if(shareCapitalChangesModel.changesDescription.isDefined)
+      shareCapitalChangesModel.changesDescription.get
+    else Constants.notApplicable
   }
 
   private def readDesSubsidiaryPerformingTrade(answerModel: ComplianceStatementAnswersModel): Option[DesSubsidiaryPerformingTrade] = {
