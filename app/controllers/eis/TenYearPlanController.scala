@@ -42,8 +42,7 @@ object TenYearPlanController extends TenYearPlanController {
 
 trait TenYearPlanController extends FrontendController with AuthorisedAndEnrolledForTAVC {
 
-  override val acceptedFlows = Seq(Seq(EIS), Seq(VCT), Seq(EIS, VCT))
-
+  override val acceptedFlows = Seq(Seq(EIS))
 
   val submissionConnector: SubmissionConnector
 
@@ -80,7 +79,7 @@ trait TenYearPlanController extends FrontendController with AuthorisedAndEnrolle
           else {
             // KI condition not met. end of the road..
             s4lConnector.saveFormData(KeystoreKeys.backLinkIneligibleForKI, routes.TenYearPlanController.show().url)
-            Future.successful(Redirect(routes.IneligibleForKIController.show()))
+            Future.successful(Redirect(routes.IneligibleForKISecondaryConditionController.show()))
           }
         }
         case None => Future.successful(Redirect(routes.DateOfIncorporationController.show()))

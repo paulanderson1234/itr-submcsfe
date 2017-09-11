@@ -96,7 +96,7 @@ class TenYearPlanControllerSpec extends BaseSpec {
       mockEnrolledRequest(eisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,
         "hasTenYearPlan" -> Constants.StandardRadioButtonNoValue,
-        "tenYearPlanDesc" -> "")(
+        "descriptionTextArea" -> "")(
         result => {
           status(result) shouldBe SEE_OTHER
           redirectLocation(result) shouldBe Some(routes.IsKnowledgeIntensiveController.show().url)
@@ -111,7 +111,7 @@ class TenYearPlanControllerSpec extends BaseSpec {
       mockEnrolledRequest(eisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,
         "hasTenYearPlan" -> Constants.StandardRadioButtonNoValue,
-        "tenYearPlanDesc" -> "")(
+        "descriptionTextArea" -> "")(
         result => {
           status(result) shouldBe SEE_OTHER
           redirectLocation(result) shouldBe Some(routes.DateOfIncorporationController.show().url)
@@ -126,7 +126,7 @@ class TenYearPlanControllerSpec extends BaseSpec {
       mockEnrolledRequest(eisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,
         "hasTenYearPlan" -> Constants.StandardRadioButtonNoValue,
-        "tenYearPlanDesc" -> "")(
+        "descriptionTextArea" -> "")(
         result => {
           status(result) shouldBe SEE_OTHER
           redirectLocation(result) shouldBe Some(routes.DateOfIncorporationController.show().url)
@@ -141,10 +141,10 @@ class TenYearPlanControllerSpec extends BaseSpec {
       mockEnrolledRequest(eisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,
         "hasTenYearPlan" -> Constants.StandardRadioButtonNoValue,
-        "tenYearPlanDesc" -> "")(
+        "descriptionTextArea" -> "")(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(routes.IneligibleForKIController.show().url)
+          redirectLocation(result) shouldBe Some(routes.IneligibleForKISecondaryConditionController.show().url)
         }
       )
     }
@@ -156,7 +156,7 @@ class TenYearPlanControllerSpec extends BaseSpec {
       mockEnrolledRequest(eisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,
         "hasTenYearPlan" -> Constants.StandardRadioButtonYesValue,
-        "tenYearPlanDesc" -> "text")(
+        "descriptionTextArea" -> "text")(
         result => {
           status(result) shouldBe SEE_OTHER
           redirectLocation(result) shouldBe Some(routes.SubsidiariesController.show().url)
@@ -170,7 +170,7 @@ class TenYearPlanControllerSpec extends BaseSpec {
       mockEnrolledRequest(eisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,
         "hasTenYearPlan" -> "",
-        "tenYearPlanDesc" -> "")(
+        "descriptionTextArea" -> "")(
         result => {
           status(result) shouldBe BAD_REQUEST
           redirectLocation(result) shouldBe None
@@ -184,7 +184,7 @@ class TenYearPlanControllerSpec extends BaseSpec {
       mockEnrolledRequest(eisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,
         "hasTenYearPlan" -> Constants.StandardRadioButtonYesValue,
-        "tenYearPlanDesc" -> "")(
+        "descriptionTextArea" -> "")(
         result => {
           status(result) shouldBe BAD_REQUEST
         }

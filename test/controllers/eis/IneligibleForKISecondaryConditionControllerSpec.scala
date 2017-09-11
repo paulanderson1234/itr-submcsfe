@@ -22,7 +22,7 @@ import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
 import play.api.test.Helpers._
 
-class IneligibleForKIControllerSpec extends BaseSpec {
+class IneligibleForKISecondaryConditionControllerSpec extends BaseSpec {
 
   object TestController extends IneligibleForKIController {
     override lazy val applicationConfig = MockConfig
@@ -31,7 +31,7 @@ class IneligibleForKIControllerSpec extends BaseSpec {
     override lazy val enrolmentConnector = mockEnrolmentConnector
   }
 
-  "IneligibleForKIController" should {
+  "IneligibleForKISecondaryConditionController" should {
     "use the correct keystore connector" in {
       IneligibleForKIController.s4lConnector shouldBe S4LConnector
     }
@@ -44,7 +44,7 @@ class IneligibleForKIControllerSpec extends BaseSpec {
   }
 
 
-  "Sending a GET request to IneligibleForKIController when authenticated and enrolled" should {
+  "Sending a GET request to IneligibleForKISecondaryConditionController when authenticated and enrolled" should {
     "return a 200" in {
       mockEnrolledRequest(eisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show())(
@@ -53,7 +53,7 @@ class IneligibleForKIControllerSpec extends BaseSpec {
     }
   }
 
-  "Posting to the IneligibleForKIController when authenticated and enrolled" should {
+  "Posting to the IneligibleForKISecondaryConditionController when authenticated and enrolled" should {
     "redirect to expected page" in {
       mockEnrolledRequest(eisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit)(

@@ -93,7 +93,7 @@ class PercentageStaffWithMastersControllerSpec extends BaseSpec {
       submitWithSessionAndAuth(TestController.submit,formInput)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some("/investment-tax-relief-cs/eis/subsidiaries")
+          redirectLocation(result) shouldBe Some(routes.SubsidiariesController.show().url)
         }
       )
     }
@@ -107,7 +107,7 @@ class PercentageStaffWithMastersControllerSpec extends BaseSpec {
       submitWithSessionAndAuth(TestController.submit,formInput)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some("/investment-tax-relief-cs/eis/is-knowledge-intensive")
+          redirectLocation(result) shouldBe Some(routes.IsKnowledgeIntensiveController.show().url)
         }
       )
     }
@@ -121,7 +121,7 @@ class PercentageStaffWithMastersControllerSpec extends BaseSpec {
       submitWithSessionAndAuth(TestController.submit,formInput)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some("/investment-tax-relief-cs/eis/date-of-incorporation")
+          redirectLocation(result) shouldBe Some(routes.DateOfIncorporationController.show().url)
         }
       )
     }
@@ -135,7 +135,7 @@ class PercentageStaffWithMastersControllerSpec extends BaseSpec {
       submitWithSessionAndAuth(TestController.submit,formInput)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some("/investment-tax-relief-cs/eis/date-of-incorporation")
+          redirectLocation(result) shouldBe Some(routes.DateOfIncorporationController.show().url)
         }
       )
     }
@@ -149,14 +149,14 @@ class PercentageStaffWithMastersControllerSpec extends BaseSpec {
       submitWithSessionAndAuth(TestController.submit,formInput)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some("/investment-tax-relief-cs/eis/ten-year-plan")
+          redirectLocation(result) shouldBe Some(routes.TenYearPlanController.show().url)
         }
       )
     }
   }
 
   "Sending an invalid form submission with validation errors to the PercentageStaffWithMastersController when Authenticated and enrolled" should {
-    "redirect to itself" in {
+    "respond with a bad request" in {
       mockEnrolledRequest(eisSchemeTypesModel)
       val formInput = "staffWithMasters" -> ""
       submitWithSessionAndAuth(TestController.submit,formInput)(

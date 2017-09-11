@@ -18,7 +18,6 @@ package views.eis
 
 import auth.{MockConfigEISFlow, MockAuthConnector}
 import common.KeystoreKeys
-import config.FrontendAppConfig
 import controllers.eis.OperatingCostsController
 import models.OperatingCostsModel
 import org.jsoup.Jsoup
@@ -58,7 +57,7 @@ class OperatingCostsSpec extends ViewSpec {
     document.getElementById("main-heading").text() shouldBe Messages("page.companyDetails.OperatingCosts.heading")
     document.getElementById("operating-costs-hint-one").text() shouldBe Messages("page.companyDetails.OperatingCosts.hint.one")
     document.getElementById("operating-costs-hint-two").text() shouldBe Messages("page.companyDetails.OperatingCosts.hint.two")
-    document.getElementById("col-heading-one").hasClass("visuallyhidden")
+    document.getElementById("col-heading-one").hasClass("visuallyhidden") shouldBe true
     document.getElementById("col-heading-one").text() shouldBe Messages("page.companyDetails.OperatingCosts.col.heading.one")
     document.getElementById("col-heading-two").text() shouldBe Messages("page.companyDetails.OperatingCosts.col.heading.two")
     document.getElementById("col-heading-three").text() shouldBe Messages("page.companyDetails.OperatingCosts.col.heading.three")
@@ -66,6 +65,18 @@ class OperatingCostsSpec extends ViewSpec {
     document.getElementById("row-heading-two").text() shouldBe Messages("page.companyDetails.OperatingCosts.row.heading.two")
     document.getElementById("row-heading-three").text() shouldBe Messages("page.companyDetails.OperatingCosts.row.heading.three")
     document.getElementById("next").text() shouldBe Messages("common.button.snc")
+    document.select(".error-summary").isEmpty shouldBe true
+    document.getElementById("label-firstYear").select(".visuallyhidden").text() shouldBe Messages("page.companyDetails.OperatingCosts.row.one.label.year")
+    document.getElementById("label-amount-operatingCosts1stYear").select(".visuallyhidden").text() shouldBe Messages("page.companyDetails.OperatingCosts.row.one.label.operatingcosts")
+    document.getElementById("label-amount-rAndDCosts1stYear").select(".visuallyhidden").text() shouldBe Messages("page.companyDetails.OperatingCosts.row.one.label.randdcosts")
+    document.getElementById("label-secondYear").select(".visuallyhidden").text() shouldBe Messages("page.companyDetails.OperatingCosts.row.two.label.year")
+    document.getElementById("label-amount-operatingCosts2ndYear").select(".visuallyhidden").text() shouldBe Messages("page.companyDetails.OperatingCosts.row.two.label.operatingcosts")
+    document.getElementById("label-amount-rAndDCosts2ndYear").select(".visuallyhidden").text() shouldBe Messages("page.companyDetails.OperatingCosts.row.two.label.randdcosts")
+    document.getElementById("label-thirdYear").select(".visuallyhidden").text() shouldBe Messages("page.companyDetails.OperatingCosts.row.three.label.year")
+    document.getElementById("label-amount-operatingCosts3rdYear").select(".visuallyhidden").text() shouldBe Messages("page.companyDetails.OperatingCosts.row.three.label.operatingcosts")
+    document.getElementById("label-amount-rAndDCosts3rdYear").select(".visuallyhidden").text() shouldBe Messages("page.companyDetails.OperatingCosts.row.three.label.randdcosts")
+    document.select(".error-summary").isEmpty shouldBe true
+
 
   }
 
@@ -81,7 +92,7 @@ class OperatingCostsSpec extends ViewSpec {
     document.getElementById("main-heading").text() shouldBe Messages("page.companyDetails.OperatingCosts.heading")
     document.getElementById("operating-costs-hint-one").text() shouldBe Messages("page.companyDetails.OperatingCosts.hint.one")
     document.getElementById("operating-costs-hint-two").text() shouldBe Messages("page.companyDetails.OperatingCosts.hint.two")
-    document.getElementById("col-heading-one").hasClass("visuallyhidden")
+    document.getElementById("col-heading-one").hasClass("visuallyhidden") shouldBe true
     document.getElementById("col-heading-one").text() shouldBe Messages("page.companyDetails.OperatingCosts.col.heading.one")
     document.getElementById("col-heading-two").text() shouldBe Messages("page.companyDetails.OperatingCosts.col.heading.two")
     document.getElementById("col-heading-three").text() shouldBe Messages("page.companyDetails.OperatingCosts.col.heading.three")
@@ -89,6 +100,17 @@ class OperatingCostsSpec extends ViewSpec {
     document.getElementById("row-heading-two").text() shouldBe Messages("page.companyDetails.OperatingCosts.row.heading.two")
     document.getElementById("row-heading-three").text() shouldBe Messages("page.companyDetails.OperatingCosts.row.heading.three")
     document.getElementById("next").text() shouldBe Messages("common.button.snc")
+    document.select(".error-summary").isEmpty shouldBe true
+    document.getElementById("label-firstYear").select(".visuallyhidden").text() shouldBe Messages("page.companyDetails.OperatingCosts.row.one.label.year")
+    document.getElementById("label-amount-operatingCosts1stYear").select(".visuallyhidden").text() shouldBe Messages("page.companyDetails.OperatingCosts.row.one.label.operatingcosts")
+    document.getElementById("label-amount-rAndDCosts1stYear").select(".visuallyhidden").text() shouldBe Messages("page.companyDetails.OperatingCosts.row.one.label.randdcosts")
+    document.getElementById("label-secondYear").select(".visuallyhidden").text() shouldBe Messages("page.companyDetails.OperatingCosts.row.two.label.year")
+    document.getElementById("label-amount-operatingCosts2ndYear").select(".visuallyhidden").text() shouldBe Messages("page.companyDetails.OperatingCosts.row.two.label.operatingcosts")
+    document.getElementById("label-amount-rAndDCosts2ndYear").select(".visuallyhidden").text() shouldBe Messages("page.companyDetails.OperatingCosts.row.two.label.randdcosts")
+    document.getElementById("label-thirdYear").select(".visuallyhidden").text() shouldBe Messages("page.companyDetails.OperatingCosts.row.three.label.year")
+    document.getElementById("label-amount-operatingCosts3rdYear").select(".visuallyhidden").text() shouldBe Messages("page.companyDetails.OperatingCosts.row.three.label.operatingcosts")
+    document.getElementById("label-amount-rAndDCosts3rdYear").select(".visuallyhidden").text() shouldBe Messages("page.companyDetails.OperatingCosts.row.three.label.randdcosts")
+    document.select(".error-summary").isEmpty shouldBe true
   }
 
   "Verify that IsKnowledgeIntensive page contains show the error summary when an invalid model (no radio button selection) is submitted" in new Setup {
@@ -98,7 +120,7 @@ class OperatingCostsSpec extends ViewSpec {
       Jsoup.parse(contentAsString(result))
     }
     // Make sure we have the expected error summary displayed
-    document.getElementById("error-summary-display").hasClass("error-summary--show")
+    document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe true
     document.title() shouldBe Messages("page.companyDetails.OperatingCosts.title")
 
   }

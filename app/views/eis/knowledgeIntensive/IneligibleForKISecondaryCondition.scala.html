@@ -5,7 +5,7 @@
 
 @main_template(title = Messages("page.knowledgeIntensive.IneligibleForKI.title"), bodyClasses = None) {
 
-@backButton(controllers.eis.routes.OperatingCostsController.show().url)
+@backButton(controllers.eis.routes.TenYearPlanController.show().url)
 
 <div class="grid-row">
     <div class="column-two-thirds">
@@ -15,18 +15,18 @@
         </div>
 
         <div class="form-group">
-            <p id="description-one">@Messages("page.knowledgeIntensive.IneligibleForKI.description.one")</p>
+            <p id="description-one">@Messages("page.knowledgeIntensive.IneligibleForKI.secondary.description.one")</p>
 
             <ul class="list list-bullet">
-                <li id="reason-one">@Messages("page.knowledgeIntensive.IneligibleForKI.bullet.one")</li>
-                <li id="reason-two">@Messages("page.knowledgeIntensive.IneligibleForKI.bullet.two")</li>
+                <li id="reason-one">@Messages("page.knowledgeIntensive.IneligibleForKI.secondary.bullet.one")</li>
+                <li id="reason-two">@Messages("page.knowledgeIntensive.IneligibleForKI.secondary.bullet.two")</li>
             </ul>
         </div>
 
 
         <div class="form-group">
             <p id="incorrect-info">@Messages("common.changeAnswers.incorrect.text")
-                <a href="@controllers.eis.routes.OperatingCostsController.show().url" class="link-style"
+                <a href="@controllers.eis.routes.TenYearPlanController.show().url" class="link-style"
                    id="change-answers">
                     @Messages("common.changeAnswers.link")</a>.</p>
         </div>
@@ -42,7 +42,7 @@
         </div>
 
         <div class="form-group">
-            @form(action = controllers.eis.routes.IneligibleForKIController.submit()) {
+            @form(action = controllers.eis.routes.IneligibleForKISecondaryConditionController.submit()) {
             <button class="btn button" id="next" type="submit">@Messages("common.button.continue")</button>
             }
         </div>

@@ -5,33 +5,43 @@
 
 @(tenYearPlanForm: Form[TenYearPlanModel])(implicit request: Request[_], messages: Messages)
 
+@additionalContent() = {
+    <div class="form-group">
+        <span class="h2-heading" id="info-heading">@Messages("page.knowledgeIntensive.TenYearPlan.description.one")</span>
+    </div>
+
+    <div class="form-group">
+        <span class="H2" id="infoId">@Messages("page.knowledgeIntensive.TenYearPlan.question.hint.three")</span>
+    </div>
+
+    @textArea(
+    tenYearPlanForm("descriptionTextArea"),
+    '_cols -> "50",
+    '_rows -> "10",
+    '_maxLength-> Constants.SuggestedTextMaxLengthLower,
+    '_infoTextClass-> "form-hint",
+     '_info2-> Messages("page.knowledgeIntensive.TenYearPlan.question.hint.four")
+    )
+}
+
 @main_template(Messages("page.knowledgeIntensive.TenYearPlan.title")) {
 
 @backButtonWithProgress(controllers.eis.routes.PercentageStaffWithMastersController.show().toString, Messages("common.section.progress.details.one"))
 
-@errorSummary(tenYearPlanForm, "ten-year-plan", "tenYearPlanDesc")
+@errorSummary(tenYearPlanForm, "ten-year-plan", "descriptionTextArea")
 
 <h1 class="form-title heading-xlarge" id="main-heading">@Messages("page.knowledgeIntensive.TenYearPlan.heading")</h1>
 
-<p class = "form-hint" id="desc-one">@Messages("page.knowledgeIntensive.TenYearPlan.question.hint.one")</p>
-<p class = "form-hint" id="desc-two">@Messages("page.knowledgeIntensive.TenYearPlan.question.hint.two")</p>
+<p id="desc-one">@Messages("page.knowledgeIntensive.TenYearPlan.question.hint.one")</p>
+<p  id="desc-two">@Messages("page.knowledgeIntensive.TenYearPlan.question.hint.two")</p>
 
     @form(action = controllers.eis.routes.TenYearPlanController.submit()) {
 
     @formHiddenYesNoRadioNoError(
     tenYearPlanForm,
     "hasTenYearPlan",
-    Messages("page.companyDetails.CommercialSale.question.hint"),
-    textArea(
-    tenYearPlanForm("tenYearPlanDesc"),
-    '_cols -> "50",
-    '_rows -> "10",
-    '_maxLength-> Constants.SuggestedTextMaxLengthLower,
-    '_label-> Messages("page.knowledgeIntensive.TenYearPlan.description.one"),
-    '_info-> Messages("page.knowledgeIntensive.TenYearPlan.question.hint.three"),
-    '_info2-> Messages("page.knowledgeIntensive.TenYearPlan.question.hint.four"),
-    '_infoTextClass-> "form-hint"
-    ),
+    Messages("page.knowledgeIntensive.TenYearPlan.heading"),
+    additionalContent(),
     None,
     Some("visuallyhidden")
     )

@@ -16,8 +16,8 @@
 
 package views.eis
 
-import auth.{MockConfigEISFlow, MockAuthConnector}
-import common.KeystoreKeys
+import auth.{MockAuthConnector, MockConfigEISFlow}
+import common.{Constants, KeystoreKeys}
 import config.FrontendAppConfig
 import controllers.eis.TenYearPlanController
 import models.TenYearPlanModel
@@ -62,13 +62,15 @@ class TenYearPlanSpec extends ViewSpec {
       document.getElementById("desc-two").text() shouldBe Messages("page.knowledgeIntensive.TenYearPlan.question.hint.two")
       document.getElementById("infoId").text() shouldBe Messages("page.knowledgeIntensive.TenYearPlan.question.hint.three")
       document.getElementById("infoId-2").text() shouldBe Messages("page.knowledgeIntensive.TenYearPlan.question.hint.four")
-      document.getElementById("labelTextId").text() shouldBe Messages("page.knowledgeIntensive.TenYearPlan.description.one")
-      document.getElementById("labelTextId").hasClass("visuallyhidden")
+      document.getElementById("info-heading").text() shouldBe Messages("page.knowledgeIntensive.TenYearPlan.description.one")
+      document.getElementsByTag("legend").select(".visuallyhidden").text() shouldBe Messages("page.knowledgeIntensive.TenYearPlan.heading")
       document.getElementById("hasTenYearPlan-yesLabel").text() shouldBe Messages("common.radioYesLabel")
       document.getElementById("hasTenYearPlan-noLabel").text() shouldBe Messages("common.radioNoLabel")
       document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.PercentageStaffWithMastersController.show().url
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.one")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
+      document.select("textarea").attr("maxLength") shouldBe Constants.SuggestedTextMaxLengthLower.toString
+      document.select(".error-summary").isEmpty shouldBe true
     }
 
     "Verify that the ten year plan page contains the correct elements when a valid 'No' TenYearPlanModel is passed" in new Setup {
@@ -81,11 +83,17 @@ class TenYearPlanSpec extends ViewSpec {
       document.getElementById("main-heading").text() shouldBe Messages("page.knowledgeIntensive.TenYearPlan.heading")
       document.getElementById("desc-one").text() shouldBe Messages("page.knowledgeIntensive.TenYearPlan.question.hint.one")
       document.getElementById("desc-two").text() shouldBe Messages("page.knowledgeIntensive.TenYearPlan.question.hint.two")
+      document.getElementById("infoId").text() shouldBe Messages("page.knowledgeIntensive.TenYearPlan.question.hint.three")
+      document.getElementById("infoId-2").text() shouldBe Messages("page.knowledgeIntensive.TenYearPlan.question.hint.four")
+      document.getElementById("info-heading").text() shouldBe Messages("page.knowledgeIntensive.TenYearPlan.description.one")
+      document.getElementsByTag("legend").select(".visuallyhidden").text() shouldBe Messages("page.knowledgeIntensive.TenYearPlan.heading")
       document.getElementById("hasTenYearPlan-yesLabel").text() shouldBe Messages("common.radioYesLabel")
       document.getElementById("hasTenYearPlan-noLabel").text() shouldBe Messages("common.radioNoLabel")
       document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.PercentageStaffWithMastersController.show().url
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.one")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
+      document.select("textarea").attr("maxLength") shouldBe Constants.SuggestedTextMaxLengthLower.toString
+      document.select(".error-summary").isEmpty shouldBe true
     }
 
     "Verify that the ten year plan page contains the correct elements when an invalid TenYearPlanModel is passed" in new Setup {
@@ -98,14 +106,17 @@ class TenYearPlanSpec extends ViewSpec {
       document.getElementById("main-heading").text() shouldBe Messages("page.knowledgeIntensive.TenYearPlan.heading")
       document.getElementById("desc-one").text() shouldBe Messages("page.knowledgeIntensive.TenYearPlan.question.hint.one")
       document.getElementById("desc-two").text() shouldBe Messages("page.knowledgeIntensive.TenYearPlan.question.hint.two")
+      document.getElementById("infoId").text() shouldBe Messages("page.knowledgeIntensive.TenYearPlan.question.hint.three")
+      document.getElementById("infoId-2").text() shouldBe Messages("page.knowledgeIntensive.TenYearPlan.question.hint.four")
+      document.getElementById("info-heading").text() shouldBe Messages("page.knowledgeIntensive.TenYearPlan.description.one")
+      document.getElementsByTag("legend").select(".visuallyhidden").text() shouldBe Messages("page.knowledgeIntensive.TenYearPlan.heading")
       document.getElementById("hasTenYearPlan-yesLabel").text() shouldBe Messages("common.radioYesLabel")
       document.getElementById("hasTenYearPlan-noLabel").text() shouldBe Messages("common.radioNoLabel")
       document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.PercentageStaffWithMastersController.show().url
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.one")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
-      document.getElementById("infoId").text() shouldBe Messages("page.knowledgeIntensive.TenYearPlan.question.hint.three")
-      document.getElementById("infoId-2").text() shouldBe Messages("page.knowledgeIntensive.TenYearPlan.question.hint.four")
-      document.getElementById("error-summary-display").hasClass("error-summary--show")
+      document.select("textarea").attr("maxLength") shouldBe Constants.SuggestedTextMaxLengthLower.toString
+      document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe true
     }
 
     "Verify that the commercial sale page contains the correct elements when an invalid 'Yes' TenYearPlanModel is passed" in new Setup {
@@ -117,13 +128,18 @@ class TenYearPlanSpec extends ViewSpec {
       document.title() shouldBe Messages("page.knowledgeIntensive.TenYearPlan.title")
       document.getElementById("main-heading").text() shouldBe Messages("page.knowledgeIntensive.TenYearPlan.heading")
       document.getElementById("desc-one").text() shouldBe Messages("page.knowledgeIntensive.TenYearPlan.question.hint.one")
+      document.getElementById("desc-two").text() shouldBe Messages("page.knowledgeIntensive.TenYearPlan.question.hint.two")
+      document.getElementById("infoId").text() shouldBe Messages("page.knowledgeIntensive.TenYearPlan.question.hint.three")
+      document.getElementById("infoId-2").text() shouldBe Messages("page.knowledgeIntensive.TenYearPlan.question.hint.four")
+      document.getElementById("info-heading").text() shouldBe Messages("page.knowledgeIntensive.TenYearPlan.description.one")
+      document.getElementsByTag("legend").select(".visuallyhidden").text() shouldBe Messages("page.knowledgeIntensive.TenYearPlan.heading")
       document.getElementById("hasTenYearPlan-yesLabel").text() shouldBe Messages("common.radioYesLabel")
       document.getElementById("hasTenYearPlan-noLabel").text() shouldBe Messages("common.radioNoLabel")
       document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.PercentageStaffWithMastersController.show().url
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.one")
-      document.getElementById("labelTextId").text() shouldBe Messages("page.knowledgeIntensive.TenYearPlan.description.one")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
-      document.getElementById("error-summary-display").hasClass("error-summary--show")
+      document.select("textarea").attr("maxLength") shouldBe Constants.SuggestedTextMaxLengthLower.toString
+      document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe true
     }
 
   }

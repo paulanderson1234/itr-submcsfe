@@ -40,21 +40,21 @@ class TenYearPlanFormSpec extends UnitSpec with OneAppPerSuite{
     }
 
     "return a Some if a model with valid inputs is supplied using .bind" in {
-      val map = Map(("hasTenYearPlan", Constants.StandardRadioButtonYesValue), ("tenYearPlanDesc", "TEXT"))
+      val map = Map(("hasTenYearPlan", Constants.StandardRadioButtonYesValue), ("descriptionTextArea", "TEXT"))
       val form = tenYearPlanForm.bind(map)
       form.value shouldBe Some(TenYearPlanModel(Constants.StandardRadioButtonYesValue, Some("TEXT")))
     }
 
     "return a Some if a model with both a 'No' selection and data present using .bind." +
       "Validation should allow both No and some text to be entered (text is cleared on submission in controller)" in {
-      val map = Map(("hasTenYearPlan", Constants.StandardRadioButtonNoValue), ("tenYearPlanDesc", "TEXT"))
+      val map = Map(("hasTenYearPlan", Constants.StandardRadioButtonNoValue), ("descriptionTextArea", "TEXT"))
       val form = tenYearPlanForm.bind(map)
       form.value shouldBe Some(TenYearPlanModel(Constants.StandardRadioButtonNoValue, Some("TEXT")))
       form.hasErrors shouldBe false
     }
 
     "when no input is selected the form" should {
-      lazy val form = tenYearPlanForm.bind(Map(("hasTenYearPlan", ""), ("tenYearPlanDesc", "")))
+      lazy val form = tenYearPlanForm.bind(Map(("hasTenYearPlan", ""), ("descriptionTextArea", "")))
       "raise form error" in {
         form.hasErrors shouldBe true
       }
@@ -68,7 +68,7 @@ class TenYearPlanFormSpec extends UnitSpec with OneAppPerSuite{
     }
 
     "when Yes input is selected with no text description the form" should {
-      lazy val form = tenYearPlanForm.bind(Map(("hasTenYearPlan", Constants.StandardRadioButtonYesValue), ("tenYearPlanDesc", "")))
+      lazy val form = tenYearPlanForm.bind(Map(("hasTenYearPlan", Constants.StandardRadioButtonYesValue), ("descriptionTextArea", "")))
       "raise form error" in {
         form.hasErrors shouldBe true
       }

@@ -20,25 +20,25 @@ import auth.{AuthorisedAndEnrolledForTAVC, EIS}
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
-import views.html.eis.knowledgeIntensive.IneligibleForKI
+import views.html.eis.knowledgeIntensive.IneligibleForKISecondaryCondition
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
 
 import scala.concurrent.Future
 
-object IneligibleForKIController extends IneligibleForKIController{
+object IneligibleForKISecondaryConditionController extends IneligibleForKISecondaryConditionController{
   override lazy val s4lConnector = S4LConnector
   override lazy val applicationConfig = FrontendAppConfig
   override lazy val authConnector = FrontendAuthConnector
   override lazy val enrolmentConnector = EnrolmentConnector
 }
 
-trait IneligibleForKIController extends FrontendController with AuthorisedAndEnrolledForTAVC {
+trait IneligibleForKISecondaryConditionController extends FrontendController with AuthorisedAndEnrolledForTAVC {
 
   override val acceptedFlows = Seq(Seq(EIS))
 
   val show = AuthorisedAndEnrolled.async { implicit user => implicit request =>
-    Future.successful(Ok(IneligibleForKI()))
+    Future.successful(Ok(IneligibleForKISecondaryCondition()))
   }
 
   val submit = AuthorisedAndEnrolled.async { implicit user => implicit request => {
