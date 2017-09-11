@@ -365,7 +365,7 @@ object DesSubmissionCSModel {
   }
 
   private def readDesInvestmentDetailsModel(answerModel: ComplianceStatementAnswersModel): DesInvestmentDetailsModel = {
-    DesInvestmentDetailsModel("NA", readUnitIssueModel(answerModel),
+    DesInvestmentDetailsModel(Constants.notApplicable, readUnitIssueModel(answerModel),
       readTotalAmountSpent(answerModel.shareDetailsAnswersModel), readDesOrganisationStatusDetails(answerModel))
   }
 
@@ -416,7 +416,7 @@ object DesSubmissionCSModel {
   def readShareChangesDescription(shareCapitalChangesModel: ShareCapitalChangesModel): String ={
     if(shareCapitalChangesModel.changesDescription.isDefined)
       shareCapitalChangesModel.changesDescription.get
-    else "NA"
+    else Constants.notApplicable
   }
 
   private def readDesSubsidiaryPerformingTrade(answerModel: ComplianceStatementAnswersModel): Option[DesSubsidiaryPerformingTrade] = {

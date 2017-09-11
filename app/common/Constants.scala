@@ -112,4 +112,6 @@ trait Constants {
   val fullTimeEquivalenceEISWithKILimit = 500
   val fullTimeEquivalenceEISWithKIInvalidLimit = 580
   val fullTimeEquivalenceInvalidLimit = -0.001
+
+  val notApplicable = "NA"
 }
