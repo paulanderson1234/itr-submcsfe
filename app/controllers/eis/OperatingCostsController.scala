@@ -76,7 +76,7 @@ trait OperatingCostsController extends FrontendController with AuthorisedAndEnro
               if(data){
                 Future.successful(Redirect(routes.PercentageStaffWithMastersController.show()))
               } else {
-                s4lConnector.saveFormData(KeystoreKeys.backLinkIneligibleForKI, routes.OperatingCostsController.show().toString())
+                s4lConnector.saveFormData(KeystoreKeys.backLinkIneligibleForKI, routes.OperatingCostsController.show().url)
                 Future.successful(Redirect(routes.IneligibleForKIController.show()))
               }
               //will only hit case none if the back end isn't running.

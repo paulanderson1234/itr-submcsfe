@@ -14,18 +14,13 @@
  * limitations under the License.
  */
 
-package forms
+package models
 
-import models.TenYearPlanModel
-import play.api.data.Form
-import play.api.data.Forms._
-import utils.Validation._
+import play.api.libs.json.Json
 
-object TenYearPlanForm {
-  val tenYearPlanForm = Form(
-    mapping(
-      "hasTenYearPlan" -> nonEmptyText,
-      "descriptionTextArea" -> optional(nonEmptyText)
-    )(TenYearPlanModel.apply)(TenYearPlanModel.unapply).verifying(tenYearPlanDescValidation)
-  )
+case class IsCompanyKnowledgeIntensiveModel (isCompanyKnowledgeIntensive: String)
+
+object IsCompanyKnowledgeIntensiveModel {
+  implicit val format = Json.format[IsCompanyKnowledgeIntensiveModel]
 }
+

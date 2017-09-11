@@ -40,6 +40,7 @@ common.address.postcode=Postcode
 common.address.findUKAddress=Find UK address
 common.back.dashboard=Dashboard
 common.changeAnswers.text=If this information is incorrect you can
+common.changeAnswers.incorrect.text=If this is incorrect you can
 common.changeAnswers.link=change your answers
 common.error.soft.heading=You don''t appear to qualify for this scheme
 common.error.soft.secondaryHeading=What happens next
@@ -297,27 +298,35 @@ page.companyDetails.CommercialSale.question.hint=When was its first commercial s
 validation.error.DateOfCommercialSale.Future=Date of first commercial sale cannot be a future date
 validation.error.DateForNoOption=Date should not be entered when '''No'' is selected
 
-#Is Knowledge Intensive Page
-page.companyDetails.IsKnowledgeIntensive.title = Do you want to apply as a knowledge intensive company?
-page.companyDetails.IsKnowledgeIntensive.heading = Do you want to apply as a knowledge intensive company?
-page.companyDetails.IsKnowledgeIntensive.description.1 = If you are a knowledge intensive company, you''re allowed to attract more investment. You can get up to £20million over your company''s lifetime.
-page.companyDetails.IsKnowledgeIntensive.description.2 = You also have up to 10 years after your first commercial sale to receive qualifying investment.
-page.companyDetails.IsKnowledgeIntensive.definition = What''s a knowledge intensive company?
-page.companyDetails.IsKnowledgeIntensive.ki-requirement-definition = Over the past 3 years, the amount you''ve spent on research and development must have been either:
-page.companyDetails.IsKnowledgeIntensive.ki-requirement-one = 15% or more of your operating costs for at least 1 year
-page.companyDetails.IsKnowledgeIntensive.ki-requirement-two = 10% or more of your operating costs per year
-page.companyDetails.IsKnowledgeIntensive.ki-requirement-also = You also need:
-page.companyDetails.IsKnowledgeIntensive.ki-requirement-three = at least 20% of your staff who do research and development to have master''s degrees, or
-page.companyDetails.IsKnowledgeIntensive.ki-requirement-four = to plan to develop, or have already developed, a product that you''ll own the rights to
+
+#Is Your Company Knowledge Intensive
+page.companyDetails.IsCompanyKnowledgeIntensive.title = Is your company knowledge intensive?
+page.companyDetails.IsCompanyKnowledgeIntensive.heading = Is your company knowledge intensive?
+page.companyDetails.IsCompanyKnowledgeIntensive.description.1 = The amount you''ve spent on research and development in the last 3 years must be either:
+page.companyDetails.IsCompanyKnowledgeIntensive.ki-requirement-one = 10% or more of your operating costs per year
+page.companyDetails.IsCompanyKnowledgeIntensive.ki-requirement-two = 15% or more of your operating costs for at least one of the 3 years
+page.companyDetails.IsCompanyKnowledgeIntensive.ki-requirement-also = You also need either:
+page.companyDetails.IsCompanyKnowledgeIntensive.ki-requirement-three = 20% or more of your research and development staff to have master''s degrees
+page.companyDetails.IsCompanyKnowledgeIntensive.ki-requirement-four = a plan to develop, or an already developed, product that you''ll own the rights to
+page.companyDetails.IsCompanyKnowledgeIntensive.ki-info=You''ll need to meet this condition when you get the investment and for 3 years afterwards.
+#Do You Want To Apply As Knowledge Intensive Page
+page.companyDetails.ApplyForKI.title = Do you want to apply as a knowledge intensive company?
+page.companyDetails.ApplyForKI.heading = Do you want to apply as a knowledge intensive company?
+page.companyDetails.ApplyForKI.description.1 = If you qualify you can raise up to £20 million over your company''s lifetime. You''ll also have up to 10 years after your first commercial sale to receive qualifying investment.
+page.companyDetails.ApplyForKI.hint = You don''t have to apply as a knowledge intensive company, even if you qualify.
 
 #Ineligible for Knowledge Intensive Page
 page.knowledgeIntensive.IneligibleForKI.title = Your company isn''t knowledge intensive
 page.knowledgeIntensive.IneligibleForKI.heading = Your company isn''t knowledge intensive
-page.knowledgeIntensive.IneligibleForKI.description.one = Your company:
-page.knowledgeIntensive.IneligibleForKI.description.two = You can still apply for advance assurance.
-page.knowledgeIntensive.IneligibleForKI.bullet.one = hasn''t spent enough on research and development, or,
-page.knowledgeIntensive.IneligibleForKI.bullet.two = hasn''t got enough qualified staff members, and,
-page.knowledgeIntensive.IneligibleForKI.bullet.three = doesn''t perform enough research and development.
+page.knowledgeIntensive.IneligibleForKI.description.one = To be knowledge intensive, the amount your company has spent on research and development in the last 3 years must be either:
+page.knowledgeIntensive.IneligibleForKI.bullet.one = 10% or more of your operating costs per year
+page.knowledgeIntensive.IneligibleForKI.bullet.two = 15% or more of your operating costs for at least one of the 3 years
+page.knowledgeIntensive.IneligibleForKI.whatNext.continue=You can continue with your Compliance Statement, but not as a knowledge intensive company.
+
+#Ineligible for Knowledge Intensive Secondary Page (where different from first error above)
+page.knowledgeIntensive.IneligibleForKI.secondary.description.one = To be knowledge intensive, your company needs either:
+page.knowledgeIntensive.IneligibleForKI.secondary.bullet.one = 20% or more of its research and development staff to have master’s degrees
+page.knowledgeIntensive.IneligibleForKI.secondary.bullet.two = a plan to develop, or an already developed, product that you''ll own the rights to
 
 
 #Operating Costs Page

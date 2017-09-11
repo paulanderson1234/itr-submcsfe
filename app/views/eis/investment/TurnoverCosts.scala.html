@@ -16,8 +16,8 @@
 
         @form(action = controllers.eis.routes.TurnoverCostsController.submit()) {
 
-        <p class="form-hint" id="turnover-costs-hint-one">@Messages("page.companyDetails.TurnoverCosts.hint.one")</p>
-        <p class="form-hint" id="turnover-costs-hint-two">@Messages("page.companyDetails.TurnoverCosts.hint.two")</p>
+        <p id="turnover-costs-hint-one">@Messages("page.companyDetails.TurnoverCosts.hint.one")</p>
+        <p  id="turnover-costs-hint-two">@Messages("page.companyDetails.TurnoverCosts.hint.two")</p>
 
         <details>
             <summary><span id="help" class="summary">@Messages("page.companyDetails.TurnoverCosts.help.link")</span></summary>
@@ -141,7 +141,7 @@
                         @inputWithCurrencySymbol(
                         operatingCostsForm("amount4"),
                         '_divClass -> "form-label",
-                        '_labelId -> "label-amount-rAndDCosts2ndYear",
+                        '_labelId -> "label-amount-four",
                         '_label -> Messages("page.companyDetails.TurnoverCosts.row.four.label.turnover"),
                         '_labelTextClass -> "visuallyhidden",
                         '_inputClass -> "input--fullwidth input--no-spinner input--left-padding",
@@ -171,7 +171,7 @@
                         @inputWithCurrencySymbol(
                         operatingCostsForm("amount5"),
                         '_divClass -> "form-label",
-                        '_labelId -> "label-amount-operatingCosts3rdYear",
+                        '_labelId -> "label-amount-five",
                         '_label -> Messages("page.companyDetails.TurnoverCosts.row.five.label.turnover"),
                         '_labelTextClass -> "visuallyhidden",
                         '_inputClass -> "input--fullwidth input--no-spinner input--left-padding",

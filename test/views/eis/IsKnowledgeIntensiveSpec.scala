@@ -46,49 +46,41 @@ class IsKnowledgeIntensiveSpec extends ViewSpec {
       (Matchers.any(), Matchers.any(),Matchers.any())).thenReturn(Future.successful(isKnowledgeIntensiveModel))
 
   "Verify that the isKnowledgeIntensive page contains the correct elements " +
-    "when a valid IsKnowledgeIntensiveModel is passed as returned from keystore" in new Setup {
+    "when a valid IsKnowledgeIntensiveModel is passed as returned from storage" in new Setup {
     val document : Document = {
       setupMocks(Some(isKnowledgeIntensiveModelYes))
       val result = TestController.show.apply(authorisedFakeRequest)
       Jsoup.parse(contentAsString(result))
     }
-    document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.CommercialSaleController.show().url
-    document.title() shouldBe Messages("page.companyDetails.IsKnowledgeIntensive.title")
-    document.getElementById("main-heading").text() shouldBe Messages("page.companyDetails.IsKnowledgeIntensive.heading")
-    document.getElementById("ki-requirement-definition").text() shouldBe Messages("page.companyDetails.IsKnowledgeIntensive.ki-requirement-definition")
-    document.getElementById("ki-requirement-one").text() shouldBe Messages("page.companyDetails.IsKnowledgeIntensive.ki-requirement-one")
-    document.getElementById("ki-requirement-two").text() shouldBe Messages("page.companyDetails.IsKnowledgeIntensive.ki-requirement-two")
-    document.getElementById("ki-requirement-also").text() shouldBe Messages("page.companyDetails.IsKnowledgeIntensive.ki-requirement-also")
-    document.getElementById("ki-requirement-three").text() shouldBe Messages("page.companyDetails.IsKnowledgeIntensive.ki-requirement-three")
-    document.getElementById("ki-requirement-four").text() shouldBe Messages("page.companyDetails.IsKnowledgeIntensive.ki-requirement-four")
+    document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.IsCompanyKnowledgeIntensiveController.show().url
+    document.title() shouldBe Messages("page.companyDetails.ApplyForKI.title")
+    document.getElementById("main-heading").text() shouldBe Messages("page.companyDetails.ApplyForKI.heading")
     document.select("#isKnowledgeIntensive-yes").size() shouldBe 1
     document.select("#isKnowledgeIntensive-yes").size() shouldBe 1
     document.getElementById("isKnowledgeIntensive-yesLabel").text() shouldBe Messages("common.radioYesLabel")
     document.getElementById("isKnowledgeIntensive-noLabel").text() shouldBe Messages("common.radioNoLabel")
     document.getElementById("next").text() shouldBe Messages("common.button.snc")
+    document.getElementsByTag("legend").select(".visuallyhidden").text() shouldBe Messages("page.companyDetails.ApplyForKI.heading")
+    document.select(".error-summary").isEmpty shouldBe true
   }
 
   "Verify that isKnowledgeIntensive page contains the correct elements when an empty model " +
-    "is passed because nothing was returned from keystore" in new Setup {
+    "is passed because nothing was returned from storage" in new Setup {
     val document : Document = {
       setupMocks()
       val result = TestController.show.apply(authorisedFakeRequest)
       Jsoup.parse(contentAsString(result))
     }
-    document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.CommercialSaleController.show().url
-    document.title() shouldBe Messages("page.companyDetails.IsKnowledgeIntensive.title")
-    document.getElementById("main-heading").text() shouldBe Messages("page.companyDetails.IsKnowledgeIntensive.heading")
-    document.getElementById("ki-requirement-definition").text() shouldBe Messages("page.companyDetails.IsKnowledgeIntensive.ki-requirement-definition")
-    document.getElementById("ki-requirement-one").text() shouldBe Messages("page.companyDetails.IsKnowledgeIntensive.ki-requirement-one")
-    document.getElementById("ki-requirement-two").text() shouldBe Messages("page.companyDetails.IsKnowledgeIntensive.ki-requirement-two")
-    document.getElementById("ki-requirement-also").text() shouldBe Messages("page.companyDetails.IsKnowledgeIntensive.ki-requirement-also")
-    document.getElementById("ki-requirement-three").text() shouldBe Messages("page.companyDetails.IsKnowledgeIntensive.ki-requirement-three")
-    document.getElementById("ki-requirement-four").text() shouldBe Messages("page.companyDetails.IsKnowledgeIntensive.ki-requirement-four")
+    document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.IsCompanyKnowledgeIntensiveController.show().url
+    document.title() shouldBe Messages("page.companyDetails.ApplyForKI.title")
+    document.getElementById("main-heading").text() shouldBe Messages("page.companyDetails.ApplyForKI.heading")
     document.select("#isKnowledgeIntensive-yes").size() shouldBe 1
     document.select("#isKnowledgeIntensive-yes").size() shouldBe 1
     document.getElementById("isKnowledgeIntensive-yesLabel").text() shouldBe Messages("common.radioYesLabel")
     document.getElementById("isKnowledgeIntensive-noLabel").text() shouldBe Messages("common.radioNoLabel")
     document.getElementById("next").text() shouldBe Messages("common.button.snc")
+    document.getElementsByTag("legend").select(".visuallyhidden").text() shouldBe Messages("page.companyDetails.ApplyForKI.heading")
+    document.select(".error-summary").isEmpty shouldBe true
   }
 
   "Verify that IsKnowledgeIntensive page contains show the error summary when an invalid model (no radio button selection) is submitted" in new Setup {
@@ -98,7 +90,7 @@ class IsKnowledgeIntensiveSpec extends ViewSpec {
       Jsoup.parse(contentAsString(result))
     }
     // Make sure we have the expected error summary displayed
-    document.getElementById("error-summary-display").hasClass("error-summary--show")
-    document.title() shouldBe Messages("page.companyDetails.IsKnowledgeIntensive.title")
+    document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe true
+    document.title() shouldBe Messages("page.companyDetails.ApplyForKI.title")
   }
 }
