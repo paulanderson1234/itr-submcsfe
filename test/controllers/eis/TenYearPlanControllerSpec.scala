@@ -159,7 +159,7 @@ class TenYearPlanControllerSpec extends BaseSpec {
         "descriptionTextArea" -> "text")(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(routes.SubsidiariesController.show().url)
+          redirectLocation(result) shouldBe Some(routes.FullTimeEmployeeCountController.show().url)
         }
       )
     }

@@ -114,7 +114,7 @@ class IsKnowledgeIntensiveControllerSpec extends BaseSpec {
       submitWithSessionAndAuth(TestController.submit,formInput)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(routes.SubsidiariesController.show().url)
+          redirectLocation(result) shouldBe Some(routes.FullTimeEmployeeCountController.show().url)
         }
       )
     }
@@ -142,7 +142,7 @@ class IsKnowledgeIntensiveControllerSpec extends BaseSpec {
       submitWithSessionAndAuth(TestController.submit,formInput)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(routes.SubsidiariesController.show().url)
+          redirectLocation(result) shouldBe Some(routes.FullTimeEmployeeCountController.show().url)
         }
       )
     }

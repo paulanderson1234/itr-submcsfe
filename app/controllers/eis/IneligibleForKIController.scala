@@ -17,6 +17,7 @@
 package controllers.eis
 
 import auth.{AuthorisedAndEnrolledForTAVC, EIS}
+import common.KeystoreKeys
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
@@ -42,6 +43,8 @@ trait IneligibleForKIController extends FrontendController with AuthorisedAndEnr
   }
 
   val submit = AuthorisedAndEnrolled.async { implicit user => implicit request => {
+    s4lConnector.saveFormData(KeystoreKeys.backLinkFullTimeEmployeeCount,
+      routes.OperatingCostsController.show().url)
     Future.successful(Redirect(routes.FullTimeEmployeeCountController.show()))
     }
   }

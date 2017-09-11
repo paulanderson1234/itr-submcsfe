@@ -61,8 +61,8 @@ trait IsCompanyKnowledgeIntensiveController extends FrontendController with Auth
             // Clear the processing data (keeping the date and is  company KI info)
             s4lConnector.saveFormData(KeystoreKeys.kiProcessingModel, KiProcessingModel(companyAssertsIsKi = Some(isKnowledgeIntensive),
               dateConditionMet = dataWithDateCondition.dateConditionMet))
-            s4lConnector.saveFormData(KeystoreKeys.backLinkSubsidiaries, routes.IsCompanyKnowledgeIntensiveController.show().url)
-            Future.successful(Redirect(routes.SubsidiariesController.show()))
+            s4lConnector.saveFormData(KeystoreKeys.backLinkFullTimeEmployeeCount, routes.IsCompanyKnowledgeIntensiveController.show().url)
+            Future.successful(Redirect(routes.FullTimeEmployeeCountController.show()))
           }
           else {
             // don't update KIProcessing model here by setting companyAssertsIsKi as next page collects that datat which

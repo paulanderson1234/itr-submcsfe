@@ -5,11 +5,11 @@
 @import uk.gov.hmrc.play.views.html.helpers.form
 @import common.Constants
 
-@(fullTimeEmployeeCountForm: Form[FullTimeEmployeeCountModel])(implicit request: Request[_], messages: Messages)
+@(fullTimeEmployeeCountForm: Form[FullTimeEmployeeCountModel], backUrl: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(Messages("page.companyDetails.fullTimeEmployeeCount.title")) {
 
-    @backButtonWithProgress(controllers.eis.routes.GrossAssetsController.show().url, Messages("common.section.progress.details.one"))
+    @backButtonWithProgress(backUrl, Messages("common.section.progress.details.one"))
 
     @errorSummary(fullTimeEmployeeCountForm, "full-time-employee-count", "fullTimeEmployeeCount")
 

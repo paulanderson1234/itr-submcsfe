@@ -42,29 +42,17 @@ trait HadPreviousRFIController extends FrontendController with AuthorisedAndEnro
   override val acceptedFlows = Seq(Seq(EIS),Seq(VCT),Seq(EIS,VCT))
 
   val show = AuthorisedAndEnrolled.async { implicit user => implicit request =>
-    def routeRequest(backUrl: Option[String]) = {
-      if (backUrl.isDefined) {
-        s4lConnector.fetchAndGetFormData[HadPreviousRFIModel](KeystoreKeys.hadPreviousRFI).map {
-          case Some(data) => Ok(previousInvestment.HadPreviousRFI(hadPreviousRFIForm.fill(data), backUrl.getOrElse("")))
-          case None => Ok(previousInvestment.HadPreviousRFI(hadPreviousRFIForm, backUrl.getOrElse("")))
-        }
-      }
-      else Future.successful(Redirect(routes.CommercialSaleController.show()))
+    s4lConnector.fetchAndGetFormData[HadPreviousRFIModel](KeystoreKeys.hadPreviousRFI).map {
+      case Some(data) => Ok(previousInvestment.HadPreviousRFI(hadPreviousRFIForm.fill(data)))
+      case None => Ok(previousInvestment.HadPreviousRFI(hadPreviousRFIForm))
     }
-    for {
-      link <- ControllerHelpers.getSavedBackLink(KeystoreKeys.backLinkSubsidiaries, s4lConnector)
-      route <- routeRequest(link)
-    } yield route
   }
 
 
   val submit = AuthorisedAndEnrolled.async { implicit user => implicit request =>
     hadPreviousRFIForm.bindFromRequest().fold(
       formWithErrors => {
-        ControllerHelpers.getSavedBackLink(KeystoreKeys.backLinkSubsidiaries, s4lConnector).flatMap {
-          case Some(data) => Future.successful(BadRequest(previousInvestment.HadPreviousRFI(formWithErrors, data)))
-          case None => Future.successful(Redirect(routes.CommercialSaleController.show()))
-        }
+        Future.successful(BadRequest(previousInvestment.HadPreviousRFI(formWithErrors)))
       },
       validFormData => {
         s4lConnector.saveFormData(KeystoreKeys.hadPreviousRFI, validFormData)

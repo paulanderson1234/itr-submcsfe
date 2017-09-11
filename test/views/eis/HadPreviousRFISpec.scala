@@ -40,24 +40,20 @@ class HadPreviousRFISpec extends ViewSpec {
     override lazy val enrolmentConnector = mockEnrolmentConnector
   }
 
-  def setupMocks(backLink: Option[String] = None, hadPreviousRFIModel: Option[HadPreviousRFIModel] = None): Unit = {
-    when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.backLinkSubsidiaries))(Matchers.any(), Matchers.any(),Matchers.any()))
-      .thenReturn(Future.successful(backLink))
+  def setupMocks(hadPreviousRFIModel: Option[HadPreviousRFIModel] = None): Unit = {
     when(mockS4lConnector.fetchAndGetFormData[HadPreviousRFIModel](Matchers.eq(KeystoreKeys.hadPreviousRFI))
       (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(hadPreviousRFIModel))
-    when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.backLinkReviewPreviousSchemes))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(controllers.eis.routes.ProposedInvestmentController.show().url)))
   }
 
 
   "Verify that the hadPreviousRFI page contains the correct elements " +
     "when a valid HadPreviousRFIModel is passed as returned from keystore" in new Setup {
     val document : Document = {
-      setupMocks(Some(controllers.eis.routes.ProposedInvestmentController.show().url), Some(hadPreviousRFIModelYes))
+      setupMocks(Some(hadPreviousRFIModelYes))
       val result = TestController.show.apply(authorisedFakeRequest)
       Jsoup.parse(contentAsString(result))
     }
-    document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.ProposedInvestmentController.show().url
+    document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.FullTimeEmployeeCountController.show().url
     document.title() shouldBe Messages("page.previousInvestment.hadPreviousRFI.title")
     document.getElementById("main-heading").text() shouldBe Messages("page.previousInvestment.hadPreviousRFI.heading")
     document.getElementById("bullet-heading").text() shouldBe Messages("page.previousInvestment.hadPreviousRFI.hintTitle")
@@ -77,11 +73,11 @@ class HadPreviousRFISpec extends ViewSpec {
   "Verify that hadPreviousRFI page contains the correct elements when an empty model " +
     "is passed because nothing was returned from keystore" in new Setup {
     val document : Document = {
-      setupMocks(Some(controllers.eis.routes.ProposedInvestmentController.show().url))
+      setupMocks()
       val result = TestController.show.apply(authorisedFakeRequest)
       Jsoup.parse(contentAsString(result))
     }
-    document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.ProposedInvestmentController.show().url
+    document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.FullTimeEmployeeCountController.show().url
     document.title() shouldBe Messages("page.previousInvestment.hadPreviousRFI.title")
     document.getElementById("main-heading").text() shouldBe Messages("page.previousInvestment.hadPreviousRFI.heading")
     document.getElementById("bullet-heading").text() shouldBe Messages("page.previousInvestment.hadPreviousRFI.hintTitle")
@@ -99,7 +95,7 @@ class HadPreviousRFISpec extends ViewSpec {
   }
 
   "Verify that HadPreviousRFI page contains show the error summary when an invalid model (no radio button selection) is submitted" in new Setup {
-    setupMocks(Some(controllers.eis.routes.ProposedInvestmentController.show().url), Some(hadPreviousRFIModelYes))
+    setupMocks(Some(hadPreviousRFIModelYes))
 
     val document : Document = {
       // submit the model with no radio selected as a post action

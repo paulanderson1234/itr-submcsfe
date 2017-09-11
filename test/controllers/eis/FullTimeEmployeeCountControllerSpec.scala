@@ -57,6 +57,9 @@ class FullTimeEmployeeCountControllerSpec extends BaseSpec {
     when(controller.submissionService.validateFullTimeEmployeeCount(Matchers.any(), Matchers.any())
       (Matchers.any(), Matchers.any()))
       .thenReturn(validCount)
+    when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.backLinkFullTimeEmployeeCount))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(
+      Future.successful(Some(controllers.eis.FullTimeEmployeeCountController.show().toString())))
   }
 
   "FullTimeEmployeeCountErrorController" should {
@@ -146,7 +149,6 @@ class FullTimeEmployeeCountControllerSpec extends BaseSpec {
         )
       }
     }
-
 
     "Sending an invalid employee count form submission to the FullTimeEmployeeCountController when authenticated and enrolled" should {
       "respond with a bad request" in {

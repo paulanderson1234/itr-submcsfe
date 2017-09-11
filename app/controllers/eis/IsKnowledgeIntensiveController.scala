@@ -67,17 +67,15 @@ trait IsKnowledgeIntensiveController extends FrontendController with AuthorisedA
             //s4lConnector.saveFormData(KeystoreKeys.tenYearPlan, Option[TenYearPlanModel] = None)
             //s4lConnector.saveFormData(KeystoreKeys.percentageStaffWithMasters, PercentageStaffWithMastersModel] = None)
 
-            // go to subsidiaries
-            s4lConnector.saveFormData(KeystoreKeys.backLinkSubsidiaries, routes.IsKnowledgeIntensiveController.show().url)
-            Future.successful(Redirect(routes.SubsidiariesController.show()))
-
+            s4lConnector.saveFormData(KeystoreKeys.backLinkFullTimeEmployeeCount, routes.IsKnowledgeIntensiveController.show().url)
+            Future.successful(Redirect(routes.FullTimeEmployeeCountController.show()))
           }
           else {
             s4lConnector.saveFormData(KeystoreKeys.kiProcessingModel, dataWithDateCondition.copy(companyAssertsIsKi = Some(isKnowledgeIntensive)))
             if (isKnowledgeIntensive) Future.successful(Redirect(routes.OperatingCostsController.show()))
             else {
-              s4lConnector.saveFormData(KeystoreKeys.backLinkSubsidiaries, routes.IsKnowledgeIntensiveController.show().url)
-              Future.successful(Redirect(routes.SubsidiariesController.show()))
+              s4lConnector.saveFormData(KeystoreKeys.backLinkFullTimeEmployeeCount, routes.IsKnowledgeIntensiveController.show().url)
+              Future.successful(Redirect(routes.FullTimeEmployeeCountController.show()))
             }
           }
 
