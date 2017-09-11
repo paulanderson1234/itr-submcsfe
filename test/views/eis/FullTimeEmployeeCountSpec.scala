@@ -16,6 +16,7 @@
 
 package views.eis
 
+import common.Constants
 import org.jsoup.Jsoup
 import play.api.test.FakeRequest
 import views.helpers.ViewSpec
@@ -73,6 +74,18 @@ class FullTimeEmployeeCountSpec extends ViewSpec {
         document.select("details p").get(1).text() shouldBe Messages("page.companyDetails.fullTimeEmployeeCount.guidance.three")
       }
 
+      "have a legend" which {
+        lazy val legend = document.select("legend")
+
+        "has the correct message" in {
+          legend.text() shouldBe Messages("page.companyDetails.fullTimeEmployeeCount.title")
+        }
+
+        "has a class of visuallyhidden" in {
+          legend.hasClass("visuallyhidden") shouldBe true
+        }
+      }
+
       "have a form posting to the correct route" in {
         document.select("form").attr("action") shouldBe controllers.eis.routes.FullTimeEmployeeCountController.submit().url
       }
@@ -83,6 +96,14 @@ class FullTimeEmployeeCountSpec extends ViewSpec {
 
       "have an input for employeeCount" in {
         document.select("input").attr("name") shouldBe "employeeCount"
+      }
+
+      "have max length for the employeeCount input field" in {
+        document.select("input").attr("maxlength") shouldBe Constants.fullTimeEquivalenceFieldMaxLength
+      }
+
+      "have an error summary" in {
+        document.select(".error-summary").isEmpty shouldBe true
       }
 
       "have a next button" in {
@@ -137,6 +158,18 @@ class FullTimeEmployeeCountSpec extends ViewSpec {
         document.select("details p").get(1).text() shouldBe Messages("page.companyDetails.fullTimeEmployeeCount.guidance.three")
       }
 
+      "have a legend" which {
+        lazy val legend = document.select("legend")
+
+        "has the correct message" in {
+          legend.text() shouldBe Messages("page.companyDetails.fullTimeEmployeeCount.title")
+        }
+
+        "has a class of visuallyhidden" in {
+          legend.hasClass("visuallyhidden") shouldBe true
+        }
+      }
+
       "have a form posting to the correct route" in {
         document.select("form").attr("action") shouldBe controllers.eis.routes.FullTimeEmployeeCountController.submit().url
       }
@@ -147,6 +180,10 @@ class FullTimeEmployeeCountSpec extends ViewSpec {
 
       "have an input for employeeCount" in {
         document.select("input").attr("name") shouldBe "employeeCount"
+      }
+
+      "have max length for the employeeCount input field" in {
+        document.select("input").attr("maxlength") shouldBe Constants.fullTimeEquivalenceFieldMaxLength
       }
 
       "have a next button" in {
