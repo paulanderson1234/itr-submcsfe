@@ -28,6 +28,8 @@ class DeclarationSpec extends ViewSpec {
 
   "The Declaration page" should {
 
+    val requestType = "GET"
+
     "Verify that the declaration page has the correct elements" in {
       val document: Document = {
         val page = Declaration()(fakeRequest, applicationMessages)
@@ -39,7 +41,7 @@ class DeclarationSpec extends ViewSpec {
       document.getElementById("description").text() shouldBe Messages("page.declaration.description")
       document.getElementById("warningMessage").text() shouldBe Messages("page.declaration.warning")
       document.getElementById("next").text() shouldBe Messages("page.declaration.submit")
-      document.select("form").attr("method") shouldBe "GET"
+      document.select("form").attr("method") shouldBe requestType
       document.select("form").attr("action") shouldBe routes.AcknowledgementController.show().url
       document.getElementById("do-not-agree").text() shouldBe Messages("page.declaration.doNotAgree")
       document.getElementById("do-not-agree").attr("href") shouldBe controllers.routes.ApplicationHubController.show().toString
