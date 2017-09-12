@@ -45,6 +45,7 @@ class GrossAssetsSpec extends ViewSpec {
       document.body.getElementById("back-link").attr("href") shouldEqual routes.ShareIssueDateController.show().url
       document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.one")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
+      document.select(".error-summary").isEmpty shouldBe true
     }
 
 
@@ -58,6 +59,7 @@ class GrossAssetsSpec extends ViewSpec {
       document.body.getElementById("back-link").attr("href") shouldEqual routes.ShareIssueDateController.show().url
       document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.one")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
+      document.select(".error-summary").isEmpty shouldBe true
 
     }
 

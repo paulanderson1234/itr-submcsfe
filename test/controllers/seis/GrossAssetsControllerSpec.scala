@@ -25,6 +25,7 @@ import models._
 import org.mockito.Matchers
 import org.mockito.Mockito._
 import play.api.test.Helpers._
+import uk.gov.hmrc.play.http.{Upstream5xxResponse, Upstream4xxResponse, BadRequestException}
 
 import scala.concurrent.Future
 
@@ -39,6 +40,7 @@ class GrossAssetsControllerSpec extends BaseSpec {
   }
 
   lazy val grossAssetsAmount = 15000000
+  val failedResponse = Upstream5xxResponse("Error",INTERNAL_SERVER_ERROR,INTERNAL_SERVER_ERROR)
 
   "GrossAssetsController" should {
     "use the correct keystore connector" in {
@@ -106,6 +108,34 @@ class GrossAssetsControllerSpec extends BaseSpec {
         result => {
           status(result) shouldBe SEE_OTHER
           redirectLocation(result) shouldBe Some(routes.GrossAssetsErrorController.show().url)
+        }
+      )
+    }
+  }
+
+  "Sending a valid form submit to the GrossAssetsController" should {
+    "show the INTERNAL_SERVER_ERROR page if an exception occurs during the API call" in {
+      when(mockSubmissionConnector.checkGrossAssetsAmountExceeded(Matchers.any(), Matchers.any())
+      (Matchers.any())).thenReturn(Future.failed(failedResponse))
+      mockEnrolledRequest(seisSchemeTypesModel)
+      submitWithSessionAndAuth(TestController.submit,
+        "grossAmount" -> "150000001")(
+        result => {
+          status(result) shouldBe INTERNAL_SERVER_ERROR
+        }
+      )
+    }
+  }
+
+  "Sending a valid form submit to the GrossAssetsController" should {
+    "show the INTERNAL_SERVER_ERROR page if the API call returns an empty Option" in {
+      when(mockSubmissionConnector.checkGrossAssetsAmountExceeded(Matchers.any(), Matchers.any())
+      (Matchers.any())).thenReturn(Future.successful(None))
+      mockEnrolledRequest(seisSchemeTypesModel)
+      submitWithSessionAndAuth(TestController.submit,
+        "grossAmount" -> "150000001")(
+        result => {
+          status(result) shouldBe INTERNAL_SERVER_ERROR
         }
       )
     }
