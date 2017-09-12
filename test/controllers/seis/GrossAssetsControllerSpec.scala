@@ -38,7 +38,7 @@ class GrossAssetsControllerSpec extends BaseSpec {
     override lazy val enrolmentConnector = mockEnrolmentConnector
   }
 
-  lazy val grossAssets = GrossAssetsModel(12345)
+  lazy val grossAssetsAmount = 15000000
 
   "GrossAssetsController" should {
     "use the correct keystore connector" in {
@@ -60,16 +60,16 @@ class GrossAssetsControllerSpec extends BaseSpec {
 
   "Sending a GET request to GrossAssetsController when authenticated and enrolled" should {
 
-    "return a 200 when something is fetched from keystore" in {
+    "return an OK when something is fetched from storage" in {
       mockEnrolledRequest(seisSchemeTypesModel)
       when(mockS4lConnector.fetchAndGetFormData[GrossAssetsModel](Matchers.eq(KeystoreKeys.grossAssets))
-        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(grossAssets)))
+        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(GrossAssetsModel(grossAssetsAmount))))
       showWithSessionAndAuth(TestController.show)(
         result => status(result) shouldBe OK
       )
     }
 
-    "provide an empty model and return a 200 when nothing is fetched using keystore" in {
+    "return an OK when nothing is fetched from storage" in {
       when(mockS4lConnector.fetchAndGetFormData[GrossAssetsModel](Matchers.eq(KeystoreKeys.grossAssets))
         (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
       mockEnrolledRequest(seisSchemeTypesModel)
@@ -86,7 +86,7 @@ class GrossAssetsControllerSpec extends BaseSpec {
       (Matchers.any())).thenReturn(Future.successful(Option(false)))
       mockEnrolledRequest(seisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,
-        "grossAmount" -> "200000")(
+        "grossAmount" -> "15000000")(
         result => {
           status(result) shouldBe SEE_OTHER
           redirectLocation(result) shouldBe Some(routes.FullTimeEmployeeCountController.show().url)
@@ -102,7 +102,7 @@ class GrossAssetsControllerSpec extends BaseSpec {
       (Matchers.any())).thenReturn(Future.successful(Option(true)))
       mockEnrolledRequest(seisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,
-        "grossAmount" -> "2000001")(
+        "grossAmount" -> "15000001")(
         result => {
           status(result) shouldBe SEE_OTHER
           redirectLocation(result) shouldBe Some(routes.GrossAssetsErrorController.show().url)

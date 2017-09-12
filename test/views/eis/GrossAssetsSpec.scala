@@ -28,13 +28,15 @@ import views.html.eis.companyDetails.GrossAssets
 
 class GrossAssetsSpec extends ViewSpec {
 
+  val grossAssetsAmount = 200000
+
   val page = (form: Form[GrossAssetsModel]) =>
     GrossAssets(form)(fakeRequest, applicationMessages)
 
   "The gross assets page" should {
 
-    "Verify that the gross assets page contains the correct elements when a valid GrossAssetsModel is passed" in new Setup {
-      val document = Jsoup.parse(page(grossAssetsForm.fill(GrossAssetsModel(200000))).body)
+    "Verify that the gross assets page contains the correct elements when a populated form is passed" in {
+      val document = Jsoup.parse(page(grossAssetsForm.fill(GrossAssetsModel(grossAssetsAmount))).body)
       document.title() shouldBe Messages("page.grossAssets.amount.title")
       document.getElementById("main-heading").text() shouldBe Messages("page.grossAssets.amount.heading")
       document.getElementById("label-amount").select("span").hasClass("visuallyhidden") shouldBe true
@@ -45,20 +47,8 @@ class GrossAssetsSpec extends ViewSpec {
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
     }
 
-    "Verify that the gross assets page contains the correct elements when an invalid GrossAssetsModel is passed" in new Setup {
-      val document = Jsoup.parse(page(grossAssetsForm.bindFromRequest()(fakeRequest.withHeaders("" -> ""))).body)
-      document.title() shouldBe Messages("page.grossAssets.amount.title")
-      document.getElementById("main-heading").text() shouldBe Messages("page.grossAssets.amount.heading")
-      document.getElementById("label-amount").select("span").hasClass("visuallyhidden") shouldBe true
-      document.getElementById("label-amount").select(".visuallyhidden").text() shouldBe Messages("page.grossAssets.amount.heading")
-      document.getElementById("next").text() shouldBe Messages("common.button.snc")
-      document.body.getElementById("back-link").attr("href") shouldEqual routes.ShareIssueDateController.show().url
-      document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.one")
-      document.getElementById("next").text() shouldBe Messages("common.button.snc")
-      document.getElementById("error-summary-display").hasClass("error-summary--show")
-    }
 
-    "Verify that the gross assets page contains the correct elements when an empty GrossAssetsModel is passed" in new Setup {
+    "Verify that the gross assets page contains the correct elements when an empty form is passed" in  {
       val document = Jsoup.parse(page(grossAssetsForm).body)
       document.title() shouldBe Messages("page.grossAssets.amount.title")
       document.getElementById("main-heading").text() shouldBe Messages("page.grossAssets.amount.heading")
@@ -69,6 +59,15 @@ class GrossAssetsSpec extends ViewSpec {
       document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.one")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
 
+    }
+
+    "Verify that the gross assets page contains the correct elements when an invalid form with errors is passed" in  {
+      val document = Jsoup.parse(page(grossAssetsForm.bindFromRequest()(fakeRequest.withHeaders("" -> ""))).body)
+      document.title() shouldBe Messages("page.grossAssets.amount.title")
+      document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe true
+      document.getElementById("error-summary-heading").text shouldBe Messages("common.error.summary.heading")
+      document.getElementById("grossAmount-error-summary").text shouldBe Messages("validation.common.error.fieldRequired")
+      document.getElementsByClass("error-notification").text shouldBe Messages("validation.common.error.fieldRequired")
     }
   }
 

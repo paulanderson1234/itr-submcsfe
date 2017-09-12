@@ -38,7 +38,7 @@ class GrossAssetsControllerSpec extends BaseSpec {
     override lazy val enrolmentConnector = mockEnrolmentConnector
   }
 
-  val grossAssets = GrossAssetsModel(12345)
+  val grossAssetsAmount = 200000
 
   "GrossAssetsController" should {
     "use the correct keystore connector" in {
@@ -60,16 +60,16 @@ class GrossAssetsControllerSpec extends BaseSpec {
 
   "Sending a GET request to GrossAssetsController when authenticated and enrolled" should {
 
-    "return a 200 when something is fetched from keystore" in {
+    "return an OK when something is fetched from storage" in {
       mockEnrolledRequest(eisSchemeTypesModel)
       when(mockS4lConnector.fetchAndGetFormData[GrossAssetsModel](Matchers.eq(KeystoreKeys.grossAssets))
-        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(grossAssets)))
+        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(GrossAssetsModel(grossAssetsAmount))))
       showWithSessionAndAuth(TestController.show)(
         result => status(result) shouldBe OK
       )
     }
 
-    "provide an empty model and return a 200 when nothing is fetched using keystore" in {
+    "return an OK when nothing is fetched from storage" in {
       when(mockS4lConnector.fetchAndGetFormData[GrossAssetsModel](Matchers.eq(KeystoreKeys.grossAssets))
         (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
       mockEnrolledRequest(eisSchemeTypesModel)

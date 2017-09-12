@@ -48,7 +48,7 @@ class GrossAssetsErrorControllerSpec extends BaseSpec {
   }
 
   "Sending a GET request to GrossAssetsErrorController when authenticated and enrolled" should {
-    "return a 200 OK" in {
+    "return an OK" in {
       mockEnrolledRequest(seisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show)(
         result => status(result) shouldBe OK
