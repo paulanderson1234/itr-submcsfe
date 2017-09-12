@@ -45,6 +45,8 @@ common.changeAnswers.link=change your answers
 common.error.soft.heading=You don''t appear to qualify for this scheme
 common.error.soft.secondaryHeading=What happens next
 common.error.soft.whatNext=You can continue with your application if you think that you should qualify.
+common.page.forename.label=First Name
+common.page.surname.label=Last Name
 
 ## Common date Messages ##
 common.date.fields.day=Day
@@ -1219,3 +1221,7 @@ page.investors.wasAnyValueReceived.additionalGuidance.list.three = when the inve
 page.investors.wasAnyValueReceived.additionalGuidance.list.four = how much it was worth
 page.investors.wasAnyValueReceived.additionalGuidance.list.five = whether you got anything in return
 
+
+# WhoRepaidShares page
+page.WhoRepaidShares.title=Who was repaid for their shares or debentures or had them repurchased?
+page.WhoRepaidShares.heading=Who was repaid for their shares or debentures or had them repurchased?
