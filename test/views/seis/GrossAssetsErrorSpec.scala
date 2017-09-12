@@ -27,7 +27,7 @@ class GrossAssetsErrorSpec extends ViewSpec {
 
   "The Gross Assets error page" should {
 
-    "Verify that page has the expected eleemnts" in {
+    "Verify that page has the expected elements" in {
       val page = GrossAssetsError()(fakeRequest, applicationMessages)
       val document = Jsoup.parse(page.body)
 
