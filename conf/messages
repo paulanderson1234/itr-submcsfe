@@ -1018,7 +1018,7 @@ page.shareDetails.totalAmountRaised.title=How much did your company raise in thi
 page.shareDetails.totalAmountRaised.heading=How much did your company raise in this share issue?
 page.shareDetails.totalAmountRaised.OutOfRange=Enter an amount between 0 and 999999999
 page.shareDetails.totalAmountRaised.invalidAmount=Enter an amount in the correct format e.g. 1000
-page.shareDetails.totalAmountRaised.descriptionOne.text=You must only include share subscriptions from investors in this application.
+page.shareDetails.totalAmountRaised.descriptionOne.text=You must only include the total amount raised by investors seeking tax relief from this share issue.
 
 
 ##  Hub Guidance ##
