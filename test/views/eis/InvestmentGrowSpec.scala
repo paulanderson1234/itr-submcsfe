@@ -88,6 +88,7 @@ class InvestmentGrowSpec extends ViewSpec {
       document.body.getElementById("business-plan").text() shouldEqual getExternalLinkText(Messages("page.investment.InvestmentGrow.businessplan.link"))
       document.body.getElementById("business-plan").attr("href") shouldEqual "https://www.gov.uk/write-business-plan"
       document.body.getElementById("business-plan").hasClass("external-link") shouldBe true
+      document.select(".error-summary").isEmpty shouldBe true
     }
 
     "Verify that the correct elements are loaded when coming from PreviousBeforeDOFCS page" in new Setup {
@@ -117,6 +118,7 @@ class InvestmentGrowSpec extends ViewSpec {
       document.body.getElementById("business-plan").text() shouldEqual getExternalLinkText(Messages("page.investment.InvestmentGrow.businessplan.link"))
       document.body.getElementById("business-plan").attr("href") shouldEqual "https://www.gov.uk/write-business-plan"
       document.body.getElementById("business-plan").hasClass("external-link") shouldBe true
+      document.select(".error-summary").isEmpty shouldBe true
     }
 
     "Verify that the correct elements are loaded when coming from NewProduct page" in new Setup {
@@ -145,6 +147,7 @@ class InvestmentGrowSpec extends ViewSpec {
       document.body.getElementById("business-plan").text() shouldEqual getExternalLinkText(Messages("page.investment.InvestmentGrow.businessplan.link"))
       document.body.getElementById("business-plan").attr("href") shouldEqual "https://www.gov.uk/write-business-plan"
       document.body.getElementById("business-plan").hasClass("external-link") shouldBe true
+      document.select(".error-summary").isEmpty shouldBe true
 
     }
 
@@ -173,7 +176,7 @@ class InvestmentGrowSpec extends ViewSpec {
       document.body.getElementById("business-plan").text() shouldEqual getExternalLinkText(Messages("page.investment.InvestmentGrow.businessplan.link"))
       document.body.getElementById("business-plan").attr("href") shouldEqual "https://www.gov.uk/write-business-plan"
       document.body.getElementById("business-plan").hasClass("external-link") shouldBe true
-
+      document.select(".error-summary").isEmpty shouldBe true
     }
 
 
@@ -202,7 +205,7 @@ class InvestmentGrowSpec extends ViewSpec {
       document.body.getElementById("business-plan").text() shouldEqual getExternalLinkText(Messages("page.investment.InvestmentGrow.businessplan.link"))
       document.body.getElementById("business-plan").attr("href") shouldEqual "https://www.gov.uk/write-business-plan"
       document.body.getElementById("business-plan").hasClass("external-link") shouldBe true
-
+      document.select(".error-summary").isEmpty shouldBe true
     }
 
     "Verify that the correct elements are loaded when hasGeoMarket is true and hasNewProduct is true" in new Setup{
@@ -236,7 +239,7 @@ class InvestmentGrowSpec extends ViewSpec {
       document.body.getElementById("business-plan").text() shouldEqual getExternalLinkText(Messages("page.investment.InvestmentGrow.businessplan.link"))
       document.body.getElementById("business-plan").attr("href") shouldEqual "https://www.gov.uk/write-business-plan"
       document.body.getElementById("business-plan").hasClass("external-link") shouldBe true
-
+      document.select(".error-summary").isEmpty shouldBe true
     }
 
     "Verify that the correct elements are loaded when hasGeoMarket is true and hasNewProduct is false" in new Setup{
@@ -270,7 +273,7 @@ class InvestmentGrowSpec extends ViewSpec {
       document.body.getElementById("business-plan").text() shouldEqual getExternalLinkText(Messages("page.investment.InvestmentGrow.businessplan.link"))
       document.body.getElementById("business-plan").attr("href") shouldEqual "https://www.gov.uk/write-business-plan"
       document.body.getElementById("business-plan").hasClass("external-link") shouldBe true
-
+      document.select(".error-summary").isEmpty shouldBe true
     }
 
     "Verify that the correct elements are loaded when hasGeoMarket is false and hasNewProduct is true" in new Setup{
@@ -303,7 +306,7 @@ class InvestmentGrowSpec extends ViewSpec {
       document.body.getElementById("business-plan").text() shouldEqual getExternalLinkText(Messages("page.investment.InvestmentGrow.businessplan.link"))
       document.body.getElementById("business-plan").attr("href") shouldEqual "https://www.gov.uk/write-business-plan"
       document.body.getElementById("business-plan").hasClass("external-link") shouldBe true
-
+      document.select(".error-summary").isEmpty shouldBe true
     }
 
     "Verify that the correct elements are loaded when hasGeoMarket is false and hasNewProduct is false" in new Setup{
@@ -334,7 +337,7 @@ class InvestmentGrowSpec extends ViewSpec {
       document.body.getElementById("business-plan").text() shouldEqual getExternalLinkText(Messages("page.investment.InvestmentGrow.businessplan.link"))
       document.body.getElementById("business-plan").attr("href") shouldEqual "https://www.gov.uk/write-business-plan"
       document.body.getElementById("business-plan").hasClass("external-link") shouldBe true
-
+      document.select(".error-summary").isEmpty shouldBe true
     }
 
     "Verify that the correct elements are loaded when newGeoMarket is not defined and hasNewProduct is not defined" in new Setup{
@@ -363,7 +366,7 @@ class InvestmentGrowSpec extends ViewSpec {
       document.body.getElementById("business-plan").text() shouldEqual getExternalLinkText(Messages("page.investment.InvestmentGrow.businessplan.link"))
       document.body.getElementById("business-plan").attr("href") shouldEqual "https://www.gov.uk/write-business-plan"
       document.body.getElementById("business-plan").hasClass("external-link") shouldBe true
-
+      document.select(".error-summary").isEmpty shouldBe true
     }
 
     "show an error no data entered" in new Setup {

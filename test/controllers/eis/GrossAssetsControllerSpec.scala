@@ -25,6 +25,7 @@ import models._
 import org.mockito.Matchers
 import org.mockito.Mockito._
 import play.api.test.Helpers._
+import uk.gov.hmrc.play.http.{Upstream5xxResponse, BadRequestException}
 
 import scala.concurrent.Future
 
@@ -38,7 +39,8 @@ class GrossAssetsControllerSpec extends BaseSpec {
     override lazy val enrolmentConnector = mockEnrolmentConnector
   }
 
-  val grossAssets = GrossAssetsModel(12345)
+  val grossAssetsAmount = 200000
+  val failedResponse = Upstream5xxResponse("Error",INTERNAL_SERVER_ERROR,INTERNAL_SERVER_ERROR)
 
   "GrossAssetsController" should {
     "use the correct keystore connector" in {
@@ -60,16 +62,16 @@ class GrossAssetsControllerSpec extends BaseSpec {
 
   "Sending a GET request to GrossAssetsController when authenticated and enrolled" should {
 
-    "return a 200 when something is fetched from keystore" in {
+    "return an OK when something is fetched from storage" in {
       mockEnrolledRequest(eisSchemeTypesModel)
       when(mockS4lConnector.fetchAndGetFormData[GrossAssetsModel](Matchers.eq(KeystoreKeys.grossAssets))
-        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(grossAssets)))
+        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(GrossAssetsModel(grossAssetsAmount))))
       showWithSessionAndAuth(TestController.show)(
         result => status(result) shouldBe OK
       )
     }
 
-    "provide an empty model and return a 200 when nothing is fetched using keystore" in {
+    "return an OK when nothing is fetched from storage" in {
       when(mockS4lConnector.fetchAndGetFormData[GrossAssetsModel](Matchers.eq(KeystoreKeys.grossAssets))
         (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
       mockEnrolledRequest(eisSchemeTypesModel)
@@ -107,6 +109,34 @@ class GrossAssetsControllerSpec extends BaseSpec {
         result => {
           status(result) shouldBe SEE_OTHER
           redirectLocation(result) shouldBe Some(routes.GrossAssetsErrorController.show().url)
+        }
+      )
+    }
+  }
+
+  "Sending a valid form submit to the GrossAssetsController" should {
+    "show the INTERNAL_SERVER_ERROR page if an exception occurs during the API call" in {
+      when(mockSubmissionConnector.checkGrossAssetsAmountExceeded(Matchers.any(), Matchers.any())
+      (Matchers.any())).thenReturn(Future.failed(failedResponse))
+      mockEnrolledRequest(eisSchemeTypesModel)
+      submitWithSessionAndAuth(TestController.submit,
+        "grossAmount" -> "200001")(
+        result => {
+          status(result) shouldBe INTERNAL_SERVER_ERROR
+        }
+      )
+    }
+  }
+
+  "Sending a valid form submit to the GrossAssetsController" should {
+    "show the INTERNAL_SERVER_ERROR page if the API call returns an empty Option" in {
+      when(mockSubmissionConnector.checkGrossAssetsAmountExceeded(Matchers.any(), Matchers.any())
+      (Matchers.any())).thenReturn(Future.successful(None))
+      mockEnrolledRequest(eisSchemeTypesModel)
+      submitWithSessionAndAuth(TestController.submit,
+        "grossAmount" -> "200001")(
+        result => {
+          status(result) shouldBe INTERNAL_SERVER_ERROR
         }
       )
     }
