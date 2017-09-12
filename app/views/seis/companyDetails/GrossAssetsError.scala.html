@@ -20,6 +20,13 @@
         </div>
 
         <div class="form-group">
+            <p id="incorrect-info">@Messages("page.companyDetails.grossAssetsError.incorrect.info")
+                <a href="@controllers.seis.routes.GrossAssetsController.show().url" class="link-style"
+                   id="change-answers">
+                    @Messages("page.companyDetails.grossAssetsError.link.changeAnswers")</a>.</p>
+        </div>
+
+        <div class="form-group">
             <span id="what-next-heading" class="heading-medium">
                 @Messages("page.companyDetails.grossAssetsError.whatNext.heading")
             </span>
@@ -33,13 +40,6 @@
             @form(action = controllers.seis.routes.GrossAssetsErrorController.submit()) {
             <button class="btn button" id="next" type="submit">@Messages("common.button.continue")</button>
             }
-        </div>
-
-        <div class="form-group">
-            <p id="incorrect-info">@Messages("page.companyDetails.grossAssetsError.incorrect.info")
-                <a href="@controllers.seis.routes.GrossAssetsController.show().url" class="link-style"
-                   id="change-answers">
-                    @Messages("page.companyDetails.grossAssetsError.link.changeAnswers")</a>.</p>
         </div>
 
     </div>
