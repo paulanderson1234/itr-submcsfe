@@ -226,5 +226,8 @@ POST       /nominal-value-of-shares               controllers.eis.NominalValueOf
 GET        /share-description                     controllers.eis.ShareDescriptionController.show
 POST       /share-description                     controllers.eis.ShareDescriptionController.submit
 
+GET       /amount-shares-repayment                controllers.eis.AmountSharesRepaymentController.show
+POST      /amount-shares-repayment                controllers.eis.AmountSharesRepaymentController.submit
+
 GET       /total-amount-raised                    controllers.eis.TotalAmountRaisedController.show
 POST      /total-amount-raised                    controllers.eis.TotalAmountRaisedController.submit

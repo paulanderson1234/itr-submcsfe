@@ -79,6 +79,7 @@ trait KeystoreKeys {
   val numberOfPreviouslyIssuedShares: String = "investors:numberOfPreviouslyIssuedShares"
   val addAnotherInvestor: String = "investors:addAnotherInvestor"
   val shareCapitalChanges: String = "investors:shareCapitalChanges"
+  val amountSharesRepayment: String = "pageKeys:amountSharesRepayment"
   val wasAnyValueReceived: String = "investors:wasAnyValueReceived"
 
   // processing Keys
