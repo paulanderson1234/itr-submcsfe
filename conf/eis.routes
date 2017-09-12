@@ -107,9 +107,15 @@ POST       /acknowledgement                         controllers.eis.Acknowledgem
 GET        /attachments-acknowledgement             controllers.eis.AttachmentsAcknowledgementController.show
 POST       /attachments-acknowledgement             controllers.eis.AttachmentsAcknowledgementController.submit
 
-
+#TODO REMOVE routes below when old lifetime limit removed
 GET        /lifetime-allowance-exceeded             controllers.eis.LifetimeAllowanceExceededController.show
 POST       /lifetime-allowance-exceeded             controllers.eis.LifetimeAllowanceExceededController.submit
+
+GET       /lifetime-allowance-exceeded-error        controllers.eis.LifetimeAllowanceExceededErrorController.show
+POST      /lifetime-allowance-exceeded-error        controllers.eis.LifetimeAllowanceExceededErrorController.submit
+
+GET       /annual-limit-exceeded-error              controllers.eis.AnnualLimitExceededErrorController.show
+POST      /annual-limit-exceeded-error              controllers.eis.AnnualLimitExceededErrorController.submit
 
 GET        /annual-turnover-error                   controllers.eis.AnnualTurnoverErrorController.show
 
