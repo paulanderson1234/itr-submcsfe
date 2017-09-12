@@ -64,14 +64,13 @@ class ReviewPreviousSchemesControllerSpec extends BaseSpec {
     }
   }
 
-  def setupMocks(previousSchemes: Option[Vector[PreviousSchemeModel]] = None,
-                 tradeStartDate: Option[TradeStartDateModel] = None): Unit = {
+  def setupMocks(previousSchemes: Option[Vector[PreviousSchemeModel]] = None): Unit = {
     when(mockS4lConnector.fetchAndGetFormData[Vector[PreviousSchemeModel]](Matchers.any())(Matchers.any(), Matchers.any(),
       Matchers.any())).thenReturn(Future.successful(previousSchemes))
   }
 
   "Sending a GET request to ReviewPreviousSchemesController when authenticated and enrolled" should {
-    "return a 200 OK when a populated vector is returned from keystore" in {
+    "return an OK when a populated vector is returned from keystore" in {
       setupMocks(Some(previousSchemeVectorList))
       mockEnrolledRequest(seisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show)(
@@ -80,18 +79,7 @@ class ReviewPreviousSchemesControllerSpec extends BaseSpec {
       }
     }
 
-    "redirect to HadPreviousRFI when nothing is returned from keystore when authenticated and enrolled" in {
-      setupMocks()
-      mockEnrolledRequest(seisSchemeTypesModel)
-      showWithSessionAndAuth(TestController.show)(
-        result => {
-          status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(routes.HadPreviousRFIController.show().url)
-        }
-      )
-    }
-
-    "redirect to HadPreviousRFI when no previous schemes are returned from keystore when authenticated and enrolled" in {
+    "redirect to HadPreviousRFI when nothing is returned from storage" in {
       setupMocks()
       mockEnrolledRequest(seisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show)(
@@ -103,33 +91,32 @@ class ReviewPreviousSchemesControllerSpec extends BaseSpec {
     }
 
     "Posting to the continue button on the ReviewPreviousSchemesController when authenticated and enrolled" should {
-      "redirect to 'Share Description' page if table is not empty" in {
+      "redirect to the correct page if table is not empty" in {
         setupMocks(Some(previousSchemeVectorList))
 
         mockEnrolledRequest(seisSchemeTypesModel)
         submitWithSessionAndAuth(TestController.submit)(
           result => {
             status(result) shouldBe SEE_OTHER
-            redirectLocation(result) shouldBe Some("/investment-tax-relief-cs/seis/share-description")
+            redirectLocation(result) shouldBe Some(routes.ShareDescriptionController.show().url)
           }
         )
       }
 
-      "redirect to itself if no payments table is empty" in {
+      "redirect to itself if previous schemes are empty" in {
         setupMocks(None)
-
         mockEnrolledRequest(seisSchemeTypesModel)
         submitWithSessionAndAuth(TestController.submit)(
           result => {
             status(result) shouldBe SEE_OTHER
-            redirectLocation(result) shouldBe Some("/investment-tax-relief-cs/seis/review-previous-schemes")
+            redirectLocation(result) shouldBe Some(routes.ReviewPreviousSchemesController.show().url)
           }
         )
       }
     }
 
     "Sending a GET request to ReviewPreviousSchemeController add method when authenticated and enrolled" should {
-      "redirect to the previous investment scheme page" in {
+      "redirect to the correct page" in {
         when(mockS4lConnector.saveFormData(Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(cacheMapBackLink)
         mockEnrolledRequest(seisSchemeTypesModel)
         submitWithSessionAndAuth(TestController.add)(
@@ -142,7 +129,7 @@ class ReviewPreviousSchemesControllerSpec extends BaseSpec {
     }
 
     "Sending a GET request to ReviewPreviousSchemeController change method when authenticated and enrolled" should {
-      "redirect to the previous investment scheme page" in {
+      "redirect to the correct page" in {
         when(mockS4lConnector.saveFormData(Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(cacheMapBackLink)
         mockEnrolledRequest(seisSchemeTypesModel)
         submitWithSessionAndAuth(TestController.change(testId))(

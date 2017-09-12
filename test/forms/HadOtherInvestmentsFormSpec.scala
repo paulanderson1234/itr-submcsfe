@@ -17,7 +17,7 @@
 package forms
 
 import common.Constants
-import models.HadPreviousRFIModel
+import models.HadOtherInvestmentsModel
 import org.scalatestplus.play.OneAppPerSuite
 import play.api.data.FormError
 import play.api.i18n.Messages
@@ -27,34 +27,34 @@ import play.api.test.FakeRequest
 import uk.gov.hmrc.play.test.UnitSpec
 import play.api.i18n.Messages.Implicits._
 
-class HadPreviousRFIFormSpec extends UnitSpec with OneAppPerSuite{
+class HadOtherInvestmentsFormSpec extends UnitSpec with OneAppPerSuite{
 
   private def bindSuccess(request: FakeRequest[AnyContentAsFormUrlEncoded]) = {
-    HadPreviousRFIForm.hadPreviousRFIForm.bindFromRequest()(request).fold(
+    HadOtherInvestmentsForm.hadOtherInvestmentsForm.bindFromRequest()(request).fold(
       formWithErrors => None,
       userData => Some(userData)
     )
   }
 
   private def bindWithError(request: FakeRequest[AnyContentAsFormUrlEncoded]): Option[FormError] = {
-    HadPreviousRFIForm.hadPreviousRFIForm.bindFromRequest()(request).fold(
+    HadOtherInvestmentsForm.hadOtherInvestmentsForm.bindFromRequest()(request).fold(
       formWithErrors => Some(formWithErrors.errors(0)),
       userData => None
     )
   }
 
-  val hadPreviousRFIJson = """{"hadPreviousRFI":"Yes"}"""
-  val hadPreviousRFIModel = HadPreviousRFIModel("Yes")
+  val hadOtherInvestmentsJson = """{"hadOtherInvestments":"Yes"}"""
+  val hadOtherInvestmentsModel = HadOtherInvestmentsModel("Yes")
 
   // address line 1 validation
-  "The Had Previous RFI Form" should {
+  "The Had Other Investments Form" should {
     "Return an error if no radio button is selected" in {
       val request = FakeRequest("POST", "/").withFormUrlEncodedBody(
-        "hadPreviousRFI" -> ""
+        "hadOtherInvestments" -> ""
       )
       bindWithError(request) match {
         case Some(err) => {
-          err.key shouldBe "hadPreviousRFI"
+          err.key shouldBe "hadOtherInvestments"
           Messages(err.message) shouldBe Messages("error.required")
           err.args shouldBe Array()
         }
@@ -65,10 +65,10 @@ class HadPreviousRFIFormSpec extends UnitSpec with OneAppPerSuite{
     }
   }
 
-  "The Had Previous RFI Form" should {
+  "The Had Other Investments Form" should {
     "not return an error if the 'Yes' option is selected" in {
       val request = FakeRequest("POST", "/").withFormUrlEncodedBody(
-        "hadPreviousRFI" -> Constants.StandardRadioButtonYesValue
+        "hadOtherInvestments" -> Constants.StandardRadioButtonYesValue
       )
       bindWithError(request) match {
         case Some(err) => {
@@ -80,10 +80,10 @@ class HadPreviousRFIFormSpec extends UnitSpec with OneAppPerSuite{
   }
 
 
-  "The Had Previous RFI Form" should {
+  "The Had Other InvestmentsForm" should {
     "not return an error if the 'No' option is selected" in {
       val request = FakeRequest("POST", "/").withFormUrlEncodedBody(
-        "hadPreviousRFI" -> Constants.StandardRadioButtonNoValue
+        "hadOtherInvestments" -> Constants.StandardRadioButtonNoValue
       )
       bindWithError(request) match {
         case Some(err) => {
@@ -95,31 +95,31 @@ class HadPreviousRFIFormSpec extends UnitSpec with OneAppPerSuite{
   }
 
   // model to json
-  "The Had Previous RFI Form model" should {
+  "The Had Other Investments Form model" should {
     "load convert to JSON successfully" in {
 
-      implicit val formats = Json.format[HadPreviousRFIModel]
+      implicit val formats = Json.format[HadOtherInvestmentsModel]
 
-      val hadPreviousRFI= Json.toJson(hadPreviousRFIModel).toString()
-      hadPreviousRFI shouldBe hadPreviousRFIJson
+      val hadOtherInvestments= Json.toJson(hadOtherInvestmentsModel).toString()
+      hadOtherInvestments shouldBe hadOtherInvestmentsJson
 
     }
   }
 
   // form model to json - apply
-  "The Had Previous RFI Form model" should {
+  "The Had Other Investments Form model" should {
     "call apply correctly on the model" in {
-      implicit val formats = Json.format[HadPreviousRFIModel]
-      val hadPreviousRFIForm =HadPreviousRFIForm.hadPreviousRFIForm.fill(hadPreviousRFIModel)
-      hadPreviousRFIForm.get.hadPreviousRFI shouldBe Constants.StandardRadioButtonYesValue
+      implicit val formats = Json.format[HadOtherInvestmentsModel]
+      val hadOtherInvestmentsForm =HadOtherInvestmentsForm.hadOtherInvestmentsForm.fill(hadOtherInvestmentsModel)
+      hadOtherInvestmentsForm.get.hadOtherInvestments shouldBe Constants.StandardRadioButtonYesValue
     }
 
     // form json to model - unapply
     "call unapply successfully to create expected Json" in {
-      implicit val formats = Json.format[HadPreviousRFIModel]
-      val hadPreviousRFIForm = HadPreviousRFIForm.hadPreviousRFIForm.fill(hadPreviousRFIModel)
-      val formJson = Json.toJson(hadPreviousRFIForm.get).toString()
-      formJson shouldBe hadPreviousRFIJson
+      implicit val formats = Json.format[HadOtherInvestmentsModel]
+      val hadOtherInvestmentsForm = HadOtherInvestmentsForm.hadOtherInvestmentsForm.fill(hadOtherInvestmentsModel)
+      val formJson = Json.toJson(hadOtherInvestmentsForm.get).toString()
+      formJson shouldBe hadOtherInvestmentsJson
     }
   }
 }

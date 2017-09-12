@@ -17,11 +17,10 @@
 package controllers.eis
 
 import auth.{MockAuthConnector, MockConfig}
-import common.KeystoreKeys
-import config.FrontendAuthConnector
+import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
-import models.PreviousSchemeModel
+import models._
 import org.mockito.Matchers
 import org.mockito.Mockito._
 import play.api.libs.json.Json
@@ -54,6 +53,9 @@ class ReviewPreviousSchemesControllerSpec extends BaseSpec {
     "use the correct keystore connector" in {
       ReviewPreviousSchemesController.s4lConnector shouldBe S4LConnector
     }
+    "use the correct config" in {
+      ReviewPreviousSchemesController.applicationConfig shouldBe FrontendAppConfig
+    }
     "use the correct auth connector" in {
       ReviewPreviousSchemesController.authConnector shouldBe FrontendAuthConnector
     }
@@ -62,48 +64,36 @@ class ReviewPreviousSchemesControllerSpec extends BaseSpec {
     }
   }
 
-  def setupMocks(previousSchemes: Option[Vector[PreviousSchemeModel]] = None, backLink: Option[String] = None): Unit = {
-    when(mockS4lConnector.fetchAndGetFormData[Vector[PreviousSchemeModel]](Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
-      .thenReturn(Future.successful(previousSchemes))
-    when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.backLinkReviewPreviousSchemes))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(backLink))
+  def setupMocks(previousSchemes: Option[Vector[PreviousSchemeModel]] = None): Unit = {
+    when(mockS4lConnector.fetchAndGetFormData[Vector[PreviousSchemeModel]](Matchers.any())(Matchers.any(), Matchers.any(),
+      Matchers.any())).thenReturn(Future.successful(previousSchemes))
   }
 
   "Sending a GET request to ReviewPreviousSchemesController when authenticated and enrolled" should {
-    "return a 200 OK when a populated vector is returned from keystore and a back link is retrieved" in {
-      setupMocks(Some(previousSchemeVectorList), Some(routes.HadPreviousRFIController.show().url))
+    "return an OK when a populated vector is returned from keystore" in {
+      setupMocks(Some(previousSchemeVectorList))
       mockEnrolledRequest(eisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show)(
         result => status(result) shouldBe OK
       )
     }
+  }
 
-    "redirect to HadPreviousRFI when nothing is returned from keystore when authenticated and enrolled" in {
-      setupMocks()
-      mockEnrolledRequest(eisSchemeTypesModel)
-      showWithSessionAndAuth(TestController.show)(
-        result => {
-          status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(routes.HadPreviousRFIController.show().url)
-        }
-      )
-    }
-
-    "redirect to HadPreviousRFI when no previous schemes are returned from keystore when authenticated and enrolled" in {
-      setupMocks(backLink = Some(routes.HadPreviousRFIController.show().url))
-      mockEnrolledRequest(eisSchemeTypesModel)
-      showWithSessionAndAuth(TestController.show)(
-        result => {
-          status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(routes.HadPreviousRFIController.show().url)
-        }
-      )
-    }
+  "redirect to HadPreviousRFI when nothing is returned from storage" in {
+    setupMocks()
+    mockEnrolledRequest(eisSchemeTypesModel)
+    showWithSessionAndAuth(TestController.show)(
+      result => {
+        status(result) shouldBe SEE_OTHER
+        redirectLocation(result) shouldBe Some(routes.HadPreviousRFIController.show().url)
+      }
+    )
   }
 
   "Posting to the continue button on the ReviewPreviousSchemesController when authenticated and enrolled" should {
-    "redirect to 'Share Description' page if table is not empty" in {
+    "redirect to the correct page if table is not empty" in {
       setupMocks(Some(previousSchemeVectorList))
+
       mockEnrolledRequest(eisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit)(
         result => {
@@ -113,8 +103,8 @@ class ReviewPreviousSchemesControllerSpec extends BaseSpec {
       )
     }
 
-    "redirect to itself if table is empty" in {
-      setupMocks()
+    "redirect to itself if previous schemes are empty" in {
+      setupMocks(None)
       mockEnrolledRequest(eisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit)(
         result => {
@@ -126,8 +116,8 @@ class ReviewPreviousSchemesControllerSpec extends BaseSpec {
   }
 
   "Sending a GET request to ReviewPreviousSchemeController add method when authenticated and enrolled" should {
-    "redirect to the previous investment scheme page" in {
-      when(mockS4lConnector.saveFormData(Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(),Matchers.any())).thenReturn(cacheMapBackLink)
+    "redirect to the correct page" in {
+      when(mockS4lConnector.saveFormData(Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(cacheMapBackLink)
       mockEnrolledRequest(eisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.add)(
         result => {
@@ -139,13 +129,13 @@ class ReviewPreviousSchemesControllerSpec extends BaseSpec {
   }
 
   "Sending a GET request to ReviewPreviousSchemeController change method when authenticated and enrolled" should {
-    "redirect to the previous investment scheme page" in {
-      when(mockS4lConnector.saveFormData(Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(),Matchers.any())).thenReturn(cacheMapBackLink)
+    "redirect to the correct page" in {
+      when(mockS4lConnector.saveFormData(Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(cacheMapBackLink)
       mockEnrolledRequest(eisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.change(testId))(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(routes.PreviousSchemeController.show().url + s"?id=$testId")
+          redirectLocation(result) shouldBe Some(s"${routes.PreviousSchemeController.show().url}?id=" + testId)
         }
       )
     }
@@ -162,4 +152,5 @@ class ReviewPreviousSchemesControllerSpec extends BaseSpec {
       )
     }
   }
+
 }

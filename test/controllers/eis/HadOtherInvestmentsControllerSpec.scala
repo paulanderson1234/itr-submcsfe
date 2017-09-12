@@ -48,47 +48,54 @@ class HadOtherInvestmentsControllerSpec extends BaseSpec {
       HadOtherInvestmentsController.enrolmentConnector shouldBe EnrolmentConnector
     }
   }
-
-  def setupMocks(hadOtherInvestmentsModel: Option[HadOtherInvestmentsModel] = None, backLink: Option[String] = None,
-                 previousSchemes: Option[Vector[PreviousSchemeModel]] = None,
-                 hadPreviousRFIModel: Option[HadPreviousRFIModel]): Unit = {
+  
+  def showMocks(hadOtherInvestmentsModel: Option[HadOtherInvestmentsModel] = None, hadPreviousRFIBackLink: Option[String] = None): Unit = {
     when(mockS4lConnector.fetchAndGetFormData[HadOtherInvestmentsModel](Matchers.eq(KeystoreKeys.hadOtherInvestments))
-      (Matchers.any(), Matchers.any(), Matchers.any()))
-      .thenReturn(Future.successful(hadOtherInvestmentsModel))
-    when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.backLinkReviewPreviousSchemes))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(backLink))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(hadOtherInvestmentsModel))
+    when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.backLinkHadRFI))(Matchers.any(), Matchers.any(),Matchers.any()))
+      .thenReturn(Future.successful(hadPreviousRFIBackLink))
+  }
+
+  def submitMocks(previousSchemes: Option[Vector[PreviousSchemeModel]] = None, hadPreviousRFIModel: Option[HadPreviousRFIModel]): Unit = {
     when(mockS4lConnector.fetchAndGetFormData[Vector[PreviousSchemeModel]](Matchers.eq(KeystoreKeys.previousSchemes))
       (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(previousSchemes))
-    when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.backLinkSubsidiaries))(Matchers.any(), Matchers.any(),Matchers.any()))
-      .thenReturn(Future.successful(backLink))
     when(mockS4lConnector.fetchAndGetFormData[HadPreviousRFIModel](Matchers.eq(KeystoreKeys.hadPreviousRFI))
       (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(hadPreviousRFIModel))
-    when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.backLinkHadRFI))(Matchers.any(), Matchers.any(),Matchers.any()))
-      .thenReturn(Future.successful(Some(controllers.eis.routes.HadPreviousRFIController.show().url)))
   }
 
   "Sending a GET request to HadOtherInvestmentsController when authenticated and enrolled for EIS" should {
-    "return a 200 when something is fetched from keystore" in {
-      setupMocks(Some(hadOtherInvestmentsModelYes), Some(routes.ProposedInvestmentController.show().url), None, Some(hadPreviousRFIModelYes))
+    "return an OK when something is fetched from storage" in {
+      showMocks(Some(hadOtherInvestmentsModelYes), Some(routes.FullTimeEmployeeCountController.show().url))
       mockEnrolledRequest(eisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show())(
         result => status(result) shouldBe OK
       )
     }
 
-    "provide an empty model and return a 200 when nothing is fetched using keystore for EIS" in {
-      setupMocks(None,Some(routes.ProposedInvestmentController.show().url), None, Some(hadPreviousRFIModelYes))
+    "provide an empty form and return an OK when nothing is fetched using storage for EIS" in {
+      showMocks(None, Some(routes.FullTimeEmployeeCountController.show().url))
       mockEnrolledRequest(eisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show())(
         result => status(result) shouldBe OK
+      )
+    }
+
+
+    "REDIRECT to the correct page in the flow when no backLink is present"  in {
+      showMocks(Some(hadOtherInvestmentsModelYes), None)
+      mockEnrolledRequest(eisSchemeTypesModel)
+      showWithSessionAndAuth(TestController.show())(
+        result => {
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(routes.HadPreviousRFIController.show().url)
+        }
       )
     }
   }
 
-  "Sending a valid 'Yes' form submit to the HadOtherInvestmentsController when authenticated and enrolled" +
-    "and there are no previous enrolments for EIS" should {
-    "redirect to previous scheme page" in {
-      setupMocks(None, None, None, Some(hadPreviousRFIModelYes))
+  "Sending a valid 'Yes' form submit to the HadOtherInvestmentsController when authenticated and enrolled for EIS" should {
+    "redirect to the PreviousScheme page when there are no previous schemes" in {
+      submitMocks(previousSchemes =  None, hadPreviousRFIModel = Some(hadPreviousRFIModelYes))
       mockEnrolledRequest(eisSchemeTypesModel)
       val formInput = "hadOtherInvestments" -> Constants.StandardRadioButtonYesValue
       submitWithSessionAndAuth(TestController.submit,formInput)(
@@ -100,10 +107,23 @@ class HadOtherInvestmentsControllerSpec extends BaseSpec {
     }
   }
 
-  "Sending a valid 'No' form submit to the HadOtherInvestmentsController with 'No' to the previous RFI when authenticated " +
-    "and enrolled for EIS" should {
-    "redirect to the commercial sale page" in {
-      setupMocks(None, None, None, Some(hadPreviousRFIModelNo))
+  "Sending a valid 'Yes' form submit to the HadOtherInvestmentsController when authenticated and enrolled for EIS" should {
+    "redirect to the ReviewPreviousSchemes page when previous schemes exist" in {
+      submitMocks(previousSchemes = Some(previousSchemesFull), hadPreviousRFIModel = Some(hadPreviousRFIModelYes))
+      mockEnrolledRequest(eisSchemeTypesModel)
+      val formInput = "hadOtherInvestments" -> Constants.StandardRadioButtonYesValue
+      submitWithSessionAndAuth(TestController.submit,formInput)(
+        result => {
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(routes.ReviewPreviousSchemesController.show().url)
+        }
+      )
+    }
+  }
+
+  "Sending a valid 'No' form submit to the HadOtherInvestmentsController with 'No' to the previous RFI when authenticated and enrolled for EIS" should {
+    "redirect to the ShareDescription page" in {
+      submitMocks(previousSchemes = None, hadPreviousRFIModel = Some(hadPreviousRFIModelNo))
       mockEnrolledRequest(eisSchemeTypesModel)
       val formInput = "hadOtherInvestments" -> Constants.StandardRadioButtonNoValue
       submitWithSessionAndAuth(TestController.submit,formInput)(
@@ -115,10 +135,9 @@ class HadOtherInvestmentsControllerSpec extends BaseSpec {
     }
   }
 
-  "Sending a valid 'No' form submit to the HadOtherInvestmentsController with 'YES' to the previous RFI when authenticated " +
-    "and enrolled for EIS" should {
-    "redirect to the previous scheme page" in {
-      setupMocks(None, None, None, Some(hadPreviousRFIModelYes))
+  "Sending a valid 'No' form submit to the HadOtherInvestmentsController with 'YES' to the previous RFI when authenticated and enrolled for EIS" should {
+    "redirect to the PreviousScheme page when there are no previous schemes" in {
+      submitMocks(previousSchemes = None, hadPreviousRFIModel = Some(hadPreviousRFIModelYes))
       mockEnrolledRequest(eisSchemeTypesModel)
       val formInput = "hadOtherInvestments" -> Constants.StandardRadioButtonNoValue
       submitWithSessionAndAuth(TestController.submit,formInput)(
@@ -130,21 +149,46 @@ class HadOtherInvestmentsControllerSpec extends BaseSpec {
     }
   }
 
-  "Sending an invalid form submission with validation errors to the HadOtherInvestmentsController when authenticated " +
-    "and enrolled for EIS" should {
-    "redirect to itself" in {
-      setupMocks(None, None, None, Some(hadPreviousRFIModelYes))
-      when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.backLinkReviewPreviousSchemes))
-        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(routes.ProposedInvestmentController.show().url)))
+  "Sending a valid 'No' form submit to the HadOtherInvestmentsController with 'YES' to the previous RFI when authenticated and enrolled for EIS" should {
+    "redirect to the ReviewPreviousScheme page when previous schemes exist" in {
+      submitMocks(previousSchemes = Some(previousSchemesFull), hadPreviousRFIModel = Some(hadPreviousRFIModelYes))
+      mockEnrolledRequest(eisSchemeTypesModel)
+      val formInput = "hadOtherInvestments" -> Constants.StandardRadioButtonNoValue
+      submitWithSessionAndAuth(TestController.submit,formInput)(
+        result => {
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(routes.ReviewPreviousSchemesController.show().url)
+        }
+      )
+    }
+  }
 
-      when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.backLinkSubsidiaries))(Matchers.any(), Matchers.any(),Matchers.any()))
-        .thenReturn(Future.successful(Some(routes.ProposedInvestmentController.show().url)))
+  "Sending an invalid form submission with validation errors to the HadOtherInvestmentsController when authenticated and enrolled for EIS" should {
+    "reload the page with a BAD_REQUEST when a backlink is found" in {
+      when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.backLinkHadRFI))(Matchers.any(), Matchers.any(),Matchers.any()))
+        .thenReturn(Future.successful(Some(controllers.eis.routes.HadPreviousRFIController.show().url)))
 
       mockEnrolledRequest(eisSchemeTypesModel)
       val formInput = "hadOtherInvestments" -> ""
       submitWithSessionAndAuth(TestController.submit,formInput)(
         result => {
           status(result) shouldBe BAD_REQUEST
+        }
+      )
+    }
+  }
+
+  "Sending an invalid form submission with validation errors to the HadOtherInvestmentsController when authenticated and enrolled for EIS" should {
+    "redirect when a backlink is not found" in {
+      when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.backLinkHadRFI))(Matchers.any(), Matchers.any(),Matchers.any()))
+        .thenReturn(Future.successful(None))
+
+      mockEnrolledRequest(eisSchemeTypesModel)
+      val formInput = "hadOtherInvestments" -> ""
+      submitWithSessionAndAuth(TestController.submit,formInput)(
+        result => {
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(routes.HadPreviousRFIController.show().url)
         }
       )
     }

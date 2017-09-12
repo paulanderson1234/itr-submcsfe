@@ -16,92 +16,72 @@
 
 package views.seis
 
-import auth.{MockAuthConnector, MockConfigEISFlow}
-import common.KeystoreKeys
-import controllers.eis.HadOtherInvestmentsController
-import models.{HadOtherInvestmentsModel, HadPreviousRFIModel}
+import controllers.seis.routes
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import org.mockito.Matchers
-import org.mockito.Mockito._
 import play.api.i18n.Messages
 import play.api.i18n.Messages.Implicits._
-import play.api.test.Helpers._
 import views.helpers.ViewSpec
+import views.html.seis.previousInvestment.HadOtherInvestments
+import forms.HadOtherInvestmentsForm._
 
-import scala.concurrent.Future
 
 class HadOtherInvestmentsSpec extends ViewSpec {
 
-  object TestController extends HadOtherInvestmentsController {
-    override lazy val applicationConfig = MockConfigEISFlow
-    override lazy val authConnector = MockAuthConnector
-    override lazy val s4lConnector = mockS4lConnector
-    override lazy val enrolmentConnector = mockEnrolmentConnector
-  }
+  val testBackLink = routes.HadPreviousRFIController.show().url
 
-  def setupMocks(hadOtherInvestmentsModel: Option[HadOtherInvestmentsModel] = None,
-                 hadPreviousRFIModel: Option[HadPreviousRFIModel] = None): Unit = {
-    when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.backLinkHadRFI))(Matchers.any(), Matchers.any(),Matchers.any()))
-      .thenReturn(Future.successful(Some(controllers.eis.routes.HadPreviousRFIController.show().url)))
-    when(mockS4lConnector.fetchAndGetFormData[HadOtherInvestmentsModel](Matchers.eq(KeystoreKeys.hadOtherInvestments))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(hadOtherInvestmentsModel))
-    when(mockS4lConnector.fetchAndGetFormData[HadPreviousRFIModel](Matchers.eq(KeystoreKeys.hadPreviousRFI))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(hadPreviousRFIModel))
-    when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.backLinkReviewPreviousSchemes))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(controllers.seis.routes.HadOtherInvestmentsController.show().url)))
-  }
+  "Verify that the HadOtherInvestments page" should {
 
+    "contains the correct elements when a valid empty form is passed" in {
+      val document: Document = {
+        val page = HadOtherInvestments(hadOtherInvestmentsForm, testBackLink)(fakeRequest, applicationMessages)
+        Jsoup.parse(page.body)
+      }
+      document.title() shouldBe Messages("page.previousInvestment.hadOtherInvestments.title")
+      document.body.getElementById("back-link").attr("href") shouldEqual testBackLink
+      document.getElementById("main-heading").text() shouldBe Messages("page.previousInvestment.hadOtherInvestments.heading")
+      document.select("#hadOtherInvestments-yes").size() shouldBe 1
+      document.select("#hadOtherInvestments-no").size() shouldBe 1
+      document.getElementById("hadOtherInvestments-yesLabel").text() shouldBe Messages("common.radioYesLabel")
+      document.getElementById("hadOtherInvestments-noLabel").text() shouldBe Messages("common.radioNoLabel")
+      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.two")
+      document.getElementById("next").text() shouldBe Messages("common.button.snc")
 
-  "Verify that the hadOtherInvestments page contains the correct elements " +
-    "when a valid hadOtherInvestmentsModel is passed as returned from keystore for SEIS" in new Setup {
-    val document : Document = {
-      setupMocks(Some(hadOtherInvestmentsModelYes),Some(hadPreviousRFIModelYes))
-      val result = TestController.show.apply(authorisedFakeRequest)
-      Jsoup.parse(contentAsString(result))
-    }
-    document.title() shouldBe Messages("page.previousInvestment.hadOtherInvestments.title")
-    document.getElementById("main-heading").text() shouldBe Messages("page.previousInvestment.hadOtherInvestments.heading")
-    document.select("#hadOtherInvestments-yes").size() shouldBe 1
-    document.select("#hadOtherInvestments-no").size() shouldBe 1
-    document.getElementById("hadOtherInvestments-yesLabel").text() shouldBe Messages("common.radioYesLabel")
-    document.getElementById("hadOtherInvestments-noLabel").text() shouldBe Messages("common.radioNoLabel")
-    document.getElementById("hadOtherInvestments-legend").select(".visuallyhidden").text() shouldBe Messages("page.previousInvestment.hadOtherInvestments.heading")
-    document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.two")
-    document.getElementById("next").text() shouldBe Messages("common.button.snc")
-  }
-
-  "Verify that hadOtherInvestments page contains the correct elements when an empty model " +
-    "is passed because nothing was returned from keystore for SEIS" in new Setup {
-    val document : Document = {
-      setupMocks(None, Some(hadPreviousRFIModelYes))
-      val result = TestController.show.apply(authorisedFakeRequest)
-      Jsoup.parse(contentAsString(result))
-    }
-    document.title() shouldBe Messages("page.previousInvestment.hadOtherInvestments.title")
-    document.getElementById("main-heading").text() shouldBe Messages("page.previousInvestment.hadOtherInvestments.heading")
-    document.select("#hadOtherInvestments-yes").size() shouldBe 1
-    document.select("#hadOtherInvestments-no").size() shouldBe 1
-    document.getElementById("hadOtherInvestments-yesLabel").text() shouldBe Messages("common.radioYesLabel")
-    document.getElementById("hadOtherInvestments-noLabel").text() shouldBe Messages("common.radioNoLabel")
-    document.getElementById("hadOtherInvestments-legend").select(".visuallyhidden").text() shouldBe Messages("page.previousInvestment.hadOtherInvestments.heading")
-    document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.two")
-    document.getElementById("next").text() shouldBe Messages("common.button.snc")
-  }
-
-  "Verify that hadOtherInvestments page contains show the error summary when an invalid model " +
-    "(no radio button selection) is submitted for SEIS" in new Setup {
-    setupMocks(None, Some(hadPreviousRFIModelYes))
-
-    val document : Document = {
-      // submit the model with no radio selected as a post action
-      val result = TestController.submit.apply(authorisedFakeRequest)
-      Jsoup.parse(contentAsString(result))
+      document.getElementById("hadOtherInvestments-legend").hasClass("visuallyhidden") shouldBe true
+      document.getElementById("hadOtherInvestments-legend").text shouldBe Messages("page.previousInvestment.hadOtherInvestments.legend")
+      document.select(".error-summary").isEmpty shouldBe true
     }
 
-    // Make sure we have the expected error summary displayed
-    document.getElementById("error-summary-display").hasClass("error-summary--show")
-    document.title() shouldBe Messages("page.previousInvestment.hadOtherInvestments.title")
+    "contain the correct elements when a valid populated form is passed" in {
+      val document: Document = {
+        val page = HadOtherInvestments(hadOtherInvestmentsForm.fill(hadOtherInvestmentsModelYes), testBackLink)(fakeRequest, applicationMessages)
+        Jsoup.parse(page.body)
+      }
+      document.title() shouldBe Messages("page.previousInvestment.hadOtherInvestments.title")
+      document.body.getElementById("back-link").attr("href") shouldEqual testBackLink
+      document.getElementById("main-heading").text() shouldBe Messages("page.previousInvestment.hadOtherInvestments.heading")
+      document.select("#hadOtherInvestments-yes").size() shouldBe 1
+      document.select("#hadOtherInvestments-no").size() shouldBe 1
+      document.getElementById("hadOtherInvestments-yesLabel").text() shouldBe Messages("common.radioYesLabel")
+      document.getElementById("hadOtherInvestments-noLabel").text() shouldBe Messages("common.radioNoLabel")
+      document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.two")
+      document.getElementById("next").text() shouldBe Messages("common.button.snc")
 
+      document.getElementById("hadOtherInvestments-legend").hasClass("visuallyhidden") shouldBe true
+      document.getElementById("hadOtherInvestments-legend").text shouldBe Messages("page.previousInvestment.hadOtherInvestments.legend")
+      document.select(".error-summary").isEmpty shouldBe true
+    }
+
+    "contain an error summary when a form with errors is passed" in {
+      val document: Document = {
+        val page = HadOtherInvestments(hadOtherInvestmentsForm.bind(Map("" -> "")), testBackLink)(fakeRequest, applicationMessages)
+        Jsoup.parse(page.body)
+      }
+      document.title() shouldBe Messages("page.previousInvestment.hadOtherInvestments.title")
+      document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe true
+      document.getElementById("error-summary-heading").text shouldBe Messages("common.error.summary.heading")
+      document.getElementById("hadOtherInvestments-error-summary").text shouldBe Messages("validation.common.error.fieldRequired")
+      document.getElementsByClass("error-notification").text shouldBe Messages("validation.common.error.fieldRequired")
+    }
   }
 }

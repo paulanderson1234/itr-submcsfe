@@ -18,10 +18,10 @@ package controllers.seis
 
 import auth.{MockAuthConnector, MockConfig}
 import common.{Constants, KeystoreKeys}
-import config.{FrontendAppConfig, FrontendAuthConnector}
+import config.FrontendAuthConnector
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
-import models._
+import models.{HadPreviousRFIModel, PreviousSchemeModel}
 import org.mockito.Matchers
 import org.mockito.Mockito._
 import play.api.test.Helpers._
@@ -37,12 +37,14 @@ class HadPreviousRFIControllerSpec extends BaseSpec {
     override lazy val enrolmentConnector = mockEnrolmentConnector
   }
 
+  def setupMocks(hadPreviousRFIModel: Option[HadPreviousRFIModel] = None): Unit = {
+    when(mockS4lConnector.fetchAndGetFormData[HadPreviousRFIModel](Matchers.eq(KeystoreKeys.hadPreviousRFI))(Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(hadPreviousRFIModel))
+  }
+
   "HadPreviousRFIController" should {
     "use the correct keystore connector" in {
       HadPreviousRFIController.s4lConnector shouldBe S4LConnector
-    }
-    "use the correct config" in {
-      HadPreviousRFIController.applicationConfig shouldBe FrontendAppConfig
     }
     "use the correct auth connector" in {
       HadPreviousRFIController.authConnector shouldBe FrontendAuthConnector
@@ -52,13 +54,8 @@ class HadPreviousRFIControllerSpec extends BaseSpec {
     }
   }
 
-  def setupMocks(hadPreviousRFIModel: Option[HadPreviousRFIModel] = None): Unit = {
-    when(mockS4lConnector.fetchAndGetFormData[HadPreviousRFIModel](Matchers.eq(KeystoreKeys.hadPreviousRFI))(Matchers.any(), Matchers.any(), Matchers.any()))
-      .thenReturn(Future.successful(hadPreviousRFIModel))
-  }
-
-  "Sending a GET request to HadPreviousRFIController when authenticated and enrolled for SEIS" should {
-    "return a 200 when something is fetched from keystore" in {
+  "Sending a GET request to HadPreviousRFIController when authenticated and enrolled for EIS" should {
+    "return an OK when something is fetched from storage" in {
       setupMocks(Some(hadPreviousRFIModelYes))
       mockEnrolledRequest(seisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show())(
@@ -66,7 +63,7 @@ class HadPreviousRFIControllerSpec extends BaseSpec {
       )
     }
 
-    "provide an empty model and return a 200 when nothing is fetched using keystore for SEIS" in {
+    "provide an empty form and return an OK when nothing is fetched using storage for EIS" in {
       setupMocks(None)
       mockEnrolledRequest(seisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show())(
@@ -75,9 +72,8 @@ class HadPreviousRFIControllerSpec extends BaseSpec {
     }
   }
 
-  "Sending a valid 'Yes' form submit to the HadPreviousRFIController when authenticated and enrolled" +
-    "and there are no previous enrolments for SEIS" should {
-    "redirect to previous scheme page" in {
+  "Sending a valid 'Yes' form submit to the HadPreviousRFIController when authenticated and enrolled for EIS" should {
+    "REDIRECT to the correct page in the flow" in {
       mockEnrolledRequest(seisSchemeTypesModel)
       val formInput = "hadPreviousRFI" -> Constants.StandardRadioButtonYesValue
       submitWithSessionAndAuth(TestController.submit,formInput)(
@@ -89,22 +85,21 @@ class HadPreviousRFIControllerSpec extends BaseSpec {
     }
   }
 
-  "Sending a valid 'No' form submit to the HadPreviousRFIController when authenticated and enrolled for SEIS" should {
-    "redirect to the commercial sale page" in {
+  "Sending a valid 'No' form submit to the HadPreviousRFIController when authenticated and enrolled for EIS" should {
+    "REDIRECT to the correct page in the flow" in {
       mockEnrolledRequest(seisSchemeTypesModel)
       val formInput = "hadPreviousRFI" -> Constants.StandardRadioButtonNoValue
       submitWithSessionAndAuth(TestController.submit,formInput)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some("/investment-tax-relief-cs/seis/had-other-investments-before")
+          redirectLocation(result) shouldBe Some(routes.HadOtherInvestmentsController.show().url)
         }
       )
     }
   }
 
-  "Sending an invalid form submission with validation errors to the HadPreviousRFIController when authenticated " +
-    "and enrolled for SEIS" should {
-    "respond wih a bad request" in {
+  "Sending an invalid form submission with validation errors to the HadPreviousRFIController when authenticated and enrolled for EIS" should {
+    "load the page with a BAD_REQUEST" in {
       mockEnrolledRequest(seisSchemeTypesModel)
       val formInput = "hadPreviousRFI" -> ""
       submitWithSessionAndAuth(TestController.submit,formInput)(
