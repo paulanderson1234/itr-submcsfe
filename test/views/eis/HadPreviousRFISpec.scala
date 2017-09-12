@@ -16,96 +16,79 @@
 
 package views.eis
 
-import auth.{MockConfigEISFlow, MockAuthConnector}
-import common.KeystoreKeys
-import controllers.eis.HadPreviousRFIController
-import models.HadPreviousRFIModel
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import org.mockito.Matchers
-import org.mockito.Mockito._
 import play.api.i18n.Messages
 import play.api.i18n.Messages.Implicits._
-import play.api.test.Helpers._
 import views.helpers.ViewSpec
-
-import scala.concurrent.Future
+import views.html.eis.previousInvestment.HadPreviousRFI
+import forms.HadPreviousRFIForm._
+import controllers.eis.routes
 
 class HadPreviousRFISpec extends ViewSpec {
 
-  object TestController extends HadPreviousRFIController {
-    override lazy val applicationConfig = MockConfigEISFlow
-    override lazy val authConnector = MockAuthConnector
-    override lazy val s4lConnector = mockS4lConnector
-    override lazy val enrolmentConnector = mockEnrolmentConnector
-  }
+  "Verify that the HadPreviousRFI page" should {
 
-  def setupMocks(hadPreviousRFIModel: Option[HadPreviousRFIModel] = None): Unit = {
-    when(mockS4lConnector.fetchAndGetFormData[HadPreviousRFIModel](Matchers.eq(KeystoreKeys.hadPreviousRFI))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(hadPreviousRFIModel))
-  }
+    "contain the correct elements when an empty form is passed to the view" in {
+      val document : Document = {
+        val page = HadPreviousRFI(hadPreviousRFIForm)(fakeRequest, applicationMessages)
+        Jsoup.parse(page.body)
+      }
+      document.body.getElementById("back-link").attr("href") shouldEqual routes.FullTimeEmployeeCountController.show().url
+      document.title() shouldBe Messages("page.previousInvestment.hadPreviousRFI.title")
+      document.getElementById("main-heading").text() shouldBe Messages("page.previousInvestment.hadPreviousRFI.heading")
+      document.getElementById("bullet-heading").text() shouldBe Messages("page.previousInvestment.hadPreviousRFI.hintTitle")
+      document.getElementById("bullet-one").text() shouldBe Messages("page.previousInvestment.schemes.bullet.one")
+      document.getElementById("bullet-two").text() shouldBe Messages("page.previousInvestment.schemes.bullet.two")
+      document.getElementById("bullet-three").text() shouldBe Messages("page.previousInvestment.schemes.bullet.three")
+      document.getElementById("bullet-four").text() shouldBe Messages("page.previousInvestment.schemes.bullet.four")
+      document.select("#hadPreviousRFI-yes").size() shouldBe 1
+      document.select("#hadPreviousRFI-yes").size() shouldBe 1
+      document.getElementById("hadPreviousRFI-yesLabel").text() shouldBe Messages("common.radioYesLabel")
+      document.getElementById("hadPreviousRFI-noLabel").text() shouldBe Messages("common.radioNoLabel")
+      document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.two")
+      document.getElementById("next").text() shouldBe Messages("common.button.snc")
 
-
-  "Verify that the hadPreviousRFI page contains the correct elements " +
-    "when a valid HadPreviousRFIModel is passed as returned from keystore" in new Setup {
-    val document : Document = {
-      setupMocks(Some(hadPreviousRFIModelYes))
-      val result = TestController.show.apply(authorisedFakeRequest)
-      Jsoup.parse(contentAsString(result))
-    }
-    document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.FullTimeEmployeeCountController.show().url
-    document.title() shouldBe Messages("page.previousInvestment.hadPreviousRFI.title")
-    document.getElementById("main-heading").text() shouldBe Messages("page.previousInvestment.hadPreviousRFI.heading")
-    document.getElementById("bullet-heading").text() shouldBe Messages("page.previousInvestment.hadPreviousRFI.hintTitle")
-    document.getElementById("bullet-one").text() shouldBe Messages("page.previousInvestment.schemes.bullet.one")
-    document.getElementById("bullet-two").text() shouldBe Messages("page.previousInvestment.schemes.bullet.two")
-    document.getElementById("bullet-three").text() shouldBe Messages("page.previousInvestment.schemes.bullet.three")
-    document.getElementById("bullet-four").text() shouldBe Messages("page.previousInvestment.schemes.bullet.four")
-    document.select("#hadPreviousRFI-yes").size() shouldBe 1
-    document.select("#hadPreviousRFI-yes").size() shouldBe 1
-    document.getElementById("hadPreviousRFI-yesLabel").text() shouldBe Messages("common.radioYesLabel")
-    document.getElementById("hadPreviousRFI-noLabel").text() shouldBe Messages("common.radioNoLabel")
-    document.getElementById("hadPreviousRFI-legend").select(".visuallyhidden").text() shouldBe Messages("page.previousInvestment.hadPreviousRFI.heading")
-    document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.two")
-    document.getElementById("next").text() shouldBe Messages("common.button.snc")
-  }
-
-  "Verify that hadPreviousRFI page contains the correct elements when an empty model " +
-    "is passed because nothing was returned from keystore" in new Setup {
-    val document : Document = {
-      setupMocks()
-      val result = TestController.show.apply(authorisedFakeRequest)
-      Jsoup.parse(contentAsString(result))
-    }
-    document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.FullTimeEmployeeCountController.show().url
-    document.title() shouldBe Messages("page.previousInvestment.hadPreviousRFI.title")
-    document.getElementById("main-heading").text() shouldBe Messages("page.previousInvestment.hadPreviousRFI.heading")
-    document.getElementById("bullet-heading").text() shouldBe Messages("page.previousInvestment.hadPreviousRFI.hintTitle")
-    document.getElementById("bullet-one").text() shouldBe Messages("page.previousInvestment.schemes.bullet.one")
-    document.getElementById("bullet-two").text() shouldBe Messages("page.previousInvestment.schemes.bullet.two")
-    document.getElementById("bullet-three").text() shouldBe Messages("page.previousInvestment.schemes.bullet.three")
-    document.getElementById("bullet-four").text() shouldBe Messages("page.previousInvestment.schemes.bullet.four")
-    document.select("#hadPreviousRFI-yes").size() shouldBe 1
-    document.select("#hadPreviousRFI-no").size() shouldBe 1
-    document.getElementById("hadPreviousRFI-yesLabel").text() shouldBe Messages("common.radioYesLabel")
-    document.getElementById("hadPreviousRFI-noLabel").text() shouldBe Messages("common.radioNoLabel")
-    document.getElementById("hadPreviousRFI-legend").select(".visuallyhidden").text() shouldBe Messages("page.previousInvestment.hadPreviousRFI.heading")
-    document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.two")
-    document.getElementById("next").text() shouldBe Messages("common.button.snc")
-  }
-
-  "Verify that HadPreviousRFI page contains show the error summary when an invalid model (no radio button selection) is submitted" in new Setup {
-    setupMocks(Some(hadPreviousRFIModelYes))
-
-    val document : Document = {
-      // submit the model with no radio selected as a post action
-      val result = TestController.submit.apply(authorisedFakeRequest)
-      Jsoup.parse(contentAsString(result))
+      document.getElementById("hadPreviousRFI-legend").hasClass("visuallyhidden") shouldBe true
+      document.getElementById("hadPreviousRFI-legend").text shouldBe Messages("page.previousInvestment.hadPreviousRFI.legend")
+      document.select(".error-summary").isEmpty shouldBe true
     }
 
-    // Make sure we have the expected error summary displayed
-    document.getElementById("error-summary-display").hasClass("error-summary--show")
-    document.title() shouldBe Messages("page.previousInvestment.hadPreviousRFI.title")
+    "contain the correct elements when a populated form is passed to the view" in {
+      val document : Document = {
+        val page = HadPreviousRFI(hadPreviousRFIForm.fill(hadPreviousRFIModelYes))(fakeRequest, applicationMessages)
+        Jsoup.parse(page.body)
+      }
+      document.body.getElementById("back-link").attr("href") shouldEqual routes.FullTimeEmployeeCountController.show().url
+      document.title() shouldBe Messages("page.previousInvestment.hadPreviousRFI.title")
+      document.getElementById("main-heading").text() shouldBe Messages("page.previousInvestment.hadPreviousRFI.heading")
+      document.getElementById("bullet-heading").text() shouldBe Messages("page.previousInvestment.hadPreviousRFI.hintTitle")
+      document.getElementById("bullet-one").text() shouldBe Messages("page.previousInvestment.schemes.bullet.one")
+      document.getElementById("bullet-two").text() shouldBe Messages("page.previousInvestment.schemes.bullet.two")
+      document.getElementById("bullet-three").text() shouldBe Messages("page.previousInvestment.schemes.bullet.three")
+      document.getElementById("bullet-four").text() shouldBe Messages("page.previousInvestment.schemes.bullet.four")
+      document.select("#hadPreviousRFI-yes").size() shouldBe 1
+      document.select("#hadPreviousRFI-yes").size() shouldBe 1
+      document.getElementById("hadPreviousRFI-yesLabel").text() shouldBe Messages("common.radioYesLabel")
+      document.getElementById("hadPreviousRFI-noLabel").text() shouldBe Messages("common.radioNoLabel")
+      document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.two")
+      document.getElementById("next").text() shouldBe Messages("common.button.snc")
 
+      document.getElementById("hadPreviousRFI-legend").hasClass("visuallyhidden") shouldBe true
+      document.getElementById("hadPreviousRFI-legend").text shouldBe Messages("page.previousInvestment.hadPreviousRFI.legend")
+      document.select(".error-summary").isEmpty shouldBe true
+    }
+
+    "contain an error summary when a form with errors is passed to the view" in  {
+      val document : Document = {
+        val page = HadPreviousRFI(hadPreviousRFIForm.bind(Map("" -> "")))(fakeRequest, applicationMessages)
+        Jsoup.parse(page.body)
+      }
+      document.title() shouldBe Messages("page.previousInvestment.hadPreviousRFI.title")
+      document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe true
+      document.getElementById("error-summary-heading").text shouldBe Messages("common.error.summary.heading")
+      document.getElementById("hadPreviousRFI-error-summary").text shouldBe Messages("validation.common.error.fieldRequired")
+      document.getElementsByClass("error-notification").text shouldBe Messages("validation.common.error.fieldRequired")
+    }
   }
 }

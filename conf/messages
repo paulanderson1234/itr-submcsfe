@@ -457,6 +457,7 @@ validation.error.DescriptionEnteredForNoOption=If ''No'' is selected description
 #had previous RFI
 page.previousInvestment.hadPreviousRFI.title=Has your company used a tax relief investment scheme before?
 page.previousInvestment.hadPreviousRFI.heading=Has your company used a tax relief investment scheme before?
+page.previousInvestment.hadPreviousRFI.legend=Has your company used a tax relief investment scheme before?
 page.previousInvestment.hadPreviousRFI.hintTitle=The 4 schemes are:
 page.previousInvestment.schemes.bullet.one=the Enterprise Investment Scheme
 page.previousInvestment.schemes.bullet.two=the Seed Enterprise Investment Scheme
@@ -466,6 +467,7 @@ page.previousInvestment.schemes.bullet.four=the Venture Capital Trust scheme
 #had other investments
 page.previousInvestment.hadOtherInvestments.title=Has your company had any other investments?
 page.previousInvestment.hadOtherInvestments.heading=Has your company had any other investments?
+page.previousInvestment.hadOtherInvestments.legend=Has your company had any other investments?
 page.previousInvestment.hadOtherInvestments.info=We only need to know about:
 page.previousInvestment.hadOtherInvestments.info.one=State aid you''ve received under the de minimis regulation
 page.previousInvestment.hadOtherInvestments.info.two=aid given to promote risk finance investment (under European Commission guidelines on state aid)

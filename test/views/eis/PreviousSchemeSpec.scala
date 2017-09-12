@@ -16,51 +16,29 @@
 
 package views.eis
 
-import auth.{MockConfigEISFlow, MockAuthConnector}
-import common.KeystoreKeys
-import config.FrontendAppConfig
-import controllers.eis.PreviousSchemeController
-import controllers.routes
-import models.PreviousSchemeModel
+import forms.PreviousSchemeForm._
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import org.mockito.Matchers
-import org.mockito.Mockito._
 import play.api.i18n.Messages
-import play.api.test.Helpers._
 import views.helpers.ViewSpec
 import play.api.i18n.Messages.Implicits._
-
-import scala.concurrent.Future
+import views.html.eis.previousInvestment.PreviousScheme
+import controllers.eis.routes
 
 class PreviousSchemeSpec extends ViewSpec {
 
-  object TestController extends PreviousSchemeController {
-    override lazy val applicationConfig = MockConfigEISFlow
-    override lazy val authConnector = MockAuthConnector
-    override lazy val s4lConnector = mockS4lConnector
-    override lazy val enrolmentConnector = mockEnrolmentConnector
-  }
 
-  def setupMocks(previousSchemeVectorList: Option[Vector[PreviousSchemeModel]] = None, backLink: Option[String] = None): Unit = {
-    when(mockS4lConnector.fetchAndGetFormData[Vector[PreviousSchemeModel]]
-      (Matchers.eq(KeystoreKeys.previousSchemes))(Matchers.any(), Matchers.any(),Matchers.any()))
-      .thenReturn(Future.successful(previousSchemeVectorList))
-    when(mockS4lConnector.fetchAndGetFormData[String]
-      (Matchers.eq(KeystoreKeys.backLinkPreviousScheme))(Matchers.any(), Matchers.any(),Matchers.any()))
-      .thenReturn(Future.successful(backLink))
-  }
+  "The  Add Previous Scheme page" should {
 
-  "The Previous Scheme page" should {
+    val backLink = routes.ReviewPreviousSchemesController.show().url
 
-    "Verify that the page contains the correct elements for a new scheme model and back link" in new Setup {
+    "contain the correct elements for a new scheme" in {
       val document: Document = {
-        setupMocks(Some(previousSchemeVectorList),Some(controllers.eis.routes.ReviewPreviousSchemesController.show().url))
-        val result = TestController.show(None).apply(authorisedFakeRequest)
-        Jsoup.parse(contentAsString(result))
+        val page = PreviousScheme(previousSchemeForm , backLink)(fakeRequest, applicationMessages)
+        Jsoup.parse(page.body)
       }
       document.title() shouldBe Messages("page.investment.PreviousScheme.title")
-      document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.ReviewPreviousSchemesController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual routes.ReviewPreviousSchemesController.show().url
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.two")
 
       document.getElementById("main-heading").text() shouldBe Messages("page.investment.PreviousScheme.heading")
@@ -87,19 +65,20 @@ class PreviousSchemeSpec extends ViewSpec {
       document.getElementById("company-house-db").attr("href") shouldBe "https://www.gov.uk/get-information-about-a-company"
       document.body.getElementById("company-house-db").text() shouldEqual getExternalLinkText(Messages("page.investment.PreviousScheme.companiesHouse"))
 
-      // BUTTON SHOULD BE ADD
+      document.getElementById("scheme-type-legend").hasClass("heading-small") shouldBe true
+      document.getElementById("scheme-type-legend").text shouldBe Messages("page.investment.PreviousScheme.schemeType")
+
       document.getElementById("next").text() shouldBe Messages("page.investment.PreviousScheme.button.add")
     }
 
-    "Verify the page contains the correct elements for an exiting scheme model and changed back link" in new Setup {
+    "contain the correct elements when displaying an existing scheme" in {
       val document: Document = {
-        setupMocks(Some(previousSchemeVectorList), Some(controllers.eis.routes.HadPreviousRFIController.show().url))
-        val result = TestController.show(Some(previousSchemeModel3.processingId.get)).apply(authorisedFakeRequest)
-        Jsoup.parse(contentAsString(result))
+        val page = PreviousScheme(previousSchemeForm.fill(previousSchemeModel1) , backLink)(fakeRequest, applicationMessages)
+        Jsoup.parse(page.body)
       }
 
       document.title() shouldBe Messages("page.investment.PreviousScheme.title")
-      document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.HadPreviousRFIController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual routes.ReviewPreviousSchemesController.show().url
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.two")
 
       document.getElementById("main-heading").text() shouldBe Messages("page.investment.PreviousScheme.heading")
@@ -126,22 +105,23 @@ class PreviousSchemeSpec extends ViewSpec {
       document.getElementById("company-house-db").attr("href") shouldBe "https://www.gov.uk/get-information-about-a-company"
       document.body.getElementById("company-house-db").text() shouldEqual getExternalLinkText(Messages("page.investment.PreviousScheme.companiesHouse"))
 
-      // BUTTON SHOULD BE UPDATE
+      document.getElementById("scheme-type-legend").hasClass("heading-small") shouldBe true
+      document.getElementById("scheme-type-legend").text shouldBe Messages("page.investment.PreviousScheme.schemeType")
+
       document.getElementById("next").text() shouldBe Messages("page.investment.PreviousScheme.button.update")
     }
 
-    "Verify the previous scheeme page contains the error summary, button text and back link for invalid new submission" in new Setup {
+    "contain the error summary when a form with errors is passed" in {
       val document: Document = {
-        setupMocks(Some(previousSchemeVectorList), Some(routes.ApplicationHubController.show().url))
-        val result = TestController.submit().apply(authorisedFakeRequest)
-        Jsoup.parse(contentAsString(result))
+        val page = PreviousScheme(previousSchemeForm.bind(Map(""->"")), backLink)(fakeRequest, applicationMessages)
+        Jsoup.parse(page.body)
       }
 
-      // BUTTON SHOULD BE ADD
-      document.getElementById("next").text() shouldBe Messages("page.investment.PreviousScheme.button.add")
-      // SHOULD BE ERROR SECTION AS NO Amount posted
-      document.getElementById("error-summary-display").hasClass("error-summary--show")
-      document.body.getElementById("back-link").attr("href") shouldEqual routes.ApplicationHubController.show().url
+      document.title() shouldBe Messages("page.investment.PreviousScheme.title")
+      document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe true
+      document.getElementById("error-summary-heading").text shouldBe Messages("common.error.summary.heading")
+      document.getElementById("schemeTypeDesc-error-summary").text shouldBe Messages("validation.common.error.fieldRequired")
+      document.getElementById("investmentAmount-error-summary").text shouldBe Messages("validation.common.error.fieldRequired")
     }
   }
 
