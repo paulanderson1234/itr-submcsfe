@@ -1219,3 +1219,10 @@ page.investors.wasAnyValueReceived.additionalGuidance.list.three = when the inve
 page.investors.wasAnyValueReceived.additionalGuidance.list.four = how much it was worth
 page.investors.wasAnyValueReceived.additionalGuidance.list.five = whether you got anything in return
 
+# DateSharesRepaid page
+page.DateSharesRepaid.title=When was the repayment or repurchase made?
+page.DateSharesRepaid.heading=When was the repayment or repurchase made?
+
+
+# validation messages for generic validation section:
+validation.error.dateSharesRepaid.Future=Date of Repayment or repurchase cannot be a future date
