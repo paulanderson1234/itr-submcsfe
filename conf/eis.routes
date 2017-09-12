@@ -111,6 +111,9 @@ POST       /attachments-acknowledgement             controllers.eis.AttachmentsA
 GET        /lifetime-allowance-exceeded             controllers.eis.LifetimeAllowanceExceededController.show
 POST       /lifetime-allowance-exceeded             controllers.eis.LifetimeAllowanceExceededController.submit
 
+GET       /any-shares-repayment                        controllers.eis.AnySharesRepaymentController.show
+POST      /any-shares-repayment                        controllers.eis.AnySharesRepaymentController.submit
+
 GET        /annual-turnover-error                   controllers.eis.AnnualTurnoverErrorController.show
 
 GET        /trading-for-too-long                    controllers.eis.TradingForTooLongController.show
