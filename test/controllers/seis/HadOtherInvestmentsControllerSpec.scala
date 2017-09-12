@@ -57,14 +57,9 @@ class HadOtherInvestmentsControllerSpec extends BaseSpec {
       .thenReturn(Future.successful(hadPreviousRFIBackLink))
   }
 
-  def submitMocks(hadOtherInvestmentsModel: Option[HadOtherInvestmentsModel] = None, backLink: Option[String] = None,
-                 previousSchemes: Option[Vector[PreviousSchemeModel]] = None, hadPreviousRFIModel: Option[HadPreviousRFIModel]): Unit = {
-    when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.backLinkReviewPreviousSchemes))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(backLink))
+  def submitMocks(previousSchemes: Option[Vector[PreviousSchemeModel]] = None, hadPreviousRFIModel: Option[HadPreviousRFIModel]): Unit = {
     when(mockS4lConnector.fetchAndGetFormData[Vector[PreviousSchemeModel]](Matchers.eq(KeystoreKeys.previousSchemes))
       (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(previousSchemes))
-    when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.backLinkSubsidiaries))(Matchers.any(), Matchers.any(),Matchers.any()))
-      .thenReturn(Future.successful(backLink))
     when(mockS4lConnector.fetchAndGetFormData[HadPreviousRFIModel](Matchers.eq(KeystoreKeys.hadPreviousRFI))
       (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(hadPreviousRFIModel))
   }
@@ -101,7 +96,7 @@ class HadOtherInvestmentsControllerSpec extends BaseSpec {
 
   "Sending a valid 'Yes' form submit to the HadOtherInvestmentsController when authenticated and enrolled for EIS" should {
     "redirect to the PreviousScheme page when there are no previous schemes" in {
-      submitMocks(None, None, None, Some(hadPreviousRFIModelYes))
+      submitMocks(previousSchemes = None, hadPreviousRFIModel = Some(hadPreviousRFIModelYes))
       mockEnrolledRequest(seisSchemeTypesModel)
       val formInput = "hadOtherInvestments" -> Constants.StandardRadioButtonYesValue
       submitWithSessionAndAuth(TestController.submit,formInput)(
@@ -115,7 +110,7 @@ class HadOtherInvestmentsControllerSpec extends BaseSpec {
 
   "Sending a valid 'Yes' form submit to the HadOtherInvestmentsController when authenticated and enrolled for EIS" should {
     "redirect to the ReviewPreviousSchemes page when previous schemes exist" in {
-      submitMocks(None, None, previousSchemes = Some(previousSchemesFull), Some(hadPreviousRFIModelYes))
+      submitMocks(previousSchemes = Some(previousSchemesFull), hadPreviousRFIModel = Some(hadPreviousRFIModelYes))
       mockEnrolledRequest(seisSchemeTypesModel)
       val formInput = "hadOtherInvestments" -> Constants.StandardRadioButtonYesValue
       submitWithSessionAndAuth(TestController.submit,formInput)(
@@ -129,7 +124,7 @@ class HadOtherInvestmentsControllerSpec extends BaseSpec {
 
   "Sending a valid 'No' form submit to the HadOtherInvestmentsController with 'No' to the previous RFI when authenticated and enrolled for EIS" should {
     "redirect to the ShareDescription page" in {
-      submitMocks(None, None, None, Some(hadPreviousRFIModelNo))
+      submitMocks(previousSchemes = None, hadPreviousRFIModel = Some(hadPreviousRFIModelNo))
       mockEnrolledRequest(seisSchemeTypesModel)
       val formInput = "hadOtherInvestments" -> Constants.StandardRadioButtonNoValue
       submitWithSessionAndAuth(TestController.submit,formInput)(
@@ -142,8 +137,8 @@ class HadOtherInvestmentsControllerSpec extends BaseSpec {
   }
 
   "Sending a valid 'No' form submit to the HadOtherInvestmentsController with 'YES' to the previous RFI when authenticated and enrolled for EIS" should {
-    "redirect to the PreviousScheme page when there are no previous schemes" in {
-      submitMocks(None, None, None, Some(hadPreviousRFIModelYes))
+    "redirect to the PreviousScheme page  when there are no previous schemes" in {
+      submitMocks(previousSchemes = None, hadPreviousRFIModel = Some(hadPreviousRFIModelYes))
       mockEnrolledRequest(seisSchemeTypesModel)
       val formInput = "hadOtherInvestments" -> Constants.StandardRadioButtonNoValue
       submitWithSessionAndAuth(TestController.submit,formInput)(
@@ -157,7 +152,7 @@ class HadOtherInvestmentsControllerSpec extends BaseSpec {
 
   "Sending a valid 'No' form submit to the HadOtherInvestmentsController with 'YES' to the previous RFI when authenticated and enrolled for EIS" should {
     "redirect to the ReviewPreviousScheme page when previous schemes exist" in {
-      submitMocks(None, None, previousSchemes = Some(previousSchemesFull), Some(hadPreviousRFIModelYes))
+      submitMocks(previousSchemes = Some(previousSchemesFull), hadPreviousRFIModel = Some(hadPreviousRFIModelYes))
       mockEnrolledRequest(seisSchemeTypesModel)
       val formInput = "hadOtherInvestments" -> Constants.StandardRadioButtonNoValue
       submitWithSessionAndAuth(TestController.submit,formInput)(

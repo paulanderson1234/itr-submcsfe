@@ -69,6 +69,7 @@ class PreviousSchemeSpec extends ViewSpec {
       document.getElementById("scheme-type-legend").text shouldBe Messages("page.investment.PreviousScheme.schemeType")
 
       document.getElementById("next").text() shouldBe Messages("page.investment.PreviousScheme.button.add")
+      document.select(".error-summary").isEmpty shouldBe true
     }
 
     "contain the correct elements when displaying an existing scheme" in {
@@ -109,6 +110,7 @@ class PreviousSchemeSpec extends ViewSpec {
       document.getElementById("scheme-type-legend").text shouldBe Messages("page.investment.PreviousScheme.schemeType")
 
       document.getElementById("next").text() shouldBe Messages("page.investment.PreviousScheme.button.update")
+      document.select(".error-summary").isEmpty shouldBe true
     }
 
     "contain the error summary when a form with errors is passed" in {

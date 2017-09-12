@@ -37,6 +37,11 @@ class HadPreviousRFIControllerSpec extends BaseSpec {
     override lazy val enrolmentConnector = mockEnrolmentConnector
   }
 
+  def setupMocks(hadPreviousRFIModel: Option[HadPreviousRFIModel] = None): Unit = {
+    when(mockS4lConnector.fetchAndGetFormData[HadPreviousRFIModel](Matchers.eq(KeystoreKeys.hadPreviousRFI))(Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(hadPreviousRFIModel))
+  }
+
   "HadPreviousRFIController" should {
     "use the correct keystore connector" in {
       HadPreviousRFIController.s4lConnector shouldBe S4LConnector
@@ -47,11 +52,6 @@ class HadPreviousRFIControllerSpec extends BaseSpec {
     "use the correct enrolment connector" in {
       HadPreviousRFIController.enrolmentConnector shouldBe EnrolmentConnector
     }
-  }
-
-  def setupMocks(hadPreviousRFIModel: Option[HadPreviousRFIModel] = None, backLink: Option[String] = None): Unit = {
-    when(mockS4lConnector.fetchAndGetFormData[HadPreviousRFIModel](Matchers.eq(KeystoreKeys.hadPreviousRFI))(Matchers.any(), Matchers.any(), Matchers.any()))
-      .thenReturn(Future.successful(hadPreviousRFIModel))
   }
 
   "Sending a GET request to HadPreviousRFIController when authenticated and enrolled for EIS" should {

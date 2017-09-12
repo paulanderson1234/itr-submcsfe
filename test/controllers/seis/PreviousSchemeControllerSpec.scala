@@ -181,6 +181,59 @@ class PreviousSchemeControllerSpec extends BaseSpec {
     }
   }
 
+  "Sending a valid new form submit to the PreviousSchemeController when authenticated and enrolled" should {
+    "redirect to an error page when an ineligible schemeType is chosen" in {
+      setupVectorMocks(Some(routes.ReviewPreviousSchemesController.show().url), Some(previousSchemeVectorList))
+      when(mockS4lConnector.saveFormData(Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(),Matchers.any()))
+        .thenReturn(cacheMap)
+      mockEnrolledRequest(seisSchemeTypesModel)
+      val formInput = Seq(
+        "schemeTypeDesc" -> Constants.schemeTypeEis,
+        "investmentAmount" -> "666",
+        "investmentSpent" -> "777",
+        "otherSchemeName" -> "",
+        "investmentDay" -> "7",
+        "investmentMonth" -> "3",
+        "investmentYear" -> "2015",
+        "processingId" -> ""
+
+      )
+      submitWithSessionAndAuth(TestController.submit, formInput:_*)(
+        result => {
+          status(result) shouldBe SEE_OTHER
+          //Redirect to error page for new previous scheme, with a processingId of one more than the last previous scheme
+          redirectLocation(result) shouldBe Some(routes.InvalidPreviousSchemeController.show(previousSchemeVectorList.last.processingId.getOrElse(0) + 1).url)
+        }
+      )
+    }
+  }
+
+  "Sending a valid updated form submit to the PreviousSchemeController when authenticated and enrolled" should {
+    "redirect to an error page when an ineligible schemeType is chosen" in {
+      setupVectorMocks(Some(routes.ReviewPreviousSchemesController.show().url), Some(previousSchemeVectorList))
+      when(mockS4lConnector.saveFormData(Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(),Matchers.any()))
+        .thenReturn(cacheMap)
+      mockEnrolledRequest(seisSchemeTypesModel)
+      val formInput = Seq(
+        "schemeTypeDesc" -> Constants.schemeTypeEis,
+        "investmentAmount" -> "666",
+        "investmentSpent" -> "777",
+        "otherSchemeName" -> "",
+        "investmentDay" -> "7",
+        "investmentMonth" -> "3",
+        "investmentYear" -> "2015",
+        "processingId" -> "5"
+
+      )
+      submitWithSessionAndAuth(TestController.submit, formInput:_*)(
+        result => {
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(routes.InvalidPreviousSchemeController.show(5).url)
+        }
+      )
+    }
+  }
+
   "Sending a invalid (no amount) updated form submit to the PreviousSchemeController when authenticated and enrolled" should {
     "not update the item and redirect to itself with errors as a bad request" in {
       setupVectorMocks(Some(routes.ReviewPreviousSchemesController.show().url), Some(previousSchemeVectorList))
