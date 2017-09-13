@@ -83,6 +83,7 @@ trait KeystoreKeys {
   val whoRepaidShares: String = "pageKeys:whoRepaidShares"
   val wasAnyValueReceived: String = "investors:wasAnyValueReceived"
   val anySharesRepayment: String = "pageKeys:anySharesRepayment"
+  val dateSharesRepaid: String = "pageKeys:dateSharesRepaid"
 
   // processing Keys
   val eisSeisProcessingModel: String = "processing:EisSeisProcessingModel"

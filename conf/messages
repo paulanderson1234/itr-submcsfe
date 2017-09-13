@@ -1255,3 +1255,11 @@ page.investors.wasAnyValueReceived.additionalGuidance.list.five = whether you go
 # WhoRepaidShares page
 page.WhoRepaidShares.title=Who was repaid for their shares or debentures or had them repurchased?
 page.WhoRepaidShares.heading=Who was repaid for their shares or debentures or had them repurchased?
+
+# DateSharesRepaid page
+page.DateSharesRepaid.title=When was the repayment or repurchase made?
+page.DateSharesRepaid.heading=When was the repayment or repurchase made?
+
+# validation messages for generic validation section:
+validation.error.dateSharesRepaid.Future=Date of Repayment or repurchase cannot be a future date
+

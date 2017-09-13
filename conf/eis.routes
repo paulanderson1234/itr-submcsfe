@@ -243,3 +243,6 @@ POST      /total-amount-raised                    controllers.eis.TotalAmountRai
 
 GET       /who-repaid-shares                      controllers.eis.WhoRepaidSharesController.show
 POST      /who-repaid-shares                      controllers.eis.WhoRepaidSharesController.submit
+
+GET       /date-shares-repaid                        controllers.eis.DateSharesRepaidController.show
+POST      /date-shares-repaid                        controllers.eis.DateSharesRepaidController.submit
