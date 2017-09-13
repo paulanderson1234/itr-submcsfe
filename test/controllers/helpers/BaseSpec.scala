@@ -210,6 +210,9 @@ trait BaseSpec extends UnitSpec with OneAppPerSuite with MockitoSugar with FakeR
   val hadOtherInvestmentsModelYes = HadOtherInvestmentsModel(Constants.StandardRadioButtonYesValue)
   val hadOtherInvestmentsModelNo = HadOtherInvestmentsModel(Constants.StandardRadioButtonNoValue)
 
+  val thirtyDayRuleModelYes = ThirtyDayRuleModel(Constants.StandardRadioButtonYesValue)
+  val thirtyDayRuleModelNo = ThirtyDayRuleModel(Constants.StandardRadioButtonNoValue)
+
   val fileId = "1"
 
   val qualifyPrepareToTrade = QualifyBusinessActivityModel(Constants.qualifyPrepareToTrade)

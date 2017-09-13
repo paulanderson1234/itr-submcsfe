@@ -1,0 +1,49 @@
+@import uk.gov.hmrc.play.views.html.helpers.{form}
+@import helpers.backButton
+
+@()(implicit request: Request[_], messages: Messages)
+
+@main_template(title = Messages("common.error.soft.title"), bodyClasses = None) {
+
+@backButton(controllers.eis.routes.ThirtyDayRuleController.show().url)
+          
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <div id="main">
+            <h1 class="form-title heading-xlarge" id="main-heading">
+                @Messages("common.error.soft.title")</h1>
+        </div>
+
+        <div class="form-group">
+            <p id="warning-description">
+                @Messages("page.ThirtyDayRuleWarning.description")</p>
+        </div>
+
+        <div class="form-group">
+            <p id="incorrect-info">@Messages("common.changeAnswers.incorrect.text")
+                <a href="@controllers.eis.routes.ThirtyDayRuleController.show().url" class="link-style"
+                   id="change-answers">
+                    @Messages("common.changeAnswers.link")</a>.</p>
+        </div>
+
+        <div class="form-group">
+            <span id="what-next-heading" class="heading-medium">
+                @Messages("common.error.soft.secondaryHeading")
+            </span>
+            <p id="continue-text">
+                @Messages("common.error.soft.whatNext.compliance")
+            </p>
+
+        </div>
+
+        <div class="form-group">
+            @form(action = controllers.eis.routes.ThirtyDayRuleErrorController.submit()) {
+            <button class="btn button" id="next" type="submit">@Messages("common.button.continue")</button>
+            }
+        </div>
+
+
+
+    </div>
+</div>
+}

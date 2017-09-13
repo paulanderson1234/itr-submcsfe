@@ -1,0 +1,48 @@
+@import models.ThirtyDayRuleModel
+@import uk.gov.hmrc.play.views.html.helpers.form
+@import common.Constants
+@import views.html.helpers.{backButtonWithProgress, formInputRadioGroup, errorSummary, formHint}
+
+@(thirtyDayRuleForm: Form[ThirtyDayRuleModel])(implicit request: Request[_], messages: Messages)
+
+@main_template(Messages("page.ThirtyDayRule.title")) {
+
+    @backButtonWithProgress(controllers.eis.routes.ThirtyDayRuleController.show().url, Messages("common.section.progress.PLEASE.UPDATE"))
+
+    @errorSummary(thirtyDayRuleForm, "thirty-day-rule", "thirtyDayRule")
+    <h1 class="heading-xlarge" id="main-heading">@Messages("page.ThirtyDayRule.heading")</h1>
+
+    <div class="form-group">
+        <p id="description-one" class="lede">@Messages("page.ThirtyDayRule.descriptionOne.text")</p>
+    </div>
+
+    <div class="form-group">
+        <ul class="list list-bullet">
+            <li id="help-bullet-one">@Messages("page.ThirtyDayRule.help.bullet.one")</li>
+            <li id="help-bullet-two">@Messages("page.ThirtyDayRule.help.bullet.two")</li>
+        </ul>
+    </div>
+
+    @form(action = controllers.eis.routes.ThirtyDayRuleController.submit()) {
+
+    <div class="form-group">
+        @formInputRadioGroup(
+        field = thirtyDayRuleForm("thirtyDayRule"),
+        Seq(
+        Constants.StandardRadioButtonYesValue -> Messages("common.radioYesLabel"),
+        Constants.StandardRadioButtonNoValue -> Messages("common.radioNoLabel")),
+        '_legend -> Messages("page.ThirtyDayRule.legend"),
+        '_legendClass -> "visuallyhidden",
+        '_labelAfter -> true,
+        '_labelClass -> "block-label",
+        '_legendID -> "thirtyDayRule",
+        '_groupClass -> "inline"
+        )
+    </div>
+
+
+    <div class="form-group">
+        <button class="btn button" type="submit" id="next">@Messages("common.button.snc")</button>
+    </div>
+    }
+}
