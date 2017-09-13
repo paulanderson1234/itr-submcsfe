@@ -1222,6 +1222,16 @@ page.AnySharesRepayment.help.bullet.one=secured loans
 page.AnySharesRepayment.help.bullet.two=unsecured loans
 page.AnySharesRepayment.help.bullet.three=convertible loans
 
+# AmountSharesRepayment page
+page.AmountSharesRepayment.title=How much was repaid or repurchased?
+page.AmountSharesRepayment.heading=How much was repaid or repurchased?
+
+# validation messages for generic validation section:
+validation.error.amountSharesRepayment.size=The amount repaid or repurchased should be between 0 and 99999999999
+validation.error.amountSharesRepayment.notANumber=Enter a valid number for the amount repaid or repurchased
+validation.error.amountSharesRepayment.decimalPlaces=The amount repaid or repurchased should not contain decimal places
+validation.error.amountSharesRepayment.negative=The amount repaid or repurchased should not be negative
+
 #Was Any Value Received
 page.investors.wasAnyValueReceived.title = Did the investor get value back from your company or a connected company?
 page.investors.wasAnyValueReceived.guidance.definition = This is called ''value received''.
