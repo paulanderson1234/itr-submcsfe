@@ -80,6 +80,7 @@ trait KeystoreKeys {
   val addAnotherInvestor: String = "investors:addAnotherInvestor"
   val shareCapitalChanges: String = "investors:shareCapitalChanges"
   val amountSharesRepayment: String = "pageKeys:amountSharesRepayment"
+  val whoRepaidShares: String = "pageKeys:whoRepaidShares"
   val wasAnyValueReceived: String = "investors:wasAnyValueReceived"
   val anySharesRepayment: String = "pageKeys:anySharesRepayment"
 

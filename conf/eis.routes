@@ -225,8 +225,8 @@ POST       /was-any-value-received               controllers.eis.WasAnyValueRece
 GET       /share-issue-date                        controllers.eis.ShareIssueDateController.show
 POST      /share-issue-date                        controllers.eis.ShareIssueDateController.submit
 
-GET        /add-another-shareholding/:investorId              controllers.eis.AddAnotherShareholdingController.show(investorId: Int)
-POST       /add-another-shareholding/:investorId              controllers.eis.AddAnotherShareholdingController.submit(investorId: Int)
+GET        /add-another-shareholding/:investorId   controllers.eis.AddAnotherShareholdingController.show(investorId: Int)
+POST       /add-another-shareholding/:investorId   controllers.eis.AddAnotherShareholdingController.submit(investorId: Int)
 
 
 GET        /nominal-value-of-shares               controllers.eis.NominalValueOfSharesController.show
@@ -240,3 +240,6 @@ POST      /amount-shares-repayment                controllers.eis.AmountSharesRe
 
 GET       /total-amount-raised                    controllers.eis.TotalAmountRaisedController.show
 POST      /total-amount-raised                    controllers.eis.TotalAmountRaisedController.submit
+
+GET       /who-repaid-shares                      controllers.eis.WhoRepaidSharesController.show
+POST      /who-repaid-shares                      controllers.eis.WhoRepaidSharesController.submit
