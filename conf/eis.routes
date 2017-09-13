@@ -246,3 +246,7 @@ POST      /who-repaid-shares                      controllers.eis.WhoRepaidShare
 
 GET       /date-shares-repaid                        controllers.eis.DateSharesRepaidController.show
 POST      /date-shares-repaid                        controllers.eis.DateSharesRepaidController.submit
+
+GET        /shares-repayment-type                 controllers.eis.SharesRepaymentTypeController.show
+POST       /shares-repayment-type                 controllers.eis.SharesRepaymentTypeController.submit
+
