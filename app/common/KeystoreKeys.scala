@@ -92,6 +92,7 @@ trait KeystoreKeys {
 
   // Subscription Details keys
   val subscriptionDetails: String = "subscription:subscriptionDetails"
+  val marketDescription: String = "pageKeys:marketDescription"
 
 
   // backlink keys
@@ -123,6 +124,7 @@ trait KeystoreKeys {
   val backLinkAddAnotherInvestor: String = "backLink:AddAnotherInvestor"
   val backLinkCommercialSale: String = "backLink:CommercialSale"
   val backLinkFullTimeEmployeeCount: String = "backLink:FullTimeEmployeeCount"
+  val backLinkMarketDescription: String = "backLink:marketDescription"
 
   //application in progress key
   val applicationInProgress: String = "applicationInProgress"

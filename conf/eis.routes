@@ -228,3 +228,6 @@ POST       /share-description                     controllers.eis.ShareDescripti
 
 GET       /total-amount-raised                    controllers.eis.TotalAmountRaisedController.show
 POST      /total-amount-raised                    controllers.eis.TotalAmountRaisedController.submit
+
+GET       /market-description                        controllers.eis.MarketDescriptionController.show
+POST      /market-description                        controllers.eis.MarketDescriptionController.submit

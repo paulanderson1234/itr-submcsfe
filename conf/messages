@@ -1219,3 +1219,9 @@ page.investors.wasAnyValueReceived.additionalGuidance.list.three = when the inve
 page.investors.wasAnyValueReceived.additionalGuidance.list.four = how much it was worth
 page.investors.wasAnyValueReceived.additionalGuidance.list.five = whether you got anything in return
 
+# MarketDescription page
+page.MarketDescription.title=What''s the new product or geographical market that you got investment for?
+page.MarketDescription.heading=What''s the new product or geographical market that you got investment for?
+page.MarketDescription.question.hint=Suggested limit: 200 words
+
+page.MarketDescription.descriptionOne.text=Give as much detail as you can about why it''s new for your company. You should also include further information about this in your business plan.
