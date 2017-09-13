@@ -1213,6 +1213,15 @@ page.declaration.warning=If you submit untrue or misleading information you coul
 page.declaration.submit=I agree and submit
 page.declaration.doNotAgree=I don''t agree
 
+# AnySharesRepayment page
+page.AnySharesRepayment.title=Have any shares or debentures been repaid or repurchased?
+page.AnySharesRepayment.heading=Have any shares or debentures been repaid or repurchased?
+page.AnySharesRepayment.legend=Have any shares or debentures been repaid or repurchased?
+page.AnySharesRepayment.descriptionOne.text=Debentures can include:
+page.AnySharesRepayment.help.bullet.one=secured loans
+page.AnySharesRepayment.help.bullet.two=unsecured loans
+page.AnySharesRepayment.help.bullet.three=convertible loans
+
 #Was Any Value Received
 page.investors.wasAnyValueReceived.title = Did the investor get value back from your company or a connected company?
 page.investors.wasAnyValueReceived.guidance.definition = This is called ''value received''.

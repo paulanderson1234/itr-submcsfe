@@ -139,6 +139,9 @@ trait BaseSpec extends UnitSpec with OneAppPerSuite with MockitoSugar with FakeR
   val subsidiariesNinetyOwnedModelYes = SubsidiariesNinetyOwnedModel(Constants.StandardRadioButtonYesValue)
   val subsidiariesNinetyOwnedModelNo = SubsidiariesNinetyOwnedModel(Constants.StandardRadioButtonNoValue)
 
+  val anySharesRepaymentModelYes = AnySharesRepaymentModel(Constants.StandardRadioButtonYesValue)
+  val anySharesRepaymentModelNo = AnySharesRepaymentModel(Constants.StandardRadioButtonNoValue)
+
   val previousBeforeDOFCSModelYes = PreviousBeforeDOFCSModel(Constants.StandardRadioButtonYesValue)
   val previousBeforeDOFCSModelNo = PreviousBeforeDOFCSModel(Constants.StandardRadioButtonNoValue)
 

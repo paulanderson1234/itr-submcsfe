@@ -117,6 +117,9 @@ POST      /lifetime-allowance-exceeded-error        controllers.eis.LifetimeAllo
 GET       /annual-limit-exceeded-error              controllers.eis.AnnualLimitExceededErrorController.show
 POST      /annual-limit-exceeded-error              controllers.eis.AnnualLimitExceededErrorController.submit
 
+GET       /any-shares-repayment                        controllers.eis.AnySharesRepaymentController.show
+POST      /any-shares-repayment                        controllers.eis.AnySharesRepaymentController.submit
+
 GET        /annual-turnover-error                   controllers.eis.AnnualTurnoverErrorController.show
 
 GET        /trading-for-too-long                    controllers.eis.TradingForTooLongController.show
