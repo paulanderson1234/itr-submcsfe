@@ -481,7 +481,7 @@ page.investment.SubsidiariesSpendingInvestment.heading = Will another company th
 #previous before dofcs
 page.previousInvestment.previousBeforeDOFCS.title = Did your company get that investment between {0} and {1}?
 page.previousInvestment.previousBeforeDOFCS.heading = Did your company get that investment between {0} and {1}?
-page.previousInvestment.previousBeforeDOFCS.description = You must have got the investment within {0} years of your first commercial sale
+page.previousInvestment.previousBeforeDOFCS.description = You must have got the investment within {0} years of your first commercial sale.
 
 
 #Subsidiaries ninety percent owned:
