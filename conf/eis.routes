@@ -231,3 +231,10 @@ POST      /total-amount-raised                    controllers.eis.TotalAmountRai
 
 GET       /market-description                        controllers.eis.MarketDescriptionController.show
 POST      /market-description                        controllers.eis.MarketDescriptionController.submit
+
+GET       /thirty-day-rule                        controllers.eis.ThirtyDayRuleController.show
+POST      /thirty-day-rule                        controllers.eis.ThirtyDayRuleController.submit
+
+GET       /thirty-day-rule-error                        controllers.eis.ThirtyDayRuleErrorController.show
+POST      /thirty-day-rule-error                        controllers.eis.ThirtyDayRuleErrorController.submit
+

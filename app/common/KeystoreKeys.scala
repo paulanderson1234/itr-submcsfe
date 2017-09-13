@@ -125,6 +125,7 @@ trait KeystoreKeys {
   val backLinkCommercialSale: String = "backLink:CommercialSale"
   val backLinkFullTimeEmployeeCount: String = "backLink:FullTimeEmployeeCount"
   val backLinkMarketDescription: String = "backLink:marketDescription"
+  val thirtyDayRule: String = "pageKeys:thirtyDayRule"
 
   //application in progress key
   val applicationInProgress: String = "applicationInProgress"

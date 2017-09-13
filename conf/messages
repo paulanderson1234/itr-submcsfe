@@ -43,8 +43,10 @@ common.changeAnswers.text=If this information is incorrect you can
 common.changeAnswers.incorrect.text=If this is incorrect you can
 common.changeAnswers.link=change your answers
 common.error.soft.heading=You don''t appear to qualify for this scheme
+common.error.soft.title=You don''t appear to qualify for this scheme
 common.error.soft.secondaryHeading=What happens next
 common.error.soft.whatNext=You can continue with your application if you think that you should qualify.
+common.error.soft.whatNext.compliance=You can continue with your Compliance Statement if you think that you should qualify.
 
 ## Common date Messages ##
 common.date.fields.day=Day
@@ -1225,3 +1227,16 @@ page.MarketDescription.heading=What''s the new product or geographical market th
 page.MarketDescription.question.hint=Suggested limit: 200 words
 
 page.MarketDescription.descriptionOne.text=Give as much detail as you can about why it''s new for your company. You should also include further information about this in your business plan.
+
+# ThirtyDayRule page
+page.ThirtyDayRule.title=Is the total amount raised in this Compliance Statement and from other relevant investments more than 50% of your average annual turnover?
+page.ThirtyDayRule.heading=Is the total amount raised in this Compliance Statement and from other relevant investments more than 50% of your average annual turnover?
+page.ThirtyDayRule.legend=Is the total amount raised in this Compliance Statement and from other relevant investments more than 50% of your average annual turnover?
+page.ThirtyDayRule.descriptionOne.text=Relevant investments must have been received within a 30 day period and include:
+page.ThirtyDayRule.help.bullet.one=investment from a Venture Capital Trust
+page.ThirtyDayRule.help.bullet.two=shares or investments that you''ve already submitted an EIS, SEIS or SITR Compliance Statement for
+
+# ThirtyDayRuleError page
+
+page.ThirtyDayRuleWarning.description=This is because the amount your company has raised is less than 50% of its average annual turnover.
+
