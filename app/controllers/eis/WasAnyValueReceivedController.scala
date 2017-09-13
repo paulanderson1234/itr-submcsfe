@@ -46,7 +46,6 @@ trait WasAnyValueReceivedController extends FrontendController with AuthorisedAn
   val show = AuthorisedAndEnrolled.async { implicit user => implicit request =>
     def routeRequest(backUrl: Option[String]) = {
       if (backUrl.isDefined) {
-        println("IT WAST FOUND=========================================================")
         s4lConnector.fetchAndGetFormData[WasAnyValueReceivedModel](KeystoreKeys.wasAnyValueReceived).map {
           case Some(data) => Ok(views.html.eis.investors.WasAnyValueReceived(wasAnyValueReceivedForm.fill(data), backUrl.getOrElse("")))
           case None => Ok(views.html.eis.investors.WasAnyValueReceived(wasAnyValueReceivedForm, backUrl.getOrElse("")))
@@ -54,7 +53,6 @@ trait WasAnyValueReceivedController extends FrontendController with AuthorisedAn
       }
       else {
         //TODO: Route to the beginning of flow as no backlink found
-        println("NOT FOUND=========================================================")
         Future.successful(Redirect(routes.AnySharesRepaymentController.show()))
       }
     }
