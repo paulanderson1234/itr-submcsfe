@@ -7,7 +7,7 @@
 
 @main_template(Messages("page.sharesRepaymentType.title")) {
 
-@backButtonWithProgress(controllers.eis.routes.SharesRepaymentTypeController.show().url, Messages("common.section.progress.details.four"))
+@backButtonWithProgress(controllers.eis.routes.WhoRepaidSharesController.show().url, Messages("common.section.progress.details.four"))
 
 @errorSummary(sharesRepaymentTypeForm, "shares-repayment-type", "sharesRepaymentType")
 

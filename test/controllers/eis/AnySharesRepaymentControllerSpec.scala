@@ -57,6 +57,10 @@ class AnySharesRepaymentControllerSpec extends BaseSpec {
     when(mockS4lConnector.saveFormData(Matchers.eq(KeystoreKeys.anySharesRepayment),
       Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
     .thenReturn(Future.successful(CacheMap("", Map())))
+
+    when(mockS4lConnector.saveFormData(Matchers.eq(KeystoreKeys.backLinkWasAnyValueReceived),
+      Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(CacheMap("", Map())))
   }
 
   "Sending a GET request to AnySharesRepaymentController when authenticated and enrolled" should {
@@ -85,8 +89,7 @@ class AnySharesRepaymentControllerSpec extends BaseSpec {
       submitWithSessionAndAuth(TestController.submit,formInput)(
         result => {
           status(result) shouldBe SEE_OTHER
-          //TODO: navigate to correct page when available
-          redirectLocation(result) shouldBe Some(routes.AnySharesRepaymentController.show().url)
+          redirectLocation(result) shouldBe Some(routes.WhoRepaidSharesController.show().url)
         }
       )
     }
@@ -100,8 +103,7 @@ class AnySharesRepaymentControllerSpec extends BaseSpec {
       submitWithSessionAndAuth(TestController.submit,formInput)(
         result => {
           status(result) shouldBe SEE_OTHER
-          //TODO: navigate to correct page when available
-          redirectLocation(result) shouldBe Some(routes.AnySharesRepaymentController.show().url)
+          redirectLocation(result) shouldBe Some(routes.WasAnyValueReceivedController.show().url)
         }
       )
     }

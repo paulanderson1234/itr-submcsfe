@@ -6,7 +6,7 @@
 @import common.Constants
 @import uk.gov.hmrc.play.views.html.helpers.form
 
-@(wasAnyValueReceivedForm: Form[WasAnyValueReceivedModel])(implicit request: Request[_], messages: Messages)
+@(wasAnyValueReceivedForm: Form[WasAnyValueReceivedModel], backUrl:String)(implicit request: Request[_], messages: Messages)
 
 @additionalContent() = {
     <h2 class="heading-medium">@Messages("page.investors.wasAnyValueReceived.subHeading")</h2>
@@ -36,7 +36,7 @@
 
 @main_template(Messages("page.investors.wasAnyValueReceived.title")) {
 
-    @backButtonWithProgress(controllers.eis.routes.ReviewAllInvestorsController.show().url, Messages("common.section.progress.details.four"))
+    @backButtonWithProgress(backUrl, Messages("common.section.progress.details.four"))
 
     @errorSummary(wasAnyValueReceivedForm, "was-any-value-received", "descriptionTextArea")
 

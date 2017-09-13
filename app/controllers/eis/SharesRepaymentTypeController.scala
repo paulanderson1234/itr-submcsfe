@@ -61,13 +61,13 @@ trait SharesRepaymentTypeController extends FrontendController with AuthorisedAn
         validFormData.sharesRepaymentType match {
 
           case Constants.repaymentTypeShares => {
-            //TODO navigate to next page when available
-            Future.successful(Redirect(routes.SharesRepaymentTypeController.show()))
+            Future.successful(Redirect(routes.DateSharesRepaidController.show()))
           }
           case Constants.repaymentTypeDebentures => {
             Future.successful(Redirect(routes.WasAnyValueReceivedController.show()))
           }
         }
+
       }
     )
   }

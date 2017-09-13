@@ -57,11 +57,10 @@ trait AnySharesRepaymentController extends FrontendController with AuthorisedAnd
         s4lConnector.saveFormData(KeystoreKeys.anySharesRepayment, validFormData)
         validFormData.anySharesRepayment match {
           case Constants.StandardRadioButtonYesValue =>
-            //TODO: Route to next page when available
-            Future.successful(Redirect(routes.AnySharesRepaymentController.show()))
+            Future.successful(Redirect(routes.WhoRepaidSharesController.show()))
           case Constants.StandardRadioButtonNoValue =>
-            //TODO: Route to next page when available
-            Future.successful(Redirect(routes.AnySharesRepaymentController.show()))
+            s4lConnector.saveFormData(KeystoreKeys.backLinkWasAnyValueReceived, routes.AnySharesRepaymentController.show().url)
+            Future.successful(Redirect(routes.WasAnyValueReceivedController.show()))
         }
       }
     )

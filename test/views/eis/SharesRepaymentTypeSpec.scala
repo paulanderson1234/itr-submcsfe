@@ -40,7 +40,7 @@ class SharesRepaymentTypeSpec extends ViewSpec {
       document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.four")
       document.getElementById("sharesRepaymentType-sharesLabel").text() shouldBe Messages("page.sharesRepaymentType.shares")
       document.getElementById("sharesRepaymentType-debenturesLabel").text() shouldBe Messages("page.sharesRepaymentType.debentures")
-      document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.SharesRepaymentTypeController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.WhoRepaidSharesController.show().url
       document.getElementById("sharesRepaymentType-legend").hasClass("visuallyhidden") shouldBe true
       document.getElementById("sharesRepaymentType-legend").text shouldBe Messages("page.sharesRepaymentType.heading")
       document.select(".error-summary").isEmpty shouldBe true
@@ -54,7 +54,7 @@ class SharesRepaymentTypeSpec extends ViewSpec {
       document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.four")
       document.getElementById("sharesRepaymentType-sharesLabel").text() shouldBe Messages("page.sharesRepaymentType.shares")
       document.getElementById("sharesRepaymentType-debenturesLabel").text() shouldBe Messages("page.sharesRepaymentType.debentures")
-      document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.SharesRepaymentTypeController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.WhoRepaidSharesController.show().url
       document.getElementById("sharesRepaymentType-legend").hasClass("visuallyhidden") shouldBe true
       document.getElementById("sharesRepaymentType-legend").text shouldBe Messages("page.sharesRepaymentType.heading")
       document.select(".error-summary").isEmpty shouldBe true
@@ -68,7 +68,7 @@ class SharesRepaymentTypeSpec extends ViewSpec {
       document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.four")
       document.getElementById("sharesRepaymentType-sharesLabel").text() shouldBe Messages("page.sharesRepaymentType.shares")
       document.getElementById("sharesRepaymentType-debenturesLabel").text() shouldBe Messages("page.sharesRepaymentType.debentures")
-      document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.SharesRepaymentTypeController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.WhoRepaidSharesController.show().url
       document.getElementById("sharesRepaymentType-legend").hasClass("visuallyhidden") shouldBe true
       document.getElementById("sharesRepaymentType-legend").text shouldBe Messages("page.sharesRepaymentType.heading")
       document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe true

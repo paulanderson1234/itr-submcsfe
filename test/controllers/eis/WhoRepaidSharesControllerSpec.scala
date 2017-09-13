@@ -94,8 +94,7 @@ class WhoRepaidSharesControllerSpec extends BaseSpec {
         result => {
           status(result) shouldBe SEE_OTHER
           redirectLocation(result) shouldBe
-            //TODO: test navigate to correct page when available
-            Some(controllers.eis.routes.WhoRepaidSharesController.show().url)
+            Some(controllers.eis.routes.SharesRepaymentTypeController.show().url)
         }
       )
     }

@@ -37,7 +37,7 @@ class WhoRepaidSharesSpec extends ViewSpec {
       document.title() shouldBe Messages("page.WhoRepaidShares.title")
       document.getElementById("main-heading").text() shouldBe Messages("page.WhoRepaidShares.heading")
       document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.four")
-      document.body.getElementById("back-link").attr("href") shouldEqual routes.WhoRepaidSharesController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual routes.AnySharesRepaymentController.show().url
       document.getElementsByTag("legend").select(".visuallyhidden").text() shouldBe Messages("page.WhoRepaidShares.heading")
       document.getElementById("label-forename").text() shouldBe Messages("common.page.forename.label")
       document.getElementById("label-surname").text() shouldBe Messages("common.page.surname.label")
@@ -51,7 +51,7 @@ class WhoRepaidSharesSpec extends ViewSpec {
       document.title() shouldBe Messages("page.WhoRepaidShares.title")
       document.getElementById("main-heading").text() shouldBe Messages("page.WhoRepaidShares.heading")
       document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.four")
-      document.body.getElementById("back-link").attr("href") shouldEqual routes.WhoRepaidSharesController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual routes.AnySharesRepaymentController.show().url
       document.getElementsByTag("legend").select(".visuallyhidden").text() shouldBe Messages("page.WhoRepaidShares.heading")
       document.getElementById("label-forename").text() shouldBe Messages("common.page.forename.label")
       document.getElementById("label-surname").text() shouldBe Messages("common.page.surname.label")
@@ -65,7 +65,7 @@ class WhoRepaidSharesSpec extends ViewSpec {
       document.title() shouldBe Messages("page.WhoRepaidShares.title")
       document.getElementById("main-heading").text() shouldBe Messages("page.WhoRepaidShares.heading")
       document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.four")
-      document.body.getElementById("back-link").attr("href") shouldEqual routes.WhoRepaidSharesController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual routes.AnySharesRepaymentController.show().url
       document.getElementsByTag("legend").select(".visuallyhidden").text() shouldBe Messages("page.WhoRepaidShares.heading")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
 

@@ -62,7 +62,7 @@ class DateSharesRepaidSpec extends ViewSpec {
       document.title() shouldBe Messages("page.DateSharesRepaid.title")
       document.getElementById("main-heading").text() shouldBe Messages("page.DateSharesRepaid.heading")
       document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.four")
-      document.body.getElementById("back-link").attr("href") shouldEqual routes.DateSharesRepaidController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual routes.SharesRepaymentTypeController.show().url
       document.body.getElementsByClass("form-hint").text should include(Messages("common.date.hint.example"))
       document.body.getElementById("dateSharesRepaidDay").parent.text shouldBe Messages("common.date.fields.day")
       document.body.getElementById("dateSharesRepaidMonth").parent.text shouldBe Messages("common.date.fields.month")
@@ -82,7 +82,7 @@ class DateSharesRepaidSpec extends ViewSpec {
       document.title() shouldBe Messages("page.DateSharesRepaid.title")
       document.getElementById("main-heading").text() shouldBe Messages("page.DateSharesRepaid.heading")
       document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.four")
-      document.body.getElementById("back-link").attr("href") shouldEqual routes.DateSharesRepaidController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual routes.SharesRepaymentTypeController.show().url
       document.body.getElementsByClass("form-hint").text should include(Messages("common.date.hint.example"))
       document.body.getElementById("dateSharesRepaidDay").parent.text shouldBe Messages("common.date.fields.day")
       document.body.getElementById("dateSharesRepaidMonth").parent.text shouldBe Messages("common.date.fields.month")
@@ -103,7 +103,7 @@ class DateSharesRepaidSpec extends ViewSpec {
       document.title() shouldBe Messages("page.DateSharesRepaid.title")
       document.getElementById("main-heading").text() shouldBe Messages("page.DateSharesRepaid.heading")
       document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.four")
-      document.body.getElementById("back-link").attr("href") shouldEqual routes.DateSharesRepaidController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual routes.SharesRepaymentTypeController.show().url
       document.body.getElementsByClass("form-hint").text should include(Messages("common.date.hint.example"))
       document.body.getElementById("dateSharesRepaidDay").parent.text shouldBe Messages("common.date.fields.day")
       document.body.getElementById("dateSharesRepaidMonth").parent.text shouldBe Messages("common.date.fields.month")

@@ -38,7 +38,7 @@ class AmountSharesRepaymentSpec extends ViewSpec {
       document.title() shouldBe Messages("page.AmountSharesRepayment.title")
       document.getElementById("main-heading").text() shouldBe Messages("page.AmountSharesRepayment.heading")
       document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.four")
-      document.body.getElementById("back-link").attr("href") shouldEqual routes.AmountSharesRepaymentController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual routes.DateSharesRepaidController.show().url
       document.getElementById("label-amount").select("span").hasClass("visuallyhidden") shouldBe true
       document.getElementById("label-amount").select(".visuallyhidden").text() shouldBe Messages("page.AmountSharesRepayment.heading")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
@@ -53,7 +53,7 @@ class AmountSharesRepaymentSpec extends ViewSpec {
       document.title() shouldBe Messages("page.AmountSharesRepayment.title")
       document.getElementById("main-heading").text() shouldBe Messages("page.AmountSharesRepayment.heading")
       document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.four")
-      document.body.getElementById("back-link").attr("href") shouldEqual routes.AmountSharesRepaymentController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual routes.DateSharesRepaidController.show().url
       document.getElementById("label-amount").select("span").hasClass("visuallyhidden") shouldBe true
       document.getElementById("label-amount").select(".visuallyhidden").text() shouldBe Messages("page.AmountSharesRepayment.heading")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
@@ -68,7 +68,7 @@ class AmountSharesRepaymentSpec extends ViewSpec {
       document.title() shouldBe Messages("page.AmountSharesRepayment.title")
       document.getElementById("main-heading").text() shouldBe Messages("page.AmountSharesRepayment.heading")
       document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.four")
-      document.body.getElementById("back-link").attr("href") shouldEqual routes.AmountSharesRepaymentController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual routes.DateSharesRepaidController.show().url
       document.getElementById("label-amount").select("span").hasClass("visuallyhidden") shouldBe true
       document.getElementById("label-amount").select(".visuallyhidden").text() shouldBe Messages("page.AmountSharesRepayment.heading")
       document.getElementsByTag("span").select(".visuallyhidden").text() shouldBe Messages("page.AmountSharesRepayment.heading")

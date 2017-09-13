@@ -16,7 +16,7 @@
 
 package controllers.eis
 
-import auth.{AuthorisedAndEnrolledForTAVC, EIS, VCT}
+import auth.{AuthorisedAndEnrolledForTAVC, EIS}
 import common.KeystoreKeys
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
@@ -38,34 +38,32 @@ object DateSharesRepaidController extends DateSharesRepaidController{
   override lazy val enrolmentConnector = EnrolmentConnector
 }
 
-trait DateSharesRepaidController extends FrontendController with AuthorisedAndEnrolledForTAVC  {
+trait DateSharesRepaidController extends FrontendController with AuthorisedAndEnrolledForTAVC {
 
-  override val acceptedFlows = Seq(Seq(EIS),Seq(VCT),Seq(EIS,VCT))
+  override val acceptedFlows = Seq(Seq(EIS))
 
-  val show = 
-    AuthorisedAndEnrolled.async { implicit user => implicit request =>
-      s4lConnector.fetchAndGetFormData[DateSharesRepaidModel](KeystoreKeys.dateSharesRepaid).map {
-        case Some(data) => Ok(DateSharesRepaid(dateSharesRepaidForm.fill(data)))
-        case None => Ok(DateSharesRepaid(dateSharesRepaidForm))
-      }
+  val show = AuthorisedAndEnrolled.async { implicit user => implicit request =>
+    s4lConnector.fetchAndGetFormData[DateSharesRepaidModel](KeystoreKeys.dateSharesRepaid).map {
+      case Some(data) => Ok(DateSharesRepaid(dateSharesRepaidForm.fill(data)))
+      case None => Ok(DateSharesRepaid(dateSharesRepaidForm))
     }
-  
+  }
 
-  val submit: Action[AnyContent] = 
-    AuthorisedAndEnrolled.async { implicit user => implicit request =>
-      val success: DateSharesRepaidModel => Future[Result] = { model =>
-        s4lConnector.saveFormData(KeystoreKeys.dateSharesRepaid, model).map(_ =>
-          //TODO: Route to next page when available
-          Redirect(routes.DateSharesRepaidController.show())
-        )
-      }
 
-      val failure: Form[DateSharesRepaidModel] => Future[Result] = { form =>
-        Future.successful(BadRequest(DateSharesRepaid(form)))
-      }
-
-      dateSharesRepaidForm.bindFromRequest().fold(failure, success)
+  val submit: Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user => implicit request =>
+    val success: DateSharesRepaidModel => Future[Result] = { model =>
+      s4lConnector.saveFormData(KeystoreKeys.dateSharesRepaid, model).map(_ =>
+        //TODO: Route to next page when available
+        Redirect(routes.AmountSharesRepaymentController.show())
+      )
     }
-  
+
+    val failure: Form[DateSharesRepaidModel] => Future[Result] = { form =>
+      Future.successful(BadRequest(DateSharesRepaid(form)))
+    }
+
+    dateSharesRepaidForm.bindFromRequest().fold(failure, success)
+  }
+
 }
 

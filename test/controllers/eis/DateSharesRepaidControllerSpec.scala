@@ -100,8 +100,7 @@ class DateSharesRepaidControllerSpec extends BaseSpec {
       submitWithSessionAndAuth(TestController.submit,formInput:_*)(
         result => {
           status(result) shouldBe SEE_OTHER
-          //TODO: change to correct target page when navigation available
-          redirectLocation(result) shouldBe Some(routes.DateSharesRepaidController.show().url)
+          redirectLocation(result) shouldBe Some(routes.AmountSharesRepaymentController.show().url)
         }
       )
     }

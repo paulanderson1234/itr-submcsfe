@@ -38,34 +38,31 @@ object WhoRepaidSharesController extends WhoRepaidSharesController{
   override lazy val enrolmentConnector = EnrolmentConnector
 }
 
-trait WhoRepaidSharesController extends FrontendController with AuthorisedAndEnrolledForTAVC  {
+trait WhoRepaidSharesController extends FrontendController with AuthorisedAndEnrolledForTAVC {
 
-  override val acceptedFlows = Seq(Seq(EIS),Seq(VCT),Seq(EIS,VCT))
+  override val acceptedFlows = Seq(Seq(EIS))
 
-  val show = 
-    AuthorisedAndEnrolled.async { implicit user => implicit request =>
-      s4lConnector.fetchAndGetFormData[WhoRepaidSharesModel](KeystoreKeys.whoRepaidShares).map {
-        case Some(data) => Ok(WhoRepaidShares(whoRepaidSharesForm.fill(data)))
-        case None => Ok(WhoRepaidShares(whoRepaidSharesForm))
-      }
+  val show = AuthorisedAndEnrolled.async { implicit user => implicit request =>
+    s4lConnector.fetchAndGetFormData[WhoRepaidSharesModel](KeystoreKeys.whoRepaidShares).map {
+      case Some(data) => Ok(WhoRepaidShares(whoRepaidSharesForm.fill(data)))
+      case None => Ok(WhoRepaidShares(whoRepaidSharesForm))
     }
-  
+  }
 
-  val submit: Action[AnyContent] = 
-    AuthorisedAndEnrolled.async { implicit user => implicit request =>
-      val success: WhoRepaidSharesModel => Future[Result] = { model =>
-        s4lConnector.saveFormData(KeystoreKeys.whoRepaidShares, model).map(_ =>
-          //TODO: Route to next page when available
-          Redirect(routes.WhoRepaidSharesController.show())
-        )
-      }
 
-      val failure: Form[WhoRepaidSharesModel] => Future[Result] = { form =>
-        Future.successful(BadRequest(WhoRepaidShares(form)))
-      }
-
-      whoRepaidSharesForm.bindFromRequest().fold(failure, success)
+  val submit: Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user => implicit request =>
+    val success: WhoRepaidSharesModel => Future[Result] = { model =>
+      s4lConnector.saveFormData(KeystoreKeys.whoRepaidShares, model).map(_ =>
+        Redirect(routes.SharesRepaymentTypeController.show())
+      )
     }
-  
+
+    val failure: Form[WhoRepaidSharesModel] => Future[Result] = { form =>
+      Future.successful(BadRequest(WhoRepaidShares(form)))
+    }
+
+    whoRepaidSharesForm.bindFromRequest().fold(failure, success)
+  }
+
 }
 

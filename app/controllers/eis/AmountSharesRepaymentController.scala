@@ -38,34 +38,31 @@ object AmountSharesRepaymentController extends AmountSharesRepaymentController{
   override lazy val enrolmentConnector = EnrolmentConnector
 }
 
-trait AmountSharesRepaymentController extends FrontendController with AuthorisedAndEnrolledForTAVC  {
+trait AmountSharesRepaymentController extends FrontendController with AuthorisedAndEnrolledForTAVC {
 
-  override val acceptedFlows = Seq(Seq(EIS),Seq(VCT),Seq(EIS,VCT))
+  override val acceptedFlows = Seq(Seq(EIS))
 
-  val show = 
-    AuthorisedAndEnrolled.async { implicit user => implicit request =>
-      s4lConnector.fetchAndGetFormData[AmountSharesRepaymentModel](KeystoreKeys.amountSharesRepayment).map {
-        case Some(data) => Ok(AmountSharesRepayment(amountSharesRepaymentForm.fill(data)))
-        case None => Ok(AmountSharesRepayment(amountSharesRepaymentForm))
-      }
+  val show = AuthorisedAndEnrolled.async { implicit user => implicit request =>
+    s4lConnector.fetchAndGetFormData[AmountSharesRepaymentModel](KeystoreKeys.amountSharesRepayment).map {
+      case Some(data) => Ok(AmountSharesRepayment(amountSharesRepaymentForm.fill(data)))
+      case None => Ok(AmountSharesRepayment(amountSharesRepaymentForm))
     }
-  
+  }
 
-  val submit: Action[AnyContent] = 
-    AuthorisedAndEnrolled.async { implicit user => implicit request =>
-      val success: AmountSharesRepaymentModel => Future[Result] = { model =>
-        s4lConnector.saveFormData(KeystoreKeys.amountSharesRepayment, model).map(_ =>
-          //TODO: Route to next page when available
-          Redirect(routes.AmountSharesRepaymentController.show())
-        )
-      }
-
-      val failure: Form[AmountSharesRepaymentModel] => Future[Result] = { form =>
-        Future.successful(BadRequest(AmountSharesRepayment(form)))
-      }
-
-      amountSharesRepaymentForm.bindFromRequest().fold(failure, success)
+  val submit: Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user => implicit request =>
+    val success: AmountSharesRepaymentModel => Future[Result] = { model =>
+      s4lConnector.saveFormData(KeystoreKeys.amountSharesRepayment, model).map(_ =>
+        //TODO: Route to next page (review) when available
+        Redirect(routes.AmountSharesRepaymentController.show())
+      )
     }
-  
+
+    val failure: Form[AmountSharesRepaymentModel] => Future[Result] = { form =>
+      Future.successful(BadRequest(AmountSharesRepayment(form)))
+    }
+
+    amountSharesRepaymentForm.bindFromRequest().fold(failure, success)
+  }
+
 }
 

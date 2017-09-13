@@ -6,7 +6,7 @@
 
 @main_template(Messages("page.DateSharesRepaid.title")) {
 
-    @backButtonWithProgress(controllers.eis.routes.DateSharesRepaidController.show().url, Messages("common.section.progress.details.four"))
+    @backButtonWithProgress(controllers.eis.routes.SharesRepaymentTypeController.show().url, Messages("common.section.progress.details.four"))
 
     @errorSummary(dateSharesRepaidForm, "date-shares-repaid", "dateSharesRepaidDay")
 
