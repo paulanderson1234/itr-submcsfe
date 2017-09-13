@@ -228,3 +228,7 @@ POST       /share-description                     controllers.eis.ShareDescripti
 
 GET       /total-amount-raised                    controllers.eis.TotalAmountRaisedController.show
 POST      /total-amount-raised                    controllers.eis.TotalAmountRaisedController.submit
+
+GET        /shares-repayment-type                 controllers.eis.SharesRepaymentTypeController.show
+POST       /shares-repayment-type                 controllers.eis.SharesRepaymentTypeController.submit
+

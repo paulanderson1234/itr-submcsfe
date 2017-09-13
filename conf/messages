@@ -1219,3 +1219,8 @@ page.investors.wasAnyValueReceived.additionalGuidance.list.three = when the inve
 page.investors.wasAnyValueReceived.additionalGuidance.list.four = how much it was worth
 page.investors.wasAnyValueReceived.additionalGuidance.list.five = whether you got anything in return
 
+#share Repayment type page
+page.sharesRepaymentType.shares=Shares
+page.sharesRepaymentType.debentures=Debentures
+page.sharesRepaymentType.title=What type of investment was repaid or repurchased?
+page.sharesRepaymentType.heading=What type of investment was repaid or repurchased?

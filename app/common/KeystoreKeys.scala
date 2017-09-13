@@ -80,6 +80,7 @@ trait KeystoreKeys {
   val addAnotherInvestor: String = "investors:addAnotherInvestor"
   val shareCapitalChanges: String = "investors:shareCapitalChanges"
   val wasAnyValueReceived: String = "investors:wasAnyValueReceived"
+  val sharesRepaymentType: String = "investors:sharesRepaymentType"
 
   // processing Keys
   val eisSeisProcessingModel: String = "processing:EisSeisProcessingModel"

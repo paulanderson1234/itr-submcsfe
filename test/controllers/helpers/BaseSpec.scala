@@ -215,6 +215,9 @@ trait BaseSpec extends UnitSpec with OneAppPerSuite with MockitoSugar with FakeR
   val qualifyPrepareToTrade = QualifyBusinessActivityModel(Constants.qualifyPrepareToTrade)
   val qualifyResearchAndDevelopment = QualifyBusinessActivityModel(Constants.qualifyResearchAndDevelopment)
 
+  val repaymentTypeShares = SharesRepaymentTypeModel(Constants.repaymentTypeShares)
+  val repaymentTypeDebentures = SharesRepaymentTypeModel(Constants.repaymentTypeDebentures)
+
   val hasInvestmentTradeStartedYear = 2004
   val hasInvestmentTradeStartedMonth = 2
   val hasInvestmentTradeStartedDay = 29

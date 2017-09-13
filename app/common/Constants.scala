@@ -39,6 +39,9 @@ trait Constants {
   val businessActivityRAndD = "Research And Development"
   val businessActivityTrade = "Trade"
 
+  val repaymentTypeShares = "Shares"
+  val repaymentTypeDebentures = "Debentures"
+
   val IsKnowledgeIntensiveYears : Int = 10
   val IsNotKnowledgeIntensiveYears : Int = 7
   val KI10Percent : Int = 10
