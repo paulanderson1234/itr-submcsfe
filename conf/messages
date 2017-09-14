@@ -46,6 +46,11 @@ common.error.soft.heading=You don''t appear to qualify for this scheme
 common.error.soft.title=You don''t appear to qualify for this scheme
 common.error.soft.secondaryHeading=What happens next
 common.error.soft.whatNext=You can continue with your application if you think that you should qualify.
+common.error.hard.title=You can''t submit a Compliance Statement yet
+common.error.hard.heading=You can''t submit a Compliance Statement yet
+common.error.hard.description=You can submit once your company has been doing the business activity for at least 4 months.
+common.error.hard.incorrect.info.start=You can
+common.error.hard.incorrect.info.end=or submit a Compliance Statement when your company meets this condition.
 common.returnToDashboard=Return to dashboard
 common.error.soft.whatNext.compliance=You can continue with your Compliance Statement if you think that you should qualify.
 common.page.forename.label=First Name
@@ -1251,20 +1256,6 @@ page.investors.wasAnyValueReceived.additionalGuidance.list.two = what it was
 page.investors.wasAnyValueReceived.additionalGuidance.list.three = when the investor received it
 page.investors.wasAnyValueReceived.additionalGuidance.list.four = how much it was worth
 page.investors.wasAnyValueReceived.additionalGuidance.list.five = whether you got anything in return
-
-# Has Trade Started Error Page
-page.companyDetails.HasInvestmentTradeStartedError.title=You can''t submit a Compliance Statement yet
-page.companyDetails.HasInvestmentTradeStartedError.heading=You can''t submit a Compliance Statement yet
-page.companyDetails.HasInvestmentTradeStartedError.description=You can submit once your company has been doing the business activity for at least 4 months.
-page.companyDetails.HasInvestmentTradeStartedError.incorrect.info.start=You can
-page.companyDetails.HasInvestmentTradeStartedError.incorrect.info.end=or submit a Compliance Statement when your company meets this condition.
-
-# Research Start Date Error Page
-page.companyDetails.ResearchStartDateError.title=You can''t submit a Compliance Statement yet
-page.companyDetails.ResearchStartDateError.heading=You can''t submit a Compliance Statement yet
-page.companyDetails.ResearchStartDateError.description=You can submit once your company has been doing the business activity for at least 4 months.
-page.companyDetails.ResearchStartDateError.incorrect.info.start=You can
-page.companyDetails.ResearchStartDateError.incorrect.info.end=or submit a Compliance Statement when your company meets this condition.
 
 # MarketDescription page
 page.MarketDescription.title=What''s the new product or geographical market that you got investment for?
