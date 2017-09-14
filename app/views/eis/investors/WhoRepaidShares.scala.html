@@ -1,0 +1,52 @@
+@import models.WhoRepaidSharesModel
+@import common.Constants
+@import uk.gov.hmrc.play.views.html.helpers.form
+@import views.html.helpers.{errorSummary, backButtonWithProgress, input}
+
+@(whoRepaidSharesForm: Form[WhoRepaidSharesModel])(implicit request: Request[_], messages: Messages)
+
+@main_template(Messages("page.WhoRepaidShares.title")) {
+
+    @backButtonWithProgress(controllers.eis.routes.AnySharesRepaymentController.show().url, Messages("common.section.progress.details.four"))
+
+    @errorSummary(whoRepaidSharesForm, "who-repaid-shares", "text")
+
+    <h1 class="heading-xlarge" id="main-heading">@Messages("page.WhoRepaidShares.heading")</h1>
+
+    @form(action = controllers.eis.routes.WhoRepaidSharesController.submit()) {
+
+        <fieldset>
+            <legend class="visuallyhidden">@Messages("page.WhoRepaidShares.heading")</legend>
+
+            <div class="form-group">
+                @input(
+                whoRepaidSharesForm("forename"),
+                '_divClass -> "form-label",
+                '_labelId -> "label-forename",
+                '_label -> Messages("common.page.forename.label"),
+                '_maxlength -> Constants.forenameLength,
+                '_inputClass -> "input--medium input--cleared",
+                'id -> "forename"
+                )
+            </div>
+
+            <div class="form-group">
+                @input(
+                whoRepaidSharesForm("surname"),
+                '_divClass -> "form-label",
+                '_labelId -> "label-surname",
+                '_label -> Messages("common.page.surname.label"),
+                '_maxlength -> Constants.surnameLength,
+                '_inputClass -> "input--medium input--cleared",
+                'id -> "surname"
+                )
+            </div>
+        </fieldset>
+
+
+        <div class="form-group">
+	    <button class="btn button" type="submit" id="next">@Messages("common.button.snc")</button>
+        </div>
+    }
+
+}
