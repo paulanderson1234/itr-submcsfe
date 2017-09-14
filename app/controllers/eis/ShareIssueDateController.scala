@@ -17,16 +17,19 @@
 package controllers.eis
 
 import auth.{AuthorisedAndEnrolledForTAVC, EIS}
-import common.KeystoreKeys
+import common.{Constants, KeystoreKeys}
+import config.FrontendGlobal.internalServerErrorTemplate
 import config.{FrontendAppConfig, FrontendAuthConnector}
-import connectors.{EnrolmentConnector, S4LConnector}
+import connectors.{EnrolmentConnector, S4LConnector, SubmissionConnector}
 import controllers.Helpers.ControllerHelpers
 import forms.ShareIssueDateForm._
-import models.ShareIssueDateModel
+import models.{ShareIssueDateModel, TradeStartDateModel}
+import play.api.Logger
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import views.html.eis.companyDetails.ShareIssueDate
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
+import play.api.mvc.Result
 
 import scala.concurrent.Future
 
@@ -35,11 +38,13 @@ object ShareIssueDateController extends ShareIssueDateController{
   override lazy val applicationConfig = FrontendAppConfig
   override lazy val authConnector = FrontendAuthConnector
   override lazy val enrolmentConnector = EnrolmentConnector
+  override lazy val submissionConnector = SubmissionConnector
 }
 
 trait ShareIssueDateController extends FrontendController with AuthorisedAndEnrolledForTAVC {
 
   override val acceptedFlows = Seq(Seq(EIS))
+  val submissionConnector: SubmissionConnector
 
   val show = AuthorisedAndEnrolled.async { implicit user => implicit request =>
 
@@ -54,10 +59,21 @@ trait ShareIssueDateController extends FrontendController with AuthorisedAndEnro
     shareIssueDateForm.bindFromRequest().fold(
       formWithErrors => {
         Future.successful(BadRequest(ShareIssueDate(formWithErrors)))
-        },
+      },
+
       validFormData => {
         s4lConnector.saveFormData(KeystoreKeys.shareIssueDate, validFormData)
-        Future.successful(Redirect(routes.GrossAssetsController.show()))
+        val result = for {
+          tradeStartDate <- s4lConnector.fetchAndGetFormData[TradeStartDateModel](KeystoreKeys.tradeStartDate)
+          canProceed <- if(tradeStartDate.isDefined && tradeStartDate.get.hasTradeStartDate == Constants.StandardRadioButtonYesValue){
+                          submissionConnector.validateSubmissionPeriod(tradeStartDate.get.tradeStartDay.get, tradeStartDate.get.tradeStartMonth.get,
+                                                                       tradeStartDate.get.tradeStartYear.get, validFormData.day.get,
+                                                                       validFormData.month.get, validFormData.year.get)} else  Future.successful(false)
+        } yield canProceed
+
+        result map {
+          res => if(res) Redirect(routes.GrossAssetsController.show()) else Redirect(routes.ShareIssueDateErrorController.show())
+        }
       }
     )
   }

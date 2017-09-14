@@ -133,5 +133,12 @@ trait SubmissionConnector {
     http.GET[HttpResponse](s"$serviceUrl/investment-tax-relief/compliance-statement/full-time-equivalence-check/$schemeType/$employeeCount")
   }
 
+  def validateSubmissionPeriod(tradeStartDay: Int, tradeStartMonth: Int, tradeStartYear: Int, shareIssueDay: Int,
+                               shareIssueMonth: Int, shareIssueYear: Int)(implicit hc: HeaderCarrier): Future[Boolean] = {
+    http.GET[Boolean](s"$serviceUrl/investment-tax-relief/submission-period/submission-period-checker" +
+      s"/trade-start-date/$tradeStartDay/$tradeStartMonth/$tradeStartYear" +
+      s"/share-issue-date/$shareIssueDay/$shareIssueMonth/$shareIssueYear")
+  }
+
 }
 

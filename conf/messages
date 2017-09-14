@@ -1029,6 +1029,13 @@ page.companyDetails.ShareIssueDate.question= When did your company issue the sha
 date.hint.shareIssueDate= For example, 31 3 1980
 page.companyDetails.ShareIssueDate.location= It''s on your company''s Register of Members.
 
+#share issue date error page
+page.companyDetails.ShareIssueDateError.title= You don''t qualify for the scheme
+page.companyDetails.ShareIssueDateError.heading= You don''t qualify for the scheme
+page.companyDetails.ShareIssueDateError.description =Your company:
+page.companyDetails.ShareIssueDateError.incorrect.info.start= has been trading for too long to get tax relief on investment
+page.companyDetails.ShareIssueDateError.incorrect.info.end= is not starting a new business activity that needs investment
+
 # Total Amount Raised page
 page.shareDetails.totalAmountRaised.title=How much did your company raise in this share issue?
 page.shareDetails.totalAmountRaised.heading=How much did your company raise in this share issue?
