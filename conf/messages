@@ -39,13 +39,11 @@ common.notAvailableAcronym=N/A
 common.address.postcode=Postcode
 common.address.findUKAddress=Find UK address
 common.back.dashboard=Dashboard
-common.changeAnswers.text=If this information is incorrect you can
 common.changeAnswers.incorrect.text=If this is incorrect you can
 common.changeAnswers.link=change your answers
 common.error.soft.heading=You don''t appear to qualify for this scheme
 common.error.soft.title=You don''t appear to qualify for this scheme
 common.error.soft.secondaryHeading=What happens next
-common.error.soft.whatNext=You can continue with your application if you think that you should qualify.
 common.error.soft.whatNext.compliance=You can continue with your Compliance Statement if you think that you should qualify.
 common.page.forename.label=First Name
 common.page.surname.label=Last Name
@@ -710,13 +708,7 @@ page.previousInvestment.schemeType.other=Other
 page.previousInvestment.amountSpent.label=Investment amount spent
 
 #Invalid previous scheme SEIS
-page.previousInvestment.InvalidPreviousScheme.title=You don''t appear to qualify for this scheme
-page.previousInvestment.InvalidPreviousScheme.heading=You don''t appear to qualify for this scheme
 page.previousInvestment.InvalidPreviousScheme.reason=This is because your company has already raised investment through the Enterprise Investment Scheme or received investment from a Venture Capital Trust.
-page.previousInvestment.InvalidPreviousScheme.change-text=If this information is incorrect you can
-page.previousInvestment.InvalidPreviousScheme.change-link=change your answers
-page.previousInvestment.InvalidPreviousScheme.secondaryHeading = What happens next
-page.previousInvestment.InvalidPreviousScheme.whatNext = You can continue with your application if you think that you should qualify.
 
 #previous schemes
 page.investment.PreviousScheme.heading=Which schemes or investments has your company used?
@@ -742,9 +734,6 @@ page.investment.AnnualTurnoverError.guidance=Link back to guidance
 page.eisseis.investment.AnnualTurnoverError.title=You don''t qualify for any of the schemes
 page.eisseis.investment.AnnualTurnoverError.heading=You don''t qualify for any of the schemes
 page.eisseis.investment.AnnualTurnoverError.description=The amount you''re trying to raise must be at least 50% of your average annual turnover.
-page.eisseis.investment.AnnualTurnoverError.incorrect.info=If this information is incorrect you can
-page.eisseis.investment.AnnualTurnoverError.change.link=change your answers
-
 
 #Trading For Too Long long error
 page.investment.TradingForTooLong.reason=Your company:
@@ -758,8 +747,6 @@ page.eisseis.investment.TradingForTooLong.heading=You don''t qualify for any of 
 page.eisseis.investment.TradingForTooLong.reason=Your company:
 page.eisseis.investment.TradingForTooLong.bullet.one=has been trading for too long to get tax relief on investment
 page.eisseis.investment.TradingForTooLong.bullet.two=is not starting a new business activity that needs investment
-page.eisseis.investment.TradingForTooLong.incorrect.info=If this information is incorrect you can
-page.eisseis.investment.TradingForTooLong.link.changeAnswers=change your answers
 
 #signout page
 page.signout.SignedOut.title = You''re signed out
@@ -815,23 +802,17 @@ validation.error.TradeStartDate.Future = Trade start date cannot be a future dat
 page.eisseis.companyDetails.tradeStartDateError.title=You don''t qualify for the Seed Enterprise Investment Scheme
 page.eisseis.companyDetails.tradeStartDateError.heading=You don''t qualify for the Seed Enterprise Investment Scheme
 page.eisseis.companyDetails.tradeStartDateError.trading.over.two.years=This is because the trade you want investment in started more than 2 years ago.
-page.eisseis.companyDetails.tradeStartDateError.whatNext.heading=What happens next
 page.eisseis.companyDetails.tradeStartDateError.whatNext.continue=You can continue with your application for:
 page.eisseis.companyDetails.tradeStartDateError.whatNext.scheme.eis=the Enterprise Investment Scheme
 page.eisseis.companyDetails.tradeStartDateError.whatNext.scheme.vct=the Venture Capital Trust scheme
-page.eisseis.companyDetails.tradeStartDateError.incorrect.info=If this information is incorrect you can
-page.eisseis.companyDetails.tradeStartDateError.link.changeAnswers=change your answers
 
 #EISSEIS not first trade error
 page.eisseis.companyDetails.notFirstTradeError.title=You don''t qualify for the Seed Enterprise Investment Scheme
 page.eisseis.companyDetails.notFirstTradeError.heading=You don''t qualify for the Seed Enterprise Investment Scheme
 page.eisseis.companyDetails.notFirstTradeError.trading.reason=This is because your company carried out another trade before the one you''re seeking investment in.
-page.eisseis.companyDetails.notFirstTradeError.whatNext.heading=What happens next
 page.eisseis.companyDetails.notFirstTradeError.whatNext.continue=You can continue with your application for:
 page.eisseis.companyDetails.notFirstTradeError.whatNext.scheme.eis=the Enterprise Investment Scheme
 page.eisseis.companyDetails.notFirstTradeError.whatNext.scheme.vct=the Venture Capital Trust scheme
-page.eisseis.companyDetails.notFirstTradeError.incorrect.info=If this information is incorrect you can
-page.eisseis.companyDetails.notFirstTradeError.link.changeAnswers=change your answers
 
 # EISSEIS is first trade
 page.eisseis.companyDetails.isFirstTrade.title=Is this the first trade your company has carried out?
@@ -851,12 +832,7 @@ page.shareDetails.totalAmountSpent.heading=How much of the investment from this 
 page.shareDetails.totalAmountSpent.title=How much of the investment from this share issue has been spent?
 
 # SEIS Full Time Employee Count Error
-page.companyDetails.fullTimeEmployeeCountError.title = You don''t appear to qualify for this scheme
 page.companyDetails.fullTimeEmployeeCountError.error = This is because your company had 25 or more full-time equivalent employees on the share issue date.
-page.companyDetails.fullTimeEmployeeCountError.whatNext = What happens next
-page.companyDetails.fullTimeEmployeeCountError.guidance = You can continue with your Compliance Statement if you think that you should qualify.
-page.companyDetails.fullTimeEmployeeCountError.incorrect = If this is incorrect you can
-page.companyDetails.fullTimeEmployeeCountError.incorrect.link = change your answers
 
 page.eis.companyDetails.fullTimeEmployeeCountError.error = This is because your company had 250 or more full-time equivalent employees on the share issue date.
 
@@ -866,8 +842,6 @@ page.nominalValueOfShares.hint = The nominal value is the amount shown on the sh
 
 # SEIS Individual Details Page
 page.individualDetails.title =Individual''s details
-page.individualDetails.forename.label= First Name
-page.individualDetails.surname.label= Last Name
 page.individualDetails.addressline1.label= Address line 1
 page.individualDetails.addressline2.label= Address line 2
 page.individualDetails.addressline3.label= Address line 3 (optional)
@@ -883,7 +857,6 @@ page.seis.checkAndSubmit.acknowledgement.title=Your Compliance Statement has bee
 page.seis.checkAndSubmit.acknowledgement.submissionConfirmation=Your Compliance Statement has been received
 page.seis.checkAndSubmit.acknowledgement.refNumberHeading=Your reference number is:
 page.seis.checkAndSubmit.acknowledgement.refNumber.note=Make a note of your reference number. If you need to contact us, we can use it to help identify your submission.
-page.seis.checkAndSubmit.acknowledgement.whatNext.heading = What happens next
 page.seis.checkAndSubmit.acknowledgement.whatNext.list.heading = You need to send us your supporting documents if:
 page.seis.checkAndSubmit.acknowledgement.whatNext.list.one = you haven't sent them to us before
 page.seis.checkAndSubmit.acknowledgement.whatNext.list.two = they''ve changed or been updated since you first sent them
@@ -909,7 +882,6 @@ page.seis.checkAndSubmit.acknowledgement.button.confirm=Finish
 page.eisseis.previousInvestment.InvalidPreviousScheme.title=You don''t qualify for the Seed Enterprise Investment Scheme
 page.eisseis.previousInvestment.InvalidPreviousScheme.heading=You don''t qualify for the Seed Enterprise Investment Scheme
 page.eisseis.previousInvestment.InvalidPreviousScheme.reason=This is because your company has already raised investment through the Enterprise Investment Scheme or received investment from a Venture Capital Trust.
-page.eisseis.previousInvestment.InvalidPreviousScheme.next.heading=What happens next
 page.eisseis.previousInvestment.InvalidPreviousScheme.next.text=You can continue with your application for:
 page.eisseis.previousInvestment.InvalidPreviousScheme.next.eis=the Enterprise Investment Scheme
 page.eisseis.previousInvestment.InvalidPreviousScheme.next.vct=the Venture Capital Trust scheme
@@ -918,8 +890,6 @@ page.eisseis.previousInvestment.InvalidPreviousScheme.next.vct=the Venture Capit
 page.eisseis.investment.LifetimeAllowanceExceeded.title=You don''t qualify for any of the schemes
 page.eisseis.investment.LifetimeAllowanceExceeded.heading=You don''t qualify for any of the schemes
 page.eisseis.investment.LifetimeAllowanceExceeded.reason=This is because you''ve already raised {0} million or more from tax relief investment schemes.
-page.eisseis.investment.LifetimeAllowanceExceeded.change.text=If this information is incorrect you can
-page.eisseis.investment.LifetimeAllowanceExceeded.change.link=change your answers
 
 #Delete Previous Scheme confirmation
 page.deletePreviousScheme.title=Confirm you want to remove this scheme or investment
@@ -936,21 +906,18 @@ page.test.page-two.button=Go to Page Two
 
 #EIS attachments acknowledgement
 page.checkAndSubmit.eis.attachments.acknowledgement.title=You''ve sent your application
-page.checkAndSubmit.eis.attachments.acknowledgement.what.happens.next.heading=What happens next
 page.checkAndSubmit.eis.attachments.acknowledgement.happens.next=We''ll contact you within 4 weeks to let you know the outcome of your application.
 page.checkAndSubmit.eis.attachments.acknowledgement.submissionConfirmation=You''ve sent your application
 page.checkAndSubmit.eis.attachments.acknowledgement.refNumberHeading=Make a note of your reference number:
 
 #EISSEIS attachments acknowledgement
 page.checkAndSubmit.eisseis.attachments.acknowledgement.title=You''ve sent your application
-page.checkAndSubmit.eisseis.attachments.acknowledgement.what.happens.next.heading=What happens next
 page.checkAndSubmit.eisseis.attachments.acknowledgement.happens.next=We''ll contact you within 4 weeks to let you know the outcome of your application.
 page.checkAndSubmit.eisseis.attachments.acknowledgement.submissionConfirmation=You''ve sent your application
 page.checkAndSubmit.eisseis.attachments.acknowledgement.refNumberHeading=Make a note of your reference number:
 
 #SEIS attachments acknowledgement
 page.checkAndSubmit.seis.attachments.acknowledgement.title=You''ve sent your application
-page.checkAndSubmit.seis.attachments.acknowledgement.what.happens.next.heading=What happens next
 page.checkAndSubmit.seis.attachments.acknowledgement.happens.next=We''ll contact you within 4 weeks to let you know the outcome of your application.
 page.checkAndSubmit.seis.attachments.acknowledgement.submissionConfirmation=You''ve sent your application
 page.checkAndSubmit.seis.attachments.acknowledgement.refNumberHeading=Make a note of your reference number:
@@ -958,7 +925,6 @@ page.checkAndSubmit.seis.attachments.acknowledgement.refNumberHeading=Make a not
 # OUTSIDE FLOW file upload acknowledgement
 page.hubPartials.fileUpload.acknowledgement.title=You''ve uploaded your documents
 page.hubPartials.fileUpload.acknowledgement.submission.confirmation=You''ve uploaded your documents
-page.hubPartials.fileUpload.acknowledgement.what.happens.heading=What happens next
 page.hubPartials.fileUpload.acknowledgement.what.happens.text=Once we''ve received your documents and answers, we''ll contact you within 4 weeks to let you know the outcome of your application.
 page.hubPartials.fileUpload.acknowledgement.button.confirm=Finish
 page.introduction.hub.upload.link=Upload documents
@@ -989,14 +955,8 @@ page.grossAssets.help.link=What happens if I don''t raise this amount?
 page.grossAssets.help.link.text=You might still be eligible for the scheme, as long as you don''t raise more than £5 million in a year.
 
 #gross assets error
-page.companyDetails.grossAssetsError.title=You don''t appear to qualify for this scheme
-page.companyDetails.grossAssetsError.heading=You don''t appear to qualify for this scheme
 page.companyDetails.grossAssetsError.description.seis=This is because your company''s gross assets were worth more than £200,000 when the shares were issued.
 page.companyDetails.grossAssetsError.description.eis=This is because your company''s gross assets were worth more than £15 million when the shares were issued.
-page.companyDetails.grossAssetsError.whatNext.heading=What happens next
-page.companyDetails.grossAssetsError.whatNext.continue=You can continue with your Compliance Statement if you think that you should qualify.
-page.companyDetails.grossAssetsError.incorrect.info=If this is incorrect you can
-page.companyDetails.grossAssetsError.link.changeAnswers=change your answers
 
 #  seventy percent 70 percent
 page.companyDetails.seventyPercentSpent.title=Has more than 70% of the SEIS Investment been spent?
@@ -1007,8 +967,6 @@ page.companyDetails.seventyPercentSpent.legend=Have you spent at least 70% of th
 page.companyDetails.SeventyPercentError.title=You can''t use this service yet
 page.companyDetails.SeventyPercentError.heading=You can''t use this service yet
 page.companyDetails.SeventyPercentError.reason=This is because you haven''t spent enough of the SEIS Investment.
-page.companyDetails.SeventyPercentError.incorrect.info=If this information is incorrect you can
-page.companyDetails.SeventyPercentError.change.link.changeAnswers=change your answers
 
 # Share Description
 page.shares.shareDescription.title=What class of shares were issued?
