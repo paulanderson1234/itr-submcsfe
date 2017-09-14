@@ -58,15 +58,7 @@ trait SharesRepaymentTypeController extends FrontendController with AuthorisedAn
       },
       validFormData => {
         s4lConnector.saveFormData(KeystoreKeys.sharesRepaymentType, validFormData)
-        validFormData.sharesRepaymentType match {
-
-          case Constants.repaymentTypeShares => {
-            Future.successful(Redirect(routes.DateSharesRepaidController.show()))
-          }
-          case Constants.repaymentTypeDebentures => {
-            Future.successful(Redirect(routes.WasAnyValueReceivedController.show()))
-          }
-        }
+          Future.successful(Redirect(routes.DateSharesRepaidController.show()))
 
       }
     )

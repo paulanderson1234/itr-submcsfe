@@ -16,7 +16,7 @@
 
 package controllers.eis
 
-import auth.{AuthorisedAndEnrolledForTAVC, EIS, VCT}
+import auth.{AuthorisedAndEnrolledForTAVC, EIS}
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
@@ -34,21 +34,15 @@ object ThirtyDayRuleErrorController extends ThirtyDayRuleErrorController{
   override lazy val enrolmentConnector = EnrolmentConnector
 }
 
-trait ThirtyDayRuleErrorController extends FrontendController with AuthorisedAndEnrolledForTAVC  {
+trait ThirtyDayRuleErrorController extends FrontendController with AuthorisedAndEnrolledForTAVC {
 
-  override val acceptedFlows = Seq(Seq(EIS),Seq(VCT),Seq(EIS,VCT))
+  override val acceptedFlows = Seq(Seq(EIS))
 
-  val show = 
-    AuthorisedAndEnrolled.async { implicit user => implicit request =>
-	  Future.successful(Ok(ThirtyDayRuleError()))
-    }
-  
+  val show = AuthorisedAndEnrolled.async { implicit user => implicit request =>
+    Future.successful(Ok(ThirtyDayRuleError()))
+  }
 
-  val submit = 
-    AuthorisedAndEnrolled.async { implicit user => implicit request =>
-      //TODO: route to correct page on continue when available
-      Future.successful(Redirect(routes.ThirtyDayRuleController.show()))
-    }
-  
-
+  val submit = AuthorisedAndEnrolled.async { implicit user => implicit request =>
+    Future.successful(Redirect(routes.MarketDescriptionController.show()))
+  }
 }

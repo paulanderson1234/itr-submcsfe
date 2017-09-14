@@ -61,8 +61,7 @@ class ThirtyDayRuleErrorControllerSpec extends BaseSpec {
       submitWithSessionAndAuth(TestController.submit)(
         result => {
 		  status(result) shouldBe SEE_OTHER
-          //TODO: change to match target page page when available
-          redirectLocation(result) shouldBe Some(routes.ThirtyDayRuleController.show().url)		         
+          redirectLocation(result) shouldBe Some(routes.MarketDescriptionController.show().url)
         }
       )
     }

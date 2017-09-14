@@ -485,7 +485,7 @@ page.investment.SubsidiariesSpendingInvestment.heading = Will another company th
 #previous before dofcs
 page.previousInvestment.previousBeforeDOFCS.title = Did your company get that investment between {0} and {1}?
 page.previousInvestment.previousBeforeDOFCS.heading = Did your company get that investment between {0} and {1}?
-page.previousInvestment.previousBeforeDOFCS.description = You must have got the investment within {0} years of your first commercial sale
+page.previousInvestment.previousBeforeDOFCS.description = You must have got the investment within {0} years of your first commercial sale.
 
 
 #Subsidiaries ninety percent owned:
@@ -1267,12 +1267,14 @@ page.MarketDescription.question.hint=Suggested limit: 200 words
 page.MarketDescription.descriptionOne.text=Give as much detail as you can about why it''s new for your company. You should also include further information about this in your business plan.
 
 # ThirtyDayRule page
-page.ThirtyDayRule.title=Is the total amount raised in this Compliance Statement and from other relevant investments more than 50% of your average annual turnover?
-page.ThirtyDayRule.heading=Is the total amount raised in this Compliance Statement and from other relevant investments more than 50% of your average annual turnover?
-page.ThirtyDayRule.legend=Is the total amount raised in this Compliance Statement and from other relevant investments more than 50% of your average annual turnover?
-page.ThirtyDayRule.descriptionOne.text=Relevant investments must have been received within a 30 day period and include:
-page.ThirtyDayRule.help.bullet.one=investment from a Venture Capital Trust
-page.ThirtyDayRule.help.bullet.two=shares or investments that you''ve already submitted an EIS, SEIS or SITR Compliance Statement for
+page.ThirtyDayRule.title=Is the total amount raised more than 50% of your average annual turnover?
+page.ThirtyDayRule.heading=Is the total amount raised more than 50% of your average annual turnover?
+page.ThirtyDayRule.legend=Is the total amount raised more than 50% of your average annual turnover?
+page.ThirtyDayRule.descriptionOne.text=You should include relevant investments that have been received in a 30 day period, for example:
+page.ThirtyDayRule.help.bullet.one=the money raised in this Compliance Statement
+page.ThirtyDayRule.help.bullet.two=investment from a Venture Capital Trust
+page.ThirtyDayRule.help.bullet.three=shares or investments that you''ve already submitted an EIS, SEIS or SITR Compliance Statement for
+
 
 # ThirtyDayRuleError page
 page.ThirtyDayRuleWarning.description=This is because the amount your company has raised is less than 50% of its average annual turnover.
