@@ -25,11 +25,13 @@ import views.helpers.ViewSpec
 
 class WasAnyValueReceivedViewSpec extends ViewSpec with FakeRequestHelper {
 
+  val testUrl = "/test/testing"
+
   "Was any value received view" when {
     implicit val request = fakeRequest
 
     "no errors are present" should {
-      lazy val doc = Jsoup.parse(views.html.eis.investors.WasAnyValueReceived(wasAnyValueReceivedForm).body)
+      lazy val doc = Jsoup.parse(views.html.eis.investors.WasAnyValueReceived(wasAnyValueReceivedForm, testUrl).body)
 
       "have the correct title" in {
         doc.title() shouldBe Messages("page.investors.wasAnyValueReceived.title")
@@ -43,7 +45,7 @@ class WasAnyValueReceivedViewSpec extends ViewSpec with FakeRequestHelper {
         }
 
         "links to the review investors page" in {
-          backLink.attr("href") shouldBe controllers.eis.routes.ReviewAllInvestorsController.show().url
+          backLink.attr("href") shouldBe testUrl
         }
       }
 
@@ -179,7 +181,7 @@ class WasAnyValueReceivedViewSpec extends ViewSpec with FakeRequestHelper {
       lazy val doc = Jsoup.parse(views.html.eis.investors.WasAnyValueReceived(wasAnyValueReceivedForm.bind(Map(
         "wasAnyValueReceived" -> "",
         "descriptionTextArea" -> ""
-      ))).body)
+      )),testUrl).body)
 
       "display an error summary" in {
         doc.select(".error-summary").isEmpty shouldBe false

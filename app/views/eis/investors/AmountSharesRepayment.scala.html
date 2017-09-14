@@ -1,0 +1,41 @@
+@import models.AmountSharesRepaymentModel
+@import uk.gov.hmrc.play.views.html.helpers.form
+@import views.html.helpers.{errorSummary, inputWithCurrencySymbol, backButtonWithProgress}
+@import utils.Validation.financialMaxAmountLength
+
+@(amountSharesRepaymentForm: Form[AmountSharesRepaymentModel])(implicit request: Request[_], messages: Messages)
+
+@main_template(Messages("page.AmountSharesRepayment.title")) {
+
+@backButtonWithProgress(controllers.eis.routes.DateSharesRepaidController.show().url, Messages("common.section.progress.details.four"))
+
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+        @errorSummary(amountSharesRepaymentForm, "amount-shares-repayment", "amount")        
+        <h1 class="heading-xlarge" id="main-heading">@Messages("page.AmountSharesRepayment.heading")</h1>
+
+        @form(action = controllers.eis.routes.AmountSharesRepaymentController.submit()) {
+        <div class="form-group">
+            @inputWithCurrencySymbol(
+            amountSharesRepaymentForm("amount"),
+            '_divClass -> "form-label",
+            '_labelId -> "label-amount",
+            '_label -> Messages("page.AmountSharesRepayment.heading"),
+            '_labelTextClass -> "visuallyhidden",
+            '_inputClass -> "input--no-spinner input--left-padding",
+            '_type -> "text",
+            '_maxlength -> s"$financialMaxAmountLength",
+            'id -> "amount"
+            )
+
+        </div>
+
+
+        <div class="form-group">
+            <button class="btn button" type="submit" id="next">@Messages("common.button.snc")</button>
+        </div>
+        }
+    </div>
+</div>
+}

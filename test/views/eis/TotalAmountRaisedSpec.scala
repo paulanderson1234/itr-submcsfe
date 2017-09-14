@@ -16,7 +16,6 @@
 
 package views.eis
 
-import common.Constants
 import forms.TotalAmountRaisedForm._
 import models.TotalAmountRaisedModel
 import org.jsoup.Jsoup

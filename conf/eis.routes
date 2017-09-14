@@ -107,9 +107,18 @@ POST       /acknowledgement                         controllers.eis.Acknowledgem
 GET        /attachments-acknowledgement             controllers.eis.AttachmentsAcknowledgementController.show
 POST       /attachments-acknowledgement             controllers.eis.AttachmentsAcknowledgementController.submit
 
-
+#TODO REMOVE routes below when old lifetime limit removed
 GET        /lifetime-allowance-exceeded             controllers.eis.LifetimeAllowanceExceededController.show
 POST       /lifetime-allowance-exceeded             controllers.eis.LifetimeAllowanceExceededController.submit
+
+GET       /lifetime-allowance-exceeded-error        controllers.eis.LifetimeAllowanceExceededErrorController.show
+POST      /lifetime-allowance-exceeded-error        controllers.eis.LifetimeAllowanceExceededErrorController.submit
+
+GET       /annual-limit-exceeded-error              controllers.eis.AnnualLimitExceededErrorController.show
+POST      /annual-limit-exceeded-error              controllers.eis.AnnualLimitExceededErrorController.submit
+
+GET       /any-shares-repayment                        controllers.eis.AnySharesRepaymentController.show
+POST      /any-shares-repayment                        controllers.eis.AnySharesRepaymentController.submit
 
 GET        /annual-turnover-error                   controllers.eis.AnnualTurnoverErrorController.show
 
@@ -216,8 +225,8 @@ POST       /was-any-value-received               controllers.eis.WasAnyValueRece
 GET       /share-issue-date                        controllers.eis.ShareIssueDateController.show
 POST      /share-issue-date                        controllers.eis.ShareIssueDateController.submit
 
-GET        /add-another-shareholding/:investorId              controllers.eis.AddAnotherShareholdingController.show(investorId: Int)
-POST       /add-another-shareholding/:investorId              controllers.eis.AddAnotherShareholdingController.submit(investorId: Int)
+GET        /add-another-shareholding/:investorId   controllers.eis.AddAnotherShareholdingController.show(investorId: Int)
+POST       /add-another-shareholding/:investorId   controllers.eis.AddAnotherShareholdingController.submit(investorId: Int)
 
 
 GET        /nominal-value-of-shares               controllers.eis.NominalValueOfSharesController.show
@@ -225,6 +234,9 @@ POST       /nominal-value-of-shares               controllers.eis.NominalValueOf
 
 GET        /share-description                     controllers.eis.ShareDescriptionController.show
 POST       /share-description                     controllers.eis.ShareDescriptionController.submit
+
+GET       /amount-shares-repayment                controllers.eis.AmountSharesRepaymentController.show
+POST      /amount-shares-repayment                controllers.eis.AmountSharesRepaymentController.submit
 
 GET       /total-amount-raised                    controllers.eis.TotalAmountRaisedController.show
 POST      /total-amount-raised                    controllers.eis.TotalAmountRaisedController.submit
@@ -237,4 +249,13 @@ POST      /thirty-day-rule                        controllers.eis.ThirtyDayRuleC
 
 GET       /thirty-day-rule-error                        controllers.eis.ThirtyDayRuleErrorController.show
 POST      /thirty-day-rule-error                        controllers.eis.ThirtyDayRuleErrorController.submit
+
+GET       /who-repaid-shares                      controllers.eis.WhoRepaidSharesController.show
+POST      /who-repaid-shares                      controllers.eis.WhoRepaidSharesController.submit
+
+GET       /date-shares-repaid                        controllers.eis.DateSharesRepaidController.show
+POST      /date-shares-repaid                        controllers.eis.DateSharesRepaidController.submit
+
+GET        /shares-repayment-type                 controllers.eis.SharesRepaymentTypeController.show
+POST       /shares-repayment-type                 controllers.eis.SharesRepaymentTypeController.submit
 
