@@ -21,7 +21,7 @@ import common.{Constants, KeystoreKeys}
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import forms.PreviousBeforeDOFCSForm._
-import models.{CommercialSaleModel, KiProcessingModel, PreviousBeforeDOFCSModel, SubsidiariesModel, InvestmentGrowModel}
+import models.{CommercialSaleModel, KiProcessingModel, PreviousBeforeDOFCSModel, InvestmentGrowModel}
 import org.joda.time.DateTime
 import play.api.data.Form
 import play.api.i18n.Messages
@@ -50,18 +50,6 @@ trait PreviousBeforeDOFCSController extends FrontendController with AuthorisedAn
   }
 
   val submit = AuthorisedAndEnrolled.async { implicit user => implicit request =>
-
-//    def routeRequest(date: Option[InvestmentGrowModel]): Future[Result] = {
-//      date match {
-//        case Some(data) if data.investmentGrowDesc == Constants.StandardRadioButtonYesValue =>
-//          s4lConnector.saveFormData(KeystoreKeys.backLinkInvestmentGrow, routes.PreviousBeforeDOFCSController.show().url)
-//          Future.successful(Redirect(routes.InvestmentGrowController.show()))
-//        case Some(_) =>
-//          s4lConnector.saveFormData(KeystoreKeys.backLinkInvestmentGrow, routes.PreviousBeforeDOFCSController.show().url)
-//          Future.successful(Redirect(routes.InvestmentGrowController.show()))
-//        case None => Future.successful(Redirect(routes.InvestmentGrowController.show()))
-//      }
-//    }
 
     previousBeforeDOFCSForm.bindFromRequest().fold(
       formWithErrors => {
