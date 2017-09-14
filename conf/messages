@@ -43,8 +43,12 @@ common.changeAnswers.text=If this information is incorrect you can
 common.changeAnswers.incorrect.text=If this is incorrect you can
 common.changeAnswers.link=change your answers
 common.error.soft.heading=You don''t appear to qualify for this scheme
+common.error.soft.title=You don''t appear to qualify for this scheme
 common.error.soft.secondaryHeading=What happens next
 common.error.soft.whatNext=You can continue with your application if you think that you should qualify.
+common.error.soft.whatNext.compliance=You can continue with your Compliance Statement if you think that you should qualify.
+common.page.forename.label=First Name
+common.page.surname.label=Last Name
 
 ## Common date Messages ##
 common.date.fields.day=Day
@@ -674,11 +678,20 @@ page.checkAndSubmit.acknowledgement.courseOfAction=Once we''ve received your sup
 page.checkAndSubmit.acknowledgement.button.confirm=Finish
 
 
-#lifetime allowance exceeded page
+#lifetime allowance exceeded page - REMOCE THIS SECTION WHEN PROPOSED INVESTERMENT GONE AND old errro page removed
+##=======================================================================================
 page.investment.LifetimeAllowanceExceeded.title=You don''t qualify for the scheme
 page.investment.LifetimeAllowanceExceeded.heading=You don''t qualify for the scheme
 page.investment.LifetimeAllowanceExceeded.reason=You''ve already raised more than {0} million from tax relief investment schemes.
 page.investment.LifetimeAllowanceExceeded.link=Back to investment schemes
+##====================================================================================================
+
+#lifetime allowance exceeded new
+page.LifetimeAllowanceExceededWarning.description=This is because your company has already raised {0} million of relevant investment in its lifetime.
+
+# AnnualLimitExceededError page
+page.AnnualLimitExceededWarning.description=This is because you can''t raise more than £5 million in a year.
+
 
 #review previous schemes
 page.previousInvestment.reviewPreviousSchemes.title=Previous schemes
@@ -1202,6 +1215,25 @@ page.declaration.warning=If you submit untrue or misleading information you coul
 page.declaration.submit=I agree and submit
 page.declaration.doNotAgree=I don''t agree
 
+# AnySharesRepayment page
+page.AnySharesRepayment.title=Have any shares or debentures been repaid or repurchased?
+page.AnySharesRepayment.heading=Have any shares or debentures been repaid or repurchased?
+page.AnySharesRepayment.legend=Have any shares or debentures been repaid or repurchased?
+page.AnySharesRepayment.descriptionOne.text=Debentures can include:
+page.AnySharesRepayment.help.bullet.one=secured loans
+page.AnySharesRepayment.help.bullet.two=unsecured loans
+page.AnySharesRepayment.help.bullet.three=convertible loans
+
+# AmountSharesRepayment page
+page.AmountSharesRepayment.title=How much was repaid or repurchased?
+page.AmountSharesRepayment.heading=How much was repaid or repurchased?
+
+# validation messages for generic validation section:
+validation.error.amountSharesRepayment.size=The amount repaid or repurchased should be between 0 and 99999999999
+validation.error.amountSharesRepayment.notANumber=Enter a valid number for the amount repaid or repurchased
+validation.error.amountSharesRepayment.decimalPlaces=The amount repaid or repurchased should not contain decimal places
+validation.error.amountSharesRepayment.negative=The amount repaid or repurchased should not be negative
+
 #Was Any Value Received
 page.investors.wasAnyValueReceived.title = Did the investor get value back from your company or a connected company?
 page.investors.wasAnyValueReceived.guidance.definition = This is called ''value received''.
@@ -1218,4 +1250,39 @@ page.investors.wasAnyValueReceived.additionalGuidance.list.two = what it was
 page.investors.wasAnyValueReceived.additionalGuidance.list.three = when the investor received it
 page.investors.wasAnyValueReceived.additionalGuidance.list.four = how much it was worth
 page.investors.wasAnyValueReceived.additionalGuidance.list.five = whether you got anything in return
+
+# MarketDescription page
+page.MarketDescription.title=What''s the new product or geographical market that you got investment for?
+page.MarketDescription.heading=What''s the new product or geographical market that you got investment for?
+page.MarketDescription.question.hint=Suggested limit: 200 words
+
+page.MarketDescription.descriptionOne.text=Give as much detail as you can about why it''s new for your company. You should also include further information about this in your business plan.
+
+# ThirtyDayRule page
+page.ThirtyDayRule.title=Is the total amount raised in this Compliance Statement and from other relevant investments more than 50% of your average annual turnover?
+page.ThirtyDayRule.heading=Is the total amount raised in this Compliance Statement and from other relevant investments more than 50% of your average annual turnover?
+page.ThirtyDayRule.legend=Is the total amount raised in this Compliance Statement and from other relevant investments more than 50% of your average annual turnover?
+page.ThirtyDayRule.descriptionOne.text=Relevant investments must have been received within a 30 day period and include:
+page.ThirtyDayRule.help.bullet.one=investment from a Venture Capital Trust
+page.ThirtyDayRule.help.bullet.two=shares or investments that you''ve already submitted an EIS, SEIS or SITR Compliance Statement for
+
+# ThirtyDayRuleError page
+page.ThirtyDayRuleWarning.description=This is because the amount your company has raised is less than 50% of its average annual turnover.
+
+# WhoRepaidShares page
+page.WhoRepaidShares.title=Who was repaid for their shares or debentures or had them repurchased?
+page.WhoRepaidShares.heading=Who was repaid for their shares or debentures or had them repurchased?
+
+# DateSharesRepaid page
+page.DateSharesRepaid.title=When was the repayment or repurchase made?
+page.DateSharesRepaid.heading=When was the repayment or repurchase made?
+
+# validation messages for generic validation section:
+validation.error.dateSharesRepaid.Future=Date of Repayment or repurchase cannot be a future date
+
+#share Repayment type page
+page.sharesRepaymentType.shares=Shares
+page.sharesRepaymentType.debentures=Debentures
+page.sharesRepaymentType.title=What type of investment was repaid or repurchased?
+page.sharesRepaymentType.heading=What type of investment was repaid or repurchased?
 
