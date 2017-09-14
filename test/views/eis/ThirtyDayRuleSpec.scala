@@ -67,6 +67,7 @@ class ThirtyDayRuleSpec extends ViewSpec {
       document.body.getElementById("description-one").text shouldBe Messages("page.ThirtyDayRule.descriptionOne.text")
       document.getElementById("help-bullet-one").text() shouldBe Messages("page.ThirtyDayRule.help.bullet.one")
       document.getElementById("help-bullet-two").text() shouldBe Messages("page.ThirtyDayRule.help.bullet.two")
+      document.getElementById("help-bullet-three").text() shouldBe Messages("page.ThirtyDayRule.help.bullet.three")
       document.select(".error-summary").isEmpty shouldBe true
     }
 	
@@ -89,6 +90,7 @@ class ThirtyDayRuleSpec extends ViewSpec {
       document.body.getElementById("description-one").text shouldBe Messages("page.ThirtyDayRule.descriptionOne.text")
       document.getElementById("help-bullet-one").text() shouldBe Messages("page.ThirtyDayRule.help.bullet.one")
       document.getElementById("help-bullet-two").text() shouldBe Messages("page.ThirtyDayRule.help.bullet.two")
+      document.getElementById("help-bullet-three").text() shouldBe Messages("page.ThirtyDayRule.help.bullet.three")
       document.select(".error-summary").isEmpty shouldBe true
     }
 
@@ -113,6 +115,7 @@ class ThirtyDayRuleSpec extends ViewSpec {
       document.body.getElementById("description-one").text shouldBe Messages("page.ThirtyDayRule.descriptionOne.text")
       document.getElementById("help-bullet-one").text() shouldBe Messages("page.ThirtyDayRule.help.bullet.one")
       document.getElementById("help-bullet-two").text() shouldBe Messages("page.ThirtyDayRule.help.bullet.two")
+      document.getElementById("help-bullet-three").text() shouldBe Messages("page.ThirtyDayRule.help.bullet.three")
 
       // Ensure Error section present
       document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe true
