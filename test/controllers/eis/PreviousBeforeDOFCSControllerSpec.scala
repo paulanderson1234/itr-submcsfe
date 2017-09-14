@@ -21,7 +21,7 @@ import common.{Constants, KeystoreKeys}
 import config.FrontendAuthConnector
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
-import models.{CommercialSaleModel, KiProcessingModel, PreviousBeforeDOFCSModel, SubsidiariesModel}
+import models.{CommercialSaleModel, KiProcessingModel, PreviousBeforeDOFCSModel, InvestmentGrowModel}
 import org.mockito.Matchers
 import org.mockito.Mockito._
 import play.api.test.Helpers._
@@ -47,9 +47,9 @@ class PreviousBeforeDOFCSControllerSpec extends BaseSpec {
       (Matchers.any(), Matchers.any(),Matchers.any())).thenReturn(Future.successful(previousBeforeDOFCSModel))
   }
 
-  def setupSubmitMocks(subsidiariesModel: Option[SubsidiariesModel] = None): Unit =
-    when(mockS4lConnector.fetchAndGetFormData[SubsidiariesModel](Matchers.eq(KeystoreKeys.subsidiaries))(Matchers.any(), Matchers.any(),Matchers.any()))
-      .thenReturn(Future.successful(subsidiariesModel))
+  def setupSubmitMocks(investmentGrowModel: Option[InvestmentGrowModel] = None): Unit =
+    when(mockS4lConnector.fetchAndGetFormData[InvestmentGrowModel](Matchers.eq(KeystoreKeys.investmentGrow))(Matchers.any(), Matchers.any(),Matchers.any()))
+      .thenReturn(Future.successful(investmentGrowModel))
 
   "PreviousBeforeDOFCSController" should {
     "use the correct keystore connector" in {
@@ -187,71 +187,14 @@ class PreviousBeforeDOFCSControllerSpec extends BaseSpec {
     }
   }
 
-  "Sending a valid 'Yes' form submit to the PreviousBeforeDOFCSController with 'No' to Subsidiaries Model when Authenticated and enrolled" should {
+  "Sending a valid 'Yes' form submit to the PreviousBeforeDOFCSController when Authenticated and enrolled" should {
     "redirect to the how-plan-to-use-investment page" in {
-      setupSubmitMocks(Some(subsidiariesModelNo))
       mockEnrolledRequest(eisSchemeTypesModel)
       val formInput = "previousBeforeDOFCS" -> Constants.StandardRadioButtonYesValue
       submitWithSessionAndAuth(TestController.submit, formInput)(
         result => {
           status(result) shouldBe SEE_OTHER
           redirectLocation(result) shouldBe Some(routes.InvestmentGrowController.show().url)
-        }
-      )
-    }
-  }
-
-  "Sending a valid 'Yes' form submit to the PreviousBeforeDOFCSController with 'Yes' to Subsidiaries Model when Authenticated and enrolled" should {
-    "redirect to the subsidiaries-spending-investment page" in {
-      setupSubmitMocks(Some(subsidiariesModelYes))
-      mockEnrolledRequest(eisSchemeTypesModel)
-      val formInput = "previousBeforeDOFCS" -> Constants.StandardRadioButtonYesValue
-      submitWithSessionAndAuth(TestController.submit, formInput)(
-        result => {
-          status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(routes.SubsidiariesSpendingInvestmentController.show().url)
-        }
-      )
-    }
-  }
-
-  "Sending a valid 'No' form submit to the PreviousBeforeDOFCSController with 'Yes' to Subsidiaries Model when Authenticated and enrolled" should {
-    "redirect to new geographical market" in {
-      setupSubmitMocks(Some(subsidiariesModelYes))
-      mockEnrolledRequest(eisSchemeTypesModel)
-      val formInput = "previousBeforeDOFCS" -> Constants.StandardRadioButtonNoValue
-      submitWithSessionAndAuth(TestController.submit, formInput)(
-        result => {
-          status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(routes.NewGeographicalMarketController.show().url)
-        }
-      )
-    }
-  }
-
-  "Sending a valid 'No' form submit to the PreviousBeforeDOFCSController with 'No' to Subsidiaries Model when Authenticated and enrolled" should {
-    "redirect to new geographical market" in {
-      setupSubmitMocks(Some(subsidiariesModelNo))
-      mockEnrolledRequest(eisSchemeTypesModel)
-      val formInput = "previousBeforeDOFCS" -> Constants.StandardRadioButtonNoValue
-      submitWithSessionAndAuth(TestController.submit, formInput)(
-        result => {
-          status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(routes.NewGeographicalMarketController.show().url)
-        }
-      )
-    }
-  }
-
-  "Sending a valid form submit to the PreviousBeforeDOFCSController without a Subsidiaries Model when Authenticated and enrolled" should {
-    "redirect to Subsidiaries page" in {
-      setupSubmitMocks()
-      mockEnrolledRequest(eisSchemeTypesModel)
-      val formInput = "previousBeforeDOFCS" -> Constants.StandardRadioButtonYesValue
-      submitWithSessionAndAuth(TestController.submit, formInput)(
-        result => {
-          status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(routes.SubsidiariesController.show().url)
         }
       )
     }
