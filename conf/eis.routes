@@ -259,3 +259,8 @@ POST      /date-shares-repaid                        controllers.eis.DateSharesR
 GET        /shares-repayment-type                 controllers.eis.SharesRepaymentTypeController.show
 POST       /shares-repayment-type                 controllers.eis.SharesRepaymentTypeController.submit
 
+GET       /gross-assets-after-issue                            controllers.eis.GrossAssetsAfterIssueController.show
+POST      /gross-assets-after-issue                            controllers.eis.GrossAssetsAfterIssueController.submit
+
+GET       /gross-assets-after-issue-error                     controllers.eis.GrossAssetsAfterIssueErrorController.show
+POST      /gross-assets-after-issue-error                     controllers.eis.GrossAssetsAfterIssueErrorController.submit
