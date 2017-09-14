@@ -25,12 +25,18 @@
         <div class="form-group">
            <p id="incorrect-info">@Messages("page.companyDetails.ResearchStartDateError.incorrect.info.start")
                 <a href="@controllers.eis.routes.ResearchStartDateController.show().url" class="link-style" id="change-answers">
-                    @Messages("page.companyDetails.ResearchStartDateError.link.changeAnswers")</a>
+                    @Messages("common.changeAnswers.link")</a>
                     @Messages("page.companyDetails.ResearchStartDateError.incorrect.info.end")</p>
         </div>
 
         <div class="form-group">
-            <!--todo Will need to route to Dashboard Submission FE hub page when
+            <!--todo Will need to route to Dashboard Submission FE hub page when it becomes central hub for AA and CS -->
+            <a href="@controllers.routes.ApplicationHubController.show().url" class="link-style" id="return-dashboard">
+                @Messages("common.returnToDashboard")
+            </a>
+        </div>
+
+    </div>
 </div>
 }
 

@@ -1,0 +1,25 @@
+@import models.DateSharesRepaidModel
+@import uk.gov.hmrc.play.views.html.helpers.form
+@import views.html.helpers.{errorSummary, formInlineDateInput, backButtonWithProgress}
+
+@(dateSharesRepaidForm: Form[DateSharesRepaidModel])(implicit request: Request[_], messages: Messages)
+
+@main_template(Messages("page.DateSharesRepaid.title")) {
+
+    @backButtonWithProgress(controllers.eis.routes.SharesRepaymentTypeController.show().url, Messages("common.section.progress.details.four"))
+
+    @errorSummary(dateSharesRepaidForm, "date-shares-repaid", "dateSharesRepaidDay")
+
+    <h1 class="heading-xlarge" id="main-heading">@Messages("page.DateSharesRepaid.heading")</h1>
+
+    @form(action = controllers.eis.routes.DateSharesRepaidController.submit()) {
+
+        @formInlineDateInput(dateSharesRepaidForm, "dateSharesRepaid", Some(Messages("page.DateSharesRepaid.heading")),
+          true, Some(Messages("common.date.hint.example")), None)
+
+        <div class="form-group">
+            <button class="btn button" type="submit" id="next">@Messages("common.button.snc")</button>
+        </div>
+
+    }
+}

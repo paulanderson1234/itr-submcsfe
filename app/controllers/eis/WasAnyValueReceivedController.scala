@@ -20,6 +20,7 @@ import auth.{AuthorisedAndEnrolledForTAVC, EIS}
 import common.{Constants, KeystoreKeys}
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
+import controllers.Helpers.ControllerHelpers
 import forms.WasAnyValueReceivedForm._
 import models.WasAnyValueReceivedModel
 import play.api.Play.current
@@ -27,6 +28,7 @@ import play.api.data.Form
 import play.api.i18n.Messages.Implicits._
 import play.api.mvc.Result
 import uk.gov.hmrc.play.frontend.controller.FrontendController
+import views.html.eis.investors.WasAnyValueReceived
 
 import scala.concurrent.Future
 
@@ -42,15 +44,30 @@ trait WasAnyValueReceivedController extends FrontendController with AuthorisedAn
   override val acceptedFlows = Seq(Seq(EIS))
 
   val show = AuthorisedAndEnrolled.async { implicit user => implicit request =>
-    s4lConnector.fetchAndGetFormData[WasAnyValueReceivedModel](KeystoreKeys.wasAnyValueReceived).map {
-      case Some(data) => Ok(views.html.eis.investors.WasAnyValueReceived(wasAnyValueReceivedForm.fill(data)))
-      case None => Ok(views.html.eis.investors.WasAnyValueReceived(wasAnyValueReceivedForm))
+    def routeRequest(backUrl: Option[String]) = {
+      if (backUrl.isDefined) {
+        s4lConnector.fetchAndGetFormData[WasAnyValueReceivedModel](KeystoreKeys.wasAnyValueReceived).map {
+          case Some(data) => Ok(views.html.eis.investors.WasAnyValueReceived(wasAnyValueReceivedForm.fill(data), backUrl.getOrElse("")))
+          case None => Ok(views.html.eis.investors.WasAnyValueReceived(wasAnyValueReceivedForm, backUrl.getOrElse("")))
+        }
+      }
+      else {
+        //TODO: Route to the beginning of flow as no backlink found
+        Future.successful(Redirect(routes.AnySharesRepaymentController.show()))
+      }
     }
+
+    for {
+      link <- ControllerHelpers.getSavedBackLink(KeystoreKeys.backLinkWasAnyValueReceived, s4lConnector)
+      route <- routeRequest(link)
+    } yield route
   }
 
   val submit = AuthorisedAndEnrolled.async { implicit user => implicit request =>
-    val errorResponse: Form[WasAnyValueReceivedModel] => Future[Result] = form =>
-      Future(BadRequest(views.html.eis.investors.WasAnyValueReceived(form)))
+    val errorResponse: Form[WasAnyValueReceivedModel] => Future[Result] = form => {
+      ControllerHelpers.getSavedBackLink(KeystoreKeys.backLinkWasAnyValueReceived, s4lConnector).flatMap(url =>
+      Future.successful(BadRequest(WasAnyValueReceived(form, url.get))))
+    }
 
     val successResponse: WasAnyValueReceivedModel => Future[Result] = model =>
       s4lConnector.saveFormData(KeystoreKeys.wasAnyValueReceived,
@@ -59,4 +76,5 @@ trait WasAnyValueReceivedController extends FrontendController with AuthorisedAn
       }
     wasAnyValueReceivedForm.bindFromRequest().fold(errorResponse, successResponse)
   }
+
 }

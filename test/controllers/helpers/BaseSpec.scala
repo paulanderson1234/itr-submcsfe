@@ -139,6 +139,9 @@ trait BaseSpec extends UnitSpec with OneAppPerSuite with MockitoSugar with FakeR
   val subsidiariesNinetyOwnedModelYes = SubsidiariesNinetyOwnedModel(Constants.StandardRadioButtonYesValue)
   val subsidiariesNinetyOwnedModelNo = SubsidiariesNinetyOwnedModel(Constants.StandardRadioButtonNoValue)
 
+  val anySharesRepaymentModelYes = AnySharesRepaymentModel(Constants.StandardRadioButtonYesValue)
+  val anySharesRepaymentModelNo = AnySharesRepaymentModel(Constants.StandardRadioButtonNoValue)
+
   val previousBeforeDOFCSModelYes = PreviousBeforeDOFCSModel(Constants.StandardRadioButtonYesValue)
   val previousBeforeDOFCSModelNo = PreviousBeforeDOFCSModel(Constants.StandardRadioButtonNoValue)
 
@@ -210,10 +213,16 @@ trait BaseSpec extends UnitSpec with OneAppPerSuite with MockitoSugar with FakeR
   val hadOtherInvestmentsModelYes = HadOtherInvestmentsModel(Constants.StandardRadioButtonYesValue)
   val hadOtherInvestmentsModelNo = HadOtherInvestmentsModel(Constants.StandardRadioButtonNoValue)
 
+  val thirtyDayRuleModelYes = ThirtyDayRuleModel(Constants.StandardRadioButtonYesValue)
+  val thirtyDayRuleModelNo = ThirtyDayRuleModel(Constants.StandardRadioButtonNoValue)
+
   val fileId = "1"
 
   val qualifyPrepareToTrade = QualifyBusinessActivityModel(Constants.qualifyPrepareToTrade)
   val qualifyResearchAndDevelopment = QualifyBusinessActivityModel(Constants.qualifyResearchAndDevelopment)
+
+  val repaymentTypeShares = SharesRepaymentTypeModel(Constants.repaymentTypeShares)
+  val repaymentTypeDebentures = SharesRepaymentTypeModel(Constants.repaymentTypeDebentures)
 
   val hasInvestmentTradeStartedYear = 2004
   val hasInvestmentTradeStartedMonth = 2

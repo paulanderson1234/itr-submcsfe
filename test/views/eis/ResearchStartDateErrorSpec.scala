@@ -34,14 +34,11 @@ class ResearchStartDateErrorSpec extends ViewSpec {
       document.body.getElementById("main-heading").text() shouldEqual Messages("page.companyDetails.ResearchStartDateError.heading")
       document.body.getElementById("error-description").text() shouldEqual Messages("page.companyDetails.ResearchStartDateError.description")
      
-      document.body.getElementById("incorrect-info").text() shouldEqual Messages("page.companyDetails.ResearchStartDateError.incorrect.info.start") + " " + Messages("page.companyDetails.ResearchStartDateError.link.changeAnswers") + " " + Messages("page.companyDetails.ResearchStartDateError.incorrect.info.end")
+      document.body.getElementById("incorrect-info").text() shouldEqual Messages("page.companyDetails.ResearchStartDateError.incorrect.info.start") + " " + Messages("common.changeAnswers.link") + " " + Messages("page.companyDetails.ResearchStartDateError.incorrect.info.end")
       document.body.getElementById("change-answers").attr("href") shouldEqual routes.ResearchStartDateController.show().url
       document.body.getElementById("back-link").attr("href") shouldEqual routes.ResearchStartDateController.show().url
-
       document.body.getElementById("return-dashboard").text() shouldEqual Messages("common.returnToDashboard")
       document.body.getElementById("return-dashboard").attr("href") shouldEqual controllers.routes.ApplicationHubController.show().url
-
-      
     }
   }
 }

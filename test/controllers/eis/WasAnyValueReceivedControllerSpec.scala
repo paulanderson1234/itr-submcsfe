@@ -37,12 +37,21 @@ class WasAnyValueReceivedControllerSpec extends BaseSpec with FakeRequestHelper 
   implicit val system = ActorSystem()
   implicit val materializer: Materializer = ActorMaterializer()
 
-  private def setupController(previousData: Option[WasAnyValueReceivedModel] = None) = {
+  val testUrl = "/test/test"
+  val testUrlOther = "/test/test/testanother"
+  val validModel = WasAnyValueReceivedModel(Constants.StandardRadioButtonYesValue, Some("text"))
+
+
+  private def setupController(previousData: Option[WasAnyValueReceivedModel] = None,  backUrl: Option[String] = None) = {
     mockEnrolledRequest(eisSchemeTypesModel)
 
     when(mockS4lConnector.fetchAndGetFormData[WasAnyValueReceivedModel](Matchers.eq(KeystoreKeys.wasAnyValueReceived))(Matchers.any(),
       Matchers.any(), Matchers.any()))
       .thenReturn(Future.successful(previousData))
+
+    when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.backLinkWasAnyValueReceived))
+      (Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(backUrl))
 
     when(mockS4lConnector.saveFormData(Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
       .thenReturn(Future.successful(mock[CacheMap]))
@@ -60,7 +69,7 @@ class WasAnyValueReceivedControllerSpec extends BaseSpec with FakeRequestHelper 
     "the show method is called" which {
 
       "has no previous data" should {
-        lazy val result = setupController().show(authorisedFakeRequest)
+        lazy val result = setupController(None, Some(testUrl)).show(authorisedFakeRequest)
 
         "return a status of 200" in {
           status(result) shouldBe 200
@@ -72,8 +81,7 @@ class WasAnyValueReceivedControllerSpec extends BaseSpec with FakeRequestHelper 
       }
 
       "has previously saved data" should {
-        lazy val result = setupController(Some(WasAnyValueReceivedModel(Constants.StandardRadioButtonYesValue,
-          Some("text")))).show(authorisedFakeRequest)
+        lazy val result = setupController(Some(validModel),Some(testUrl)).show(authorisedFakeRequest)
 
         "return a status of 200" in {
           status(result) shouldBe 200
@@ -83,12 +91,24 @@ class WasAnyValueReceivedControllerSpec extends BaseSpec with FakeRequestHelper 
           Jsoup.parse(bodyOf(result)).title() shouldBe Messages("page.investors.wasAnyValueReceived.title")
         }
       }
+
+      "has no backlink in storage" should {
+        lazy val result = setupController(Some(validModel), None).show(authorisedFakeRequest)
+
+        "return a status of 200" in {
+          status(result) shouldBe 303
+        }
+        "redirect to the share/loan capital pages" in {
+          redirectLocation(result) shouldBe Some(controllers.eis.routes.AnySharesRepaymentController.show().url)
+        }
+
+      }
     }
 
     "the submit method is called" which {
 
       "has an invalid form" should {
-        lazy val result = setupController().submit(authorisedFakeRequestToPOST(("wasAnyValueReceived", ""), ("descriptionTextArea", "")))
+        lazy val result = setupController(None, Some(testUrl)).submit(authorisedFakeRequestToPOST(("wasAnyValueReceived", ""), ("descriptionTextArea", "")))
 
         "return a status of 400" in {
           status(result) shouldBe 400
@@ -100,7 +120,7 @@ class WasAnyValueReceivedControllerSpec extends BaseSpec with FakeRequestHelper 
       }
 
       "has a valid form" should {
-        lazy val result = setupController().submit(authorisedFakeRequestToPOST(("wasAnyValueReceived",
+        lazy val result = setupController(None, Some(testUrl)).submit(authorisedFakeRequestToPOST(("wasAnyValueReceived",
           Constants.StandardRadioButtonNoValue), ("descriptionTextArea", "")))
 
         "return a status of 303" in {
