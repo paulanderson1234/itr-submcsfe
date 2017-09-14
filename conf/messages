@@ -1251,6 +1251,24 @@ page.investors.wasAnyValueReceived.additionalGuidance.list.three = when the inve
 page.investors.wasAnyValueReceived.additionalGuidance.list.four = how much it was worth
 page.investors.wasAnyValueReceived.additionalGuidance.list.five = whether you got anything in return
 
+# MarketDescription page
+page.MarketDescription.title=What''s the new product or geographical market that you got investment for?
+page.MarketDescription.heading=What''s the new product or geographical market that you got investment for?
+page.MarketDescription.question.hint=Suggested limit: 200 words
+
+page.MarketDescription.descriptionOne.text=Give as much detail as you can about why it''s new for your company. You should also include further information about this in your business plan.
+
+# ThirtyDayRule page
+page.ThirtyDayRule.title=Is the total amount raised in this Compliance Statement and from other relevant investments more than 50% of your average annual turnover?
+page.ThirtyDayRule.heading=Is the total amount raised in this Compliance Statement and from other relevant investments more than 50% of your average annual turnover?
+page.ThirtyDayRule.legend=Is the total amount raised in this Compliance Statement and from other relevant investments more than 50% of your average annual turnover?
+page.ThirtyDayRule.descriptionOne.text=Relevant investments must have been received within a 30 day period and include:
+page.ThirtyDayRule.help.bullet.one=investment from a Venture Capital Trust
+page.ThirtyDayRule.help.bullet.two=shares or investments that you''ve already submitted an EIS, SEIS or SITR Compliance Statement for
+
+# ThirtyDayRuleError page
+page.ThirtyDayRuleWarning.description=This is because the amount your company has raised is less than 50% of its average annual turnover.
+
 # WhoRepaidShares page
 page.WhoRepaidShares.title=Who was repaid for their shares or debentures or had them repurchased?
 page.WhoRepaidShares.heading=Who was repaid for their shares or debentures or had them repurchased?

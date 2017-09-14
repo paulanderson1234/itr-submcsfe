@@ -1,0 +1,42 @@
+@import models.MarketDescriptionModel
+@import common.Constants
+@import uk.gov.hmrc.play.views.html.helpers.form
+@import views.html.helpers.{errorSummary, backButtonWithProgress, textArea}
+
+@(marketDescriptionForm: Form[MarketDescriptionModel], backUrl: String)(implicit request: Request[_], messages: Messages)
+
+@main_template(Messages("page.MarketDescription.title")) {
+
+    @backButtonWithProgress(backUrl, Messages("common.section.progress.details.three"))
+
+    @errorSummary(marketDescriptionForm, "market-description", "descriptionTextArea")
+
+    <h1 class="heading-xlarge" id="main-heading">@Messages("page.MarketDescription.heading")</h1>
+
+    <div class="form-group">
+        <p id="description-one" class="lede">@Messages("page.MarketDescription.descriptionOne.text")</p>
+    </div>
+
+    @form(action = controllers.eis.routes.MarketDescriptionController.submit()) {
+        <fieldset>
+            <legend id="legendId" class="visuallyhidden">@Messages("page.MarketDescription.heading")</legend>
+            <span class = "form-hint" id="description-hint">@Messages("page.MarketDescription.question.hint")</span>
+            <div class="form-group">
+            @textArea(
+		        marketDescriptionForm("descriptionTextArea"),
+		        '_cols -> "50",
+		        '_rows -> "10",
+		        '_maxLength-> Constants.SuggestedTextMaxLength,
+		        '_label -> Messages("page.MarketDescription.heading"),
+		        '_labelTextClass-> "visuallyhidden"
+		        )
+            </div>
+        </fieldset>
+
+
+        <div class="form-group">
+            <button class="btn button" type="submit" id="next">@Messages("common.button.snc")</button>
+        </div>
+    }
+
+}

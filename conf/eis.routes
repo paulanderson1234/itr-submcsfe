@@ -241,6 +241,15 @@ POST      /amount-shares-repayment                controllers.eis.AmountSharesRe
 GET       /total-amount-raised                    controllers.eis.TotalAmountRaisedController.show
 POST      /total-amount-raised                    controllers.eis.TotalAmountRaisedController.submit
 
+GET       /market-description                        controllers.eis.MarketDescriptionController.show
+POST      /market-description                        controllers.eis.MarketDescriptionController.submit
+
+GET       /thirty-day-rule                        controllers.eis.ThirtyDayRuleController.show
+POST      /thirty-day-rule                        controllers.eis.ThirtyDayRuleController.submit
+
+GET       /thirty-day-rule-error                        controllers.eis.ThirtyDayRuleErrorController.show
+POST      /thirty-day-rule-error                        controllers.eis.ThirtyDayRuleErrorController.submit
+
 GET       /who-repaid-shares                      controllers.eis.WhoRepaidSharesController.show
 POST      /who-repaid-shares                      controllers.eis.WhoRepaidSharesController.submit
 
