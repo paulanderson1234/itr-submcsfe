@@ -28,7 +28,7 @@ import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
 import scala.concurrent.Future
 
-object GrossAssetsAfterIssueErrorController extends GrossAssetsErrorController
+object GrossAssetsAfterIssueErrorController extends GrossAssetsAfterIssueErrorController
 {
   override lazy val applicationConfig = FrontendAppConfig
   override lazy val authConnector = FrontendAuthConnector

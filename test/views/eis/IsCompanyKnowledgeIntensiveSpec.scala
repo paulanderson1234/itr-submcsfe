@@ -51,7 +51,7 @@ class IsCompanyKnowledgeIntensiveSpec extends ViewSpec {
       val result = TestController.show.apply(authorisedFakeRequest)
       Jsoup.parse(contentAsString(result))
     }
-    document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.CommercialSaleController.show().url
+    document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.GrossAssetsAfterIssueController.show().url
     document.title() shouldBe Messages("page.companyDetails.IsCompanyKnowledgeIntensive.title")
     document.getElementById("main-heading").text() shouldBe Messages("page.companyDetails.IsCompanyKnowledgeIntensive.heading")
     document.getElementById("description-ki").text() shouldBe Messages("page.companyDetails.IsCompanyKnowledgeIntensive.description.1")
@@ -76,7 +76,7 @@ class IsCompanyKnowledgeIntensiveSpec extends ViewSpec {
       val result = TestController.show.apply(authorisedFakeRequest)
       Jsoup.parse(contentAsString(result))
     }
-    document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.CommercialSaleController.show().url
+    document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.GrossAssetsAfterIssueController.show().url
     document.title() shouldBe Messages("page.companyDetails.IsCompanyKnowledgeIntensive.title")
     document.getElementById("main-heading").text() shouldBe Messages("page.companyDetails.IsCompanyKnowledgeIntensive.heading")
     document.getElementById("description-ki").text() shouldBe Messages("page.companyDetails.IsCompanyKnowledgeIntensive.description.1")

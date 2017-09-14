@@ -33,7 +33,7 @@ import views.html.eis.companyDetails.GrossAssetsAfterIssue
 
 import scala.concurrent.Future
 
-object GrossAssetsAfterIssueController extends GrossAssetsController {
+object GrossAssetsAfterIssueController extends GrossAssetsAfterIssueController {
   override lazy val s4lConnector = S4LConnector
   val submissionConnector: SubmissionConnector = SubmissionConnector
   override lazy val applicationConfig = FrontendAppConfig
@@ -47,7 +47,7 @@ trait GrossAssetsAfterIssueController extends FrontendController with Authorised
 
   val submissionConnector: SubmissionConnector
 
-  val show: Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user => implicit request =>
+  val show = AuthorisedAndEnrolled.async { implicit user => implicit request =>
 
     s4lConnector.fetchAndGetFormData[GrossAssetsAfterIssueModel](KeystoreKeys.grossAssetsAfterIssue).map {
       case Some(data) => Ok(GrossAssetsAfterIssue(grossAssetsAfterIssueForm.fill(data)))
