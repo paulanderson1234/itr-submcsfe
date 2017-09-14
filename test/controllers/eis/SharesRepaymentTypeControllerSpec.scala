@@ -99,7 +99,7 @@ class SharesRepaymentTypeControllerSpec extends BaseSpec {
       submitWithSessionAndAuth(TestController.submit,formInput)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(controllers.eis.routes.WasAnyValueReceivedController.show().url)
+          redirectLocation(result) shouldBe Some(controllers.eis.routes.DateSharesRepaidController.show().url)
         }
       )
     }
