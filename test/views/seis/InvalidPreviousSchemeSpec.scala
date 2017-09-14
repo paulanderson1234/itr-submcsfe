@@ -33,7 +33,7 @@ class InvalidPreviousSchemeSpec extends ViewSpec with FakeRequestHelper {
     lazy val document: Document = Jsoup.parse(view.body)
 
     "contain the correct title" in {
-      document.title shouldBe Messages("page.previousInvestment.InvalidPreviousScheme.title")
+      document.title shouldBe Messages("common.error.soft.title")
     }
 
     "contain a back link" which {
@@ -49,7 +49,7 @@ class InvalidPreviousSchemeSpec extends ViewSpec with FakeRequestHelper {
     }
 
     "contain the correct heading" in {
-      document.select("h1").text() shouldBe Messages("page.previousInvestment.InvalidPreviousScheme.heading")
+      document.select("h1").text() shouldBe Messages("common.error.soft.heading")
     }
 
     "contain a description of the error" in {
@@ -57,18 +57,18 @@ class InvalidPreviousSchemeSpec extends ViewSpec with FakeRequestHelper {
     }
 
     "contain the correct secondary heading" in {
-      document.select("h2").text().trim shouldBe Messages("page.previousInvestment.InvalidPreviousScheme.secondaryHeading")
+      document.select("h2").text().trim shouldBe Messages("common.error.soft.secondaryHeading")
     }
 
     "contains the correct what next information" in {
-      document.select("article div p").get(1).text() shouldBe Messages("page.previousInvestment.InvalidPreviousScheme.whatNext")
+      document.select("article div p").get(1).text() shouldBe Messages("common.error.soft.whatNext.compliance")
     }
 
     "contain a change link" which {
       lazy val changeLink = document.select("article div p").get(2)
 
       "has the correct sentence" in {
-        changeLink.text() shouldBe Messages("common.changeAnswers.text") +
+        changeLink.text() shouldBe Messages("common.changeAnswers.incorrect.text") +
           " " + Messages("common.changeAnswers.link") + "."
       }
 

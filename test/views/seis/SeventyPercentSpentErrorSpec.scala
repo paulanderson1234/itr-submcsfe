@@ -44,8 +44,8 @@ class SeventyPercentSpentErrorSpec extends ViewSpec {
       document.title shouldEqual Messages("page.companyDetails.SeventyPercentError.title")
       document.body.getElementById("main-heading").text() shouldEqual Messages("page.companyDetails.SeventyPercentError.heading")
       document.body.getElementById("error-reason").text() shouldEqual Messages("page.companyDetails.SeventyPercentError.reason")
-      document.body.getElementById("incorrect-info").text() shouldEqual Messages("page.companyDetails.SeventyPercentError.incorrect.info") +
-        " " + Messages("page.companyDetails.SeventyPercentError.change.link.changeAnswers") + "."
+      document.body.getElementById("incorrect-info").text() shouldEqual Messages("common.changeAnswers.incorrect.text") +
+        " " + Messages("common.changeAnswers.link") + "."
       document.body.getElementById("change-answers").attr("href") shouldEqual controllers.seis.routes.SeventyPercentSpentController.show().url
       document.body.getElementById("back-link").attr("href") shouldEqual controllers.seis.routes.SeventyPercentSpentController.show().url
 

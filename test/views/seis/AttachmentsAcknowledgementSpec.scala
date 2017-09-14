@@ -42,7 +42,7 @@ class AttachmentsAcknowledgementSpec extends ViewSpec {
       document.body.getElementById("ref-number").text() shouldBe submissionResponse.formBundleNumber
 
       //what happens next
-      document.body.getElementById("what-happens-next").text() shouldBe Messages("page.checkAndSubmit.eis.attachments.acknowledgement.what.happens.next.heading")
+      document.body.getElementById("what-happens-next").text() shouldBe Messages("common.error.soft.secondaryHeading")
       document.body.getElementById("happens-next").text() shouldBe Messages("page.checkAndSubmit.eis.attachments.acknowledgement.happens.next")
 
       //get help
