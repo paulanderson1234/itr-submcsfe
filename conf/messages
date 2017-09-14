@@ -45,6 +45,7 @@ common.changeAnswers.link=change your answers
 common.error.soft.heading=You don''t appear to qualify for this scheme
 common.error.soft.secondaryHeading=What happens next
 common.error.soft.whatNext=You can continue with your application if you think that you should qualify.
+common.returnToDashboard=Return to dashboard
 
 ## Common date Messages ##
 common.date.fields.day=Day
@@ -1218,4 +1219,21 @@ page.investors.wasAnyValueReceived.additionalGuidance.list.two = what it was
 page.investors.wasAnyValueReceived.additionalGuidance.list.three = when the investor received it
 page.investors.wasAnyValueReceived.additionalGuidance.list.four = how much it was worth
 page.investors.wasAnyValueReceived.additionalGuidance.list.five = whether you got anything in return
+
+# Has Trade Started Error Page
+page.companyDetails.HasTradeStartedError.title=You can''t submit a Compliance Statement yet
+page.companyDetails.HasTradeStartedError.heading=You can''t submit a Compliance Statement yet
+page.companyDetails.HasTradeStartedError.description=You can submit once your company has been doing the business activity for at least 4 months.
+page.companyDetails.HasTradeStartedError.incorrect.info.start=You can
+page.companyDetails.HasTradeStartedError.link.changeAnswers=change your answers
+page.companyDetails.HasTradeStartedError.incorrect.info.end=or submit a Compliance Statement when your company meets this condition.
+
+# Research Start Date Error Page
+page.companyDetails.ResearchStartDateError.title=You can''t submit a Compliance Statement yet
+page.companyDetails.ResearchStartDateError.heading=You can''t submit a Compliance Statement yet
+page.companyDetails.ResearchStartDateError.description=You can submit once your company has been doing the business activity for at least 4 months.
+page.companyDetails.ResearchStartDateError.incorrect.info.start=You can
+page.companyDetails.ResearchStartDateError.link.changeAnswers=change your answers
+page.companyDetails.ResearchStartDateError.incorrect.info.end=or submit a Compliance Statement when your company meets this condition.
+
 

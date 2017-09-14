@@ -228,3 +228,7 @@ POST       /share-description                     controllers.eis.ShareDescripti
 
 GET       /total-amount-raised                    controllers.eis.TotalAmountRaisedController.show
 POST      /total-amount-raised                    controllers.eis.TotalAmountRaisedController.submit
+
+GET       /has-investment-trade-started-error     controllers.eis.HasInvestmentTradeStartedErrorController.show
+
+GET       /research-start-date-error              controllers.eis.ResearchStartDateErrorController.show
