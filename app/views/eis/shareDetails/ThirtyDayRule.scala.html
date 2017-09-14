@@ -7,7 +7,7 @@
 
 @main_template(Messages("page.ThirtyDayRule.title")) {
 
-    @backButtonWithProgress(controllers.eis.routes.ThirtyDayRuleController.show().url, Messages("common.section.progress.details.three"))
+    @backButtonWithProgress(controllers.eis.routes.TurnoverCostsController.show().url, Messages("common.section.progress.details.three"))
 
     @errorSummary(thirtyDayRuleForm, "thirty-day-rule", "thirtyDayRule")
     <h1 class="heading-xlarge" id="main-heading">@Messages("page.ThirtyDayRule.heading")</h1>

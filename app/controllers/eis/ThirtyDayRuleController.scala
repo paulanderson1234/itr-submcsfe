@@ -26,7 +26,6 @@ import uk.gov.hmrc.play.frontend.controller.FrontendController
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
 import views.html.eis.shareDetails.ThirtyDayRule
-import views.html.eis.shareDetails.ThirtyDayRuleError
 import scala.concurrent.Future
 
 
@@ -55,7 +54,7 @@ trait ThirtyDayRuleController extends FrontendController with AuthorisedAndEnrol
         Future.successful(BadRequest(ThirtyDayRule(formWithErrors)))
       },
       validFormData => {
-        // srt backlink to here regardless of whether an error
+        // set backlink to here regardless of whether an error
         s4lConnector.saveFormData(KeystoreKeys.backLinkMarketDescription, routes.ThirtyDayRuleController.show().url)
         s4lConnector.saveFormData(KeystoreKeys.thirtyDayRule, validFormData)
         validFormData.thirtyDayRule match {
