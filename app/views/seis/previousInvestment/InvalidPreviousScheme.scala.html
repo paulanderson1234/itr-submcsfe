@@ -5,22 +5,22 @@
 
 @import config.FrontendAppConfig
 
-@main_template(title = Messages("page.previousInvestment.InvalidPreviousScheme.title"), bodyClasses = None) {
+@main_template(title = Messages("common.error.soft.title"), bodyClasses = None) {
 
 @backButton(controllers.seis.routes.ReviewPreviousSchemesController.change(schemeId).url)
 
 <div class="grid-row">
     <div class="column-two-thirds">
-        <h1 class="form-title heading-xlarge" id="main-heading" >@Messages("page.previousInvestment.InvalidPreviousScheme.heading")</h1>
+        <h1 class="form-title heading-xlarge" id="main-heading" >@Messages("common.error.soft.heading")</h1>
 
         <div class="form-group">
             <p id="invalid-scheme-reason">@Messages("page.previousInvestment.InvalidPreviousScheme.reason")</p>
         </div>
 
-        <h2 class="heading-medium">@Messages("page.previousInvestment.InvalidPreviousScheme.secondaryHeading")</h2>
+        <h2 class="heading-medium">@Messages("common.error.soft.secondaryHeading")</h2>
 
         <div class="form-group">
-            <p>@Messages("page.previousInvestment.InvalidPreviousScheme.whatNext")</p>
+            <p>@Messages("common.error.soft.whatNext.compliance")</p>
         </div>
 
         @form(action = controllers.seis.routes.InvalidPreviousSchemeController.submit()) {
@@ -31,7 +31,7 @@
 
         <div class="form-group">
             <p>
-                @Messages("common.changeAnswers.text")
+                @Messages("common.changeAnswers.incorrect.text")
                 <a id="change-answers-link" class="link"
                   href="@controllers.seis.routes.ReviewPreviousSchemesController.change(schemeId).url">@Messages("common.changeAnswers.link")</a>.
             </p>

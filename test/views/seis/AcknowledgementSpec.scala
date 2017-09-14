@@ -56,7 +56,7 @@ class AcknowledgementSpec extends ViewSpec {
       lazy val section = document.select("div.column-two-thirds > div.form-group").get(1)
 
       "has the correct subheading" in {
-        section.select("h2").text() shouldBe Messages("page.seis.checkAndSubmit.acknowledgement.whatNext.heading")
+        section.select("h2").text() shouldBe Messages("common.error.soft.secondaryHeading")
       }
 
       "has a list heading" in {
