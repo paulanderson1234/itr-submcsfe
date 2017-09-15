@@ -31,14 +31,14 @@ class GrossAssetsErrorSpec extends ViewSpec {
       val page = GrossAssetsError()(fakeRequest, applicationMessages)
       val document = Jsoup.parse(page.body)
 
-      document.title shouldEqual Messages("page.companyDetails.grossAssetsError.title")
-      document.body.getElementById("main-heading").text() shouldEqual Messages("page.companyDetails.grossAssetsError.heading")
+      document.title shouldEqual Messages("common.error.soft.title")
+      document.body.getElementById("main-heading").text() shouldEqual Messages("common.error.soft.title")
       document.body.getElementById("error-description").text() shouldEqual Messages("page.companyDetails.grossAssetsError.description.eis")
-      document.body.getElementById("what-next-heading").text() shouldEqual Messages("page.companyDetails.grossAssetsError.whatNext.heading")
-      document.body.getElementById("continue-text").text() shouldEqual Messages("page.companyDetails.grossAssetsError.whatNext.continue")
+      document.body.getElementById("what-next-heading").text() shouldEqual Messages("common.error.soft.secondaryHeading")
+      document.body.getElementById("continue-text").text() shouldEqual Messages("common.error.soft.whatNext.compliance")
 
-      document.body.getElementById("incorrect-info").text() shouldEqual Messages("page.companyDetails.grossAssetsError.incorrect.info") +
-        " " + Messages("page.companyDetails.grossAssetsError.link.changeAnswers") + "."
+      document.body.getElementById("incorrect-info").text() shouldEqual Messages("common.changeAnswers.incorrect.text") +
+        " " + Messages("common.changeAnswers.link") + "."
       document.body.getElementById("change-answers").attr("href") shouldEqual routes.GrossAssetsController.show().url
       document.body.getElementById("back-link").attr("href") shouldEqual routes.GrossAssetsController.show().url
       document.getElementById("next").text() shouldBe Messages("common.button.continue")
