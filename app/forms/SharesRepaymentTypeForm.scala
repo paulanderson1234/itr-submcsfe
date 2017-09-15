@@ -16,7 +16,7 @@
 
 package forms
 
-import models.SharesRepaymentTypeModel
+import models.repayments.SharesRepaymentTypeModel
 import play.api.data.Form
 import play.api.data.Forms._
 

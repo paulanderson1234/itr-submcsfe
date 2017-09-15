@@ -21,11 +21,12 @@ import common.KeystoreKeys
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import forms.AmountSharesRepaymentForm._
-import models.AmountSharesRepaymentModel
+import models.repayments.AmountSharesRepaymentModel
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
 import views.html.eis.investors.AmountSharesRepayment
+
 import scala.concurrent.Future
 import play.api.mvc.{Action, AnyContent, Result}
 import play.api.data.Form

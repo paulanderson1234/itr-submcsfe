@@ -16,7 +16,6 @@
 
 package views.eis
 
-import models.SharesRepaymentTypeModel
 import org.jsoup.Jsoup
 import play.api.data.Form
 import play.api.i18n.Messages
@@ -24,6 +23,7 @@ import views.helpers.ViewSpec
 import play.api.i18n.Messages.Implicits._
 import views.html.eis.investors.SharesRepaymentType
 import forms.SharesRepaymentTypeForm._
+import models.repayments.SharesRepaymentTypeModel
 
 class SharesRepaymentTypeSpec extends ViewSpec {
 

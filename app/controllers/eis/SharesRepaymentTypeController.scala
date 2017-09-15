@@ -21,7 +21,7 @@ import common.{Constants, KeystoreKeys}
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import forms.SharesRepaymentTypeForm
-import models.SharesRepaymentTypeModel
+import models.repayments.SharesRepaymentTypeModel
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current

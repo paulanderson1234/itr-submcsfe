@@ -17,13 +17,13 @@
 package views.eis
 
 import forms.AmountSharesRepaymentForm._
-import models.AmountSharesRepaymentModel
 import org.jsoup.Jsoup
 import play.api.data.Form
 import play.api.i18n.Messages
 import views.helpers.ViewSpec
 import play.api.i18n.Messages.Implicits._
 import controllers.eis.routes
+import models.repayments.AmountSharesRepaymentModel
 import utils.Validation.financialMaxAmountLength
 import views.html.eis.investors.AmountSharesRepayment
 

@@ -21,7 +21,7 @@ import common.{Constants, KeystoreKeys}
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
-import models.SharesRepaymentTypeModel
+import models.repayments.SharesRepaymentTypeModel
 import org.mockito.Matchers
 import org.mockito.Mockito._
 import play.api.test.Helpers._

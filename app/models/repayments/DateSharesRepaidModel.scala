@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package models
+package models.repayments
 
 import play.api.libs.json.Json
 import utils.DateFormatter

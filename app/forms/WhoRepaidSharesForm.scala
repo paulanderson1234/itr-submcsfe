@@ -17,7 +17,7 @@
 package forms
 
 import common.Constants
-import models.WhoRepaidSharesModel
+import models.repayments.WhoRepaidSharesModel
 import play.api.data.Form
 import play.api.data.Forms._
 

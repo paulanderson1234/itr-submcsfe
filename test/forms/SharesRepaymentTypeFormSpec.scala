@@ -17,7 +17,7 @@
 package forms
 
 import common.Constants
-import models.SharesRepaymentTypeModel
+import models.repayments.SharesRepaymentTypeModel
 import org.scalatestplus.play.OneAppPerSuite
 import play.api.data.FormError
 import play.api.i18n.Messages

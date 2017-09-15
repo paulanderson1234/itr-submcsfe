@@ -17,13 +17,13 @@
 package views.eis
 
 import forms.WhoRepaidSharesForm._
-import models.WhoRepaidSharesModel
 import org.jsoup.Jsoup
 import play.api.data.Form
 import play.api.i18n.Messages
 import views.helpers.ViewSpec
 import play.api.i18n.Messages.Implicits._
 import controllers.eis.routes
+import models.repayments.WhoRepaidSharesModel
 import views.html.eis.investors.WhoRepaidShares
 
 class WhoRepaidSharesSpec extends ViewSpec {

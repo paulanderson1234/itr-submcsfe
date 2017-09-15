@@ -22,10 +22,12 @@ import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
 import models._
+import models.repayments.AmountSharesRepaymentModel
 import org.mockito.Matchers
 import org.mockito.Mockito._
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.cache.client.CacheMap
+
 import scala.concurrent.Future
 
 class AmountSharesRepaymentControllerSpec extends BaseSpec {

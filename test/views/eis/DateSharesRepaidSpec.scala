@@ -19,7 +19,7 @@ package views.eis
 import auth.{MockAuthConnector, MockConfigEISFlow}
 import common.KeystoreKeys
 import controllers.eis.{DateSharesRepaidController, routes}
-import models.DateSharesRepaidModel
+import models.repayments.DateSharesRepaidModel
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.mockito.Matchers
@@ -28,6 +28,7 @@ import play.api.i18n.Messages
 import play.api.i18n.Messages.Implicits._
 import play.api.test.Helpers._
 import views.helpers.ViewSpec
+
 import scala.concurrent.Future
 
 class DateSharesRepaidSpec extends ViewSpec {
