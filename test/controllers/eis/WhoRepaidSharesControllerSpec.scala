@@ -32,8 +32,6 @@ import scala.concurrent.Future
 
 class WhoRepaidSharesControllerSpec extends BaseSpec {
 
-  val whoRepaidSharesModel = WhoRepaidSharesModel("bill", "smith")
-
   object TestController extends WhoRepaidSharesController {
     override lazy val applicationConfig = MockConfig
     override lazy val authConnector = MockAuthConnector

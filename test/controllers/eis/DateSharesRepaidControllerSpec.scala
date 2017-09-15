@@ -32,13 +32,6 @@ import scala.concurrent.Future
 
 class DateSharesRepaidControllerSpec extends BaseSpec {
 
-  //TODO: Move test data below to BaseSpec
-  val dateSharesRepaidYear = 2004
-  val dateSharesRepaidMonth = 2
-  val dateSharesRepaidDay = 29
-  val dateSharesRepaidModel = DateSharesRepaidModel(Some(dateSharesRepaidDay), Some(dateSharesRepaidMonth), Some(dateSharesRepaidYear))
-  val dateSharesRepaidEmpty = DateSharesRepaidModel(None, None, None)
-
   object TestController extends DateSharesRepaidController {
     override lazy val applicationConfig = MockConfig
     override lazy val authConnector = MockAuthConnector

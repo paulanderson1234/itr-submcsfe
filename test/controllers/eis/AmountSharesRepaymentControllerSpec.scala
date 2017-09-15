@@ -32,8 +32,6 @@ import scala.concurrent.Future
 
 class AmountSharesRepaymentControllerSpec extends BaseSpec {
 
-  val amountSharesRepaymentModel = AmountSharesRepaymentModel(1)
-
   object TestController extends AmountSharesRepaymentController {
     override lazy val applicationConfig = MockConfig
     override lazy val authConnector = MockAuthConnector
@@ -60,7 +58,7 @@ class AmountSharesRepaymentControllerSpec extends BaseSpec {
     }
     "use the correct enrolment connector" in {
       AmountSharesRepaymentController.enrolmentConnector shouldBe EnrolmentConnector
-    }   
+    }
     "use the correct application config" in {
       AmountSharesRepaymentController.applicationConfig shouldBe FrontendAppConfig
     }

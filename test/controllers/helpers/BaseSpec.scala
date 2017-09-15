@@ -16,15 +16,13 @@
 
 package controllers.helpers
 
-import akka.actor.ActorSystem
-import akka.stream.{ActorMaterializer, Materializer}
 import auth.{Enrolment, Identifier}
 import common.{Constants, KeystoreKeys}
 import connectors.{EnrolmentConnector, S4LConnector, SubmissionConnector}
 import fixtures.SubmissionFixture
-import models.submission.SchemeTypesModel
 import models.investorDetails._
-import models.repayments.{AnySharesRepaymentModel, SharesRepaymentTypeModel}
+import models.repayments.{AmountSharesRepaymentModel, _}
+import models.submission.SchemeTypesModel
 import models.{UsedInvestmentReasonBeforeModel, YourCompanyNeedModel, _}
 import org.mockito.Matchers
 import org.mockito.Mockito._
@@ -34,8 +32,8 @@ import org.scalatestplus.play.OneAppPerSuite
 import play.api.libs.json.Json
 import services.{FileUploadService, RegistrationDetailsService, SubscriptionService}
 import uk.gov.hmrc.http.cache.client.CacheMap
-import uk.gov.hmrc.play.test.UnitSpec
 import uk.gov.hmrc.play.http.HeaderCarrier
+import uk.gov.hmrc.play.test.UnitSpec
 
 import scala.concurrent.Future
 
@@ -394,4 +392,13 @@ trait BaseSpec extends UnitSpec with OneAppPerSuite with MockitoSugar with FakeR
   val investor5 = InvestorDetailsModel(processingId = Some(5), investorOrNomineeModel = Some(investorNominee5))
 
   val investorListForDeleteTests = Vector(investor1, investor2, investor3, investor4, investor5)
+
+  val whoRepaidSharesModel = WhoRepaidSharesModel("bill", "smith")
+
+  val dateSharesRepaidYear = 2004
+  val dateSharesRepaidMonth = 2
+  val dateSharesRepaidDay = 29
+  val dateSharesRepaidModel = DateSharesRepaidModel(Some(dateSharesRepaidDay), Some(dateSharesRepaidMonth), Some(dateSharesRepaidYear))
+  val dateSharesRepaidEmpty = DateSharesRepaidModel(None, None, None)
+  val amountSharesRepaymentModel = AmountSharesRepaymentModel(13)
 }
