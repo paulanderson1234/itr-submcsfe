@@ -23,7 +23,7 @@ import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector, SubmissionConnector}
 import controllers.Helpers.ControllerHelpers
 import forms.ShareIssueDateForm._
-import models.{ShareIssueDateModel, TradeStartDateModel}
+import models.{HasInvestmentTradeStartedModel, ShareIssueDateModel, TradeStartDateModel}
 import play.api.Logger
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import views.html.eis.companyDetails.ShareIssueDate
@@ -57,10 +57,12 @@ trait ShareIssueDateController extends FrontendController with AuthorisedAndEnro
 
   val submit = AuthorisedAndEnrolled.async { implicit user => implicit request =>
 
-    def routeRequest(tradeStartDate: TradeStartDateModel, shareIssueDate: ShareIssueDateModel) = {
+    def routeRequest(hasInvestmentTradeStartedModel: HasInvestmentTradeStartedModel, shareIssueDate: ShareIssueDateModel) = {
 
-      submissionConnector.validateSubmissionPeriod(tradeStartDate.tradeStartDay.get, tradeStartDate.tradeStartMonth.get, tradeStartDate.tradeStartYear.get,
-        shareIssueDate.day.get, shareIssueDate.month.get, shareIssueDate.year.get) map {
+      submissionConnector.validateSubmissionPeriod(hasInvestmentTradeStartedModel.hasInvestmentTradeStartedDay.get,
+                                                   hasInvestmentTradeStartedModel.hasInvestmentTradeStartedMonth.get,
+                                                   hasInvestmentTradeStartedModel.hasInvestmentTradeStartedYear.get,
+                                                   shareIssueDate.day.get, shareIssueDate.month.get, shareIssueDate.year.get) map {
         case canProceed => if (canProceed) Redirect(routes.GrossAssetsController.show())
         else Redirect(routes.ShareIssueDateErrorController.show())
       }
@@ -75,9 +77,8 @@ trait ShareIssueDateController extends FrontendController with AuthorisedAndEnro
       validFormData => {
         s4lConnector.saveFormData(KeystoreKeys.shareIssueDate, validFormData)
 
-        s4lConnector.fetchAndGetFormData[TradeStartDateModel](KeystoreKeys.tradeStartDate) flatMap {
-          case Some(data) => if(data.hasTradeStartDate == Constants.StandardRadioButtonYesValue)
-                                routeRequest(data, validFormData)
+        s4lConnector.fetchAndGetFormData[HasInvestmentTradeStartedModel](KeystoreKeys.hasInvestmentTradeStarted) flatMap {
+          case Some(data) => if(data.hasDate) routeRequest(data, validFormData)
                              else Future.successful(Redirect(routes.HasInvestmentTradeStartedController.show()))
           case None => Future.successful(Redirect(routes.HasInvestmentTradeStartedController.show()))
         }
