@@ -63,7 +63,7 @@ class TradingForTooLongSpec extends ViewSpec with FakeRequestHelper {
       lazy val changeLink = document.select("article div p").get(1)
 
       "has the correct sentence" in {
-        changeLink.text() shouldBe Messages("common.changeAnswers.text") +
+        changeLink.text() shouldBe Messages("common.changeAnswers.incorrect.text") +
           " " + Messages("common.changeAnswers.link") + "."
       }
 
@@ -81,7 +81,7 @@ class TradingForTooLongSpec extends ViewSpec with FakeRequestHelper {
     }
 
     "contains the correct what next information" in {
-      document.select("article div p").get(2).text() shouldBe Messages("common.error.soft.whatNext")
+      document.select("article div p").get(2).text() shouldBe Messages("common.error.soft.whatNext.compliance")
     }
 
 

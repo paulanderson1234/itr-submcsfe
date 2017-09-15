@@ -32,7 +32,7 @@ class GrossAssetsErrorSpec extends ViewSpec {
       val document = Jsoup.parse(page.body)
 
       document.title shouldEqual Messages("common.error.soft.title")
-      document.body.getElementById("main-heading").text() shouldEqual Messages("common.error.soft.title")
+      document.body.getElementById("main-heading").text() shouldEqual Messages("common.error.soft.heading")
       document.body.getElementById("error-description").text() shouldEqual Messages("page.companyDetails.grossAssetsError.description.eis")
       document.body.getElementById("what-next-heading").text() shouldEqual Messages("common.error.soft.secondaryHeading")
       document.body.getElementById("continue-text").text() shouldEqual Messages("common.error.soft.whatNext.compliance")
