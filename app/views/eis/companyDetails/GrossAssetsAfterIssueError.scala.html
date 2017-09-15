@@ -3,7 +3,7 @@
 
 @()(implicit request: Request[_], messages: Messages)
 
-@main_template(title = Messages("page.companyDetails.grossAssetsError.title"), bodyClasses = None) {
+@main_template(title = Messages("common.error.soft.title"), bodyClasses = None) {
 
 @backButton(controllers.eis.routes.GrossAssetsAfterIssueController.show().url)
 
@@ -11,7 +11,7 @@
     <div class="column-two-thirds">
         <div id="main">
             <h1 class="form-title heading-xlarge" id="main-heading">
-                @Messages("common.error.soft.title")</h1>
+                @Messages("common.error.soft.heading")</h1>
         </div>
 
         <div class="form-group">
