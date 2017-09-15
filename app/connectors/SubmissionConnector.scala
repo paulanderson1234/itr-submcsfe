@@ -54,12 +54,12 @@ trait SubmissionConnector {
       s"$hasPercentageWithMasters/has-ten-year-plan/$hasTenYearPlan")
   }
 
-  def checkLifetimeAllowanceExceeded(hadPrevRFI: Boolean, isKi: Boolean, previousInvestmentSchemesTotal: Int,
-                                     proposedAmount: Int)
+  def checkLifetimeAllowanceExceeded(hadPrevRFI: Boolean, isKi: Boolean, previousInvestmentSchemesTotal: BigInt,
+                                     totalAmountRaised: BigInt)
                                     (implicit hc: HeaderCarrier): Future[Option[Boolean]] = {
 
     http.GET[Option[Boolean]](s"$serviceUrl/investment-tax-relief/lifetime-allowance/lifetime-allowance-checker/had-previous-rfi/" +
-      s"$hadPrevRFI/is-knowledge-intensive/$isKi/previous-schemes-total/$previousInvestmentSchemesTotal/proposed-amount/$proposedAmount")
+      s"$hadPrevRFI/is-knowledge-intensive/$isKi/previous-schemes-total/$previousInvestmentSchemesTotal/proposed-amount/$totalAmountRaised")
 
   }
 
