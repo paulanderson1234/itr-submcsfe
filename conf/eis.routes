@@ -241,6 +241,10 @@ POST      /amount-shares-repayment                controllers.eis.AmountSharesRe
 GET       /total-amount-raised                    controllers.eis.TotalAmountRaisedController.show
 POST      /total-amount-raised                    controllers.eis.TotalAmountRaisedController.submit
 
+GET       /has-investment-trade-started-error     controllers.eis.HasInvestmentTradeStartedErrorController.show
+
+GET       /research-start-date-error              controllers.eis.ResearchStartDateErrorController.show
+
 GET       /market-description                        controllers.eis.MarketDescriptionController.show
 POST      /market-description                        controllers.eis.MarketDescriptionController.submit
 

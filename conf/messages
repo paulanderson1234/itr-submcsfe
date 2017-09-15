@@ -45,6 +45,12 @@ common.error.soft.heading=You don''t appear to qualify for this scheme
 common.error.soft.title=You don''t appear to qualify for this scheme
 common.error.soft.secondaryHeading=What happens next
 common.error.soft.whatNext.compliance=You can continue with your Compliance Statement if you think that you should qualify.
+common.error.hard.title=You can''t submit a Compliance Statement yet
+common.error.hard.heading=You can''t submit a Compliance Statement yet
+common.error.hard.description=You can submit once your company has been doing the business activity for at least 4 months.
+common.error.hard.incorrect.info.start=You can
+common.error.hard.incorrect.info.end=or submit a Compliance Statement when your company meets this condition.
+common.returnToDashboard=Return to dashboard
 common.page.forename.label=First Name
 common.page.surname.label=Last Name
 
@@ -676,7 +682,7 @@ page.checkAndSubmit.acknowledgement.courseOfAction=Once we''ve received your sup
 page.checkAndSubmit.acknowledgement.button.confirm=Finish
 
 
-#lifetime allowance exceeded page - REMOCE THIS SECTION WHEN PROPOSED INVESTERMENT GONE AND old errro page removed
+#lifetime allowance exceeded page - REMOVE THIS SECTION WHEN PROPOSED INVESTMENT GONE AND OLD ERROR PAGE REMOVED
 ##=======================================================================================
 page.investment.LifetimeAllowanceExceeded.title=You don''t qualify for the scheme
 page.investment.LifetimeAllowanceExceeded.heading=You don''t qualify for the scheme
