@@ -22,7 +22,7 @@ import connectors.{EnrolmentConnector, S4LConnector}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
-
+import views.html.eis.companyDetails.ShareIssueDateError
 import scala.concurrent.Future
 
 
@@ -39,7 +39,7 @@ trait ShareIssueDateErrorController extends FrontendController with AuthorisedAn
   override val acceptedFlows = Seq(Seq(EIS))
 
   val show = AuthorisedAndEnrolled.async {implicit user => implicit request =>
-    Future.successful(Ok(views.html.eis.companyDetails.ShareIssueDateError()))
+    Future.successful(Ok(ShareIssueDateError()))
   }
 
 }

@@ -16,41 +16,29 @@
 
 package views.eis
 
-import auth.{MockAuthConnector, MockConfigEISFlow}
-import config.FrontendAppConfig
-import controllers.eis.ShareIssueDateErrorController
+import controllers.eis.routes
 import org.jsoup.Jsoup
-import org.jsoup.nodes.Document
 import play.api.i18n.Messages
 import play.api.i18n.Messages.Implicits._
-import play.api.test.Helpers._
 import views.helpers.ViewSpec
+import views.html.eis.companyDetails.ShareIssueDateError
 
 class ShareIssueDateErrorSpec extends ViewSpec {
 
-  object TestController extends ShareIssueDateErrorController {
-    override lazy val applicationConfig = MockConfigEISFlow
-    override lazy val authConnector = MockAuthConnector
-    override lazy val enrolmentConnector = mockEnrolmentConnector
-    override lazy val s4lConnector = mockS4lConnector
-  }
+  "The ShareIssueDateErrorSpec page" should {
+    "contain the expected elements" in {
+      val page = ShareIssueDateError()(fakeRequest, applicationMessages)
+      val document = Jsoup.parse(page.body)
 
-  "The share issue date error page" should {
+      document.title shouldEqual Messages("common.error.hard.title")
+      document.body.getElementById("main-heading").text() shouldEqual Messages("common.error.hard.heading")
+      document.body.getElementById("error-description").text() shouldEqual Messages("common.error.hard.description")
 
-    "Verify that start page contains the correct elements" in new Setup {
-      val document: Document = {
-        val result = TestController.show.apply(authorisedFakeRequest)
-        Jsoup.parse(contentAsString(result))
-      }
-      document.title shouldEqual Messages("page.investment.TradingForTooLong.title")
-      document.body.getElementById("main-heading").text() shouldEqual Messages("page.investment.TradingForTooLong.heading")
-      document.body.getElementById("invalid-share-issue-date-reason").text() shouldEqual Messages("page.investment.TradingForTooLong.reason")
-      document.body.getElementById("trading-too-long").text() shouldEqual Messages("page.investment.TradingForTooLong.bullet.one")
-      document.body.getElementById("not-new-business").text() shouldEqual Messages("page.investment.TradingForTooLong.bullet.two")
-      document.body.getElementById("link-text-one").attr("href") shouldEqual "https://www.gov.uk/hmrc-internal-manuals/venture-capital-schemes-manual/8154"
-      document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.NewProductController.show().url
-
+      document.body.getElementById("incorrect-info").text() shouldEqual Messages("common.error.hard.incorrect.info.start") + " " + Messages("common.changeAnswers.link") + " " + Messages("common.error.hard.incorrect.info.end")
+      document.body.getElementById("change-answers").attr("href") shouldEqual routes.ShareIssueDateController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual routes.ShareIssueDateController.show().url
+      document.body.getElementById("return-dashboard").text() shouldEqual Messages("common.returnToDashboard")
+      document.body.getElementById("return-dashboard").attr("href") shouldEqual controllers.routes.ApplicationHubController.show().url
     }
   }
-
 }

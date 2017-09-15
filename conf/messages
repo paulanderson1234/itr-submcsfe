@@ -1116,6 +1116,7 @@ page.investors.isExistingShareHolder.legend = Did this {0} already own shares in
 #Investor Share Issue Date
 page.investors.investorShareIssueDate.title = When were these previous shares issued?
 page.investors.investorShareIssueDate.heading = When were these previous shares issued?
+page.investors.investorShareIssueDate.legend = When were these previous shares issued?
 validation.error.InvestorShareIssueDate.Future = Investor previous shares issued date cannot be a future date
 
 #Number of shares purchased

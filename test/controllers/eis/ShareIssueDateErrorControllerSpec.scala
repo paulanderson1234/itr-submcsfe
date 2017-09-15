@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 package controllers.eis
 
 import auth.{MockAuthConnector, MockConfig}
@@ -42,7 +41,7 @@ class ShareIssueDateErrorControllerSpec extends BaseSpec{
   }
 
   "Sending a GET request to ShareIssueDateErrorController when authenticated and enrolled" should {
-    "return a 200 OK" in {
+    "return an OK" in {
       mockEnrolledRequest(eisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show)(
         result => status(result) shouldBe OK

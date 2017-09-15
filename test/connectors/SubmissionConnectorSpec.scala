@@ -341,4 +341,22 @@ class SubmissionConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndA
       await(result) shouldBe Some(validResponse)
     }
   }
+
+  "Calling validateSubmissionPeriod" should {
+
+    val dummyTradeStartDate = (1,12,9999)
+    val dummyShareIssueDate = (1,1,9999)
+
+    lazy val result = TargetSubmissionConnector.validateSubmissionPeriod(dummyTradeStartDate._1, dummyTradeStartDate._2, dummyTradeStartDate._3,
+                                                                         dummyShareIssueDate._1, dummyShareIssueDate._2, dummyShareIssueDate._3)
+
+    "return a valid Boolean" in {
+      when(mockHttp.GET[Boolean](Matchers.eq(
+        s"${TargetSubmissionConnector.serviceUrl}/investment-tax-relief/submission-period/submission-period-checker" +
+          s"/trade-start-date/${dummyTradeStartDate._1}/${dummyTradeStartDate._2}/${dummyTradeStartDate._3}" +
+          s"/share-issue-date/${dummyShareIssueDate._1}/${dummyShareIssueDate._2}/${dummyShareIssueDate._3}"))
+        (Matchers.any(),Matchers.any())).thenReturn(validResponse)
+      await(result) shouldBe Some(validResponse)
+    }
+  }
 }

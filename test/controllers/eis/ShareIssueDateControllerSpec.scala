@@ -36,6 +36,7 @@ class ShareIssueDateControllerSpec extends BaseSpec {
     override lazy val authConnector = MockAuthConnector
     override lazy val s4lConnector = mockS4lConnector
     override lazy val enrolmentConnector = mockEnrolmentConnector
+    override lazy val submissionConnector = mockSubmissionConnector
   }
 
   "ShareIssueDateController" should {
@@ -50,25 +51,19 @@ class ShareIssueDateControllerSpec extends BaseSpec {
     }
   }
 
-  def setupMocks(shareIssueDateModel: Option[ShareIssueDateModel] = None): Unit = {
+  def setupMocks(shareIssueDateModel: Option[ShareIssueDateModel] = None, tradeStartDateModel: Option[TradeStartDateModel] = None): Unit = {
     when(mockS4lConnector.fetchAndGetFormData[ShareIssueDateModel](Matchers.eq(KeystoreKeys.shareIssueDate))
       (Matchers.any(), Matchers.any(), Matchers.any()))
       .thenReturn(Future.successful(shareIssueDateModel))
-
-    when(mockS4lConnector.saveFormData(Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
-      .thenReturn(Future.successful(CacheMap("", Map())))
-
-
-    when(mockS4lConnector.saveFormData(Matchers.eq(KeystoreKeys.backLinkShareIssueDate),
-      Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
-      .thenReturn(Future.successful(CacheMap("", Map())))
-
+    when(mockS4lConnector.fetchAndGetFormData[TradeStartDateModel](Matchers.eq(KeystoreKeys.tradeStartDate))
+      (Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(tradeStartDateModel))
   }
 
   "Sending a GET request to ShareIssueDateController when authenticated and enrolled" should {
 
-    "return a 200 when something is fetched from keystore" in {
-      setupMocks(Some(shareIssuetDateModel))
+    "return a 200 when something is fetched from storage" in {
+      setupMocks(shareIssueDateModel = Some(shareIssuetDateModel))
       mockEnrolledRequest(eisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show())(
         result => {
@@ -77,8 +72,8 @@ class ShareIssueDateControllerSpec extends BaseSpec {
       )
     }
 
-    "provide an empty model and return a 200 when nothing is fetched using keystore" in {
-      setupMocks(None)
+    "provide an empty model and return a 200 when nothing is fetched using storage" in {
+      setupMocks(shareIssueDateModel = None)
       mockEnrolledRequest(eisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show())(
         result => status(result) shouldBe OK
@@ -87,8 +82,30 @@ class ShareIssueDateControllerSpec extends BaseSpec {
   }
 
   "Sending a valid form submit to the ShareIssueDateController when authenticated and enrolled" should {
-    "redirect to first trade start date page" in {
-      setupMocks(Some(shareIssueDateModel))
+    "redirect to correct page when submission date is within the submission period" in {
+      setupMocks(shareIssueDateModel = Some(shareIssueDateModel), tradeStartDateModel = Some(tradeStartDateModelYes))
+      when(TestController.submissionConnector.validateSubmissionPeriod(tradeStartDateModelYes.tradeStartDay.get, tradeStartDateModelYes.tradeStartMonth.get,
+        tradeStartDateModelYes.tradeStartYear.get, shareIssueDateModel.day.get, shareIssueDateModel.month.get, shareIssueDateModel.year.get)).thenReturn(true)
+      mockEnrolledRequest(eisSchemeTypesModel)
+      val formInput = Seq(
+        "shareIssueDay" -> "23",
+        "shareIssueMonth" -> "11",
+        "shareIssueYear" -> "1993")
+
+      submitWithSessionAndAuth(TestController.submit,formInput:_*)(
+        result => {
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(routes.GrossAssetsController.show().url)
+        }
+      )
+    }
+  }
+
+  "Sending a valid form submit to the ShareIssueDateController when authenticated and enrolled" should {
+    "redirect to correct error page when submission date is not within the submission period" in {
+      setupMocks(shareIssueDateModel = Some(shareIssueDateModel), tradeStartDateModel = Some(tradeStartDateModelYes))
+      when(TestController.submissionConnector.validateSubmissionPeriod(tradeStartDateModelYes.tradeStartDay.get, tradeStartDateModelYes.tradeStartMonth.get,
+        tradeStartDateModelYes.tradeStartYear.get, shareIssueDateModel.day.get, shareIssueDateModel.month.get, shareIssueDateModel.year.get)).thenReturn(false)
       mockEnrolledRequest(eisSchemeTypesModel)
 
       val formInput = Seq(
@@ -99,7 +116,45 @@ class ShareIssueDateControllerSpec extends BaseSpec {
       submitWithSessionAndAuth(TestController.submit,formInput:_*)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(routes.GrossAssetsController.show().url)
+          redirectLocation(result) shouldBe Some(routes.ShareIssueDateErrorController.show().url)
+        }
+      )
+    }
+  }
+
+  "Sending a valid form submit to the ShareIssueDateController when authenticated and enrolled" should {
+    "redirect to HasInvestmentTradeStarted page if the model is not in storage" in {
+      setupMocks(shareIssueDateModel = Some(shareIssueDateModel), tradeStartDateModel = None)
+      mockEnrolledRequest(eisSchemeTypesModel)
+
+      val formInput = Seq(
+        "shareIssueDay" -> "23",
+        "shareIssueMonth" -> "11",
+        "shareIssueYear" -> "1993")
+
+      submitWithSessionAndAuth(TestController.submit,formInput:_*)(
+        result => {
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(routes.HasInvestmentTradeStartedController.show().url)
+        }
+      )
+    }
+  }
+
+  "Sending a valid form submit to the ShareIssueDateController when authenticated and enrolled" should {
+    "redirect to HasInvestmentTradeStarted page if the model has invalid data" in {
+      setupMocks(shareIssueDateModel = Some(shareIssueDateModel), tradeStartDateModel = Some(tradeStartDateModelNo))
+      mockEnrolledRequest(eisSchemeTypesModel)
+
+      val formInput = Seq(
+        "shareIssueDay" -> "23",
+        "shareIssueMonth" -> "11",
+        "shareIssueYear" -> "1993")
+
+      submitWithSessionAndAuth(TestController.submit,formInput:_*)(
+        result => {
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(routes.HasInvestmentTradeStartedController.show().url)
         }
       )
     }

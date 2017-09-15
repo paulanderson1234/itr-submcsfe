@@ -56,6 +56,17 @@ trait ShareIssueDateController extends FrontendController with AuthorisedAndEnro
 
 
   val submit = AuthorisedAndEnrolled.async { implicit user => implicit request =>
+
+    def routeRequest(tradeStartDate: TradeStartDateModel, shareIssueDate: ShareIssueDateModel) = {
+
+      submissionConnector.validateSubmissionPeriod(tradeStartDate.tradeStartDay.get, tradeStartDate.tradeStartMonth.get, tradeStartDate.tradeStartYear.get,
+        shareIssueDate.day.get, shareIssueDate.month.get, shareIssueDate.year.get) map {
+        case canProceed => if (canProceed) Redirect(routes.GrossAssetsController.show())
+        else Redirect(routes.ShareIssueDateErrorController.show())
+      }
+
+    }
+
     shareIssueDateForm.bindFromRequest().fold(
       formWithErrors => {
         Future.successful(BadRequest(ShareIssueDate(formWithErrors)))
@@ -63,16 +74,12 @@ trait ShareIssueDateController extends FrontendController with AuthorisedAndEnro
 
       validFormData => {
         s4lConnector.saveFormData(KeystoreKeys.shareIssueDate, validFormData)
-        val result = for {
-          tradeStartDate <- s4lConnector.fetchAndGetFormData[TradeStartDateModel](KeystoreKeys.tradeStartDate)
-          canProceed <- if(tradeStartDate.isDefined && tradeStartDate.get.hasTradeStartDate == Constants.StandardRadioButtonYesValue){
-                          submissionConnector.validateSubmissionPeriod(tradeStartDate.get.tradeStartDay.get, tradeStartDate.get.tradeStartMonth.get,
-                                                                       tradeStartDate.get.tradeStartYear.get, validFormData.day.get,
-                                                                       validFormData.month.get, validFormData.year.get)} else  Future.successful(false)
-        } yield canProceed
 
-        result map {
-          res => if(res) Redirect(routes.GrossAssetsController.show()) else Redirect(routes.ShareIssueDateErrorController.show())
+        s4lConnector.fetchAndGetFormData[TradeStartDateModel](KeystoreKeys.tradeStartDate) flatMap {
+          case Some(data) => if(data.hasTradeStartDate == Constants.StandardRadioButtonYesValue)
+                                routeRequest(data, validFormData)
+                             else Future.successful(Redirect(routes.HasInvestmentTradeStartedController.show()))
+          case None => Future.successful(Redirect(routes.HasInvestmentTradeStartedController.show()))
         }
       }
     )
