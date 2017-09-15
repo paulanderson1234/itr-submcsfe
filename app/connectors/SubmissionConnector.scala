@@ -18,7 +18,7 @@ package connectors
 import config.{FrontendAppConfig, WSHttp}
 import models.registration.RegistrationDetailsModel
 import models.submission.{ComplianceStatementAnswersModel, DesSubmissionCSModel, DesSubmitAdvancedAssuranceModel, Submission}
-import models.{AnnualTurnoverCostsModel, GrossAssetsModel, ProposedInvestmentModel}
+import models.{AnnualTurnoverCostsModel, GrossAssetsAfterIssueModel, GrossAssetsModel, ProposedInvestmentModel}
 import play.api.Logger
 import play.api.http.Status.OK
 import play.api.libs.json.{JsValue, Json}
@@ -141,5 +141,11 @@ trait SubmissionConnector {
       s"/share-issue-date/$shareIssueDay/$shareIssueMonth/$shareIssueYear")
   }
 
+  def checkGrossAssetsAfterIssueAmountExceeded(grossAssetAmount: Int)
+                                    (implicit hc: HeaderCarrier): Future[Option[Boolean]] = {
+
+    http.GET[Option[Boolean]](s"$serviceUrl/investment-tax-relief/gross-assets/gross-assets-after-issue-checker/check-total/gross-amount/$grossAssetAmount")
+
+  }
 }
 

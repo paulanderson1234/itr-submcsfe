@@ -6,27 +6,27 @@
 
 @import config.FrontendAppConfig
 
-@main_template(title = Messages("page.companyDetails.ResearchStartDateError.title"), bodyClasses = None) {
+@main_template(title = Messages("common.error.hard.title"), bodyClasses = None) {
 
 @backButton(controllers.eis.routes.ResearchStartDateController.show().url)
 
 <div class="grid-row">
     <div class="column-two-thirds">
         <div id="main">
-            <h1 class="form-title heading-xlarge" id="main-heading" >@Messages("page.companyDetails.ResearchStartDateError.heading")</h1>
+            <h1 class="form-title heading-xlarge" id="main-heading" >@Messages("common.error.hard.heading")</h1>
         </div>
 
         <div class="form-group">
             <span id="error-description">
-                @Messages("page.companyDetails.ResearchStartDateError.description")
+                @Messages("common.error.hard.description")
             </span>
         </div>
 
         <div class="form-group">
-           <p id="incorrect-info">@Messages("page.companyDetails.ResearchStartDateError.incorrect.info.start")
+           <p id="incorrect-info">@Messages("common.error.hard.incorrect.info.start")
                 <a href="@controllers.eis.routes.ResearchStartDateController.show().url" class="link-style" id="change-answers">
                     @Messages("common.changeAnswers.link")</a>
-                    @Messages("page.companyDetails.ResearchStartDateError.incorrect.info.end")</p>
+                    @Messages("common.error.hard.incorrect.info.end")</p>
         </div>
 
         <div class="form-group">

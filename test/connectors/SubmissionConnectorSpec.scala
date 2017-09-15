@@ -36,9 +36,10 @@ import java.util.UUID
 
 import auth.MockConfig
 import common.Constants._
-import models.{GrossAssetsModel, AddressModel, AnnualTurnoverCostsModel, ProposedInvestmentModel}
+import models._
 import play.api.test.Helpers._
 import fixtures.SubmissionFixture
+import forms.GrossAssetsAfterIssueForm
 import models.registration.RegistrationDetailsModel
 import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.play.OneServerPerSuite
@@ -56,15 +57,15 @@ import scala.concurrent.Future
 
 class SubmissionConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach with OneServerPerSuite with SubmissionFixture {
 
-  val mockHttp : WSHttp = mock[WSHttp]
+  val mockHttp: WSHttp = mock[WSHttp]
   val sessionId = UUID.randomUUID.toString
 
-  val addressModel = AddressModel("line1", "line2",countryCode = "NZ")
+  val addressModel = AddressModel("line1", "line2", countryCode = "NZ")
   val safeID = "XA000123456789"
   val newGeographicalYes = true
   val newGeographicalNo = false
   val newProductYes = true
-  val newProductNo= false
+  val newProductNo = false
   val tradeStartDayYes = true
   val tradeStartDayNo = false
   val tradeStartMonthYes = true
@@ -72,6 +73,7 @@ class SubmissionConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndA
   val tradeStartYearYes = true
   val tradeStartYearNo = false
   val grossAssetsAmount = 1000
+  val grossAssetsAfterIssueAmount = 16000000
 
   object TargetSubmissionConnector extends SubmissionConnector with FrontendController {
     override val serviceUrl = MockConfig.submissionUrl
@@ -93,8 +95,8 @@ class SubmissionConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndA
       val operatingCostData: Int = 1000
       val rAndDCostData: Int = 100
 
-      val result = TargetSubmissionConnector.validateKiCostConditions(operatingCostData,operatingCostData,
-        operatingCostData,rAndDCostData,rAndDCostData,rAndDCostData)
+      val result = TargetSubmissionConnector.validateKiCostConditions(operatingCostData, operatingCostData,
+        operatingCostData, rAndDCostData, rAndDCostData, rAndDCostData)
       await(result) shouldBe Some(trueResponse)
     }
   }
@@ -108,7 +110,7 @@ class SubmissionConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndA
       val hasPercentageWithMasters: Boolean = true
       val hasTenYearPlan: Boolean = true
 
-      val result = TargetSubmissionConnector.validateSecondaryKiConditions(hasPercentageWithMasters,hasTenYearPlan)
+      val result = TargetSubmissionConnector.validateSecondaryKiConditions(hasPercentageWithMasters, hasTenYearPlan)
       await(result) shouldBe Some(trueResponse)
     }
   }
@@ -121,7 +123,7 @@ class SubmissionConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndA
 
       val hadPrevRFI = true
       val isKi = true
-      val previousInvestmentSchemesTotal= 1000
+      val previousInvestmentSchemesTotal = 1000
       val proposedAmount = 1000
 
       val result = TargetSubmissionConnector.checkLifetimeAllowanceExceeded(hadPrevRFI, isKi, previousInvestmentSchemesTotal, proposedAmount)
@@ -137,9 +139,9 @@ class SubmissionConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndA
     "return a valid response" in {
 
       val proposedInvestment = ProposedInvestmentModel(50)
-      val annualTurnoverCosts = AnnualTurnoverCostsModel("100","100","100","100","100","2005","2006","2007","2008","2009")
+      val annualTurnoverCosts = AnnualTurnoverCostsModel("100", "100", "100", "100", "100", "2005", "2006", "2007", "2008", "2009")
 
-      val result = TargetSubmissionConnector.checkAveragedAnnualTurnover(proposedInvestment,annualTurnoverCosts)
+      val result = TargetSubmissionConnector.checkAveragedAnnualTurnover(proposedInvestment, annualTurnoverCosts)
       await(result) shouldBe Some(validResponse)
     }
   }
@@ -226,7 +228,7 @@ class SubmissionConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndA
     "return a RegistrationDetailsModel" in {
       when(mockHttp.GET[Option[RegistrationDetailsModel]](Matchers.eq(
         s"${TargetSubmissionConnector.serviceUrl}/investment-tax-relief/registration/registration-details/safeid/$safeID"))
-        (Matchers.any(),Matchers.any())).thenReturn(Some(registrationDetailsModel))
+        (Matchers.any(), Matchers.any())).thenReturn(Some(registrationDetailsModel))
       await(result) shouldBe Some(registrationDetailsModel)
     }
 
@@ -234,12 +236,12 @@ class SubmissionConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndA
 
   "Calling checkMarketCriteria with true and true" should {
 
-    lazy val result = TargetSubmissionConnector.checkMarketCriteria(newGeographicalYes,newProductYes)
+    lazy val result = TargetSubmissionConnector.checkMarketCriteria(newGeographicalYes, newProductYes)
 
     "return true" in {
       when(mockHttp.GET[Option[Boolean]](Matchers.eq(
         s"${TargetSubmissionConnector.serviceUrl}/investment-tax-relief/market-criteria/new-geographical/$newGeographicalYes/new-product/$newProductYes"))
-        (Matchers.any(),Matchers.any())).thenReturn(Some(true))
+        (Matchers.any(), Matchers.any())).thenReturn(Some(true))
       await(result) shouldBe Some(true)
     }
 
@@ -247,12 +249,12 @@ class SubmissionConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndA
 
   "Calling checkMarketCriteria with false and true" should {
 
-    lazy val result = TargetSubmissionConnector.checkMarketCriteria(newGeographicalNo,newProductYes)
+    lazy val result = TargetSubmissionConnector.checkMarketCriteria(newGeographicalNo, newProductYes)
 
     "return true" in {
       when(mockHttp.GET[Option[Boolean]](Matchers.eq(
         s"${TargetSubmissionConnector.serviceUrl}/investment-tax-relief/market-criteria/new-geographical/$newGeographicalNo/new-product/$newProductYes"))
-        (Matchers.any(),Matchers.any())).thenReturn(Some(true))
+        (Matchers.any(), Matchers.any())).thenReturn(Some(true))
       await(result) shouldBe Some(true)
     }
 
@@ -260,12 +262,12 @@ class SubmissionConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndA
 
   "Calling checkMarketCriteria with true and false" should {
 
-    lazy val result = TargetSubmissionConnector.checkMarketCriteria(newGeographicalYes,newProductNo)
+    lazy val result = TargetSubmissionConnector.checkMarketCriteria(newGeographicalYes, newProductNo)
 
     "return true" in {
       when(mockHttp.GET[Option[Boolean]](Matchers.eq(
         s"${TargetSubmissionConnector.serviceUrl}/investment-tax-relief/market-criteria/new-geographical/$newGeographicalYes/new-product/$newProductNo"))
-        (Matchers.any(),Matchers.any())).thenReturn(Some(true))
+        (Matchers.any(), Matchers.any())).thenReturn(Some(true))
       await(result) shouldBe Some(true)
     }
 
@@ -273,12 +275,12 @@ class SubmissionConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndA
 
   "Calling checkMarketCriteria with false and false" should {
 
-    lazy val result = TargetSubmissionConnector.checkMarketCriteria(newGeographicalNo,newProductNo)
+    lazy val result = TargetSubmissionConnector.checkMarketCriteria(newGeographicalNo, newProductNo)
 
     "return false" in {
       when(mockHttp.GET[Option[Boolean]](Matchers.eq(
         s"${TargetSubmissionConnector.serviceUrl}/investment-tax-relief/market-criteria/new-geographical/$newGeographicalNo/new-product/$newProductNo"))
-        (Matchers.any(),Matchers.any())).thenReturn(Some(false))
+        (Matchers.any(), Matchers.any())).thenReturn(Some(false))
       await(result) shouldBe Some(false)
     }
 
@@ -318,7 +320,7 @@ class SubmissionConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndA
 
   "Calling getAASubmissionDetails" should {
     "throw an error if the TAVCRef is empty" in {
-      intercept[IllegalArgumentException]{
+      intercept[IllegalArgumentException] {
         TargetSubmissionConnector.getAASubmissionDetails("")
       }
     }
@@ -332,31 +334,59 @@ class SubmissionConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndA
 
   "Calling checkGrossAssetsAmountExceeded" should {
 
-    lazy val result = TargetSubmissionConnector.checkGrossAssetsAmountExceeded(schemeTypeEis,GrossAssetsModel(grossAssetsAmount))
+    lazy val result = TargetSubmissionConnector.checkGrossAssetsAmountExceeded(schemeTypeEis, GrossAssetsModel(grossAssetsAmount))
 
     "return a valid Boolean" in {
       when(mockHttp.GET[Option[Boolean]](Matchers.eq(
         s"${TargetSubmissionConnector.serviceUrl}/investment-tax-relief/gross-assets/gross-assets-checker/check-total/gross-amount/$schemeTypeEis/$grossAssetsAmount"))
-        (Matchers.any(),Matchers.any())).thenReturn(Some(validResponse))
+        (Matchers.any(), Matchers.any())).thenReturn(Some(validResponse))
       await(result) shouldBe Some(validResponse)
     }
   }
 
   "Calling validateSubmissionPeriod" should {
 
-    val dummyTradeStartDate = (1,12,9999)
-    val dummyShareIssueDate = (1,1,9999)
+    val dummyTradeStartDate = (1, 12, 9999)
+    val dummyShareIssueDate = (1, 1, 9999)
 
     lazy val result = TargetSubmissionConnector.validateSubmissionPeriod(dummyTradeStartDate._1, dummyTradeStartDate._2, dummyTradeStartDate._3,
-                                                                         dummyShareIssueDate._1, dummyShareIssueDate._2, dummyShareIssueDate._3)
+      dummyShareIssueDate._1, dummyShareIssueDate._2, dummyShareIssueDate._3)
 
     "return a valid Boolean" in {
       when(mockHttp.GET[Boolean](Matchers.eq(
         s"${TargetSubmissionConnector.serviceUrl}/investment-tax-relief/submission-period/submission-period-checker" +
           s"/trade-start-date/${dummyTradeStartDate._1}/${dummyTradeStartDate._2}/${dummyTradeStartDate._3}" +
           s"/share-issue-date/${dummyShareIssueDate._1}/${dummyShareIssueDate._2}/${dummyShareIssueDate._3}"))
-        (Matchers.any(),Matchers.any())).thenReturn(validResponse)
+        (Matchers.any(), Matchers.any())).thenReturn(validResponse)
       await(result) shouldBe Some(validResponse)
+
+
+    }
+  }
+
+
+  "Calling checkGrossAssetsAfterIssueAmountExceeded with exceeded amount" should {
+
+    lazy val result = TargetSubmissionConnector.checkGrossAssetsAfterIssueAmountExceeded(grossAssetsAfterIssueAmount + 1)
+
+    "return a valid Boolean" in {
+      when(mockHttp.GET[Option[Boolean]](Matchers.eq(
+        s"${TargetSubmissionConnector.serviceUrl}/investment-tax-relief/gross-assets/gross-assets-after-issue-checker/check-total/gross-amount/${grossAssetsAfterIssueAmount + 1}"))
+        (Matchers.any(), Matchers.any())).thenReturn(Some(trueResponse))
+      await(result) shouldBe Some(trueResponse)
+    }
+  }
+
+  "Calling checkGrossAssetsAfterIssueAmountExceeded with valid amount" should {
+
+    lazy val result = TargetSubmissionConnector.checkGrossAssetsAfterIssueAmountExceeded(grossAssetsAfterIssueAmount)
+
+    "return a valid Boolean" in {
+      when(mockHttp.GET[Option[Boolean]](Matchers.eq(
+        s"${TargetSubmissionConnector.serviceUrl}/investment-tax-relief/gross-assets/gross-assets-after-issue-checker/check-total/gross-amount/$grossAssetsAfterIssueAmount"))
+        (Matchers.any(), Matchers.any())).thenReturn(Some(falseResponse))
+      await(result) shouldBe Some(falseResponse)
     }
   }
 }
+

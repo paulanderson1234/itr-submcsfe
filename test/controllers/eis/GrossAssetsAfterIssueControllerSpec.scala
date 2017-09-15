@@ -25,13 +25,13 @@ import models._
 import org.mockito.Matchers
 import org.mockito.Mockito._
 import play.api.test.Helpers._
-import uk.gov.hmrc.play.http.{Upstream5xxResponse, BadRequestException}
+import uk.gov.hmrc.play.http.Upstream5xxResponse
 
 import scala.concurrent.Future
 
-class GrossAssetsControllerSpec extends BaseSpec {
+class GrossAssetsAfterIssueControllerSpec extends BaseSpec {
 
-  object TestController extends GrossAssetsController {
+  object TestController extends GrossAssetsAfterIssueController {
     override lazy val applicationConfig = MockConfig
     override lazy val authConnector = MockAuthConnector
     override lazy val s4lConnector = mockS4lConnector
@@ -44,35 +44,35 @@ class GrossAssetsControllerSpec extends BaseSpec {
 
   "GrossAssetsController" should {
     "use the correct keystore connector" in {
-      GrossAssetsController.s4lConnector shouldBe S4LConnector
+      GrossAssetsAfterIssueController.s4lConnector shouldBe S4LConnector
     }
     "use the correct auth connector" in {
-      GrossAssetsController.authConnector shouldBe FrontendAuthConnector
+      GrossAssetsAfterIssueController.authConnector shouldBe FrontendAuthConnector
     }
     "use the correct enrolment connector" in {
-      GrossAssetsController.enrolmentConnector shouldBe EnrolmentConnector
+      GrossAssetsAfterIssueController.enrolmentConnector shouldBe EnrolmentConnector
     }
     "use the correct submission connector" in {
-      GrossAssetsController.submissionConnector shouldBe SubmissionConnector
+      GrossAssetsAfterIssueController.submissionConnector shouldBe SubmissionConnector
     }
     "use the correct application config" in {
-      GrossAssetsController.applicationConfig shouldBe FrontendAppConfig
+      GrossAssetsAfterIssueController.applicationConfig shouldBe FrontendAppConfig
     }
   }
 
-  "Sending a GET request to GrossAssetsController when authenticated and enrolled" should {
+  "Sending a GET request to GrossAssetsAfterIssueController when authenticated and enrolled" should {
 
-    "return an OK when something is fetched from storage" in {
+    "return an OK when something is fetched from session" in {
       mockEnrolledRequest(eisSchemeTypesModel)
-      when(mockS4lConnector.fetchAndGetFormData[GrossAssetsModel](Matchers.eq(KeystoreKeys.grossAssets))
-        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(GrossAssetsModel(grossAssetsAmount))))
+      when(mockS4lConnector.fetchAndGetFormData[GrossAssetsAfterIssueModel](Matchers.eq(KeystoreKeys.grossAssetsAfterIssue))
+        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(GrossAssetsAfterIssueModel(grossAssetsAmount))))
       showWithSessionAndAuth(TestController.show)(
         result => status(result) shouldBe OK
       )
     }
 
-    "return an OK when nothing is fetched from storage" in {
-      when(mockS4lConnector.fetchAndGetFormData[GrossAssetsModel](Matchers.eq(KeystoreKeys.grossAssets))
+    "return an OK when nothing is fetched from session" in {
+      when(mockS4lConnector.fetchAndGetFormData[GrossAssetsAfterIssueModel](Matchers.eq(KeystoreKeys.grossAssetsAfterIssue))
         (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
       mockEnrolledRequest(eisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show)(
@@ -82,41 +82,62 @@ class GrossAssetsControllerSpec extends BaseSpec {
 
   }
 
-  "Sending a valid form submit to the GrossAssetsController" should {
-    "redirect to the correct next page if the allowed amount is not exceeded from API" in {
-      when(mockSubmissionConnector.checkGrossAssetsAmountExceeded(Matchers.any(), Matchers.any())
+  "Sending a valid form submit to the GrossAssetsAfterIssueController" should {
+    "redirect to the correct next page if the allowed amount is not exceeded from API" +
+      "and the date of incorporation is less than 3 years ago" in {
+      when(mockSubmissionConnector.checkGrossAssetsAfterIssueAmountExceeded(Matchers.any())
       (Matchers.any())).thenReturn(Future.successful(Option(false)))
+      when(mockS4lConnector.fetchAndGetFormData[DateOfIncorporationModel](Matchers.eq(KeystoreKeys.dateOfIncorporation))
+        (Matchers.any(), Matchers.any(),Matchers.any())).thenReturn(Future.successful(Some(dateOfIncorporationModelKI)))
       mockEnrolledRequest(eisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,
         "grossAmount" -> "200000")(
         result => {
           status(result) shouldBe SEE_OTHER
-          //todo Redirect to GrossAssetsAfter page when complete
-          redirectLocation(result) shouldBe Some(routes.GrossAssetsAfterIssueController.show().url)
+          redirectLocation(result) shouldBe Some(routes.FullTimeEmployeeCountController.show().url)
         }
       )
     }
   }
 
-
-  "Sending a valid form submit to the GrossAssetsController" should {
-    "redirect to the correct next page if the allowed amount is exceeded from API" in {
-      when(mockSubmissionConnector.checkGrossAssetsAmountExceeded(Matchers.any(), Matchers.any())
-      (Matchers.any())).thenReturn(Future.successful(Option(true)))
+  "Sending a valid form submit to the GrossAssetsAfterIssueController" should {
+    "redirect to the correct next page if the allowed amount is not exceeded from API" +
+      "and the date of incorporation is more than 3 years ago" in {
+      when(mockSubmissionConnector.checkGrossAssetsAfterIssueAmountExceeded(Matchers.any())
+      (Matchers.any())).thenReturn(Future.successful(Option(false)))
+      when(mockS4lConnector.fetchAndGetFormData[DateOfIncorporationModel](Matchers.eq(KeystoreKeys.dateOfIncorporation))
+        (Matchers.any(), Matchers.any(),Matchers.any())).thenReturn(Future.successful(Some(dateOfIncorporationModel)))
       mockEnrolledRequest(eisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,
-        "grossAmount" -> "2000001")(
+        "grossAmount" -> "200000")(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(routes.GrossAssetsErrorController.show().url)
+          redirectLocation(result) shouldBe Some(routes.IsCompanyKnowledgeIntensiveController.show().url)
         }
       )
     }
   }
 
-  "Sending a valid form submit to the GrossAssetsController" should {
+  "Sending a valid form submit to the GrossAssetsAfterIssueController" should {
+    "redirect to the correct next page if the allowed amount is exceeded from API" in {
+      when(mockSubmissionConnector.checkGrossAssetsAfterIssueAmountExceeded(Matchers.any())
+      (Matchers.any())).thenReturn(Future.successful(Option(true)))
+      when(mockS4lConnector.fetchAndGetFormData[DateOfIncorporationModel](Matchers.eq(KeystoreKeys.dateOfIncorporation))
+        (Matchers.any(), Matchers.any(),Matchers.any())).thenReturn(Future.successful(Some(dateOfIncorporationModel)))
+      mockEnrolledRequest(eisSchemeTypesModel)
+      submitWithSessionAndAuth(TestController.submit,
+        "grossAmount" -> "20000000")(
+        result => {
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(routes.GrossAssetsAfterIssueErrorController.show().url)
+        }
+      )
+    }
+  }
+
+  "Sending a valid form submit to the GrossAssetsAfterIssueController" should {
     "show the INTERNAL_SERVER_ERROR page if an exception occurs during the API call" in {
-      when(mockSubmissionConnector.checkGrossAssetsAmountExceeded(Matchers.any(), Matchers.any())
+      when(mockSubmissionConnector.checkGrossAssetsAfterIssueAmountExceeded(Matchers.any())
       (Matchers.any())).thenReturn(Future.failed(failedResponse))
       mockEnrolledRequest(eisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,
@@ -128,9 +149,9 @@ class GrossAssetsControllerSpec extends BaseSpec {
     }
   }
 
-  "Sending a valid form submit to the GrossAssetsController" should {
+  "Sending a valid form submit to the GrossAssetsAfterIssueController" should {
     "show the INTERNAL_SERVER_ERROR page if the API call returns an empty Option" in {
-      when(mockSubmissionConnector.checkGrossAssetsAmountExceeded(Matchers.any(), Matchers.any())
+      when(mockSubmissionConnector.checkGrossAssetsAfterIssueAmountExceeded(Matchers.any())
       (Matchers.any())).thenReturn(Future.successful(None))
       mockEnrolledRequest(eisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,
@@ -142,7 +163,7 @@ class GrossAssetsControllerSpec extends BaseSpec {
     }
   }
 
-  "Sending an invalid form submission with validation errors to the GrossAssetsController" should {
+  "Sending an invalid form submission with validation errors to the GrossAssetsAfterIssueController" should {
     "respond wih a bad request" in {
       mockEnrolledRequest(eisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,

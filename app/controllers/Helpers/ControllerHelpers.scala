@@ -27,6 +27,7 @@ import play.api.i18n.Messages
 import play.api.mvc.Results._
 import play.api.mvc.{AnyContent, Request, Result}
 import uk.gov.hmrc.play.http.HeaderCarrier
+import utils.Validation
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -185,5 +186,16 @@ trait ControllerHelpers {
       case Some(result: Result) => result
       case _ => Redirect(controllers.eis.routes.AddInvestorOrNomineeController.show(Some(index)))
     }
+  }
+
+  def redirectGrossAssetsAfterIssue(dateOfIncorporationModel: Option[DateOfIncorporationModel],
+                                    s4lConnector: connectors.S4LConnector)(implicit hc: HeaderCarrier, user: TAVCUser): Result = {
+    if(dateOfIncorporationModel.isDefined && Validation.dateAfterIncorporationRule(dateOfIncorporationModel.get.day.get,
+      dateOfIncorporationModel.get.month.get, dateOfIncorporationModel.get.year.get)){
+      s4lConnector.saveFormData(KeystoreKeys.backLinkFullTimeEmployeeCount,
+        controllers.eis.routes.GrossAssetsAfterIssueController.show().url)
+      Redirect(controllers.eis.routes.FullTimeEmployeeCountController.show)
+    }
+    else Redirect(controllers.eis.routes.IsCompanyKnowledgeIntensiveController.show)
   }
 }

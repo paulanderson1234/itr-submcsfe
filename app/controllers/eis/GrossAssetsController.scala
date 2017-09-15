@@ -60,8 +60,7 @@ trait GrossAssetsController extends FrontendController with AuthorisedAndEnrolle
     def routeRequest(grossAssetsExceeded: Option[Boolean]): Future[Result] = {
       if (grossAssetsExceeded.nonEmpty) {
         grossAssetsExceeded match {
-            //todo Redirect to GrossAssets after when complete
-          case Some(false) => Future.successful(Redirect(routes.GrossAssetsController.show()))
+          case Some(false) => Future.successful(Redirect(routes.GrossAssetsAfterIssueController.show()))
           case _ => Future.successful(Redirect(routes.GrossAssetsErrorController.show()))
         }
       }

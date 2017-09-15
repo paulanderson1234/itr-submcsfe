@@ -17,32 +17,39 @@
 package controllers.eis
 
 import auth.{AuthorisedAndEnrolledForTAVC, EIS}
+import common.KeystoreKeys
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
+import controllers.Helpers.ControllerHelpers
+import models.DateOfIncorporationModel
 import uk.gov.hmrc.play.frontend.controller.FrontendController
+import views.html.eis.companyDetails.GrossAssetsAfterIssueError
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
-import views.html.eis.shareDetails.ThirtyDayRuleError
-
-
 import scala.concurrent.Future
 
-object ThirtyDayRuleErrorController extends ThirtyDayRuleErrorController{
-  override lazy val s4lConnector = S4LConnector
+object GrossAssetsAfterIssueErrorController extends GrossAssetsAfterIssueErrorController
+{
   override lazy val applicationConfig = FrontendAppConfig
   override lazy val authConnector = FrontendAuthConnector
   override lazy val enrolmentConnector = EnrolmentConnector
+  override lazy val s4lConnector = S4LConnector
 }
 
-trait ThirtyDayRuleErrorController extends FrontendController with AuthorisedAndEnrolledForTAVC {
+trait GrossAssetsAfterIssueErrorController extends FrontendController with AuthorisedAndEnrolledForTAVC {
+
 
   override val acceptedFlows = Seq(Seq(EIS))
 
   val show = AuthorisedAndEnrolled.async { implicit user => implicit request =>
-    Future.successful(Ok(ThirtyDayRuleError()))
+    Future.successful(Ok(GrossAssetsAfterIssueError()))
   }
 
   val submit = AuthorisedAndEnrolled.async { implicit user => implicit request =>
-    Future.successful(Redirect(routes.MarketDescriptionController.show()))
+    s4lConnector.fetchAndGetFormData[DateOfIncorporationModel](KeystoreKeys.dateOfIncorporation).map {
+      case Some(data) => ControllerHelpers.redirectGrossAssetsAfterIssue(Some(data), s4lConnector)
+      case None => Redirect(routes.DateOfIncorporationController.show())
+    }
   }
+
 }

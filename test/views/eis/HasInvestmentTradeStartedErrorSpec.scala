@@ -30,11 +30,11 @@ class HasInvestmentTradeStartedErrorSpec extends ViewSpec {
       val page = HasInvestmentTradeStartedError()(fakeRequest, applicationMessages)
       val document = Jsoup.parse(page.body)
 
-      document.title shouldEqual Messages("page.companyDetails.HasInvestmentTradeStartedError.title")
-      document.body.getElementById("main-heading").text() shouldEqual Messages("page.companyDetails.HasInvestmentTradeStartedError.heading")
-      document.body.getElementById("error-description").text() shouldEqual Messages("page.companyDetails.HasInvestmentTradeStartedError.description")
+      document.title shouldEqual Messages("common.error.hard.title")
+      document.body.getElementById("main-heading").text() shouldEqual Messages("common.error.hard.heading")
+      document.body.getElementById("error-description").text() shouldEqual Messages("common.error.hard.description")
      
-      document.body.getElementById("incorrect-info").text() shouldEqual Messages("page.companyDetails.HasInvestmentTradeStartedError.incorrect.info.start") + " " + Messages("common.changeAnswers.link") + " " + Messages("page.companyDetails.HasInvestmentTradeStartedError.incorrect.info.end")
+      document.body.getElementById("incorrect-info").text() shouldEqual Messages("common.error.hard.incorrect.info.start") + " " + Messages("common.changeAnswers.link") + " " + Messages("common.error.hard.incorrect.info.end")
       document.body.getElementById("change-answers").attr("href") shouldEqual routes.HasInvestmentTradeStartedController.show().url
       document.body.getElementById("back-link").attr("href") shouldEqual routes.HasInvestmentTradeStartedController.show().url
       document.body.getElementById("return-dashboard").text() shouldEqual Messages("common.returnToDashboard")

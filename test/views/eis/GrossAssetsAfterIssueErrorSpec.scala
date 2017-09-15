@@ -19,28 +19,28 @@ package views.eis
 import controllers.eis.routes
 import org.jsoup.Jsoup
 import play.api.i18n.Messages
-import views.helpers.ViewSpec
 import play.api.i18n.Messages.Implicits._
-import views.html.eis.companyDetails.GrossAssetsError
+import views.helpers.ViewSpec
+import views.html.eis.companyDetails.GrossAssetsAfterIssueError
 
-class GrossAssetsErrorSpec extends ViewSpec {
+class GrossAssetsAfterIssueErrorSpec extends ViewSpec {
 
   "The Gross Assets error page" should {
 
     "Verify that page has the expected elements" in {
-      val page = GrossAssetsError()(fakeRequest, applicationMessages)
+      val page = GrossAssetsAfterIssueError()(fakeRequest, applicationMessages)
       val document = Jsoup.parse(page.body)
 
       document.title shouldEqual Messages("common.error.soft.title")
       document.body.getElementById("main-heading").text() shouldEqual Messages("common.error.soft.heading")
-      document.body.getElementById("error-description").text() shouldEqual Messages("page.companyDetails.grossAssetsError.description.eis")
+      document.body.getElementById("error-description").text() shouldEqual Messages("page.companyDetails.grossAssetsAfterIssueError.description")
       document.body.getElementById("what-next-heading").text() shouldEqual Messages("common.error.soft.secondaryHeading")
       document.body.getElementById("continue-text").text() shouldEqual Messages("common.error.soft.whatNext.compliance")
 
       document.body.getElementById("incorrect-info").text() shouldEqual Messages("common.changeAnswers.incorrect.text") +
         " " + Messages("common.changeAnswers.link") + "."
-      document.body.getElementById("change-answers").attr("href") shouldEqual routes.GrossAssetsController.show().url
-      document.body.getElementById("back-link").attr("href") shouldEqual routes.GrossAssetsController.show().url
+      document.body.getElementById("change-answers").attr("href") shouldEqual routes.GrossAssetsAfterIssueController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual routes.GrossAssetsAfterIssueController.show().url
       document.getElementById("next").text() shouldBe Messages("common.button.continue")
     }
   }
