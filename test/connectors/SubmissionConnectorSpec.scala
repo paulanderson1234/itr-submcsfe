@@ -358,12 +358,9 @@ class SubmissionConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndA
           s"/trade-start-date/${dummyTradeStartDate._1}/${dummyTradeStartDate._2}/${dummyTradeStartDate._3}" +
           s"/share-issue-date/${dummyShareIssueDate._1}/${dummyShareIssueDate._2}/${dummyShareIssueDate._3}"))
         (Matchers.any(), Matchers.any())).thenReturn(validResponse)
-      await(result) shouldBe Some(validResponse)
-
-
+      await(result) shouldBe validResponse
     }
   }
-
 
   "Calling checkGrossAssetsAfterIssueAmountExceeded with exceeded amount" should {
 

@@ -46,7 +46,7 @@ class ShareIssueDateSpec extends ViewSpec {
       document.body.getElementById("back-link").attr("href") shouldEqual routes.CommercialSaleController.show().url
       document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.one")
 
-      document.getElementById("question-date-text-legend-id").hasClass("h2-heading") shouldBe true
+      document.getElementById("question-date-text-legend-id").hasClass("visuallyhidden") shouldBe true
       document.getElementById("question-date-text-legend-id").text shouldBe Messages("page.companyDetails.ShareIssueDate.legend")
 
       document.select(".error-summary").isEmpty shouldBe true
@@ -57,11 +57,11 @@ class ShareIssueDateSpec extends ViewSpec {
       val document = Jsoup.parse(page.body)
 
       document.title() shouldBe Messages("page.companyDetails.ShareIssueDate.title")
-      document.getElementById("back-link").attr("href") shouldBe controllers.eis.routes.CommercialSaleController.show().url
+      document.getElementById("back-link").attr("href") shouldBe routes.CommercialSaleController.show().url
       document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe true
       document.getElementById("error-summary-heading").text shouldBe Messages("common.error.summary.heading")
-      document.getElementById("shareIssue-error-summary").text shouldBe Messages("common.error.fieldRequired")
-      document.getElementsByClass("error-notification").text shouldBe Messages("common.error.fieldRequired")
+      document.getElementById("shareIssueDay-error-summary").text shouldBe Messages("validation.error.DateNotEntered")
+      document.getElementsByClass("error-notification").text shouldBe Messages("validation.error.DateNotEntered")
 
     }
 

@@ -44,39 +44,36 @@ object ShareIssueDateController extends ShareIssueDateController{
 trait ShareIssueDateController extends FrontendController with AuthorisedAndEnrolledForTAVC {
 
   override val acceptedFlows = Seq(Seq(EIS))
+
   val submissionConnector: SubmissionConnector
 
   val show = AuthorisedAndEnrolled.async { implicit user => implicit request =>
-
-        s4lConnector.fetchAndGetFormData[ShareIssueDateModel](KeystoreKeys.shareIssueDate).map {
-          case Some(data) => Ok(ShareIssueDate(shareIssueDateForm.fill(data)))
-          case None => Ok(ShareIssueDate(shareIssueDateForm))
-        }
-      }
+    s4lConnector.fetchAndGetFormData[ShareIssueDateModel](KeystoreKeys.shareIssueDate).map {
+        case Some(data) => Ok(ShareIssueDate(shareIssueDateForm.fill(data)))
+        case None => Ok(ShareIssueDate(shareIssueDateForm))
+    }
+  }
 
 
   val submit = AuthorisedAndEnrolled.async { implicit user => implicit request =>
 
-    def routeRequest(hasInvestmentTradeStartedModel: HasInvestmentTradeStartedModel, shareIssueDate: ShareIssueDateModel) = {
+    def routeRequest(hasInvestmentTradeStarted: HasInvestmentTradeStartedModel, shareIssueDate: ShareIssueDateModel) = {
 
-      submissionConnector.validateSubmissionPeriod(hasInvestmentTradeStartedModel.hasInvestmentTradeStartedDay.get,
-                                                   hasInvestmentTradeStartedModel.hasInvestmentTradeStartedMonth.get,
-                                                   hasInvestmentTradeStartedModel.hasInvestmentTradeStartedYear.get,
+      submissionConnector.validateSubmissionPeriod(hasInvestmentTradeStarted.hasInvestmentTradeStartedDay.get,
+                                                   hasInvestmentTradeStarted.hasInvestmentTradeStartedMonth.get,
+                                                   hasInvestmentTradeStarted.hasInvestmentTradeStartedYear.get,
                                                    shareIssueDate.day.get, shareIssueDate.month.get, shareIssueDate.year.get) map {
         case canProceed => if (canProceed) Redirect(routes.GrossAssetsController.show())
-        else Redirect(routes.ShareIssueDateErrorController.show())
+                           else Redirect(routes.ShareIssueDateErrorController.show())
       }
-
     }
 
     shareIssueDateForm.bindFromRequest().fold(
       formWithErrors => {
         Future.successful(BadRequest(ShareIssueDate(formWithErrors)))
       },
-
       validFormData => {
         s4lConnector.saveFormData(KeystoreKeys.shareIssueDate, validFormData)
-
         s4lConnector.fetchAndGetFormData[HasInvestmentTradeStartedModel](KeystoreKeys.hasInvestmentTradeStarted) flatMap {
           case Some(data) => if(data.hasDate) routeRequest(data, validFormData)
                              else Future.successful(Redirect(routes.HasInvestmentTradeStartedController.show()))

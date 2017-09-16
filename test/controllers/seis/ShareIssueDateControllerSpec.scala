@@ -31,6 +31,8 @@ import scala.concurrent.Future
 
 class ShareIssueDateControllerSpec extends BaseSpec {
 
+  val testBackLink = routes.SeventyPercentSpentController.show().url
+
   object TestController extends ShareIssueDateController {
     override lazy val applicationConfig = MockConfig
     override lazy val authConnector = MockAuthConnector
@@ -51,32 +53,34 @@ class ShareIssueDateControllerSpec extends BaseSpec {
   }
 
   def setupMocks(shareIssueDateModel: Option[ShareIssueDateModel] = None, backLink: Option[String] = None): Unit = {
+
     when(mockS4lConnector.fetchAndGetFormData[ShareIssueDateModel](Matchers.eq(KeystoreKeys.shareIssueDate))
       (Matchers.any(), Matchers.any(), Matchers.any()))
       .thenReturn(Future.successful(shareIssueDateModel))
 
-    when(mockS4lConnector.saveFormData(Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
-      .thenReturn(Future.successful(CacheMap("", Map())))
-
     when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.backLinkShareIssueDate))
       (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(backLink))
-
-    when(mockS4lConnector.saveFormData(Matchers.eq(KeystoreKeys.backLinkShareIssueDate),
-      Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
-      .thenReturn(Future.successful(CacheMap("", Map())))
 
   }
 
   "Sending a GET request to ShareIssueDateController when authenticated and enrolled" should {
-    "return a 200 when something is fetched from keystore and back link returned" in {
-      setupMocks(Some(shareIssuetDateModel), Some("/test/test"))
+    "return an OK when something is fetched from storage" in {
+      setupMocks(Some(shareIssuetDateModel), Some(testBackLink))
       mockEnrolledRequest(seisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show())(
         result => status(result) shouldBe OK
       )
     }
 
-    "return a 200 when something is fetched from keystore and back link is None" in {
+    "return an OK when nothing is fetched from storage" in {
+      setupMocks(None, Some(testBackLink))
+      mockEnrolledRequest(seisSchemeTypesModel)
+      showWithSessionAndAuth(TestController.show())(
+        result => status(result) shouldBe OK
+      )
+    }
+
+    "redirect to the correct page when no back link is provided" in {
       setupMocks(Some(shareIssuetDateModel), None)
       mockEnrolledRequest(seisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show())(
@@ -86,18 +90,10 @@ class ShareIssueDateControllerSpec extends BaseSpec {
         }
       )
     }
-
-    "provide an empty model and return a 200 when nothing is fetched using keystore" in {
-      setupMocks(None, Some("/test/test/"))
-      mockEnrolledRequest(seisSchemeTypesModel)
-      showWithSessionAndAuth(TestController.show())(
-        result => status(result) shouldBe OK
-      )
-    }
   }
 
   "Sending a valid form submit to the ShareIssueDateController when authenticated and enrolled" should {
-    "redirect to first trade start date page" in {
+    "redirect to the correct page" in {
       setupMocks(Some(shareIssueDateModel))
       mockEnrolledRequest(seisSchemeTypesModel)
 
@@ -116,8 +112,8 @@ class ShareIssueDateControllerSpec extends BaseSpec {
   }
 
   "Sending an invalid form submission with validation errors to the ShareIssueDateController when authenticated and enrolled" should {
-    "return a bad request" in {
-      setupMocks(None, Some("/test/test"))
+    "return a BadRequest when a backlink is provided" in {
+      setupMocks(None, Some(testBackLink))
       mockEnrolledRequest(seisSchemeTypesModel)
       val formInput = Seq(
         "shareIssueDay" -> "",
@@ -127,6 +123,25 @@ class ShareIssueDateControllerSpec extends BaseSpec {
       submitWithSessionAndAuth(TestController.submit,formInput:_*)(
         result => {
           status(result) shouldBe BAD_REQUEST
+        }
+      )
+    }
+  }
+
+
+  "Sending an invalid form submission with validation errors to the ShareIssueDateController when authenticated and enrolled" should {
+    "redirect to the correct page when no back link is provided" in {
+      setupMocks(None, None)
+      mockEnrolledRequest(seisSchemeTypesModel)
+      val formInput = Seq(
+        "shareIssueDay" -> "",
+        "shareIssueMonth" -> "",
+        "shareIssueYear" -> "")
+
+      submitWithSessionAndAuth(TestController.submit,formInput:_*)(
+        result => {
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(routes.QualifyBusinessActivityController.show().url)
         }
       )
     }

@@ -30,11 +30,14 @@ class ShareIssueDateErrorSpec extends ViewSpec {
       val page = ShareIssueDateError()(fakeRequest, applicationMessages)
       val document = Jsoup.parse(page.body)
 
-      document.title shouldEqual Messages("common.error.hard.title")
-      document.body.getElementById("main-heading").text() shouldEqual Messages("common.error.hard.heading")
-      document.body.getElementById("error-description").text() shouldEqual Messages("common.error.hard.description")
-
-      document.body.getElementById("incorrect-info").text() shouldEqual Messages("common.error.hard.incorrect.info.start") + " " + Messages("common.changeAnswers.link") + " " + Messages("common.error.hard.incorrect.info.end")
+      document.title shouldEqual Messages("page.companyDetails.ShareIssueDateError.title")
+      document.body.getElementById("main-heading").text() shouldEqual Messages("page.companyDetails.ShareIssueDateError.heading")
+      document.body.getElementById("error-description").text() shouldEqual Messages("page.companyDetails.ShareIssueDateError.description")
+      document.body.getElementById("incorrect-info").text() shouldEqual Messages("common.changeAnswers.incorrect.text") + " " +
+        Messages("common.changeAnswers.link") + "."
+      document.body.getElementById("criteria-explanation").text() shouldEqual Messages("page.companyDetails.ShareIssueDateError.criteria.explanation")
+      document.body.getElementById("criteria-one").text() shouldEqual Messages("page.companyDetails.ShareIssueDateError.criteria.one")
+      document.body.getElementById("criteria-two").text() shouldEqual Messages("page.companyDetails.ShareIssueDateError.criteria.two")
       document.body.getElementById("change-answers").attr("href") shouldEqual routes.ShareIssueDateController.show().url
       document.body.getElementById("back-link").attr("href") shouldEqual routes.ShareIssueDateController.show().url
       document.body.getElementById("return-dashboard").text() shouldEqual Messages("common.returnToDashboard")

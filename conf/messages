@@ -994,18 +994,20 @@ page.shares.ShareDescription.location=It''s on your company''s Register of Membe
 
 #share issue date page
 validation.error.ShareIssueDate.Future=Share issue date cannot be a future date
-page.companyDetails.ShareIssueDate.title= When did your company issue the shares in this application?
-page.companyDetails.ShareIssueDate.heading= When did your company issue the shares in this application?
-page.companyDetails.ShareIssueDate.question= When did your company issue the shares in this application?
+page.companyDetails.ShareIssueDate.title= When did your company issue the shares in this Compliance Statement?
+page.companyDetails.ShareIssueDate.heading= When did your company issue the shares in this Compliance Statement?
+page.companyDetails.ShareIssueDate.question= When did your company issue the shares in this Compliance Statement?
+page.companyDetails.ShareIssueDate.legend= When did your company issue the shares in this Compliance Statement?
 date.hint.shareIssueDate= For example, 31 3 1980
 page.companyDetails.ShareIssueDate.location= It''s on your company''s Register of Members.
 
 #share issue date error page
-page.companyDetails.ShareIssueDateError.title= You don''t qualify for the scheme
-page.companyDetails.ShareIssueDateError.heading= You don''t qualify for the scheme
-page.companyDetails.ShareIssueDateError.description =Your company:
-page.companyDetails.ShareIssueDateError.incorrect.info.start= has been trading for too long to get tax relief on investment
-page.companyDetails.ShareIssueDateError.incorrect.info.end= is not starting a new business activity that needs investment
+page.companyDetails.ShareIssueDateError.title=You can’t submit a Compliance Statement
+page.companyDetails.ShareIssueDateError.heading=You can’t submit a Compliance Statement
+page.companyDetails.ShareIssueDateError.description =This is because you have not submitted in time.
+page.companyDetails.ShareIssueDateError.criteria.explanation=You had to submit your Compliance Statement either:
+page.companyDetails.ShareIssueDateError.criteria.one=2 years after the end of the tax year when the shares were issued
+page.companyDetails.ShareIssueDateError.criteria.two=2 years and 4 months after your company began doing business or research and development
 
 # Total Amount Raised page
 page.shareDetails.totalAmountRaised.title=How much did your company raise in this share issue?
