@@ -19,20 +19,18 @@ package forms
 import models.TotalAmountRaisedModel
 import play.api.data.Form
 import play.api.data.Forms._
-import play.api.i18n.Messages
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
 import utils.Validation
 
 object TotalAmountRaisedForm {
 
   val messageKey = "totalAmountRaised"
   val minAllowableAmount: Int = 0
+  val maxLength = 9
 
   val totalAmountRaisedForm = Form(
     mapping(
       "amount" -> nonEmptyText
-        .verifying(Validation.genericWholeAmountCheck(messageKey, minAllowableAmount))
+        .verifying(Validation.genericWholeAmountCheck(messageKey, minAllowableAmount, maxLength))
         .transform[BigDecimal](value => BigDecimal(value), _.toString())
     )(TotalAmountRaisedModel.apply)(TotalAmountRaisedModel.unapply)
   )

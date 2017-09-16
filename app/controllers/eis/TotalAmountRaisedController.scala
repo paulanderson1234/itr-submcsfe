@@ -77,8 +77,7 @@ trait TotalAmountRaisedController extends FrontendController with AuthorisedAndE
                   // first API condition passed. Need to check second condition now..
                   validateAnnualLimitRouteRequestSecondCheck(totalAmountRaised)
                 }
-              // if none, redirect back to HadPreviousRFI page.
-              // Will only hit this if there is no backend connected.
+              // if none, redirect back to HadPreviousRFI page. Will only hit this if there is no backend connected.
               case None =>
                 Logger.warn("TotalAmountRaisedController][submit] - unexpected None response returned from submissionConnector.checkLifetimeAllowanceExceeded")
                 Future.successful(InternalServerError(internalServerErrorTemplate))
@@ -95,8 +94,8 @@ trait TotalAmountRaisedController extends FrontendController with AuthorisedAndE
           } else
             // evaluate
             isAnnualLimitExceeded match {
-              case Some(check) if check => TotalAmountRaisedHelper.getContinueRouteRequest(s4lConnector)
-              case Some(check) => Future.successful(Redirect(routes.AnnualLimitExceededErrorController.show()))
+              case Some(check) if !check => TotalAmountRaisedHelper.getContinueRouteRequest(s4lConnector)
+              case Some(check) if check => Future.successful(Redirect(routes.AnnualLimitExceededErrorController.show()))
               case None =>
                 Logger.warn("TotalAmountRaisedController][submit] - unexpected None response returned from submissionConnector.checkAnnualLimit")
                 Future.successful(InternalServerError(internalServerErrorTemplate))
@@ -118,7 +117,7 @@ trait TotalAmountRaisedController extends FrontendController with AuthorisedAndE
             Future.successful(BadRequest(TotalAmountRaised(formWithErrors))))
         },
         validFormData => {
-          s4lConnector.saveFormData(KeystoreKeys.proposedInvestment, validFormData)
+          s4lConnector.saveFormData(KeystoreKeys.totalAmountRaised, validFormData)
           (for {
             kiModel <- s4lConnector.fetchAndGetFormData[KiProcessingModel](KeystoreKeys.kiProcessingModel)
             hadPrevRFI <- s4lConnector.fetchAndGetFormData[HadPreviousRFIModel](KeystoreKeys.hadPreviousRFI)

@@ -16,7 +16,6 @@
 
 package forms
 
-import common.Constants
 import models.ResearchStartDateModel
 import play.api.data.Form
 import play.api.data.Forms._

@@ -16,7 +16,7 @@
 
 package forms
 
-import models.{SubsidiariesModel}
+import models.SubsidiariesModel
 import play.api.data.Form
 import play.api.data.Forms._
 

@@ -21,6 +21,7 @@ import common.KeystoreKeys
 import config.FrontendGlobal._
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
+import controllers.Helpers.TotalAmountRaisedHelper
 import models.KiProcessingModel
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import play.api.i18n.Messages.Implicits._
@@ -48,10 +49,7 @@ trait LifetimeAllowanceExceededErrorController extends FrontendController with A
   }
 
   val submit = AuthorisedAndEnrolled.async { implicit user => implicit request =>
-    //TODO: The total amount raised controller can navigate to a number of different pages based on various conditions
-    // This route below will have to mirror that logic.
-    // The proposedInvestorController has much of the rerqired logic that need moving to the TotalAmountRaisedController.
-    // when doing this the navigation implementation (routeRequest) should be put in a common helper so this page can call it to continue
-    Future.successful(Redirect(routes.InvestmentGrowController.show()))
+    //TODO: unit tests
+    TotalAmountRaisedHelper.getContinueRouteRequest(s4lConnector)
   }
 }

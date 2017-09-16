@@ -696,7 +696,9 @@ object Validation {
     })
   }
 
-  def genericWholeAmountCheck(formValueMessageKey: String, minimumAmount:Int, maxLength:Int = financialMaxAmountLength): Constraint[String] = {
+  //noinspection ScalaStyle
+  def genericWholeAmountCheck(formValueMessageKey: String, minimumAmount:Int, maxLength:Int = financialMaxAmountLength,
+                              restrictToInteger:Boolean = false): Constraint[String] = {
     Constraint("constraint.genericWholeAmountCheck") {
       value =>
         val errors = Try {
@@ -704,11 +706,12 @@ object Validation {
         } match {
           case Success(result) =>
             val decimal = if (!(result.scale == 0)) Seq(ValidationError(Messages(s"validation.error.$formValueMessageKey.decimalPlaces"))) else Seq()
-            val size = if (result.precision > maxLength) Seq(ValidationError(Messages(s"validation.error.$formValueMessageKey.size"))) else Seq()
+            val size = if (result.precision > (if (restrictToInteger) 10 else maxLength)) Seq(ValidationError(Messages(s"validation.error.$formValueMessageKey.size"))) else Seq()
             val negative = if (result < 0) Seq(ValidationError(Messages(s"validation.error.$formValueMessageKey.negative"))) else Seq()
             val minCheck = if (result < minimumAmount) Seq(ValidationError(Messages(s"validation.error.$formValueMessageKey.size", minimumAmount))) else Seq()
+            val intCheck = if (restrictToInteger && result > Int.MaxValue) Seq(ValidationError(Messages(s"validation.error.$formValueMessageKey.int.size"))) else Seq()
 
-            decimal ++ size ++ negative ++ minCheck
+            decimal ++ size ++ negative ++ minCheck ++ intCheck
           case Failure(_) if value.trim.nonEmpty => Seq(ValidationError(Messages(s"validation.error.$formValueMessageKey.notANumber")))
           case _ => Seq()
         }

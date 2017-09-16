@@ -19,7 +19,7 @@ package forms
 import models.NumberOfSharesModel
 import play.api.data.Form
 import play.api.data.Forms._
-import utils.Validation._
+import utils.Validation.genericDecimalCheck
 
 
 object NumberOfSharesForm {

@@ -97,7 +97,7 @@ trait SubmissionConnector {
     http.POST[JsValue, HttpResponse](s"$serviceUrl/investment-tax-relief/advanced-assurance/$tavcReferenceNumber/submit", Json.toJson(targetSubmissionModel))
   }
 
-  def submitComplainceStatement(submissionRequest: ComplianceStatementAnswersModel, tavcReferenceNumber: String,
+  def submitComplianceStatement(submissionRequest: ComplianceStatementAnswersModel, tavcReferenceNumber: String,
                                 registrationDetailsModel: Option[RegistrationDetailsModel])(implicit hc: HeaderCarrier): Future[HttpResponse] = {
     if(tavcReferenceNumber.isEmpty) {
       Logger.warn("[SubmissionConnector][submitComplainceStatement] An empty tavcReferenceNumber was passed")
