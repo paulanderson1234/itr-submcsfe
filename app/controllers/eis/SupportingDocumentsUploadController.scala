@@ -44,7 +44,7 @@ object SupportingDocumentsUploadController extends SupportingDocumentsUploadCont
 
 trait SupportingDocumentsUploadController extends FrontendController with AuthorisedAndEnrolledForTAVC {
 
-  override val acceptedFlows = Seq(Seq(EIS),Seq(VCT),Seq(EIS,VCT))
+  override val acceptedFlows = Seq(Seq(EIS))
 
   val attachmentsFrontEndUrl: String
   val fileUploadService: FileUploadService

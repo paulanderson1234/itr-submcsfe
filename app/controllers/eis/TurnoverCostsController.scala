@@ -44,7 +44,7 @@ object TurnoverCostsController extends TurnoverCostsController {
 
 trait TurnoverCostsController extends FrontendController with AuthorisedAndEnrolledForTAVC {
 
-  override val acceptedFlows = Seq(Seq(EIS),Seq(VCT),Seq(EIS,VCT))
+  override val acceptedFlows = Seq(Seq(EIS))
 
   implicit val formatCostModel = Json.format[CostModel]
 

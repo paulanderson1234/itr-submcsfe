@@ -63,6 +63,14 @@ trait SubmissionConnector {
 
   }
 
+  def checkAnnualLimitExceeded(previousInvestmentSchemesInRangeTotal: Int,
+                                     totalAmountRaised: Int)
+                                    (implicit hc: HeaderCarrier): Future[Option[Boolean]] = {
+
+    http.GET[Option[Boolean]](s"$serviceUrl/investment-tax-relief/compliance-statement/validate-annual-limit/" +
+      s"previous-schemes-total-in-range/$previousInvestmentSchemesInRangeTotal/total-amount-raised/$totalAmountRaised")
+  }
+
   def checkAveragedAnnualTurnover(proposedInvestmentAmount: ProposedInvestmentModel, annualTurnoverCostsModel: AnnualTurnoverCostsModel)
                                  (implicit hc: HeaderCarrier): Future[Option[Boolean]] = {
     http.GET[Option[Boolean]](s"$serviceUrl/investment-tax-relief/averaged-annual-turnover/check-averaged-annual-turnover/" +

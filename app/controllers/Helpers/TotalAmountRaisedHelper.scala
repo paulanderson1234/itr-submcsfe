@@ -34,13 +34,46 @@ object TotalAmountRaisedHelper extends TotalAmountRaisedHelper {
 
 trait TotalAmountRaisedHelper {
 
-  def getRoute(prevRFI: HadPreviousRFIModel, commercialSale: Option[CommercialSaleModel],
-               hasSub: Option[SubsidiariesModel], isKi: Boolean,  s4lConnector: S4LConnector)
+
+//  def routeReq(kiModel: KiProcessingModel, prevRFI: HadPreviousRFIModel,
+//               comSale: Option[CommercialSaleModel], hasSub: Option[SubsidiariesModel],s4lConnector: S4LConnector): Future[Result] = {
+//    getRoute(prevRFI, comSale, hasSub, kiModel.isKi, s4lConnector)
+//  }
+//
+//  def getContinueRouteRequest(s4lConnector: S4LConnector):Future[Result] = {
+//    for {
+//      kiModel <- s4lConnector.fetchAndGetFormData[KiProcessingModel](KeystoreKeys.kiProcessingModel)
+//      prevRFI <- s4lConnector.fetchAndGetFormData[HadPreviousRFIModel](KeystoreKeys.hadPreviousRFI)
+//      previousInvestments <- PreviousSchemesHelper.getPreviousInvestmentTotalFromKeystore(s4lConnector)
+//      comSale <- s4lConnector.fetchAndGetFormData[CommercialSaleModel](KeystoreKeys.commercialSale)
+//      hasSub <- s4lConnector.fetchAndGetFormData[SubsidiariesModel](KeystoreKeys.subsidiaries)
+//      route <- routeReq(kiModel.get, prevRFI.get, comSale, hasSub, s4lConnector)
+//    } yield route
+//  }
+
+
+  def getContinueRouteRequest(s4lConnector: S4LConnector) (implicit hc: HeaderCarrier, user: TAVCUser): Future[Result] = {
+    for {
+      kiModel <- s4lConnector.fetchAndGetFormData[KiProcessingModel](KeystoreKeys.kiProcessingModel)
+      prevRFI <- s4lConnector.fetchAndGetFormData[HadPreviousRFIModel](KeystoreKeys.hadPreviousRFI)
+      previousInvestments <- PreviousSchemesHelper.getPreviousInvestmentTotalFromKeystore(s4lConnector)
+      comSale <- s4lConnector.fetchAndGetFormData[CommercialSaleModel](KeystoreKeys.commercialSale)
+      hasSub <- s4lConnector.fetchAndGetFormData[SubsidiariesModel](KeystoreKeys.subsidiaries)
+      route <- getRoute( prevRFI, comSale, hasSub, kiModel, s4lConnector)
+    } yield route
+  }
+
+  def getRoute(prevRFI: Option[HadPreviousRFIModel], commercialSale: Option[CommercialSaleModel],
+               hasSub: Option[SubsidiariesModel], kiProcessingModel: Option[KiProcessingModel],  s4lConnector: S4LConnector)
               (implicit hc: HeaderCarrier, user: TAVCUser): Future[Result] = {
 
-    commercialSale match {
+    //if(prevRFI.isEmpty || kiProcessingModel.isEmpty)
+    if(kiProcessingModel.isEmpty) Future.successful(Redirect(routes.IsCompanyKnowledgeIntensiveController.show()))
+    else if (prevRFI.isEmpty) Future.successful(Redirect(routes.HadPreviousRFIController.show()))
+    else  commercialSale match {
       case Some(sale) if sale.hasCommercialSale == Constants.StandardRadioButtonNoValue => subsidiariesCheck(hasSub,s4lConnector)
-      case Some(sale) if sale.hasCommercialSale == Constants.StandardRadioButtonYesValue => getPreviousSaleRoute(prevRFI, sale, hasSub, isKi, s4lConnector)
+      case Some(sale) if sale.hasCommercialSale == Constants.StandardRadioButtonYesValue =>
+        getPreviousSaleRoute(prevRFI.get, sale, hasSub, kiProcessingModel.get.isKi,s4lConnector)
       case None => Future.successful(Redirect(routes.CommercialSaleController.show()))
     }
   }
@@ -61,11 +94,10 @@ trait TotalAmountRaisedHelper {
           routes.ProposedInvestmentController.show().url)
         Future.successful(Redirect(routes.InvestmentGrowController.show()))
       }
-      case None => {
+      case None =>
         s4lConnector.saveFormData(KeystoreKeys.backLinkSubsidiaries,
           routes.ProposedInvestmentController.show().url)
         Future.successful(Redirect(routes.SubsidiariesController.show()))
-      }
     }
   }
 

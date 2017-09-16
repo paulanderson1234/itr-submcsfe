@@ -41,7 +41,7 @@ object DeletePreviousSchemeController extends DeletePreviousSchemeController {
 
 trait DeletePreviousSchemeController extends FrontendController with AuthorisedAndEnrolledForTAVC with FeatureSwitch{
   
-  override val acceptedFlows = Seq(Seq(EIS),Seq(VCT),Seq(EIS,VCT))
+  override val acceptedFlows = Seq(Seq(EIS))
 
   def show (previousSchemeId: Int): Action[AnyContent] = { AuthorisedAndEnrolled.async { implicit user => implicit request =>
       PreviousSchemesHelper.getExistingInvestmentFromKeystore(s4lConnector, previousSchemeId).flatMap {

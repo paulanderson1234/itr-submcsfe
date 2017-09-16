@@ -18,7 +18,8 @@ package controllers.Helpers
 
 import auth.TAVCUser
 import common.KeystoreKeys
-import models.{PreviousSchemeModel, TradeStartDateModel}
+import models.{PreviousSchemeModel, ShareIssueDateModel, TradeStartDateModel}
+import org.joda.time.DateTime
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.http.HeaderCarrier
 import utils.Validation
@@ -116,6 +117,38 @@ trait PreviousSchemesHelper {
       }
 
       amount = calculateAmount(dateTradeStarted, previousInvestments)
+    } yield amount
+
+  }
+
+  def getPreviousInvestmentsInShareIssueDateRangeTotal(s4lConnector: connectors.S4LConnector)
+                                              (implicit hc: HeaderCarrier, user: TAVCUser): Future[Int] = {
+
+    def calculateAmount(shareIssueDate: Option[ShareIssueDateModel],
+                        previousInvestments: Option[Vector[PreviousSchemeModel]]): Int = {
+
+      if (shareIssueDate.isEmpty) 0
+      else {
+
+        val shareDate = shareIssueDate.get
+
+        val shareIssueDateTime = new DateTime(shareDate.year.get, shareDate.month.get, shareDate.day.get, 0, 0)
+
+        previousInvestments match {
+          case Some(data) => data.filter(investment =>
+            isPreviousInvestmentInRange(shareIssueDateTime,investment.day.get, investment.month.get,investment.year.get)).foldLeft(0)(_ + _.investmentAmount)
+          case _ => 0
+        }
+      }
+    }
+
+    for {
+      shareIssueDate <- s4lConnector.fetchAndGetFormData[ShareIssueDateModel](KeystoreKeys.shareIssueDate)
+      previousInvestments <- s4lConnector.fetchAndGetFormData[Vector[PreviousSchemeModel]](KeystoreKeys.previousSchemes).recover {
+        case _ => None
+      }
+
+      amount = calculateAmount(shareIssueDate, previousInvestments)
     } yield amount
 
   }
@@ -222,5 +255,14 @@ trait PreviousSchemesHelper {
     } yield x.last
 
     model
+  }
+
+  private def isPreviousInvestmentInRange(shareIssueDate: DateTime, previousInvestmentDay:Int,
+                                          previousInvestmentMonth:Int,
+                                          previousInvestmentYear:Int): Boolean = {
+
+    val dateToCheck = new DateTime(previousInvestmentYear, previousInvestmentMonth, previousInvestmentDay, 0, 0)
+
+    dateToCheck.isAfter(shareIssueDate.minusYears(1)) && dateToCheck.isBefore(shareIssueDate.plusDays(1))
   }
 }
