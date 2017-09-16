@@ -22,48 +22,35 @@ import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
 import play.api.test.Helpers._
 
+class HasInvestmentTradeStartedErrorControllerSpec extends BaseSpec {
 
-class GrossAssetsErrorControllerSpec extends BaseSpec {
-
-  object TestController extends GrossAssetsErrorController {
+  object TestController extends HasInvestmentTradeStartedErrorController {
     override lazy val applicationConfig = MockConfig
     override lazy val authConnector = MockAuthConnector
     override lazy val enrolmentConnector = mockEnrolmentConnector
     override lazy val s4lConnector = mockS4lConnector
   }
 
-  "GrossAssetsController" should {
-    "use the correct keystore connector" in {
-      GrossAssetsErrorController.s4lConnector shouldBe S4LConnector
-    }
+  "HasInvestmentTradeStartedErrorController" should {
     "use the correct auth connector" in {
-      GrossAssetsErrorController.authConnector shouldBe FrontendAuthConnector
+      HasInvestmentTradeStartedErrorController.authConnector shouldBe FrontendAuthConnector
     }
     "use the correct enrolment connector" in {
-      GrossAssetsErrorController.enrolmentConnector shouldBe EnrolmentConnector
+      HasInvestmentTradeStartedErrorController.enrolmentConnector shouldBe EnrolmentConnector
     }
-    "use the correct application config" in {
-      GrossAssetsErrorController.applicationConfig shouldBe FrontendAppConfig
+	"use the correct storage connector" in {
+      HasInvestmentTradeStartedErrorController.s4lConnector shouldBe S4LConnector
+    }
+	"use the correct application config" in {
+      HasInvestmentTradeStartedErrorController.applicationConfig shouldBe FrontendAppConfig
     }
   }
 
-  "Sending a GET request to GrossAssetsErrorController when authenticated and enrolled" should {
-    "return an OK" in {
+  "Sending a GET request to HasInvestmentTradeStartedErrorController when authenticated and enrolled" should {
+    "return a 200 OK" in {
       mockEnrolledRequest(eisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show)(
         result => status(result) shouldBe OK
-      )
-    }
-  }
-
-  "Sending submission to GrossAssetsErrorController when authenticated and enrolled" should {
-    "redirect to correct page" in {
-      mockEnrolledRequest(eisSchemeTypesModel)
-      submitWithSessionAndAuth(TestController.submit)(
-        result => {
-          status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(controllers.eis.routes.GrossAssetsAfterIssueController.show().url)
-        }
       )
     }
   }

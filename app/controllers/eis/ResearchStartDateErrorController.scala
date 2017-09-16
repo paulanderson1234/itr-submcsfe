@@ -16,35 +16,31 @@
 
 package controllers.eis
 
-import auth.{AuthorisedAndEnrolledForTAVC, EIS}
+import auth.{AuthorisedAndEnrolledForTAVC, EIS, VCT}
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
-import views.html.eis.companyDetails.GrossAssetsError
+import views.html.eis.companyDetails.ResearchStartDateError
+
 
 import scala.concurrent.Future
 
-object GrossAssetsErrorController extends GrossAssetsErrorController
-{
+object ResearchStartDateErrorController extends ResearchStartDateErrorController{
+  override lazy val s4lConnector = S4LConnector
   override lazy val applicationConfig = FrontendAppConfig
   override lazy val authConnector = FrontendAuthConnector
   override lazy val enrolmentConnector = EnrolmentConnector
-  override lazy val s4lConnector = S4LConnector
 }
 
-trait GrossAssetsErrorController extends FrontendController with AuthorisedAndEnrolledForTAVC {
+trait ResearchStartDateErrorController extends FrontendController with AuthorisedAndEnrolledForTAVC  {
 
+  override val acceptedFlows = Seq(Seq(EIS),Seq(VCT),Seq(EIS,VCT))
 
-  override val acceptedFlows = Seq(Seq(EIS))
-
-  val show = AuthorisedAndEnrolled.async { implicit user => implicit request =>
-    Future.successful(Ok(GrossAssetsError()))
-  }
-
-  val submit = AuthorisedAndEnrolled.async { implicit user => implicit request =>
-    Future.successful(Redirect(routes.GrossAssetsAfterIssueController.show()))
-  }
-
+  val show = 
+    AuthorisedAndEnrolled.async { implicit user => implicit request =>
+	  Future.successful(Ok(ResearchStartDateError()))
+    }
+  
 }

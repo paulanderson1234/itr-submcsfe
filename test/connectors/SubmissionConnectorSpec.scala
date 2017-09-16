@@ -36,9 +36,10 @@ import java.util.UUID
 
 import auth.MockConfig
 import common.Constants._
-import models.{GrossAssetsModel, AddressModel, AnnualTurnoverCostsModel, ProposedInvestmentModel}
+import models._
 import play.api.test.Helpers._
 import fixtures.SubmissionFixture
+import forms.GrossAssetsAfterIssueForm
 import models.registration.RegistrationDetailsModel
 import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.play.OneServerPerSuite
@@ -72,6 +73,7 @@ class SubmissionConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndA
   val tradeStartYearYes = true
   val tradeStartYearNo = false
   val grossAssetsAmount = 1000
+  val grossAssetsAfterIssueAmount = 16000000
 
   object TargetSubmissionConnector extends SubmissionConnector with FrontendController {
     override val serviceUrl = MockConfig.submissionUrl
@@ -339,6 +341,30 @@ class SubmissionConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndA
         s"${TargetSubmissionConnector.serviceUrl}/investment-tax-relief/gross-assets/gross-assets-checker/check-total/gross-amount/$schemeTypeEis/$grossAssetsAmount"))
         (Matchers.any(),Matchers.any())).thenReturn(Some(validResponse))
       await(result) shouldBe Some(validResponse)
+    }
+  }
+
+  "Calling checkGrossAssetsAfterIssueAmountExceeded with exceeded amount" should {
+
+    lazy val result = TargetSubmissionConnector.checkGrossAssetsAfterIssueAmountExceeded(grossAssetsAfterIssueAmount+1)
+
+    "return a valid Boolean" in {
+      when(mockHttp.GET[Option[Boolean]](Matchers.eq(
+        s"${TargetSubmissionConnector.serviceUrl}/investment-tax-relief/gross-assets/gross-assets-after-issue-checker/check-total/gross-amount/${grossAssetsAfterIssueAmount+1}"))
+        (Matchers.any(),Matchers.any())).thenReturn(Some(trueResponse))
+      await(result) shouldBe Some(trueResponse)
+    }
+  }
+
+  "Calling checkGrossAssetsAfterIssueAmountExceeded with valid amount" should {
+
+    lazy val result = TargetSubmissionConnector.checkGrossAssetsAfterIssueAmountExceeded(grossAssetsAfterIssueAmount)
+
+    "return a valid Boolean" in {
+      when(mockHttp.GET[Option[Boolean]](Matchers.eq(
+        s"${TargetSubmissionConnector.serviceUrl}/investment-tax-relief/gross-assets/gross-assets-after-issue-checker/check-total/gross-amount/$grossAssetsAfterIssueAmount"))
+        (Matchers.any(),Matchers.any())).thenReturn(Some(falseResponse))
+      await(result) shouldBe Some(falseResponse)
     }
   }
 }

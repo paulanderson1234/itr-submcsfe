@@ -70,8 +70,7 @@ trait HasInvestmentTradeStartedController extends FrontendController with Author
                   Redirect(routes.CommercialSaleController.show())
                 }
                 else {
-                  //TODO Should route to Investment Trade start date ERROR page once completed, if less than 4 months
-                  Redirect(routes.HasInvestmentTradeStartedController.show())
+                  Redirect(routes.HasInvestmentTradeStartedErrorController.show())
                 }
               case _ => {
                 Logger.warn(s"[HasInvestmentTradeStartedController][submit] - Call to validate investment trade start date in backend failed")
@@ -84,9 +83,8 @@ trait HasInvestmentTradeStartedController extends FrontendController with Author
               }
             }
           }
-          //TODO Should route to Investment Trade start date error page once completed, if no button selected
           case Constants.StandardRadioButtonNoValue => {
-            Future.successful(Redirect(routes.HasInvestmentTradeStartedController.show()))
+            Future.successful(Redirect(routes.HasInvestmentTradeStartedErrorController.show()))
           }
         }
       }
