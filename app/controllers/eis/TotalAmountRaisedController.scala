@@ -21,7 +21,7 @@ import common.{Constants, KeystoreKeys}
 import config.FrontendGlobal._
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector, SubmissionConnector}
-import controllers.Helpers.{ControllerHelpers, PreviousSchemesHelper}
+import controllers.Helpers.PreviousSchemesHelper
 import forms.TotalAmountRaisedForm._
 import models.{HadPreviousRFIModel, KiProcessingModel, ShareIssueDateModel, TotalAmountRaisedModel}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
@@ -60,12 +60,12 @@ trait TotalAmountRaisedController extends FrontendController with AuthorisedAndE
     implicit request =>
 
       def validateLifetimeAllowanceFirstCheck(kiModel: Option[KiProcessingModel], isLifetimeAlowanceExceeded: Option[Boolean],
-                       prevRFI: HadPreviousRFIModel, totalAmountRaised: Int): Future[Result] = {
+                                              prevRFI: HadPreviousRFIModel, totalAmountRaised: Int): Future[Result] = {
         kiModel match {
           // check previous answers present
           case Some(dataWithPreviousValid) => {
             // all good - TODO:Save the lifetime exceeded flag? - decide how to handle. For now I put it in keystore..
-            if(isLifetimeAlowanceExceeded.nonEmpty){
+            if (isLifetimeAlowanceExceeded.nonEmpty) {
               s4lConnector.saveFormData(KeystoreKeys.lifeTimeAllowanceExceeded, isLifetimeAlowanceExceeded.getOrElse(false))
             }
             isLifetimeAlowanceExceeded match {
@@ -87,12 +87,12 @@ trait TotalAmountRaisedController extends FrontendController with AuthorisedAndE
         }
       }
 
-      def validateAnnualLimitRouteRequestSecondCheck(totalAmountRaised:Int) : Future[Result] = {
+      def validateAnnualLimitRouteRequestSecondCheck(totalAmountRaised: Int): Future[Result] = {
         def routeForResult(shareIssueDate: Option[ShareIssueDateModel], isAnnualLimitExceeded: Option[Boolean]): Future[Result] = {
-          if(shareIssueDate.isEmpty) {
+          if (shareIssueDate.isEmpty) {
             Future.successful(Redirect(routes.ShareIssueDateController.show()))
           } else
-            // evaluate
+          // evaluate
             isAnnualLimitExceeded match {
               case Some(check) if !check => TotalAmountRaisedHelper.getContinueRouteRequest(s4lConnector)
               case Some(check) if check => Future.successful(Redirect(routes.AnnualLimitExceededErrorController.show()))
@@ -113,8 +113,8 @@ trait TotalAmountRaisedController extends FrontendController with AuthorisedAndE
       // Form submit validation  and routing
       totalAmountRaisedForm.bindFromRequest().fold(
         formWithErrors => {
-          ControllerHelpers.getSavedBackLink(KeystoreKeys.backLinkProposedInvestment, s4lConnector).flatMap(url =>
-            Future.successful(BadRequest(TotalAmountRaised(formWithErrors))))
+
+          Future.successful(BadRequest(TotalAmountRaised(formWithErrors)))
         },
         validFormData => {
           s4lConnector.saveFormData(KeystoreKeys.totalAmountRaised, validFormData)
@@ -127,7 +127,7 @@ trait TotalAmountRaisedController extends FrontendController with AuthorisedAndE
             isLifetimeAlowanceExceeded <- submissionConnector.checkLifetimeAllowanceExceeded(
               if (hadPrevRFI.fold(Constants.StandardRadioButtonNoValue)(_.hadPreviousRFI) == Constants.StandardRadioButtonYesValue) true else false,
               if (kiModel.isDefined) kiModel.get.isKi else false, previousInvestments,
-              validFormData.amount.toIntExact)
+              validFormData.amount.toLongExact)
 
             route <- validateLifetimeAllowanceFirstCheck(kiModel, isLifetimeAlowanceExceeded, hadPrevRFI.get, validFormData.amount.toIntExact)
           } yield route) recover {

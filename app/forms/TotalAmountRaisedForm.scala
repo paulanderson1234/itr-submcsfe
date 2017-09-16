@@ -25,12 +25,11 @@ object TotalAmountRaisedForm {
 
   val messageKey = "totalAmountRaised"
   val minAllowableAmount: Int = 0
-  val maxLength = 9
 
   val totalAmountRaisedForm = Form(
     mapping(
       "amount" -> nonEmptyText
-        .verifying(Validation.genericWholeAmountCheck(messageKey, minAllowableAmount, maxLength))
+        .verifying(Validation.genericWholeAmountCheck(messageKey, minAllowableAmount))
         .transform[BigDecimal](value => BigDecimal(value), _.toString())
     )(TotalAmountRaisedModel.apply)(TotalAmountRaisedModel.unapply)
   )

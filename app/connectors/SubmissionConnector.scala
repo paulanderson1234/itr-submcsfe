@@ -15,17 +15,15 @@
  */
 
 package connectors
+
 import config.{FrontendAppConfig, WSHttp}
 import models.registration.RegistrationDetailsModel
 import models.submission.{ComplianceStatementAnswersModel, DesSubmissionCSModel, DesSubmitAdvancedAssuranceModel, Submission}
 import models.{AnnualTurnoverCostsModel, GrossAssetsAfterIssueModel, GrossAssetsModel, ProposedInvestmentModel}
 import play.api.Logger
-import play.api.http.Status.OK
 import play.api.libs.json.{JsValue, Json}
 import uk.gov.hmrc.play.config.ServicesConfig
 import uk.gov.hmrc.play.http._
-
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 object SubmissionConnector extends SubmissionConnector with ServicesConfig {
@@ -54,7 +52,7 @@ trait SubmissionConnector {
       s"$hasPercentageWithMasters/has-ten-year-plan/$hasTenYearPlan")
   }
 
-  def checkLifetimeAllowanceExceeded(hadPrevRFI: Boolean, isKi: Boolean, previousInvestmentSchemesTotal: BigInt,
+  def checkLifetimeAllowanceExceeded(hadPrevRFI: Boolean, isKi: Boolean, previousInvestmentSchemesTotal: Long,
                                      totalAmountRaised: BigInt)
                                     (implicit hc: HeaderCarrier): Future[Option[Boolean]] = {
 
@@ -63,8 +61,8 @@ trait SubmissionConnector {
 
   }
 
-  def checkAnnualLimitExceeded(previousInvestmentSchemesInRangeTotal: Int,
-                                     totalAmountRaised: Int)
+  def checkAnnualLimitExceeded(previousInvestmentSchemesInRangeTotal: Long,
+                                     totalAmountRaised: BigInt)
                                     (implicit hc: HeaderCarrier): Future[Option[Boolean]] = {
 
     http.GET[Option[Boolean]](s"$serviceUrl/investment-tax-relief/compliance-statement/validate-annual-limit/" +
@@ -82,7 +80,7 @@ trait SubmissionConnector {
                                     (implicit hc: HeaderCarrier): Future[Option[Boolean]] = {
 
     http.GET[Option[Boolean]](s"$serviceUrl/investment-tax-relief/gross-assets/gross-assets-checker/check-total/gross-amount/" +
-      s"$schemeType/${grossAssetAmount.grossAmount.toIntExact}")
+      s"$schemeType/${grossAssetAmount.grossAmount.toLongExact}")
 
   }
 
@@ -141,7 +139,7 @@ trait SubmissionConnector {
     http.GET[HttpResponse](s"$serviceUrl/investment-tax-relief/compliance-statement/full-time-equivalence-check/$schemeType/$employeeCount")
   }
 
-  def checkGrossAssetsAfterIssueAmountExceeded(grossAssetAmount: Int)
+  def checkGrossAssetsAfterIssueAmountExceeded(grossAssetAmount: Long)
                                     (implicit hc: HeaderCarrier): Future[Option[Boolean]] = {
 
     http.GET[Option[Boolean]](s"$serviceUrl/investment-tax-relief/gross-assets/gross-assets-after-issue-checker/check-total/gross-amount/$grossAssetAmount")

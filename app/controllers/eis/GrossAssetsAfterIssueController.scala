@@ -73,7 +73,7 @@ trait GrossAssetsAfterIssueController extends FrontendController with Authorised
       validFormData => {
         s4lConnector.saveFormData(KeystoreKeys.grossAssetsAfterIssue, validFormData)
         (for {
-          grossAssetsAfterIssueExceeded <- submissionConnector.checkGrossAssetsAfterIssueAmountExceeded(validFormData.grossAmount.toIntExact)
+          grossAssetsAfterIssueExceeded <- submissionConnector.checkGrossAssetsAfterIssueAmountExceeded(validFormData.grossAmount.toLongExact)
           dateOfIncorporationModel <- s4lConnector.fetchAndGetFormData[DateOfIncorporationModel](KeystoreKeys.dateOfIncorporation)
           route <- routeRequest(grossAssetsAfterIssueExceeded, dateOfIncorporationModel)
         } yield route) recover {

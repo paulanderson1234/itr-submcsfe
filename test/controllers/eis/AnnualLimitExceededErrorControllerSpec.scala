@@ -17,10 +17,16 @@
 package controllers.eis
 
 import auth.{MockAuthConnector, MockConfig}
+import common.KeystoreKeys
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
-import controllers.helpers.BaseSpec
+import models.{PreviousSchemeModel, _}
+import org.mockito.Matchers
+import org.mockito.Mockito._
 import play.api.test.Helpers._
+import controllers.helpers.BaseSpec
+
+import scala.concurrent.Future
 
 class AnnualLimitExceededErrorControllerSpec extends BaseSpec {
 
@@ -55,14 +61,521 @@ class AnnualLimitExceededErrorControllerSpec extends BaseSpec {
     }
   }
 
-  "Sending submission to AnnualLimitExceededErrorController when authenticated and enrolled" should {
-    "redirect to correct page" in {
+  "Sending a valid form submit to the AnnualLimitExceededErrorController for first investment when more than 7 years from " +
+    "Commercial sale date when not deemed knowledge intensive and lifetime limit has not been exceeded" should {
+    "redirect to new geographical market page" in {
+      when(mockS4lConnector.fetchAndGetFormData[KiProcessingModel](Matchers.eq(KeystoreKeys.kiProcessingModel))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(falseKIModel)))
+      when(mockS4lConnector.fetchAndGetFormData[HadPreviousRFIModel](Matchers.eq(KeystoreKeys.hadPreviousRFI))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(keyStoreSavedHadPreviousRFINo)))
+      when(mockS4lConnector.fetchAndGetFormData[CommercialSaleModel](Matchers.eq(KeystoreKeys.commercialSale))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(keyStoreSavedCommercialSale7YearsOneDay)))
+      when(mockS4lConnector.fetchAndGetFormData[SubsidiariesModel](Matchers.eq(KeystoreKeys.subsidiaries))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(keyStoreSavedSubsidiariesYes)))
+      when(mockS4lConnector.fetchAndGetFormData[DateOfIncorporationModel](Matchers.eq(KeystoreKeys.dateOfIncorporation))(Matchers.any(),
+        Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(keyStoreSavedDOI3YearsLessOneDay)))
+      when(mockS4lConnector.fetchAndGetFormData[Vector[PreviousSchemeModel]](Matchers.eq(KeystoreKeys.previousSchemes))(Matchers.any(),
+        Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(previousSchemeTrueKIVectorList)))
       mockEnrolledRequest(eisSchemeTypesModel)
-      submitWithSessionAndAuth(TestController.submit)(
+      submitWithSessionAndAuth(TestController.submit,
+        "investmentAmount" -> "123456")(
         result => {
-		  status(result) shouldBe SEE_OTHER
-          //TODO: change to match target options with mocking page page when available
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(routes.NewGeographicalMarketController.show().url)
+        }
+      )
+    }
+  }
+
+  "Sending a valid form submit to the AnnualLimitExceededError Controlller for first investment when more than 10 years from " +
+    "Commercial sale date and not exceeded lifetime limit" should {
+    "redirect to new geographical market page" in {
+      when(mockS4lConnector.fetchAndGetFormData[KiProcessingModel](Matchers.eq(KeystoreKeys.kiProcessingModel))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(trueKIModel)))
+      when(mockS4lConnector.fetchAndGetFormData[HadPreviousRFIModel](Matchers.eq(KeystoreKeys.hadPreviousRFI))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(keyStoreSavedHadPreviousRFINo)))
+      when(mockS4lConnector.fetchAndGetFormData[CommercialSaleModel](Matchers.eq(KeystoreKeys.commercialSale))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(keyStoreSavedCommercialSale10YearsOneDay)))
+      when(mockS4lConnector.fetchAndGetFormData[SubsidiariesModel](Matchers.eq(KeystoreKeys.subsidiaries))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(keyStoreSavedSubsidiariesYes)))
+      when(mockS4lConnector.fetchAndGetFormData[DateOfIncorporationModel](Matchers.eq(KeystoreKeys.dateOfIncorporation))(Matchers.any(),
+        Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(keyStoreSavedDOI3YearsLessOneDay)))
+      when(mockS4lConnector.fetchAndGetFormData[Vector[PreviousSchemeModel]](Matchers.eq(KeystoreKeys.previousSchemes))(Matchers.any(),
+        Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(previousSchemeTrueKIVectorList)))
+      mockEnrolledRequest(eisSchemeTypesModel)
+      submitWithSessionAndAuth(TestController.submit,
+        "investmentAmount" -> "123456")(
+        result => {
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(routes.NewGeographicalMarketController.show().url)
+        }
+      )
+    }
+  }
+
+  "Sending a valid form submit to the AnnualLimitExceededErrorController for first investment when NOT more than 7 years from " +
+    "Commercial sale date when not deemed knowledge intensive with subsidiaries and not exceeded lifetime limit" should {
+    "redirect to new subsidiaries-spending-investment page" in {
+      when(mockS4lConnector.fetchAndGetFormData[KiProcessingModel](Matchers.eq(KeystoreKeys.kiProcessingModel))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(falseKIModel)))
+      when(mockS4lConnector.fetchAndGetFormData[HadPreviousRFIModel](Matchers.eq(KeystoreKeys.hadPreviousRFI))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(keyStoreSavedHadPreviousRFINo)))
+      when(mockS4lConnector.fetchAndGetFormData[CommercialSaleModel](Matchers.eq(KeystoreKeys.commercialSale))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(keyStoreSavedCommercialSale7YearsLessOneDay)))
+      when(mockS4lConnector.fetchAndGetFormData[SubsidiariesModel](Matchers.eq(KeystoreKeys.subsidiaries))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(keyStoreSavedSubsidiariesYes)))
+      when(mockS4lConnector.fetchAndGetFormData[DateOfIncorporationModel](Matchers.eq(KeystoreKeys.dateOfIncorporation))(Matchers.any(),
+        Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(keyStoreSavedDOI3YearsLessOneDay)))
+      when(mockS4lConnector.fetchAndGetFormData[Vector[PreviousSchemeModel]](Matchers.eq(KeystoreKeys.previousSchemes))(Matchers.any(),
+        Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(previousSchemeTrueKIVectorList)))
+      mockEnrolledRequest(eisSchemeTypesModel)
+      submitWithSessionAndAuth(TestController.submit,
+        "investmentAmount" -> "123456")(
+        result => {
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(routes.SubsidiariesSpendingInvestmentController.show().url)
+        }
+      )
+    }
+  }
+
+  "Sending a valid form submit to the AnnualLimitExceededErrorController for first investment when EXACTLY 7 years from " +
+    "Commercial sale date when not deemed knowledge intensive with subsidiaries and not exceeded lifetime limit" should {
+    "redirect to new subsidiaries-spending-investment page" in {
+      when(mockS4lConnector.fetchAndGetFormData[KiProcessingModel](Matchers.eq(KeystoreKeys.kiProcessingModel))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(falseKIModel)))
+      when(mockS4lConnector.fetchAndGetFormData[HadPreviousRFIModel](Matchers.eq(KeystoreKeys.hadPreviousRFI))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(keyStoreSavedHadPreviousRFINo)))
+      when(mockS4lConnector.fetchAndGetFormData[CommercialSaleModel](Matchers.eq(KeystoreKeys.commercialSale))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(keyStoreSavedCommercialSale7Years)))
+      when(mockS4lConnector.fetchAndGetFormData[SubsidiariesModel](Matchers.eq(KeystoreKeys.subsidiaries))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(keyStoreSavedSubsidiariesYes)))
+      when(mockS4lConnector.fetchAndGetFormData[DateOfIncorporationModel](Matchers.eq(KeystoreKeys.dateOfIncorporation))(Matchers.any(),
+        Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(keyStoreSavedDOI3YearsLessOneDay)))
+      when(mockS4lConnector.fetchAndGetFormData[Vector[PreviousSchemeModel]](Matchers.eq(KeystoreKeys.previousSchemes))(Matchers.any(),
+        Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(previousSchemeTrueKIVectorList)))
+      mockEnrolledRequest(eisSchemeTypesModel)
+      submitWithSessionAndAuth(TestController.submit,
+        "investmentAmount" -> "123456")(
+        result => {
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(routes.SubsidiariesSpendingInvestmentController.show().url)
+        }
+      )
+    }
+  }
+
+  "Sending a valid form submit to the AnnualLimitExceededErrorController for first investment when NOT more than 10 years from " +
+    "Commercial sale date when it is deemed knowledge intensive with subsidiaries and not exceeded lifetime limit" should {
+    "redirect to new subsidiaries-spending-investment page" in {
+      when(mockS4lConnector.fetchAndGetFormData[KiProcessingModel](Matchers.eq(KeystoreKeys.kiProcessingModel))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(trueKIModel)))
+      when(mockS4lConnector.fetchAndGetFormData[HadPreviousRFIModel](Matchers.eq(KeystoreKeys.hadPreviousRFI))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(keyStoreSavedHadPreviousRFINo)))
+      when(mockS4lConnector.fetchAndGetFormData[CommercialSaleModel](Matchers.eq(KeystoreKeys.commercialSale))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(keyStoreSavedCommercialSale7YearsLessOneDay)))
+      when(mockS4lConnector.fetchAndGetFormData[SubsidiariesModel](Matchers.eq(KeystoreKeys.subsidiaries))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(keyStoreSavedSubsidiariesYes)))
+      when(mockS4lConnector.fetchAndGetFormData[DateOfIncorporationModel](Matchers.eq(KeystoreKeys.dateOfIncorporation))(Matchers.any(),
+        Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(keyStoreSavedDOI3Years)))
+      when(mockS4lConnector.fetchAndGetFormData[Vector[PreviousSchemeModel]](Matchers.eq(KeystoreKeys.previousSchemes))(Matchers.any(),
+        Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(previousSchemeTrueKIVectorList)))
+      mockEnrolledRequest(eisSchemeTypesModel)
+      submitWithSessionAndAuth(TestController.submit,
+        "investmentAmount" -> "123456")(
+        result => {
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(routes.SubsidiariesSpendingInvestmentController.show().url)
+        }
+      )
+    }
+  }
+
+  "Sending a valid form submit to the AnnualLimitExceededErrorController for first investment when EXACTLY 10 years from " +
+    "Commercial sale date when it is deemed knowledge intensive with subsidiaries and not exceeded lifetime limit" should {
+    "redirect to new subsidiaries-spending-investment page" in {
+      when(mockS4lConnector.fetchAndGetFormData[KiProcessingModel](Matchers.eq(KeystoreKeys.kiProcessingModel))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(trueKIModel)))
+      when(mockS4lConnector.fetchAndGetFormData[HadPreviousRFIModel](Matchers.eq(KeystoreKeys.hadPreviousRFI))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(keyStoreSavedHadPreviousRFINo)))
+      when(mockS4lConnector.fetchAndGetFormData[CommercialSaleModel](Matchers.eq(KeystoreKeys.commercialSale))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(keyStoreSavedCommercialSale7Years)))
+      when(mockS4lConnector.fetchAndGetFormData[SubsidiariesModel](Matchers.eq(KeystoreKeys.subsidiaries))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(keyStoreSavedSubsidiariesYes)))
+      when(mockS4lConnector.fetchAndGetFormData[DateOfIncorporationModel](Matchers.eq(KeystoreKeys.dateOfIncorporation))(Matchers.any(),
+        Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(keyStoreSavedDOI3Years)))
+      when(mockS4lConnector.fetchAndGetFormData[Vector[PreviousSchemeModel]](Matchers.eq(KeystoreKeys.previousSchemes))(Matchers.any(),
+        Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(previousSchemeTrueKIVectorList)))
+      mockEnrolledRequest(eisSchemeTypesModel)
+      submitWithSessionAndAuth(TestController.submit,
+        "investmentAmount" -> "123456")(
+        result => {
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(routes.SubsidiariesSpendingInvestmentController.show().url)
+        }
+      )
+    }
+  }
+
+
+  "Sending a valid form submit to the AnnualLimitExceededErrorController for first investment is NOT more than 7 years from " +
+    "Commercial sale date when it is NOT deemed knowledge intensive and without any subsidiaries and not exceeded lifetime limit" should {
+    "redirect to new how-plan-to-use-investment page" in {
+      when(mockS4lConnector.fetchAndGetFormData[KiProcessingModel](Matchers.eq(KeystoreKeys.kiProcessingModel))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(falseKIModel)))
+      when(mockS4lConnector.fetchAndGetFormData[HadPreviousRFIModel](Matchers.eq(KeystoreKeys.hadPreviousRFI))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(keyStoreSavedHadPreviousRFINo)))
+      when(mockS4lConnector.fetchAndGetFormData[CommercialSaleModel](Matchers.eq(KeystoreKeys.commercialSale))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(keyStoreSavedCommercialSale7YearsLessOneDay)))
+      when(mockS4lConnector.fetchAndGetFormData[SubsidiariesModel](Matchers.eq(KeystoreKeys.subsidiaries))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(keyStoreSavedSubsidiariesNo)))
+      when(mockS4lConnector.fetchAndGetFormData[DateOfIncorporationModel](Matchers.eq(KeystoreKeys.dateOfIncorporation))(Matchers.any(),
+        Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(keyStoreSavedDOI3YearsLessOneDay)))
+      when(mockS4lConnector.fetchAndGetFormData[Vector[PreviousSchemeModel]](Matchers.eq(KeystoreKeys.previousSchemes))(Matchers.any(),
+        Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(previousSchemeTrueKIVectorList)))
+      mockEnrolledRequest(eisSchemeTypesModel)
+      submitWithSessionAndAuth(TestController.submit,
+        "investmentAmount" -> "123456")(
+        result => {
+          status(result) shouldBe SEE_OTHER
           redirectLocation(result) shouldBe Some(routes.InvestmentGrowController.show().url)
+        }
+      )
+    }
+  }
+
+  "Sending a valid form submit to the AnnualLimitExceededErrorController for first investment is EXACTLY 7 years from " +
+    "Commercial sale date when it is NOT deemed knowledge intensive and without any subsidiaries and not exceeded lifetime limit" should {
+    "redirect to new how-plan-to-use-investment page" in {
+      when(mockS4lConnector.fetchAndGetFormData[KiProcessingModel](Matchers.eq(KeystoreKeys.kiProcessingModel))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(falseKIModel)))
+      when(mockS4lConnector.fetchAndGetFormData[HadPreviousRFIModel](Matchers.eq(KeystoreKeys.hadPreviousRFI))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(keyStoreSavedHadPreviousRFINo)))
+      when(mockS4lConnector.fetchAndGetFormData[CommercialSaleModel](Matchers.eq(KeystoreKeys.commercialSale))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(keyStoreSavedCommercialSale7Years)))
+      when(mockS4lConnector.fetchAndGetFormData[SubsidiariesModel](Matchers.eq(KeystoreKeys.subsidiaries))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(keyStoreSavedSubsidiariesNo)))
+      when(mockS4lConnector.fetchAndGetFormData[DateOfIncorporationModel](Matchers.eq(KeystoreKeys.dateOfIncorporation))(Matchers.any(),
+        Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(keyStoreSavedDOI3YearsOneDay)))
+      when(mockS4lConnector.fetchAndGetFormData[Vector[PreviousSchemeModel]](Matchers.eq(KeystoreKeys.previousSchemes))(Matchers.any(),
+        Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(previousSchemeTrueKIVectorList)))
+      mockEnrolledRequest(eisSchemeTypesModel)
+      submitWithSessionAndAuth(TestController.submit,
+        "investmentAmount" -> "123456")(
+        result => {
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(routes.InvestmentGrowController.show().url)
+        }
+      )
+    }
+  }
+
+  "Sending a valid form submit to the AnnualLimitExceededErrorController for the first investment when NOT more than 10 years from " +
+    "Commercial sale date and when it IS deemed knowledge intensive and without any subsidiaries and not exceeded lifetime limit" should {
+    "redirect to new how-plan-to-use-investment page" in {
+      when(mockS4lConnector.fetchAndGetFormData[KiProcessingModel](Matchers.eq(KeystoreKeys.kiProcessingModel))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(trueKIModel)))
+      when(mockS4lConnector.fetchAndGetFormData[HadPreviousRFIModel](Matchers.eq(KeystoreKeys.hadPreviousRFI))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(keyStoreSavedHadPreviousRFINo)))
+      when(mockS4lConnector.fetchAndGetFormData[CommercialSaleModel](Matchers.eq(KeystoreKeys.commercialSale))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(keyStoreSavedCommercialSale10YearsLessOneDay)))
+      when(mockS4lConnector.fetchAndGetFormData[SubsidiariesModel](Matchers.eq(KeystoreKeys.subsidiaries))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(keyStoreSavedSubsidiariesNo)))
+      when(mockS4lConnector.fetchAndGetFormData[DateOfIncorporationModel](Matchers.eq(KeystoreKeys.dateOfIncorporation))(Matchers.any(),
+        Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(keyStoreSavedDOI3Years)))
+      when(mockS4lConnector.fetchAndGetFormData[Vector[PreviousSchemeModel]](Matchers.eq(KeystoreKeys.previousSchemes))(Matchers.any(),
+        Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(previousSchemeTrueKIVectorList)))
+      mockEnrolledRequest(eisSchemeTypesModel)
+      submitWithSessionAndAuth(TestController.submit,
+        "investmentAmount" -> "123456")(
+        result => {
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(routes.InvestmentGrowController.show().url)
+        }
+      )
+    }
+  }
+
+  "Sending a valid form submit to the AnnualLimitExceededErrorController for the first investment when EXACTLY 10 years from " +
+    "Commercial sale date and when it IS deemed knowledge intensive and without any subsidiaries and not exceeded lifetime limit" should {
+    "redirect to new how-plan-to-use-investment page" in {
+      when(mockS4lConnector.fetchAndGetFormData[KiProcessingModel](Matchers.eq(KeystoreKeys.kiProcessingModel))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(trueKIModel)))
+      when(mockS4lConnector.fetchAndGetFormData[HadPreviousRFIModel](Matchers.eq(KeystoreKeys.hadPreviousRFI))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(keyStoreSavedHadPreviousRFINo)))
+      when(mockS4lConnector.fetchAndGetFormData[CommercialSaleModel](Matchers.eq(KeystoreKeys.commercialSale))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(keyStoreSavedCommercialSale10Years)))
+      when(mockS4lConnector.fetchAndGetFormData[SubsidiariesModel](Matchers.eq(KeystoreKeys.subsidiaries))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(keyStoreSavedSubsidiariesNo)))
+      when(mockS4lConnector.fetchAndGetFormData[DateOfIncorporationModel](Matchers.eq(KeystoreKeys.dateOfIncorporation))(Matchers.any(),
+        Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(keyStoreSavedDOI3Years)))
+      when(mockS4lConnector.fetchAndGetFormData[Vector[PreviousSchemeModel]](Matchers.eq(KeystoreKeys.previousSchemes))(Matchers.any(),
+        Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(previousSchemeTrueKIVectorList)))
+      mockEnrolledRequest(eisSchemeTypesModel)
+      submitWithSessionAndAuth(TestController.submit,
+        "investmentAmount" -> "123456")(
+        result => {
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(routes.InvestmentGrowController.show().url)
+        }
+      )
+    }
+  }
+
+  "Sending a valid form submit to the AnnualLimitExceededErrorController for the first investment when no commercial sale has been made " +
+    "and when it IS deemed knowledge intensive and has subsidiaries and not exceeded lifetime limit" should {
+    "redirect to new subsidiaries-spending-investment page" in {
+      when(mockS4lConnector.fetchAndGetFormData[KiProcessingModel](Matchers.eq(KeystoreKeys.kiProcessingModel))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(trueKIModel)))
+      when(mockS4lConnector.fetchAndGetFormData[HadPreviousRFIModel](Matchers.eq(KeystoreKeys.hadPreviousRFI))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(keyStoreSavedHadPreviousRFINo)))
+      when(mockS4lConnector.fetchAndGetFormData[CommercialSaleModel](Matchers.eq(KeystoreKeys.commercialSale))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(keyStoreSavedCommercialSaleNo)))
+      when(mockS4lConnector.fetchAndGetFormData[SubsidiariesModel](Matchers.eq(KeystoreKeys.subsidiaries))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(keyStoreSavedSubsidiariesYes)))
+      when(mockS4lConnector.fetchAndGetFormData[DateOfIncorporationModel](Matchers.eq(KeystoreKeys.dateOfIncorporation))(Matchers.any(),
+        Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(keyStoreSavedDOI3Years)))
+      when(mockS4lConnector.fetchAndGetFormData[Vector[PreviousSchemeModel]](Matchers.eq(KeystoreKeys.previousSchemes))(Matchers.any(),
+        Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(previousSchemeTrueKIVectorList)))
+      mockEnrolledRequest(eisSchemeTypesModel)
+      submitWithSessionAndAuth(TestController.submit,
+        "investmentAmount" -> "123456")(
+        result => {
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(routes.SubsidiariesSpendingInvestmentController.show().url)
+        }
+      )
+    }
+  }
+
+  "Sending a valid form submit to the AnnualLimitExceededErrorController for the first investment when no commercial sale has been made " +
+    "and when it IS deemed knowledge intensive and does not have subsidiaries and not exceeded lifetime limit" should {
+    "redirect to investment grow page" in {
+      when(mockS4lConnector.fetchAndGetFormData[KiProcessingModel](Matchers.eq(KeystoreKeys.kiProcessingModel))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(trueKIModel)))
+      when(mockS4lConnector.fetchAndGetFormData[HadPreviousRFIModel](Matchers.eq(KeystoreKeys.hadPreviousRFI))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(keyStoreSavedHadPreviousRFINo)))
+      when(mockS4lConnector.fetchAndGetFormData[CommercialSaleModel](Matchers.eq(KeystoreKeys.commercialSale))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(keyStoreSavedCommercialSaleNo)))
+      when(mockS4lConnector.fetchAndGetFormData[SubsidiariesModel](Matchers.eq(KeystoreKeys.subsidiaries))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(keyStoreSavedSubsidiariesNo)))
+      when(mockS4lConnector.fetchAndGetFormData[DateOfIncorporationModel](Matchers.eq(KeystoreKeys.dateOfIncorporation))(Matchers.any(), Matchers.any(),
+        Matchers.any())).thenReturn(Future.successful(Option(keyStoreSavedDOI3Years)))
+      when(mockS4lConnector.fetchAndGetFormData[Vector[PreviousSchemeModel]](Matchers.eq(KeystoreKeys.previousSchemes))(Matchers.any(),
+        Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(previousSchemeTrueKIVectorList)))
+      mockEnrolledRequest(eisSchemeTypesModel)
+      submitWithSessionAndAuth(TestController.submit,
+        "investmentAmount" -> "123456")(
+        result => {
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(routes.InvestmentGrowController.show().url)
+        }
+      )
+    }
+  }
+
+  "Sending a valid form submit to the AnnualLimitExceededErrorController for the first investment when no commercial sale has been made " +
+    "and when it IS NOT deemed knowledge intensive and does not have subsidiaries and not exceeded lifetime limit" should {
+    "redirect to investment grow page" in {
+      when(mockS4lConnector.fetchAndGetFormData[KiProcessingModel](Matchers.eq(KeystoreKeys.kiProcessingModel))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(falseKIModel)))
+      when(mockS4lConnector.fetchAndGetFormData[HadPreviousRFIModel](Matchers.eq(KeystoreKeys.hadPreviousRFI))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(keyStoreSavedHadPreviousRFINo)))
+      when(mockS4lConnector.fetchAndGetFormData[CommercialSaleModel](Matchers.eq(KeystoreKeys.commercialSale))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(keyStoreSavedCommercialSaleNo)))
+      when(mockS4lConnector.fetchAndGetFormData[SubsidiariesModel](Matchers.eq(KeystoreKeys.subsidiaries))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(keyStoreSavedSubsidiariesNo)))
+      when(mockS4lConnector.fetchAndGetFormData[DateOfIncorporationModel](Matchers.eq(KeystoreKeys.dateOfIncorporation))(Matchers.any(),
+        Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(keyStoreSavedDOI3YearsLessOneDay)))
+      when(mockS4lConnector.fetchAndGetFormData[Vector[PreviousSchemeModel]](Matchers.eq(KeystoreKeys.previousSchemes))(Matchers.any(),
+        Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(previousSchemeTrueKIVectorList)))
+      mockEnrolledRequest(eisSchemeTypesModel)
+      submitWithSessionAndAuth(TestController.submit,
+        "investmentAmount" -> "123456")(
+        result => {
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(routes.InvestmentGrowController.show().url)
+        }
+      )
+    }
+  }
+
+  "Sending a valid form submit to the AnnualLimitExceededErrorController for the first investment when no commercial sale has been made " +
+    "and when it IS NOT deemed knowledge intensive and has subsidiaries and not exceeded lifetime limit" should {
+    "redirect to new subsidiaries-spending-investment page" in {
+      when(mockS4lConnector.fetchAndGetFormData[KiProcessingModel](Matchers.eq(KeystoreKeys.kiProcessingModel))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(falseKIModel)))
+      when(mockS4lConnector.fetchAndGetFormData[HadPreviousRFIModel](Matchers.eq(KeystoreKeys.hadPreviousRFI))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(keyStoreSavedHadPreviousRFINo)))
+      when(mockS4lConnector.fetchAndGetFormData[CommercialSaleModel](Matchers.eq(KeystoreKeys.commercialSale))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(keyStoreSavedCommercialSaleNo)))
+      when(mockS4lConnector.fetchAndGetFormData[SubsidiariesModel](Matchers.eq(KeystoreKeys.subsidiaries))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(keyStoreSavedSubsidiariesYes)))
+      when(mockS4lConnector.fetchAndGetFormData[DateOfIncorporationModel](Matchers.eq(KeystoreKeys.dateOfIncorporation))(Matchers.any(), Matchers.any(),
+        Matchers.any())).thenReturn(Future.successful(Option(keyStoreSavedDOI3YearsLessOneDay)))
+      when(mockS4lConnector.fetchAndGetFormData[Vector[PreviousSchemeModel]](Matchers.eq(KeystoreKeys.previousSchemes))(Matchers.any(),
+        Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(previousSchemeTrueKIVectorList)))
+      mockEnrolledRequest(eisSchemeTypesModel)
+      submitWithSessionAndAuth(TestController.submit,
+        "investmentAmount" -> "123456")(
+        result => {
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(routes.SubsidiariesSpendingInvestmentController.show().url)
+        }
+      )
+    }
+  }
+
+  "Sending a valid form submit to the AnnualLimitExceededErrorController when investment has been used previously and a commercial sale exists" +
+    "and has a date that isn't within the range and not exceeded lifetime limit" should {
+    "redirect to subsidiaries page" in {
+      when(mockS4lConnector.fetchAndGetFormData[KiProcessingModel](Matchers.eq(KeystoreKeys.kiProcessingModel))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(trueKIModel)))
+      when(mockS4lConnector.fetchAndGetFormData[HadPreviousRFIModel](Matchers.eq(KeystoreKeys.hadPreviousRFI))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(keyStoreSavedHadPreviousRFIYes)))
+      when(mockS4lConnector.fetchAndGetFormData[CommercialSaleModel](Matchers.eq(KeystoreKeys.commercialSale))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(keyStoreSavedCommercialSale1Year)))
+      when(mockS4lConnector.fetchAndGetFormData[SubsidiariesModel](Matchers.eq(KeystoreKeys.subsidiaries))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(None))
+      when(mockS4lConnector.fetchAndGetFormData[DateOfIncorporationModel](Matchers.eq(KeystoreKeys.dateOfIncorporation))(Matchers.any(), Matchers.any(),
+        Matchers.any())).thenReturn(Future.successful(Option(keyStoreSavedDOI3Years)))
+      when(mockS4lConnector.fetchAndGetFormData[Vector[PreviousSchemeModel]](Matchers.eq(KeystoreKeys.previousSchemes))(Matchers.any(),
+        Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(previousSchemeTrueKIVectorList)))
+      mockEnrolledRequest(eisSchemeTypesModel)
+      submitWithSessionAndAuth(TestController.submit,
+        "investmentAmount" -> "123456")(
+        result => {
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(routes.SubsidiariesController.show().url)
+        }
+      )
+    }
+  }
+
+  "Sending a valid form submit to the AnnualLimitExceededErrorController when investment has been used previously and a commercial sale exists " +
+    "and not exceeded lifetime limit" should {
+    "redirect to reason used before page" in {
+      when(mockS4lConnector.fetchAndGetFormData[KiProcessingModel](Matchers.eq(KeystoreKeys.kiProcessingModel))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(falseKIModel)))
+      when(mockS4lConnector.fetchAndGetFormData[HadPreviousRFIModel](Matchers.eq(KeystoreKeys.hadPreviousRFI))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(keyStoreSavedHadPreviousRFIYes)))
+      when(mockS4lConnector.fetchAndGetFormData[CommercialSaleModel](Matchers.eq(KeystoreKeys.commercialSale))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(keyStoreSavedCommercialSale7YearsOneDay)))
+      when(mockS4lConnector.fetchAndGetFormData[SubsidiariesModel](Matchers.eq(KeystoreKeys.subsidiaries))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(keyStoreSavedSubsidiariesYes)))
+      when(mockS4lConnector.fetchAndGetFormData[DateOfIncorporationModel](Matchers.eq(KeystoreKeys.dateOfIncorporation))(Matchers.any(), Matchers.any(),
+        Matchers.any())).thenReturn(Future.successful(Option(keyStoreSavedDOI3YearsLessOneDay)))
+      when(mockS4lConnector.fetchAndGetFormData[Vector[PreviousSchemeModel]](Matchers.eq(KeystoreKeys.previousSchemes))(Matchers.any(),
+        Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(previousSchemeTrueKIVectorList)))
+      mockEnrolledRequest(eisSchemeTypesModel)
+      submitWithSessionAndAuth(TestController.submit,
+        "investmentAmount" -> "123456")(
+        result => {
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(routes.UsedInvestmentReasonBeforeController.show().url)
+        }
+      )
+    }
+  }
+
+  "Sending a valid form submit to the AnnualLimitExceededErrorController when investment has been used previously and a commercial sale exists" +
+    "but using different models and not exceeded lifetime limit" should {
+    "redirect to reason used before page" in {
+      when(mockS4lConnector.fetchAndGetFormData[KiProcessingModel](Matchers.eq(KeystoreKeys.kiProcessingModel))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(falseKIModel)))
+      when(mockS4lConnector.fetchAndGetFormData[HadPreviousRFIModel](Matchers.eq(KeystoreKeys.hadPreviousRFI))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(keyStoreSavedHadPreviousRFIYes)))
+      when(mockS4lConnector.fetchAndGetFormData[CommercialSaleModel](Matchers.eq(KeystoreKeys.commercialSale))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(keyStoreSavedCommercialSale10YearsOneDay)))
+      when(mockS4lConnector.fetchAndGetFormData[SubsidiariesModel](Matchers.eq(KeystoreKeys.subsidiaries))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(keyStoreSavedSubsidiariesYes)))
+      when(mockS4lConnector.fetchAndGetFormData[DateOfIncorporationModel](Matchers.eq(KeystoreKeys.dateOfIncorporation))(Matchers.any(),
+        Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(keyStoreSavedDOI3Years)))
+      when(mockS4lConnector.fetchAndGetFormData[Vector[PreviousSchemeModel]](Matchers.eq(KeystoreKeys.previousSchemes))(Matchers.any(),
+        Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(previousSchemeTrueKIVectorList)))
+      mockEnrolledRequest(eisSchemeTypesModel)
+      submitWithSessionAndAuth(TestController.submit,
+        "investmentAmount" -> "123456")(
+        result => {
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(routes.UsedInvestmentReasonBeforeController.show().url)
+        }
+      )
+    }
+  }
+
+  "Sending a valid form submit to the AnnualLimitExceededErrorController for first investment with empty PrevRFI and not exceeded lifetime limit" should {
+    "redirect to used-investment-scheme-before page" in {
+      when(mockS4lConnector.fetchAndGetFormData[KiProcessingModel](Matchers.eq(KeystoreKeys.kiProcessingModel))(Matchers.any(),
+        Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(trueKIModel)))
+      when(mockS4lConnector.fetchAndGetFormData[HadPreviousRFIModel](Matchers.eq(KeystoreKeys.hadPreviousRFI))(Matchers.any(),
+        Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
+      when(mockS4lConnector.fetchAndGetFormData[CommercialSaleModel](Matchers.eq(KeystoreKeys.commercialSale))(Matchers.any(),
+        Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(keyStoreSavedCommercialSale7Years)))
+      when(mockS4lConnector.fetchAndGetFormData[SubsidiariesModel](Matchers.eq(KeystoreKeys.subsidiaries))(Matchers.any(),
+        Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
+      when(mockS4lConnector.fetchAndGetFormData[DateOfIncorporationModel](Matchers.eq(KeystoreKeys.dateOfIncorporation))(Matchers.any(),
+        Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
+      when(mockS4lConnector.fetchAndGetFormData[Vector[PreviousSchemeModel]](Matchers.eq(KeystoreKeys.previousSchemes))(Matchers.any(),
+        Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(previousSchemeTrueKIVectorList)))
+      mockEnrolledRequest(eisSchemeTypesModel)
+      submitWithSessionAndAuth(TestController.submit,
+        "investmentAmount" -> "123456")(
+        result => {
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(routes.HadPreviousRFIController.show().url)
+        }
+      )
+    }
+  }
+
+  "Sending a valid form submit to the AnnualLimitExceededErrorController for the first investment with an empty Commercial sale " +
+    "and not exceeded lifetime limit" should {
+    "redirect to commercial-sale page" in {
+      when(mockS4lConnector.fetchAndGetFormData[KiProcessingModel](Matchers.eq(KeystoreKeys.kiProcessingModel))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(trueKIModel)))
+      when(mockS4lConnector.fetchAndGetFormData[HadPreviousRFIModel](Matchers.eq(KeystoreKeys.hadPreviousRFI))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(keyStoreSavedHadPreviousRFIYes)))
+      when(mockS4lConnector.fetchAndGetFormData[CommercialSaleModel](Matchers.eq(KeystoreKeys.commercialSale))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(None))
+      when(mockS4lConnector.fetchAndGetFormData[SubsidiariesModel](Matchers.eq(KeystoreKeys.subsidiaries))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(None))
+      when(mockS4lConnector.fetchAndGetFormData[DateOfIncorporationModel](Matchers.eq(KeystoreKeys.dateOfIncorporation))(Matchers.any(),
+        Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
+      when(mockS4lConnector.fetchAndGetFormData[Vector[PreviousSchemeModel]](Matchers.eq(KeystoreKeys.previousSchemes))(Matchers.any(),
+        Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(previousSchemeTrueKIVectorList)))
+      mockEnrolledRequest(eisSchemeTypesModel)
+      submitWithSessionAndAuth(TestController.submit,
+        "investmentAmount" -> "123456")(
+        result => {
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(routes.CommercialSaleController.show().url)
+        }
+      )
+    }
+  }
+
+  "Sending a valid form submit to the AnnualLimitExceededErrorController for the first investment with an empty KIProcessingModel " +
+    "and not exceeded lifetime limit" should {
+    "redirect to date-of-incorporation page" in {
+      when(mockS4lConnector.fetchAndGetFormData[KiProcessingModel](Matchers.eq(KeystoreKeys.kiProcessingModel))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(None))
+      when(mockS4lConnector.fetchAndGetFormData[HadPreviousRFIModel](Matchers.eq(KeystoreKeys.hadPreviousRFI))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(keyStoreSavedHadPreviousRFIYes)))
+      when(mockS4lConnector.fetchAndGetFormData[CommercialSaleModel](Matchers.eq(KeystoreKeys.commercialSale))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(keyStoreSavedCommercialSale7Years)))
+      when(mockS4lConnector.fetchAndGetFormData[SubsidiariesModel](Matchers.eq(KeystoreKeys.subsidiaries))(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Option(keyStoreSavedSubsidiariesYes)))
+      when(mockS4lConnector.fetchAndGetFormData[DateOfIncorporationModel](Matchers.eq(KeystoreKeys.dateOfIncorporation))(Matchers.any(),
+        Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(keyStoreSavedDOI3Years)))
+      when(mockS4lConnector.fetchAndGetFormData[Vector[PreviousSchemeModel]](Matchers.eq(KeystoreKeys.previousSchemes))(Matchers.any(),
+        Matchers.any(), Matchers.any()))        .thenReturn(Future.successful(Option(previousSchemeTrueKIVectorList)))
+      mockEnrolledRequest(eisSchemeTypesModel)
+      submitWithSessionAndAuth(TestController.submit,
+        "investmentAmount" -> "123456")(
+        result => {
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(routes.IsCompanyKnowledgeIntensiveController.show().url)
         }
       )
     }

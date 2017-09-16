@@ -18,11 +18,10 @@ package controllers.Helpers
 
 import auth.TAVCUser
 import common.KeystoreKeys
-import models.{PreviousSchemeModel, ShareIssueDateModel, TradeStartDateModel}
+import models.{PreviousSchemeModel, ShareIssueDateModel}
 import org.joda.time.DateTime
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.http.HeaderCarrier
-import utils.Validation
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -42,13 +41,12 @@ trait PreviousSchemesHelper {
     require(modelProcessingIdToRetrieve > 0, "The item to retrieve processingId must be an integer > 0")
 
     val result = s4lConnector.fetchAndGetFormData[Vector[PreviousSchemeModel]](KeystoreKeys.previousSchemes).map {
-      case Some(data) => {
+      case Some(data) =>
         val itemToRetrieveIndex = data.indexWhere(_.processingId.getOrElse(0) == modelProcessingIdToRetrieve)
         if (itemToRetrieveIndex != idNotFound) {
           Some(data(itemToRetrieveIndex))
         }
         else None
-      }
       case None => None
     }.recover { case _ => None }
 
@@ -76,68 +74,34 @@ trait PreviousSchemesHelper {
     }.recoverWith { case _ => Future(false) }
 
     result
-
   }
 
   def getPreviousInvestmentTotalFromKeystore(s4lConnector: connectors.S4LConnector)
-                                            (implicit hc: HeaderCarrier, user: TAVCUser): Future[Int] = {
+                                            (implicit hc: HeaderCarrier, user: TAVCUser): Future[Long] = {
 
     val result = s4lConnector.fetchAndGetFormData[Vector[PreviousSchemeModel]](KeystoreKeys.previousSchemes).map {
-      case Some(data) => data.foldLeft(0)(_ + _.investmentAmount)
-      case None => 0
-    }.recover { case _ => 0 }
+      case Some(data) => data.foldLeft(0.toLong)(_ + _.investmentAmount.toLong)
+      case None => 0.toLong
+    }.recover { case _ => 0.toLong }
 
     result
   }
 
-  def getPreviousInvestmentsFromStartDateTotal(s4lConnector: connectors.S4LConnector)
-                                              (implicit hc: HeaderCarrier, user: TAVCUser): Future[Int] = {
-
-    def calculateAmount(dateTradeStarted: Option[TradeStartDateModel],
-                        previousInvestments: Option[Vector[PreviousSchemeModel]]): Int = {
-
-      if (dateTradeStarted.isEmpty) 0
-      else {
-
-        val startDate = dateTradeStarted.get
-
-        previousInvestments match {
-          case Some(data) => data.filter(investment => Validation.dateSinceOtherDate(investment.day.get,
-            investment.month.get, investment.year.get, Validation.constructDate(startDate.tradeStartDay.get, startDate.tradeStartMonth.get,
-              startDate.tradeStartYear.get))).foldLeft(0)(_ + _.investmentAmount)
-          case _ => 0
-        }
-      }
-    }
-
-    for {
-      dateTradeStarted <- s4lConnector.fetchAndGetFormData[TradeStartDateModel](KeystoreKeys.tradeStartDate)
-      previousInvestments <- s4lConnector.fetchAndGetFormData[Vector[PreviousSchemeModel]](KeystoreKeys.previousSchemes).recover {
-        case _ => None
-      }
-
-      amount = calculateAmount(dateTradeStarted, previousInvestments)
-    } yield amount
-
-  }
-
   def getPreviousInvestmentsInShareIssueDateRangeTotal(s4lConnector: connectors.S4LConnector)
-                                              (implicit hc: HeaderCarrier, user: TAVCUser): Future[Int] = {
+                                              (implicit hc: HeaderCarrier, user: TAVCUser): Future[Long] = {
 
     def calculateAmount(shareIssueDate: Option[ShareIssueDateModel],
-                        previousInvestments: Option[Vector[PreviousSchemeModel]]): Int = {
+                        previousInvestments: Option[Vector[PreviousSchemeModel]]): Long = {
 
-      if (shareIssueDate.isEmpty) 0
+      if (shareIssueDate.isEmpty) 0.toLong
       else {
-
         val shareDate = shareIssueDate.get
-
         val shareIssueDateTime = new DateTime(shareDate.year.get, shareDate.month.get, shareDate.day.get, 0, 0)
-
         previousInvestments match {
           case Some(data) => data.filter(investment =>
-            isPreviousInvestmentInRange(shareIssueDateTime,investment.day.get, investment.month.get,investment.year.get)).foldLeft(0)(_ + _.investmentAmount)
-          case _ => 0
+            isPreviousInvestmentInRange(shareIssueDateTime,investment.day.get,
+              investment.month.get,investment.year.get)).foldLeft(0.toLong)(_ + _.investmentAmount.toLong)
+          case _ => 0.toLong
         }
       }
     }
@@ -159,10 +123,9 @@ trait PreviousSchemesHelper {
     val defaultId: Int = 1
 
     val result = s4lConnector.fetchAndGetFormData[Vector[PreviousSchemeModel]](KeystoreKeys.previousSchemes).map {
-      case Some(data) => {
+      case Some(data) =>
         val newId = data.last.processingId.get + 1
         data :+ previousSchemeModelToAdd.copy(processingId = Some(newId))
-      }
       case None => Vector.empty :+ previousSchemeModelToAdd.copy(processingId = Some(defaultId))
     }.recover { case _ => Vector.empty :+ previousSchemeModelToAdd.copy(processingId = Some(defaultId)) }
 
@@ -178,14 +141,13 @@ trait PreviousSchemesHelper {
       "The item to update processingId must be an integer > 0")
 
     val result = s4lConnector.fetchAndGetFormData[Vector[PreviousSchemeModel]](KeystoreKeys.previousSchemes).map {
-      case Some(data) => {
+      case Some(data) =>
         val itemToUpdateIndex = data.indexWhere(_.processingId.getOrElse(0) ==
           previousSchemeModelToUpdate.processingId.getOrElse(0))
         if (itemToUpdateIndex != idNotFound) {
           data.updated(itemToUpdateIndex, previousSchemeModelToUpdate)
         }
         else data
-      }
       case None => Vector[PreviousSchemeModel]()
     }
     result.flatMap(updatedVectorList => s4lConnector.saveFormData(KeystoreKeys.previousSchemes, updatedVectorList))
@@ -217,14 +179,13 @@ trait PreviousSchemesHelper {
       "The item to update processingId must be an integer > 0")
 
     val result = s4lConnector.fetchAndGetFormData[Vector[PreviousSchemeModel]](KeystoreKeys.previousSchemes).map {
-      case Some(data) => {
+      case Some(data) =>
         val itemToUpdateIndex = data.indexWhere(_.processingId.getOrElse(0) ==
           previousSchemeModelToUpdate.processingId.getOrElse(0))
         if (itemToUpdateIndex != idNotFound) {
           data.updated(itemToUpdateIndex, previousSchemeModelToUpdate)
         }
         else data
-      }
       case None => Vector[PreviousSchemeModel]()
     }
     result.flatMap(updatedVectorList => s4lConnector.saveFormData(KeystoreKeys.previousSchemes, updatedVectorList))
@@ -241,10 +202,9 @@ trait PreviousSchemesHelper {
     val defaultId: Int = 1
 
     val result = s4lConnector.fetchAndGetFormData[Vector[PreviousSchemeModel]](KeystoreKeys.previousSchemes).map {
-      case Some(data) => {
+      case Some(data) =>
         val newId = data.last.processingId.get + 1
         data :+ previousSchemeModelToAdd.copy(processingId = Some(newId))
-      }
       case None => Vector.empty :+ previousSchemeModelToAdd.copy(processingId = Some(defaultId))
     }.recover { case _ => Vector.empty :+ previousSchemeModelToAdd.copy(processingId = Some(defaultId)) }
 

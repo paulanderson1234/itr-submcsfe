@@ -21,7 +21,7 @@ import common.{Constants, KeystoreKeys}
 import controllers.eis.routes
 import models._
 import play.api.mvc.Results._
-import play.api.mvc.{AnyContent, Request, Result}
+import play.api.mvc.Result
 import uk.gov.hmrc.play.http.HeaderCarrier
 import utils.Validation
 import connectors.S4LConnector
@@ -48,7 +48,6 @@ trait TotalAmountRaisedHelper {
                hasSub: Option[SubsidiariesModel], kiProcessingModel: Option[KiProcessingModel],  s4lConnector: S4LConnector)
               (implicit hc: HeaderCarrier, user: TAVCUser): Future[Result] = {
 
-    //if(prevRFI.isEmpty || kiProcessingModel.isEmpty)
     if(kiProcessingModel.isEmpty) Future.successful(Redirect(routes.IsCompanyKnowledgeIntensiveController.show()))
     else if (prevRFI.isEmpty) Future.successful(Redirect(routes.HadPreviousRFIController.show()))
     else  commercialSale match {
