@@ -154,8 +154,8 @@ trait BaseSpec extends UnitSpec with OneAppPerSuite with MockitoSugar with FakeR
   val subsidiariesSpendingInvestmentModelYes = SubsidiariesSpendingInvestmentModel(Constants.StandardRadioButtonYesValue)
   val subsidiariesSpendingInvestmentModelNo = SubsidiariesSpendingInvestmentModel(Constants.StandardRadioButtonNoValue)
 
-  val proposedInvestmentAmount = 5000000
-  val proposedInvestmentModel = ProposedInvestmentModel(proposedInvestmentAmount)
+  val totalAmountRaised = 5000000
+  val totalAmountRaisedModel = TotalAmountRaisedModel(totalAmountRaised)
 
   val previousSchemeModel1 = PreviousSchemeModel(
     Constants.PageInvestmentSchemeEisValue, 2356, None, None, Some(4), Some(12), Some(2009), Some(1))
@@ -353,9 +353,9 @@ trait BaseSpec extends UnitSpec with OneAppPerSuite with MockitoSugar with FakeR
 
   val keyStoreSavedDOI10Years = DateOfIncorporationModel(Some(date10YearsAgoDay), Some(date10YearsAgoMonth), Some(date10YearsAgoYear))
 
-  val modelProposedInvestment = ProposedInvestmentModel(12345)
+  val modelProposedInvestment = TotalAmountRaisedModel(12345)
   //val cacheMap: CacheMap = CacheMap("", Map("" -> Json.toJson(modelProposedInvestment)))
-  val keyStoreSavedProposedInvestment = ProposedInvestmentModel(12345)
+  val keyStoreSavedProposedInvestment = TotalAmountRaisedModel(12345)
 
   val optionKIModel = KiProcessingModel(Some(false), Some(true), Some(false), None, None, None)
   val emptyKIModel = KiProcessingModel(None, None, None, None, None, None)

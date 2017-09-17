@@ -72,7 +72,7 @@ trait TotalAmountRaisedController extends FrontendController with AuthorisedAndE
               case Some(data) =>
                 // if it's exceeded go to the error page
                 if (data) {
-                  Future.successful(Redirect(routes.LifetimeAllowanceExceededController.show()))
+                  Future.successful(Redirect(routes.LifetimeAllowanceExceededErrorController.show()))
                 } else {
                   // first API condition passed. Need to check second condition now..
                   validateAnnualLimitRouteRequestSecondCheck(totalAmountRaised)

@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package Forms
+package models
 import common.Constants
-import models._
 import models.submission._
 import play.api.libs.json.Json
 import uk.gov.hmrc.play.test.UnitSpec
@@ -100,7 +99,7 @@ val subsidiaryPerformingTradeWithAddress = SubsidiaryPerformingTradeModel(ninety
     dateTradeCommenced = "2001-01-01",
     annualCosts = Some(costsFull),
     annualTurnover = Some(turnover),
-    proposedInvestmentModel = ProposedInvestmentModel(250000),
+    proposedInvestmentModel = TotalAmountRaisedModel(250000),
     investmentGrowModel = InvestmentGrowModel("It will help me invest in new equipment and R&D"),
     knowledgeIntensive = Some(KiModel(skilledEmployeesConditionMet = true, innovationConditionMet = Some("reason met"), kiConditionMet = Some(true))),
     subsidiaryPerformingTrade = Some(subsidiaryPerformingTradeWithFull),

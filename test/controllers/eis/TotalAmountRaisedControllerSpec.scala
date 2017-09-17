@@ -147,7 +147,7 @@ class TotalAmountRaisedControllerSpec extends BaseSpec {
         "amount" -> "123456")(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(routes.LifetimeAllowanceExceededController.show().url)
+          redirectLocation(result) shouldBe Some(routes.LifetimeAllowanceExceededErrorController.show().url)
         }
       )
     }

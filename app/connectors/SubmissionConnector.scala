@@ -19,11 +19,12 @@ package connectors
 import config.{FrontendAppConfig, WSHttp}
 import models.registration.RegistrationDetailsModel
 import models.submission.{ComplianceStatementAnswersModel, DesSubmissionCSModel, DesSubmitAdvancedAssuranceModel, Submission}
-import models.{AnnualTurnoverCostsModel, GrossAssetsAfterIssueModel, GrossAssetsModel, ProposedInvestmentModel}
+import models._
 import play.api.Logger
 import play.api.libs.json.{JsValue, Json}
 import uk.gov.hmrc.play.config.ServicesConfig
 import uk.gov.hmrc.play.http._
+
 import scala.concurrent.Future
 
 object SubmissionConnector extends SubmissionConnector with ServicesConfig {
@@ -69,10 +70,10 @@ trait SubmissionConnector {
       s"previous-schemes-total-in-range/$previousInvestmentSchemesInRangeTotal/total-amount-raised/$totalAmountRaised")
   }
 
-  def checkAveragedAnnualTurnover(proposedInvestmentAmount: ProposedInvestmentModel, annualTurnoverCostsModel: AnnualTurnoverCostsModel)
+  def checkAveragedAnnualTurnover(totalAmountRaised: TotalAmountRaisedModel, annualTurnoverCostsModel: AnnualTurnoverCostsModel)
                                  (implicit hc: HeaderCarrier): Future[Option[Boolean]] = {
     http.GET[Option[Boolean]](s"$serviceUrl/investment-tax-relief/averaged-annual-turnover/check-averaged-annual-turnover/" +
-      s"proposed-investment-amount/${proposedInvestmentAmount.investmentAmount}/annual-turn-over/${annualTurnoverCostsModel.amount1}" +
+      s"proposed-investment-amount/${totalAmountRaised.amount.toLongExact}/annual-turn-over/${annualTurnoverCostsModel.amount1}" +
       s"/${annualTurnoverCostsModel.amount2}/${annualTurnoverCostsModel.amount3}/${annualTurnoverCostsModel.amount4}/${annualTurnoverCostsModel.amount5}")
   }
 

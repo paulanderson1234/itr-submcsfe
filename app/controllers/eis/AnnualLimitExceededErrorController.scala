@@ -43,7 +43,6 @@ trait AnnualLimitExceededErrorController extends FrontendController with Authori
   }
 
   val submit = AuthorisedAndEnrolled.async { implicit user => implicit request =>
-    //TODO: unit tests
     TotalAmountRaisedHelper.getContinueRouteRequest(s4lConnector)
   }
 }

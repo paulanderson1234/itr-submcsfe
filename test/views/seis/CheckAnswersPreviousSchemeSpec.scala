@@ -34,7 +34,7 @@ class CheckAnswersPreviousSchemeSpec extends CheckAnswersSpec {
       val model = SEISCheckAnswersModel(None, None, None, previousSchemesValid, None, None, None, None, None,
         None, None, None, None, None, None, None, None, None, None, None, false)
       val page = CheckAnswers(model)(authorisedFakeRequest, applicationMessages)
-      val document = Jsoup.parse(page.body)
+      lazy val document = Jsoup.parse(page.body)
 
       document.title() shouldBe Messages("page.checkAndSubmit.checkAnswers.heading")
       document.getElementById("main-heading").text() shouldBe Messages("page.checkAndSubmit.checkAnswers.heading")
@@ -81,8 +81,8 @@ class CheckAnswersPreviousSchemeSpec extends CheckAnswersSpec {
       " when an empty Vector is be retrieved" in new SEISSetup {
       val model = SEISCheckAnswersModel(None, None, None, Vector(), None, None, None, None, None,
         None, None, None, None, None, None, None, None, None, None, None, false)
-      val page = CheckAnswers(model)(authorisedFakeRequest, applicationMessages)
-      val document = Jsoup.parse(page.body)
+      lazy val page = CheckAnswers(model)(authorisedFakeRequest, applicationMessages)
+      lazy val document = Jsoup.parse(page.body)
 
       document.title() shouldBe Messages("page.checkAndSubmit.checkAnswers.heading")
       document.getElementById("main-heading").text() shouldBe Messages("page.checkAndSubmit.checkAnswers.heading")

@@ -21,8 +21,7 @@ import utils.CostFormatter
 
 case class TotalAmountRaisedModel(amount: BigDecimal)
 
-object TotalAmountRaisedModel {
+object TotalAmountRaisedModel extends CostFormatter{
 
   implicit val format = Json.format[TotalAmountRaisedModel]
-  implicit val writes = Json.writes[TotalAmountRaisedModel]
 }

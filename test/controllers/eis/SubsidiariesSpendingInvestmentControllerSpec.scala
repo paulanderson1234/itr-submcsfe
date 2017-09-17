@@ -58,7 +58,7 @@ class SubsidiariesSpendingInvestmentControllerSpec extends BaseSpec {
 
   "Sending a GET request to SubsidiariesSpendingInvestmentController when authenticated and enrolled" should {
     "return a 200 when something is fetched from keystore" in {
-      setupMocks(Some(subsidiariesSpendingInvestmentModelYes), Some(routes.ProposedInvestmentController.show().url))
+      setupMocks(Some(subsidiariesSpendingInvestmentModelYes), Some(routes.TotalAmountRaisedController.show().url))
       mockEnrolledRequest(eisSchemeTypesModel)
       showWithSessionAndAuth(SubsidiariesSpendingInvestmentControllerTest.show)(
         result => status(result) shouldBe OK
@@ -66,7 +66,7 @@ class SubsidiariesSpendingInvestmentControllerSpec extends BaseSpec {
     }
 
     "provide an empty model and return a 200 when nothing is fetched using keystore when authenticated and enrolled" in {
-      setupMocks(backLink = Some(routes.ProposedInvestmentController.show().url))
+      setupMocks(backLink = Some(routes.TotalAmountRaisedController.show().url))
       mockEnrolledRequest(eisSchemeTypesModel)
       showWithSessionAndAuth(SubsidiariesSpendingInvestmentControllerTest.show)(
         result => status(result) shouldBe OK
@@ -79,7 +79,7 @@ class SubsidiariesSpendingInvestmentControllerSpec extends BaseSpec {
       showWithSessionAndAuth(SubsidiariesSpendingInvestmentControllerTest.show)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some("/investment-tax-relief-cs/eis/proposed-investment")
+          redirectLocation(result) shouldBe Some("/investment-tax-relief-cs/eis/total-amount-raised")
         }
       )
     }
@@ -119,7 +119,7 @@ class SubsidiariesSpendingInvestmentControllerSpec extends BaseSpec {
       submitWithSessionAndAuth(SubsidiariesSpendingInvestmentControllerTest.submit, formInput)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some("/investment-tax-relief-cs/eis/proposed-investment")
+          redirectLocation(result) shouldBe Some("/investment-tax-relief-cs/eis/total-amount-raised")
         }
       )
     }
@@ -127,7 +127,7 @@ class SubsidiariesSpendingInvestmentControllerSpec extends BaseSpec {
 
   "Sending an invalid form submission with validation errors to the SubsidiariesSpendingInvestmentController when authenticated and enrolled" should {
     "redirect to itself with errors" in {
-      setupMocks(backLink = Some(routes.ProposedInvestmentController.show().url))
+      setupMocks(backLink = Some(routes.TotalAmountRaisedController.show().url))
       mockEnrolledRequest(eisSchemeTypesModel)
       val formInput = "subSpendingInvestment" -> ""
       submitWithSessionAndAuth(SubsidiariesSpendingInvestmentControllerTest.submit, formInput)(

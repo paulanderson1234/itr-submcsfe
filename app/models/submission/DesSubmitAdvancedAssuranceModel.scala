@@ -215,7 +215,7 @@ object DesSubmitAdvancedAssuranceModel {
 
   implicit val proposedAmountWrites = Json.writes[ProposedAmount]
   implicit val proposedAmountReads: Reads[ProposedAmount] = (
-    (__ \ "investmentAmount").read[Int].map(amount=> poundToPence(Right(amount))) and
+    (__ \ "amount").read[Int].map(amount=> poundToPence(Right(amount))) and
       ((__ \ "currency").read[String] or Reads.pure("GBP"))
     ) (ProposedAmount.apply _)
 
