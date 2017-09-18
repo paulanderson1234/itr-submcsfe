@@ -119,7 +119,7 @@
             @tableHeaderHelper("investmentSection", Messages("page.summaryQuestion.companyDetailsSectionThree"))
             <!--Data rows-->
             <tbody>
-            <!--Total Amount raised-->
+            <!--Total Amount raised needs checing later-->
             @if(checkAnswersModel.totalAmountRaisedModel.isDefined){
             @textRowHelperBasic("proposedInvestment", Messages("page.summaryQuestion.amountRaised"), TotalAmountRaisedModel.getAmountAsFormattedString(checkAnswersModel.totalAmountRaisedModel.get.amount), Some(controllers.eis.routes.TotalAmountRaisedController.show().toString))
             }
