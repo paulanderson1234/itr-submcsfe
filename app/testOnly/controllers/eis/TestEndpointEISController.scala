@@ -79,7 +79,7 @@ trait TestEndpointEISController extends FrontendController with AuthorisedAndEnr
 
   def showPageTwo: Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user => implicit request =>
     for {
-      proposedInvestmentForm <- fillForm[ProposedInvestmentModel](KeystoreKeys.proposedInvestment, ProposedInvestmentForm.proposedInvestmentForm)
+      totalAmountRaisedForm <- fillForm[TotalAmountRaisedModel](KeystoreKeys.totalAmountRaised, TotalAmountRaisedForm.totalAmountRaisedForm)
       usedInvestmentReasonBeforeForm <- fillForm[UsedInvestmentReasonBeforeModel](KeystoreKeys.usedInvestmentReasonBefore,
         UsedInvestmentReasonBeforeForm.usedInvestmentReasonBeforeForm)
       previousBeforeDoFCSForm <- fillForm[PreviousBeforeDOFCSModel](KeystoreKeys.previousBeforeDOFCS, PreviousBeforeDOFCSForm.previousBeforeDOFCSForm)
@@ -94,7 +94,7 @@ trait TestEndpointEISController extends FrontendController with AuthorisedAndEnr
       contactAddressForm <- fillForm[AddressModel](KeystoreKeys.manualContactAddress, ContactAddressForm.contactAddressForm)
     } yield Ok(
       testOnly.views.html.eis.testEndpointEISPageTwo(
-        proposedInvestmentForm,
+        totalAmountRaisedForm,
         usedInvestmentReasonBeforeForm,
         previousBeforeDoFCSForm,
         newGeographicalMarketForm,
@@ -141,7 +141,7 @@ trait TestEndpointEISController extends FrontendController with AuthorisedAndEnr
   }
 
   def submitPageTwo: Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user => implicit request =>
-    val proposedInvestment = bindForm[ProposedInvestmentModel](KeystoreKeys.proposedInvestment, ProposedInvestmentForm.proposedInvestmentForm)
+    val totalAmountRaised = bindForm[TotalAmountRaisedModel](KeystoreKeys.totalAmountRaised, TotalAmountRaisedForm.totalAmountRaisedForm)
     val usedInvestmentReasonBefore = bindForm[UsedInvestmentReasonBeforeModel](KeystoreKeys.usedInvestmentReasonBefore,
       UsedInvestmentReasonBeforeForm.usedInvestmentReasonBeforeForm)
     val previousBeforeDoFCS = bindForm[PreviousBeforeDOFCSModel](KeystoreKeys.previousBeforeDOFCS, PreviousBeforeDOFCSForm.previousBeforeDOFCSForm)
@@ -157,7 +157,7 @@ trait TestEndpointEISController extends FrontendController with AuthorisedAndEnr
     saveSchemeType()
     Future.successful(Ok(
       testOnly.views.html.eis.testEndpointEISPageTwo(
-        proposedInvestment,
+        totalAmountRaised,
         usedInvestmentReasonBefore,
         previousBeforeDoFCS,
         newGeographicalMarket,

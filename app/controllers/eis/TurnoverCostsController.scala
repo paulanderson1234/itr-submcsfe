@@ -24,7 +24,7 @@ import uk.gov.hmrc.play.frontend.controller.FrontendController
 import forms.TurnoverCostsForm._
 import common.{Constants, KeystoreKeys}
 import config.FrontendGlobal._
-import models.{AnnualTurnoverCostsModel, ProposedInvestmentModel, SubsidiariesModel}
+import models.{AnnualTurnoverCostsModel, TotalAmountRaisedModel, SubsidiariesModel}
 import models.submission.CostModel
 import play.Logger
 import play.api.libs.json.Json
@@ -44,7 +44,7 @@ object TurnoverCostsController extends TurnoverCostsController {
 
 trait TurnoverCostsController extends FrontendController with AuthorisedAndEnrolledForTAVC {
 
-  override val acceptedFlows = Seq(Seq(EIS),Seq(VCT),Seq(EIS,VCT))
+  override val acceptedFlows = Seq(Seq(EIS))
 
   implicit val formatCostModel = Json.format[CostModel]
 
@@ -83,11 +83,11 @@ trait TurnoverCostsController extends FrontendController with AuthorisedAndEnrol
         s4lConnector.saveFormData(KeystoreKeys.turnoverCosts, validFormData)
         (for {
           subsidiaries <- s4lConnector.fetchAndGetFormData[SubsidiariesModel](KeystoreKeys.subsidiaries)
-          proposedInvestment <- s4lConnector.fetchAndGetFormData[ProposedInvestmentModel](KeystoreKeys.proposedInvestment)
-          turnoverCheckRes <-  submissionConnector.checkAveragedAnnualTurnover(proposedInvestment.get,validFormData)
+          totalAmountRaised <- s4lConnector.fetchAndGetFormData[TotalAmountRaisedModel](KeystoreKeys.totalAmountRaised)
+          turnoverCheckRes <- submissionConnector.checkAveragedAnnualTurnover(totalAmountRaised.get,validFormData)
           route <- routeRequest(subsidiaries, turnoverCheckRes)
         } yield route) recover {
-          case e: NoSuchElementException => Redirect(routes.ProposedInvestmentController.show())
+          case e: NoSuchElementException => Redirect(routes.TotalAmountRaisedController.show())
           case e: Exception => {
             Logger.warn(s"[PercentageStaffWithMastersController][submit] - Exception validateSecondaryKiConditions: ${e.getMessage}")
             InternalServerError(internalServerErrorTemplate)

@@ -19,11 +19,11 @@ package controllers.eis
 import auth.{AuthorisedAndEnrolledForTAVC, EIS, VCT}
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
+import controllers.Helpers.TotalAmountRaisedHelper
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
 import views.html.eis.shareDetails.AnnualLimitExceededError
-
 
 import scala.concurrent.Future
 
@@ -36,17 +36,13 @@ object AnnualLimitExceededErrorController extends AnnualLimitExceededErrorContro
 
 trait AnnualLimitExceededErrorController extends FrontendController with AuthorisedAndEnrolledForTAVC {
 
-  override val acceptedFlows = Seq(Seq(EIS), Seq(VCT), Seq(EIS, VCT))
+  override val acceptedFlows = Seq(Seq(EIS))
 
   val show = AuthorisedAndEnrolled.async { implicit user => implicit request =>
     Future.successful(Ok(AnnualLimitExceededError()))
   }
 
   val submit = AuthorisedAndEnrolled.async { implicit user => implicit request =>
-    //TODO: The total amount raised controller can navigate to a number of different pages based on various conditions
-    // This route below will have to mirror that logic.
-    // The proposedInvestorController has much of the rerqired logic that need moving to the TotalAmountRaisedController.
-    // when doing this the navigation implementation (routeRequest) should be put in a common helper so this page can call it to continue
-    Future.successful(Redirect(routes.InvestmentGrowController.show()))
+    TotalAmountRaisedHelper.getContinueRouteRequest(s4lConnector)
   }
 }

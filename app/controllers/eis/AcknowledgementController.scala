@@ -47,7 +47,7 @@ object AcknowledgementController extends AcknowledgementController{
 
 trait AcknowledgementController extends FrontendController with AuthorisedAndEnrolledForTAVC {
 
-  override val acceptedFlows = Seq(Seq(EIS),Seq(VCT),Seq(EIS,VCT))
+  override val acceptedFlows = Seq(Seq(EIS))
 
 
   val submissionConnector: SubmissionConnector
@@ -62,7 +62,7 @@ trait AcknowledgementController extends FrontendController with AuthorisedAndEnr
       kiProcModel <- s4lConnector.fetchAndGetFormData[KiProcessingModel](KeystoreKeys.kiProcessingModel)
       natureOfBusiness <- s4lConnector.fetchAndGetFormData[NatureOfBusinessModel](KeystoreKeys.natureOfBusiness)
       contactDetails <- s4lConnector.fetchAndGetFormData[ContactDetailsModel](KeystoreKeys.contactDetails)
-      proposedInvestment <- s4lConnector.fetchAndGetFormData[ProposedInvestmentModel](KeystoreKeys.proposedInvestment)
+      proposedInvestment <- s4lConnector.fetchAndGetFormData[TotalAmountRaisedModel](KeystoreKeys.totalAmountRaised)
       investmentGrow <- s4lConnector.fetchAndGetFormData[InvestmentGrowModel](KeystoreKeys.investmentGrow)
       dateOfIncorporation <- s4lConnector.fetchAndGetFormData[DateOfIncorporationModel](KeystoreKeys.dateOfIncorporation)
       contactAddress <- s4lConnector.fetchAndGetFormData[AddressModel](KeystoreKeys.contactAddress)
@@ -104,7 +104,7 @@ trait AcknowledgementController extends FrontendController with AuthorisedAndEnr
                                             kiProcModel: Option[KiProcessingModel],
                                             natOfBusiness: Option[NatureOfBusinessModel],
                                             contactDetails: Option[ContactDetailsModel],
-                                            proposedInvestment: Option[ProposedInvestmentModel],
+                                            proposedInvestment: Option[TotalAmountRaisedModel],
                                             investmentGrowModel: Option[InvestmentGrowModel],
                                             dateOfIncorporation: Option[DateOfIncorporationModel],
                                             contactAddress: Option[AddressModel],

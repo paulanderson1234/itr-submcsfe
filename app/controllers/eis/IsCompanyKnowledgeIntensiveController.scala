@@ -39,7 +39,7 @@ object IsCompanyKnowledgeIntensiveController extends IsCompanyKnowledgeIntensive
 
 trait IsCompanyKnowledgeIntensiveController extends FrontendController with AuthorisedAndEnrolledForTAVC {
 
-  override val acceptedFlows = Seq(Seq(EIS),Seq(VCT),Seq(EIS,VCT))
+  override val acceptedFlows = Seq(Seq(EIS))
 
   val show = AuthorisedAndEnrolled.async { implicit user => implicit request =>
     s4lConnector.fetchAndGetFormData[IsCompanyKnowledgeIntensiveModel](KeystoreKeys.isCompanyKnowledgeIntensive).map {

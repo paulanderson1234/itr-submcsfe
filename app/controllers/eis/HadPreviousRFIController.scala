@@ -39,7 +39,7 @@ object HadPreviousRFIController extends HadPreviousRFIController{
 
 trait HadPreviousRFIController extends FrontendController with AuthorisedAndEnrolledForTAVC with PreviousSchemesHelper {
 
-  override val acceptedFlows = Seq(Seq(EIS),Seq(VCT),Seq(EIS,VCT))
+  override val acceptedFlows = Seq(Seq(EIS))
 
   val show = AuthorisedAndEnrolled.async { implicit user => implicit request =>
     s4lConnector.fetchAndGetFormData[HadPreviousRFIModel](KeystoreKeys.hadPreviousRFI).map {

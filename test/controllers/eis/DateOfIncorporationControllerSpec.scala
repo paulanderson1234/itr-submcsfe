@@ -21,7 +21,6 @@ import common.KeystoreKeys
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
-import controllers.seis.DateOfIncorporationController
 import models.{DateOfIncorporationModel, KiProcessingModel}
 import org.mockito.Matchers
 import org.mockito.Mockito._

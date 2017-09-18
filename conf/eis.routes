@@ -39,9 +39,6 @@ POST       /percentage-of-staff-with-masters        controllers.eis.PercentageSt
 GET        /ten-year-plan                           controllers.eis.TenYearPlanController.show
 POST       /ten-year-plan                           controllers.eis.TenYearPlanController.submit
 
-GET        /proposed-investment                     controllers.eis.ProposedInvestmentController.show
-POST       /proposed-investment                     controllers.eis.ProposedInvestmentController.submit
-
 GET        /new-product                             controllers.eis.NewProductController.show
 POST       /new-product                             controllers.eis.NewProductController.submit
 
@@ -106,10 +103,6 @@ POST       /acknowledgement                         controllers.eis.Acknowledgem
 
 GET        /attachments-acknowledgement             controllers.eis.AttachmentsAcknowledgementController.show
 POST       /attachments-acknowledgement             controllers.eis.AttachmentsAcknowledgementController.submit
-
-#TODO REMOVE routes below when old lifetime limit removed
-GET        /lifetime-allowance-exceeded             controllers.eis.LifetimeAllowanceExceededController.show
-POST       /lifetime-allowance-exceeded             controllers.eis.LifetimeAllowanceExceededController.submit
 
 GET       /lifetime-allowance-exceeded-error        controllers.eis.LifetimeAllowanceExceededErrorController.show
 POST      /lifetime-allowance-exceeded-error        controllers.eis.LifetimeAllowanceExceededErrorController.submit

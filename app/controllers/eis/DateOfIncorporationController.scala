@@ -40,7 +40,7 @@ object DateOfIncorporationController extends DateOfIncorporationController{
 
 trait DateOfIncorporationController extends FrontendController with AuthorisedAndEnrolledForTAVC {
 
-  override val acceptedFlows = Seq(Seq(EIS),Seq(VCT),Seq(EIS,VCT))
+  override val acceptedFlows = Seq(Seq(EIS))
 
 
 

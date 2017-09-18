@@ -40,7 +40,7 @@ class CheckAnswersContactDetailsSpec extends CheckAnswersSpec {
 
     "Verify that the Check Answers page contains the correct elements for Section 4: Contact Details" +
       " when the contact details model is fully populated" in new Setup {
-      val document: Document = {
+      lazy val document: Document = {
         previousRFISetup()
         investmentSetup()
         contactDetailsSetup(Some(contactDetailsModel))
@@ -89,7 +89,7 @@ class CheckAnswersContactDetailsSpec extends CheckAnswersSpec {
 
     "Verify that the Check Answers page contains an empty table for Section 4: Contact Details" +
       " when the contact details model is not populated" in new Setup {
-      val document: Document = {
+      lazy val document: Document = {
         previousRFISetup()
         investmentSetup()
         contactDetailsSetup()

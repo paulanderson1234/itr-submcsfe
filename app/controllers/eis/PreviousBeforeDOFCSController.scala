@@ -43,7 +43,7 @@ object  PreviousBeforeDOFCSController extends PreviousBeforeDOFCSController {
 
 trait PreviousBeforeDOFCSController extends FrontendController with AuthorisedAndEnrolledForTAVC with DateFormatter {
 
-  override val acceptedFlows = Seq(Seq(EIS),Seq(VCT),Seq(EIS,VCT))
+  override val acceptedFlows = Seq(Seq(EIS))
 
   val show = AuthorisedAndEnrolled.async { implicit user => implicit request =>
     createResponse(None)

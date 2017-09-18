@@ -36,7 +36,7 @@ object TradingForTooLongController extends TradingForTooLongController
 
 trait TradingForTooLongController extends FrontendController with AuthorisedAndEnrolledForTAVC {
 
-  override val acceptedFlows = Seq(Seq(EIS),Seq(VCT),Seq(EIS,VCT))
+  override val acceptedFlows = Seq(Seq(EIS))
 
   val show = AuthorisedAndEnrolled.async { implicit user => implicit request =>
     Future.successful(Ok(TradingForTooLong()))

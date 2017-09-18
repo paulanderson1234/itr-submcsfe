@@ -49,7 +49,7 @@ case class AdvancedAssuranceSubmissionType(
                                             // minimum mandatory types required:
                                             natureOfBusinessModel: NatureOfBusinessModel, //trade: baDescription
                                             contactDetailsModel: ContactDetailsModel,
-                                            proposedInvestmentModel: ProposedInvestmentModel,
+                                            proposedInvestmentModel: TotalAmountRaisedModel,
                                             investmentGrowModel: InvestmentGrowModel,
                                             organisationDetails: OrganisationDetailsModel,
 

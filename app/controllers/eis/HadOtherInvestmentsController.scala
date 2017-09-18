@@ -41,7 +41,7 @@ object HadOtherInvestmentsController extends HadOtherInvestmentsController{
 
 trait HadOtherInvestmentsController extends FrontendController with AuthorisedAndEnrolledForTAVC with PreviousSchemesHelper {
 
-  override val acceptedFlows = Seq(Seq(EIS),Seq(VCT),Seq(EIS,VCT))
+  override val acceptedFlows = Seq(Seq(EIS))
 
   val show = AuthorisedAndEnrolled.async { implicit user => implicit request =>
     def routeRequest(backUrl: Option[String]) = {

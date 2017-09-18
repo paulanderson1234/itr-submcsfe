@@ -238,7 +238,7 @@ trait AcknowledgementController extends FrontendController with AuthorisedAndEnr
   def processResult(seisAnswersModel: ComplianceStatementAnswersModel, tavcReferenceNumber: String,
                     registrationDetailsModel: Option[RegistrationDetailsModel])
                    (implicit hc: HeaderCarrier, user: TAVCUser, request: Request[AnyContent]): Future[Result] = {
-    submissionConnector.submitComplainceStatement(seisAnswersModel, tavcReferenceNumber, registrationDetailsModel).map { submissionResponse =>
+    submissionConnector.submitComplianceStatement(seisAnswersModel, tavcReferenceNumber, registrationDetailsModel).map { submissionResponse =>
       submissionResponse.status match {
         case OK =>
           s4lConnector.clearCache()
@@ -260,7 +260,7 @@ trait AcknowledgementController extends FrontendController with AuthorisedAndEnr
   def processResultUpload(seisAnswersModel: ComplianceStatementAnswersModel, tavcReferenceNumber: String,
                           registrationDetailsModel: Option[RegistrationDetailsModel])
                          (implicit hc: HeaderCarrier, user: TAVCUser, request: Request[AnyContent]): Future[Result] = {
-    submissionConnector.submitComplainceStatement(seisAnswersModel, tavcReferenceNumber, registrationDetailsModel).flatMap { submissionResponse =>
+    submissionConnector.submitComplianceStatement(seisAnswersModel, tavcReferenceNumber, registrationDetailsModel).flatMap { submissionResponse =>
       submissionResponse.status match {
         case OK =>
           s4lConnector.fetchAndGetFormData[String](KeystoreKeys.envelopeId).flatMap {
