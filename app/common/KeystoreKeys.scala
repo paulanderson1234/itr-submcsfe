@@ -86,6 +86,7 @@ trait KeystoreKeys {
   val dateSharesRepaid: String = "pageKeys:dateSharesRepaid"
   val sharesRepaymentType: String = "investors:sharesRepaymentType"
   val grossAssetsAfterIssue: String = "companyDetails:grossAssetsAfterIssue"
+  val sharesRepaymentDetails: String = "pageKeys:sharesRepaymentDetails"
 
   // processing Keys
   val eisSeisProcessingModel: String = "processing:EisSeisProcessingModel"
@@ -133,6 +134,11 @@ trait KeystoreKeys {
   val backLinkMarketDescription: String = "backLink:marketDescription"
   val thirtyDayRule: String = "pageKeys:thirtyDayRule"
   val backLinkWasAnyValueReceived: String = "backLink:WasAnyValueReceived"
+  val backLinkAnySharesRepayment: String = "backLink:AnySharesRepayment"
+  val backLinkWhoRepaidShares: String = "backLink:WhoRepaidShares"
+  val backLinkSharesRepaymentType: String = "backLink:SharesRepaymentType"
+  val backLinkSharesRepaymentDate: String = "backLink:SharesRepaymentDate"
+  val backLinkSharesRepaymentAmount: String = "backLink:SharesRepaymentAmount"
 
   //application in progress key
   val applicationInProgress: String = "applicationInProgress"

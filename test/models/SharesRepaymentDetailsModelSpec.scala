@@ -23,31 +23,25 @@ class SharesRepaymentDetailsModelSpec extends BaseSpec{
 
   val invalidSharesRepaymentDetails = SharesRepaymentDetailsModel()
 
-  val validSharesRepaymentDetails = SharesRepaymentDetailsModel(Some(anySharesRepaymentModelYes), Some(whoRepaidSharesModel),
+  val validSharesRepaymentDetails = SharesRepaymentDetailsModel(Some(whoRepaidSharesModel),
     Some(repaymentTypeShares), Some(dateSharesRepaidModel), Some(amountSharesRepaymentModel))
 
-  val sharesRepaymentDetailsMissingAnySharesModel = SharesRepaymentDetailsModel(None, Some(whoRepaidSharesModel),
+  val sharesRepaymentDetailsMissingRecipient = SharesRepaymentDetailsModel(None,
     Some(repaymentTypeShares), Some(dateSharesRepaidModel), Some(amountSharesRepaymentModel))
 
-  val sharesRepaymentDetailsMissingRecipient = SharesRepaymentDetailsModel(Some(anySharesRepaymentModelYes), None,
-    Some(repaymentTypeShares), Some(dateSharesRepaidModel), Some(amountSharesRepaymentModel))
+  val sharesRepaymentDetailsMissingRepaymentType = SharesRepaymentDetailsModel(Some(whoRepaidSharesModel),
+    None, Some(dateSharesRepaidModel), Some(amountSharesRepaymentModel))
 
-  val sharesRepaymentDetailsMissingRepaymentType = SharesRepaymentDetailsModel(Some(anySharesRepaymentModelYes),
-    Some(whoRepaidSharesModel), None, Some(dateSharesRepaidModel), Some(amountSharesRepaymentModel))
-
-  val sharesRepaymentDetailsMissingRepaymentDate = SharesRepaymentDetailsModel(Some(anySharesRepaymentModelYes), Some(whoRepaidSharesModel),
+  val sharesRepaymentDetailsMissingRepaymentDate = SharesRepaymentDetailsModel(Some(whoRepaidSharesModel),
     Some(repaymentTypeShares), None, Some(amountSharesRepaymentModel))
 
-  val sharesRepaymentDetailsMissingRepaymentAmount = SharesRepaymentDetailsModel(Some(anySharesRepaymentModelYes), Some(whoRepaidSharesModel),
+  val sharesRepaymentDetailsMissingRepaymentAmount = SharesRepaymentDetailsModel(Some(whoRepaidSharesModel),
     Some(repaymentTypeShares), Some(dateSharesRepaidModel), None)
 
   "Calling validate" should {
     "return false" when {
       "the shares repayment details model is empty" in {
         invalidSharesRepaymentDetails.validate shouldBe false
-      }
-      "the shares repayment details is missing anySharesRepayment model" in {
-        sharesRepaymentDetailsMissingAnySharesModel.validate shouldBe false
       }
       "the shares repayment details is missing recipient " in {
         sharesRepaymentDetailsMissingRecipient.validate shouldBe false

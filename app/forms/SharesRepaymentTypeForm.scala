@@ -23,7 +23,8 @@ import play.api.data.Forms._
 object SharesRepaymentTypeForm {
   val sharesRepaymentTypeForm = Form(
     mapping(
-      "sharesRepaymentType" -> nonEmptyText
+      "sharesRepaymentType" -> nonEmptyText,
+      "processingId" -> optional(number)
     )
     (SharesRepaymentTypeModel.apply)(SharesRepaymentTypeModel.unapply)
   )

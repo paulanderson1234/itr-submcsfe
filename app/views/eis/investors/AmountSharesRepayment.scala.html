@@ -3,11 +3,11 @@
 @import views.html.helpers.{errorSummary, inputWithCurrencySymbol, backButtonWithProgress}
 @import utils.Validation.financialMaxAmountLength
 
-@(amountSharesRepaymentForm: Form[AmountSharesRepaymentModel])(implicit request: Request[_], messages: Messages)
+@(amountSharesRepaymentForm: Form[AmountSharesRepaymentModel], backUrl: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(Messages("page.AmountSharesRepayment.title")) {
 
-@backButtonWithProgress(controllers.eis.routes.DateSharesRepaidController.show().url, Messages("common.section.progress.details.four"))
+@backButtonWithProgress(backUrl, Messages("common.section.progress.details.four"))
 
 
 <div class="grid-row">

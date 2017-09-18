@@ -16,21 +16,18 @@
 
 package models.repayments
 
-import models._
 import play.api.libs.json.Json
 
 
-case class SharesRepaymentDetailsModel(anySharesRepaymentModel: Option[AnySharesRepaymentModel] = None,
-                                       whoRepaidSharesModel: Option[WhoRepaidSharesModel] = None,
+case class SharesRepaymentDetailsModel(whoRepaidSharesModel: Option[WhoRepaidSharesModel] = None,
                                        sharesRepaymentTypeModel: Option[SharesRepaymentTypeModel] = None,
                                        dateSharesRepaidModel: Option[DateSharesRepaidModel] = None,
                                        amountSharesRepaymentModel: Option[AmountSharesRepaymentModel] = None,
                                        processingId: Option[Int] = None) {
 
   def validate: Boolean = {
-    anySharesRepaymentModel.isDefined && whoRepaidSharesModel.isDefined &&
-      sharesRepaymentTypeModel.isDefined && dateSharesRepaidModel.isDefined &&
-      amountSharesRepaymentModel.isDefined
+      whoRepaidSharesModel.isDefined && sharesRepaymentTypeModel.isDefined &&
+        dateSharesRepaidModel.isDefined && amountSharesRepaymentModel.isDefined
   }
 }
 

@@ -3,11 +3,11 @@
 @import common.Constants
 @import views.html.helpers.{backButtonWithProgress, formInputRadioGroup, errorSummary, formHint}
 
-@(sharesRepaymentTypeForm: Form[SharesRepaymentTypeModel])(implicit request: Request[_], messages: Messages)
+@(sharesRepaymentTypeForm: Form[SharesRepaymentTypeModel], backUrl: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(Messages("page.sharesRepaymentType.title")) {
 
-@backButtonWithProgress(controllers.eis.routes.WhoRepaidSharesController.show().url, Messages("common.section.progress.details.four"))
+@backButtonWithProgress(backUrl, Messages("common.section.progress.details.four"))
 
 @errorSummary(sharesRepaymentTypeForm, "shares-repayment-type", "sharesRepaymentType")
 

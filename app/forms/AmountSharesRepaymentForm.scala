@@ -30,7 +30,8 @@ object AmountSharesRepaymentForm {
     mapping(
       "amount" -> nonEmptyText
         .verifying(Validation.genericWholeAmountCheck(messageKey, minimumAmount))
-        .transform[BigDecimal](value => BigDecimal(value), _.toString())
+        .transform[BigDecimal](value => BigDecimal(value), _.toString()),
+      "processingId" -> optional(number)
     )(AmountSharesRepaymentModel.apply)(AmountSharesRepaymentModel.unapply)
   )
 }

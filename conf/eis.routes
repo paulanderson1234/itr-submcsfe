@@ -228,14 +228,13 @@ POST      /share-issue-date                        controllers.eis.ShareIssueDat
 GET        /add-another-shareholding/:investorId   controllers.eis.AddAnotherShareholdingController.show(investorId: Int)
 POST       /add-another-shareholding/:investorId   controllers.eis.AddAnotherShareholdingController.submit(investorId: Int)
 
-
 GET        /nominal-value-of-shares               controllers.eis.NominalValueOfSharesController.show
 POST       /nominal-value-of-shares               controllers.eis.NominalValueOfSharesController.submit
 
 GET        /share-description                     controllers.eis.ShareDescriptionController.show
 POST       /share-description                     controllers.eis.ShareDescriptionController.submit
 
-GET       /amount-shares-repayment                controllers.eis.AmountSharesRepaymentController.show
+GET       /amount-shares-repayment/:id                controllers.eis.AmountSharesRepaymentController.show(id: Int)
 POST      /amount-shares-repayment                controllers.eis.AmountSharesRepaymentController.submit
 
 GET       /total-amount-raised                    controllers.eis.TotalAmountRaisedController.show
@@ -250,13 +249,13 @@ POST      /thirty-day-rule                        controllers.eis.ThirtyDayRuleC
 GET       /thirty-day-rule-error                        controllers.eis.ThirtyDayRuleErrorController.show
 POST      /thirty-day-rule-error                        controllers.eis.ThirtyDayRuleErrorController.submit
 
-GET       /who-repaid-shares                      controllers.eis.WhoRepaidSharesController.show
+GET       /who-repaid-shares                      controllers.eis.WhoRepaidSharesController.show(id: Option[Int]?=None)
 POST      /who-repaid-shares                      controllers.eis.WhoRepaidSharesController.submit
 
-GET       /date-shares-repaid                        controllers.eis.DateSharesRepaidController.show
+GET       /date-shares-repaid/:id                        controllers.eis.DateSharesRepaidController.show(id: Int)
 POST      /date-shares-repaid                        controllers.eis.DateSharesRepaidController.submit
 
-GET        /shares-repayment-type                 controllers.eis.SharesRepaymentTypeController.show
+GET        /shares-repayment-type/:id                 controllers.eis.SharesRepaymentTypeController.show(id: Int)
 POST       /shares-repayment-type                 controllers.eis.SharesRepaymentTypeController.submit
 
 GET       /gross-assets-after-issue               controllers.eis.GrossAssetsAfterIssueController.show

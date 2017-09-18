@@ -18,7 +18,8 @@ package models.repayments
 
 import play.api.libs.json.Json
 
-case class WhoRepaidSharesModel(forename : String, surname : String)
+case class WhoRepaidSharesModel(forename : String, surname : String,
+                                processingId: Option[Int] = None)
 
 object WhoRepaidSharesModel {
 

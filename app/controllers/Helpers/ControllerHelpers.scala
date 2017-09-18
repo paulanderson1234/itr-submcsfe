@@ -21,6 +21,7 @@ import common.{Constants, KeystoreKeys}
 import controllers.seis.routes
 import models._
 import models.investorDetails.{InvestorDetailsModel, PreviousShareHoldingModel}
+import models.repayments.SharesRepaymentDetailsModel
 import models.submission.SchemeTypesModel
 import play.api.data.Form
 import play.api.i18n.Messages
@@ -197,5 +198,28 @@ trait ControllerHelpers {
       Redirect(controllers.eis.routes.FullTimeEmployeeCountController.show)
     }
     else Redirect(controllers.eis.routes.IsCompanyKnowledgeIntensiveController.show)
+  }
+
+  def getRepaymentsIndex(targetIndex: Int, data: Vector[SharesRepaymentDetailsModel]): Int = {
+    data.indexWhere(_.processingId.getOrElse(0) == targetIndex)
+  }
+
+  def redirectInvalidRepayments(index: Int)(f: Int => Result): Result = {
+    if (index != Constants.notFound) {
+      f(index)
+    } else {
+      Redirect(controllers.eis.routes.AnySharesRepaymentController.show())
+    }
+  }
+
+  def retrieveRepaymentsData[T](index: Int, repayments: Vector[SharesRepaymentDetailsModel])(f: SharesRepaymentDetailsModel => Option[T]): Option[T] = {
+    repayments.lift(index).flatMap(f)
+  }
+
+  def redirectIfNoRepayments(vector: Option[Vector[SharesRepaymentDetailsModel]])(f: Vector[SharesRepaymentDetailsModel] => Result): Result = {
+    vector match {
+      case Some(data) if data.nonEmpty => f(data)
+      case _ => Redirect(controllers.eis.routes.AnySharesRepaymentController.show())
+    }
   }
 }

@@ -2,11 +2,11 @@
 @import uk.gov.hmrc.play.views.html.helpers.form
 @import views.html.helpers.{errorSummary, formInlineDateInput, backButtonWithProgress}
 
-@(dateSharesRepaidForm: Form[DateSharesRepaidModel])(implicit request: Request[_], messages: Messages)
+@(dateSharesRepaidForm: Form[DateSharesRepaidModel], backUrl: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(Messages("page.DateSharesRepaid.title")) {
 
-    @backButtonWithProgress(controllers.eis.routes.SharesRepaymentTypeController.show().url, Messages("common.section.progress.details.four"))
+    @backButtonWithProgress(backUrl, Messages("common.section.progress.details.four"))
 
     @errorSummary(dateSharesRepaidForm, "date-shares-repaid", "dateSharesRepaidDay")
 

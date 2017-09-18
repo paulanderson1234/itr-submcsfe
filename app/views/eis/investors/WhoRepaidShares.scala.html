@@ -3,11 +3,11 @@
 @import uk.gov.hmrc.play.views.html.helpers.form
 @import views.html.helpers.{errorSummary, backButtonWithProgress, input}
 
-@(whoRepaidSharesForm: Form[WhoRepaidSharesModel])(implicit request: Request[_], messages: Messages)
+@(whoRepaidSharesForm: Form[WhoRepaidSharesModel], backUrl: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(Messages("page.WhoRepaidShares.title")) {
 
-    @backButtonWithProgress(controllers.eis.routes.AnySharesRepaymentController.show().url, Messages("common.section.progress.details.four"))
+    @backButtonWithProgress(backUrl, Messages("common.section.progress.details.four"))
 
     @errorSummary(whoRepaidSharesForm, "who-repaid-shares", "text")
 

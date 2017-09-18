@@ -20,16 +20,20 @@ import auth.{AuthorisedAndEnrolledForTAVC, EIS, VCT}
 import common.KeystoreKeys
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
+import controllers.Helpers.{ControllerHelpers, PreviousInvestorsHelper, PreviousRepaymentsHelper}
+import forms.AddInvestorOrNomineeForm.addInvestorOrNomineeForm
 import forms.WhoRepaidSharesForm._
-import models.repayments.WhoRepaidSharesModel
+import models.repayments.{SharesRepaymentDetailsModel, WhoRepaidSharesModel}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
-import views.html.eis.investors.WhoRepaidShares
+import views.html.eis.investors.{AnySharesRepayment, WhoRepaidShares}
 
 import scala.concurrent.Future
 import play.api.mvc.{Action, AnyContent, Result}
 import play.api.data.Form
+
+import scala.reflect.macros.whitebox
 
 
 object WhoRepaidSharesController extends WhoRepaidSharesController{
@@ -39,31 +43,67 @@ object WhoRepaidSharesController extends WhoRepaidSharesController{
   override lazy val enrolmentConnector = EnrolmentConnector
 }
 
-trait WhoRepaidSharesController extends FrontendController with AuthorisedAndEnrolledForTAVC {
+trait WhoRepaidSharesController extends FrontendController with AuthorisedAndEnrolledForTAVC with ControllerHelpers{
 
   override val acceptedFlows = Seq(Seq(EIS))
 
-  val show = AuthorisedAndEnrolled.async { implicit user => implicit request =>
-    s4lConnector.fetchAndGetFormData[WhoRepaidSharesModel](KeystoreKeys.whoRepaidShares).map {
-      case Some(data) => Ok(WhoRepaidShares(whoRepaidSharesForm.fill(data)))
-      case None => Ok(WhoRepaidShares(whoRepaidSharesForm))
+  def show(id: Option[Int]): Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user => implicit request =>
+    def routeRequest(backUrl: Option[String]) = {
+      if (backUrl.isDefined) {
+        s4lConnector.fetchAndGetFormData[Vector[SharesRepaymentDetailsModel]](KeystoreKeys.sharesRepaymentDetails).map {
+          case Some(data) if (data.nonEmpty) =>
+            id match {
+              case Some(idVal) => {
+                redirectInvalidRepayments(getRepaymentsIndex(idVal, data)) { id =>
+                  val form = fillForm(whoRepaidSharesForm, retrieveRepaymentsData(id, data)(_.whoRepaidSharesModel))
+                  Ok(WhoRepaidShares(form, backUrl.get))
+                }
+              }
+              case None => {
+                val sharesRepaymentsDetailsModel = data.last
+                if (sharesRepaymentsDetailsModel.validate) Ok(WhoRepaidShares(whoRepaidSharesForm, backUrl.get))
+                else Ok(WhoRepaidShares(
+                  whoRepaidSharesForm.fill(sharesRepaymentsDetailsModel.whoRepaidSharesModel.get), backUrl.get))
+              }
+            }
+          case _ => Ok(WhoRepaidShares(whoRepaidSharesForm, backUrl.get))
+        }
+      }
+      else Future.successful(Redirect(controllers.eis.routes.ReviewAllInvestorsController.show()))
     }
+
+    for {
+      link <- ControllerHelpers.getSavedBackLink(KeystoreKeys.backLinkWhoRepaidShares, s4lConnector)
+      route <- routeRequest(link)
+    } yield route
   }
 
-
-  val submit: Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user => implicit request =>
-    val success: WhoRepaidSharesModel => Future[Result] = { model =>
-      s4lConnector.saveFormData(KeystoreKeys.whoRepaidShares, model).map(_ =>
-        Redirect(routes.SharesRepaymentTypeController.show())
+  val submit = AuthorisedAndEnrolled.async { implicit user =>
+    implicit request =>
+      whoRepaidSharesForm.bindFromRequest().fold(
+        formWithErrors => {
+          ControllerHelpers.getSavedBackLink(KeystoreKeys.backLinkWhoRepaidShares, s4lConnector).flatMap(url =>
+            Future.successful(BadRequest(WhoRepaidShares(formWithErrors, url.get))))
+        },
+        validFormData => {
+          validFormData.processingId match {
+            case Some(_) => PreviousRepaymentsHelper.updateWhoRepaidShares(s4lConnector, validFormData).map {
+              sharesRepaymentDetails => {
+                s4lConnector.saveFormData(KeystoreKeys.backLinkSharesRepaymentType,
+                  routes.WhoRepaidSharesController.show(sharesRepaymentDetails.processingId).url)
+                Redirect(routes.SharesRepaymentTypeController.show(sharesRepaymentDetails.processingId.get))
+              }
+            }
+            case None => PreviousRepaymentsHelper.addWhoRepaidShares(s4lConnector, validFormData).map {
+              sharesRepaymentDetails => {
+                s4lConnector.saveFormData(KeystoreKeys.backLinkSharesRepaymentType,
+                  routes.WhoRepaidSharesController.show(sharesRepaymentDetails.processingId).url)
+                Redirect(routes.SharesRepaymentTypeController.show(sharesRepaymentDetails.processingId.get))
+              }
+            }
+          }
+        }
       )
-    }
-
-    val failure: Form[WhoRepaidSharesModel] => Future[Result] = { form =>
-      Future.successful(BadRequest(WhoRepaidShares(form)))
-    }
-
-    whoRepaidSharesForm.bindFromRequest().fold(failure, success)
   }
-
 }
 

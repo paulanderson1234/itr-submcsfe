@@ -22,11 +22,12 @@ import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.Helpers.ControllerHelpers
 import models.investorDetails.InvestorDetailsModel
-import uk.gov.hmrc.play.frontend.controller.FrontendController
-import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
+import play.api.i18n.Messages.Implicits._
+import play.api.mvc.{Action, AnyContent}
+import uk.gov.hmrc.play.frontend.controller.FrontendController
 import views.html.eis.investors.ReviewAllInvestors
-import play.api.mvc.{Action, AnyContent, _}
+
 import scala.concurrent.Future
 
 object ReviewAllInvestorsController extends ReviewAllInvestorsController
@@ -49,10 +50,11 @@ trait ReviewAllInvestorsController extends FrontendController with AuthorisedAnd
   }
 
   val submit = AuthorisedAndEnrolled.async { implicit user => implicit request =>
+
     s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map { vector =>
       redirectEisNoInvestors(vector) { data =>
         if (data.forall(_.validate))
-          Redirect(routes.AddAnotherInvestorController.show())
+          Redirect(routes.AnySharesRepaymentController.show())
         else Redirect(routes.ReviewAllInvestorsController.show())
       }
     }

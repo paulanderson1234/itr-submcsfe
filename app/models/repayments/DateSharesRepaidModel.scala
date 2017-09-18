@@ -19,7 +19,8 @@ package models.repayments
 import play.api.libs.json.Json
 import utils.DateFormatter
 
-case class DateSharesRepaidModel(day:Option[Int], month:Option[Int], year:Option[Int])
+case class DateSharesRepaidModel(day:Option[Int], month:Option[Int], year:Option[Int],
+                                 processingId: Option[Int] = None)
 
 object DateSharesRepaidModel extends DateFormatter{
   implicit val format = Json.format[DateSharesRepaidModel]

@@ -32,7 +32,8 @@ object DateSharesRepaidForm {
     mapping(
       "dateSharesRepaidDay" -> optional(number),
       "dateSharesRepaidMonth" -> optional(number),
-      "dateSharesRepaidYear" -> optional(number)
+      "dateSharesRepaidYear" -> optional(number),
+      "processingId" -> optional(number)
     )(DateSharesRepaidModel.apply)(DateSharesRepaidModel.unapply)
       .verifying(Messages("validation.error.DateNotEntered"), fields =>
         validateNonEmptyDateOptions(fields.day, fields.month, fields.year))

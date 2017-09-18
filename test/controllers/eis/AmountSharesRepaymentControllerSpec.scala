@@ -46,7 +46,7 @@ class AmountSharesRepaymentControllerSpec extends BaseSpec {
 		
     when(mockS4lConnector.saveFormData(Matchers.eq(KeystoreKeys.amountSharesRepayment),
       Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
-    .thenReturn(Future.successful(CacheMap("", Map())))		
+    .thenReturn(Future.successful(CacheMap("", Map())))
   }
 
   "AmountSharesRepaymentController" should {

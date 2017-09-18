@@ -20,8 +20,10 @@ import auth.{AuthorisedAndEnrolledForTAVC, EIS}
 import common.KeystoreKeys
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
+import controllers.Helpers.{ControllerHelpers, PreviousRepaymentsHelper}
 import forms.DateSharesRepaidForm._
-import models.repayments.DateSharesRepaidModel
+import forms.SharesRepaymentTypeForm.sharesRepaymentTypeForm
+import models.repayments.{DateSharesRepaidModel, SharesRepaymentDetailsModel}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
@@ -39,31 +41,60 @@ object DateSharesRepaidController extends DateSharesRepaidController{
   override lazy val enrolmentConnector = EnrolmentConnector
 }
 
-trait DateSharesRepaidController extends FrontendController with AuthorisedAndEnrolledForTAVC {
+trait DateSharesRepaidController extends FrontendController with AuthorisedAndEnrolledForTAVC with ControllerHelpers{
 
   override val acceptedFlows = Seq(Seq(EIS))
 
-  val show = AuthorisedAndEnrolled.async { implicit user => implicit request =>
-    s4lConnector.fetchAndGetFormData[DateSharesRepaidModel](KeystoreKeys.dateSharesRepaid).map {
-      case Some(data) => Ok(DateSharesRepaid(dateSharesRepaidForm.fill(data)))
-      case None => Ok(DateSharesRepaid(dateSharesRepaidForm))
-    }
+  def show(id: Int): Action[AnyContent] = AuthorisedAndEnrolled.async {
+    implicit user =>
+      implicit request => {
+        def process(backUrl: Option[String]) = {
+          if (backUrl.isDefined) {
+            s4lConnector.fetchAndGetFormData[Vector[SharesRepaymentDetailsModel]](KeystoreKeys.sharesRepaymentDetails).map { vector =>
+              redirectIfNoRepayments(vector) { data =>
+                val itemToUpdateIndex = getRepaymentsIndex(id, data)
+                redirectInvalidRepayments(itemToUpdateIndex) { index =>
+                  val form = fillForm(dateSharesRepaidForm, retrieveRepaymentsData(index, data)(_.dateSharesRepaidModel))
+                  Ok(DateSharesRepaid(form, backUrl.get))
+                }
+              }
+            }
+          }
+          else Future.successful(Redirect(controllers.eis.routes.AnySharesRepaymentController.show()))
+        }
+
+        for {
+          backUrl <- s4lConnector.fetchAndGetFormData[String](KeystoreKeys.backLinkSharesRepaymentDate)
+          route <- process(backUrl)
+        } yield route
+      }
   }
 
-
-  val submit: Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user => implicit request =>
-    val success: DateSharesRepaidModel => Future[Result] = { model =>
-      s4lConnector.saveFormData(KeystoreKeys.dateSharesRepaid, model).map(_ =>
-        //TODO: Route to next page when available
-        Redirect(routes.AmountSharesRepaymentController.show())
-      )
-    }
-
-    val failure: Form[DateSharesRepaidModel] => Future[Result] = { form =>
-      Future.successful(BadRequest(DateSharesRepaid(form)))
-    }
-
-    dateSharesRepaidForm.bindFromRequest().fold(failure, success)
+  val submit = AuthorisedAndEnrolled.async { implicit user => implicit request =>
+    dateSharesRepaidForm.bindFromRequest().fold(
+      formWithErrors => {
+        ControllerHelpers.getSavedBackLink(KeystoreKeys.backLinkSharesRepaymentDate, s4lConnector).flatMap(url =>
+          Future.successful(BadRequest(DateSharesRepaid(formWithErrors, url.get))))
+      },
+      validFormData => {
+        validFormData.processingId match {
+          case Some(_) => PreviousRepaymentsHelper.updateDateSharesRepaid(s4lConnector, validFormData).map {
+            sharesRepaymentDetails => {
+              s4lConnector.saveFormData(KeystoreKeys.backLinkSharesRepaymentAmount,
+                routes.DateSharesRepaidController.show(sharesRepaymentDetails.processingId.get).url)
+              Redirect(routes.AmountSharesRepaymentController.show(sharesRepaymentDetails.processingId.get))
+            }
+          }
+          case None => PreviousRepaymentsHelper.addDateSharesRepaid(s4lConnector, validFormData).map {
+            sharesRepaymentDetails => {
+              s4lConnector.saveFormData(KeystoreKeys.backLinkSharesRepaymentAmount,
+                routes.DateSharesRepaidController.show(sharesRepaymentDetails.processingId.get).url)
+              Redirect(routes.AmountSharesRepaymentController.show(sharesRepaymentDetails.processingId.get))
+            }
+          }
+        }
+      }
+    )
   }
 
 }

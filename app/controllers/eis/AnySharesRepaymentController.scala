@@ -20,11 +20,12 @@ import auth.{AuthorisedAndEnrolledForTAVC, EIS}
 import common.{Constants, KeystoreKeys}
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
+import controllers.Helpers.ControllerHelpers
 import forms.AnySharesRepaymentForm._
-import models.repayments.AnySharesRepaymentModel
-import uk.gov.hmrc.play.frontend.controller.FrontendController
-import play.api.i18n.Messages.Implicits._
+import models.repayments.{AnySharesRepaymentModel, SharesRepaymentDetailsModel}
 import play.api.Play.current
+import play.api.i18n.Messages.Implicits._
+import uk.gov.hmrc.play.frontend.controller.FrontendController
 import views.html.eis.investors.AnySharesRepayment
 
 import scala.concurrent.Future
@@ -37,12 +38,11 @@ object AnySharesRepaymentController extends AnySharesRepaymentController{
   override lazy val enrolmentConnector = EnrolmentConnector
 }
 
-trait AnySharesRepaymentController extends FrontendController with AuthorisedAndEnrolledForTAVC {
+trait AnySharesRepaymentController extends FrontendController with AuthorisedAndEnrolledForTAVC with ControllerHelpers{
 
   override val acceptedFlows = Seq(Seq(EIS))
 
   val show = AuthorisedAndEnrolled.async { implicit user => implicit request =>
-
     s4lConnector.fetchAndGetFormData[AnySharesRepaymentModel](KeystoreKeys.anySharesRepayment).map {
       case Some(data) => Ok(AnySharesRepayment(anySharesRepaymentForm.fill(data)))
       case None => Ok(AnySharesRepayment(anySharesRepaymentForm))
