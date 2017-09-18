@@ -42,7 +42,7 @@ class CheckAnswersInvestmentSpec extends CheckAnswersSpec {
       " when it is fully populated with investment models" in new Setup {
       val document: Document = {
         previousRFISetup()
-        investmentSetup(Some(proposedInvestmentModel),Some(usedInvestmentReasonBeforeModelYes),
+        investmentSetup(Some(totalAmountRaisedModel),Some(usedInvestmentReasonBeforeModelYes),
         Some(previousBeforeDOFCSModelYes),Some(newGeographicalMarketModelYes),Some(newProductMarketModelYes),Some(subsidiariesSpendingInvestmentModelYes),
         Some(subsidiariesNinetyOwnedModelNo),Some(investmentGrowModel))
         contactDetailsSetup()
@@ -57,14 +57,12 @@ class CheckAnswersInvestmentSpec extends CheckAnswersSpec {
       //Section table heading
       document.getElementById("investmentSection-table-heading").text() shouldBe Messages("page.summaryQuestion.companyDetailsSectionThree")
 
-      //proposed investment
+      //total amount raised
       investmentTableTbody.select("tr").get(0).getElementById("proposedInvestment-question").text() shouldBe
-        Messages("page.summaryQuestion.proposedInvestment")
-      investmentTableTbody.select("tr").get(0).getElementById("proposedInvestment-answer").text() shouldBe
-        ProposedInvestmentModel.getAmountAsFormattedString(proposedInvestmentModel.investmentAmount)
+        Messages("page.summaryQuestion.amountRaised")
+      investmentTableTbody.select("tr").get(0).getElementById("proposedInvestment-answer").text() shouldBe TotalAmountRaisedModel.getAmountAsFormattedString(totalAmountRaisedModel.amount)
       investmentTableTbody.select("tr").get(0).getElementById("proposedInvestment-link")
-        .attr("href") shouldEqual controllers.eis.routes.ProposedInvestmentController.show().url
-
+        .attr("href") shouldEqual controllers.eis.routes.TotalAmountRaisedController.show().url
 
       // same reason as before
       investmentTableTbody.select("tr").get(1).getElementById("usedInvestReasonBefore-question").text() shouldBe

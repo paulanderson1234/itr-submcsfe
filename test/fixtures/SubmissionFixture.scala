@@ -93,8 +93,8 @@ trait SubmissionFixture {
       .thenReturn(Future.successful(Option(natureOfBusinessValid)))
     when(mockS4lConnector.fetchAndGetFormData[ContactDetailsModel](Matchers.eq(KeystoreKeys.contactDetails))(Matchers.any(), Matchers.any(),Matchers.any()))
       .thenReturn(Future.successful(Option(contactDetailsValid)))
-    when(mockS4lConnector.fetchAndGetFormData[ProposedInvestmentModel](Matchers.eq(KeystoreKeys.proposedInvestment))(Matchers.any(), Matchers.any(),Matchers.any()))
-      .thenReturn(Future.successful(Option(proposedInvestmentValid)))
+    when(mockS4lConnector.fetchAndGetFormData[TotalAmountRaisedModel](Matchers.eq(KeystoreKeys.totalAmountRaised))(Matchers.any(), Matchers.any(),Matchers.any()))
+      .thenReturn(Future.successful(Option(totalAmountRaisedValid)))
     when(mockS4lConnector.fetchAndGetFormData[InvestmentGrowModel](Matchers.eq(KeystoreKeys.investmentGrow))(Matchers.any(), Matchers.any(),Matchers.any()))
       .thenReturn(Future.successful(Option(investmentGrowValid)))
     when(mockS4lConnector.fetchAndGetFormData[DateOfIncorporationModel](Matchers.eq(KeystoreKeys.dateOfIncorporation))(Matchers.any(), Matchers.any(),Matchers.any()))
@@ -139,8 +139,8 @@ trait SubmissionFixture {
       .thenReturn(Future.successful(Option(natureOfBusinessValid)))
     when(mockS4lConnector.fetchAndGetFormData[ContactDetailsModel](Matchers.eq(KeystoreKeys.contactDetails))(Matchers.any(), Matchers.any(),Matchers.any()))
       .thenReturn(Future.successful(Option(contactDetailsValid)))
-    when(mockS4lConnector.fetchAndGetFormData[ProposedInvestmentModel](Matchers.eq(KeystoreKeys.proposedInvestment))(Matchers.any(), Matchers.any(),Matchers.any()))
-      .thenReturn(Future.successful(Option(proposedInvestmentValid)))
+    when(mockS4lConnector.fetchAndGetFormData[TotalAmountRaisedModel](Matchers.eq(KeystoreKeys.totalAmountRaised))(Matchers.any(), Matchers.any(),Matchers.any()))
+      .thenReturn(Future.successful(Option(totalAmountRaisedValid)))
     when(mockS4lConnector.fetchAndGetFormData[InvestmentGrowModel](Matchers.eq(KeystoreKeys.investmentGrow))(Matchers.any(), Matchers.any(),Matchers.any()))
       .thenReturn(Future.successful(Option(investmentGrowValid)))
     when(mockS4lConnector.fetchAndGetFormData[DateOfIncorporationModel](Matchers.eq(KeystoreKeys.dateOfIncorporation))(Matchers.any(), Matchers.any(),Matchers.any()))
@@ -173,7 +173,7 @@ trait SubmissionFixture {
                                           kiModel: Option[KiProcessingModel],
                                           natureBusiness: Option[NatureOfBusinessModel],
                                           contactDetails: Option[ContactDetailsModel],
-                                          proposedInvestment: Option[ProposedInvestmentModel],
+                                          totalAmountRaised: Option[TotalAmountRaisedModel],
                                           investGrow: Option[InvestmentGrowModel],
                                           dateIncorp: Option[DateOfIncorporationModel],
                                           contactAddress: Option[AddressModel],
@@ -188,8 +188,8 @@ trait SubmissionFixture {
       .thenReturn( if(natureBusiness.nonEmpty) Future.successful(Option(natureBusiness.get)) else Future.successful(None))
     when(mockS4lConnector.fetchAndGetFormData[ContactDetailsModel](Matchers.eq(KeystoreKeys.contactDetails))(Matchers.any(), Matchers.any(),Matchers.any()))
       .thenReturn( if(contactDetails.nonEmpty) Future.successful(Option(contactDetails.get)) else Future.successful(None))
-    when(mockS4lConnector.fetchAndGetFormData[ProposedInvestmentModel](Matchers.eq(KeystoreKeys.proposedInvestment))(Matchers.any(), Matchers.any(),Matchers.any()))
-      .thenReturn( if(proposedInvestment.nonEmpty) Future.successful(Option(proposedInvestment.get)) else Future.successful(None))
+    when(mockS4lConnector.fetchAndGetFormData[TotalAmountRaisedModel](Matchers.eq(KeystoreKeys.totalAmountRaised))(Matchers.any(), Matchers.any(),Matchers.any()))
+      .thenReturn( if(totalAmountRaised.nonEmpty) Future.successful(Option(totalAmountRaised.get)) else Future.successful(None))
     when(mockS4lConnector.fetchAndGetFormData[InvestmentGrowModel](Matchers.eq(KeystoreKeys.investmentGrow))(Matchers.any(), Matchers.any(),Matchers.any()))
       .thenReturn( if(investGrow.nonEmpty) Future.successful(Option(investGrow.get)) else Future.successful(None))
     when(mockS4lConnector.fetchAndGetFormData[DateOfIncorporationModel](Matchers.eq(KeystoreKeys.dateOfIncorporation))(Matchers.any(), Matchers.any(),Matchers.any()))
@@ -312,7 +312,7 @@ trait SubmissionFixture {
     dateTradeCommenced = tradeStartDateModelYes.toDate,
     annualCosts = Some(costsFull),
     annualTurnover = Some(turnover),
-    proposedInvestmentModel = ProposedInvestmentModel(250000),
+    proposedInvestmentModel = TotalAmountRaisedModel(250000),
     investmentGrowModel = InvestmentGrowModel("It will help me invest in new equipment and R&D"),
     knowledgeIntensive = Some(KiModel(skilledEmployeesConditionMet = true, innovationConditionMet = Some("reason met"), kiConditionMet = Some(true))),
     subsidiaryPerformingTrade = Some(subsidiaryPerformingTradeWithFull),
@@ -326,7 +326,7 @@ trait SubmissionFixture {
   val whatWillUseForValid = None
   val natureOfBusinessValid = NatureOfBusinessModel("Technology supplier")
   val contactDetailsValid = ContactDetailsModel("fred", "Smith", Some("01952 245666"), None, "fred@hotmail.com")
-  val proposedInvestmentValid = ProposedInvestmentModel(2000)
+  val totalAmountRaisedValid = TotalAmountRaisedModel(2000)
   val investmentGrowValid = InvestmentGrowModel("It will be used to pay for R&D")
   val dateOfIncorporationValid = DateOfIncorporationModel(Some(2), Some(3), Some(2012))
 

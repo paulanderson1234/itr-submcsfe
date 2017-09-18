@@ -29,4 +29,10 @@ trait CostFormatter {
     val transformedValue = Transformers.numberToFormattedNumber(value)
     Constants.amountFormattedAnswer(transformedValue)
   }
+
+  def getAmountAsFormattedStringAny(value: AnyVal): String = {
+    val transformedValue = Transformers.numberToFormattedNumber(value)
+    Constants.amountFormattedAnswer(transformedValue)
+  }
+
 }

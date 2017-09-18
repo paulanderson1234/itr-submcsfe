@@ -41,7 +41,7 @@ object ContactAddressController extends ContactAddressController
 
 trait ContactAddressController extends FrontendController with AuthorisedAndEnrolledForTAVC {
 
-  override val acceptedFlows = Seq(Seq(EIS),Seq(VCT),Seq(EIS,VCT))
+  override val acceptedFlows = Seq(Seq(EIS))
 
   lazy val countriesList = CountriesHelper.getIsoCodeTupleList
 

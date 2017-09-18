@@ -16,7 +16,7 @@
 
 package controllers.eis
 
-import auth.{AuthorisedAndEnrolledForTAVC, EIS, TAVCUser, VCT}
+import auth.{AuthorisedAndEnrolledForTAVC, EIS, TAVCUser}
 import common.KeystoreKeys
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import config.FrontendGlobal.internalServerErrorTemplate
@@ -61,7 +61,7 @@ trait CheckAnswersController extends FrontendController with AuthorisedAndEnroll
     subsidiaries <- s4lConnector.fetchAndGetFormData[SubsidiariesModel](KeystoreKeys.subsidiaries)
     hadPreviousRFI <- s4lConnector.fetchAndGetFormData[HadPreviousRFIModel](KeystoreKeys.hadPreviousRFI)
     previousSchemes <- getAllInvestmentFromKeystore(s4lConnector)
-    proposedInvestment <- s4lConnector.fetchAndGetFormData[ProposedInvestmentModel](KeystoreKeys.proposedInvestment)
+    totalAmountRaised <- s4lConnector.fetchAndGetFormData[TotalAmountRaisedModel](KeystoreKeys.totalAmountRaised)
     usedInvestmentReasonBefore <- s4lConnector.fetchAndGetFormData[UsedInvestmentReasonBeforeModel](KeystoreKeys.usedInvestmentReasonBefore)
     previousBeforeDOFCS <- s4lConnector.fetchAndGetFormData[PreviousBeforeDOFCSModel](KeystoreKeys.previousBeforeDOFCS)
     newGeographicalMarket <- s4lConnector.fetchAndGetFormData[NewGeographicalMarketModel](KeystoreKeys.newGeographicalMarket)
@@ -73,7 +73,7 @@ trait CheckAnswersController extends FrontendController with AuthorisedAndEnroll
     investmentGrowModel <- s4lConnector.fetchAndGetFormData[InvestmentGrowModel](KeystoreKeys.investmentGrow)
   }yield new CheckAnswersModel(yourCompanyNeed,taxPayerReference,registeredAddress,dateOfIncorporation
     ,natureOfBusiness,commercialSale,isKnowledgeIntensive,operatingCosts
-    ,percentageStaffWithMasters,tenYearPlan,subsidiaries,hadPreviousRFI, previousSchemes, proposedInvestment
+    ,percentageStaffWithMasters,tenYearPlan,subsidiaries,hadPreviousRFI, previousSchemes, totalAmountRaised
     ,usedInvestmentReasonBefore,previousBeforeDOFCS,newGeographicalMarket,newProduct,subsidiariesSpendingInvestment,
     subsidiariesNinetyOwned,contactDetails,contactAddress,investmentGrowModel, applicationConfig.uploadFeatureEnabled)
 

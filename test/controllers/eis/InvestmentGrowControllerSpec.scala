@@ -115,7 +115,7 @@ class InvestmentGrowControllerSpec extends BaseSpec {
         mockEnrolledRequest(eisSchemeTypesModel)
         showWithSessionAndAuth(TestController.show)(
           result => {
-            redirectLocation(result) shouldBe Some(routes.ProposedInvestmentController.show().url)
+            redirectLocation(result) shouldBe Some(routes.TotalAmountRaisedController.show().url)
           }
         )
       }
@@ -176,7 +176,7 @@ class InvestmentGrowControllerSpec extends BaseSpec {
       submitWithSessionAndAuth(TestController.submit,formInput)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(routes.ConfirmContactDetailsController.show().url)
+          redirectLocation(result) shouldBe Some(routes.AddInvestorOrNomineeController.show().url)
         }
       )
     }
@@ -196,12 +196,12 @@ class InvestmentGrowControllerSpec extends BaseSpec {
     }
 
     "redirect to WhatWillUseFor page" in {
-      setup(None,Some(newGeographicalMarketModelYes),Some(newProductMarketModelYes),None)
+      setup(None,Some(newGeographicalMarketModelYes),Some(newProductMarketModelYes), None)
       mockEnrolledRequest(eisSchemeTypesModel)
       val formInput = "descriptionTextArea" -> ""
       submitWithSessionAndAuth(TestController.submit,formInput)(
         result => {
-          redirectLocation(result) shouldBe Some(routes.ProposedInvestmentController.show().url)
+          redirectLocation(result) shouldBe Some(routes.TotalAmountRaisedController.show().url)
         }
       )
     }

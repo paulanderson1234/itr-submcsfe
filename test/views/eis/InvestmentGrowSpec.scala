@@ -63,7 +63,7 @@ class InvestmentGrowSpec extends ViewSpec {
 
 
       val document: Document = {
-        setupMocks(investmentGrowModel = Some(validInvestmentGrowModelMaxLength),backLink = Some(controllers.eis.routes.ProposedInvestmentController.show().url))
+        setupMocks(investmentGrowModel = Some(validInvestmentGrowModelMaxLength),backLink = Some(controllers.eis.routes.TotalAmountRaisedController.show().url))
         val result = TestController.show.apply(authorisedFakeRequest)
         Jsoup.parse(contentAsString(result))
       }
@@ -79,7 +79,7 @@ class InvestmentGrowSpec extends ViewSpec {
       document.body.getElementById("descriptionTextArea").attr("maxlength") shouldBe s"${Constants.SuggestedTextMaxLength}"
       document.body.getElementById("descriptionTextArea").text() shouldBe SuggestedMaxLengthText
       document.getElementsByTag("textarea").attr("name") shouldBe "descriptionTextArea"
-      document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.ProposedInvestmentController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.TotalAmountRaisedController.show().url
       document.body.getElementById("get-help-action").text shouldBe Messages("common.error.help.text")
 
       document.getElementById("labelTextId").text() shouldBe Messages("page.investment.InvestmentGrow.heading")
@@ -211,7 +211,7 @@ class InvestmentGrowSpec extends ViewSpec {
     "Verify that the correct elements are loaded when hasGeoMarket is true and hasNewProduct is true" in new Setup{
       val document: Document = {
         setupMocks(Some(validInvestmentGrowModelMaxLength),Some(newGeographicalMarketModelYes),
-          Some(newProductMarketModelYes),Some(controllers.eis.routes.ProposedInvestmentController.show().url))
+          Some(newProductMarketModelYes),Some(controllers.eis.routes.TotalAmountRaisedController.show().url))
         val result = TestController.show.apply(authorisedFakeRequest)
         Jsoup.parse(contentAsString(result))
       }
@@ -231,7 +231,7 @@ class InvestmentGrowSpec extends ViewSpec {
       document.body.getElementById("descriptionTextArea").attr("maxlength") shouldBe s"${Constants.SuggestedTextMaxLength}"
       document.body.getElementById("descriptionTextArea").text() shouldBe SuggestedMaxLengthText
       document.getElementsByTag("textarea").attr("name") shouldBe "descriptionTextArea"
-      document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.ProposedInvestmentController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.TotalAmountRaisedController.show().url
       document.body.getElementById("get-help-action").text shouldBe  Messages("common.error.help.text")
       document.getElementById("labelTextId").text() shouldBe Messages("page.investment.InvestmentGrow.heading")
       document.getElementById("labelTextId").hasClass("visuallyhidden") shouldBe true
@@ -246,7 +246,7 @@ class InvestmentGrowSpec extends ViewSpec {
 
       val document: Document = {
         setupMocks(Some(validInvestmentGrowModelMaxLength),Some(newGeographicalMarketModelYes),
-          Some(newProductMarketModelNo),Some(controllers.eis.routes.ProposedInvestmentController.show().url))
+          Some(newProductMarketModelNo),Some(controllers.eis.routes.TotalAmountRaisedController.show().url))
         val result = TestController.show.apply(authorisedFakeRequest)
         Jsoup.parse(contentAsString(result))
       }
@@ -265,7 +265,7 @@ class InvestmentGrowSpec extends ViewSpec {
       document.body.getElementById("descriptionTextArea").attr("maxlength") shouldBe s"${Constants.SuggestedTextMaxLength}"
       document.body.getElementById("descriptionTextArea").text() shouldBe SuggestedMaxLengthText
       document.getElementsByTag("textarea").attr("name") shouldBe "descriptionTextArea"
-      document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.ProposedInvestmentController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.TotalAmountRaisedController.show().url
       document.body.getElementById("get-help-action").text shouldBe  Messages("common.error.help.text")
       document.getElementById("labelTextId").text() shouldBe Messages("page.investment.InvestmentGrow.heading")
       document.getElementById("labelTextId").hasClass("visuallyhidden") shouldBe true
@@ -279,7 +279,7 @@ class InvestmentGrowSpec extends ViewSpec {
     "Verify that the correct elements are loaded when hasGeoMarket is false and hasNewProduct is true" in new Setup{
       val document: Document = {
         setupMocks(Some(validInvestmentGrowModelMaxLength),Some(newGeographicalMarketModelNo),
-          Some(newProductMarketModelYes),Some(controllers.eis.routes.ProposedInvestmentController.show().url))
+          Some(newProductMarketModelYes),Some(controllers.eis.routes.TotalAmountRaisedController.show().url))
         val result = TestController.show.apply(authorisedFakeRequest)
         Jsoup.parse(contentAsString(result))
       }
@@ -298,7 +298,7 @@ class InvestmentGrowSpec extends ViewSpec {
       document.body.getElementById("descriptionTextArea").attr("maxlength") shouldBe s"${Constants.SuggestedTextMaxLength}"
       document.body.getElementById("descriptionTextArea").text() shouldBe SuggestedMaxLengthText
       document.getElementsByTag("textarea").attr("name") shouldBe "descriptionTextArea"
-      document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.ProposedInvestmentController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.TotalAmountRaisedController.show().url
       document.body.getElementById("get-help-action").text shouldBe  Messages("common.error.help.text")
       document.getElementById("labelTextId").text() shouldBe Messages("page.investment.InvestmentGrow.heading")
       document.getElementById("labelTextId").hasClass("visuallyhidden") shouldBe true
@@ -313,7 +313,7 @@ class InvestmentGrowSpec extends ViewSpec {
 
       val document: Document = {
         setupMocks(Some(validInvestmentGrowModelMaxLength),Some(newGeographicalMarketModelNo),
-          Some(newProductMarketModelNo),Some(controllers.eis.routes.ProposedInvestmentController.show().url))
+          Some(newProductMarketModelNo),Some(controllers.eis.routes.TotalAmountRaisedController.show().url))
         val result = TestController.show.apply(authorisedFakeRequest)
         Jsoup.parse(contentAsString(result))
       }
@@ -329,7 +329,7 @@ class InvestmentGrowSpec extends ViewSpec {
       document.body.getElementById("descriptionTextArea").attr("maxlength") shouldBe s"${Constants.SuggestedTextMaxLength}"
       document.body.getElementById("descriptionTextArea").text() shouldBe SuggestedMaxLengthText
       document.getElementsByTag("textarea").attr("name") shouldBe "descriptionTextArea"
-      document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.ProposedInvestmentController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.TotalAmountRaisedController.show().url
       document.body.getElementById("get-help-action").text shouldBe  Messages("common.error.help.text")
       document.getElementById("labelTextId").text() shouldBe Messages("page.investment.InvestmentGrow.heading")
       document.getElementById("labelTextId").hasClass("visuallyhidden") shouldBe true
@@ -342,7 +342,7 @@ class InvestmentGrowSpec extends ViewSpec {
 
     "Verify that the correct elements are loaded when newGeoMarket is not defined and hasNewProduct is not defined" in new Setup{
       val document: Document = {
-        setupMocks(investmentGrowModel = Some(validInvestmentGrowModelMaxLength), backLink = Some(controllers.eis.routes.ProposedInvestmentController.show().url))
+        setupMocks(investmentGrowModel = Some(validInvestmentGrowModelMaxLength), backLink = Some(controllers.eis.routes.TotalAmountRaisedController.show().url))
         val result = TestController.show.apply(authorisedFakeRequest)
         Jsoup.parse(contentAsString(result))
       }
@@ -358,7 +358,7 @@ class InvestmentGrowSpec extends ViewSpec {
       document.body.getElementById("descriptionTextArea").attr("maxlength") shouldBe s"${Constants.SuggestedTextMaxLength}"
       document.body.getElementById("descriptionTextArea").text() shouldBe SuggestedMaxLengthText
       document.getElementsByTag("textarea").attr("name") shouldBe "descriptionTextArea"
-      document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.ProposedInvestmentController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.TotalAmountRaisedController.show().url
       document.body.getElementById("get-help-action").text shouldBe  Messages("common.error.help.text")
       document.getElementById("labelTextId").text() shouldBe Messages("page.investment.InvestmentGrow.heading")
       document.getElementById("labelTextId").hasClass("visuallyhidden") shouldBe true
@@ -371,7 +371,7 @@ class InvestmentGrowSpec extends ViewSpec {
 
     "show an error no data entered" in new Setup {
       val document: Document = {
-        setupMocks(backLink = Some(controllers.eis.routes.ProposedInvestmentController.show().url))
+        setupMocks(backLink = Some(controllers.eis.routes.TotalAmountRaisedController.show().url))
         val result = TestController.submit.apply(authorisedFakeRequest)
         Jsoup.parse(contentAsString(result))
       }
@@ -383,7 +383,7 @@ class InvestmentGrowSpec extends ViewSpec {
       document.getElementById("bullet-three").text() shouldBe Messages("page.investment.InvestmentGrow.bullet.three")
       document.getElementById("description-three").text() shouldBe Messages("page.investment.InvestmentGrow.description.three")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
-      document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.ProposedInvestmentController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.TotalAmountRaisedController.show().url
       document.body.getElementById("get-help-action").text shouldBe Messages("common.error.help.text")
       document.getElementById("labelTextId").text() shouldBe Messages("page.investment.InvestmentGrow.heading")
       document.getElementById("labelTextId").hasClass("visuallyhidden") shouldBe true

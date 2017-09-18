@@ -21,18 +21,18 @@ import common.{Constants, KeystoreKeys}
 import config.FrontendGlobal._
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector, SubmissionConnector}
-import controllers.Helpers.ControllerHelpers
+import controllers.Helpers.PreviousSchemesHelper
 import forms.TotalAmountRaisedForm._
-import models.{HasInvestmentTradeStartedModel, TotalAmountRaisedModel}
+import models.{HadPreviousRFIModel, KiProcessingModel, ShareIssueDateModel, TotalAmountRaisedModel}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
 import views.html.eis.shareDetails.TotalAmountRaised
 
 import scala.concurrent.Future
-import models.investorDetails.InvestorDetailsModel
 import play.Logger
-import play.api.mvc.Result
+import play.api.mvc.{Action, AnyContent, Result}
+import controllers.Helpers.TotalAmountRaisedHelper
 
 object TotalAmountRaisedController extends TotalAmountRaisedController{
   override lazy val s4lConnector = S4LConnector
@@ -48,7 +48,7 @@ trait TotalAmountRaisedController extends FrontendController with AuthorisedAndE
 
   val submissionConnector: SubmissionConnector
 
-  val show = AuthorisedAndEnrolled.async { implicit user =>
+  val show: Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user =>
     implicit request =>
       s4lConnector.fetchAndGetFormData[TotalAmountRaisedModel](KeystoreKeys.totalAmountRaised).map {
         case Some(data) => Ok(TotalAmountRaised(totalAmountRaisedForm.fill(data)))
@@ -56,56 +56,87 @@ trait TotalAmountRaisedController extends FrontendController with AuthorisedAndE
       }
   }
 
-  val submit = AuthorisedAndEnrolled.async { implicit user =>
+  val submit: Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user =>
     implicit request =>
 
-      def routeRequest(dateForActivity: Option[HasInvestmentTradeStartedModel]): Future[Result] = {
-        if (dateForActivity.isDefined) {
-          if (dateForActivity.get.hasInvestmentTradeStarted == Constants.StandardRadioButtonYesValue) {
-            val validationFlag = for {
-              startDateValid <- submissionConnector.validateHasInvestmentTradeStartedCondition(dateForActivity.get.hasInvestmentTradeStartedDay.get,
-                dateForActivity.get.hasInvestmentTradeStartedMonth.get, dateForActivity.get.hasInvestmentTradeStartedYear.get)
-              investorDetails <- s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails)
-            } yield (startDateValid, investorDetails)
-
-            validationFlag.map {
-              case (Some(startDateValid), investorDetails) if startDateValid => {
-                s4lConnector.saveFormData(KeystoreKeys.backLinkAddInvestorOrNominee, routes.TotalAmountRaisedController.show().url)
-                if (investorDetails.isDefined && investorDetails.get.nonEmpty)
-                  Redirect(controllers.eis.routes.ReviewAllInvestorsController.show())
-                else Redirect(controllers.eis.routes.AddInvestorOrNomineeController.show())
-              }
-              case (Some(startDateValid), _) if !startDateValid => Redirect(routes.UsedInvestmentReasonBeforeController.show())
-              case (None, _) =>
-                Logger.warn("[TotalAmountRaisedController][submit] - validateHasInvestmentTradeStartedCondition did not return expected true/false answer")
-                InternalServerError(internalServerErrorTemplate)
+      def validateLifetimeAllowanceFirstCheck(kiModel: Option[KiProcessingModel], isLifetimeAlowanceExceeded: Option[Boolean],
+                                              prevRFI: HadPreviousRFIModel, totalAmountRaised: Long): Future[Result] = {
+        kiModel match {
+          // check previous answers present
+          case Some(dataWithPreviousValid) => {
+            // all good - TODO:Save the lifetime exceeded flag? - decide how to handle. For now I put it in keystore..
+            if (isLifetimeAlowanceExceeded.nonEmpty) {
+              s4lConnector.saveFormData(KeystoreKeys.lifeTimeAllowanceExceeded, isLifetimeAlowanceExceeded.getOrElse(false))
+            }
+            isLifetimeAlowanceExceeded match {
+              case Some(data) =>
+                // if it's exceeded go to the error page
+                if (data) {
+                  Future.successful(Redirect(routes.LifetimeAllowanceExceededErrorController.show()))
+                } else {
+                  // first API condition passed. Need to check second condition now..
+                  validateAnnualLimitRouteRequestSecondCheck(totalAmountRaised)
+                }
+              // if none, redirect back to HadPreviousRFI page. Will only hit this if there is no backend connected.
+              case None =>
+                Logger.warn("TotalAmountRaisedController][submit] - unexpected None response returned from submissionConnector.checkLifetimeAllowanceExceeded")
+                Future.successful(InternalServerError(internalServerErrorTemplate))
             }
           }
-          else
-          // trade not started so treat as less than 4 months trading
-            Future.successful(Redirect(routes.UsedInvestmentReasonBeforeController.show()))
+          case None => Future.successful(Redirect(routes.DateOfIncorporationController.show()))
         }
-        else
-        // inconsistent date. User page skipping etc. Send to start of flow.
-          Future.successful(Redirect(routes.QualifyBusinessActivityController.show()))
       }
 
+      def validateAnnualLimitRouteRequestSecondCheck(totalAmountRaised: Long): Future[Result] = {
+        def routeForResult(shareIssueDate: Option[ShareIssueDateModel], isAnnualLimitExceeded: Option[Boolean]): Future[Result] = {
+          if (shareIssueDate.isEmpty) {
+            Future.successful(Redirect(routes.ShareIssueDateController.show()))
+          } else
+          // evaluate
+            isAnnualLimitExceeded match {
+              case Some(check) if !check => TotalAmountRaisedHelper.getContinueRouteRequest(s4lConnector)
+              case Some(check) if check => Future.successful(Redirect(routes.AnnualLimitExceededErrorController.show()))
+              case None =>
+                Logger.warn("TotalAmountRaisedController][submit] - unexpected None response returned from submissionConnector.checkAnnualLimit")
+                Future.successful(InternalServerError(internalServerErrorTemplate))
+            }
+        }
+        for {
+          shareIssueDate <- s4lConnector.fetchAndGetFormData[ShareIssueDateModel](KeystoreKeys.shareIssueDate)
+          previousInvestmentTotalInRange <- PreviousSchemesHelper.getPreviousInvestmentsInShareIssueDateRangeTotal(s4lConnector)
+          // Call API check 2
+          isAnnualLimitExceeded <- submissionConnector.checkAnnualLimitExceeded(previousInvestmentTotalInRange, totalAmountRaised)
+          route <- routeForResult(shareIssueDate, isAnnualLimitExceeded)
+        } yield route
+      }
+
+      // Form submit validation  and routing
       totalAmountRaisedForm.bindFromRequest().fold(
         formWithErrors => {
+
           Future.successful(BadRequest(TotalAmountRaised(formWithErrors)))
         },
         validFormData => {
           s4lConnector.saveFormData(KeystoreKeys.totalAmountRaised, validFormData)
           (for {
-            dateForActivity <- ControllerHelpers.getTradeStartDateForBusinessActivity(s4lConnector)
-            route <- routeRequest(dateForActivity)
+            kiModel <- s4lConnector.fetchAndGetFormData[KiProcessingModel](KeystoreKeys.kiProcessingModel)
+            hadPrevRFI <- s4lConnector.fetchAndGetFormData[HadPreviousRFIModel](KeystoreKeys.hadPreviousRFI)
+            previousInvestments <- PreviousSchemesHelper.getPreviousInvestmentTotalFromKeystore(s4lConnector)
+
+            // Call API check 1 (takes priority over check 2)
+            isLifetimeAlowanceExceeded <- submissionConnector.checkLifetimeAllowanceExceeded(
+              if (hadPrevRFI.fold(Constants.StandardRadioButtonNoValue)(_.hadPreviousRFI) == Constants.StandardRadioButtonYesValue) true else false,
+              if (kiModel.isDefined) kiModel.get.isKi else false, previousInvestments,
+              validFormData.amount.toLongExact)
+
+            route <- validateLifetimeAllowanceFirstCheck(kiModel, isLifetimeAlowanceExceeded, hadPrevRFI.get, validFormData.amount.toLongExact)
           } yield route) recover {
+            case e: NoSuchElementException => Redirect(routes.HadPreviousRFIController.show())
             case e: Exception => {
-              Logger.warn(s"[TotalAmountRaisedController][submit]- Exception occurred: ${e.getMessage}")
+              Logger.warn(s"[TotalAmountRaisedController][submit] - Submit Exception: ${e.getMessage}")
               InternalServerError(internalServerErrorTemplate)
             }
           }
-
         }
       )
   }

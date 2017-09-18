@@ -47,10 +47,10 @@ class TurnoverCostsControllerSpec extends BaseSpec {
       .thenReturn(Future.successful(checkAveragedAnnualTurnover))
   }
 
-  def setupSubmitMocks(proposedInvestmentModel: Option[ProposedInvestmentModel] = None,
+  def setupSubmitMocks(totalAmountRaisedModel: Option[TotalAmountRaisedModel] = None,
                        subsidiariesModel: Option[SubsidiariesModel] = None, checkedTurnover: Option[Boolean] = None): Unit = {
-    when(mockS4lConnector.fetchAndGetFormData[ProposedInvestmentModel](Matchers.eq(KeystoreKeys.proposedInvestment))
-      (Matchers.any(), Matchers.any(),Matchers.any())).thenReturn(Future.successful(proposedInvestmentModel))
+    when(mockS4lConnector.fetchAndGetFormData[TotalAmountRaisedModel](Matchers.eq(KeystoreKeys.totalAmountRaised))
+      (Matchers.any(), Matchers.any(),Matchers.any())).thenReturn(Future.successful(totalAmountRaisedModel))
     when(mockS4lConnector.fetchAndGetFormData[SubsidiariesModel](Matchers.eq(KeystoreKeys.subsidiaries))
       (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(subsidiariesModel))
     when(mockSubmissionConnector.checkAveragedAnnualTurnover(Matchers.any(), Matchers.any())(Matchers.any()))
@@ -98,7 +98,7 @@ class TurnoverCostsControllerSpec extends BaseSpec {
   "Sending a valid form submission to the TurnoverCostsController when Authenticated and enrolled" should {
     "redirect to subsidiariess spending investment form when annual turnover check returns true and owns subsidiaries is true" in {
       mockEnrolledRequest(eisSchemeTypesModel)
-      setupSubmitMocks(Some(proposedInvestmentModel), Some(subsidiariesModelYes), Some(true))
+      setupSubmitMocks(Some(totalAmountRaisedModel), Some(subsidiariesModelYes), Some(true))
       val formInput = Seq(
         "amount1" -> "100",
         "amount2" -> "100",
@@ -121,7 +121,7 @@ class TurnoverCostsControllerSpec extends BaseSpec {
 
     "redirect to investment grow form when annual turnover check returns true and owns subsidiaries is false" in {
       mockEnrolledRequest(eisSchemeTypesModel)
-      setupSubmitMocks(Some(proposedInvestmentModel), Some(subsidiariesModelNo), Some(true))
+      setupSubmitMocks(Some(totalAmountRaisedModel), Some(subsidiariesModelNo), Some(true))
       val formInput = Seq(
         "amount1" -> "100",
         "amount2" -> "100",
@@ -144,7 +144,7 @@ class TurnoverCostsControllerSpec extends BaseSpec {
 
     "redirect to annual turnover error page when annual turnover check returns false" in {
       mockEnrolledRequest(eisSchemeTypesModel)
-      setupSubmitMocks(Some(proposedInvestmentModel), Some(subsidiariesModelNo), Some(false))
+      setupSubmitMocks(Some(totalAmountRaisedModel), Some(subsidiariesModelNo), Some(false))
       val formInput = Seq(
         "amount1" -> "100",
         "amount2" -> "100",
@@ -183,14 +183,14 @@ class TurnoverCostsControllerSpec extends BaseSpec {
       submitWithSessionAndAuth(TestController.submit, formInput: _*)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(routes.ProposedInvestmentController.show().url)
+          redirectLocation(result) shouldBe Some(routes.TotalAmountRaisedController.show().url)
         }
       )
     }
 
     "redirect to subsidiaries page when no subsidiaries model is returned from keystore" in {
       mockEnrolledRequest(eisSchemeTypesModel)
-      setupSubmitMocks(Some(proposedInvestmentModel),checkedTurnover = Some(true))
+      setupSubmitMocks(Some(totalAmountRaisedModel),checkedTurnover = Some(true))
       val formInput = Seq(
         "amount1" -> "100",
         "amount2" -> "100",

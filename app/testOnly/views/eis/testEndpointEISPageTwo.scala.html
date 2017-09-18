@@ -6,7 +6,7 @@
 @import utils.CountriesHelper
 @import views.html.helpers.{externalLink,formHint, formInputRadioGroup, backButtonWithProgress, input, inputWithCurrencySymbol, formInlineDateInput, hiddenField, errorSummary, formHiddenYesNoRadioNoError, textArea, dropdown}
 
-@(proposedInvestmentForm: Form[ProposedInvestmentModel], usedInvestmentReasonBeforeForm: Form[UsedInvestmentReasonBeforeModel], previousBeforeDOFCSForm: Form[PreviousBeforeDOFCSModel], newGeographicalMarketForm: Form[NewGeographicalMarketModel],
+@(totalAmountRaisedForm: Form[TotalAmountRaisedModel], usedInvestmentReasonBeforeForm: Form[UsedInvestmentReasonBeforeModel], previousBeforeDOFCSForm: Form[PreviousBeforeDOFCSModel], newGeographicalMarketForm: Form[NewGeographicalMarketModel],
 newProductForm: Form[NewProductModel], testTurnoverCostsForm: Form[AnnualTurnoverCostsModel], investmentGrowForm: Form[InvestmentGrowModel], confirmContactDetailsForm: Form[ConfirmContactDetailsModel], contactDetailsForm: Form[ContactDetailsModel],
 confirmCorrespondAddressForm: Form[ConfirmCorrespondAddressModel], contactAddressForm: Form[AddressModel])(implicit request: Request[_], messages: Messages)
 @main_template(Messages("page.test.page-two.title")) {
@@ -16,17 +16,15 @@ confirmCorrespondAddressForm: Form[ConfirmCorrespondAddressModel], contactAddres
     <h2>How much you want to raise</h2>
     <div class="form-group">
         @inputWithCurrencySymbol(
-        proposedInvestmentForm("investmentAmount"),
+        totalAmountRaisedForm("amount"),
         '_divClass -> "form-label",
         '_labelId -> "label-amount",
-        '_hintId -> "label-amount-hint",
-        '_label -> Messages("page.investment.amount.heading"),
+        '_label -> Messages("page.shareDetails.totalAmountRaised.heading"),
         '_labelTextClass -> "visuallyhidden",
-        '_inputHint -> Messages("page.investment.amount.hint"),
-        '_inputClass -> "input--normal input--no-spinner input--left-padding",
+        '_inputClass -> "input--no-spinner input--left-padding",
         '_type -> "text",
-        '_maxlength -> "7",
-        'id -> "investmentAmount"
+        '_maxlength -> "11",
+        'id -> "amount"
         )
 
     </div>
