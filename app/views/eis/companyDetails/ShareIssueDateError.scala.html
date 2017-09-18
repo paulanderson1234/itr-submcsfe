@@ -1,0 +1,47 @@
+@import uk.gov.hmrc.play.views.html.helpers.{form}
+@import helpers.{backButton}
+@import common.Constants._
+
+@()(implicit request: Request[_], messages: Messages)
+
+@import config.FrontendAppConfig
+
+@main_template(title = Messages("page.companyDetails.ShareIssueDateError.title"), bodyClasses = None) {
+
+@backButton(controllers.eis.routes.ShareIssueDateController.show().url)
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <div id="main">
+            <h1 class="form-title heading-xlarge" id="main-heading" >@Messages("page.companyDetails.ShareIssueDateError.heading")</h1>
+        </div>
+
+        <div class="form-group">
+            <span id="error-description">
+                @Messages("page.companyDetails.ShareIssueDateError.description")
+            </span>
+        </div>
+
+        <div class="form-group">
+            <p id="incorrect-info">@Messages("common.changeAnswers.incorrect.text")
+                <a href="@controllers.eis.routes.ShareIssueDateController.show().url" class="link-style" id="change-answers">
+                    @Messages("common.changeAnswers.link")</a>.</p>
+        </div>
+
+        <p id="criteria-explanation"> @Messages("page.companyDetails.ShareIssueDateError.criteria.explanation")</p>
+
+        <ul class="list list-bullet">
+            <li id="criteria-one"> @Messages("page.companyDetails.ShareIssueDateError.criteria.one")</li>
+            <li id="criteria-two"> @Messages("page.companyDetails.ShareIssueDateError.criteria.two")</li>
+        </ul>
+
+        <div class="form-group">
+            <!--todo Will need to route to Dashboard Submission FE hub page when it becomes central hub for AA and CS -->
+            <a href="@controllers.routes.ApplicationHubController.show().url" class="link-style" id="return-dashboard">
+                @Messages("common.returnToDashboard")
+            </a>
+        </div>
+
+    </div>
+</div>
+}

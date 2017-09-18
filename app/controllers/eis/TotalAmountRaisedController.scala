@@ -31,7 +31,7 @@ import views.html.eis.shareDetails.TotalAmountRaised
 
 import scala.concurrent.Future
 import play.Logger
-import play.api.mvc.Result
+import play.api.mvc.{Action, AnyContent, Result}
 import controllers.Helpers.TotalAmountRaisedHelper
 
 object TotalAmountRaisedController extends TotalAmountRaisedController{
@@ -48,7 +48,7 @@ trait TotalAmountRaisedController extends FrontendController with AuthorisedAndE
 
   val submissionConnector: SubmissionConnector
 
-  val show = AuthorisedAndEnrolled.async { implicit user =>
+  val show: Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user =>
     implicit request =>
       s4lConnector.fetchAndGetFormData[TotalAmountRaisedModel](KeystoreKeys.totalAmountRaised).map {
         case Some(data) => Ok(TotalAmountRaised(totalAmountRaisedForm.fill(data)))
@@ -56,11 +56,11 @@ trait TotalAmountRaisedController extends FrontendController with AuthorisedAndE
       }
   }
 
-  val submit = AuthorisedAndEnrolled.async { implicit user =>
+  val submit: Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user =>
     implicit request =>
 
       def validateLifetimeAllowanceFirstCheck(kiModel: Option[KiProcessingModel], isLifetimeAlowanceExceeded: Option[Boolean],
-                                              prevRFI: HadPreviousRFIModel, totalAmountRaised: Int): Future[Result] = {
+                                              prevRFI: HadPreviousRFIModel, totalAmountRaised: Long): Future[Result] = {
         kiModel match {
           // check previous answers present
           case Some(dataWithPreviousValid) => {
@@ -87,7 +87,7 @@ trait TotalAmountRaisedController extends FrontendController with AuthorisedAndE
         }
       }
 
-      def validateAnnualLimitRouteRequestSecondCheck(totalAmountRaised: Int): Future[Result] = {
+      def validateAnnualLimitRouteRequestSecondCheck(totalAmountRaised: Long): Future[Result] = {
         def routeForResult(shareIssueDate: Option[ShareIssueDateModel], isAnnualLimitExceeded: Option[Boolean]): Future[Result] = {
           if (shareIssueDate.isEmpty) {
             Future.successful(Redirect(routes.ShareIssueDateController.show()))
@@ -129,7 +129,7 @@ trait TotalAmountRaisedController extends FrontendController with AuthorisedAndE
               if (kiModel.isDefined) kiModel.get.isKi else false, previousInvestments,
               validFormData.amount.toLongExact)
 
-            route <- validateLifetimeAllowanceFirstCheck(kiModel, isLifetimeAlowanceExceeded, hadPrevRFI.get, validFormData.amount.toIntExact)
+            route <- validateLifetimeAllowanceFirstCheck(kiModel, isLifetimeAlowanceExceeded, hadPrevRFI.get, validFormData.amount.toLongExact)
           } yield route) recover {
             case e: NoSuchElementException => Redirect(routes.HadPreviousRFIController.show())
             case e: Exception => {
