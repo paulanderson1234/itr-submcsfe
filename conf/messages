@@ -1005,7 +1005,7 @@ page.companyDetails.ShareIssueDate.location= It''s on your company''s Register o
 page.companyDetails.ShareIssueDateError.title=You can’t submit a Compliance Statement
 page.companyDetails.ShareIssueDateError.heading=You can’t submit a Compliance Statement
 page.companyDetails.ShareIssueDateError.description =This is because you have not submitted in time.
-page.companyDetails.ShareIssueDateError.criteria.explanation=You had to submit your Compliance Statement either:
+page.companyDetails.ShareIssueDateError.criteria.explanation=You had to submit your Compliance Statement by either:
 page.companyDetails.ShareIssueDateError.criteria.one=2 years after the end of the tax year when the shares were issued
 page.companyDetails.ShareIssueDateError.criteria.two=2 years and 4 months after your company began doing business or research and development
 
