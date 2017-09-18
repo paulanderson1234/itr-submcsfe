@@ -54,7 +54,7 @@ trait SubmissionConnector {
   }
 
   def checkLifetimeAllowanceExceeded(hadPrevRFI: Boolean, isKi: Boolean, previousInvestmentSchemesTotal: Long,
-                                     totalAmountRaised: BigInt)
+                                     totalAmountRaised: Long)
                                     (implicit hc: HeaderCarrier): Future[Option[Boolean]] = {
 
     http.GET[Option[Boolean]](s"$serviceUrl/investment-tax-relief/lifetime-allowance/lifetime-allowance-checker/had-previous-rfi/" +
@@ -63,7 +63,7 @@ trait SubmissionConnector {
   }
 
   def checkAnnualLimitExceeded(previousInvestmentSchemesInRangeTotal: Long,
-                                     totalAmountRaised: BigInt)
+                                     totalAmountRaised: Long)
                                     (implicit hc: HeaderCarrier): Future[Option[Boolean]] = {
 
     http.GET[Option[Boolean]](s"$serviceUrl/investment-tax-relief/compliance-statement/validate-annual-limit/" +
