@@ -29,7 +29,7 @@ import views.html.eis.investors.WhoRepaidShares
 class WhoRepaidSharesSpec extends ViewSpec {
 
   val page = (form: Form[WhoRepaidSharesModel]) =>
-    WhoRepaidShares(form)(fakeRequest, applicationMessages)
+    WhoRepaidShares(form, routes.AnySharesRepaymentController.show().url)(fakeRequest, applicationMessages)
 
     "The WhoRepaidShares page" should {
     "contain the correct elements for a GET when a valid WhoRepaidSharesModel is loaded" in new Setup {

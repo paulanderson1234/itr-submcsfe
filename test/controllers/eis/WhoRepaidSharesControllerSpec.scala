@@ -68,7 +68,7 @@ class WhoRepaidSharesControllerSpec extends BaseSpec {
     "return a 200 when a saved model is fetched from storage" in {
       setupMocks(Some(whoRepaidSharesModel))
       mockEnrolledRequest(eisSchemeTypesModel)
-      showWithSessionAndAuth(TestController.show)(
+      showWithSessionAndAuth(TestController.show(Some(1)))(
         result => status(result) shouldBe OK
       )
     }
@@ -76,7 +76,7 @@ class WhoRepaidSharesControllerSpec extends BaseSpec {
     "provide an empty model and return an OK 200 when nothing is fetched from storage" in {
       setupMocks(None)
       mockEnrolledRequest(eisSchemeTypesModel)
-      showWithSessionAndAuth(TestController.show())(
+      showWithSessionAndAuth(TestController.show(Some(1)))(
         result => status(result) shouldBe OK
       )
     }
@@ -94,7 +94,7 @@ class WhoRepaidSharesControllerSpec extends BaseSpec {
         result => {
           status(result) shouldBe SEE_OTHER
           redirectLocation(result) shouldBe
-            Some(controllers.eis.routes.SharesRepaymentTypeController.show().url)
+            Some(controllers.eis.routes.SharesRepaymentTypeController.show(1).url)
         }
       )
     }

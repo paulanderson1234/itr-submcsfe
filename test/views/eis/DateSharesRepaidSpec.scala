@@ -50,13 +50,13 @@ class DateSharesRepaidSpec extends ViewSpec {
     "contain the correct elements for a GET when a valid DateSharesRepaidModel is returned from keystore" in new Setup {
       val document: Document = {
         setupMocks(Some(dateSharesRepaidModel))
-        val result = TestController.show.apply(authorisedFakeRequest)
+        val result = TestController.show(1).apply(authorisedFakeRequest)
         Jsoup.parse(contentAsString(result))
       }
       document.title() shouldBe Messages("page.DateSharesRepaid.title")
       document.getElementById("main-heading").text() shouldBe Messages("page.DateSharesRepaid.heading")
       document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.four")
-      document.body.getElementById("back-link").attr("href") shouldEqual routes.SharesRepaymentTypeController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual routes.SharesRepaymentTypeController.show(1).url
       document.body.getElementsByClass("form-hint").text should include(Messages("common.date.hint.example"))
       document.body.getElementById("dateSharesRepaidDay").parent.text shouldBe Messages("common.date.fields.day")
       document.body.getElementById("dateSharesRepaidMonth").parent.text shouldBe Messages("common.date.fields.month")
@@ -70,13 +70,13 @@ class DateSharesRepaidSpec extends ViewSpec {
 	 "contain the correct elements for a GET when there is no DateSharesRepaidModel returned from keystore" in new Setup {
       val document: Document = {
         setupMocks()
-        val result = TestController.show.apply(authorisedFakeRequest)
+        val result = TestController.show(1).apply(authorisedFakeRequest)
         Jsoup.parse(contentAsString(result))
       }
       document.title() shouldBe Messages("page.DateSharesRepaid.title")
       document.getElementById("main-heading").text() shouldBe Messages("page.DateSharesRepaid.heading")
       document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.four")
-      document.body.getElementById("back-link").attr("href") shouldEqual routes.SharesRepaymentTypeController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual routes.SharesRepaymentTypeController.show(1).url
       document.body.getElementsByClass("form-hint").text should include(Messages("common.date.hint.example"))
       document.body.getElementById("dateSharesRepaidDay").parent.text shouldBe Messages("common.date.fields.day")
       document.body.getElementById("dateSharesRepaidMonth").parent.text shouldBe Messages("common.date.fields.month")
@@ -97,7 +97,7 @@ class DateSharesRepaidSpec extends ViewSpec {
       document.title() shouldBe Messages("page.DateSharesRepaid.title")
       document.getElementById("main-heading").text() shouldBe Messages("page.DateSharesRepaid.heading")
       document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.four")
-      document.body.getElementById("back-link").attr("href") shouldEqual routes.SharesRepaymentTypeController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual routes.SharesRepaymentTypeController.show(1).url
       document.body.getElementsByClass("form-hint").text should include(Messages("common.date.hint.example"))
       document.body.getElementById("dateSharesRepaidDay").parent.text shouldBe Messages("common.date.fields.day")
       document.body.getElementById("dateSharesRepaidMonth").parent.text shouldBe Messages("common.date.fields.month")

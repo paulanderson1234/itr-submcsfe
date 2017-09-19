@@ -63,7 +63,7 @@ class SharesRepaymentTypeControllerSpec extends BaseSpec {
     "return a 200 when something is fetched from storage" in {
       setupMocks(Some(repaymentTypeShares))
       mockEnrolledRequest(eisSchemeTypesModel)
-      showWithSessionAndAuth(TestController.show())(
+      showWithSessionAndAuth(TestController.show(1))(
         result => status(result) shouldBe OK
       )
     }
@@ -71,7 +71,7 @@ class SharesRepaymentTypeControllerSpec extends BaseSpec {
     "provide an empty model and return a 200 when nothing is fetched using storage" in {
       setupMocks(None)
       mockEnrolledRequest(eisSchemeTypesModel)
-      showWithSessionAndAuth(TestController.show())(
+      showWithSessionAndAuth(TestController.show(1))(
         result => status(result) shouldBe OK
       )
     }
@@ -85,7 +85,7 @@ class SharesRepaymentTypeControllerSpec extends BaseSpec {
       submitWithSessionAndAuth(TestController.submit,formInput)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(controllers.eis.routes.DateSharesRepaidController.show().url)
+          redirectLocation(result) shouldBe Some(controllers.eis.routes.DateSharesRepaidController.show(1).url)
         }
       )
     }
@@ -99,7 +99,7 @@ class SharesRepaymentTypeControllerSpec extends BaseSpec {
       submitWithSessionAndAuth(TestController.submit,formInput)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(controllers.eis.routes.DateSharesRepaidController.show().url)
+          redirectLocation(result) shouldBe Some(controllers.eis.routes.DateSharesRepaidController.show(1).url)
         }
       )
     }
