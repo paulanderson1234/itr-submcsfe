@@ -19,7 +19,7 @@ package connectors
 import config.{FrontendAppConfig, WSHttp}
 import models.registration.RegistrationDetailsModel
 import models.submission.{ComplianceStatementAnswersModel, DesSubmissionCSModel, DesSubmitAdvancedAssuranceModel, Submission}
-import models._
+import models.{TotalAmountRaisedModel, AnnualTurnoverCostsModel, GrossAssetsModel}
 import play.api.Logger
 import play.api.libs.json.{JsValue, Json}
 import uk.gov.hmrc.play.config.ServicesConfig

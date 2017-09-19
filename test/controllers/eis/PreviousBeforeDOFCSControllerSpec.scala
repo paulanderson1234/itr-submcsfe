@@ -21,7 +21,7 @@ import common.{Constants, KeystoreKeys}
 import config.FrontendAuthConnector
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
-import models.{CommercialSaleModel, KiProcessingModel, PreviousBeforeDOFCSModel, InvestmentGrowModel}
+import models._
 import org.mockito.Matchers
 import org.mockito.Mockito._
 import play.api.test.Helpers._
@@ -190,6 +190,8 @@ class PreviousBeforeDOFCSControllerSpec extends BaseSpec {
   "Sending a valid 'Yes' form submit to the PreviousBeforeDOFCSController when Authenticated and enrolled" should {
     "redirect to the how-plan-to-use-investment page" in {
       mockEnrolledRequest(eisSchemeTypesModel)
+      when(mockS4lConnector.fetchAndGetFormData[SubsidiariesModel](Matchers.eq(KeystoreKeys.subsidiaries))
+        (Matchers.any(), Matchers.any(),Matchers.any())).thenReturn(Future.successful(Some(subsidiariesModelNo)))
       val formInput = "previousBeforeDOFCS" -> Constants.StandardRadioButtonYesValue
       submitWithSessionAndAuth(TestController.submit, formInput)(
         result => {
