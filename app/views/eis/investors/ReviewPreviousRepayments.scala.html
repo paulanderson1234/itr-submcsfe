@@ -1,0 +1,83 @@
+@import models.repayments.SharesRepaymentDetailsModel}
+@import config.FrontendAppConfig
+@import uk.gov.hmrc.play.views.html.helpers.form
+@import views.html.helpers.{errorSummary, formInputRadioGroup, backButtonWithProgress, input, inputWithCurrencySymbol, formInlineDateInput, hiddenField}
+
+@(repayments: Vector[SharesRepaymentDetailsModel])(implicit request: Request[_], messages: Messages)
+
+@main_template(Messages("page.repayments.previousShareRepaymentsReview.title"), articleLayout=false) {
+
+@Messages("common.section.progress.details.four")
+
+<div class="grid-column">
+    <div class="full-width">
+        <h1 class="form-title heading-xlarge" id="main-heading">@Messages("page.repayments.previousShareRepaymentsReview.heading")</h1>
+        <table id="previous-share-holdings-table">
+            <thead>
+                <tr>
+                    <th id="share-holdings-table-heading">@Messages("page.repayments.previousShareRepaymentsReview.heading.one")</th>
+                    <th id="amount-raised-table-heading">@Messages("page.repayments.previousShareRepaymentsReview.heading.two")</th>
+                    <th id="date-table-heading">@Messages("page.repayments.previousShareRepaymentsReview.heading.three")</th>
+                    <th id="count-table-heading">@Messages("page.repayments.previousShareRepaymentsReview.heading.four")</th>
+                    <th>
+                        <span class="visuallyhidden">
+                            @Messages("common.base.change")
+                        </span>
+                    </th>
+                    <th>
+                        <span class="visuallyhidden">
+                            @Messages("common.base.remove")
+                        </span>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+            @for((repayment, index) <- repayments.zipWithIndex) {
+            <tr>
+                @if(repayment.whoRepaidSharesModel.isDefined){
+                <td id="share-desc-@{index}">@(s"${repayment.whoRepaidSharesModel.get.forename} ${repayment.whoRepaidSharesModel.get.surname}")</td>
+                }else{<td>Incomplete</td>}
+                @if(repayment.sharesRepaymentTypeModel.isDefined){
+                <td id="share-nominal-value-@{index}">@repayment.sharesRepaymentTypeModel.sharesRepaymentType</td>
+                }else{<td>Incomplete</td>}
+                @if(repayment.dateSharesRepaidModel.isDefined){
+                <td id="share-purchase-date-@{index}">@SharesRepaymentDetailsModel.toDateString(repayment.dateSharesRepaidModel.get.day.get,
+                    repayment.dateSharesRepaidModel.get.month.get, repayment.dateSharesRepaidModel.get.year.get)</td>
+                }else{<td>Incomplete</td>}
+                @if(repayment.amountSharesRepaymentModel.isDefined){
+                <td id="share-purchase-count-@{index}">@SharesRepaymentDetailsModel.getAmountAsFormattedString(repayment.amountSharesRepaymentModel.get.amount)</td>
+                }else{<td>Incomplete</td>}
+                @if(repayment.validate){
+                <td id="change-@{index}"><a id="change-ref-@{index}"
+                                            href="@controllers.eis.routes.PreviousShareHoldingsReviewController.change(repayment.investorProcessingId.get,repayment.processingId.get).toString">@Messages("common.base.change")</a></td>
+                }else{
+                <td id="continue-@{index}"> @form(action = controllers.eis.routes.ReviewPreviousRepaymentsController.change(repayment.processingId.get)) {
+                    <button class="button--link-style font-xsmall removeLink" type="submit" id="continue-link-@{index}"> @Messages("common.button.continue")</button>
+                    }</td>
+                }
+                <td id="remove-@{index}"> @form(action = controllers.eis.routes.ReviewPreviousRepaymentsController.remove(repayment.processingId.get)) {
+                    <button class="button--link-style font-xsmall removeLink" type="submit" id="remove-link-@{index}"> @Messages("common.base.remove")</button>
+                    }</td>
+            </tr>
+            }
+            @if(repayments.forall(_.validate)){
+            <tr>
+                <td colspan="6"><a id="add-share-holder"
+                                   href=@controllers.eis.routes.WhoRepaidSharesController.show(investor.processingId.get).toString>@Messages("page.repayments.previousShareRepaymentsReview.add")</a></td>
+            </tr>
+            }
+
+
+            </tbody>
+        </table>
+        @if(repayments.forall(_.validate)){
+        @form(action = controllers.eis.routes.ReviewPreviousRepaymentsController.submit(investor.processingId.get)) {
+        <div class="form-group">
+            <button class="btn button" type="submit" id="next">@Messages("common.button.snc")</button>
+        </div>
+        }
+        }
+
+    </div>
+</div>
+}

@@ -17,6 +17,7 @@
 package models.repayments
 
 import play.api.libs.json.Json
+import utils.{CostFormatter, DateFormatter}
 
 
 case class SharesRepaymentDetailsModel(whoRepaidSharesModel: Option[WhoRepaidSharesModel] = None,
@@ -31,6 +32,6 @@ case class SharesRepaymentDetailsModel(whoRepaidSharesModel: Option[WhoRepaidSha
   }
 }
 
-object SharesRepaymentDetailsModel{
+object SharesRepaymentDetailsModel extends DateFormatter with CostFormatter{
   implicit val formats = Json.format[SharesRepaymentDetailsModel]
 }

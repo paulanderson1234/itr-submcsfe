@@ -249,6 +249,8 @@ POST      /thirty-day-rule                        controllers.eis.ThirtyDayRuleC
 GET       /thirty-day-rule-error                        controllers.eis.ThirtyDayRuleErrorController.show
 POST      /thirty-day-rule-error                        controllers.eis.ThirtyDayRuleErrorController.submit
 
+GET        /process-repayments                    controllers.eis.ProcessRepaymentsController.show
+
 GET       /who-repaid-shares                      controllers.eis.WhoRepaidSharesController.show(id: Option[Int]?=None)
 POST      /who-repaid-shares                      controllers.eis.WhoRepaidSharesController.submit
 
@@ -263,3 +265,6 @@ POST      /gross-assets-after-issue              controllers.eis.GrossAssetsAfte
 
 GET       /gross-assets-after-issue-error         controllers.eis.GrossAssetsAfterIssueErrorController.show
 POST      /gross-assets-after-issue-error         controllers.eis.GrossAssetsAfterIssueErrorController.submit
+
+GET        /review-previous-repayments      controllers.eis.ReviewPreviousRepaymentsController.show
+POST       /review-previous-repayments      controllers.eis.ReviewPreviousRepaymentsController.submit

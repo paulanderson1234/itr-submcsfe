@@ -16,24 +16,20 @@
 
 package controllers.eis
 
-import auth.{AuthorisedAndEnrolledForTAVC, EIS, VCT}
+import auth.{AuthorisedAndEnrolledForTAVC, EIS}
 import common.KeystoreKeys
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
-import controllers.Helpers.{ControllerHelpers, PreviousInvestorsHelper, PreviousRepaymentsHelper}
-import forms.AddInvestorOrNomineeForm.addInvestorOrNomineeForm
+import controllers.Helpers.{ControllerHelpers, PreviousRepaymentsHelper}
 import forms.WhoRepaidSharesForm._
-import models.repayments.{SharesRepaymentDetailsModel, WhoRepaidSharesModel}
-import uk.gov.hmrc.play.frontend.controller.FrontendController
-import play.api.i18n.Messages.Implicits._
+import models.repayments.SharesRepaymentDetailsModel
 import play.api.Play.current
-import views.html.eis.investors.{AnySharesRepayment, WhoRepaidShares}
+import play.api.i18n.Messages.Implicits._
+import play.api.mvc.{Action, AnyContent}
+import uk.gov.hmrc.play.frontend.controller.FrontendController
+import views.html.eis.investors.WhoRepaidShares
 
 import scala.concurrent.Future
-import play.api.mvc.{Action, AnyContent, Result}
-import play.api.data.Form
-
-import scala.reflect.macros.whitebox
 
 
 object WhoRepaidSharesController extends WhoRepaidSharesController{
@@ -69,7 +65,7 @@ trait WhoRepaidSharesController extends FrontendController with AuthorisedAndEnr
           case _ => Ok(WhoRepaidShares(whoRepaidSharesForm, backUrl.get))
         }
       }
-      else Future.successful(Redirect(controllers.eis.routes.ReviewAllInvestorsController.show()))
+      else Future.successful(Redirect(controllers.eis.routes.AnySharesRepaymentController.show()))
     }
 
     for {

@@ -22,16 +22,14 @@ import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.Helpers.{ControllerHelpers, PreviousRepaymentsHelper}
 import forms.DateSharesRepaidForm._
-import forms.SharesRepaymentTypeForm.sharesRepaymentTypeForm
-import models.repayments.{DateSharesRepaidModel, SharesRepaymentDetailsModel}
-import uk.gov.hmrc.play.frontend.controller.FrontendController
-import play.api.i18n.Messages.Implicits._
+import models.repayments.SharesRepaymentDetailsModel
 import play.api.Play.current
+import play.api.i18n.Messages.Implicits._
+import play.api.mvc.{Action, AnyContent}
+import uk.gov.hmrc.play.frontend.controller.FrontendController
 import views.html.eis.investors.DateSharesRepaid
 
 import scala.concurrent.Future
-import play.api.mvc.{Action, AnyContent, Result}
-import play.api.data.Form
 
 
 object DateSharesRepaidController extends DateSharesRepaidController{

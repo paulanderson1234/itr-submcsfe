@@ -1254,3 +1254,11 @@ page.sharesRepaymentType.debentures=Debentures
 page.sharesRepaymentType.title=What type of investment was repaid or repurchased?
 page.sharesRepaymentType.heading=What type of investment was repaid or repurchased?
 
+# Review share Repayments page
+page.repayments.previousShareRepaymentsReview.title=Check repaid or repurchased investments
+page.repayments.previousShareRepaymentsReview.heading=Check repaid or repurchased investments
+page.repayments.previousShareRepaymentsReview.heading.one=Name
+page.repayments.previousShareRepaymentsReview.heading.two=Type of repayment or repurchase
+page.repayments.previousShareRepaymentsReview.heading.three=Date of repayment or repurchase
+page.repayments.previousShareRepaymentsReview.heading.four=Amount repaid or repurchased
+page.repayments.previousShareRepaymentsReview.add=Add more repaid or repurchased investments
