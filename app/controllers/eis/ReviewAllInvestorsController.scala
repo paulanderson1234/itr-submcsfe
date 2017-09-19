@@ -54,7 +54,7 @@ trait ReviewAllInvestorsController extends FrontendController with AuthorisedAnd
     s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map { vector =>
       redirectEisNoInvestors(vector) { data =>
         if (data.forall(_.validate))
-          Redirect(routes.AnySharesRepaymentController.show())
+          Redirect(routes.ProcessRepaymentsController.show())
         else Redirect(routes.ReviewAllInvestorsController.show())
       }
     }

@@ -58,14 +58,19 @@ trait AnySharesRepaymentController extends FrontendController with AuthorisedAnd
         s4lConnector.saveFormData(KeystoreKeys.anySharesRepayment, validFormData)
         validFormData.anySharesRepayment match {
           case Constants.StandardRadioButtonYesValue =>
-            s4lConnector.saveFormData(KeystoreKeys.backLinkWhoRepaidShares, routes.AnySharesRepaymentController.show().url)
-            Future.successful(Redirect(routes.WhoRepaidSharesController.show()))
+            s4lConnector.fetchAndGetFormData[Vector[SharesRepaymentDetailsModel]](KeystoreKeys.sharesRepaymentDetails).map {
+              case Some(data) if (data.nonEmpty) => Redirect(routes.ReviewPreviousRepaymentsController.show())
+              case _ => s4lConnector.saveFormData(KeystoreKeys.backLinkWhoRepaidShares, routes.AnySharesRepaymentController.show().url)
+                Redirect(routes.WhoRepaidSharesController.show())
+            }
           case Constants.StandardRadioButtonNoValue =>
-            s4lConnector.saveFormData(KeystoreKeys.backLinkWasAnyValueReceived, routes.AnySharesRepaymentController.show().url)
-            Future.successful(Redirect(routes.WasAnyValueReceivedController.show()))
+            s4lConnector.fetchAndGetFormData[Vector[SharesRepaymentDetailsModel]](KeystoreKeys.sharesRepaymentDetails).map {
+              case Some(data) if (data.nonEmpty) => Redirect(routes.ReviewPreviousRepaymentsController.show())
+              case _ => s4lConnector.saveFormData(KeystoreKeys.backLinkWasAnyValueReceived, routes.AnySharesRepaymentController.show().url)
+                Redirect(routes.WasAnyValueReceivedController.show())
+            }
         }
       }
     )
   }
-
 }

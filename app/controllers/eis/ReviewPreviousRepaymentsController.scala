@@ -20,7 +20,7 @@ import auth.{AuthorisedAndEnrolledForTAVC, EIS}
 import common.KeystoreKeys
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
-import controllers.Helpers.ControllerHelpers
+import controllers.Helpers.{ControllerHelpers, PreviousRepaymentsHelper}
 import models.repayments.SharesRepaymentDetailsModel
 import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
@@ -52,7 +52,10 @@ trait ReviewPreviousRepaymentsController extends FrontendController with Authori
 
   def remove(id: Int): Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user =>
     implicit request =>
-      Future.successful(Redirect(controllers.eis.routes.ReviewPreviousRepaymentsController.show()))
+      PreviousRepaymentsHelper.removeKeystorePreviousRepayment(s4lConnector, id).map {
+        case _ => Redirect(controllers.eis.routes.ReviewPreviousRepaymentsController.show())
+      }
+
   }
 
   def change(id: Int): Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user =>
@@ -64,6 +67,7 @@ trait ReviewPreviousRepaymentsController extends FrontendController with Authori
 
   val submit = AuthorisedAndEnrolled.async { implicit user =>
     implicit request =>
-      Future.successful(Redirect(controllers.eis.routes.ReviewPreviousRepaymentsController.show()))
+      s4lConnector.saveFormData(KeystoreKeys.backLinkWasAnyValueReceived, routes.ReviewPreviousRepaymentsController.show().url)
+      Future.successful(Redirect(controllers.eis.routes.WasAnyValueReceivedController.show()))
   }
 }

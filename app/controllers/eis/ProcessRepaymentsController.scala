@@ -39,7 +39,7 @@ trait ProcessRepaymentsController extends FrontendController with AuthorisedAndE
     implicit user =>
       implicit request => {
         s4lConnector.fetchAndGetFormData[Vector[SharesRepaymentDetailsModel]](KeystoreKeys.sharesRepaymentDetails).map {
-          case Some(data) if (data.nonEmpty) => Redirect(controllers.eis.routes.WhoRepaidSharesController.show())
+          case Some(data) if (data.nonEmpty) => Redirect(controllers.eis.routes.ReviewPreviousRepaymentsController.show())
           case _ => Redirect(controllers.eis.routes.AnySharesRepaymentController.show())
         }
       }

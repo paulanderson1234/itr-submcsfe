@@ -46,7 +46,7 @@ trait DeleteSharesRepaymentController extends FrontendController with Authorised
           val itemToUpdateIndex = getRepaymentsIndex(id, data)
           redirectInvalidRepayments(itemToUpdateIndex) { index =>
             Ok(DeleteSharesRepayment(retrieveRepaymentsData(index, data)(model =>
-              Option(model.copy())).get))
+              Option(model)).get))
           }
         }
       }
