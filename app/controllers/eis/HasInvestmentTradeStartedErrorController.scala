@@ -16,38 +16,29 @@
 
 package controllers.eis
 
-import auth.{AuthorisedAndEnrolledForTAVC, EIS, VCT}
-import common.KeystoreKeys
-import config.FrontendGlobal._
+import auth.{AuthorisedAndEnrolledForTAVC, EIS}
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
-import models.KiProcessingModel
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
-import views.html.eis.investment.LifetimeAllowanceExceeded
+import views.html.eis.companyDetails.HasInvestmentTradeStartedError
 
 import scala.concurrent.Future
 
-object LifetimeAllowanceExceededController extends LifetimeAllowanceExceededController {
-  override lazy val s4lConnector = S4LConnector
+object HasInvestmentTradeStartedErrorController extends HasInvestmentTradeStartedErrorController
+{
   override lazy val applicationConfig = FrontendAppConfig
   override lazy val authConnector = FrontendAuthConnector
   override lazy val enrolmentConnector = EnrolmentConnector
+  override lazy val s4lConnector = S4LConnector
 }
 
-trait LifetimeAllowanceExceededController extends FrontendController with AuthorisedAndEnrolledForTAVC {
+trait HasInvestmentTradeStartedErrorController extends FrontendController with AuthorisedAndEnrolledForTAVC {
 
-  override val acceptedFlows = Seq(Seq(EIS),Seq(VCT),Seq(EIS,VCT))
+  override val acceptedFlows = Seq(Seq(EIS))
 
   val show = AuthorisedAndEnrolled.async { implicit user => implicit request =>
-    s4lConnector.fetchAndGetFormData[KiProcessingModel](KeystoreKeys.kiProcessingModel).map {
-      case Some(data) => Ok(LifetimeAllowanceExceeded(data))
-      case None => InternalServerError(internalServerErrorTemplate)
-    }
-  }
-
-  val submit = AuthorisedAndEnrolled.async { implicit user => implicit request =>
-    Future.successful(Redirect(routes.ProposedInvestmentController.show()))
+    Future successful(Ok(HasInvestmentTradeStartedError()))
   }
 }

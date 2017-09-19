@@ -17,7 +17,7 @@
 package views.seis
 
 import common.Constants
-import models.{ProposedInvestmentModel, WasAnyValueReceivedModel}
+import models.WasAnyValueReceivedModel
 import models.investorDetails.{InvestorDetailsModel, PreviousShareHoldingModel}
 import models.seis.SEISCheckAnswersModel
 import org.jsoup.Jsoup

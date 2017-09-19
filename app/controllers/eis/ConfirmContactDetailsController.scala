@@ -42,7 +42,7 @@ object ConfirmContactDetailsController extends ConfirmContactDetailsController{
 
 trait ConfirmContactDetailsController extends FrontendController with AuthorisedAndEnrolledForTAVC {
 
-  override val acceptedFlows = Seq(Seq(EIS),Seq(VCT),Seq(EIS,VCT))
+  override val acceptedFlows = Seq(Seq(EIS))
 
 
   val subscriptionService: SubscriptionService

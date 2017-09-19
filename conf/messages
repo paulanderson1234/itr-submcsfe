@@ -45,6 +45,12 @@ common.error.soft.heading=You don''t appear to qualify for this scheme
 common.error.soft.title=You don''t appear to qualify for this scheme
 common.error.soft.secondaryHeading=What happens next
 common.error.soft.whatNext.compliance=You can continue with your Compliance Statement if you think that you should qualify.
+common.error.hard.title=You can''t submit a Compliance Statement yet
+common.error.hard.heading=You can''t submit a Compliance Statement yet
+common.error.hard.description=You can submit once your company has been doing the business activity for at least 4 months.
+common.error.hard.incorrect.info.start=You can
+common.error.hard.incorrect.info.end=or submit a Compliance Statement when your company meets this condition.
+common.returnToDashboard=Return to dashboard
 common.page.forename.label=First Name
 common.page.surname.label=Last Name
 
@@ -108,12 +114,13 @@ validation.error.totalAmountSpent.notANumber = Enter a valid number for the tota
 validation.error.totalAmountSpent.decimalPlaces = The total amount spent should not contain decimal places
 validation.error.totalAmountSpent.negative = The total amount spent should not be negative
 
-validation.error.grossAssets.size =The gross assets amount should be between 0 and 99999999
+validation.error.grossAssets.size =The gross assets amount should be between 0 and 999999999
 validation.error.grossAssets.notANumber =Enter a valid number for the gross assets amount
 validation.error.grossAssets.decimalPlaces =The gross assets amount should not contain decimal places
 validation.error.grossAssets.negative = The gross assets amount should not be negative
 
-validation.error.totalAmountRaised.size = The total amount raised should be between 0 and 99999999999
+validation.error.totalAmountRaised.size = The total amount raised should be between 0 and 999999999
+validation.error.totalAmountRaised.int.size = The total amount raised should be between 0 and 2147483647
 validation.error.totalAmountRaised.notANumber = Enter a valid number for the total amount raised
 validation.error.totalAmountRaised.decimalPlaces = The total amount raised should not contain decimal places
 validation.error.totalAmountRaised.negative = The total amount raised should not be negative
@@ -676,7 +683,7 @@ page.checkAndSubmit.acknowledgement.courseOfAction=Once we''ve received your sup
 page.checkAndSubmit.acknowledgement.button.confirm=Finish
 
 
-#lifetime allowance exceeded page - REMOCE THIS SECTION WHEN PROPOSED INVESTERMENT GONE AND old errro page removed
+#lifetime allowance exceeded page - REMOVE THIS SECTION WHEN PROPOSED INVESTMENT GONE AND OLD ERROR PAGE REMOVED
 ##=======================================================================================
 page.investment.LifetimeAllowanceExceeded.title=You don''t qualify for the scheme
 page.investment.LifetimeAllowanceExceeded.heading=You don''t qualify for the scheme
@@ -988,11 +995,20 @@ page.shares.ShareDescription.location=It''s on your company''s Register of Membe
 
 #share issue date page
 validation.error.ShareIssueDate.Future=Share issue date cannot be a future date
-page.companyDetails.ShareIssueDate.title= When did your company issue the shares in this application?
-page.companyDetails.ShareIssueDate.heading= When did your company issue the shares in this application?
-page.companyDetails.ShareIssueDate.question= When did your company issue the shares in this application?
+page.companyDetails.ShareIssueDate.title= When did your company issue the shares in this Compliance Statement?
+page.companyDetails.ShareIssueDate.heading= When did your company issue the shares in this Compliance Statement?
+page.companyDetails.ShareIssueDate.question= When did your company issue the shares in this Compliance Statement?
+page.companyDetails.ShareIssueDate.legend= When did your company issue the shares in this Compliance Statement?
 date.hint.shareIssueDate= For example, 31 3 1980
 page.companyDetails.ShareIssueDate.location= It''s on your company''s Register of Members.
+
+#share issue date error page
+page.companyDetails.ShareIssueDateError.title=You can’t submit a Compliance Statement
+page.companyDetails.ShareIssueDateError.heading=You can’t submit a Compliance Statement
+page.companyDetails.ShareIssueDateError.description =This is because you have not submitted in time.
+page.companyDetails.ShareIssueDateError.criteria.explanation=You had to submit your Compliance Statement by either:
+page.companyDetails.ShareIssueDateError.criteria.one=2 years after the end of the tax year when the shares were issued
+page.companyDetails.ShareIssueDateError.criteria.two=2 years and 4 months after your company began doing business or research and development
 
 # Total Amount Raised page
 page.shareDetails.totalAmountRaised.title=How much did your company raise in this share issue?
@@ -1074,6 +1090,7 @@ page.investors.isExistingShareHolder.legend = Did this {0} already own shares in
 #Investor Share Issue Date
 page.investors.investorShareIssueDate.title = When were these previous shares issued?
 page.investors.investorShareIssueDate.heading = When were these previous shares issued?
+page.investors.investorShareIssueDate.legend = When were these previous shares issued?
 validation.error.InvestorShareIssueDate.Future = Investor previous shares issued date cannot be a future date
 
 #Number of shares purchased
@@ -1254,11 +1271,11 @@ page.sharesRepaymentType.debentures=Debentures
 page.sharesRepaymentType.title=What type of investment was repaid or repurchased?
 page.sharesRepaymentType.heading=What type of investment was repaid or repurchased?
 
-# Review share Repayments page
+# Review Share Repayments page
 page.repayments.previousShareRepaymentsReview.title=Check repaid or repurchased investments
 page.repayments.previousShareRepaymentsReview.heading=Check repaid or repurchased investments
 page.repayments.previousShareRepaymentsReview.heading.one=Name
-page.repayments.previousShareRepaymentsReview.heading.two=Type of repayment or repurchase
-page.repayments.previousShareRepaymentsReview.heading.three=Date of repayment or repurchase
-page.repayments.previousShareRepaymentsReview.heading.four=Amount repaid or repurchased
+page.repayments.previousShareRepaymentsReview.heading.two=Type of repayment or <br/> repurchase
+page.repayments.previousShareRepaymentsReview.heading.three=Date of repayment or <br/> repurchase
+page.repayments.previousShareRepaymentsReview.heading.four=Amount repaid or <br/> repurchased
 page.repayments.previousShareRepaymentsReview.add=Add more repaid or repurchased investments

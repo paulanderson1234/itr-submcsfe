@@ -39,9 +39,6 @@ POST       /percentage-of-staff-with-masters        controllers.eis.PercentageSt
 GET        /ten-year-plan                           controllers.eis.TenYearPlanController.show
 POST       /ten-year-plan                           controllers.eis.TenYearPlanController.submit
 
-GET        /proposed-investment                     controllers.eis.ProposedInvestmentController.show
-POST       /proposed-investment                     controllers.eis.ProposedInvestmentController.submit
-
 GET        /new-product                             controllers.eis.NewProductController.show
 POST       /new-product                             controllers.eis.NewProductController.submit
 
@@ -106,10 +103,6 @@ POST       /acknowledgement                         controllers.eis.Acknowledgem
 
 GET        /attachments-acknowledgement             controllers.eis.AttachmentsAcknowledgementController.show
 POST       /attachments-acknowledgement             controllers.eis.AttachmentsAcknowledgementController.submit
-
-#TODO REMOVE routes below when old lifetime limit removed
-GET        /lifetime-allowance-exceeded             controllers.eis.LifetimeAllowanceExceededController.show
-POST       /lifetime-allowance-exceeded             controllers.eis.LifetimeAllowanceExceededController.submit
 
 GET       /lifetime-allowance-exceeded-error        controllers.eis.LifetimeAllowanceExceededErrorController.show
 POST      /lifetime-allowance-exceeded-error        controllers.eis.LifetimeAllowanceExceededErrorController.submit
@@ -197,9 +190,6 @@ POST       /previous-shareholding-description                   controllers.eis.
 GET        /previous-shareholding-nominal-value/:investorProcessingId/:id      controllers.eis.PreviousShareHoldingNominalValueController.show(investorProcessingId: Int, id: Int)
 POST       /previous-shareholding-nominal-value                      controllers.eis.PreviousShareHoldingNominalValueController.submit(id: Option[Int]?=None)
 
-GET        /review-previous-share-holdings/:investorProcessingId                 controllers.eis.PreviousShareHoldingsReviewController.show(investorProcessingId: Int)
-POST       /review-previous-share-holdings/:investorProcessingId                 controllers.eis.PreviousShareHoldingsReviewController.submit(investorProcessingId: Int)
-
 GET        /qualify-business-activity               controllers.eis.QualifyBusinessActivityController.show
 POST       /qualify-business-activity               controllers.eis.QualifyBusinessActivityController.submit
 
@@ -224,6 +214,7 @@ POST       /was-any-value-received               controllers.eis.WasAnyValueRece
 
 GET       /share-issue-date                        controllers.eis.ShareIssueDateController.show
 POST      /share-issue-date                        controllers.eis.ShareIssueDateController.submit
+GET       /share-issue-date-error                controllers.eis.ShareIssueDateErrorController.show
 
 GET        /add-another-shareholding/:investorId   controllers.eis.AddAnotherShareholdingController.show(investorId: Int)
 POST       /add-another-shareholding/:investorId   controllers.eis.AddAnotherShareholdingController.submit(investorId: Int)
@@ -239,6 +230,10 @@ POST      /amount-shares-repayment                controllers.eis.AmountSharesRe
 
 GET       /total-amount-raised                    controllers.eis.TotalAmountRaisedController.show
 POST      /total-amount-raised                    controllers.eis.TotalAmountRaisedController.submit
+
+GET       /has-investment-trade-started-error     controllers.eis.HasInvestmentTradeStartedErrorController.show
+
+GET       /research-start-date-error              controllers.eis.ResearchStartDateErrorController.show
 
 GET       /market-description                        controllers.eis.MarketDescriptionController.show
 POST      /market-description                        controllers.eis.MarketDescriptionController.submit
@@ -268,3 +263,6 @@ POST      /gross-assets-after-issue-error         controllers.eis.GrossAssetsAft
 
 GET        /review-previous-repayments      controllers.eis.ReviewPreviousRepaymentsController.show
 POST       /review-previous-repayments      controllers.eis.ReviewPreviousRepaymentsController.submit
+
+GET        /review-previous-repayments/:id      controllers.eis.ReviewPreviousRepaymentsController.change(id: Int)
+GET       /review-previous-repayments/:id      controllers.eis.ReviewPreviousRepaymentsController.remove(id: Int)

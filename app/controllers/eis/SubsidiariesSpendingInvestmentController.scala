@@ -54,7 +54,7 @@ object SubsidiariesSpendingInvestmentController extends SubsidiariesSpendingInve
 
 trait SubsidiariesSpendingInvestmentController extends FrontendController with AuthorisedAndEnrolledForTAVC{
 
-  override val acceptedFlows = Seq(Seq(EIS),Seq(VCT),Seq(EIS,VCT))
+  override val acceptedFlows = Seq(Seq(EIS))
 
   val show = AuthorisedAndEnrolled.async { implicit user => implicit request =>
     def routeRequest(backUrl: Option[String]) = {
@@ -64,7 +64,7 @@ trait SubsidiariesSpendingInvestmentController extends FrontendController with A
           case None => Ok(SubsidiariesSpendingInvestment(subsidiariesSpendingInvestmentForm, backUrl.get))
         }
       }
-      else Future.successful(Redirect(routes.ProposedInvestmentController.show()))
+      else Future.successful(Redirect(routes.TotalAmountRaisedController.show()))
     }
     for {
       link <- ControllerHelpers.getSavedBackLink(KeystoreKeys.backLinkSubSpendingInvestment, s4lConnector)
@@ -78,7 +78,7 @@ trait SubsidiariesSpendingInvestmentController extends FrontendController with A
         ControllerHelpers.getSavedBackLink(KeystoreKeys.backLinkSubSpendingInvestment, s4lConnector).flatMap {
           case Some(data) => Future.successful(
             BadRequest(views.html.eis.investment.SubsidiariesSpendingInvestment(invalidForm, data)))
-          case None => Future.successful(Redirect(routes.ProposedInvestmentController.show()))
+          case None => Future.successful(Redirect(routes.TotalAmountRaisedController.show()))
       },
       validForm => {
         s4lConnector.saveFormData(KeystoreKeys.subsidiariesSpendingInvestment, validForm)

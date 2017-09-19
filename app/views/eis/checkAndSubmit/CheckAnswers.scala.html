@@ -119,9 +119,9 @@
             @tableHeaderHelper("investmentSection", Messages("page.summaryQuestion.companyDetailsSectionThree"))
             <!--Data rows-->
             <tbody>
-            <!--Proposed Investment-->
-            @if(checkAnswersModel.proposedInvestmentModel.isDefined){
-            @textRowHelperBasic("proposedInvestment", Messages("page.summaryQuestion.proposedInvestment"), ProposedInvestmentModel.getAmountAsFormattedString(checkAnswersModel.proposedInvestmentModel.get.investmentAmount), Some(controllers.eis.routes.ProposedInvestmentController.show().toString))
+            <!--Total Amount raised needs checking later-->
+            @if(checkAnswersModel.totalAmountRaisedModel.isDefined){
+            @textRowHelperBasic("proposedInvestment", Messages("page.summaryQuestion.amountRaised"), TotalAmountRaisedModel.getAmountAsFormattedString(checkAnswersModel.totalAmountRaisedModel.get.amount), Some(controllers.eis.routes.TotalAmountRaisedController.show().toString))
             }
             <!--Used investment reason before page-->
             @if(checkAnswersModel.usedInvestmentReasonBeforeModel.isDefined){

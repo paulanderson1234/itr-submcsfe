@@ -97,7 +97,7 @@ class AcknowledgementControllerSpec extends BaseSpec {
     when(mockS4lConnector.fetchAndGetFormData[ShareIssueDateModel](Matchers.eq(KeystoreKeys.shareIssueDate))
       (Matchers.any(), Matchers.any(), Matchers.any()))
       .thenReturn(Future.successful(Some(shareIssuetDateModel)))
-    when(mockSubmissionConnector.submitComplainceStatement(Matchers.any(), Matchers.any(), Matchers.any())(Matchers.any()))
+    when(mockSubmissionConnector.submitComplianceStatement(Matchers.any(), Matchers.any(), Matchers.any())(Matchers.any()))
       .thenReturn(Future.successful(HttpResponse(OK, Some(Json.toJson(submissionResponse)))))
     when(mockS4lConnector.fetchAndGetFormData[TradeStartDateModel](Matchers.eq(KeystoreKeys.tradeStartDate))
       (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Some(tradeStartDateModelYes))
@@ -248,7 +248,7 @@ class AcknowledgementControllerSpec extends BaseSpec {
     "return a 303 redirect if mandatory NatureOfBusinessModel is missing from keystore" in {
 
       setUpMocksTestMinimumRequiredModels(mockS4lConnector, mockRegistrationDetailsService, Some(kiProcModelValid),
-        natureBusiness = None, Some(contactValid), Some(proposedInvestmentValid),
+        natureBusiness = None, Some(contactValid), Some(totalAmountRaisedValid),
         Some(investmentGrowValid), Some(dateOfIncorporationValid), Some(fullCorrespondenceAddress), true)
       setupMocks()
       mockEnrolledRequest(seisSchemeTypesModel)
@@ -262,7 +262,7 @@ class AcknowledgementControllerSpec extends BaseSpec {
     "return a 303 redirect if mandatory ContactDetailsModel is missing from keystore" in {
 
       setUpMocksTestMinimumRequiredModels(mockS4lConnector, mockRegistrationDetailsService, Some(kiProcModelValid),
-        Some(natureOfBusinessValid), contactDetails = None, Some(proposedInvestmentValid),
+        Some(natureOfBusinessValid), contactDetails = None, Some(totalAmountRaisedValid),
         Some(investmentGrowValid), Some(dateOfIncorporationValid), Some(fullCorrespondenceAddress), true)
       setupMocks()
       mockEnrolledRequest(seisSchemeTypesModel)
@@ -276,7 +276,7 @@ class AcknowledgementControllerSpec extends BaseSpec {
     "return a 303 redirect if mandatory ProposedInvestmentModel is missing from keystore" in {
 
       setUpMocksTestMinimumRequiredModels(mockS4lConnector, mockRegistrationDetailsService, Some(kiProcModelValid),
-        Some(natureOfBusinessValid), Some(contactValid), proposedInvestment = None,
+        Some(natureOfBusinessValid), Some(contactValid), totalAmountRaised = None,
         Some(investmentGrowValid), Some(dateOfIncorporationValid), Some(fullCorrespondenceAddress), true)
       setupMocks()
       mockEnrolledRequest(seisSchemeTypesModel)
@@ -290,7 +290,7 @@ class AcknowledgementControllerSpec extends BaseSpec {
     "return a 303 redirect if mandatory DateOfIncorporationModel is missing from keystore" in {
 
       setUpMocksTestMinimumRequiredModels(mockS4lConnector, mockRegistrationDetailsService, Some(kiProcModelValid),
-        Some(natureOfBusinessValid), Some(contactValid), Some(proposedInvestmentValid),
+        Some(natureOfBusinessValid), Some(contactValid), Some(totalAmountRaisedValid),
         Some(investmentGrowValid), dateIncorp = None, Some(fullCorrespondenceAddress), true)
       setupMocks()
       mockEnrolledRequest(seisSchemeTypesModel)
@@ -304,7 +304,7 @@ class AcknowledgementControllerSpec extends BaseSpec {
     "return a 303 redirect if mandatory AddressModel (contact address) is missing from keystore" in {
 
       setUpMocksTestMinimumRequiredModels(mockS4lConnector, mockRegistrationDetailsService, Some(kiProcModelValid),
-        Some(natureOfBusinessValid), Some(contactValid), Some(proposedInvestmentValid),
+        Some(natureOfBusinessValid), Some(contactValid), Some(totalAmountRaisedValid),
         Some(investmentGrowValid), Some(dateOfIncorporationValid), contactAddress = None, true)
       setupMocks()
       mockEnrolledRequest(seisSchemeTypesModel)
@@ -318,7 +318,7 @@ class AcknowledgementControllerSpec extends BaseSpec {
     "return a 303 redirect if mandatory registrationDetailsModel is from registration details service" in {
 
       setUpMocksTestMinimumRequiredModels(mockS4lConnector, mockRegistrationDetailsService, Some(kiProcModelValid),
-        Some(natureOfBusinessValid), Some(contactValid), Some(proposedInvestmentValid),
+        Some(natureOfBusinessValid), Some(contactValid), Some(totalAmountRaisedValid),
         Some(investmentGrowValid), Some(dateOfIncorporationValid), Some(fullCorrespondenceAddress), false)
       setupMocks()
       mockEnrolledRequest(seisSchemeTypesModel)
@@ -332,7 +332,7 @@ class AcknowledgementControllerSpec extends BaseSpec {
     "return a 5xx when an invalid email is submitted" in new SetupPageFull {
       when(mockS4lConnector.fetchAndGetFormData[SchemeTypesModel](Matchers.eq(KeystoreKeys.selectedSchemes))
         (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Some(schemeTypesEIS))
-      when(mockSubmissionConnector.submitComplainceStatement(Matchers.any(), Matchers.any(), Matchers.any())(Matchers.any()))
+      when(mockSubmissionConnector.submitComplianceStatement(Matchers.any(), Matchers.any(), Matchers.any())(Matchers.any()))
         .thenReturn(Future.successful(HttpResponse(INTERNAL_SERVER_ERROR)))
       mockEnrolledRequest(seisSchemeTypesModel)
       setupMocks()

@@ -78,20 +78,11 @@ trait AmountSharesRepaymentController extends FrontendController with Authorised
       },
       validFormData => {
         validFormData.processingId match {
-          case Some(_) => PreviousRepaymentsHelper.updateAmountSharesRepayment(s4lConnector, validFormData).map {
-            sharesRepaymentDetails => {
-              /*s4lConnector.saveFormData(KeystoreKeys.backLinkSharesRepaymentAmount,
-                routes.DateSharesRepaidController.show(sharesRepaymentDetails.processingId.get).url)*/
-              Redirect(routes.AmountSharesRepaymentController.show(sharesRepaymentDetails.processingId.get))
-            }
-          }
-          case None => PreviousRepaymentsHelper.addAmountSharesRepayment(s4lConnector, validFormData).map {
-            sharesRepaymentDetails => {
-              /*s4lConnector.saveFormData(KeystoreKeys.backLinkSharesRepaymentAmount,
-                routes.DateSharesRepaidController.show(sharesRepaymentDetails.processingId.get).url)*/
-              Redirect(routes.AmountSharesRepaymentController.show(sharesRepaymentDetails.processingId.get))
-            }
-          }
+          case Some(_) => PreviousRepaymentsHelper.updateAmountSharesRepayment(s4lConnector, validFormData)
+            Future.successful(Redirect(routes.ReviewPreviousRepaymentsController.show()))
+
+          case None => PreviousRepaymentsHelper.addAmountSharesRepayment(s4lConnector, validFormData)
+              Future.successful(Redirect(routes.ReviewPreviousRepaymentsController.show()))
         }
       }
     )

@@ -119,9 +119,7 @@ class ResearchStartDateControllerSpec extends BaseSpec {
       submitWithSessionAndAuth(TestController.submit,formInput: _*)(
         result => {
           status(result) shouldBe SEE_OTHER
-
-          //TODO Should route to Research start date error page once completed
-          redirectLocation(result) shouldBe Some(controllers.eis.routes.ResearchStartDateController.show().url)
+          redirectLocation(result) shouldBe Some(controllers.eis.routes.ResearchStartDateErrorController.show().url)
         }
       )
     }
@@ -139,9 +137,7 @@ class ResearchStartDateControllerSpec extends BaseSpec {
       submitWithSessionAndAuth(TestController.submit,formInput:_*)(
         result => {
           status(result) shouldBe SEE_OTHER
-
-          //TODO Should route to Research start date error page once completed
-          redirectLocation(result) shouldBe Some(controllers.eis.routes.ResearchStartDateController.show().url)
+          redirectLocation(result) shouldBe Some(controllers.eis.routes.ResearchStartDateErrorController.show().url)
         }
       )
     }

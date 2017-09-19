@@ -15,17 +15,16 @@
  */
 
 package connectors
+
 import config.{FrontendAppConfig, WSHttp}
 import models.registration.RegistrationDetailsModel
 import models.submission.{ComplianceStatementAnswersModel, DesSubmissionCSModel, DesSubmitAdvancedAssuranceModel, Submission}
-import models.{AnnualTurnoverCostsModel, GrossAssetsAfterIssueModel, GrossAssetsModel, ProposedInvestmentModel}
+import models._
 import play.api.Logger
-import play.api.http.Status.OK
 import play.api.libs.json.{JsValue, Json}
 import uk.gov.hmrc.play.config.ServicesConfig
 import uk.gov.hmrc.play.http._
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 object SubmissionConnector extends SubmissionConnector with ServicesConfig {
@@ -54,19 +53,27 @@ trait SubmissionConnector {
       s"$hasPercentageWithMasters/has-ten-year-plan/$hasTenYearPlan")
   }
 
-  def checkLifetimeAllowanceExceeded(hadPrevRFI: Boolean, isKi: Boolean, previousInvestmentSchemesTotal: Int,
-                                     proposedAmount: Int)
+  def checkLifetimeAllowanceExceeded(hadPrevRFI: Boolean, isKi: Boolean, previousInvestmentSchemesTotal: Long,
+                                     totalAmountRaised: Long)
                                     (implicit hc: HeaderCarrier): Future[Option[Boolean]] = {
 
     http.GET[Option[Boolean]](s"$serviceUrl/investment-tax-relief/lifetime-allowance/lifetime-allowance-checker/had-previous-rfi/" +
-      s"$hadPrevRFI/is-knowledge-intensive/$isKi/previous-schemes-total/$previousInvestmentSchemesTotal/proposed-amount/$proposedAmount")
+      s"$hadPrevRFI/is-knowledge-intensive/$isKi/previous-schemes-total/$previousInvestmentSchemesTotal/proposed-amount/$totalAmountRaised")
 
   }
 
-  def checkAveragedAnnualTurnover(proposedInvestmentAmount: ProposedInvestmentModel, annualTurnoverCostsModel: AnnualTurnoverCostsModel)
+  def checkAnnualLimitExceeded(previousInvestmentSchemesInRangeTotal: Long,
+                                     totalAmountRaised: Long)
+                                    (implicit hc: HeaderCarrier): Future[Option[Boolean]] = {
+
+    http.GET[Option[Boolean]](s"$serviceUrl/investment-tax-relief/compliance-statement/validate-annual-limit/" +
+      s"previous-schemes-total-in-range/$previousInvestmentSchemesInRangeTotal/total-amount-raised/$totalAmountRaised")
+  }
+
+  def checkAveragedAnnualTurnover(totalAmountRaised: TotalAmountRaisedModel, annualTurnoverCostsModel: AnnualTurnoverCostsModel)
                                  (implicit hc: HeaderCarrier): Future[Option[Boolean]] = {
     http.GET[Option[Boolean]](s"$serviceUrl/investment-tax-relief/averaged-annual-turnover/check-averaged-annual-turnover/" +
-      s"proposed-investment-amount/${proposedInvestmentAmount.investmentAmount}/annual-turn-over/${annualTurnoverCostsModel.amount1}" +
+      s"proposed-investment-amount/${totalAmountRaised.amount.toLongExact}/annual-turn-over/${annualTurnoverCostsModel.amount1}" +
       s"/${annualTurnoverCostsModel.amount2}/${annualTurnoverCostsModel.amount3}/${annualTurnoverCostsModel.amount4}/${annualTurnoverCostsModel.amount5}")
   }
 
@@ -74,7 +81,7 @@ trait SubmissionConnector {
                                     (implicit hc: HeaderCarrier): Future[Option[Boolean]] = {
 
     http.GET[Option[Boolean]](s"$serviceUrl/investment-tax-relief/gross-assets/gross-assets-checker/check-total/gross-amount/" +
-      s"$schemeType/${grossAssetAmount.grossAmount.toIntExact}")
+      s"$schemeType/${grossAssetAmount.grossAmount.toLongExact}")
 
   }
 
@@ -89,7 +96,7 @@ trait SubmissionConnector {
     http.POST[JsValue, HttpResponse](s"$serviceUrl/investment-tax-relief/advanced-assurance/$tavcReferenceNumber/submit", Json.toJson(targetSubmissionModel))
   }
 
-  def submitComplainceStatement(submissionRequest: ComplianceStatementAnswersModel, tavcReferenceNumber: String,
+  def submitComplianceStatement(submissionRequest: ComplianceStatementAnswersModel, tavcReferenceNumber: String,
                                 registrationDetailsModel: Option[RegistrationDetailsModel])(implicit hc: HeaderCarrier): Future[HttpResponse] = {
     if(tavcReferenceNumber.isEmpty) {
       Logger.warn("[SubmissionConnector][submitComplainceStatement] An empty tavcReferenceNumber was passed")
@@ -133,7 +140,15 @@ trait SubmissionConnector {
     http.GET[HttpResponse](s"$serviceUrl/investment-tax-relief/compliance-statement/full-time-equivalence-check/$schemeType/$employeeCount")
   }
 
-  def checkGrossAssetsAfterIssueAmountExceeded(grossAssetAmount: Int)
+  def validateSubmissionPeriod(tradeStartDay: Int, tradeStartMonth: Int, tradeStartYear: Int,
+                               shareIssueDay: Int, shareIssueMonth: Int, shareIssueYear: Int)
+                              (implicit hc: HeaderCarrier): Future[Boolean] = {
+    http.GET[Boolean](s"$serviceUrl/investment-tax-relief/submission-period/submission-period-checker" +
+      s"/trade-start-date/$tradeStartDay/$tradeStartMonth/$tradeStartYear" +
+      s"/share-issue-date/$shareIssueDay/$shareIssueMonth/$shareIssueYear")
+  }
+
+  def checkGrossAssetsAfterIssueAmountExceeded(grossAssetAmount: Long)
                                     (implicit hc: HeaderCarrier): Future[Option[Boolean]] = {
 
     http.GET[Option[Boolean]](s"$serviceUrl/investment-tax-relief/gross-assets/gross-assets-after-issue-checker/check-total/gross-amount/$grossAssetAmount")

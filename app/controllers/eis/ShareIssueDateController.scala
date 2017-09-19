@@ -17,16 +17,19 @@
 package controllers.eis
 
 import auth.{AuthorisedAndEnrolledForTAVC, EIS}
-import common.KeystoreKeys
+import common.{Constants, KeystoreKeys}
+import config.FrontendGlobal.internalServerErrorTemplate
 import config.{FrontendAppConfig, FrontendAuthConnector}
-import connectors.{EnrolmentConnector, S4LConnector}
+import connectors.{EnrolmentConnector, S4LConnector, SubmissionConnector}
 import controllers.Helpers.ControllerHelpers
 import forms.ShareIssueDateForm._
-import models.ShareIssueDateModel
+import models.{HasInvestmentTradeStartedModel, ShareIssueDateModel, TradeStartDateModel}
+import play.api.Logger
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import views.html.eis.companyDetails.ShareIssueDate
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
+import play.api.mvc.Result
 
 import scala.concurrent.Future
 
@@ -35,29 +38,47 @@ object ShareIssueDateController extends ShareIssueDateController{
   override lazy val applicationConfig = FrontendAppConfig
   override lazy val authConnector = FrontendAuthConnector
   override lazy val enrolmentConnector = EnrolmentConnector
+  override lazy val submissionConnector = SubmissionConnector
 }
 
 trait ShareIssueDateController extends FrontendController with AuthorisedAndEnrolledForTAVC {
 
   override val acceptedFlows = Seq(Seq(EIS))
 
-  val show = AuthorisedAndEnrolled.async { implicit user => implicit request =>
+  val submissionConnector: SubmissionConnector
 
-        s4lConnector.fetchAndGetFormData[ShareIssueDateModel](KeystoreKeys.shareIssueDate).map {
-          case Some(data) => Ok(ShareIssueDate(shareIssueDateForm.fill(data)))
-          case None => Ok(ShareIssueDate(shareIssueDateForm))
-        }
-      }
+  val show = AuthorisedAndEnrolled.async { implicit user => implicit request =>
+    s4lConnector.fetchAndGetFormData[ShareIssueDateModel](KeystoreKeys.shareIssueDate).map {
+        case Some(data) => Ok(ShareIssueDate(shareIssueDateForm.fill(data)))
+        case None => Ok(ShareIssueDate(shareIssueDateForm))
+    }
+  }
 
 
   val submit = AuthorisedAndEnrolled.async { implicit user => implicit request =>
+
+    def routeRequest(hasInvestmentTradeStarted: HasInvestmentTradeStartedModel, shareIssueDate: ShareIssueDateModel) = {
+
+      submissionConnector.validateSubmissionPeriod(hasInvestmentTradeStarted.hasInvestmentTradeStartedDay.get,
+                                                   hasInvestmentTradeStarted.hasInvestmentTradeStartedMonth.get,
+                                                   hasInvestmentTradeStarted.hasInvestmentTradeStartedYear.get,
+                                                   shareIssueDate.day.get, shareIssueDate.month.get, shareIssueDate.year.get) map {
+        case canProceed => if (canProceed) Redirect(routes.GrossAssetsController.show())
+                           else Redirect(routes.ShareIssueDateErrorController.show())
+      }
+    }
+
     shareIssueDateForm.bindFromRequest().fold(
       formWithErrors => {
         Future.successful(BadRequest(ShareIssueDate(formWithErrors)))
-        },
+      },
       validFormData => {
         s4lConnector.saveFormData(KeystoreKeys.shareIssueDate, validFormData)
-        Future.successful(Redirect(routes.GrossAssetsController.show()))
+        s4lConnector.fetchAndGetFormData[HasInvestmentTradeStartedModel](KeystoreKeys.hasInvestmentTradeStarted) flatMap {
+          case Some(data) => if(data.hasDate) routeRequest(data, validFormData)
+                             else Future.successful(Redirect(routes.HasInvestmentTradeStartedController.show()))
+          case None => Future.successful(Redirect(routes.HasInvestmentTradeStartedController.show()))
+        }
       }
     )
   }

@@ -24,6 +24,9 @@ import controllers.Helpers.ControllerHelpers
 import models.repayments.SharesRepaymentDetailsModel
 import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
+import views.html.eis.investors.ReviewPreviousRepayments
+import play.api.Play.current
+import play.api.i18n.Messages.Implicits._
 
 import scala.concurrent.Future
 
@@ -38,29 +41,29 @@ trait ReviewPreviousRepaymentsController extends FrontendController with Authori
 
   override val acceptedFlows = Seq(Seq(EIS))
 
-  def show(id: Int): Action[AnyContent] = AuthorisedAndEnrolled.async {
+  val show = AuthorisedAndEnrolled.async {
     implicit user =>
       implicit request =>
         s4lConnector.fetchAndGetFormData[Vector[SharesRepaymentDetailsModel]](KeystoreKeys.sharesRepaymentDetails).map {
-          case Some(data) if (data.nonEmpty) => Redirect(controllers.eis.routes.WhoRepaidSharesController.show())
+          case Some(data) if (data.nonEmpty) => Ok(ReviewPreviousRepayments(data))
           case _ => Redirect(controllers.eis.routes.AnySharesRepaymentController.show())
         }
   }
 
-  def remove(investorProcessingId: Int, id: Int): Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user =>
+  def remove(id: Int): Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user =>
     implicit request =>
-      Future.successful(Redirect(controllers.eis.routes.DeletePreviousShareHolderController.show(investorProcessingId, id)))
+      Future.successful(Redirect(controllers.eis.routes.ReviewPreviousRepaymentsController.show()))
   }
 
-  def change(investorProcessingId: Int, id: Int): Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user =>
+  def change(id: Int): Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user =>
     implicit request =>
-      s4lConnector.saveFormData(KeystoreKeys.backLinkShareClassAndDescription,
-        routes.PreviousShareHoldingsReviewController.show(investorProcessingId).url)
-      Future.successful(Redirect(controllers.eis.routes.PreviousShareHoldingDescriptionController.show(investorProcessingId, Some(id))))
+      s4lConnector.saveFormData(KeystoreKeys.backLinkWhoRepaidShares,
+        routes.ReviewPreviousRepaymentsController.show().url)
+      Future.successful(Redirect(controllers.eis.routes.WhoRepaidSharesController.show(Some(id))))
   }
 
-  def submit(investorProcessingId: Int): Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user =>
+  val submit = AuthorisedAndEnrolled.async { implicit user =>
     implicit request =>
-      Future.successful(Redirect(controllers.eis.routes.AddAnotherShareholdingController.show(investorProcessingId)))
+      Future.successful(Redirect(controllers.eis.routes.ReviewPreviousRepaymentsController.show()))
   }
 }

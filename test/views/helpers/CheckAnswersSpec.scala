@@ -33,15 +33,15 @@ trait CheckAnswersSpec extends ViewSpec {
       (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(previousSchemes))
   }
 
-  def investmentSetup(proposedInvestmentModel: Option[ProposedInvestmentModel] = None,
+  def investmentSetup(totalAmountRaisedModel: Option[TotalAmountRaisedModel] = None,
                       usedInvestmentReasonBeforeModel: Option[UsedInvestmentReasonBeforeModel] = None,
                       previousBeforeDOFCSModel: Option[PreviousBeforeDOFCSModel] = None,
                       newGeographicalMarketModel: Option[NewGeographicalMarketModel] = None, newProductModel: Option[NewProductModel] = None,
                       subsidiariesSpendingInvestmentModel: Option[SubsidiariesSpendingInvestmentModel] = None,
                       subsidiariesNinetyOwnedModel: Option[SubsidiariesNinetyOwnedModel] = None,
                       investmentGrowModel: Option[InvestmentGrowModel] = None): Unit = {
-    when(mockS4lConnector.fetchAndGetFormData[ProposedInvestmentModel](Matchers.eq(KeystoreKeys.proposedInvestment))
-      (Matchers.any(), Matchers.any(),Matchers.any())).thenReturn(Future.successful(proposedInvestmentModel))
+    when(mockS4lConnector.fetchAndGetFormData[TotalAmountRaisedModel](Matchers.eq(KeystoreKeys.totalAmountRaised))
+      (Matchers.any(), Matchers.any(),Matchers.any())).thenReturn(Future.successful(totalAmountRaisedModel))
     when(mockS4lConnector.fetchAndGetFormData[UsedInvestmentReasonBeforeModel](Matchers.eq(KeystoreKeys.usedInvestmentReasonBefore))
       (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(usedInvestmentReasonBeforeModel))
     when(mockS4lConnector.fetchAndGetFormData[PreviousBeforeDOFCSModel](Matchers.eq(KeystoreKeys.previousBeforeDOFCS))
@@ -98,11 +98,11 @@ trait CheckAnswersSpec extends ViewSpec {
       (Matchers.any(), Matchers.any(),Matchers.any())).thenReturn(Future.successful(subsidiariesModel))
   }
 
-  def seisInvestmentSetup(proposedInvestmentModel: Option[ProposedInvestmentModel] = None,
+  def seisInvestmentSetup(totalAmountRaisedModel: Option[TotalAmountRaisedModel] = None,
                           subsidiariesSpendingInvestmentModel: Option[SubsidiariesSpendingInvestmentModel] = None,
                           subsidiariesNinetyOwnedModel: Option[SubsidiariesNinetyOwnedModel] = None): Unit = {
-    when(mockS4lConnector.fetchAndGetFormData[ProposedInvestmentModel](Matchers.eq(KeystoreKeys.proposedInvestment))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(proposedInvestmentModel))
+    when(mockS4lConnector.fetchAndGetFormData[TotalAmountRaisedModel](Matchers.eq(KeystoreKeys.totalAmountSpent))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(totalAmountRaisedModel))
     when(mockS4lConnector.fetchAndGetFormData[SubsidiariesSpendingInvestmentModel](Matchers.eq(KeystoreKeys.subsidiariesSpendingInvestment))
       (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(subsidiariesSpendingInvestmentModel))
     when(mockS4lConnector.fetchAndGetFormData[SubsidiariesNinetyOwnedModel](Matchers.eq(KeystoreKeys.subsidiariesNinetyOwned))

@@ -31,45 +31,7 @@ object PreviousRepaymentsHelper extends PreviousRepaymentsHelper {
 
 trait PreviousRepaymentsHelper {
 
-  def addPreviousRepaymentsToKeystore(s4lConnector: connectors.S4LConnector,
-                                      sharesRepaymentDetailsModel: SharesRepaymentDetailsModel)
-                                         (implicit hc: HeaderCarrier, user: TAVCUser): Future[Vector[SharesRepaymentDetailsModel]] = {
-    val defaultId: Int = 1
-
-    val result = s4lConnector.fetchAndGetFormData[Vector[SharesRepaymentDetailsModel]](KeystoreKeys.sharesRepaymentDetails).map {
-      case Some(data) =>
-        val newId = data.last.processingId.get + 1
-        data :+ sharesRepaymentDetailsModel.copy(processingId = Some(newId))
-      case None => Vector.empty :+ sharesRepaymentDetailsModel.copy(processingId = Some(defaultId))
-    }.recover { case _ => Vector.empty :+ sharesRepaymentDetailsModel.copy(processingId = Some(defaultId)) }
-
-    result.flatMap(newVectorList => s4lConnector.saveFormData(KeystoreKeys.sharesRepaymentDetails, newVectorList))
-    result
-  }
-
-  def updateKeystorePreviousInvestment(s4lConnector: connectors.S4LConnector,
-                                       sharesRepaymentDetailsModel: SharesRepaymentDetailsModel)
-                                      (implicit hc: HeaderCarrier, user: TAVCUser): Future[Vector[SharesRepaymentDetailsModel]] = {
-    val idNotFound: Int = Constants.notFound
-
-    require(sharesRepaymentDetailsModel.processingId.getOrElse(0) > 0,
-      "The item to update processingId must be an integer > 0")
-
-    val result = s4lConnector.fetchAndGetFormData[Vector[SharesRepaymentDetailsModel]](KeystoreKeys.sharesRepaymentDetails).map {
-      case Some(data) =>
-        val itemToUpdateIndex = data.indexWhere(_.processingId.getOrElse(0) ==
-          sharesRepaymentDetailsModel.processingId.getOrElse(0))
-        if (itemToUpdateIndex != idNotFound) {
-          data.updated(itemToUpdateIndex, sharesRepaymentDetailsModel)
-        }
-        else data
-      case None => Vector[SharesRepaymentDetailsModel]()
-    }
-    result.flatMap(updatedVectorList => s4lConnector.saveFormData(KeystoreKeys.sharesRepaymentDetails, updatedVectorList))
-    result
-  }
-
-  def removeKeystorePreviousInvestment(s4lConnector: connectors.S4LConnector, processingId: Int)
+  def removeKeystorePreviousRepayment(s4lConnector: connectors.S4LConnector, processingId: Int)
                                       (implicit hc: HeaderCarrier, user: TAVCUser): Future[Vector[SharesRepaymentDetailsModel]] = {
 
     require(processingId > 0, "The processingId must be an integer > 0")

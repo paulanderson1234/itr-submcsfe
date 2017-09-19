@@ -16,6 +16,9 @@
 
 package controllers.helpers
 
+import java.time.ZoneId
+import java.util.Date
+
 import auth.{Enrolment, Identifier}
 import common.{Constants, KeystoreKeys}
 import connectors.{EnrolmentConnector, S4LConnector, SubmissionConnector}
@@ -150,8 +153,8 @@ trait BaseSpec extends UnitSpec with OneAppPerSuite with MockitoSugar with FakeR
   val subsidiariesSpendingInvestmentModelYes = SubsidiariesSpendingInvestmentModel(Constants.StandardRadioButtonYesValue)
   val subsidiariesSpendingInvestmentModelNo = SubsidiariesSpendingInvestmentModel(Constants.StandardRadioButtonNoValue)
 
-  val proposedInvestmentAmount = 5000000
-  val proposedInvestmentModel = ProposedInvestmentModel(proposedInvestmentAmount)
+  val totalAmountRaised = 5000000
+  val totalAmountRaisedModel = TotalAmountRaisedModel(totalAmountRaised)
 
   val previousSchemeModel1 = PreviousSchemeModel(
     Constants.PageInvestmentSchemeEisValue, 2356, None, None, Some(4), Some(12), Some(2009), Some(1))
@@ -254,7 +257,139 @@ trait BaseSpec extends UnitSpec with OneAppPerSuite with MockitoSugar with FakeR
 
 
 
+  // total amont raised testing
+  val date = new Date()
+  val localDate = date.toInstant.atZone(ZoneId.systemDefault()).toLocalDate
 
+  val todayDay: String = localDate.getDayOfMonth.toString
+  val todayMonth: String = localDate.getMonthValue.toString
+  val todayYear: String = localDate.getYear.toString
+
+  // 3 year boundary dates (at, below, above) from today
+  val date3YearsAgo = localDate.minusYears(3)
+  val date3YearsAgoDay: Int = date3YearsAgo.getDayOfMonth
+  val date3YearsAgoMonth: Int = date3YearsAgo.getMonthValue
+  val date3YearsAgoYear: Int = date3YearsAgo.getYear
+
+  val date3YearsOneDay = localDate.minusYears(3).minusDays(1)
+  val date3YearsOneDayDay: Int = date3YearsOneDay.getDayOfMonth
+  val date3YearsOneDayMonth: Int = date3YearsOneDay.getMonthValue
+  val date3YearsOneDayYear: Int = date3YearsOneDay.getYear
+
+  val date3YearsLessOneDay = localDate.minusYears(3).plusDays(1)
+  val date3yearsLessOneDayDay: Int = date3YearsLessOneDay.getDayOfMonth
+  val date3YearsLessOneDayMonth: Int = date3YearsLessOneDay.getMonthValue
+  val date3YearsLessOneDayYear: Int = date3YearsLessOneDay.getYear
+
+  // 1 year
+  val date1YearAgo = localDate.minusYears(1)
+  val date1YearAgoDay: Int = date1YearAgo.getDayOfMonth
+  val date1YearAgoMonth: Int = date1YearAgo.getMonthValue
+  val date1YearAgoYear: Int = date1YearAgo.getYear
+
+  // 7 year boundary dates (at, below, above) from today
+  val date7YearsAgo = localDate.minusYears(7)
+  val date7YearsAgoDay: Int = date7YearsAgo.getDayOfMonth
+  val date7YearsAgoMonth: Int = date7YearsAgo.getMonthValue
+  val date7YearsAgoYear: Int = date7YearsAgo.getYear
+
+  val date7YearsOneDay = localDate.minusYears(7).minusDays(1)
+  val date7YearsOneDayDay: Int = date7YearsOneDay.getDayOfMonth
+  val date7YearsOneDayMonth: Int = date7YearsOneDay.getMonthValue
+  val date7YearsOneDayYear: Int = date7YearsOneDay.getYear
+
+  val date7YearsLessOneDay = localDate.minusYears(7).plusDays(1)
+  val date7YearsLessOneDayDay: Int = date7YearsLessOneDay.getDayOfMonth
+  val date7YearsLessOneDayMonth: Int = date7YearsLessOneDay.getMonthValue
+  val date7YearsLessOneDayYear: Int = date7YearsLessOneDay.getYear
+
+  // 10 year boundary dates (at, below, above) from today
+  val date10YearsAgo = localDate.minusYears(10)
+  val date10YearsAgoDay: Int = date10YearsAgo.getDayOfMonth
+  val date10YearsAgoMonth: Int = date10YearsAgo.getMonthValue
+  val date10YearsAgoYear: Int = date10YearsAgo.getYear
+
+  val date10YearsOneDay = localDate.minusYears(10).minusDays(1)
+  val date10YearsOneDayDay: Int = date10YearsOneDay.getDayOfMonth
+  val date10YearsOneDayMonth: Int = date10YearsOneDay.getMonthValue
+  val date10YearsOneDayYear: Int = date10YearsOneDay.getYear
+
+  val date10YearsLessOneDay = localDate.minusYears(10).plusDays(1)
+  val date10YearsLessOneDayDay: Int = date10YearsLessOneDay.getDayOfMonth
+  val date10YearsLessOneDayMonth: Int = date10YearsLessOneDay.getMonthValue
+  val date10YearsLessOneDayYear: Int = date10YearsLessOneDay.getYear
+
+
+  val keyStoreSavedCommercialSaleNo = CommercialSaleModel(Constants.StandardRadioButtonNoValue, None, None, None)
+  val keyStoreSavedCommercialSaleEmpty = CommercialSaleModel("", None, None, None)
+
+  val keyStoreSavedDOIEmpty = DateOfIncorporationModel(None, None, None)
+
+  // 10 year from today boundary models Commercial Sale
+  val keyStoreSavedCommercialSale10Years = CommercialSaleModel(Constants.StandardRadioButtonYesValue,
+    Some(date10YearsAgoDay), Some(date10YearsAgoMonth), Some(date10YearsAgoYear))
+  val keyStoreSavedCommercialSale10YearsOneDay = CommercialSaleModel(Constants.StandardRadioButtonYesValue,
+    Some(date10YearsOneDayDay), Some(date10YearsOneDayMonth), Some(date10YearsOneDayYear))
+  val keyStoreSavedCommercialSale10YearsLessOneDay = CommercialSaleModel(Constants.StandardRadioButtonYesValue,
+    Some(date10YearsLessOneDayDay), Some(date10YearsLessOneDayMonth), Some(date10YearsLessOneDayYear))
+
+  // 7 year from today boundary models Commercial Sale
+  val keyStoreSavedCommercialSale7Years = CommercialSaleModel(Constants.StandardRadioButtonYesValue,
+    Some(date7YearsAgoDay), Some(date7YearsAgoMonth), Some(date7YearsAgoYear))
+  val keyStoreSavedCommercialSale7YearsOneDay = CommercialSaleModel(Constants.StandardRadioButtonYesValue,
+    Some(date7YearsOneDayDay), Some(date7YearsOneDayMonth), Some(date7YearsOneDayYear))
+  val keyStoreSavedCommercialSale7YearsLessOneDay = CommercialSaleModel(Constants.StandardRadioButtonYesValue,
+    Some(date7YearsLessOneDayDay), Some(date7YearsLessOneDayMonth), Some(date7YearsLessOneDayYear))
+
+  val keyStoreSavedCommercialSale1Year = CommercialSaleModel(Constants.StandardRadioButtonYesValue,
+    Some(date1YearAgoDay), Some(date1YearAgoMonth), Some(date1YearAgoYear))
+
+  //3 year from today bounder models Date of Incorporation
+  val keyStoreSavedDOI3Years = DateOfIncorporationModel(Some(date3YearsAgoDay), Some(date3YearsAgoMonth), Some(date3YearsAgoYear))
+  val keyStoreSavedDOI3YearsOneDay = DateOfIncorporationModel(Some(date3YearsOneDayDay), Some(date3YearsOneDayMonth), Some(date3YearsOneDayYear))
+  val keyStoreSavedDOI3YearsLessOneDay = DateOfIncorporationModel(Some(date10YearsLessOneDayDay),
+    Some(date10YearsLessOneDayMonth), Some(date10YearsLessOneDayYear))
+
+  val keyStoreSavedDOI10Years = DateOfIncorporationModel(Some(date10YearsAgoDay), Some(date10YearsAgoMonth), Some(date10YearsAgoYear))
+
+  val modelProposedInvestment = TotalAmountRaisedModel(12345)
+  //val cacheMap: CacheMap = CacheMap("", Map("" -> Json.toJson(modelProposedInvestment)))
+  val keyStoreSavedProposedInvestment = TotalAmountRaisedModel(12345)
+
+  val optionKIModel = KiProcessingModel(Some(false), Some(true), Some(false), None, None, None)
+  val emptyKIModel = KiProcessingModel(None, None, None, None, None, None)
+  val missingCompanyAssertsIsKiKiModel = KiProcessingModel(None, Some(true), Some(true), Some(true), None, Some(true))
+  val missingCostsConditionKiModel = KiProcessingModel(Some(true),Some(true),None, None, None, None)
+  val missingSecondaryConditionsKiModel = KiProcessingModel(Some(true),Some(true),Some(false),Some(true),Some(true),None)
+  val missingDateConditionMetKiModel = KiProcessingModel(Some(false),None,Some(true), None, None, None)
+
+  val keyStoreSavedHadPreviousRFIYes = HadPreviousRFIModel(Constants.StandardRadioButtonYesValue)
+  val keyStoreSavedHadPreviousRFINo = HadPreviousRFIModel(Constants.StandardRadioButtonNoValue)
+  val keyStoreSavedHadPreviousRFIEmpty = HadPreviousRFIModel("")
+  val keyStoreSavedSubsidiariesYes = SubsidiariesModel(Constants.StandardRadioButtonYesValue)
+  val keyStoreSavedSubsidiariesNo = SubsidiariesModel(Constants.StandardRadioButtonNoValue)
+  val keyStoreSavedSubsidiariesEmpty = SubsidiariesModel("")
+
+  val model1 = PreviousSchemeModel(
+    Constants.PageInvestmentSchemeEisValue, 2356, None, None, Some(4), Some(12), Some(2009), Some(1))
+  val model2 = PreviousSchemeModel(
+    Constants.PageInvestmentSchemeSeisValue, 2356, Some(666), None, Some(4), Some(12), Some(2010), Some(3))
+  val model3 = PreviousSchemeModel(
+    Constants.PageInvestmentSchemeAnotherValue, 2356, None, Some("My scheme"), Some(9), Some(8), Some(2010), Some(5))
+  val model4 = PreviousSchemeModel(
+    Constants.PageInvestmentSchemeAnotherValue, 19999999, None, Some("My scheme"), Some(9), Some(8), Some(2010), Some(5))
+  val model5 = PreviousSchemeModel(
+    Constants.PageInvestmentSchemeAnotherValue, 1, None, Some("My scheme"), Some(9), Some(8), Some(2010), Some(5))
+  val model6 = PreviousSchemeModel(
+    Constants.PageInvestmentSchemeAnotherValue, 11999999, None, Some("My scheme"), Some(9), Some(8), Some(2010), Some(5))
+  val model7 = PreviousSchemeModel(
+    Constants.PageInvestmentSchemeAnotherValue, 15000000, None, Some("My scheme"), Some(9), Some(8), Some(2010), Some(5))
+
+  val previousSchemeTrueKIVectorList = Vector(model1, model2, model3)
+  val previousSchemeOverTrueKIVectorList = Vector(model4, model5, model5)
+  val previousSchemeFalseKIVectorList = Vector(model1, model2, model3)
+  val previousSchemeOverFalseKIVectorList = Vector(model4, model5, model6)
+  val previousSchemeUnderTotalAmount = Vector(model3, model5, model7)
 
 
   //investor details

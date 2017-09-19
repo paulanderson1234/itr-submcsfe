@@ -19,7 +19,7 @@ package controllers.eis
 import auth.{MockAuthConnector, MockConfig}
 import common.{Constants, KeystoreKeys}
 import config.FrontendAuthConnector
-import connectors.{EnrolmentConnector, S4LConnector}
+import connectors.{SubmissionConnector, EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
 import models._
 import org.mockito.Matchers
@@ -36,6 +36,7 @@ class ShareIssueDateControllerSpec extends BaseSpec {
     override lazy val authConnector = MockAuthConnector
     override lazy val s4lConnector = mockS4lConnector
     override lazy val enrolmentConnector = mockEnrolmentConnector
+    override lazy val submissionConnector = mockSubmissionConnector
   }
 
   "ShareIssueDateController" should {
@@ -48,27 +49,25 @@ class ShareIssueDateControllerSpec extends BaseSpec {
     "use the correct enrolment connector" in {
       ShareIssueDateController.enrolmentConnector shouldBe EnrolmentConnector
     }
+    "use the correct submission connector" in {
+      ShareIssueDateController.submissionConnector shouldBe SubmissionConnector
+    }
   }
 
-  def setupMocks(shareIssueDateModel: Option[ShareIssueDateModel] = None): Unit = {
+  def setupMocks(shareIssueDateModel: Option[ShareIssueDateModel] = None,
+                 hasInvestmentTradeStartedModel: Option[HasInvestmentTradeStartedModel] = None): Unit = {
     when(mockS4lConnector.fetchAndGetFormData[ShareIssueDateModel](Matchers.eq(KeystoreKeys.shareIssueDate))
       (Matchers.any(), Matchers.any(), Matchers.any()))
       .thenReturn(Future.successful(shareIssueDateModel))
-
-    when(mockS4lConnector.saveFormData(Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
-      .thenReturn(Future.successful(CacheMap("", Map())))
-
-
-    when(mockS4lConnector.saveFormData(Matchers.eq(KeystoreKeys.backLinkShareIssueDate),
-      Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
-      .thenReturn(Future.successful(CacheMap("", Map())))
-
+    when(mockS4lConnector.fetchAndGetFormData[HasInvestmentTradeStartedModel](Matchers.eq(KeystoreKeys.hasInvestmentTradeStarted))
+      (Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(hasInvestmentTradeStartedModel))
   }
 
   "Sending a GET request to ShareIssueDateController when authenticated and enrolled" should {
 
-    "return a 200 when something is fetched from keystore" in {
-      setupMocks(Some(shareIssuetDateModel))
+    "return an OK when something is fetched from storage" in {
+      setupMocks(shareIssueDateModel = Some(shareIssuetDateModel))
       mockEnrolledRequest(eisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show())(
         result => {
@@ -77,8 +76,8 @@ class ShareIssueDateControllerSpec extends BaseSpec {
       )
     }
 
-    "provide an empty model and return a 200 when nothing is fetched using keystore" in {
-      setupMocks(None)
+    "return an OK when nothing is fetched using storage" in {
+      setupMocks(shareIssueDateModel = None)
       mockEnrolledRequest(eisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show())(
         result => status(result) shouldBe OK
@@ -87,10 +86,11 @@ class ShareIssueDateControllerSpec extends BaseSpec {
   }
 
   "Sending a valid form submit to the ShareIssueDateController when authenticated and enrolled" should {
-    "redirect to first trade start date page" in {
-      setupMocks(Some(shareIssueDateModel))
+    "redirect to correct page when submission date is within the submission period" in {
+      setupMocks(shareIssueDateModel = Some(shareIssueDateModel), hasInvestmentTradeStartedModel = Some(hasInvestmentTradeStartedModelYes))
+      when(TestController.submissionConnector.validateSubmissionPeriod(Matchers.any(), Matchers.any(), Matchers.any(),
+        Matchers.any(), Matchers.any(), Matchers.any())(Matchers.any())).thenReturn(true)
       mockEnrolledRequest(eisSchemeTypesModel)
-
       val formInput = Seq(
         "shareIssueDay" -> "23",
         "shareIssueMonth" -> "11",
@@ -105,8 +105,67 @@ class ShareIssueDateControllerSpec extends BaseSpec {
     }
   }
 
+  "Sending a valid form submit to the ShareIssueDateController when authenticated and enrolled" should {
+    "redirect to correct error page when submission date is not within the submission period" in {
+      setupMocks(shareIssueDateModel = Some(shareIssueDateModel), hasInvestmentTradeStartedModel = Some(hasInvestmentTradeStartedModelYes))
+      when(TestController.submissionConnector.validateSubmissionPeriod(Matchers.any(), Matchers.any(), Matchers.any(),
+        Matchers.any(), Matchers.any(), Matchers.any())(Matchers.any())).thenReturn(false)
+      mockEnrolledRequest(eisSchemeTypesModel)
+
+      val formInput = Seq(
+        "shareIssueDay" -> "23",
+        "shareIssueMonth" -> "11",
+        "shareIssueYear" -> "1993")
+
+      submitWithSessionAndAuth(TestController.submit,formInput:_*)(
+        result => {
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(routes.ShareIssueDateErrorController.show().url)
+        }
+      )
+    }
+  }
+
+  "Sending a valid form submit to the ShareIssueDateController when authenticated and enrolled" should {
+    "redirect to HasInvestmentTradeStarted page if the model is not in storage" in {
+      setupMocks(shareIssueDateModel = Some(shareIssueDateModel), hasInvestmentTradeStartedModel = None)
+      mockEnrolledRequest(eisSchemeTypesModel)
+
+      val formInput = Seq(
+        "shareIssueDay" -> "23",
+        "shareIssueMonth" -> "11",
+        "shareIssueYear" -> "1993")
+
+      submitWithSessionAndAuth(TestController.submit,formInput:_*)(
+        result => {
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(routes.HasInvestmentTradeStartedController.show().url)
+        }
+      )
+    }
+  }
+
+  "Sending a valid form submit to the ShareIssueDateController when authenticated and enrolled" should {
+    "redirect to HasInvestmentTradeStarted page if the model has invalid data" in {
+      setupMocks(shareIssueDateModel = Some(shareIssueDateModel), hasInvestmentTradeStartedModel = Some(hasInvestmentTradeStartedModelNo))
+      mockEnrolledRequest(eisSchemeTypesModel)
+
+      val formInput = Seq(
+        "shareIssueDay" -> "23",
+        "shareIssueMonth" -> "11",
+        "shareIssueYear" -> "1993")
+
+      submitWithSessionAndAuth(TestController.submit,formInput:_*)(
+        result => {
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(routes.HasInvestmentTradeStartedController.show().url)
+        }
+      )
+    }
+  }
+
   "Sending an invalid form submission with validation errors to the ShareIssueDateController when authenticated and enrolled" should {
-    "return a bad request" in {
+    "return a BADREQUEST" in {
       setupMocks(None)
       mockEnrolledRequest(eisSchemeTypesModel)
       val formInput = Seq(
