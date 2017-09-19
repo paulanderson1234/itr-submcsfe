@@ -264,5 +264,5 @@ POST      /gross-assets-after-issue-error         controllers.eis.GrossAssetsAft
 GET        /review-previous-repayments      controllers.eis.ReviewPreviousRepaymentsController.show
 POST       /review-previous-repayments      controllers.eis.ReviewPreviousRepaymentsController.submit
 
-GET        /review-previous-repayments/:id      controllers.eis.ReviewPreviousRepaymentsController.change(id: Int)
-GET       /review-previous-repayments/:id      controllers.eis.ReviewPreviousRepaymentsController.remove(id: Int)
+GET        /review-previous-repayments-change/:id      controllers.eis.ReviewPreviousRepaymentsController.change(id: Int)
+GET       /review-previous-repayments-remove/:id      controllers.eis.ReviewPreviousRepaymentsController.remove(id: Int)

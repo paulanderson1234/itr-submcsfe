@@ -536,4 +536,22 @@ trait BaseSpec extends UnitSpec with OneAppPerSuite with MockitoSugar with FakeR
   val dateSharesRepaidModel = DateSharesRepaidModel(Some(dateSharesRepaidDay), Some(dateSharesRepaidMonth), Some(dateSharesRepaidYear))
   val dateSharesRepaidEmpty = DateSharesRepaidModel(None, None, None)
   val amountSharesRepaymentModel = AmountSharesRepaymentModel(13)
+
+  val invalidSharesRepaymentDetails = SharesRepaymentDetailsModel()
+
+  val validSharesRepaymentDetails = SharesRepaymentDetailsModel(Some(whoRepaidSharesModel),
+    Some(repaymentTypeShares), Some(dateSharesRepaidModel), Some(amountSharesRepaymentModel))
+
+  val sharesRepaymentDetailsMissingRecipient = SharesRepaymentDetailsModel(None,
+    Some(repaymentTypeShares), Some(dateSharesRepaidModel), Some(amountSharesRepaymentModel))
+
+  val sharesRepaymentDetailsMissingRepaymentType = SharesRepaymentDetailsModel(Some(whoRepaidSharesModel),
+    None, Some(dateSharesRepaidModel), Some(amountSharesRepaymentModel))
+
+  val sharesRepaymentDetailsMissingRepaymentDate = SharesRepaymentDetailsModel(Some(whoRepaidSharesModel),
+    Some(repaymentTypeShares), None, Some(amountSharesRepaymentModel))
+
+  val sharesRepaymentDetailsMissingRepaymentAmount = SharesRepaymentDetailsModel(Some(whoRepaidSharesModel),
+    Some(repaymentTypeShares), Some(dateSharesRepaidModel), None)
+
 }
