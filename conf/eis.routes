@@ -266,3 +266,6 @@ POST       /review-previous-repayments      controllers.eis.ReviewPreviousRepaym
 
 GET        /review-previous-repayments/:id      controllers.eis.ReviewPreviousRepaymentsController.change(id: Int)
 GET       /review-previous-repayments/:id      controllers.eis.ReviewPreviousRepaymentsController.remove(id: Int)
+
+GET        /delete-shares-repayment/:repaymentId                       controllers.eis.DeleteSharesRepaymentController.show(repaymentId: Int)
+POST       /delete-shares-repayment/:repaymentProcessingId             controllers.eis.DeleteSharesRepaymentController.submit(repaymentProcessingId: Int)

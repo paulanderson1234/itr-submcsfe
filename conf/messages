@@ -1279,3 +1279,9 @@ page.repayments.previousShareRepaymentsReview.heading.two=Type of repayment or <
 page.repayments.previousShareRepaymentsReview.heading.three=Date of repayment or <br/> repurchase
 page.repayments.previousShareRepaymentsReview.heading.four=Amount repaid or <br/> repurchased
 page.repayments.previousShareRepaymentsReview.add=Add more repaid or repurchased investments
+
+
+# Delete Share Repayments page
+page.repayments.deleteSharesRepayment.title=Confirm that you want to remove these repaid or repurchased investments
+page.repayments.deleteSharesRepayment.heading=Confirm that you want to remove these repaid or repurchased investments
+page.repayments.deleteSharesRepayment.description=This will remove {0} from your list of repaid or repurchased investments.
