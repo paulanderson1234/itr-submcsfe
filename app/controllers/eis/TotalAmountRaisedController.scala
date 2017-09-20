@@ -23,7 +23,7 @@ import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector, SubmissionConnector}
 import controllers.Helpers.PreviousSchemesHelper
 import forms.TotalAmountRaisedForm._
-import models.{HadPreviousRFIModel, KiProcessingModel, ShareIssueDateModel, TotalAmountRaisedModel}
+import models._
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
@@ -60,7 +60,7 @@ trait TotalAmountRaisedController extends FrontendController with AuthorisedAndE
     implicit request =>
 
       def validateLifetimeAllowanceFirstCheck(kiModel: Option[KiProcessingModel], isLifetimeAlowanceExceeded: Option[Boolean],
-                                              prevRFI: HadPreviousRFIModel, totalAmountRaised: Long): Future[Result] = {
+                                              totalAmountRaised: Long): Future[Result] = {
         kiModel match {
           // check previous answers present
           case Some(dataWithPreviousValid) => {
@@ -120,16 +120,18 @@ trait TotalAmountRaisedController extends FrontendController with AuthorisedAndE
           s4lConnector.saveFormData(KeystoreKeys.totalAmountRaised, validFormData)
           (for {
             kiModel <- s4lConnector.fetchAndGetFormData[KiProcessingModel](KeystoreKeys.kiProcessingModel)
+            hadOtherInvestments <- s4lConnector.fetchAndGetFormData[HadOtherInvestmentsModel](KeystoreKeys.hadOtherInvestments)
             hadPrevRFI <- s4lConnector.fetchAndGetFormData[HadPreviousRFIModel](KeystoreKeys.hadPreviousRFI)
             previousInvestments <- PreviousSchemesHelper.getPreviousInvestmentTotalFromKeystore(s4lConnector)
 
             // Call API check 1 (takes priority over check 2)
             isLifetimeAlowanceExceeded <- submissionConnector.checkLifetimeAllowanceExceeded(
-              if (hadPrevRFI.fold(Constants.StandardRadioButtonNoValue)(_.hadPreviousRFI) == Constants.StandardRadioButtonYesValue) true else false,
+              if (hadPrevRFI.fold(Constants.StandardRadioButtonNoValue)(_.hadPreviousRFI) == Constants.StandardRadioButtonYesValue ||
+                hadOtherInvestments.fold(Constants.StandardRadioButtonNoValue)(_.hadOtherInvestments) == Constants.StandardRadioButtonYesValue) true else false,
               if (kiModel.isDefined) kiModel.get.isKi else false, previousInvestments,
               validFormData.amount.toLongExact)
 
-            route <- validateLifetimeAllowanceFirstCheck(kiModel, isLifetimeAlowanceExceeded, hadPrevRFI.get, validFormData.amount.toLongExact)
+            route <- validateLifetimeAllowanceFirstCheck(kiModel, isLifetimeAlowanceExceeded, validFormData.amount.toLongExact)
           } yield route) recover {
             case e: NoSuchElementException => Redirect(routes.HadPreviousRFIController.show())
             case e: Exception => {
