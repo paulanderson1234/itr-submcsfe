@@ -72,6 +72,8 @@ class LifetimeAllowanceExceededErrorControllerSpec extends BaseSpec {
         .thenReturn(Future.successful(Option(falseKIModel)))
       when(mockS4lConnector.fetchAndGetFormData[HadPreviousRFIModel](Matchers.eq(KeystoreKeys.hadPreviousRFI))(Matchers.any(), Matchers.any(), Matchers.any()))
         .thenReturn(Future.successful(Option(keyStoreSavedHadPreviousRFINo)))
+      when(mockS4lConnector.fetchAndGetFormData[HadOtherInvestmentsModel](Matchers.eq(KeystoreKeys.hadOtherInvestments))
+        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(hadOtherInvestmentsModelNo)))
       when(mockS4lConnector.fetchAndGetFormData[CommercialSaleModel](Matchers.eq(KeystoreKeys.commercialSale))(Matchers.any(), Matchers.any(), Matchers.any()))
         .thenReturn(Future.successful(Option(keyStoreSavedCommercialSale7YearsOneDay)))
       when(mockS4lConnector.fetchAndGetFormData[SubsidiariesModel](Matchers.eq(KeystoreKeys.subsidiaries))(Matchers.any(), Matchers.any(), Matchers.any()))
@@ -98,6 +100,8 @@ class LifetimeAllowanceExceededErrorControllerSpec extends BaseSpec {
         .thenReturn(Future.successful(Option(trueKIModel)))
       when(mockS4lConnector.fetchAndGetFormData[HadPreviousRFIModel](Matchers.eq(KeystoreKeys.hadPreviousRFI))(Matchers.any(), Matchers.any(), Matchers.any()))
         .thenReturn(Future.successful(Option(keyStoreSavedHadPreviousRFINo)))
+      when(mockS4lConnector.fetchAndGetFormData[HadOtherInvestmentsModel](Matchers.eq(KeystoreKeys.hadOtherInvestments))
+        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(hadOtherInvestmentsModelNo)))
       when(mockS4lConnector.fetchAndGetFormData[CommercialSaleModel](Matchers.eq(KeystoreKeys.commercialSale))(Matchers.any(), Matchers.any(), Matchers.any()))
         .thenReturn(Future.successful(Option(keyStoreSavedCommercialSale10YearsOneDay)))
       when(mockS4lConnector.fetchAndGetFormData[SubsidiariesModel](Matchers.eq(KeystoreKeys.subsidiaries))(Matchers.any(), Matchers.any(), Matchers.any()))
@@ -124,6 +128,8 @@ class LifetimeAllowanceExceededErrorControllerSpec extends BaseSpec {
         .thenReturn(Future.successful(Option(falseKIModel)))
       when(mockS4lConnector.fetchAndGetFormData[HadPreviousRFIModel](Matchers.eq(KeystoreKeys.hadPreviousRFI))(Matchers.any(), Matchers.any(), Matchers.any()))
         .thenReturn(Future.successful(Option(keyStoreSavedHadPreviousRFINo)))
+      when(mockS4lConnector.fetchAndGetFormData[HadOtherInvestmentsModel](Matchers.eq(KeystoreKeys.hadOtherInvestments))
+        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(hadOtherInvestmentsModelNo)))
       when(mockS4lConnector.fetchAndGetFormData[CommercialSaleModel](Matchers.eq(KeystoreKeys.commercialSale))(Matchers.any(), Matchers.any(), Matchers.any()))
         .thenReturn(Future.successful(Option(keyStoreSavedCommercialSale7YearsLessOneDay)))
       when(mockS4lConnector.fetchAndGetFormData[SubsidiariesModel](Matchers.eq(KeystoreKeys.subsidiaries))(Matchers.any(), Matchers.any(), Matchers.any()))
@@ -150,6 +156,8 @@ class LifetimeAllowanceExceededErrorControllerSpec extends BaseSpec {
         .thenReturn(Future.successful(Option(falseKIModel)))
       when(mockS4lConnector.fetchAndGetFormData[HadPreviousRFIModel](Matchers.eq(KeystoreKeys.hadPreviousRFI))(Matchers.any(), Matchers.any(), Matchers.any()))
         .thenReturn(Future.successful(Option(keyStoreSavedHadPreviousRFINo)))
+      when(mockS4lConnector.fetchAndGetFormData[HadOtherInvestmentsModel](Matchers.eq(KeystoreKeys.hadOtherInvestments))
+        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(hadOtherInvestmentsModelNo)))
       when(mockS4lConnector.fetchAndGetFormData[CommercialSaleModel](Matchers.eq(KeystoreKeys.commercialSale))(Matchers.any(), Matchers.any(), Matchers.any()))
         .thenReturn(Future.successful(Option(keyStoreSavedCommercialSale7Years)))
       when(mockS4lConnector.fetchAndGetFormData[SubsidiariesModel](Matchers.eq(KeystoreKeys.subsidiaries))(Matchers.any(), Matchers.any(), Matchers.any()))
@@ -176,6 +184,8 @@ class LifetimeAllowanceExceededErrorControllerSpec extends BaseSpec {
         .thenReturn(Future.successful(Option(trueKIModel)))
       when(mockS4lConnector.fetchAndGetFormData[HadPreviousRFIModel](Matchers.eq(KeystoreKeys.hadPreviousRFI))(Matchers.any(), Matchers.any(), Matchers.any()))
         .thenReturn(Future.successful(Option(keyStoreSavedHadPreviousRFINo)))
+      when(mockS4lConnector.fetchAndGetFormData[HadOtherInvestmentsModel](Matchers.eq(KeystoreKeys.hadOtherInvestments))
+        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(hadOtherInvestmentsModelNo)))
       when(mockS4lConnector.fetchAndGetFormData[CommercialSaleModel](Matchers.eq(KeystoreKeys.commercialSale))(Matchers.any(), Matchers.any(), Matchers.any()))
         .thenReturn(Future.successful(Option(keyStoreSavedCommercialSale7YearsLessOneDay)))
       when(mockS4lConnector.fetchAndGetFormData[SubsidiariesModel](Matchers.eq(KeystoreKeys.subsidiaries))(Matchers.any(), Matchers.any(), Matchers.any()))
@@ -202,6 +212,8 @@ class LifetimeAllowanceExceededErrorControllerSpec extends BaseSpec {
         .thenReturn(Future.successful(Option(trueKIModel)))
       when(mockS4lConnector.fetchAndGetFormData[HadPreviousRFIModel](Matchers.eq(KeystoreKeys.hadPreviousRFI))(Matchers.any(), Matchers.any(), Matchers.any()))
         .thenReturn(Future.successful(Option(keyStoreSavedHadPreviousRFINo)))
+      when(mockS4lConnector.fetchAndGetFormData[HadOtherInvestmentsModel](Matchers.eq(KeystoreKeys.hadOtherInvestments))
+        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(hadOtherInvestmentsModelNo)))
       when(mockS4lConnector.fetchAndGetFormData[CommercialSaleModel](Matchers.eq(KeystoreKeys.commercialSale))(Matchers.any(), Matchers.any(), Matchers.any()))
         .thenReturn(Future.successful(Option(keyStoreSavedCommercialSale7Years)))
       when(mockS4lConnector.fetchAndGetFormData[SubsidiariesModel](Matchers.eq(KeystoreKeys.subsidiaries))(Matchers.any(), Matchers.any(), Matchers.any()))
@@ -229,6 +241,8 @@ class LifetimeAllowanceExceededErrorControllerSpec extends BaseSpec {
         .thenReturn(Future.successful(Option(falseKIModel)))
       when(mockS4lConnector.fetchAndGetFormData[HadPreviousRFIModel](Matchers.eq(KeystoreKeys.hadPreviousRFI))(Matchers.any(), Matchers.any(), Matchers.any()))
         .thenReturn(Future.successful(Option(keyStoreSavedHadPreviousRFINo)))
+      when(mockS4lConnector.fetchAndGetFormData[HadOtherInvestmentsModel](Matchers.eq(KeystoreKeys.hadOtherInvestments))
+        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(hadOtherInvestmentsModelNo)))
       when(mockS4lConnector.fetchAndGetFormData[CommercialSaleModel](Matchers.eq(KeystoreKeys.commercialSale))(Matchers.any(), Matchers.any(), Matchers.any()))
         .thenReturn(Future.successful(Option(keyStoreSavedCommercialSale7YearsLessOneDay)))
       when(mockS4lConnector.fetchAndGetFormData[SubsidiariesModel](Matchers.eq(KeystoreKeys.subsidiaries))(Matchers.any(), Matchers.any(), Matchers.any()))
@@ -255,6 +269,8 @@ class LifetimeAllowanceExceededErrorControllerSpec extends BaseSpec {
         .thenReturn(Future.successful(Option(falseKIModel)))
       when(mockS4lConnector.fetchAndGetFormData[HadPreviousRFIModel](Matchers.eq(KeystoreKeys.hadPreviousRFI))(Matchers.any(), Matchers.any(), Matchers.any()))
         .thenReturn(Future.successful(Option(keyStoreSavedHadPreviousRFINo)))
+      when(mockS4lConnector.fetchAndGetFormData[HadOtherInvestmentsModel](Matchers.eq(KeystoreKeys.hadOtherInvestments))
+        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(hadOtherInvestmentsModelNo)))
       when(mockS4lConnector.fetchAndGetFormData[CommercialSaleModel](Matchers.eq(KeystoreKeys.commercialSale))(Matchers.any(), Matchers.any(), Matchers.any()))
         .thenReturn(Future.successful(Option(keyStoreSavedCommercialSale7Years)))
       when(mockS4lConnector.fetchAndGetFormData[SubsidiariesModel](Matchers.eq(KeystoreKeys.subsidiaries))(Matchers.any(), Matchers.any(), Matchers.any()))
@@ -281,6 +297,8 @@ class LifetimeAllowanceExceededErrorControllerSpec extends BaseSpec {
         .thenReturn(Future.successful(Option(trueKIModel)))
       when(mockS4lConnector.fetchAndGetFormData[HadPreviousRFIModel](Matchers.eq(KeystoreKeys.hadPreviousRFI))(Matchers.any(), Matchers.any(), Matchers.any()))
         .thenReturn(Future.successful(Option(keyStoreSavedHadPreviousRFINo)))
+      when(mockS4lConnector.fetchAndGetFormData[HadOtherInvestmentsModel](Matchers.eq(KeystoreKeys.hadOtherInvestments))
+        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(hadOtherInvestmentsModelNo)))
       when(mockS4lConnector.fetchAndGetFormData[CommercialSaleModel](Matchers.eq(KeystoreKeys.commercialSale))(Matchers.any(), Matchers.any(), Matchers.any()))
         .thenReturn(Future.successful(Option(keyStoreSavedCommercialSale10YearsLessOneDay)))
       when(mockS4lConnector.fetchAndGetFormData[SubsidiariesModel](Matchers.eq(KeystoreKeys.subsidiaries))(Matchers.any(), Matchers.any(), Matchers.any()))
@@ -307,6 +325,8 @@ class LifetimeAllowanceExceededErrorControllerSpec extends BaseSpec {
         .thenReturn(Future.successful(Option(trueKIModel)))
       when(mockS4lConnector.fetchAndGetFormData[HadPreviousRFIModel](Matchers.eq(KeystoreKeys.hadPreviousRFI))(Matchers.any(), Matchers.any(), Matchers.any()))
         .thenReturn(Future.successful(Option(keyStoreSavedHadPreviousRFINo)))
+      when(mockS4lConnector.fetchAndGetFormData[HadOtherInvestmentsModel](Matchers.eq(KeystoreKeys.hadOtherInvestments))
+        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(hadOtherInvestmentsModelNo)))
       when(mockS4lConnector.fetchAndGetFormData[CommercialSaleModel](Matchers.eq(KeystoreKeys.commercialSale))(Matchers.any(), Matchers.any(), Matchers.any()))
         .thenReturn(Future.successful(Option(keyStoreSavedCommercialSale10Years)))
       when(mockS4lConnector.fetchAndGetFormData[SubsidiariesModel](Matchers.eq(KeystoreKeys.subsidiaries))(Matchers.any(), Matchers.any(), Matchers.any()))
@@ -333,6 +353,8 @@ class LifetimeAllowanceExceededErrorControllerSpec extends BaseSpec {
         .thenReturn(Future.successful(Option(trueKIModel)))
       when(mockS4lConnector.fetchAndGetFormData[HadPreviousRFIModel](Matchers.eq(KeystoreKeys.hadPreviousRFI))(Matchers.any(), Matchers.any(), Matchers.any()))
         .thenReturn(Future.successful(Option(keyStoreSavedHadPreviousRFINo)))
+      when(mockS4lConnector.fetchAndGetFormData[HadOtherInvestmentsModel](Matchers.eq(KeystoreKeys.hadOtherInvestments))
+        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(hadOtherInvestmentsModelNo)))
       when(mockS4lConnector.fetchAndGetFormData[CommercialSaleModel](Matchers.eq(KeystoreKeys.commercialSale))(Matchers.any(), Matchers.any(), Matchers.any()))
         .thenReturn(Future.successful(Option(keyStoreSavedCommercialSaleNo)))
       when(mockS4lConnector.fetchAndGetFormData[SubsidiariesModel](Matchers.eq(KeystoreKeys.subsidiaries))(Matchers.any(), Matchers.any(), Matchers.any()))
@@ -359,6 +381,8 @@ class LifetimeAllowanceExceededErrorControllerSpec extends BaseSpec {
         .thenReturn(Future.successful(Option(trueKIModel)))
       when(mockS4lConnector.fetchAndGetFormData[HadPreviousRFIModel](Matchers.eq(KeystoreKeys.hadPreviousRFI))(Matchers.any(), Matchers.any(), Matchers.any()))
         .thenReturn(Future.successful(Option(keyStoreSavedHadPreviousRFINo)))
+      when(mockS4lConnector.fetchAndGetFormData[HadOtherInvestmentsModel](Matchers.eq(KeystoreKeys.hadOtherInvestments))
+        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(hadOtherInvestmentsModelNo)))
       when(mockS4lConnector.fetchAndGetFormData[CommercialSaleModel](Matchers.eq(KeystoreKeys.commercialSale))(Matchers.any(), Matchers.any(), Matchers.any()))
         .thenReturn(Future.successful(Option(keyStoreSavedCommercialSaleNo)))
       when(mockS4lConnector.fetchAndGetFormData[SubsidiariesModel](Matchers.eq(KeystoreKeys.subsidiaries))(Matchers.any(), Matchers.any(), Matchers.any()))
@@ -385,6 +409,8 @@ class LifetimeAllowanceExceededErrorControllerSpec extends BaseSpec {
         .thenReturn(Future.successful(Option(falseKIModel)))
       when(mockS4lConnector.fetchAndGetFormData[HadPreviousRFIModel](Matchers.eq(KeystoreKeys.hadPreviousRFI))(Matchers.any(), Matchers.any(), Matchers.any()))
         .thenReturn(Future.successful(Option(keyStoreSavedHadPreviousRFINo)))
+      when(mockS4lConnector.fetchAndGetFormData[HadOtherInvestmentsModel](Matchers.eq(KeystoreKeys.hadOtherInvestments))
+        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(hadOtherInvestmentsModelNo)))
       when(mockS4lConnector.fetchAndGetFormData[CommercialSaleModel](Matchers.eq(KeystoreKeys.commercialSale))(Matchers.any(), Matchers.any(), Matchers.any()))
         .thenReturn(Future.successful(Option(keyStoreSavedCommercialSaleNo)))
       when(mockS4lConnector.fetchAndGetFormData[SubsidiariesModel](Matchers.eq(KeystoreKeys.subsidiaries))(Matchers.any(), Matchers.any(), Matchers.any()))
@@ -411,6 +437,8 @@ class LifetimeAllowanceExceededErrorControllerSpec extends BaseSpec {
         .thenReturn(Future.successful(Option(falseKIModel)))
       when(mockS4lConnector.fetchAndGetFormData[HadPreviousRFIModel](Matchers.eq(KeystoreKeys.hadPreviousRFI))(Matchers.any(), Matchers.any(), Matchers.any()))
         .thenReturn(Future.successful(Option(keyStoreSavedHadPreviousRFINo)))
+      when(mockS4lConnector.fetchAndGetFormData[HadOtherInvestmentsModel](Matchers.eq(KeystoreKeys.hadOtherInvestments))
+        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(hadOtherInvestmentsModelNo)))
       when(mockS4lConnector.fetchAndGetFormData[CommercialSaleModel](Matchers.eq(KeystoreKeys.commercialSale))(Matchers.any(), Matchers.any(), Matchers.any()))
         .thenReturn(Future.successful(Option(keyStoreSavedCommercialSaleNo)))
       when(mockS4lConnector.fetchAndGetFormData[SubsidiariesModel](Matchers.eq(KeystoreKeys.subsidiaries))(Matchers.any(), Matchers.any(), Matchers.any()))
@@ -437,6 +465,8 @@ class LifetimeAllowanceExceededErrorControllerSpec extends BaseSpec {
         .thenReturn(Future.successful(Option(trueKIModel)))
       when(mockS4lConnector.fetchAndGetFormData[HadPreviousRFIModel](Matchers.eq(KeystoreKeys.hadPreviousRFI))(Matchers.any(), Matchers.any(), Matchers.any()))
         .thenReturn(Future.successful(Option(keyStoreSavedHadPreviousRFIYes)))
+      when(mockS4lConnector.fetchAndGetFormData[HadOtherInvestmentsModel](Matchers.eq(KeystoreKeys.hadOtherInvestments))
+        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(hadOtherInvestmentsModelYes)))
       when(mockS4lConnector.fetchAndGetFormData[CommercialSaleModel](Matchers.eq(KeystoreKeys.commercialSale))(Matchers.any(), Matchers.any(), Matchers.any()))
         .thenReturn(Future.successful(Option(keyStoreSavedCommercialSale1Year)))
       when(mockS4lConnector.fetchAndGetFormData[SubsidiariesModel](Matchers.eq(KeystoreKeys.subsidiaries))(Matchers.any(), Matchers.any(), Matchers.any()))
@@ -463,6 +493,8 @@ class LifetimeAllowanceExceededErrorControllerSpec extends BaseSpec {
         .thenReturn(Future.successful(Option(falseKIModel)))
       when(mockS4lConnector.fetchAndGetFormData[HadPreviousRFIModel](Matchers.eq(KeystoreKeys.hadPreviousRFI))(Matchers.any(), Matchers.any(), Matchers.any()))
         .thenReturn(Future.successful(Option(keyStoreSavedHadPreviousRFIYes)))
+      when(mockS4lConnector.fetchAndGetFormData[HadOtherInvestmentsModel](Matchers.eq(KeystoreKeys.hadOtherInvestments))
+        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(hadOtherInvestmentsModelYes)))
       when(mockS4lConnector.fetchAndGetFormData[CommercialSaleModel](Matchers.eq(KeystoreKeys.commercialSale))(Matchers.any(), Matchers.any(), Matchers.any()))
         .thenReturn(Future.successful(Option(keyStoreSavedCommercialSale7YearsOneDay)))
       when(mockS4lConnector.fetchAndGetFormData[SubsidiariesModel](Matchers.eq(KeystoreKeys.subsidiaries))(Matchers.any(), Matchers.any(), Matchers.any()))
@@ -489,6 +521,8 @@ class LifetimeAllowanceExceededErrorControllerSpec extends BaseSpec {
         .thenReturn(Future.successful(Option(falseKIModel)))
       when(mockS4lConnector.fetchAndGetFormData[HadPreviousRFIModel](Matchers.eq(KeystoreKeys.hadPreviousRFI))(Matchers.any(), Matchers.any(), Matchers.any()))
         .thenReturn(Future.successful(Option(keyStoreSavedHadPreviousRFIYes)))
+      when(mockS4lConnector.fetchAndGetFormData[HadOtherInvestmentsModel](Matchers.eq(KeystoreKeys.hadOtherInvestments))
+        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(hadOtherInvestmentsModelYes)))
       when(mockS4lConnector.fetchAndGetFormData[CommercialSaleModel](Matchers.eq(KeystoreKeys.commercialSale))(Matchers.any(), Matchers.any(), Matchers.any()))
         .thenReturn(Future.successful(Option(keyStoreSavedCommercialSale10YearsOneDay)))
       when(mockS4lConnector.fetchAndGetFormData[SubsidiariesModel](Matchers.eq(KeystoreKeys.subsidiaries))(Matchers.any(), Matchers.any(), Matchers.any()))
@@ -514,6 +548,8 @@ class LifetimeAllowanceExceededErrorControllerSpec extends BaseSpec {
         Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(trueKIModel)))
       when(mockS4lConnector.fetchAndGetFormData[HadPreviousRFIModel](Matchers.eq(KeystoreKeys.hadPreviousRFI))(Matchers.any(),
         Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
+      when(mockS4lConnector.fetchAndGetFormData[HadOtherInvestmentsModel](Matchers.eq(KeystoreKeys.hadOtherInvestments))
+        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(hadOtherInvestmentsModelNo)))
       when(mockS4lConnector.fetchAndGetFormData[CommercialSaleModel](Matchers.eq(KeystoreKeys.commercialSale))(Matchers.any(),
         Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(keyStoreSavedCommercialSale7Years)))
       when(mockS4lConnector.fetchAndGetFormData[SubsidiariesModel](Matchers.eq(KeystoreKeys.subsidiaries))(Matchers.any(),
@@ -533,6 +569,33 @@ class LifetimeAllowanceExceededErrorControllerSpec extends BaseSpec {
     }
   }
 
+  "Sending a valid form submit to the LifetimeAllowanceExceededErrorController for first investment with empty HadOtherInvestments and not exceeded lifetime limit" should {
+    "redirect to the correct page" in {
+      when(mockS4lConnector.fetchAndGetFormData[KiProcessingModel](Matchers.eq(KeystoreKeys.kiProcessingModel))(Matchers.any(),
+        Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(trueKIModel)))
+      when(mockS4lConnector.fetchAndGetFormData[HadPreviousRFIModel](Matchers.eq(KeystoreKeys.hadPreviousRFI))(Matchers.any(),
+        Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(keyStoreSavedHadPreviousRFINo)))
+      when(mockS4lConnector.fetchAndGetFormData[HadOtherInvestmentsModel](Matchers.eq(KeystoreKeys.hadOtherInvestments))
+        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
+      when(mockS4lConnector.fetchAndGetFormData[CommercialSaleModel](Matchers.eq(KeystoreKeys.commercialSale))(Matchers.any(),
+        Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(keyStoreSavedCommercialSale7Years)))
+      when(mockS4lConnector.fetchAndGetFormData[SubsidiariesModel](Matchers.eq(KeystoreKeys.subsidiaries))(Matchers.any(),
+        Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
+      when(mockS4lConnector.fetchAndGetFormData[DateOfIncorporationModel](Matchers.eq(KeystoreKeys.dateOfIncorporation))(Matchers.any(),
+        Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
+      when(mockS4lConnector.fetchAndGetFormData[Vector[PreviousSchemeModel]](Matchers.eq(KeystoreKeys.previousSchemes))(Matchers.any(),
+        Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(previousSchemeTrueKIVectorList)))
+      mockEnrolledRequest(eisSchemeTypesModel)
+      submitWithSessionAndAuth(TestController.submit,
+        "investmentAmount" -> "123456")(
+        result => {
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(routes.HadOtherInvestmentsController.show().url)
+        }
+      )
+    }
+  }
+
   "Sending a valid form submit to the LifetimeAllowanceExceededErrorController for the first investment with an empty Commercial sale " +
     "and not exceeded lifetime limit" should {
     "redirect to commercial-sale page" in {
@@ -540,6 +603,8 @@ class LifetimeAllowanceExceededErrorControllerSpec extends BaseSpec {
         .thenReturn(Future.successful(Option(trueKIModel)))
       when(mockS4lConnector.fetchAndGetFormData[HadPreviousRFIModel](Matchers.eq(KeystoreKeys.hadPreviousRFI))(Matchers.any(), Matchers.any(), Matchers.any()))
         .thenReturn(Future.successful(Option(keyStoreSavedHadPreviousRFIYes)))
+      when(mockS4lConnector.fetchAndGetFormData[HadOtherInvestmentsModel](Matchers.eq(KeystoreKeys.hadOtherInvestments))
+        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(hadOtherInvestmentsModelYes)))
       when(mockS4lConnector.fetchAndGetFormData[CommercialSaleModel](Matchers.eq(KeystoreKeys.commercialSale))(Matchers.any(), Matchers.any(), Matchers.any()))
         .thenReturn(Future.successful(None))
       when(mockS4lConnector.fetchAndGetFormData[SubsidiariesModel](Matchers.eq(KeystoreKeys.subsidiaries))(Matchers.any(), Matchers.any(), Matchers.any()))
@@ -566,6 +631,8 @@ class LifetimeAllowanceExceededErrorControllerSpec extends BaseSpec {
         .thenReturn(Future.successful(None))
       when(mockS4lConnector.fetchAndGetFormData[HadPreviousRFIModel](Matchers.eq(KeystoreKeys.hadPreviousRFI))(Matchers.any(), Matchers.any(), Matchers.any()))
         .thenReturn(Future.successful(Option(keyStoreSavedHadPreviousRFIYes)))
+      when(mockS4lConnector.fetchAndGetFormData[HadOtherInvestmentsModel](Matchers.eq(KeystoreKeys.hadOtherInvestments))
+        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(hadOtherInvestmentsModelYes)))
       when(mockS4lConnector.fetchAndGetFormData[CommercialSaleModel](Matchers.eq(KeystoreKeys.commercialSale))(Matchers.any(), Matchers.any(), Matchers.any()))
         .thenReturn(Future.successful(Option(keyStoreSavedCommercialSale7Years)))
       when(mockS4lConnector.fetchAndGetFormData[SubsidiariesModel](Matchers.eq(KeystoreKeys.subsidiaries))(Matchers.any(), Matchers.any(), Matchers.any()))

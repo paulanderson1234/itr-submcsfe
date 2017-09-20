@@ -38,18 +38,20 @@ trait TotalAmountRaisedHelper {
     for {
       kiModel <- s4lConnector.fetchAndGetFormData[KiProcessingModel](KeystoreKeys.kiProcessingModel)
       prevRFI <- s4lConnector.fetchAndGetFormData[HadPreviousRFIModel](KeystoreKeys.hadPreviousRFI)
+      hadOtherInvestments <- s4lConnector.fetchAndGetFormData[HadOtherInvestmentsModel](KeystoreKeys.hadOtherInvestments)
       comSale <- s4lConnector.fetchAndGetFormData[CommercialSaleModel](KeystoreKeys.commercialSale)
       hasSub <- s4lConnector.fetchAndGetFormData[SubsidiariesModel](KeystoreKeys.subsidiaries)
-      route <- getRoute( prevRFI, comSale, hasSub, kiModel, s4lConnector)
+      route <- getRoute(prevRFI, hadOtherInvestments, comSale, hasSub, kiModel, s4lConnector)
     } yield route
   }
 
-  private def getRoute(prevRFI: Option[HadPreviousRFIModel], commercialSale: Option[CommercialSaleModel],
-               hasSub: Option[SubsidiariesModel], kiProcessingModel: Option[KiProcessingModel],  s4lConnector: S4LConnector)
+  private def getRoute(prevRFI: Option[HadPreviousRFIModel], hadOtherInvestments: Option[HadOtherInvestmentsModel],
+                       commercialSale: Option[CommercialSaleModel], hasSub: Option[SubsidiariesModel], kiProcessingModel: Option[KiProcessingModel],  s4lConnector: S4LConnector)
               (implicit hc: HeaderCarrier, user: TAVCUser): Future[Result] = {
 
     if(kiProcessingModel.isEmpty) Future.successful(Redirect(routes.IsCompanyKnowledgeIntensiveController.show()))
     else if (prevRFI.isEmpty) Future.successful(Redirect(routes.HadPreviousRFIController.show()))
+    else if (hadOtherInvestments.isEmpty) Future.successful(Redirect(routes.HadOtherInvestmentsController.show()))
     else  commercialSale match {
       case Some(sale) if sale.hasCommercialSale == Constants.StandardRadioButtonNoValue => subsidiariesCheck(hasSub,s4lConnector)
       case Some(sale) if sale.hasCommercialSale == Constants.StandardRadioButtonYesValue =>
