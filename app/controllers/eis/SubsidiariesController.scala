@@ -51,7 +51,7 @@ trait SubsidiariesController extends FrontendController with AuthorisedAndEnroll
       }
       else {
         // no back link - user skipping - redirect to start of flow point
-        Future.successful(Redirect(routes.DateOfIncorporationController.show()))
+        Future.successful(Redirect(routes.IsCompanyKnowledgeIntensiveController.show()))
       }
     }
 
