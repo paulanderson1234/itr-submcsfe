@@ -55,7 +55,7 @@ trait TotalAmountRaisedHelper {
     else  commercialSale match {
       case Some(sale) if sale.hasCommercialSale == Constants.StandardRadioButtonNoValue => subsidiariesCheck(hasSub,s4lConnector)
       case Some(sale) if sale.hasCommercialSale == Constants.StandardRadioButtonYesValue =>
-        getPreviousSaleRoute(prevRFI.get, sale, hasSub, kiProcessingModel.get.isKi,s4lConnector)
+        getPreviousSaleRoute(prevRFI.get, hadOtherInvestments.get, sale, hasSub, kiProcessingModel.get.isKi,s4lConnector)
       case None => Future.successful(Redirect(routes.CommercialSaleController.show()))
     }
   }
@@ -83,15 +83,15 @@ trait TotalAmountRaisedHelper {
     }
   }
 
-  private def getPreviousSaleRoute(prevRFI: HadPreviousRFIModel, commercialSale: CommercialSaleModel,
+  private def getPreviousSaleRoute(prevRFI: HadPreviousRFIModel, hadOtherInvestments: HadOtherInvestmentsModel, commercialSale: CommercialSaleModel,
                            hasSub: Option[SubsidiariesModel], isKi: Boolean, s4lConnector: S4LConnector)
                           (implicit hc: HeaderCarrier, user: TAVCUser): Future[Result] = {
 
     val dateWithinRangeRule: Boolean = Validation.checkAgeRule(commercialSale.commercialSaleDay.get,
       commercialSale.commercialSaleMonth.get, commercialSale.commercialSaleYear.get, getAgeLimit(isKi))
 
-    prevRFI match {
-      case rfi if rfi.hadPreviousRFI == Constants.StandardRadioButtonNoValue => {
+    if (prevRFI.hadPreviousRFI == Constants.StandardRadioButtonNoValue &&
+      hadOtherInvestments.hadOtherInvestments == Constants.StandardRadioButtonNoValue){
         // this is first scheme
         if (dateWithinRangeRule) {
           s4lConnector.saveFormData(KeystoreKeys.backLinkNewGeoMarket,
@@ -100,12 +100,7 @@ trait TotalAmountRaisedHelper {
         }
         else subsidiariesCheck(hasSub,s4lConnector)
       }
-      case rfi if rfi.hadPreviousRFI == Constants.StandardRadioButtonYesValue => {
-        // subsequent scheme
-        if (dateWithinRangeRule) Future.successful(Redirect(routes.UsedInvestmentReasonBeforeController.show()))
-        else subsidiariesCheck(hasSub,s4lConnector)
-      }
-
-    }
+    else if (dateWithinRangeRule) Future.successful(Redirect(routes.UsedInvestmentReasonBeforeController.show()))
+    else subsidiariesCheck(hasSub,s4lConnector)
   }
 }
