@@ -21,6 +21,7 @@ import common.{Constants, KeystoreKeys}
 import connectors.SubmissionConnector
 import controllers.eis.{AddAnotherInvestorController, routes}
 import models.AddAnotherInvestorModel
+import models.repayments.SharesRepaymentDetailsModel
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.mockito.Matchers
@@ -42,9 +43,14 @@ class AddAnotherInvestorSpec extends ViewSpec {
     override lazy val submissionConnector: SubmissionConnector = mockSubmissionConnector
   }
 
-  def setupMocks(addAnotherInvestorModel: Option[AddAnotherInvestorModel] = None): Unit =
+  def setupMocks(addAnotherInvestorModel: Option[AddAnotherInvestorModel] = None): Unit = {
     when(mockS4lConnector.fetchAndGetFormData[AddAnotherInvestorModel](Matchers.eq(KeystoreKeys.addAnotherInvestor))
-      (Matchers.any(), Matchers.any(),Matchers.any())).thenReturn(Future.successful(addAnotherInvestorModel))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(addAnotherInvestorModel))
+
+    when(mockS4lConnector.fetchAndGetFormData[Vector[SharesRepaymentDetailsModel]](Matchers.eq(KeystoreKeys.sharesRepaymentDetails))
+      (Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Some(validSharesRepaymentDetailsVector))
+  }
 
   "The AddAnotherInvestor page" should {
 

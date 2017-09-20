@@ -106,6 +106,25 @@ class WhoRepaidSharesControllerSpec extends BaseSpec {
     }
   }
 
+  "Submitting a valid request with validSharesRepaymentDetailsVector when authenticated and enrolled" should {
+    "redirect to the correct page" in {
+
+      val formInput = Seq(
+        "forename" -> "Bill",
+        "surname" -> "Smith",
+        "processingId" -> "2")
+      setupMocks(Some(validSharesRepaymentDetailsVector), Some(validInitialBackLink))
+      mockEnrolledRequest(eisSchemeTypesModel)
+      submitWithSessionAndAuth(TestController.submit(), formInput: _*)(
+        result => {
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe
+            Some(controllers.eis.routes.SharesRepaymentTypeController.show(2).url)
+        }
+      )
+    }
+  }
+
   "Submitting an invalid request when authenticated and enrolled" should {
     "respond with a bad request with form errors" in {
 

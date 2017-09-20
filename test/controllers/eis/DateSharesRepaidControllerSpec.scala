@@ -73,7 +73,7 @@ class DateSharesRepaidControllerSpec extends BaseSpec {
   "Sending a GET request to DateSharesRepaidController when authenticated and enrolled" should {
     "return a 200 when a saved model is fetched from storage" in {
      setupMocks(Some(validSharesRepaymentDetailsVector),
-       Some(controllers.eis.routes.WhoRepaidSharesController.show(Some(processingId)).toString))
+       Some(controllers.eis.routes.SharesRepaymentTypeController.show(processingId).toString))
       mockEnrolledRequest(eisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show(processingId))(
         result => status(result) shouldBe OK
@@ -81,8 +81,8 @@ class DateSharesRepaidControllerSpec extends BaseSpec {
     }
 
     "provide an empty model and return an OK 200 when nothing is fetched from storage" in {
-      setupMocks(Some(validSharesRepaymentDetailsVector),
-        Some(controllers.eis.routes.WhoRepaidSharesController.show(Some(processingId)).toString))
+      setupMocks(Some(Vector.empty :+ sharesRepaymentDetailsMissingRepaymentDate),
+        Some(controllers.eis.routes.SharesRepaymentTypeController.show(processingId).toString))
       mockEnrolledRequest(eisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show(processingId))(
         result => status(result) shouldBe OK
@@ -93,7 +93,7 @@ class DateSharesRepaidControllerSpec extends BaseSpec {
   "Sending a valid form submit to the DateSharesRepaidController when authenticated and enrolled" should {
     "redirect to the expected page" in {
       setupMocks(Some(validSharesRepaymentDetailsVector),
-       Some(controllers.eis.routes.WhoRepaidSharesController.show(Some(processingId)).toString))
+       Some(controllers.eis.routes.SharesRepaymentTypeController.show(processingId).toString))
       mockEnrolledRequest(eisSchemeTypesModel)
 
       val formInput = Seq(
@@ -104,7 +104,7 @@ class DateSharesRepaidControllerSpec extends BaseSpec {
       submitWithSessionAndAuth(TestController.submit,formInput:_*)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(routes.AmountSharesRepaymentController.show(processingId+1).url)
+          redirectLocation(result) shouldBe Some(routes.AmountSharesRepaymentController.show(processingId + 1).url)
         }
       )
     }
@@ -113,7 +113,7 @@ class DateSharesRepaidControllerSpec extends BaseSpec {
   "Sending an invalid form submission with validation errors to the DateSharesRepaidController when authenticated and enrolled" should {
     "return a bad request" in {
       setupMocks(None,
-        Some(controllers.eis.routes.WhoRepaidSharesController.show(Some(processingId)).toString))
+        Some(controllers.eis.routes.SharesRepaymentTypeController.show(processingId).toString))
       mockEnrolledRequest(eisSchemeTypesModel)
 
       val formInput = Seq(

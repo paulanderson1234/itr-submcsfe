@@ -21,7 +21,6 @@ import common.{Constants, KeystoreKeys}
 import config.FrontendAuthConnector
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
-import models._
 import models.repayments.{AnySharesRepaymentModel, SharesRepaymentDetailsModel}
 import org.mockito.Matchers
 import org.mockito.Mockito._
@@ -64,9 +63,6 @@ class AnySharesRepaymentControllerSpec extends BaseSpec {
       Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
       .thenReturn(Future.successful(CacheMap("", Map())))
 
-    when(mockS4lConnector.fetchAndGetFormData[Vector[SharesRepaymentDetailsModel]](Matchers.eq(KeystoreKeys.sharesRepaymentDetails))
-      (Matchers.any(), Matchers.any(), Matchers.any()))
-      .thenReturn(Some(validSharesRepaymentDetailsVector))
   }
 
   "Sending a GET request to AnySharesRepaymentController when authenticated and enrolled" should {
@@ -87,10 +83,32 @@ class AnySharesRepaymentControllerSpec extends BaseSpec {
     }
   }
 
-  "Sending a valid Yes form submission to the AnySharesRepaymentController when authenticated and enrolled" should {
+  "Sending a valid Yes form submission to the AnySharesRepaymentController with a valid SharesRepaymentDetailsModel " +
+    "when authenticated and enrolled" should {
     "redirect to the expected page condition is met" in {
       val formInput = "anySharesRepayment" -> Constants.StandardRadioButtonYesValue
       setupMocks()
+      when(mockS4lConnector.fetchAndGetFormData[Vector[SharesRepaymentDetailsModel]](Matchers.eq(KeystoreKeys.sharesRepaymentDetails))
+        (Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Some(validSharesRepaymentDetailsVector))
+      mockEnrolledRequest(eisSchemeTypesModel)
+      submitWithSessionAndAuth(TestController.submit,formInput)(
+        result => {
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(routes.ReviewPreviousRepaymentsController.show().url)
+        }
+      )
+    }
+  }
+
+  "Sending a valid Yes form submission to the AnySharesRepaymentController with a no or empty SharesRepaymentDetailsModel " +
+    "when authenticated and enrolled" should {
+    "redirect to the expected page condition is met" in {
+      val formInput = "anySharesRepayment" -> Constants.StandardRadioButtonYesValue
+      setupMocks()
+      when(mockS4lConnector.fetchAndGetFormData[Vector[SharesRepaymentDetailsModel]](Matchers.eq(KeystoreKeys.sharesRepaymentDetails))
+        (Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(None)
       mockEnrolledRequest(eisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,formInput)(
         result => {
@@ -101,10 +119,32 @@ class AnySharesRepaymentControllerSpec extends BaseSpec {
     }
   }
 
-  "Sending a valid No form submission to the AnySharesRepaymentController when authenticated and enrolled" should {
+  "Sending a valid No form submission to the AnySharesRepaymentController with a valid SharesRepaymentDetailsModel " +
+    "when authenticated and enrolled" should {
     "redirect to the expected page" in {
       val formInput = "anySharesRepayment" -> Constants.StandardRadioButtonNoValue
       setupMocks()
+      when(mockS4lConnector.fetchAndGetFormData[Vector[SharesRepaymentDetailsModel]](Matchers.eq(KeystoreKeys.sharesRepaymentDetails))
+        (Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Some(validSharesRepaymentDetailsVector))
+      mockEnrolledRequest(eisSchemeTypesModel)
+      submitWithSessionAndAuth(TestController.submit,formInput)(
+        result => {
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(routes.ReviewPreviousRepaymentsController.show().url)
+        }
+      )
+    }
+  }
+
+  "Sending a valid No form submission to the AnySharesRepaymentController with a no or empty SharesRepaymentDetailsModel " +
+    "when authenticated and enrolled" should {
+    "redirect to the expected page" in {
+      val formInput = "anySharesRepayment" -> Constants.StandardRadioButtonNoValue
+      setupMocks()
+      when(mockS4lConnector.fetchAndGetFormData[Vector[SharesRepaymentDetailsModel]](Matchers.eq(KeystoreKeys.sharesRepaymentDetails))
+        (Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(None)
       mockEnrolledRequest(eisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,formInput)(
         result => {

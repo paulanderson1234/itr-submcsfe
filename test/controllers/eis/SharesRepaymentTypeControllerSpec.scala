@@ -69,7 +69,7 @@ class SharesRepaymentTypeControllerSpec extends BaseSpec {
   "Sending a GET request to SharesRepaymentTypeController when authenticated and enrolled" should {
     "return a 200 when something is fetched from storage" in {
       setupMocks(Some(validSharesRepaymentDetailsVector),
-        Some(controllers.eis.routes.WhoRepaidSharesController.show(dateSharesRepaidModel.processingId).toString))
+        Some(controllers.eis.routes.WhoRepaidSharesController.show(Some(1)).toString))
       mockEnrolledRequest(eisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show(1))(
         result => status(result) shouldBe OK
@@ -77,8 +77,8 @@ class SharesRepaymentTypeControllerSpec extends BaseSpec {
     }
 
     "provide an empty model and return a 200 when nothing is fetched using storage" in {
-      setupMocks(Some(validSharesRepaymentDetailsVector),
-        Some(controllers.eis.routes.WhoRepaidSharesController.show(dateSharesRepaidModel.processingId).toString))
+      setupMocks(Some(Vector.empty :+ sharesRepaymentDetailsMissingRepaymentType),
+        Some(controllers.eis.routes.WhoRepaidSharesController.show(Some(1)).toString))
       mockEnrolledRequest(eisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show(1))(
         result => status(result) shouldBe OK
@@ -86,15 +86,16 @@ class SharesRepaymentTypeControllerSpec extends BaseSpec {
     }
   }
 
-  "Sending a validshares form submission to the SharesRepaymentTypeController when authenticated and enrolled" should {
+  "Sending a valid shares form submission to the SharesRepaymentTypeController when authenticated and enrolled" should {
     "redirect to the expected page" in {
       val formInput = "sharesRepaymentType" -> Constants.repaymentTypeShares
-      setupMocks(Some(validSharesRepaymentDetailsVector), Some(validInitialBackLink))
+      setupMocks(Some(validSharesRepaymentDetailsVector),
+        Some(controllers.eis.routes.WhoRepaidSharesController.show(Some(2)).toString))
       mockEnrolledRequest(eisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,formInput)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(controllers.eis.routes.DateSharesRepaidController.show(1).url)
+          redirectLocation(result) shouldBe Some(controllers.eis.routes.DateSharesRepaidController.show(2).url)
         }
       )
     }
@@ -104,12 +105,12 @@ class SharesRepaymentTypeControllerSpec extends BaseSpec {
     "redirect to the expected page" in {
       val formInput = "sharesRepaymentType" -> Constants.repaymentTypeDebentures
       setupMocks(Some(validSharesRepaymentDetailsVector),
-        Some(controllers.eis.routes.WhoRepaidSharesController.show(dateSharesRepaidModel.processingId).toString))
+        Some(controllers.eis.routes.WhoRepaidSharesController.show(Some(2)).toString))
       mockEnrolledRequest(eisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,formInput)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(controllers.eis.routes.DateSharesRepaidController.show(1).url)
+          redirectLocation(result) shouldBe Some(controllers.eis.routes.DateSharesRepaidController.show(2).url)
         }
       )
     }
@@ -118,6 +119,8 @@ class SharesRepaymentTypeControllerSpec extends BaseSpec {
   "Sending an invalid form submission with validation errors to the SharesRepaymentTypeController when authenticated and enrolled" should {
     "respond with a bad request" in {
       mockEnrolledRequest(eisSchemeTypesModel)
+      setupMocks(Some(validSharesRepaymentDetailsVector),
+        Some(controllers.eis.routes.WhoRepaidSharesController.show(Some(1)).toString))
       val formInput = "sharesRepaymentType" -> ""
       submitWithSessionAndAuth(TestController.submit,formInput)(
         result => {

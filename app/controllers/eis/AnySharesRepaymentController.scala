@@ -55,9 +55,9 @@ trait AnySharesRepaymentController extends FrontendController with AuthorisedAnd
         Future.successful(BadRequest(AnySharesRepayment(formWithErrors)))
       },
       validFormData => {
-        s4lConnector.saveFormData(KeystoreKeys.anySharesRepayment, validFormData)
         validFormData.anySharesRepayment match {
           case Constants.StandardRadioButtonYesValue =>
+            s4lConnector.saveFormData(KeystoreKeys.anySharesRepayment, validFormData)
             s4lConnector.fetchAndGetFormData[Vector[SharesRepaymentDetailsModel]](KeystoreKeys.sharesRepaymentDetails).map {
               case Some(data) if (data.nonEmpty) => Redirect(routes.ReviewPreviousRepaymentsController.show())
               case _ => s4lConnector.saveFormData(KeystoreKeys.backLinkWhoRepaidShares, routes.AnySharesRepaymentController.show().url)
@@ -66,7 +66,8 @@ trait AnySharesRepaymentController extends FrontendController with AuthorisedAnd
           case Constants.StandardRadioButtonNoValue =>
             s4lConnector.fetchAndGetFormData[Vector[SharesRepaymentDetailsModel]](KeystoreKeys.sharesRepaymentDetails).map {
               case Some(data) if (data.nonEmpty) => Redirect(routes.ReviewPreviousRepaymentsController.show())
-              case _ => s4lConnector.saveFormData(KeystoreKeys.backLinkWasAnyValueReceived, routes.AnySharesRepaymentController.show().url)
+              case _ => s4lConnector.saveFormData(KeystoreKeys.anySharesRepayment, validFormData)
+                s4lConnector.saveFormData(KeystoreKeys.backLinkWasAnyValueReceived, routes.AnySharesRepaymentController.show().url)
                 Redirect(routes.WasAnyValueReceivedController.show())
             }
         }

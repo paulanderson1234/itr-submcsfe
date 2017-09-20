@@ -19,7 +19,7 @@ package views.eis
 import auth.{MockAuthConnector, MockConfigEISFlow}
 import common.KeystoreKeys
 import controllers.eis.{DateSharesRepaidController, routes}
-import models.repayments.DateSharesRepaidModel
+import models.repayments.{DateSharesRepaidModel, SharesRepaymentDetailsModel}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.mockito.Matchers
@@ -44,6 +44,13 @@ class DateSharesRepaidSpec extends ViewSpec {
     when(mockS4lConnector.fetchAndGetFormData[DateSharesRepaidModel](Matchers.eq(KeystoreKeys.dateSharesRepaid))
       (Matchers.any(), Matchers.any(), Matchers.any()))
         .thenReturn(Future.successful(dateSharesRepaidModel))
+    when(mockS4lConnector.fetchAndGetFormData[Vector[SharesRepaymentDetailsModel]](Matchers.eq(KeystoreKeys.sharesRepaymentDetails))
+      (Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Some(inCompleteSharesRepaymentDetailsVector))
+
+    when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.backLinkSharesRepaymentDate))
+      (Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(Some(controllers.eis.routes.SharesRepaymentTypeController.show(1).toString)))
   }
 
    "The DateSharesRepaid page" should {

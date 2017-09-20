@@ -52,16 +52,11 @@ trait ReviewPreviousRepaymentsController extends FrontendController with Authori
 
   def remove(id: Int): Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user =>
     implicit request =>
-      PreviousRepaymentsHelper.removeKeystorePreviousRepayment(s4lConnector, id).map {
-        case _ => Redirect(controllers.eis.routes.ReviewPreviousRepaymentsController.show())
-      }
-
+      Future.successful(Redirect(controllers.eis.routes.DeleteSharesRepaymentController.show(id)))
   }
 
   def change(id: Int): Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user =>
     implicit request =>
-      s4lConnector.saveFormData(KeystoreKeys.backLinkWhoRepaidShares,
-        routes.ReviewPreviousRepaymentsController.show().url)
       Future.successful(Redirect(controllers.eis.routes.WhoRepaidSharesController.show(Some(id))))
   }
 

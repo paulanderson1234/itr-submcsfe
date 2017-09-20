@@ -17,164 +17,164 @@
 package controllers.eis
 
 import auth.{MockAuthConnector, MockConfig}
-import common.{Constants, KeystoreKeys}
+import common.KeystoreKeys
 import config.{AppConfig, FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
-import models.investorDetails.{InvestorDetailsModel, PreviousShareHoldingModel}
+import models.repayments.SharesRepaymentDetailsModel
 import org.mockito.Matchers
 import org.mockito.Mockito._
 import play.api.test.Helpers._
 import uk.gov.hmrc.play.frontend.auth.connectors.AuthConnector
 
-import scala.concurrent.Future
-
 
 class ReviewPreviousRepaymentsControllerSpec extends BaseSpec{
 
-  lazy val controller = new PreviousShareHoldingsReviewController {
+  lazy val testController = new ReviewPreviousRepaymentsController {
     override lazy val s4lConnector: S4LConnector = mockS4lConnector
     override lazy val enrolmentConnector: EnrolmentConnector = mockEnrolmentConnector
     override lazy val applicationConfig: AppConfig = MockConfig
     override lazy val authConnector: AuthConnector = MockAuthConnector
   }
 
-  val shareHoldersModelForReview = Vector(PreviousShareHoldingModel(investorShareIssueDateModel = Some(investorShareIssueDateModel1),
-    numberOfPreviouslyIssuedSharesModel = Some (numberOfPreviouslyIssuedSharesModel1),
-    previousShareHoldingNominalValueModel = Some(previousShareHoldingNominalValueModel1),
-    previousShareHoldingDescriptionModel = Some(previousShareHoldingDescriptionModel1),
-    processingId = Some(1), investorProcessingId = Some(2)))
-
-  val investorModelForReview = InvestorDetailsModel(Some(investorModel2), Some(companyOrIndividualModel2), Some(companyDetailsModel2), None,
-    Some(numberOfSharesPurchasedModel2), Some(howMuchSpentOnSharesModel2), Some(isExistingShareHolderModelYes),
-    previousShareHoldingModels = Some(shareHoldersModelForReview), processingId = Some(2))
-
-  val listOfInvestorsEmptyShareHoldings =  Vector(validModelWithPrevShareHoldings.copy(previousShareHoldingModels = Some(Vector())))
-  val listOfInvestorsWithShareHoldings =  Vector(investorModelForReview)
-  val listOfInvestorsMissingNumberOfPreviouslyIssuedShares =  Vector(validModelWithPrevShareHoldings.copy(previousShareHoldingModels =
-    Some(Vector(PreviousShareHoldingModel(previousShareHoldingDescriptionModel = Some(previousShareHoldingDescriptionModel1), processingId = Some(1))))))
-
-  def setupMocks(investorDetailsModel: Option[Vector[InvestorDetailsModel]]): Unit = {
-    mockEnrolledRequest(eisSchemeTypesModel)
-
-    when(mockS4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](Matchers.eq(KeystoreKeys.investorDetails))
+  def setupMocks(sharesRepaymentDetails: Option[Vector[SharesRepaymentDetailsModel]] = None): Unit = {
+    when(mockS4lConnector.fetchAndGetFormData[Vector[SharesRepaymentDetailsModel]](Matchers.eq(KeystoreKeys.sharesRepaymentDetails))
       (Matchers.any(), Matchers.any(), Matchers.any()))
-      .thenReturn(Future.successful(investorDetailsModel))
-
+      .thenReturn(sharesRepaymentDetails)
+    mockEnrolledRequest(eisSchemeTypesModel)
   }
 
   "The Number Of Previously Issued Shares controller" should {
 
     "use the correct auth connector" in {
-      PreviousShareHoldingsReviewController.authConnector shouldBe FrontendAuthConnector
+      ReviewPreviousRepaymentsController.authConnector shouldBe FrontendAuthConnector
     }
 
     "use the correct config" in {
-      PreviousShareHoldingsReviewController.applicationConfig shouldBe FrontendAppConfig
+      ReviewPreviousRepaymentsController.applicationConfig shouldBe FrontendAppConfig
     }
 
     "use the correct keystore connector" in {
-      PreviousShareHoldingsReviewController.s4lConnector shouldBe S4LConnector
+      ReviewPreviousRepaymentsController.s4lConnector shouldBe S4LConnector
     }
 
     "use the correct enrolment connector" in {
-      PreviousShareHoldingsReviewController.enrolmentConnector shouldBe EnrolmentConnector
+      ReviewPreviousRepaymentsController.enrolmentConnector shouldBe EnrolmentConnector
     }
   }
 
-  "Sending a GET request to PreviousShareHoldingsReview Controller when authenticated and enrolled" should {
+  "When a GET request is made to ReviewPreviousRepaymentsController show method" which {
 
-    "Redirect to IsExistingShareHolder page" when {
-      "there is no share holders present" in {
-        mockEnrolledRequest(eisSchemeTypesModel)
-        setupMocks(Some(onlyInvestorOrNomineeVectorList))
-        showWithSessionAndAuth(controller.show(2))(
-          result => {
-            status(result) shouldBe SEE_OTHER
-            redirectLocation(result) shouldBe Some(routes.AddInvestorOrNomineeController.show().url)
-          }
-        )
-      }
-
-      "no 'investor details list' is retrieved" in {
-        mockEnrolledRequest(eisSchemeTypesModel)
+    "does not find any repayments" should {
+      lazy val result = {
         setupMocks(None)
-        showWithSessionAndAuth(controller.show(2))(
-          result => {
-            status(result) shouldBe SEE_OTHER
-            redirectLocation(result) shouldBe Some(controllers.eis.routes.AddInvestorOrNomineeController.show(None).url)
-          }
-        )
+        testController.show()(authorisedFakeRequest)
       }
 
-
-      "an 'investor details list' is retrieved and an INVALID investor details ID is passed" in {
-        mockEnrolledRequest(eisSchemeTypesModel)
-        setupMocks(Some(listOfInvestorsComplete))
-        showWithSessionAndAuth(controller.show(Constants.obviouslyInvalidId))(
-          result => {
-            status(result) shouldBe SEE_OTHER
-            redirectLocation(result) shouldBe Some(controllers.eis.routes.AddInvestorOrNomineeController.show(None).url)
-          }
-        )
+      "return a status of 303" in {
+        status(result) shouldBe SEE_OTHER
       }
 
-
-      "an 'investor details list' is retrieved, a VALID investor details " +
-        "ID is passed and the investor details contains an empty list of share holdings" in {
-        mockEnrolledRequest(eisSchemeTypesModel)
-        setupMocks(Some(listOfInvestorsEmptyShareHoldings))
-        showWithSessionAndAuth(controller.show(2))(
-          result => {
-            status(result) shouldBe SEE_OTHER
-            redirectLocation(result) shouldBe Some(controllers.eis.routes.IsExistingShareHolderController.show(2).url)
-          }
-        )
+      "redirect the user to the AnySharesRepayment page" in {
+        redirectLocation(result) shouldBe Some(controllers.eis.routes.AnySharesRepaymentController.show().url)
       }
     }
 
 
-    "Load a populated ShareHolding review page" when {
-      "an 'investor details list' is retrieved, a VALID investor details " +
-        "ID is defined and a VALID share holding Id is provided" in {
-        mockEnrolledRequest(eisSchemeTypesModel)
-        setupMocks(Some(listOfInvestorsWithShareHoldings))
-        showWithSessionAndAuth(controller.show(2))(
-          result => {
-            status(result) shouldBe OK
-          }
-        )
+    "finds previous repayments details" should {
+      lazy val result = {
+        setupMocks(Some(validSharesRepaymentDetailsVector))
+        testController.show()(authorisedFakeRequest)
       }
-    }
 
-  }
-
-  "Submitting to the PreviousShareHoldingsReviewController when authenticated and enrolled" should {
-    "redirect to the AddInvestorOrNominee page if the form 'was not' previously populated" in {
-
-      setupMocks(Some(listOfInvestorsComplete))
-      mockEnrolledRequest(eisSchemeTypesModel)
-      submitWithSessionAndAuth(controller.submit(1))(
-        result => {
-          status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe
-            Some(controllers.eis.routes.AddAnotherShareholdingController.show(1).url)
-        }
-      )
+      "return a status of 200" in {
+        status(result) shouldBe OK
+      }
     }
   }
 
-  "By removing the share holder the PreviousShareHoldingsReviewController when authenticated and enrolled" should {
-    "redirect to the DeletePreviousShareHolderController page " in {
-      setupMocks(Some(listOfInvestorsWithShareHoldings))
-      mockEnrolledRequest(eisSchemeTypesModel)
-      submitWithSessionAndAuth(controller.remove(2, 1))(
-        result => {
-          status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe
-            Some(controllers.eis.routes.DeletePreviousShareHolderController.show(2, 1).url)
-        }
-      )
+  "When a POST request is made to ReviewPreviousRepaymentsController submit method" which {
+
+    "finds previous repayments details which are all Valid" should {
+      lazy val result = {
+        setupMocks(Some(validSharesRepaymentDetailsVector))
+        testController.submit()(authorisedFakeRequest)
+      }
+
+      "return a status of 303" in {
+        status(result) shouldBe SEE_OTHER
+      }
+
+      "Redirect to the AddAnotherInvestorOrNominee page" in {
+        redirectLocation(result) shouldBe Some(controllers.eis.routes.WasAnyValueReceivedController.show().url)
+      }
+
     }
+  }
+
+  "When a GET request is made to ReviewPreviousRepaymentsController change method" which {
+
+    "does not find any repayments" should {
+      lazy val result = {
+        setupMocks(Some(inCompleteSharesRepaymentDetailsVector))
+        testController.change(2)(authorisedFakeRequest)
+      }
+
+      "return a status of 303" in {
+        status(result) shouldBe SEE_OTHER
+      }
+
+      "redirect the user to the WhoRepaidSharesController page" in {
+        redirectLocation(result) shouldBe Some(controllers.eis.routes.WhoRepaidSharesController.show(Some(2)).url)
+      }
+    }
+
+
+    "finds previous repayment details which are all valid" should {
+      lazy val result = {
+        setupMocks(Some(validSharesRepaymentDetailsVector))
+        testController.change(2)(authorisedFakeRequest)
+      }
+
+      "return a status of 303" in {
+        status(result) shouldBe SEE_OTHER
+      }
+
+      "Redirect to the WhoRepaidSharesController page" in {
+        redirectLocation(result) shouldBe Some(controllers.eis.routes.WhoRepaidSharesController.show(Some(2)).url)
+      }
+    }
+
+    "finds previous repayment details, some of which are incomplete" should {
+      lazy val result = {
+        setupMocks(Some(inCompleteSharesRepaymentDetailsVector))
+        testController.change(1)(authorisedFakeRequest)
+      }
+
+      "return a status of 303" in {
+        status(result) shouldBe 303
+      }
+
+      "Redirect to the itself page" in {
+        redirectLocation(result) shouldBe Some(controllers.eis.routes.WhoRepaidSharesController.show(Some(1)).url)
+      }
+    }
+  }
+
+  "Making a GET request to the ReviewAllInvestorsController remove method" should {
+
+    lazy val result = {
+      setupMocks(Some(inCompleteSharesRepaymentDetailsVector))
+      testController.remove(1)(authorisedFakeRequest)
+    }
+
+    "return a status of 303" in {
+      status(result) shouldBe SEE_OTHER
+    }
+
+    "redirect to the remove investor page" in {
+      redirectLocation(result) shouldBe Some(controllers.eis.routes.DeleteSharesRepaymentController.show(1).url)
+    }
+
   }
 }

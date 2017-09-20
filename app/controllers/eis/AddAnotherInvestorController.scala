@@ -45,11 +45,7 @@ trait AddAnotherInvestorController extends FrontendController with AuthorisedAnd
   val submissionConnector: SubmissionConnector
 
   val show = AuthorisedAndEnrolled.async { implicit user => implicit request =>
-    s4lConnector.fetchAndGetFormData[Vector[SharesRepaymentDetailsModel]](KeystoreKeys.sharesRepaymentDetails).map {
-      case Some(data) if (data.nonEmpty) => Redirect(controllers.eis.routes.ReviewPreviousRepaymentsController.show())
-      case _ => Redirect(controllers.eis.routes.AnySharesRepaymentController.show())
-    }
-    //Future.successful(Ok(AddAnotherInvestor(addAnotherInvestorForm)))
+    Future.successful(Ok(AddAnotherInvestor(addAnotherInvestorForm)))
   }
 
 
@@ -65,7 +61,10 @@ trait AddAnotherInvestorController extends FrontendController with AuthorisedAnd
             Future.successful(Redirect(routes.AddInvestorOrNomineeController.show()))
           }
           case Constants.StandardRadioButtonNoValue => {
-            Future.successful(Redirect(routes.WasAnyValueReceivedController.show()))
+            s4lConnector.fetchAndGetFormData[Vector[SharesRepaymentDetailsModel]](KeystoreKeys.sharesRepaymentDetails).map {
+              case Some(data) if (data.nonEmpty) => Redirect(controllers.eis.routes.ReviewPreviousRepaymentsController.show())
+              case _ => Redirect(controllers.eis.routes.AnySharesRepaymentController.show())
+            }
           }
         }
       }

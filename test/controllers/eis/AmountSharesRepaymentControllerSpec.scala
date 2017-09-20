@@ -21,8 +21,7 @@ import common.KeystoreKeys
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
-import models._
-import models.repayments.{AmountSharesRepaymentModel, SharesRepaymentDetailsModel}
+import models.repayments.SharesRepaymentDetailsModel
 import org.mockito.Matchers
 import org.mockito.Mockito._
 import play.api.test.Helpers._
@@ -49,7 +48,7 @@ class AmountSharesRepaymentControllerSpec extends BaseSpec {
     when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.backLinkSharesRepaymentAmount))
       (Matchers.any(), Matchers.any(), Matchers.any()))
       .thenReturn(Future.successful(backUrl))
-		
+
     when(mockS4lConnector.saveFormData(Matchers.eq(KeystoreKeys.amountSharesRepayment),
       Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
     .thenReturn(Future.successful(CacheMap("", Map())))
@@ -81,10 +80,11 @@ class AmountSharesRepaymentControllerSpec extends BaseSpec {
     }
 
     "provide an empty model and return an OK 200 when nothing is fetched from storage" in {
-      setupMocks(None, Some(controllers.eis.routes.DateSharesRepaidController.show(1).toString))
+      setupMocks(Some(Vector.empty :+ sharesRepaymentDetailsMissingRepaymentAmount),
+        Some(controllers.eis.routes.DateSharesRepaidController.show(1).toString))
       mockEnrolledRequest(eisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show(1))(
-        result => status(result) shouldBe SEE_OTHER
+        result => status(result) shouldBe OK
       )
     }
   }
