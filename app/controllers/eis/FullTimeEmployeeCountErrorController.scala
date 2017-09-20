@@ -16,9 +16,11 @@
 
 package controllers.eis
 
-import auth.{AuthorisedAndEnrolledForTAVC, Flow, EIS}
+import auth.{AuthorisedAndEnrolledForTAVC, EIS, Flow}
+import common.{Constants, KeystoreKeys}
 import config.{AppConfig, FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
+import models.KiProcessingModel
 import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.play.frontend.auth.connectors.AuthConnector
 import uk.gov.hmrc.play.frontend.controller.FrontendController
@@ -39,6 +41,9 @@ trait FullTimeEmployeeCountErrorController extends FrontendController with Autho
   val acceptedFlows: Seq[Seq[Flow]] = Seq(Seq(EIS))
 
   val show: Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user => implicit request =>
-    Future.successful(Ok(FullTimeEmployeeCountError()))
+    s4lConnector.fetchAndGetFormData[KiProcessingModel](KeystoreKeys.kiProcessingModel).map {
+      case Some(data) if(data.isKi)=> Ok(FullTimeEmployeeCountError(Constants.schemeTypeEisKi))
+      case _ => Ok(FullTimeEmployeeCountError(Constants.schemeTypeEis))
+    }
   }
 }

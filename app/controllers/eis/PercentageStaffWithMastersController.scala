@@ -67,7 +67,7 @@ trait PercentageStaffWithMastersController extends FrontendController with Autho
             hasPercentageWithMasters = Some(percentageWithMasters))
           s4lConnector.saveFormData(KeystoreKeys.kiProcessingModel, updatedModel)
 
-          if (updatedModel.isKi) {
+          if (updatedModel.isKi && percentageWithMasters) {
             // it's all good - no need to ask more KI questions
             s4lConnector.saveFormData(KeystoreKeys.backLinkFullTimeEmployeeCount,
               routes.PercentageStaffWithMastersController.show().url)
