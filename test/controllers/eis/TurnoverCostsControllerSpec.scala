@@ -119,7 +119,7 @@ class TurnoverCostsControllerSpec extends BaseSpec {
       )
     }
 
-    "redirect to investment grow form when annual turnover check returns true and owns subsidiaries is false" in {
+    "redirect to the correct page when annual turnover check returns true and owns subsidiaries is false" in {
       mockEnrolledRequest(eisSchemeTypesModel)
       setupSubmitMocks(Some(totalAmountRaisedModel), Some(subsidiariesModelNo), Some(true))
       val formInput = Seq(
@@ -137,12 +137,12 @@ class TurnoverCostsControllerSpec extends BaseSpec {
       submitWithSessionAndAuth(TestController.submit, formInput: _*)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(routes.InvestmentGrowController.show().url)
+          redirectLocation(result) shouldBe Some(routes.MarketDescriptionController.show().url)
         }
       )
     }
 
-    "redirect to annual turnover error page when annual turnover check returns false" in {
+    "redirect to the correct page when annual turnover check returns false" in {
       mockEnrolledRequest(eisSchemeTypesModel)
       setupSubmitMocks(Some(totalAmountRaisedModel), Some(subsidiariesModelNo), Some(false))
       val formInput = Seq(
@@ -160,12 +160,12 @@ class TurnoverCostsControllerSpec extends BaseSpec {
       submitWithSessionAndAuth(TestController.submit, formInput: _*)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(routes.AnnualTurnoverErrorController.show().url)
+          redirectLocation(result) shouldBe Some(routes.ThirtyDayRuleController.show().url)
         }
       )
     }
 
-    "redirect to proposed investment page when no proposed investment is returned from keystore" in {
+    "redirect to total amount raised when no total amount raised is returned from keystore" in {
       mockEnrolledRequest(eisSchemeTypesModel)
       setupSubmitMocks(subsidiariesModel = Some(subsidiariesModelYes))
       val formInput = Seq(
