@@ -4,38 +4,36 @@
 
 @(schemeType: String)(implicit request: Request[_], messages: Messages)
 
-@main_template(Messages("page.companyDetails.fullTimeEmployeeCountError.title")) {
+    @main_template(Messages("common.error.soft.title")) {
 
-@backButton(controllers.eis.routes.FullTimeEmployeeCountController.show().url)
+        @backButton(controllers.eis.routes.FullTimeEmployeeCountController.show().url)
 
-<h1 class="heading-xlarge">@Messages("page.companyDetails.fullTimeEmployeeCountError.title")</h1>
+        <h1 class="heading-xlarge">@Messages("common.error.soft.title")</h1>
 
-<div class="form-group">
-    @if(schemeType == Constants.schemeTypeEis){
-    <p>@Messages("page.eis.companyDetails.fullTimeEmployeeCountError.error")</p>
-    }
-    @if(schemeType == Constants.schemeTypeEisKi){
-    <p>@Messages("page.eiski.companyDetails.fullTimeEmployeeCountError.error")</p>
-    }
-</div>
-<div>
+        <div class="form-group">
+            @if(schemeType == Constants.schemeTypeEis){
+            <p>@Messages("page.eis.companyDetails.fullTimeEmployeeCountError.error")</p>
+            }
+            @if(schemeType == Constants.schemeTypeEisKi){
+            <p>@Messages("page.eiski.companyDetails.fullTimeEmployeeCountError.error")</p>
+            }
+        </div>
+
+        <div class="form-group">
             <span>
-                @Messages("page.companyDetails.fullTimeEmployeeCountError.incorrect")
-                <a href="@controllers.eis.routes.FullTimeEmployeeCountController.show().url">@Messages("page.companyDetails.fullTimeEmployeeCountError.incorrect.link")</a>.
+                @Messages("common.changeAnswers.incorrect.text")
+                <a href="@controllers.eis.routes.FullTimeEmployeeCountController.show().url">@Messages("common.changeAnswers.link")</a>.
             </span>
-</div>
-<div class="form-group">
-    <p></p>
-</div>
-<div class="form-group">
-    <h2 class="heading-medium">@Messages("page.companyDetails.fullTimeEmployeeCountError.whatNext")</h2>
+        </div>
 
-    <p>@Messages("page.companyDetails.fullTimeEmployeeCountError.guidance")</p>
-</div>
-<div class="form-group">
-    @form(action = controllers.eis.routes.HadPreviousRFIController.show()) {
-    <button class="btn button" id="next" type="submit">@Messages("common.button.continue")</button>
+        <div class="form-group">
+            <h2 class="heading-medium">@Messages("common.error.soft.secondaryHeading")</h2>
+
+            <p>@Messages("common.error.soft.whatNext.compliance")</p>
+        </div>
+        <div class="form-group">
+            @form(action = controllers.eis.routes.HadPreviousRFIController.show()) {
+            <button class="btn button" id="next" type="submit">@Messages("common.button.continue")</button>
+            }
+        </div>
     }
-</div>
-
-}
