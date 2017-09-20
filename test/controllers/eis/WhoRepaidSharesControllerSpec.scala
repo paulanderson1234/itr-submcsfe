@@ -21,8 +21,7 @@ import common.KeystoreKeys
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
-import models._
-import models.repayments.WhoRepaidSharesModel
+import models.repayments.{SharesRepaymentDetailsModel, WhoRepaidSharesModel}
 import org.mockito.Matchers
 import org.mockito.Mockito._
 import play.api.test.Helpers._
@@ -32,6 +31,9 @@ import scala.concurrent.Future
 
 class WhoRepaidSharesControllerSpec extends BaseSpec {
 
+  lazy val validInitialBackLink = controllers.eis.routes.AnySharesRepaymentController.show().toString
+  lazy val validBackLink = controllers.eis.routes.ReviewPreviousRepaymentsController.show().toString
+
   object TestController extends WhoRepaidSharesController {
     override lazy val applicationConfig = MockConfig
     override lazy val authConnector = MockAuthConnector
@@ -39,10 +41,14 @@ class WhoRepaidSharesControllerSpec extends BaseSpec {
     override lazy val enrolmentConnector = mockEnrolmentConnector
   }
 
-  def setupMocks(whoRepaidSharesModel: Option[WhoRepaidSharesModel] = None): Unit = {
-    when(mockS4lConnector.fetchAndGetFormData[WhoRepaidSharesModel](Matchers.eq(KeystoreKeys.whoRepaidShares))
+  def setupMocks(sharesRepaymentDetails: Option[Vector[SharesRepaymentDetailsModel]] = None, backUrl: Option[String]): Unit = {
+    when(mockS4lConnector.fetchAndGetFormData[Vector[SharesRepaymentDetailsModel]](Matchers.eq(KeystoreKeys.sharesRepaymentDetails))
       (Matchers.any(), Matchers.any(), Matchers.any()))
-      .thenReturn(Future.successful(whoRepaidSharesModel))
+      .thenReturn(sharesRepaymentDetails)
+
+    when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.backLinkWhoRepaidShares))
+      (Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(backUrl))
 
     when(mockS4lConnector.saveFormData(Matchers.eq(KeystoreKeys.whoRepaidShares),
       Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
@@ -66,7 +72,7 @@ class WhoRepaidSharesControllerSpec extends BaseSpec {
 
   "Sending a GET request to WhoRepaidSharesController when authenticated and enrolled" should {
     "return a 200 when a saved model is fetched from storage" in {
-      setupMocks(Some(whoRepaidSharesModel))
+      setupMocks(Some(validSharesRepaymentDetailsVector), Some(validInitialBackLink))
       mockEnrolledRequest(eisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show(Some(1)))(
         result => status(result) shouldBe OK
@@ -74,7 +80,7 @@ class WhoRepaidSharesControllerSpec extends BaseSpec {
     }
 
     "provide an empty model and return an OK 200 when nothing is fetched from storage" in {
-      setupMocks(None)
+      setupMocks(None, Some(validInitialBackLink))
       mockEnrolledRequest(eisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show(Some(1)))(
         result => status(result) shouldBe OK
@@ -88,7 +94,7 @@ class WhoRepaidSharesControllerSpec extends BaseSpec {
       val formInput = Seq(
         "forename" -> "Bill",
         "surname" -> "Smith")
-      setupMocks(None)
+      setupMocks(None, Some(validInitialBackLink))
       mockEnrolledRequest(eisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit(), formInput: _*)(
         result => {
@@ -101,12 +107,13 @@ class WhoRepaidSharesControllerSpec extends BaseSpec {
   }
 
   "Submitting an invalid request when authenticated and enrolled" should {
-    "repsond with a bad request with form errors" in {
+    "respond with a bad request with form errors" in {
 
       val formInput = Seq(
         "forename" -> "",
-        "surname" -> "")
-
+        "surname" -> "",
+        "processingId" -> "")
+      setupMocks(None, Some(validInitialBackLink))
       mockEnrolledRequest(eisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit(), formInput: _*)(
         result => {

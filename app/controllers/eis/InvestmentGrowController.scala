@@ -72,9 +72,12 @@ trait InvestmentGrowController extends FrontendController with AuthorisedAndEnro
         },
       validForm => {
         s4lConnector.saveFormData(KeystoreKeys.investmentGrow, validForm)
-        s4lConnector.saveFormData(KeystoreKeys.backLinkAddInvestorOrNominee,
-          routes.InvestmentGrowController.show().url)
-        Future.successful(Redirect(routes.AddInvestorOrNomineeController.show()))
+        s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
+          case Some(data) if (data.nonEmpty) => Redirect(routes.ReviewAllInvestorsController.show())
+          case _ => s4lConnector.saveFormData(KeystoreKeys.backLinkAddInvestorOrNominee,
+            routes.InvestmentGrowController.show().url)
+            Redirect(routes.AddInvestorOrNomineeController.show())
+        }
       }
     )
   }

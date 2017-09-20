@@ -31,6 +31,17 @@ object PreviousRepaymentsHelper extends PreviousRepaymentsHelper {
 
 trait PreviousRepaymentsHelper {
 
+  def getAllRepaymentsFromKeystore(s4lConnector: connectors.S4LConnector)
+                                  (implicit hc: HeaderCarrier, user: TAVCUser): Future[Vector[SharesRepaymentDetailsModel]] = {
+
+    val result = s4lConnector.fetchAndGetFormData[Vector[SharesRepaymentDetailsModel]](KeystoreKeys.sharesRepaymentDetails).map {
+      case Some(data) => data
+      case None => Vector[SharesRepaymentDetailsModel]()
+    }.recover { case _ => Vector[SharesRepaymentDetailsModel]() }
+
+    result
+  }
+
   def removeKeystorePreviousRepayment(s4lConnector: connectors.S4LConnector, processingId: Int)
                                       (implicit hc: HeaderCarrier, user: TAVCUser): Future[Vector[SharesRepaymentDetailsModel]] = {
 

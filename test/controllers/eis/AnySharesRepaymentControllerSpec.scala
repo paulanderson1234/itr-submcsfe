@@ -22,7 +22,7 @@ import config.FrontendAuthConnector
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
 import models._
-import models.repayments.AnySharesRepaymentModel
+import models.repayments.{AnySharesRepaymentModel, SharesRepaymentDetailsModel}
 import org.mockito.Matchers
 import org.mockito.Mockito._
 import play.api.test.Helpers._
@@ -63,6 +63,10 @@ class AnySharesRepaymentControllerSpec extends BaseSpec {
     when(mockS4lConnector.saveFormData(Matchers.eq(KeystoreKeys.backLinkWasAnyValueReceived),
       Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
       .thenReturn(Future.successful(CacheMap("", Map())))
+
+    when(mockS4lConnector.fetchAndGetFormData[Vector[SharesRepaymentDetailsModel]](Matchers.eq(KeystoreKeys.sharesRepaymentDetails))
+      (Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Some(validSharesRepaymentDetailsVector))
   }
 
   "Sending a GET request to AnySharesRepaymentController when authenticated and enrolled" should {
@@ -114,6 +118,7 @@ class AnySharesRepaymentControllerSpec extends BaseSpec {
   "Sending an invalid form submission with validation errors to the AnySharesRepaymentController when authenticated and enrolled" should {
     "return a bad request status" in {
       mockEnrolledRequest(eisSchemeTypesModel)
+      setupMocks()
       val formInput = "anySharesRepayment" -> ""
       submitWithSessionAndAuth(TestController.submit,formInput)(
         result => {
