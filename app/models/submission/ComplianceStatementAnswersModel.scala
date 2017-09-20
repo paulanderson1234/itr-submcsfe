@@ -18,7 +18,7 @@ package models.submission
 
 import common.Constants
 import connectors.SubmissionConnector
-import models._
+import models.{IsKnowledgeIntensiveModel, _}
 import models.investorDetails.InvestorDetailsModel
 import uk.gov.hmrc.play.http.HeaderCarrier
 
@@ -31,10 +31,11 @@ case class ComplianceStatementAnswersModel(companyDetailsAnswersModel: CompanyDe
                                            investorDetailsAnswersModel: InvestorDetailsAnswersModel,
                                            contactDetailsAnswersModel: ContactDetailsAnswersModel,
                                            supportingDocumentsUploadModel: SupportingDocumentsUploadModel,
-                                           //TODO: add other models required for EIS as below when EIS is submitted
                                            schemeTypes: SchemeTypesModel,
-                                           kiModel: Option[KiModel] = None,
-                                           investmentGrow: Option[InvestmentGrowModel] = None
+                                           kiAnswersModel: Option[KiAnswersModel] = None,
+                                           marketInfo: Option[MarketInfoAnswersModel] = None,
+                                           costsAnswersModel: CostsAnswerModel
+
                                           ) {
 
 
@@ -64,7 +65,8 @@ case class CompanyDetailsAnswersModel(natureOfBusinessModel: NatureOfBusinessMod
                                       seventyPercentSpentModel: Option[SeventyPercentSpentModel],
                                       shareIssueDateModel: ShareIssueDateModel,
                                       grossAssetsModel: GrossAssetsModel,
-                                      fullTimeEmployeeCountModel: FullTimeEmployeeCountModel) {
+                                      fullTimeEmployeeCountModel: FullTimeEmployeeCountModel,
+                                      commercialSaleModel:Option[CommercialSaleModel]) {
 
   def validate(submissionConnector: SubmissionConnector)(implicit hc: HeaderCarrier): Future[Boolean] = {
 
@@ -170,3 +172,17 @@ case class InvestorDetailsAnswersModel(investors: Vector[InvestorDetailsModel],
 case class ContactDetailsAnswersModel(contactDetailsModel: ContactDetailsModel,
                                       correspondAddressModel: ConfirmCorrespondAddressModel)
 
+case class MarketInfoAnswersModel(newGeographicMarket: NewGeographicalMarketModel,
+                                   newProductMarket: NewProductModel,
+                                   marketDescription: Option[MarketDescriptionModel]){
+}
+
+case class KiAnswersModel(kiProcessingModel: KiProcessingModel,
+                          tenYearPlanModel: Option[TenYearPlanModel],
+                          isKnowledgeIntensiveModel: Option[IsKnowledgeIntensiveModel]){
+}
+
+case class CostsAnswerModel(operatingCosts: Option[OperatingCostsModel],
+                            turnoverCostModel: Option[AnnualTurnoverCostsModel]) {
+
+}

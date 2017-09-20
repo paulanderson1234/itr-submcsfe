@@ -50,16 +50,19 @@ trait IsKnowledgeIntensiveController extends FrontendController with AuthorisedA
 
   val submit = AuthorisedAndEnrolled.async { implicit user => implicit request =>
 
-    def routeRequest(kiModel: Option[KiProcessingModel], isKnowledgeIntensive: Boolean): Future[Result] = {
+    def routeRequest(kiModel: Option[KiProcessingModel], wantsToApplyKi: Boolean): Future[Result] = {
       kiModel match {
         case Some(data) if data.dateConditionMet.isEmpty => {
           Future.successful(Redirect(routes.DateOfIncorporationController.show()))
         }
+        case Some(data) if data.companyAssertsIsKi.isEmpty => {
+          Future.successful(Redirect(routes.IsCompanyKnowledgeIntensiveController.show()))
+        }
         case Some(dataWithDateCondition) => {
-          if (!isKnowledgeIntensive & dataWithDateCondition.companyAssertsIsKi.getOrElse(false)) {
+          if (!wantsToApplyKi & dataWithDateCondition.companyAssertsIsKi.getOrElse(false)) {
             // user changed from yes to no. Clear the processing data (keeping the date and isKi info)
             s4lConnector.saveFormData(KeystoreKeys.kiProcessingModel,
-              KiProcessingModel(companyAssertsIsKi = Some(isKnowledgeIntensive),
+              KiProcessingModel(companyAssertsIsKi = Some(wantsToApplyKi),
                 dateConditionMet = dataWithDateCondition.dateConditionMet))
 
             // clear real data: TODO: it will work for now but we should probably clear the real data to ..how do this??
@@ -71,8 +74,8 @@ trait IsKnowledgeIntensiveController extends FrontendController with AuthorisedA
             Future.successful(Redirect(routes.FullTimeEmployeeCountController.show()))
           }
           else {
-            s4lConnector.saveFormData(KeystoreKeys.kiProcessingModel, dataWithDateCondition.copy(companyAssertsIsKi = Some(isKnowledgeIntensive)))
-            if (isKnowledgeIntensive) Future.successful(Redirect(routes.OperatingCostsController.show()))
+            s4lConnector.saveFormData(KeystoreKeys.kiProcessingModel, dataWithDateCondition.copy(companyWishesToApplyKi = Some(wantsToApplyKi)))
+            if (wantsToApplyKi) Future.successful(Redirect(routes.OperatingCostsController.show()))
             else {
               s4lConnector.saveFormData(KeystoreKeys.backLinkFullTimeEmployeeCount, routes.IsKnowledgeIntensiveController.show().url)
               Future.successful(Redirect(routes.FullTimeEmployeeCountController.show()))

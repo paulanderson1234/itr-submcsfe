@@ -58,7 +58,48 @@ trait AcknowledgementController extends FrontendController with AuthorisedAndEnr
   val registrationDetailsService: RegistrationDetailsService
   val fileUploadService: FileUploadService
 
-  def getCompanyDetailsAnswers(implicit hc: HeaderCarrier, user: TAVCUser): Future[Option[CompanyDetailsAnswersModel]] = {
+  def getAnswers(implicit hc: HeaderCarrier, user: TAVCUser): Future[Option[ComplianceStatementAnswersModel]] = {
+    val companyDetailsAnswers = getCompanyDetailsAnswers
+    val previousSchemesAnswers = getPreviousSchemesAnswersModel
+    val shareDetailsAnswers = getShareDetailsAnswersModel
+    val investorDetailsAnswers = getInvestorDetailsAnswersModel
+    val contactDetailsAnswers = getContactDetailsAnswerModel
+    val supportingDocumentsUpload = s4lConnector.fetchAndGetFormData[SupportingDocumentsUploadModel](KeystoreKeys.supportingDocumentsUpload)
+    val schemeType = s4lConnector.fetchAndGetFormData[SchemeTypesModel](KeystoreKeys.selectedSchemes)
+
+    def createModel(companyDetailsAnswersModel: Option[CompanyDetailsAnswersModel],
+                    previousSchemesAnswersModel: Option[PreviousSchemesAnswersModel],
+                    shareDetailsAnswersModel: Option[ShareDetailsAnswersModel],
+                    investorDetailsAnswersModel: Option[InvestorDetailsAnswersModel],
+                    contactDetailsAnswersModel: Option[ContactDetailsAnswersModel],
+                    supportingDocumentsUploadModel: Option[SupportingDocumentsUploadModel],
+                    schemeTypeModel:Option[SchemeTypesModel]) = {
+      for {
+        companyDetailsAnswersModel <- companyDetailsAnswersModel
+        previousSchemesAnswersModel <- previousSchemesAnswersModel
+        shareDetailsAnswersModel <- shareDetailsAnswersModel
+        investorDetailsAnswersModel <- investorDetailsAnswersModel
+        contactDetailsAnswersModel <- contactDetailsAnswersModel
+        supportingDocumentsUploadModel <- supportingDocumentsUploadModel
+        schemeTypeModel <- schemeTypeModel
+      } yield ComplianceStatementAnswersModel(companyDetailsAnswersModel, previousSchemesAnswersModel, shareDetailsAnswersModel, investorDetailsAnswersModel,
+        contactDetailsAnswersModel, supportingDocumentsUploadModel,schemeTypeModel, None, None, CostsAnswerModel(None, None))
+    }
+
+    for {
+      companyDetailsAnswersModel <- companyDetailsAnswers
+      previousSchemesAnswersModel <- previousSchemesAnswers
+      shareDetailsAnswersModel <- shareDetailsAnswers
+      investorDetailsAnswersModel <- investorDetailsAnswers
+      contactDetailsAnswersModel <- contactDetailsAnswers
+      supportingDocumentsUploadModel <- supportingDocumentsUpload
+      schemeTypeModel <- schemeType
+    } yield createModel(companyDetailsAnswersModel, previousSchemesAnswersModel, shareDetailsAnswersModel, investorDetailsAnswersModel,
+      contactDetailsAnswersModel, supportingDocumentsUploadModel, schemeTypeModel
+    )
+  }
+
+  private def getCompanyDetailsAnswers(implicit hc: HeaderCarrier, user: TAVCUser): Future[Option[CompanyDetailsAnswersModel]] = {
     val natureOfBusiness = s4lConnector.fetchAndGetFormData[NatureOfBusinessModel](KeystoreKeys.natureOfBusiness)
     val dateOfIncorporation = s4lConnector.fetchAndGetFormData[DateOfIncorporationModel](KeystoreKeys.dateOfIncorporation)
     val qualifyingBusinessActivity = s4lConnector.fetchAndGetFormData[QualifyBusinessActivityModel](KeystoreKeys.isQualifyBusinessActivity)
@@ -88,7 +129,7 @@ trait AcknowledgementController extends FrontendController with AuthorisedAndEnr
         fullTimeEmployeeCountModel <- fullTimeEmployeeCountModel
       } yield {
         CompanyDetailsAnswersModel(natureOfBusinessModel, dateOfIncorporationModel, qualifyingBusinessActivityModel,
-          hasInvestmentTradeStartedModel, researchStartDateModel, seventyPercentSpentModel, shareIssueDateModel, grossAssetsModel, fullTimeEmployeeCountModel)
+          hasInvestmentTradeStartedModel, researchStartDateModel, seventyPercentSpentModel, shareIssueDateModel, grossAssetsModel, fullTimeEmployeeCountModel, None)
       }
     }
 
@@ -108,7 +149,7 @@ trait AcknowledgementController extends FrontendController with AuthorisedAndEnr
     }
   }
 
-  def getPreviousSchemesAnswersModel(implicit hc: HeaderCarrier, user: TAVCUser): Future[Option[PreviousSchemesAnswersModel]] = {
+  private def getPreviousSchemesAnswersModel(implicit hc: HeaderCarrier, user: TAVCUser): Future[Option[PreviousSchemesAnswersModel]] = {
     val hadPreviousRFI = s4lConnector.fetchAndGetFormData[HadPreviousRFIModel](KeystoreKeys.hadPreviousRFI)
     val otherInvestments = s4lConnector.fetchAndGetFormData[HadOtherInvestmentsModel](KeystoreKeys.hadOtherInvestments)
     val previousScheme = s4lConnector.fetchAndGetFormData[List[PreviousSchemeModel]](KeystoreKeys.previousSchemes)
@@ -153,7 +194,7 @@ trait AcknowledgementController extends FrontendController with AuthorisedAndEnr
     } yield createModel(shareDescriptionModel, numberOfSharesModel, totalAmountRaisedModel, totalAmountSpentModel)
   }
 
-  def getInvestorDetailsAnswersModel(implicit hc: HeaderCarrier, user: TAVCUser): Future[Option[InvestorDetailsAnswersModel]] = {
+  private def getInvestorDetailsAnswersModel(implicit hc: HeaderCarrier, user: TAVCUser): Future[Option[InvestorDetailsAnswersModel]] = {
     val investors = s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails)
     val valueReceived = s4lConnector.fetchAndGetFormData[WasAnyValueReceivedModel](KeystoreKeys.wasAnyValueReceived)
     val shareCapitalChanges = s4lConnector.fetchAndGetFormData[ShareCapitalChangesModel](KeystoreKeys.shareCapitalChanges)
@@ -176,7 +217,7 @@ trait AcknowledgementController extends FrontendController with AuthorisedAndEnr
     } yield createModel(investorsModel, valueReceivedModel, shareCapitalChangesModel)
   }
 
-  def getContactDetailsAnswerModel(implicit hc: HeaderCarrier, user: TAVCUser): Future[Option[ContactDetailsAnswersModel]] = {
+  private def getContactDetailsAnswerModel(implicit hc: HeaderCarrier, user: TAVCUser): Future[Option[ContactDetailsAnswersModel]] = {
     val contactDetails = s4lConnector.fetchAndGetFormData[ContactDetailsModel](KeystoreKeys.contactDetails)
     val correspondenceAddress = s4lConnector.fetchAndGetFormData[ConfirmCorrespondAddressModel](KeystoreKeys.confirmContactAddress)
 
@@ -194,48 +235,9 @@ trait AcknowledgementController extends FrontendController with AuthorisedAndEnr
     } yield createModel(contactDetailsModel, correspondenceAddressModel)
   }
 
-  def getAnswers(implicit hc: HeaderCarrier, user: TAVCUser): Future[Option[ComplianceStatementAnswersModel]] = {
-    val companyDetailsAnswers = getCompanyDetailsAnswers
-    val previousSchemesAnswers = getPreviousSchemesAnswersModel
-    val shareDetailsAnswers = getShareDetailsAnswersModel
-    val investorDetailsAnswers = getInvestorDetailsAnswersModel
-    val contactDetailsAnswers = getContactDetailsAnswerModel
-    val supportingDocumentsUpload = s4lConnector.fetchAndGetFormData[SupportingDocumentsUploadModel](KeystoreKeys.supportingDocumentsUpload)
-    val schemeType = s4lConnector.fetchAndGetFormData[SchemeTypesModel](KeystoreKeys.selectedSchemes)
 
-    def createModel(companyDetailsAnswersModel: Option[CompanyDetailsAnswersModel],
-                    previousSchemesAnswersModel: Option[PreviousSchemesAnswersModel],
-                    shareDetailsAnswersModel: Option[ShareDetailsAnswersModel],
-                    investorDetailsAnswersModel: Option[InvestorDetailsAnswersModel],
-                    contactDetailsAnswersModel: Option[ContactDetailsAnswersModel],
-                    supportingDocumentsUploadModel: Option[SupportingDocumentsUploadModel],
-                    schemeTypeModel:Option[SchemeTypesModel]) = {
-      for {
-        companyDetailsAnswersModel <- companyDetailsAnswersModel
-        previousSchemesAnswersModel <- previousSchemesAnswersModel
-        shareDetailsAnswersModel <- shareDetailsAnswersModel
-        investorDetailsAnswersModel <- investorDetailsAnswersModel
-        contactDetailsAnswersModel <- contactDetailsAnswersModel
-        supportingDocumentsUploadModel <- supportingDocumentsUploadModel
-        schemeTypeModel <- schemeTypeModel
-      } yield ComplianceStatementAnswersModel(companyDetailsAnswersModel, previousSchemesAnswersModel, shareDetailsAnswersModel, investorDetailsAnswersModel,
-        contactDetailsAnswersModel, supportingDocumentsUploadModel,schemeTypeModel)
-    }
 
-    for {
-      companyDetailsAnswersModel <- companyDetailsAnswers
-      previousSchemesAnswersModel <- previousSchemesAnswers
-      shareDetailsAnswersModel <- shareDetailsAnswers
-      investorDetailsAnswersModel <- investorDetailsAnswers
-      contactDetailsAnswersModel <- contactDetailsAnswers
-      supportingDocumentsUploadModel <- supportingDocumentsUpload
-      schemeTypeModel <- schemeType
-    } yield createModel(companyDetailsAnswersModel, previousSchemesAnswersModel, shareDetailsAnswersModel, investorDetailsAnswersModel,
-      contactDetailsAnswersModel, supportingDocumentsUploadModel, schemeTypeModel
-    )
-  }
-
-  def processResult(seisAnswersModel: ComplianceStatementAnswersModel, tavcReferenceNumber: String,
+  private def processResult(seisAnswersModel: ComplianceStatementAnswersModel, tavcReferenceNumber: String,
                     registrationDetailsModel: Option[RegistrationDetailsModel])
                    (implicit hc: HeaderCarrier, user: TAVCUser, request: Request[AnyContent]): Future[Result] = {
     submissionConnector.submitComplianceStatement(seisAnswersModel, tavcReferenceNumber, registrationDetailsModel).map { submissionResponse =>
@@ -257,7 +259,7 @@ trait AcknowledgementController extends FrontendController with AuthorisedAndEnr
     }
   }
 
-  def processResultUpload(seisAnswersModel: ComplianceStatementAnswersModel, tavcReferenceNumber: String,
+  private def processResultUpload(seisAnswersModel: ComplianceStatementAnswersModel, tavcReferenceNumber: String,
                           registrationDetailsModel: Option[RegistrationDetailsModel])
                          (implicit hc: HeaderCarrier, user: TAVCUser, request: Request[AnyContent]): Future[Result] = {
     submissionConnector.submitComplianceStatement(seisAnswersModel, tavcReferenceNumber, registrationDetailsModel).flatMap { submissionResponse =>

@@ -21,7 +21,7 @@ import models.investorDetails._
 import models.registration.RegistrationDetailsModel
 import models._
 import play.api.libs.json.Json
-import utils.{Transformers, Validation}
+import utils.{Converters, Transformers, Validation}
 
 
 case class DesIndividualDetailsModel(
@@ -279,7 +279,7 @@ object DesSubmissionCSModel {
                                  registrationDetailsModel: Option[RegistrationDetailsModel]): DesComplianceStatement = {
     DesComplianceStatement(getSchemeType(answerModel.schemeTypes), readDesTradeModel(answerModel),
       readDesInvestmentDetailsModel(answerModel),
-      readDesSubsidiaryPerformingTrade(answerModel), readDesKnowledgeIncentice(answerModel),
+      readDesSubsidiaryPerformingTrade(answerModel), readDesKnowledgeIntensive(answerModel),
       readDesInvestorDetailsModel(answerModel), readDesRepaymentsModel(answerModel),
       readDesValueReceived(answerModel.investorDetailsAnswersModel),
       readDesOrganisationModel(answerModel, registrationDetailsModel))
@@ -343,6 +343,10 @@ object DesSubmissionCSModel {
 
   private def readDesAnnualCostsModel(answerModel: ComplianceStatementAnswersModel): Option[DesAnnualCostsModel] = {
     //DesAnnualCostsModel(None, readDesAnnualCostModel(answerModel))
+
+    //if (turnoverCosts.nonEmpty)
+    //Some(Converters.turnoverCostsToList(turnoverCosts.get))
+    //else None,
     None
   }
   private def readDesAnnualCostModel(answerModel: ComplianceStatementAnswersModel): Vector[AnnualCostModel] = {
@@ -357,13 +361,18 @@ object DesSubmissionCSModel {
     CostModel("")
   }
   private def readDesAnnualTurnoversModel(answerModel: ComplianceStatementAnswersModel): Option[DesAnnualTurnoversModel] = {
-    //DesAnnualTurnoversModel(Some("nodata"), re)
-    None
+
+    if(answerModel.costsAnswersModel.turnoverCostModel.nonEmpty && answerModel.kiAnswersModel.get.)
+    answerModel.costsAnswersModel.turnoverCostModel.fold(Some(DesAnnualTurnoversModel(List.empty)))(list =>
+      Some(DesAnnualTurnoversModel(Converters.turnoverCostsToList (list)))) else None
+
   }
   private def readDesPreviousOwnershipModel(answerModel: ComplianceStatementAnswersModel): Option[DesPreviousOwnershipModel] = {
     None
   }
 
+  //TODO: growth justification is not required for SEIS and needs hard coding to NA but for EIS it is required
+  //onstants.notApplicable neeeds consitionally changing
   private def readDesInvestmentDetailsModel(answerModel: ComplianceStatementAnswersModel): DesInvestmentDetailsModel = {
     DesInvestmentDetailsModel(Constants.notApplicable, readUnitIssueModel(answerModel),
       readTotalAmountSpent(answerModel.shareDetailsAnswersModel), readDesOrganisationStatusDetails(answerModel))
@@ -423,8 +432,19 @@ object DesSubmissionCSModel {
     None
   }
 
-  private def readDesKnowledgeIncentice(answerModel: ComplianceStatementAnswersModel): Option[KiModel] = {
-    None
+  private def readDesKnowledgeIntensive(answerModel: ComplianceStatementAnswersModel): Option[KiModel] = {
+
+    answerModel.kiAnswersModel match {
+      case Some(ki) =>
+        val kiAnswersModel = answerModel.kiAnswersModel.get
+        if (kiAnswersModel.kiProcessingModel.companyAssertsIsKi.getOrElse(false))
+          Some(KiModel(skilledEmployeesConditionMet = kiAnswersModel.kiProcessingModel.hasPercentageWithMasters.getOrElse(false),
+            innovationConditionMet = if (kiAnswersModel.tenYearPlanModel.nonEmpty) kiAnswersModel.tenYearPlanModel.get.tenYearPlanDesc else None,
+            kiConditionMet = Some(kiAnswersModel.kiProcessingModel.isKi)))
+        else None
+      case _ => None
+    }
+
   }
 
   private def readDesInvestorDetailsModel(answerModel: ComplianceStatementAnswersModel): DesInvestorDetailsModel = {
@@ -546,10 +566,14 @@ object DesSubmissionCSModel {
   }
 
   private def readDesOrganisationDetails(registrationDetailsModel: Option[RegistrationDetailsModel]): DesCompanyDetailsModel = {
+    //TODO if no reg model why would we sens company
+    require(registrationDetailsModel.nonEmpty)
+
     if(registrationDetailsModel.isDefined)
       DesCompanyDetailsModel(registrationDetailsModel.get.organisationName, None, None,
         readOrgAddress(registrationDetailsModel.get.addressModel))
     else
+      // get rid of this
       DesCompanyDetailsModel("COMPANY", None, None, None)
   }
 
