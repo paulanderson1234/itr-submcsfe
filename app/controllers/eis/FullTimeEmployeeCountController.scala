@@ -83,8 +83,10 @@ trait FullTimeEmployeeCountController extends FrontendController with Authorised
           })
 
           fteStatus.map {
-            case true => Redirect(routes.HadPreviousRFIController.show())
-            case false => Redirect(routes.FullTimeEmployeeCountErrorController.show())
+            case true => s4lConnector.saveFormData(KeystoreKeys.backLinkSubsidiaries, routes.FullTimeEmployeeCountController.show().url)
+              Redirect(routes.SubsidiariesController.show())
+            case false => s4lConnector.saveFormData(KeystoreKeys.backLinkSubsidiaries, routes.FullTimeEmployeeCountController.show().url)
+              Redirect(routes.FullTimeEmployeeCountErrorController.show())
           }
         }
       )
