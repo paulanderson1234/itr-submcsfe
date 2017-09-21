@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package models
+package models.repayments
 
 import play.api.libs.json.Json
 
-case class AmountSharesRepaymentModel(amount: BigDecimal)
+case class AmountSharesRepaymentModel(amount: BigDecimal,
+                                      processingId: Option[Int] = None)
 
 object AmountSharesRepaymentModel {
   implicit val format = Json.format[AmountSharesRepaymentModel]

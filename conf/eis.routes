@@ -188,9 +188,6 @@ POST       /previous-shareholding-description                   controllers.eis.
 GET        /previous-shareholding-nominal-value/:investorProcessingId/:id      controllers.eis.PreviousShareHoldingNominalValueController.show(investorProcessingId: Int, id: Int)
 POST       /previous-shareholding-nominal-value                      controllers.eis.PreviousShareHoldingNominalValueController.submit(id: Option[Int]?=None)
 
-GET        /review-previous-share-holdings/:investorProcessingId                 controllers.eis.PreviousShareHoldingsReviewController.show(investorProcessingId: Int)
-POST       /review-previous-share-holdings/:investorProcessingId                 controllers.eis.PreviousShareHoldingsReviewController.submit(investorProcessingId: Int)
-
 GET        /qualify-business-activity               controllers.eis.QualifyBusinessActivityController.show
 POST       /qualify-business-activity               controllers.eis.QualifyBusinessActivityController.submit
 
@@ -215,16 +212,10 @@ POST       /was-any-value-received               controllers.eis.WasAnyValueRece
 
 GET       /share-issue-date                        controllers.eis.ShareIssueDateController.show
 POST      /share-issue-date                        controllers.eis.ShareIssueDateController.submit
-
+GET       /share-issue-date-error                controllers.eis.ShareIssueDateErrorController.show
 
 GET        /add-another-shareholding/:investorId   controllers.eis.AddAnotherShareholdingController.show(investorId: Int)
 POST       /add-another-shareholding/:investorId   controllers.eis.AddAnotherShareholdingController.submit(investorId: Int)
-
-GET         /share-issue-date-error                controllers.eis.ShareIssueDateErrorController.show
-
-GET        /add-another-shareholding/:investorId              controllers.eis.AddAnotherShareholdingController.show(investorId: Int)
-POST       /add-another-shareholding/:investorId              controllers.eis.AddAnotherShareholdingController.submit(investorId: Int)
-
 
 GET        /nominal-value-of-shares               controllers.eis.NominalValueOfSharesController.show
 POST       /nominal-value-of-shares               controllers.eis.NominalValueOfSharesController.submit
@@ -232,7 +223,7 @@ POST       /nominal-value-of-shares               controllers.eis.NominalValueOf
 GET        /share-description                     controllers.eis.ShareDescriptionController.show
 POST       /share-description                     controllers.eis.ShareDescriptionController.submit
 
-GET       /amount-shares-repayment                controllers.eis.AmountSharesRepaymentController.show
+GET       /amount-shares-repayment/:id                controllers.eis.AmountSharesRepaymentController.show(id: Int)
 POST      /amount-shares-repayment                controllers.eis.AmountSharesRepaymentController.submit
 
 GET       /total-amount-raised                    controllers.eis.TotalAmountRaisedController.show
@@ -251,13 +242,15 @@ POST      /thirty-day-rule                        controllers.eis.ThirtyDayRuleC
 GET       /thirty-day-rule-error                        controllers.eis.ThirtyDayRuleErrorController.show
 POST      /thirty-day-rule-error                        controllers.eis.ThirtyDayRuleErrorController.submit
 
-GET       /who-repaid-shares                      controllers.eis.WhoRepaidSharesController.show
+GET        /process-repayments                    controllers.eis.ProcessRepaymentsController.show
+
+GET       /who-repaid-shares                      controllers.eis.WhoRepaidSharesController.show(id: Option[Int]?=None)
 POST      /who-repaid-shares                      controllers.eis.WhoRepaidSharesController.submit
 
-GET       /date-shares-repaid                        controllers.eis.DateSharesRepaidController.show
+GET       /date-shares-repaid/:id                        controllers.eis.DateSharesRepaidController.show(id: Int)
 POST      /date-shares-repaid                        controllers.eis.DateSharesRepaidController.submit
 
-GET        /shares-repayment-type                 controllers.eis.SharesRepaymentTypeController.show
+GET        /shares-repayment-type/:id                 controllers.eis.SharesRepaymentTypeController.show(id: Int)
 POST       /shares-repayment-type                 controllers.eis.SharesRepaymentTypeController.submit
 
 GET       /gross-assets-after-issue               controllers.eis.GrossAssetsAfterIssueController.show
@@ -265,3 +258,12 @@ POST      /gross-assets-after-issue              controllers.eis.GrossAssetsAfte
 
 GET       /gross-assets-after-issue-error         controllers.eis.GrossAssetsAfterIssueErrorController.show
 POST      /gross-assets-after-issue-error         controllers.eis.GrossAssetsAfterIssueErrorController.submit
+
+GET        /review-previous-repayments      controllers.eis.ReviewPreviousRepaymentsController.show
+POST       /review-previous-repayments      controllers.eis.ReviewPreviousRepaymentsController.submit
+
+GET        /review-previous-repayments-change/:id      controllers.eis.ReviewPreviousRepaymentsController.change(id: Int)
+GET       /review-previous-repayments-remove/:id      controllers.eis.ReviewPreviousRepaymentsController.remove(id: Int)
+
+GET        /delete-shares-repayment/:repaymentId                       controllers.eis.DeleteSharesRepaymentController.show(repaymentId: Int)
+POST       /delete-shares-repayment/:repaymentProcessingId             controllers.eis.DeleteSharesRepaymentController.submit(repaymentProcessingId: Int)

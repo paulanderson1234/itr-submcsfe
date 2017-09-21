@@ -20,12 +20,15 @@ import auth.{AuthorisedAndEnrolledForTAVC, EIS, VCT}
 import common.KeystoreKeys
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
+import controllers.Helpers.{ControllerHelpers, PreviousRepaymentsHelper}
 import forms.AmountSharesRepaymentForm._
-import models.AmountSharesRepaymentModel
+import forms.DateSharesRepaidForm.dateSharesRepaidForm
+import models.repayments.{AmountSharesRepaymentModel, SharesRepaymentDetailsModel}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
 import views.html.eis.investors.AmountSharesRepayment
+
 import scala.concurrent.Future
 import play.api.mvc.{Action, AnyContent, Result}
 import play.api.data.Form
@@ -38,31 +41,51 @@ object AmountSharesRepaymentController extends AmountSharesRepaymentController{
   override lazy val enrolmentConnector = EnrolmentConnector
 }
 
-trait AmountSharesRepaymentController extends FrontendController with AuthorisedAndEnrolledForTAVC {
+trait AmountSharesRepaymentController extends FrontendController with AuthorisedAndEnrolledForTAVC with ControllerHelpers{
 
   override val acceptedFlows = Seq(Seq(EIS))
 
-  val show = AuthorisedAndEnrolled.async { implicit user => implicit request =>
-    s4lConnector.fetchAndGetFormData[AmountSharesRepaymentModel](KeystoreKeys.amountSharesRepayment).map {
-      case Some(data) => Ok(AmountSharesRepayment(amountSharesRepaymentForm.fill(data)))
-      case None => Ok(AmountSharesRepayment(amountSharesRepaymentForm))
-    }
+  def show(id: Int): Action[AnyContent] = AuthorisedAndEnrolled.async {
+    implicit user =>
+      implicit request => {
+        def process(backUrl: Option[String]) = {
+          if (backUrl.isDefined) {
+            s4lConnector.fetchAndGetFormData[Vector[SharesRepaymentDetailsModel]](KeystoreKeys.sharesRepaymentDetails).map { vector =>
+              redirectIfNoRepayments(vector) { data =>
+                val itemToUpdateIndex = getRepaymentsIndex(id, data)
+                redirectInvalidRepayments(itemToUpdateIndex) { index =>
+                  val form = fillForm(amountSharesRepaymentForm, retrieveRepaymentsData(index, data)(_.amountSharesRepaymentModel))
+                  Ok(AmountSharesRepayment(form, backUrl.get))
+                }
+              }
+            }
+          }
+          else Future.successful(Redirect(controllers.eis.routes.AnySharesRepaymentController.show()))
+        }
+
+        for {
+          backUrl <- s4lConnector.fetchAndGetFormData[String](KeystoreKeys.backLinkSharesRepaymentAmount)
+          route <- process(backUrl)
+        } yield route
+      }
   }
 
-  val submit: Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user => implicit request =>
-    val success: AmountSharesRepaymentModel => Future[Result] = { model =>
-      s4lConnector.saveFormData(KeystoreKeys.amountSharesRepayment, model).map(_ =>
-        //TODO: Route to next page (review) when available
-        Redirect(routes.AmountSharesRepaymentController.show())
-      )
-    }
+  val submit = AuthorisedAndEnrolled.async { implicit user => implicit request =>
+    amountSharesRepaymentForm.bindFromRequest().fold(
+      formWithErrors => {
+        ControllerHelpers.getSavedBackLink(KeystoreKeys.backLinkSharesRepaymentAmount, s4lConnector).flatMap(url =>
+          Future.successful(BadRequest(AmountSharesRepayment(formWithErrors, url.get))))
+      },
+      validFormData => {
+        validFormData.processingId match {
+          case Some(_) => PreviousRepaymentsHelper.updateAmountSharesRepayment(s4lConnector, validFormData)
+            Future.successful(Redirect(routes.ReviewPreviousRepaymentsController.show()))
 
-    val failure: Form[AmountSharesRepaymentModel] => Future[Result] = { form =>
-      Future.successful(BadRequest(AmountSharesRepayment(form)))
-    }
-
-    amountSharesRepaymentForm.bindFromRequest().fold(failure, success)
+          case None => PreviousRepaymentsHelper.addAmountSharesRepayment(s4lConnector, validFormData)
+              Future.successful(Redirect(routes.ReviewPreviousRepaymentsController.show()))
+        }
+      }
+    )
   }
-
 }
 

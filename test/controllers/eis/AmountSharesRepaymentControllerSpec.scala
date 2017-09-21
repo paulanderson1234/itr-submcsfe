@@ -21,16 +21,17 @@ import common.KeystoreKeys
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
-import models._
+import models.repayments.SharesRepaymentDetailsModel
 import org.mockito.Matchers
 import org.mockito.Mockito._
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.cache.client.CacheMap
+
 import scala.concurrent.Future
 
 class AmountSharesRepaymentControllerSpec extends BaseSpec {
 
-  val amountSharesRepaymentModel = AmountSharesRepaymentModel(1)
+  lazy val validBackLink = controllers.eis.routes.ReviewPreviousRepaymentsController.show().toString
 
   object TestController extends AmountSharesRepaymentController {
     override lazy val applicationConfig = MockConfig
@@ -39,14 +40,18 @@ class AmountSharesRepaymentControllerSpec extends BaseSpec {
     override lazy val enrolmentConnector = mockEnrolmentConnector
   }
   
-  def setupMocks(amountSharesRepaymentModel: Option[AmountSharesRepaymentModel] = None): Unit = {
-    when(mockS4lConnector.fetchAndGetFormData[AmountSharesRepaymentModel](Matchers.eq(KeystoreKeys.amountSharesRepayment))
+  def setupMocks(sharesRepaymentDetails: Option[Vector[SharesRepaymentDetailsModel]] = None, backUrl: Option[String]= None): Unit = {
+    when(mockS4lConnector.fetchAndGetFormData[Vector[SharesRepaymentDetailsModel]](Matchers.eq(KeystoreKeys.sharesRepaymentDetails))
       (Matchers.any(), Matchers.any(), Matchers.any()))
-        .thenReturn(Future.successful(amountSharesRepaymentModel))
-		
+      .thenReturn(sharesRepaymentDetails)
+
+    when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.backLinkSharesRepaymentAmount))
+      (Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(backUrl))
+
     when(mockS4lConnector.saveFormData(Matchers.eq(KeystoreKeys.amountSharesRepayment),
       Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
-    .thenReturn(Future.successful(CacheMap("", Map())))		
+    .thenReturn(Future.successful(CacheMap("", Map())))
   }
 
   "AmountSharesRepaymentController" should {
@@ -58,7 +63,7 @@ class AmountSharesRepaymentControllerSpec extends BaseSpec {
     }
     "use the correct enrolment connector" in {
       AmountSharesRepaymentController.enrolmentConnector shouldBe EnrolmentConnector
-    }   
+    }
     "use the correct application config" in {
       AmountSharesRepaymentController.applicationConfig shouldBe FrontendAppConfig
     }
@@ -66,17 +71,19 @@ class AmountSharesRepaymentControllerSpec extends BaseSpec {
 
   "Sending a GET request to AmountSharesRepaymentController when authenticated and enrolled" should {
     "return a 200 when a saved model is fetched from storage" in {
-     setupMocks(Some(amountSharesRepaymentModel))
+     setupMocks(Some(validSharesRepaymentDetailsVector),
+       Some(controllers.eis.routes.DateSharesRepaidController.show(1).toString))
       mockEnrolledRequest(eisSchemeTypesModel)
-      showWithSessionAndAuth(TestController.show)(
+      showWithSessionAndAuth(TestController.show(1))(
         result => status(result) shouldBe OK
       )
     }
 
     "provide an empty model and return an OK 200 when nothing is fetched from storage" in {
-      setupMocks(None)
+      setupMocks(Some(Vector.empty :+ sharesRepaymentDetailsMissingRepaymentAmount),
+        Some(controllers.eis.routes.DateSharesRepaidController.show(1).toString))
       mockEnrolledRequest(eisSchemeTypesModel)
-      showWithSessionAndAuth(TestController.show())(
+      showWithSessionAndAuth(TestController.show(1))(
         result => status(result) shouldBe OK
       )
     }
@@ -84,14 +91,13 @@ class AmountSharesRepaymentControllerSpec extends BaseSpec {
   
   "Sending a valid form submit to the AmountSharesRepaymentController" should {
     "redirect to the expected page" in {
-      setupMocks(None)
+      setupMocks(Some(validSharesRepaymentDetailsVector), Some(controllers.eis.routes.DateSharesRepaidController.show(1).toString))
       mockEnrolledRequest(eisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,
         "amount" -> "1")(
         result => {
           status(result) shouldBe SEE_OTHER
-          //TODO: navigate to correct page when available
-          redirectLocation(result) shouldBe Some(routes.AmountSharesRepaymentController.show().url)
+          redirectLocation(result) shouldBe Some(routes.ReviewPreviousRepaymentsController.show().url)
         }
       )
     }
@@ -99,6 +105,7 @@ class AmountSharesRepaymentControllerSpec extends BaseSpec {
 
    "Sending an invalid form submission with validation errors to the AmountSharesRepaymentController when authenticated and enrolled" should {
     "return a bad request status" in {
+      setupMocks(None, Some(controllers.eis.routes.DateSharesRepaidController.show(1).toString))
       mockEnrolledRequest(eisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,
         "amount" -> "")(

@@ -16,7 +16,7 @@
 
 package forms
 
-import models.DateSharesRepaidModel
+import models.repayments.DateSharesRepaidModel
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.i18n.Messages
@@ -32,7 +32,8 @@ object DateSharesRepaidForm {
     mapping(
       "dateSharesRepaidDay" -> optional(number),
       "dateSharesRepaidMonth" -> optional(number),
-      "dateSharesRepaidYear" -> optional(number)
+      "dateSharesRepaidYear" -> optional(number),
+      "processingId" -> optional(number)
     )(DateSharesRepaidModel.apply)(DateSharesRepaidModel.unapply)
       .verifying(Messages("validation.error.DateNotEntered"), fields =>
         validateNonEmptyDateOptions(fields.day, fields.month, fields.year))

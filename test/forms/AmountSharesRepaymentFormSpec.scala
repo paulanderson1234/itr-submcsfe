@@ -16,10 +16,10 @@
 
 package forms
 
-import models.AmountSharesRepaymentModel
 import org.scalatestplus.play.OneAppPerSuite
 import uk.gov.hmrc.play.test.UnitSpec
 import forms.AmountSharesRepaymentForm._
+import models.repayments.AmountSharesRepaymentModel
 import play.api.i18n.Messages
 import play.api.i18n.Messages.Implicits._
 

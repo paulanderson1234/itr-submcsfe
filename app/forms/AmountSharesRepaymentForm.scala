@@ -16,7 +16,7 @@
 
 package forms
 
-import models.AmountSharesRepaymentModel
+import models.repayments.AmountSharesRepaymentModel
 import play.api.data.Form
 import play.api.data.Forms._
 import utils.Validation
@@ -30,7 +30,8 @@ object AmountSharesRepaymentForm {
     mapping(
       "amount" -> nonEmptyText
         .verifying(Validation.genericWholeAmountCheck(messageKey, minimumAmount))
-        .transform[BigDecimal](value => BigDecimal(value), _.toString())
+        .transform[BigDecimal](value => BigDecimal(value), _.toString()),
+      "processingId" -> optional(number)
     )(AmountSharesRepaymentModel.apply)(AmountSharesRepaymentModel.unapply)
   )
 }

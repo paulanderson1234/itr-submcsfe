@@ -69,6 +69,7 @@ trait MarketDescriptionController extends FrontendController with AuthorisedAndE
       },
       validFormData => {
         s4lConnector.saveFormData(KeystoreKeys.marketDescription, validFormData)
+        s4lConnector.saveFormData(KeystoreKeys.backLinkInvestmentGrow, routes.MarketDescriptionController.show().url)
         Future.successful(Redirect(routes.InvestmentGrowController.show()))
       }
     )

@@ -17,10 +17,11 @@
 package controllers.eis
 
 import auth.{AuthorisedAndEnrolledForTAVC, EIS}
-import common.Constants
+import common.{Constants, KeystoreKeys}
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector, SubmissionConnector}
 import forms.AddAnotherInvestorForm._
+import models.repayments.SharesRepaymentDetailsModel
 import play.api.Play.current
 import play.api.i18n.Messages.Implicits._
 import uk.gov.hmrc.play.frontend.controller.FrontendController
@@ -60,7 +61,10 @@ trait AddAnotherInvestorController extends FrontendController with AuthorisedAnd
             Future.successful(Redirect(routes.AddInvestorOrNomineeController.show()))
           }
           case Constants.StandardRadioButtonNoValue => {
-            Future.successful(Redirect(routes.WasAnyValueReceivedController.show()))
+            s4lConnector.fetchAndGetFormData[Vector[SharesRepaymentDetailsModel]](KeystoreKeys.sharesRepaymentDetails).map {
+              case Some(data) if (data.nonEmpty) => Redirect(controllers.eis.routes.ReviewPreviousRepaymentsController.show())
+              case _ => Redirect(controllers.eis.routes.AnySharesRepaymentController.show())
+            }
           }
         }
       }

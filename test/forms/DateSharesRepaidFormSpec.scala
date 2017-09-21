@@ -16,12 +16,13 @@
 
 package forms
 
-import models.DateSharesRepaidModel
 import forms.DateSharesRepaidForm._
 import org.scalatestplus.play.OneAppPerSuite
 import uk.gov.hmrc.play.test.UnitSpec
 import java.time.ZoneId
 import java.util.Date
+
+import models.repayments.DateSharesRepaidModel
 
 class DateSharesRepaidFormSpec extends UnitSpec with OneAppPerSuite{
 

@@ -16,6 +16,7 @@
 
 package views.eis
 
+import common.Constants
 import org.jsoup.Jsoup
 import play.api.i18n.Messages
 import play.api.i18n.Messages.Implicits.applicationMessages
@@ -25,7 +26,7 @@ import views.html.eis.companyDetails.FullTimeEmployeeCountError
 class FullTimeEmployeeCountErrorSpec extends ViewSpec {
 
   "The FullTimeEmployeeCountError view" should {
-    lazy val doc = Jsoup.parse(FullTimeEmployeeCountError()(fakeRequest, applicationMessages).body)
+    lazy val doc = Jsoup.parse(FullTimeEmployeeCountError(Constants.schemeTypeEis)(fakeRequest, applicationMessages).body)
 
     "contain a title with the correct text" in {
       doc.title() shouldBe Messages("common.error.soft.title")

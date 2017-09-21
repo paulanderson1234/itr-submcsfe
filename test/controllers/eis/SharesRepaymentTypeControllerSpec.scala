@@ -21,7 +21,7 @@ import common.{Constants, KeystoreKeys}
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
-import models.SharesRepaymentTypeModel
+import models.repayments.{SharesRepaymentDetailsModel, SharesRepaymentTypeModel}
 import org.mockito.Matchers
 import org.mockito.Mockito._
 import play.api.test.Helpers._
@@ -29,6 +29,9 @@ import play.api.test.Helpers._
 import scala.concurrent.Future
 
 class SharesRepaymentTypeControllerSpec extends BaseSpec {
+
+  lazy val validInitialBackLink = controllers.eis.routes.WhoRepaidSharesController.show().toString
+  lazy val validBackLink = controllers.eis.routes.ReviewPreviousRepaymentsController.show().toString
 
   object TestController extends SharesRepaymentTypeController {
     override lazy val applicationConfig = MockConfig
@@ -52,40 +55,47 @@ class SharesRepaymentTypeControllerSpec extends BaseSpec {
     }
   }
 
-  def setupMocks(sharesRepaymentTypeModel: Option[SharesRepaymentTypeModel] = None): Unit = {
-    when(mockS4lConnector.fetchAndGetFormData[SharesRepaymentTypeModel](Matchers.eq(KeystoreKeys.sharesRepaymentType))
+  def setupMocks(sharesRepaymentDetails: Option[Vector[SharesRepaymentDetailsModel]] = None, backUrl: Option[String]): Unit = {
+    when(mockS4lConnector.fetchAndGetFormData[Vector[SharesRepaymentDetailsModel]](Matchers.eq(KeystoreKeys.sharesRepaymentDetails))
       (Matchers.any(), Matchers.any(), Matchers.any()))
-        .thenReturn(Future.successful(sharesRepaymentTypeModel))
+      .thenReturn(sharesRepaymentDetails)
+
+    when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.backLinkSharesRepaymentType))
+      (Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(backUrl))
 
   }
 
   "Sending a GET request to SharesRepaymentTypeController when authenticated and enrolled" should {
     "return a 200 when something is fetched from storage" in {
-      setupMocks(Some(repaymentTypeShares))
+      setupMocks(Some(validSharesRepaymentDetailsVector),
+        Some(controllers.eis.routes.WhoRepaidSharesController.show(Some(1)).toString))
       mockEnrolledRequest(eisSchemeTypesModel)
-      showWithSessionAndAuth(TestController.show())(
+      showWithSessionAndAuth(TestController.show(1))(
         result => status(result) shouldBe OK
       )
     }
 
     "provide an empty model and return a 200 when nothing is fetched using storage" in {
-      setupMocks(None)
+      setupMocks(Some(Vector.empty :+ sharesRepaymentDetailsMissingRepaymentType),
+        Some(controllers.eis.routes.WhoRepaidSharesController.show(Some(1)).toString))
       mockEnrolledRequest(eisSchemeTypesModel)
-      showWithSessionAndAuth(TestController.show())(
+      showWithSessionAndAuth(TestController.show(1))(
         result => status(result) shouldBe OK
       )
     }
   }
 
-  "Sending a validshares form submission to the SharesRepaymentTypeController when authenticated and enrolled" should {
+  "Sending a valid shares form submission to the SharesRepaymentTypeController when authenticated and enrolled" should {
     "redirect to the expected page" in {
       val formInput = "sharesRepaymentType" -> Constants.repaymentTypeShares
-      setupMocks()
+      setupMocks(Some(validSharesRepaymentDetailsVector),
+        Some(controllers.eis.routes.WhoRepaidSharesController.show(Some(2)).toString))
       mockEnrolledRequest(eisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,formInput)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(controllers.eis.routes.DateSharesRepaidController.show().url)
+          redirectLocation(result) shouldBe Some(controllers.eis.routes.DateSharesRepaidController.show(2).url)
         }
       )
     }
@@ -94,12 +104,13 @@ class SharesRepaymentTypeControllerSpec extends BaseSpec {
   "Sending a valid debentures form submission to the SharesRepaymentTypeController when authenticated and enrolled" should {
     "redirect to the expected page" in {
       val formInput = "sharesRepaymentType" -> Constants.repaymentTypeDebentures
-      setupMocks()
+      setupMocks(Some(validSharesRepaymentDetailsVector),
+        Some(controllers.eis.routes.WhoRepaidSharesController.show(Some(2)).toString))
       mockEnrolledRequest(eisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,formInput)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(controllers.eis.routes.DateSharesRepaidController.show().url)
+          redirectLocation(result) shouldBe Some(controllers.eis.routes.DateSharesRepaidController.show(2).url)
         }
       )
     }
@@ -108,6 +119,8 @@ class SharesRepaymentTypeControllerSpec extends BaseSpec {
   "Sending an invalid form submission with validation errors to the SharesRepaymentTypeController when authenticated and enrolled" should {
     "respond with a bad request" in {
       mockEnrolledRequest(eisSchemeTypesModel)
+      setupMocks(Some(validSharesRepaymentDetailsVector),
+        Some(controllers.eis.routes.WhoRepaidSharesController.show(Some(1)).toString))
       val formInput = "sharesRepaymentType" -> ""
       submitWithSessionAndAuth(TestController.submit,formInput)(
         result => {

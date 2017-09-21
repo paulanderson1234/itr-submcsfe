@@ -19,14 +19,13 @@ package controllers.helpers
 import java.time.ZoneId
 import java.util.Date
 
-import akka.actor.ActorSystem
-import akka.stream.{ActorMaterializer, Materializer}
 import auth.{Enrolment, Identifier}
 import common.{Constants, KeystoreKeys}
 import connectors.{EnrolmentConnector, S4LConnector, SubmissionConnector}
 import fixtures.SubmissionFixture
-import models.submission.SchemeTypesModel
 import models.investorDetails._
+import models.repayments.{AmountSharesRepaymentModel, _}
+import models.submission.SchemeTypesModel
 import models.{UsedInvestmentReasonBeforeModel, YourCompanyNeedModel, _}
 import org.mockito.Matchers
 import org.mockito.Mockito._
@@ -36,8 +35,8 @@ import org.scalatestplus.play.OneAppPerSuite
 import play.api.libs.json.Json
 import services.{FileUploadService, RegistrationDetailsService, SubscriptionService}
 import uk.gov.hmrc.http.cache.client.CacheMap
-import uk.gov.hmrc.play.test.UnitSpec
 import uk.gov.hmrc.play.http.HeaderCarrier
+import uk.gov.hmrc.play.test.UnitSpec
 
 import scala.concurrent.Future
 
@@ -224,8 +223,8 @@ trait BaseSpec extends UnitSpec with OneAppPerSuite with MockitoSugar with FakeR
   val qualifyPrepareToTrade = QualifyBusinessActivityModel(Constants.qualifyPrepareToTrade)
   val qualifyResearchAndDevelopment = QualifyBusinessActivityModel(Constants.qualifyResearchAndDevelopment)
 
-  val repaymentTypeShares = SharesRepaymentTypeModel(Constants.repaymentTypeShares)
-  val repaymentTypeDebentures = SharesRepaymentTypeModel(Constants.repaymentTypeDebentures)
+  val repaymentTypeShares = SharesRepaymentTypeModel(Constants.repaymentTypeShares, Some(1))
+  val repaymentTypeDebentures = SharesRepaymentTypeModel(Constants.repaymentTypeDebentures, Some(1))
 
   val hasInvestmentTradeStartedYear = 2004
   val hasInvestmentTradeStartedMonth = 2
@@ -528,4 +527,59 @@ trait BaseSpec extends UnitSpec with OneAppPerSuite with MockitoSugar with FakeR
   val investor5 = InvestorDetailsModel(processingId = Some(5), investorOrNomineeModel = Some(investorNominee5))
 
   val investorListForDeleteTests = Vector(investor1, investor2, investor3, investor4, investor5)
+
+  val whoRepaidSharesModel = WhoRepaidSharesModel("bill", "smith", Some(1))
+
+  val whoRepaidSharesModelForIdOne = WhoRepaidSharesModel("Naren", "Vijay", Some(1))
+  val whoRepaidSharesModelForIdTwo = WhoRepaidSharesModel("Rey", "Deva", Some(2))
+
+  val repaymentTypeSharesForIdOne = SharesRepaymentTypeModel(Constants.repaymentTypeShares, Some(1))
+  val repaymentTypeSharesForIdTwo = SharesRepaymentTypeModel(Constants.repaymentTypeShares, Some(2))
+
+  val repaymentTypeDebenturesForIdOne = SharesRepaymentTypeModel(Constants.repaymentTypeDebentures, Some(1))
+  val repaymentTypeDebenturesForIdTwo = SharesRepaymentTypeModel(Constants.repaymentTypeDebentures, Some(2))
+
+  val dateSharesRepaidModelForIdOne = DateSharesRepaidModel(Some(dateSharesRepaidDay), Some(dateSharesRepaidMonth), Some(dateSharesRepaidYear), Some(1))
+  val dateSharesRepaidModelForIdTwo = DateSharesRepaidModel(Some(dateSharesRepaidDay), Some(dateSharesRepaidMonth), Some(dateSharesRepaidYear), Some(2))
+
+  val amountSharesRepaymentModelForIdOne = AmountSharesRepaymentModel(sharesRepaymentAmount, Some(1))
+  val amountSharesRepaymentModelForIdTwo = AmountSharesRepaymentModel(sharesRepaymentAmount, Some(2))
+
+  val sharesRepaymentAmount = 13
+  val dateSharesRepaidYear = 2004
+  val dateSharesRepaidMonth = 2
+  val dateSharesRepaidDay = 29
+  val dateSharesRepaidModel = DateSharesRepaidModel(Some(dateSharesRepaidDay), Some(dateSharesRepaidMonth), Some(dateSharesRepaidYear), Some(1))
+  val dateSharesRepaidEmpty = DateSharesRepaidModel(None, None, None, Some(1))
+  val amountSharesRepaymentModel = AmountSharesRepaymentModel(sharesRepaymentAmount, Some(1))
+
+  val invalidSharesRepaymentDetails = SharesRepaymentDetailsModel()
+
+  val validSharesRepaymentDetails = SharesRepaymentDetailsModel(Some(whoRepaidSharesModel),
+    Some(repaymentTypeShares), Some(dateSharesRepaidModel), Some(amountSharesRepaymentModel), Some(1))
+
+  val sharesRepaymentDetailsMissingRecipient = SharesRepaymentDetailsModel(None,
+    Some(repaymentTypeShares), Some(dateSharesRepaidModel), Some(amountSharesRepaymentModel), Some(1))
+
+  val sharesRepaymentDetailsMissingRepaymentType = SharesRepaymentDetailsModel(Some(whoRepaidSharesModel),
+    None, Some(dateSharesRepaidModel), Some(amountSharesRepaymentModel), Some(1))
+
+  val sharesRepaymentDetailsMissingRepaymentDate = SharesRepaymentDetailsModel(Some(whoRepaidSharesModel),
+    Some(repaymentTypeShares), None, Some(amountSharesRepaymentModel), Some(1))
+
+  val sharesRepaymentDetailsMissingRepaymentAmount = SharesRepaymentDetailsModel(Some(whoRepaidSharesModel),
+    Some(repaymentTypeShares), Some(dateSharesRepaidModel), None, Some(1))
+
+  val sharesRepaymentDetailsForIdOne = SharesRepaymentDetailsModel(Some(whoRepaidSharesModelForIdOne),
+    Some(repaymentTypeSharesForIdOne), Some(dateSharesRepaidModelForIdOne), Some(amountSharesRepaymentModelForIdOne), Some(1))
+
+  val sharesRepaymentDetailsForIdTwo = SharesRepaymentDetailsModel(Some(whoRepaidSharesModelForIdTwo),
+    Some(repaymentTypeSharesForIdTwo), Some(dateSharesRepaidModelForIdTwo), Some(amountSharesRepaymentModelForIdTwo), Some(2))
+
+  val validSharesRepaymentDetailsVector = Vector.empty :+ sharesRepaymentDetailsForIdOne :+ sharesRepaymentDetailsForIdTwo
+
+  val inCompleteSharesRepaymentDetailsVector = Vector.empty :+ sharesRepaymentDetailsMissingRepaymentAmount
+
+  val emptySharesRepaymentDetailsVector = Vector.empty
+
 }

@@ -17,7 +17,7 @@
 package forms
 
 import common.Constants
-import models.WhoRepaidSharesModel
+import models.repayments.WhoRepaidSharesModel
 import play.api.data.Form
 import play.api.data.Forms._
 
@@ -26,7 +26,8 @@ object WhoRepaidSharesForm {
   val whoRepaidSharesForm = Form(
     mapping(
       "forename" -> nonEmptyText(maxLength = Constants.forenameLength),
-      "surname" -> nonEmptyText(maxLength = Constants.surnameLength)
+      "surname" -> nonEmptyText(maxLength = Constants.surnameLength),
+      "processingId" -> optional(number)
     )(WhoRepaidSharesModel.apply)(WhoRepaidSharesModel.unapply)
   )
 }

@@ -21,22 +21,18 @@ import common.KeystoreKeys
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
-import models._
+import models.repayments.SharesRepaymentDetailsModel
 import org.mockito.Matchers
 import org.mockito.Mockito._
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.cache.client.CacheMap
+
 import scala.concurrent.Future
 
 class DateSharesRepaidControllerSpec extends BaseSpec {
 
-  //TODO: Move test data below to BaseSpec
-  val dateSharesRepaidYear = 2004
-  val dateSharesRepaidMonth = 2
-  val dateSharesRepaidDay = 29
-  val dateSharesRepaidModel = DateSharesRepaidModel(Some(dateSharesRepaidDay), Some(dateSharesRepaidMonth), Some(dateSharesRepaidYear))
-  val dateSharesRepaidEmpty = DateSharesRepaidModel(None, None, None)
-
+  lazy val validChangeBackLink = controllers.eis.routes.ReviewPreviousRepaymentsController.show().toString
+  val processingId = 1
   object TestController extends DateSharesRepaidController {
     override lazy val applicationConfig = MockConfig
     override lazy val authConnector = MockAuthConnector
@@ -44,10 +40,15 @@ class DateSharesRepaidControllerSpec extends BaseSpec {
     override lazy val enrolmentConnector = mockEnrolmentConnector
   }
 
-  def setupMocks(dateSharesRepaidModel: Option[DateSharesRepaidModel] = None): Unit = {
-    when(mockS4lConnector.fetchAndGetFormData[DateSharesRepaidModel](Matchers.eq(KeystoreKeys.dateSharesRepaid))
+  def setupMocks(sharesRepaymentDetails: Option[Vector[SharesRepaymentDetailsModel]] = None, backUrl: Option[String]): Unit = {
+    when(mockS4lConnector.fetchAndGetFormData[Vector[SharesRepaymentDetailsModel]](Matchers.eq(KeystoreKeys.sharesRepaymentDetails))
       (Matchers.any(), Matchers.any(), Matchers.any()))
-        .thenReturn(Future.successful(dateSharesRepaidModel))
+      .thenReturn(sharesRepaymentDetails)
+
+    when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.backLinkSharesRepaymentDate))
+      (Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(backUrl))
+
 
     when(mockS4lConnector.saveFormData(Matchers.eq(KeystoreKeys.dateSharesRepaid),
       Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
@@ -71,17 +72,19 @@ class DateSharesRepaidControllerSpec extends BaseSpec {
 
   "Sending a GET request to DateSharesRepaidController when authenticated and enrolled" should {
     "return a 200 when a saved model is fetched from storage" in {
-     setupMocks(Some(dateSharesRepaidModel))
+     setupMocks(Some(validSharesRepaymentDetailsVector),
+       Some(controllers.eis.routes.SharesRepaymentTypeController.show(processingId).toString))
       mockEnrolledRequest(eisSchemeTypesModel)
-      showWithSessionAndAuth(TestController.show)(
+      showWithSessionAndAuth(TestController.show(processingId))(
         result => status(result) shouldBe OK
       )
     }
 
     "provide an empty model and return an OK 200 when nothing is fetched from storage" in {
-      setupMocks(None)
+      setupMocks(Some(Vector.empty :+ sharesRepaymentDetailsMissingRepaymentDate),
+        Some(controllers.eis.routes.SharesRepaymentTypeController.show(processingId).toString))
       mockEnrolledRequest(eisSchemeTypesModel)
-      showWithSessionAndAuth(TestController.show())(
+      showWithSessionAndAuth(TestController.show(processingId))(
         result => status(result) shouldBe OK
       )
     }
@@ -89,7 +92,8 @@ class DateSharesRepaidControllerSpec extends BaseSpec {
 
   "Sending a valid form submit to the DateSharesRepaidController when authenticated and enrolled" should {
     "redirect to the expected page" in {
-      setupMocks(Some(dateSharesRepaidModel))
+      setupMocks(Some(validSharesRepaymentDetailsVector),
+       Some(controllers.eis.routes.SharesRepaymentTypeController.show(processingId).toString))
       mockEnrolledRequest(eisSchemeTypesModel)
 
       val formInput = Seq(
@@ -100,7 +104,7 @@ class DateSharesRepaidControllerSpec extends BaseSpec {
       submitWithSessionAndAuth(TestController.submit,formInput:_*)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(routes.AmountSharesRepaymentController.show().url)
+          redirectLocation(result) shouldBe Some(routes.AmountSharesRepaymentController.show(processingId + 1).url)
         }
       )
     }
@@ -108,7 +112,8 @@ class DateSharesRepaidControllerSpec extends BaseSpec {
 
   "Sending an invalid form submission with validation errors to the DateSharesRepaidController when authenticated and enrolled" should {
     "return a bad request" in {
-      setupMocks(None)
+      setupMocks(None,
+        Some(controllers.eis.routes.SharesRepaymentTypeController.show(processingId).toString))
       mockEnrolledRequest(eisSchemeTypesModel)
 
       val formInput = Seq(
