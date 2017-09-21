@@ -55,7 +55,7 @@ trait PreviousRepaymentsHelper {
     result
   }
 
-  def clearPreviousInvestments(s4lConnector: connectors.S4LConnector)
+  def clearPreviousRepayments(s4lConnector: connectors.S4LConnector)
                               (implicit hc: HeaderCarrier, user: TAVCUser): Future[CacheMap] = {
     s4lConnector.saveFormData(KeystoreKeys.sharesRepaymentDetails, Vector[SharesRepaymentDetailsModel]())
   }
