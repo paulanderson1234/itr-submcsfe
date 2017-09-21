@@ -19,7 +19,7 @@ package forms
 import common.Constants
 import controllers.helpers.MockDataGenerator
 import forms.WhoRepaidSharesForm._
-import models.WhoRepaidSharesModel
+import models.repayments.WhoRepaidSharesModel
 import org.scalatestplus.play.OneAppPerSuite
 import play.api.i18n.Messages
 import uk.gov.hmrc.play.test.UnitSpec

@@ -19,7 +19,7 @@ package views.eis
 import auth.{MockAuthConnector, MockConfigEISFlow}
 import common.KeystoreKeys
 import controllers.eis.AnySharesRepaymentController
-import models.AnySharesRepaymentModel
+import models.repayments.AnySharesRepaymentModel
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.mockito.Matchers

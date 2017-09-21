@@ -20,11 +20,13 @@ import auth.{AuthorisedAndEnrolledForTAVC, EIS}
 import common.{Constants, KeystoreKeys}
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
-import forms.SharesRepaymentTypeForm
-import models.SharesRepaymentTypeModel
+import controllers.Helpers.{ControllerHelpers, PreviousRepaymentsHelper}
+import forms.SharesRepaymentTypeForm._
+import models.repayments.{SharesRepaymentDetailsModel, SharesRepaymentTypeModel}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
+import play.api.mvc.{Action, AnyContent}
 import views.html.eis.investors.SharesRepaymentType
 
 import scala.concurrent.Future
@@ -37,29 +39,58 @@ object SharesRepaymentTypeController extends SharesRepaymentTypeController
   override lazy val enrolmentConnector = EnrolmentConnector
 }
 
-trait SharesRepaymentTypeController extends FrontendController with AuthorisedAndEnrolledForTAVC {
+trait SharesRepaymentTypeController extends FrontendController with AuthorisedAndEnrolledForTAVC with ControllerHelpers{
 
   override val acceptedFlows = Seq(Seq(EIS))
 
-  val show = AuthorisedAndEnrolled.async {
+  def show(id: Int): Action[AnyContent] = AuthorisedAndEnrolled.async {
     implicit user =>
       implicit request => {
-        s4lConnector.fetchAndGetFormData[SharesRepaymentTypeModel](KeystoreKeys.sharesRepaymentType).map {
-          case Some(data) => Ok(SharesRepaymentType(SharesRepaymentTypeForm.sharesRepaymentTypeForm.fill(data)))
-          case None => Ok(SharesRepaymentType(SharesRepaymentTypeForm.sharesRepaymentTypeForm))
+        def process(backUrl: Option[String]) = {
+          if (backUrl.isDefined) {
+            s4lConnector.fetchAndGetFormData[Vector[SharesRepaymentDetailsModel]](KeystoreKeys.sharesRepaymentDetails).map { vector =>
+              redirectIfNoRepayments(vector) { data =>
+                val itemToUpdateIndex = getRepaymentsIndex(id, data)
+                redirectInvalidRepayments(itemToUpdateIndex) { index =>
+                  val form = fillForm(sharesRepaymentTypeForm, retrieveRepaymentsData(index, data)(_.sharesRepaymentTypeModel))
+                  Ok(SharesRepaymentType(form, backUrl.get))
+                }
+              }
+            }
+          }
+          else Future.successful(Redirect(controllers.eis.routes.AnySharesRepaymentController.show()))
         }
+
+        for {
+          backUrl <- s4lConnector.fetchAndGetFormData[String](KeystoreKeys.backLinkSharesRepaymentType)
+          route <- process(backUrl)
+        } yield route
       }
   }
 
   val submit = AuthorisedAndEnrolled.async { implicit user => implicit request =>
-    SharesRepaymentTypeForm.sharesRepaymentTypeForm.bindFromRequest().fold(
+    sharesRepaymentTypeForm.bindFromRequest().fold(
       formWithErrors => {
-        Future.successful(BadRequest(SharesRepaymentType(formWithErrors)))
+        ControllerHelpers.getSavedBackLink(KeystoreKeys.backLinkSharesRepaymentType, s4lConnector).flatMap(url =>
+          Future.successful(BadRequest(SharesRepaymentType(formWithErrors, url.get))))
       },
       validFormData => {
-        s4lConnector.saveFormData(KeystoreKeys.sharesRepaymentType, validFormData)
-          Future.successful(Redirect(routes.DateSharesRepaidController.show()))
-
+        validFormData.processingId match {
+          case Some(_) => PreviousRepaymentsHelper.updateSharesRepaymentType(s4lConnector, validFormData).map {
+            sharesRepaymentDetails => {
+              s4lConnector.saveFormData(KeystoreKeys.backLinkSharesRepaymentDate,
+                routes.SharesRepaymentTypeController.show(sharesRepaymentDetails.processingId.get).url)
+              Redirect(routes.DateSharesRepaidController.show(sharesRepaymentDetails.processingId.get))
+            }
+          }
+          case None => PreviousRepaymentsHelper.addSharesRepaymentType(s4lConnector, validFormData).map {
+            sharesRepaymentDetails => {
+              s4lConnector.saveFormData(KeystoreKeys.backLinkSharesRepaymentDate,
+                routes.SharesRepaymentTypeController.show(sharesRepaymentDetails.processingId.get).url)
+              Redirect(routes.DateSharesRepaidController.show(sharesRepaymentDetails.processingId.get))
+            }
+          }
+        }
       }
     )
   }

@@ -23,6 +23,7 @@ import uk.gov.hmrc.play.frontend.controller.FrontendController
 import common.{Constants, KeystoreKeys}
 import controllers.Helpers.ControllerHelpers
 import forms.InvestmentGrowForm._
+import models.investorDetails.InvestorDetailsModel
 import models.{InvestmentGrowModel, NewGeographicalMarketModel, NewProductModel}
 import play.api.data.Form
 import play.api.mvc._
@@ -71,7 +72,12 @@ trait InvestmentGrowController extends FrontendController with AuthorisedAndEnro
         },
       validForm => {
         s4lConnector.saveFormData(KeystoreKeys.investmentGrow, validForm)
-        Future.successful(Redirect(routes.AddInvestorOrNomineeController.show()))
+        s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails).map {
+          case Some(data) if (data.nonEmpty) => Redirect(routes.ReviewAllInvestorsController.show())
+          case _ => s4lConnector.saveFormData(KeystoreKeys.backLinkAddInvestorOrNominee,
+            routes.InvestmentGrowController.show().url)
+            Redirect(routes.AddInvestorOrNomineeController.show())
+        }
       }
     )
   }

@@ -17,11 +17,17 @@
 package controllers.eis
 
 import auth.{MockAuthConnector, MockConfig}
+import common.KeystoreKeys
 import config.{AppConfig, FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
+import models.KiProcessingModel
+import org.mockito.Matchers
+import org.mockito.Mockito.when
 import uk.gov.hmrc.play.frontend.auth.connectors.AuthConnector
 import play.api.test.Helpers._
+
+import scala.concurrent.Future
 
 class FullTimeEmployeeCountErrorControllerSpec extends BaseSpec {
 
@@ -53,6 +59,8 @@ class FullTimeEmployeeCountErrorControllerSpec extends BaseSpec {
     }
 
     "return a valid 200 response from a show GET request when authorised" in {
+      when(mockS4lConnector.fetchAndGetFormData[KiProcessingModel](Matchers.eq(KeystoreKeys.kiProcessingModel))
+        (Matchers.any(), Matchers.any(),Matchers.any())).thenReturn(Future.successful(Option(kiProcessingModelMet)))
       showWithSessionAndAuth(controller.show)(
         result => {
           status(result) shouldBe OK

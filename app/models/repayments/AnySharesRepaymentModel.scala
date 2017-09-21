@@ -14,14 +14,12 @@
  * limitations under the License.
  */
 
-package models
+package models.repayments
 
 import play.api.libs.json.Json
 
-case class WhoRepaidSharesModel(forename : String, surname : String)
+case class AnySharesRepaymentModel (anySharesRepayment : String)
 
-object WhoRepaidSharesModel {
-
-  implicit val format = Json.format[WhoRepaidSharesModel]
+object AnySharesRepaymentModel {
+  implicit val format = Json.format[AnySharesRepaymentModel]
 }
-

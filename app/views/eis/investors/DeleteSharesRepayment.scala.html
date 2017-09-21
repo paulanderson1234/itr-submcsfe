@@ -1,0 +1,32 @@
+@import models.repayments.SharesRepaymentDetailsModel
+@import uk.gov.hmrc.play.views.html.helpers.{form}
+@import views.html.helpers.backButtonWithProgress
+
+@(sharesRepayment: SharesRepaymentDetailsModel)(implicit request: Request[_], messages: Messages)
+
+@main_template(Messages("page.repayments.deleteSharesRepayment.title")) {
+
+@backButtonWithProgress(controllers.eis.routes.ReviewPreviousRepaymentsController.show().url, Messages("common.section.progress.details.four"))
+
+<h1 id="main-heading" class="form-title heading-xlarge">@Messages("page.repayments.deleteSharesRepayment.heading")</h1>
+
+@if(sharesRepayment.whoRepaidSharesModel.isDefined){
+<p class="lede" id="info">
+    @Messages("page.repayments.deleteSharesRepayment.description", sharesRepayment.whoRepaidSharesModel.get.forename ++
+    " " ++ sharesRepayment.whoRepaidSharesModel.get.surname) </p>
+}
+
+@form(action = controllers.eis.routes.DeleteSharesRepaymentController.submit(sharesRepayment.processingId.get)){
+<div class="form-group"></div>
+<div class="form-group">
+    <button id="remove-button" class="button button--alert" type="submit">@Messages("common.base.remove")</button>
+</div>
+}
+
+<div class="form-group">
+    <a id="delete-sharesRepayment-cancel"
+       href="@controllers.eis.routes.ReviewPreviousRepaymentsController.show().url">
+        @Messages("common.button.cancel")</a>
+</div>
+
+}

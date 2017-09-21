@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package models
+package models.repayments
 
 import play.api.libs.json.Json
 
-case class SharesRepaymentTypeModel (sharesRepaymentType : String)
+case class SharesRepaymentTypeModel (sharesRepaymentType : String,
+                                     processingId: Option[Int] = None)
 
 object SharesRepaymentTypeModel {
   implicit val format = Json.format[SharesRepaymentTypeModel]

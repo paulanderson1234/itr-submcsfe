@@ -108,7 +108,7 @@ class FullTimeEmployeeCountControllerSpec extends BaseSpec {
         submitWithSessionAndAuth(controller.submit,formInput)(
           result => {
             status(result) shouldBe SEE_OTHER
-            redirectLocation(result) shouldBe Some(controllers.eis.routes.HadPreviousRFIController.show().url)
+            redirectLocation(result) shouldBe Some(controllers.eis.routes.SubsidiariesController.show().url)
           }
         )
       }
@@ -133,7 +133,7 @@ class FullTimeEmployeeCountControllerSpec extends BaseSpec {
         submitWithSessionAndAuth(controller.submit,formInput)(
           result => {
             status(result) shouldBe SEE_OTHER
-            redirectLocation(result) shouldBe Some(controllers.eis.routes.HadPreviousRFIController.show().url)
+            redirectLocation(result) shouldBe Some(controllers.eis.routes.SubsidiariesController.show().url)
           }
         )
       }

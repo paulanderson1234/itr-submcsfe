@@ -20,12 +20,14 @@ import auth.{AuthorisedAndEnrolledForTAVC, EIS}
 import common.{Constants, KeystoreKeys}
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
+import controllers.Helpers.ControllerHelpers
 import forms.AnySharesRepaymentForm._
-import models.AnySharesRepaymentModel
-import uk.gov.hmrc.play.frontend.controller.FrontendController
-import play.api.i18n.Messages.Implicits._
+import models.repayments.{AnySharesRepaymentModel, SharesRepaymentDetailsModel}
 import play.api.Play.current
+import play.api.i18n.Messages.Implicits._
+import uk.gov.hmrc.play.frontend.controller.FrontendController
 import views.html.eis.investors.AnySharesRepayment
+
 import scala.concurrent.Future
 
 
@@ -36,12 +38,11 @@ object AnySharesRepaymentController extends AnySharesRepaymentController{
   override lazy val enrolmentConnector = EnrolmentConnector
 }
 
-trait AnySharesRepaymentController extends FrontendController with AuthorisedAndEnrolledForTAVC {
+trait AnySharesRepaymentController extends FrontendController with AuthorisedAndEnrolledForTAVC with ControllerHelpers{
 
   override val acceptedFlows = Seq(Seq(EIS))
 
   val show = AuthorisedAndEnrolled.async { implicit user => implicit request =>
-
     s4lConnector.fetchAndGetFormData[AnySharesRepaymentModel](KeystoreKeys.anySharesRepayment).map {
       case Some(data) => Ok(AnySharesRepayment(anySharesRepaymentForm.fill(data)))
       case None => Ok(AnySharesRepayment(anySharesRepaymentForm))
@@ -54,16 +55,23 @@ trait AnySharesRepaymentController extends FrontendController with AuthorisedAnd
         Future.successful(BadRequest(AnySharesRepayment(formWithErrors)))
       },
       validFormData => {
-        s4lConnector.saveFormData(KeystoreKeys.anySharesRepayment, validFormData)
         validFormData.anySharesRepayment match {
           case Constants.StandardRadioButtonYesValue =>
-            Future.successful(Redirect(routes.WhoRepaidSharesController.show()))
+            s4lConnector.saveFormData(KeystoreKeys.anySharesRepayment, validFormData)
+            s4lConnector.fetchAndGetFormData[Vector[SharesRepaymentDetailsModel]](KeystoreKeys.sharesRepaymentDetails).map {
+              case Some(data) if (data.nonEmpty) => Redirect(routes.ReviewPreviousRepaymentsController.show())
+              case _ => s4lConnector.saveFormData(KeystoreKeys.backLinkWhoRepaidShares, routes.AnySharesRepaymentController.show().url)
+                Redirect(routes.WhoRepaidSharesController.show())
+            }
           case Constants.StandardRadioButtonNoValue =>
-            s4lConnector.saveFormData(KeystoreKeys.backLinkWasAnyValueReceived, routes.AnySharesRepaymentController.show().url)
-            Future.successful(Redirect(routes.WasAnyValueReceivedController.show()))
+            s4lConnector.fetchAndGetFormData[Vector[SharesRepaymentDetailsModel]](KeystoreKeys.sharesRepaymentDetails).map {
+              case Some(data) if (data.nonEmpty) => Redirect(routes.ReviewPreviousRepaymentsController.show())
+              case _ => s4lConnector.saveFormData(KeystoreKeys.anySharesRepayment, validFormData)
+                s4lConnector.saveFormData(KeystoreKeys.backLinkWasAnyValueReceived, routes.AnySharesRepaymentController.show().url)
+                Redirect(routes.WasAnyValueReceivedController.show())
+            }
         }
       }
     )
   }
-
 }

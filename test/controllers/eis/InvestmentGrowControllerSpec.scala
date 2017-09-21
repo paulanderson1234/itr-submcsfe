@@ -21,6 +21,7 @@ import common.KeystoreKeys
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
+import models.investorDetails.InvestorDetailsModel
 import models.{InvestmentGrowModel, NewGeographicalMarketModel, NewProductModel}
 import org.mockito.Matchers
 import org.mockito.Mockito._
@@ -49,6 +50,7 @@ class InvestmentGrowControllerSpec extends BaseSpec {
       (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(newGeographicalMarketModel))
     when(mockS4lConnector.fetchAndGetFormData[NewProductModel](Matchers.eq(KeystoreKeys.newProduct))
       (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(newProductModel))
+
   }
 
   "InvestmentGrowController" should {
@@ -171,6 +173,9 @@ class InvestmentGrowControllerSpec extends BaseSpec {
   "Sending a valid form submit to the InvestmentGrowController when authenticated and enrolled" should {
     "redirect to Contact Details Controller" in {
       setup(None,Some(newGeographicalMarketModelYes),Some(newProductMarketModelYes),Some(validBackLink))
+      when(mockS4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](Matchers.eq(KeystoreKeys.investorDetails))
+        (Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(None))
       mockEnrolledRequest(eisSchemeTypesModel)
       val formInput = "descriptionTextArea" -> "some text so it's valid"
       submitWithSessionAndAuth(TestController.submit,formInput)(
@@ -186,6 +191,9 @@ class InvestmentGrowControllerSpec extends BaseSpec {
 
     "return a SEE_OTHER" in {
       setup(None,Some(newGeographicalMarketModelYes),Some(newProductMarketModelYes),None)
+      when(mockS4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](Matchers.eq(KeystoreKeys.investorDetails))
+        (Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Some(listOfInvestorsComplete)))
       mockEnrolledRequest(eisSchemeTypesModel)
       val formInput = "descriptionTextArea" -> ""
       submitWithSessionAndAuth(TestController.submit,formInput)(
@@ -197,6 +205,9 @@ class InvestmentGrowControllerSpec extends BaseSpec {
 
     "redirect to WhatWillUseFor page" in {
       setup(None,Some(newGeographicalMarketModelYes),Some(newProductMarketModelYes), None)
+      when(mockS4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](Matchers.eq(KeystoreKeys.investorDetails))
+        (Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(Some(listOfInvestorsComplete)))
       mockEnrolledRequest(eisSchemeTypesModel)
       val formInput = "descriptionTextArea" -> ""
       submitWithSessionAndAuth(TestController.submit,formInput)(

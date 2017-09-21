@@ -22,6 +22,8 @@ import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
 import models._
+import models.investorDetails.InvestorDetailsModel
+import models.repayments.SharesRepaymentDetailsModel
 import org.mockito.Matchers
 import org.mockito.Mockito._
 import play.api.test.Helpers._
@@ -92,15 +94,37 @@ class AddAnotherInvestorControllerSpec extends BaseSpec {
     }
   }
 
-  "Sending a valid No form submission to the AddAnotherInvestorController when authenticated and enrolled" should {
+  "Sending a valid No form submission to the AddAnotherInvestorController with SharesRepaymentDetailsModel " +
+    "when authenticated and enrolled" should {
     "redirect to the Value Receieved page" in {
       val formInput = "addAnotherInvestor" -> Constants.StandardRadioButtonNoValue
       setupMocks()
+      when(mockS4lConnector.fetchAndGetFormData[Vector[SharesRepaymentDetailsModel]](Matchers.eq(KeystoreKeys.sharesRepaymentDetails))
+        (Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Some(inCompleteSharesRepaymentDetailsVector))
       mockEnrolledRequest(eisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,formInput)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(controllers.eis.routes.WasAnyValueReceivedController.show().url)
+          redirectLocation(result) shouldBe Some(controllers.eis.routes.ReviewPreviousRepaymentsController.show().url)
+        }
+      )
+    }
+  }
+
+  "Sending a valid No form submission to the AddAnotherInvestorController with no or empty SharesRepaymentDetailsModel " +
+    "when authenticated and enrolled" should {
+    "redirect to the Value Receieved page" in {
+      val formInput = "addAnotherInvestor" -> Constants.StandardRadioButtonNoValue
+      setupMocks()
+      when(mockS4lConnector.fetchAndGetFormData[Vector[SharesRepaymentDetailsModel]](Matchers.eq(KeystoreKeys.sharesRepaymentDetails))
+        (Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(None)
+      mockEnrolledRequest(eisSchemeTypesModel)
+      submitWithSessionAndAuth(TestController.submit,formInput)(
+        result => {
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(controllers.eis.routes.AnySharesRepaymentController.show().url)
         }
       )
     }

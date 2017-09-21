@@ -86,8 +86,8 @@ trait PreviousBeforeDOFCSController extends FrontendController with AuthorisedAn
   private def generatePage(day: Int, month: Int, year: Int, difference: Int, formWithErrors: Option[Form[PreviousBeforeDOFCSModel]])
                           (implicit request: Request[Any], user: TAVCUser): Future[Result] = {
     val newDate = new DateTime(year,month,day,0,0).plusYears(difference)
-    val convertedNewDate = toDateString(newDate.getDayOfMonth,newDate.getMonthOfYear,newDate.getYear)
-    val commercialDate = toDateString(day,month,year)
+    val convertedNewDate = dateToStringWithNoZeroDay(newDate.getDayOfMonth,newDate.getMonthOfYear,newDate.getYear)
+    val commercialDate = dateToStringWithNoZeroDay(day,month,year)
     val question = Messages("page.previousInvestment.previousBeforeDOFCS.heading",commercialDate,convertedNewDate)
     val description = Messages("page.previousInvestment.previousBeforeDOFCS.description",difference)
     if(formWithErrors.isDefined) {

@@ -19,7 +19,7 @@ package views.eis
 import auth.{MockAuthConnector, MockConfigEISFlow}
 import common.KeystoreKeys
 import controllers.eis.{DateSharesRepaidController, routes}
-import models.DateSharesRepaidModel
+import models.repayments.{DateSharesRepaidModel, SharesRepaymentDetailsModel}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.mockito.Matchers
@@ -28,16 +28,10 @@ import play.api.i18n.Messages
 import play.api.i18n.Messages.Implicits._
 import play.api.test.Helpers._
 import views.helpers.ViewSpec
+
 import scala.concurrent.Future
 
 class DateSharesRepaidSpec extends ViewSpec {
-
-  //TODO: Move test data below to BaseSpec
-  val dateSharesRepaidYear = 2004
-  val dateSharesRepaidMonth = 2
-  val dateSharesRepaidDay = 29
-  val dateSharesRepaidModel = DateSharesRepaidModel(Some(dateSharesRepaidDay), Some(dateSharesRepaidMonth), Some(dateSharesRepaidYear))
-  val dateSharesRepaidEmpty = DateSharesRepaidModel(None, None, None)
 
   object TestController extends DateSharesRepaidController {
     override lazy val applicationConfig = MockConfigEISFlow
@@ -50,19 +44,26 @@ class DateSharesRepaidSpec extends ViewSpec {
     when(mockS4lConnector.fetchAndGetFormData[DateSharesRepaidModel](Matchers.eq(KeystoreKeys.dateSharesRepaid))
       (Matchers.any(), Matchers.any(), Matchers.any()))
         .thenReturn(Future.successful(dateSharesRepaidModel))
+    when(mockS4lConnector.fetchAndGetFormData[Vector[SharesRepaymentDetailsModel]](Matchers.eq(KeystoreKeys.sharesRepaymentDetails))
+      (Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Some(inCompleteSharesRepaymentDetailsVector))
+
+    when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.backLinkSharesRepaymentDate))
+      (Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(Some(controllers.eis.routes.SharesRepaymentTypeController.show(1).toString)))
   }
 
    "The DateSharesRepaid page" should {
     "contain the correct elements for a GET when a valid DateSharesRepaidModel is returned from keystore" in new Setup {
       val document: Document = {
         setupMocks(Some(dateSharesRepaidModel))
-        val result = TestController.show.apply(authorisedFakeRequest)
+        val result = TestController.show(1).apply(authorisedFakeRequest)
         Jsoup.parse(contentAsString(result))
       }
       document.title() shouldBe Messages("page.DateSharesRepaid.title")
       document.getElementById("main-heading").text() shouldBe Messages("page.DateSharesRepaid.heading")
       document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.four")
-      document.body.getElementById("back-link").attr("href") shouldEqual routes.SharesRepaymentTypeController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual routes.SharesRepaymentTypeController.show(1).url
       document.body.getElementsByClass("form-hint").text should include(Messages("common.date.hint.example"))
       document.body.getElementById("dateSharesRepaidDay").parent.text shouldBe Messages("common.date.fields.day")
       document.body.getElementById("dateSharesRepaidMonth").parent.text shouldBe Messages("common.date.fields.month")
@@ -76,13 +77,13 @@ class DateSharesRepaidSpec extends ViewSpec {
 	 "contain the correct elements for a GET when there is no DateSharesRepaidModel returned from keystore" in new Setup {
       val document: Document = {
         setupMocks()
-        val result = TestController.show.apply(authorisedFakeRequest)
+        val result = TestController.show(1).apply(authorisedFakeRequest)
         Jsoup.parse(contentAsString(result))
       }
       document.title() shouldBe Messages("page.DateSharesRepaid.title")
       document.getElementById("main-heading").text() shouldBe Messages("page.DateSharesRepaid.heading")
       document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.four")
-      document.body.getElementById("back-link").attr("href") shouldEqual routes.SharesRepaymentTypeController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual routes.SharesRepaymentTypeController.show(1).url
       document.body.getElementsByClass("form-hint").text should include(Messages("common.date.hint.example"))
       document.body.getElementById("dateSharesRepaidDay").parent.text shouldBe Messages("common.date.fields.day")
       document.body.getElementById("dateSharesRepaidMonth").parent.text shouldBe Messages("common.date.fields.month")
@@ -103,7 +104,7 @@ class DateSharesRepaidSpec extends ViewSpec {
       document.title() shouldBe Messages("page.DateSharesRepaid.title")
       document.getElementById("main-heading").text() shouldBe Messages("page.DateSharesRepaid.heading")
       document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.four")
-      document.body.getElementById("back-link").attr("href") shouldEqual routes.SharesRepaymentTypeController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual routes.SharesRepaymentTypeController.show(1).url
       document.body.getElementsByClass("form-hint").text should include(Messages("common.date.hint.example"))
       document.body.getElementById("dateSharesRepaidDay").parent.text shouldBe Messages("common.date.fields.day")
       document.body.getElementById("dateSharesRepaidMonth").parent.text shouldBe Messages("common.date.fields.month")
