@@ -274,21 +274,18 @@ trait AcknowledgementController extends FrontendController with AuthorisedAndEnr
 
     val tenYearPlan = s4lConnector.fetchAndGetFormData[TenYearPlanModel](KeystoreKeys.tenYearPlan)
     val Ki = s4lConnector.fetchAndGetFormData[KiProcessingModel](KeystoreKeys.kiProcessingModel)
-    val isKnowledgeIntensive = s4lConnector.fetchAndGetFormData[IsKnowledgeIntensiveModel](KeystoreKeys.isKnowledgeIntensive)
 
     def createModel(tenYearPlanModel: Option[TenYearPlanModel],
-                    kiProcessingModel: Option[KiProcessingModel],
-                    isKnowledgeIntensiveModel:Option[IsKnowledgeIntensiveModel]) = {
+                    kiProcessingModel: Option[KiProcessingModel]) = {
       for {
         kiProcessingModel <- kiProcessingModel
-      } yield KiAnswersModel(kiProcessingModel,tenYearPlanModel,isKnowledgeIntensiveModel)
+      } yield KiAnswersModel(kiProcessingModel,tenYearPlanModel)
     }
 
     for {
       tenYearPlanModel <- tenYearPlan
       kiProcessingModel <- Ki
-      isKnowledgeIntensiveModel <- isKnowledgeIntensive
-    } yield createModel(tenYearPlanModel, kiProcessingModel, isKnowledgeIntensiveModel)
+    } yield createModel(tenYearPlanModel, kiProcessingModel)
   }
 
 

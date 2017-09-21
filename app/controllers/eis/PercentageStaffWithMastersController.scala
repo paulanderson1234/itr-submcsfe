@@ -58,10 +58,11 @@ trait PercentageStaffWithMastersController extends FrontendController with Autho
       kiModel match {
         // check previous answers present
         case Some(data) if isMissingData(data) => Future.successful(Redirect(routes.DateOfIncorporationController.show()))
-        case Some(dataWithPrevious) if !dataWithPrevious.companyAssertsIsKi.get => {
+        case Some(dataWithPrevious) if !dataWithPrevious.companyAssertsIsKi.get =>
+          Future.successful(Redirect(routes.IsCompanyKnowledgeIntensiveController.show()))
+        case Some(dataWithPrevious) if !dataWithPrevious.companyWishesToApplyKi.get =>
           Future.successful(Redirect(routes.IsKnowledgeIntensiveController.show()))
-        }
-        case Some(dataWithPreviousValid) => {
+        case Some(dataWithPreviousValid) =>
           // all good - save the cost condition result returned from API and navigate accordingly
           val updatedModel = dataWithPreviousValid.copy(secondaryCondtionsMet = isSecondaryKiConditionsMet,
             hasPercentageWithMasters = Some(percentageWithMasters))
@@ -77,7 +78,6 @@ trait PercentageStaffWithMastersController extends FrontendController with Autho
             // Non cost KI condition not met. Try other conditions.
             Future.successful(Redirect(routes.TenYearPlanController.show()))
           }
-        }
         case None => Future.successful(Redirect(routes.DateOfIncorporationController.show()))
       }
     }
@@ -108,6 +108,6 @@ trait PercentageStaffWithMastersController extends FrontendController with Autho
   }
 
   def isMissingData(data: KiProcessingModel): Boolean = {
-    data.dateConditionMet.isEmpty || data.companyAssertsIsKi.isEmpty || data.costsConditionMet.isEmpty
+    data.dateConditionMet.isEmpty || data.companyAssertsIsKi.isEmpty || data.companyWishesToApplyKi.isEmpty || data.costsConditionMet.isEmpty
   }
 }

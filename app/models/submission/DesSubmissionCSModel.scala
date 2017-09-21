@@ -61,7 +61,7 @@ object DesPreviousOwnershipModel{
 case class DesTradeModel(
                           businessActivity: Option[String],
                           baDescription: String,
-                          marketInfo: Option[DesMarketInfo],
+                          marketInfo: Option[DesMarketInfo], // eis only
                           thirtyDayRule: Option[Boolean],
                           dateTradeCommenced: String, // Not required for CS but required in DES scheme
                           annualCosts: Option[DesAnnualCostsModel],
@@ -171,7 +171,7 @@ case class DesOrganisationModel(
                                  utr:Option[String],
                                  chrn:Option[String],
                                  startDate:String,
-                                 firstDateOfCommercialSale:Option[String],
+                                 firstDateOfCommercialSale:Option[String], //esi only
                                  orgDetails: DesCompanyDetailsModel,
                                  previousRFIs: Option[DesRFICostsModel]
                                )
@@ -286,7 +286,7 @@ object DesSubmissionCSModel {
   }
 
   private def readDesTradeModel(answerModel: ComplianceStatementAnswersModel): DesTradeModel = {
-    DesTradeModel(readDesBussinessActivity(answerModel.companyDetailsAnswersModel),
+    DesTradeModel(readDesBusinessActivity(answerModel.companyDetailsAnswersModel),
       readDesBaDescription(answerModel.companyDetailsAnswersModel),
       readDesMarketInfo(answerModel), readDesThirtyDayRule(answerModel),
       readDesTradeDateCommenced(answerModel.companyDetailsAnswersModel),
@@ -294,7 +294,7 @@ object DesSubmissionCSModel {
       readDesPreviousOwnershipModel(answerModel))
   }
 
-  private def readDesBussinessActivity(companyDetailsAnswersModel: CompanyDetailsAnswersModel): Option[String] = {
+  private def readDesBusinessActivity(companyDetailsAnswersModel: CompanyDetailsAnswersModel): Option[String] = {
     companyDetailsAnswersModel.qualifyBusinessActivityModel.isQualifyBusinessActivity match {
       case Constants.qualifyPrepareToTrade => Some(BusinessActivity.preparingToTrade.toString)
       case Constants.qualifyResearchAndDevelopment => Some(BusinessActivity.researchAndDevelopment.toString)
@@ -307,7 +307,20 @@ object DesSubmissionCSModel {
   }
 
   private def readDesMarketInfo(answerModel: ComplianceStatementAnswersModel): Option[DesMarketInfo] = {
-    None
+    //EIS only. only populate if both new produt market and new geographic arket = no.
+    // if both no market description should not sent present either (but this is covered by previos comment)
+    def getMarketDescription(marketDescriptionModel: Option[MarketDescriptionModel]) : Option[String] = {
+      if(marketDescriptionModel.nonEmpty) Some(marketDescriptionModel.fold("")(_.text)) else None
+    }
+
+    answerModel.marketInfo match{
+      case Some(marketInfo) => if (marketInfo.newGeographicMarket.isNewGeographicalMarket == Constants.StandardRadioButtonYesValue ||
+        marketInfo.newProductMarket.isNewProduct == Constants.StandardRadioButtonYesValue)
+        Some(DesMarketInfo(answerToBoolean(marketInfo.newGeographicMarket.isNewGeographicalMarket),
+          answerToBoolean(marketInfo.newProductMarket.isNewProduct),getMarketDescription(marketInfo.marketDescription))) else None
+      case _  => None
+    }
+    
   }
 
   private def readDesThirtyDayRule(answerModel: ComplianceStatementAnswersModel): Option[Boolean] = {
@@ -342,12 +355,13 @@ object DesSubmissionCSModel {
   }
 
   private def readDesAnnualCostsModel(answerModel: ComplianceStatementAnswersModel): Option[DesAnnualCostsModel] = {
-    //DesAnnualCostsModel(None, readDesAnnualCostModel(answerModel))
 
-    //if (turnoverCosts.nonEmpty)
-    //Some(Converters.turnoverCostsToList(turnoverCosts.get))
-    //else None,
-    None
+    // eis only
+    if(answerModel.costsAnswersModel.operatingCosts.nonEmpty &&
+      answerModel.kiAnswersModel.fold(false)(kiModel => kiModel.kiProcessingModel.companyWishesToApplyKi.fold(false)(_.self)))
+      answerModel.costsAnswersModel.operatingCosts.fold(Some(DesAnnualCostsModel(List.empty)))(list =>
+        Some(DesAnnualCostsModel(Converters.operatingCostsToList(list)))) else None
+
   }
   private def readDesAnnualCostModel(answerModel: ComplianceStatementAnswersModel): Vector[AnnualCostModel] = {
     Vector.empty :+ AnnualCostModel("", readDesOperatingCost(answerModel), readDesResearchAndDevelopmentCost(answerModel))
@@ -362,11 +376,15 @@ object DesSubmissionCSModel {
   }
   private def readDesAnnualTurnoversModel(answerModel: ComplianceStatementAnswersModel): Option[DesAnnualTurnoversModel] = {
 
-    if(answerModel.costsAnswersModel.turnoverCostModel.nonEmpty && answerModel.kiAnswersModel.get.)
-    answerModel.costsAnswersModel.turnoverCostModel.fold(Some(DesAnnualTurnoversModel(List.empty)))(list =>
-      Some(DesAnnualTurnoversModel(Converters.turnoverCostsToList (list)))) else None
-
+    answerModel.marketInfo match{
+      case Some(marketInfo) => if (marketInfo.newGeographicMarket.isNewGeographicalMarket == Constants.StandardRadioButtonYesValue ||
+        marketInfo.newProductMarket.isNewProduct == Constants.StandardRadioButtonYesValue && answerModel.costsAnswersModel.turnoverCostModel.nonEmpty)
+        Some(DesAnnualTurnoversModel(answerModel.costsAnswersModel.turnoverCostModel.fold(List[TurnoverCostModel]())(list => Converters.turnoverCostsToList(list))))
+      else None
+      case _  => None
+    }
   }
+
   private def readDesPreviousOwnershipModel(answerModel: ComplianceStatementAnswersModel): Option[DesPreviousOwnershipModel] = {
     None
   }
@@ -434,10 +452,11 @@ object DesSubmissionCSModel {
 
   private def readDesKnowledgeIntensive(answerModel: ComplianceStatementAnswersModel): Option[KiModel] = {
 
+    // eis only
     answerModel.kiAnswersModel match {
       case Some(ki) =>
         val kiAnswersModel = answerModel.kiAnswersModel.get
-        if (kiAnswersModel.kiProcessingModel.companyAssertsIsKi.getOrElse(false))
+        if (kiAnswersModel.kiProcessingModel.companyWishesToApplyKi.getOrElse(false))
           Some(KiModel(skilledEmployeesConditionMet = kiAnswersModel.kiProcessingModel.hasPercentageWithMasters.getOrElse(false),
             innovationConditionMet = if (kiAnswersModel.tenYearPlanModel.nonEmpty) kiAnswersModel.tenYearPlanModel.get.tenYearPlanDesc else None,
             kiConditionMet = Some(kiAnswersModel.kiProcessingModel.isKi)))
@@ -559,6 +578,13 @@ object DesSubmissionCSModel {
   }
 
   private def readDateOfIncorporation(companyDetailsAnswersModel: CompanyDetailsAnswersModel) : String = {
+    if(companyDetailsAnswersModel.dateOfIncorporationModel.day.isDefined)
+      Validation.dateToDesFormat(companyDetailsAnswersModel.dateOfIncorporationModel.day.get,
+        companyDetailsAnswersModel.dateOfIncorporationModel.month.get, companyDetailsAnswersModel.dateOfIncorporationModel.year.get)
+    else Constants.standardIgnoreYearValue
+  }
+
+  private def readFirstDateOfCommericailSale(companyDetailsAnswersModel: CompanyDetailsAnswersModel) : String = {
     if(companyDetailsAnswersModel.dateOfIncorporationModel.day.isDefined)
       Validation.dateToDesFormat(companyDetailsAnswersModel.dateOfIncorporationModel.day.get,
         companyDetailsAnswersModel.dateOfIncorporationModel.month.get, companyDetailsAnswersModel.dateOfIncorporationModel.year.get)

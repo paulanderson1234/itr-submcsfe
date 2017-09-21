@@ -178,8 +178,7 @@ case class MarketInfoAnswersModel(newGeographicMarket: NewGeographicalMarketMode
 }
 
 case class KiAnswersModel(kiProcessingModel: KiProcessingModel,
-                          tenYearPlanModel: Option[TenYearPlanModel],
-                          isKnowledgeIntensiveModel: Option[IsKnowledgeIntensiveModel]){
+                          tenYearPlanModel: Option[TenYearPlanModel]){
 }
 
 case class CostsAnswerModel(operatingCosts: Option[OperatingCostsModel],

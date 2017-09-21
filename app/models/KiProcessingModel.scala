@@ -38,6 +38,7 @@ case class KiProcessingModel(
                               companyWishesToApplyKi : Option[Boolean] = None
                             ){
   val isKi: Boolean = if(companyAssertsIsKi.getOrElse(false) &&
+    companyWishesToApplyKi.getOrElse(false) &&
     dateConditionMet.getOrElse(false) &&
     costsConditionMet.getOrElse(false) &&
     secondaryCondtionsMet.getOrElse(false)) true else false

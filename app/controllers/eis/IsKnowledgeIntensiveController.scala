@@ -62,8 +62,8 @@ trait IsKnowledgeIntensiveController extends FrontendController with AuthorisedA
           if (!wantsToApplyKi & dataWithDateCondition.companyAssertsIsKi.getOrElse(false)) {
             // user changed from yes to no. Clear the processing data (keeping the date and isKi info)
             s4lConnector.saveFormData(KeystoreKeys.kiProcessingModel,
-              KiProcessingModel(companyAssertsIsKi = Some(wantsToApplyKi),
-                dateConditionMet = dataWithDateCondition.dateConditionMet))
+              KiProcessingModel(companyAssertsIsKi = dataWithDateCondition.companyAssertsIsKi,
+                dateConditionMet = dataWithDateCondition.dateConditionMet, companyWishesToApplyKi = Some(wantsToApplyKi)))
 
             // clear real data: TODO: it will work for now but we should probably clear the real data to ..how do this??
             //s4lConnector.saveFormData(KeystoreKeys.operatingCosts, Option[OperatingCostsModel] = None)

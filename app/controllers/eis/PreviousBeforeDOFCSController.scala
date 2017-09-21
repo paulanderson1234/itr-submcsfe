@@ -104,7 +104,7 @@ trait PreviousBeforeDOFCSController extends FrontendController with AuthorisedAn
                              formWithErrors: Option[Form[PreviousBeforeDOFCSModel]])(implicit request: Request[Any], user: TAVCUser): Future[Result] = {
 
     def isMissingKiData: Boolean =
-      kiProcessingModel.fold(true)(kiModel => kiModel.dateConditionMet.isEmpty || kiModel.companyAssertsIsKi.isEmpty)
+      kiProcessingModel.fold(true)(kiModel => kiModel.dateConditionMet.isEmpty || kiModel.companyAssertsIsKi.isEmpty || kiModel.companyWishesToApplyKi.isEmpty)
 
     def isMissingCommercialSale: Boolean =
       commercialSaleModel.fold(true)(commercialModel => commercialModel.commercialSaleDay.isEmpty
