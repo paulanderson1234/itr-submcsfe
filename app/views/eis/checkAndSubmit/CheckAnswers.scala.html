@@ -82,7 +82,7 @@
             }
             <!--If Knowledge Intensive is Yes-->
             @if(checkAnswersModel.isKnowledgeIntensiveModel.isDefined){
-                @if(checkAnswersModel.isKnowledgeIntensiveModel.get.isKnowledgeIntensive == Messages("common.radioYesLabel")){
+                @if(checkAnswersModel.isCompanyKnowledgeIntensiveModel.get.isCompanyKnowledgeIntensive == Messages("common.radioYesLabel") && checkAnswersModel.isKnowledgeIntensiveModel.get.isKnowledgeIntensive == Messages("common.radioYesLabel")){
                     <!-- Operating and R&D Costs -->
                     @if(checkAnswersModel.operatingCostsModel.isDefined){
                         @defining(checkAnswersModel.operatingCostsModel.get) { operatingAndRDCosts =>
