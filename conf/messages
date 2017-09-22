@@ -852,6 +852,8 @@ page.shareDetails.totalAmountSpent.title=How much of the investment from this sh
 # Full Time Employee Count Error
 page.companyDetails.fullTimeEmployeeCountError.error = This is because your company had 25 or more full-time equivalent employees on the share issue date.
 
+# EIS Full Time Employee Count Error
+page.eis.companyDetails.fullTimeEmployeeCountError.error.ki =  This is because your company had 500 or more full-time equivalent employees on the share issue date.
 page.eis.companyDetails.fullTimeEmployeeCountError.error = This is because your company had 250 or more full-time equivalent employees on the share issue date.
 page.eiski.companyDetails.fullTimeEmployeeCountError.error = This is because your company had 500 or more full-time equivalent employees on the share issue date.
 
