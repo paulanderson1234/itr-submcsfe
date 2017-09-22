@@ -833,7 +833,6 @@ page.companyDetails.fullTimeEmployeeCount.guidance.progressive = How to work thi
 page.companyDetails.fullTimeEmployeeCount.guidance.one = A full-time employee works at least 35 hours a week. You can''t include any employees on maternity / paternity leave, apprentices or students on vocational training.
 page.companyDetails.fullTimeEmployeeCount.guidance.two = The number of hours that each part-time employee works should be used to calculate their contribution to the full-time limit.
 page.companyDetails.fullTimeEmployeeCount.guidance.three = For example, someone working 21 hours a week would count as 60% of a full-time employee and someone working 14 hours a week would count as 40% of a full-time employee. Together they would count as one full-time employee.
-page.eiski.companyDetails.fullTimeEmployeeCountError.error = This is because your company had 500 or more full-time equivalent employees on the share issue date.
 
 #SEIS Total Amount Spent
 page.shareDetails.totalAmountSpent.heading=How much of the investment from this share issue has been spent?
@@ -842,6 +841,8 @@ page.shareDetails.totalAmountSpent.title=How much of the investment from this sh
 # SEIS Full Time Employee Count Error
 page.companyDetails.fullTimeEmployeeCountError.error = This is because your company had 25 or more full-time equivalent employees on the share issue date.
 
+# EIS Full Time Employee Count Error
+page.eis.companyDetails.fullTimeEmployeeCountError.error.ki =  This is because your company had 500 or more full-time equivalent employees on the share issue date.
 page.eis.companyDetails.fullTimeEmployeeCountError.error = This is because your company had 250 or more full-time equivalent employees on the share issue date.
 
 # SEIS Nominal Value of Shares
