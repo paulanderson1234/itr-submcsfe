@@ -21,10 +21,13 @@ import common.{Constants, KeystoreKeys}
 import config.FrontendAuthConnector
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
-import models.{HadPreviousRFIModel, PreviousSchemeModel}
+import models.submission.SchemeTypesModel
+import models.{HadOtherInvestmentsModel, HadPreviousRFIModel, PreviousSchemeModel}
 import org.mockito.Matchers
 import org.mockito.Mockito._
+import play.api.libs.json.Json
 import play.api.test.Helpers._
+import uk.gov.hmrc.http.cache.client.CacheMap
 
 import scala.concurrent.Future
 
@@ -37,9 +40,14 @@ class HadPreviousRFIControllerSpec extends BaseSpec {
     override lazy val enrolmentConnector = mockEnrolmentConnector
   }
 
-  def setupMocks(hadPreviousRFIModel: Option[HadPreviousRFIModel] = None): Unit = {
+  val cacheMapRemovedPreviousInvestments: CacheMap = CacheMap("", Map("" -> Json.toJson(Vector[PreviousSchemeModel]())))
+
+  def setupMocks(hadPreviousRFIModel: Option[HadPreviousRFIModel] = None, hadOtherInvestments: Option[HadOtherInvestmentsModel] = None): Unit = {
     when(mockS4lConnector.fetchAndGetFormData[HadPreviousRFIModel](Matchers.eq(KeystoreKeys.hadPreviousRFI))(Matchers.any(), Matchers.any(), Matchers.any()))
       .thenReturn(Future.successful(hadPreviousRFIModel))
+    when(mockS4lConnector.fetchAndGetFormData[HadOtherInvestmentsModel](Matchers.eq(KeystoreKeys.hadOtherInvestments))
+      (Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(hadOtherInvestments))
   }
 
   "HadPreviousRFIController" should {
@@ -74,6 +82,7 @@ class HadPreviousRFIControllerSpec extends BaseSpec {
 
   "Sending a valid 'Yes' form submit to the HadPreviousRFIController when authenticated and enrolled for EIS" should {
     "REDIRECT to the correct page in the flow" in {
+      setupMocks()
       mockEnrolledRequest(seisSchemeTypesModel)
       val formInput = "hadPreviousRFI" -> Constants.StandardRadioButtonYesValue
       submitWithSessionAndAuth(TestController.submit,formInput)(
@@ -87,7 +96,24 @@ class HadPreviousRFIControllerSpec extends BaseSpec {
 
   "Sending a valid 'No' form submit to the HadPreviousRFIController when authenticated and enrolled for EIS" should {
     "REDIRECT to the correct page in the flow" in {
+      setupMocks()
       mockEnrolledRequest(seisSchemeTypesModel)
+      val formInput = "hadPreviousRFI" -> Constants.StandardRadioButtonNoValue
+      submitWithSessionAndAuth(TestController.submit,formInput)(
+        result => {
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(routes.HadOtherInvestmentsController.show().url)
+        }
+      )
+    }
+  }
+
+  "Sending a valid 'No' form submit to the HadPreviousRFIController when authenticated and enrolled for EIS" should {
+    "REDIRECT to the correct page in the flow and remove all previous investments when HadOtherInvestments is also 'NO'" in {
+      setupMocks(hadOtherInvestments = Some(hadOtherInvestmentsModelNo))
+      mockEnrolledRequest(seisSchemeTypesModel)
+      when(mockS4lConnector.saveFormData(Matchers.eq(KeystoreKeys.previousSchemes), Matchers.any())(Matchers.any(), Matchers.any(),Matchers.any()))
+        .thenReturn(cacheMapRemovedPreviousInvestments)
       val formInput = "hadPreviousRFI" -> Constants.StandardRadioButtonNoValue
       submitWithSessionAndAuth(TestController.submit,formInput)(
         result => {
@@ -100,6 +126,7 @@ class HadPreviousRFIControllerSpec extends BaseSpec {
 
   "Sending an invalid form submission with validation errors to the HadPreviousRFIController when authenticated and enrolled for EIS" should {
     "load the page with a BAD_REQUEST" in {
+      setupMocks()
       mockEnrolledRequest(seisSchemeTypesModel)
       val formInput = "hadPreviousRFI" -> ""
       submitWithSessionAndAuth(TestController.submit,formInput)(

@@ -16,16 +16,18 @@
 
 package controllers.seis
 
-import auth.{AuthorisedAndEnrolledForTAVC, SEIS}
-import common.KeystoreKeys
+import auth.{TAVCUser, AuthorisedAndEnrolledForTAVC, SEIS}
+import common.{Constants, KeystoreKeys}
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.Helpers.PreviousSchemesHelper
 import forms.HadPreviousRFIForm._
-import models.HadPreviousRFIModel
+import models.{HadOtherInvestmentsModel, HadPreviousRFIModel}
+import play.api.mvc.Result
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
+import uk.gov.hmrc.play.http.HeaderCarrier
 import views.html.seis.previousInvestment.HadPreviousRFI
 
 import scala.concurrent.Future
@@ -56,8 +58,24 @@ trait HadPreviousRFIController extends FrontendController with AuthorisedAndEnro
       },
       validFormData => {
         s4lConnector.saveFormData(KeystoreKeys.hadPreviousRFI, validFormData)
-        Future.successful(Redirect(routes.HadOtherInvestmentsController.show()))
+        for {
+          hadOtherInvestments <- s4lConnector.fetchAndGetFormData[HadOtherInvestmentsModel](KeystoreKeys.hadOtherInvestments)
+          result <- routeRequest(hadOtherInvestments, validFormData)
+        } yield result
       }
     )
+  }
+
+  def routeRequest(hadOtherInvestmentsModel : Option[HadOtherInvestmentsModel], validFormData: HadPreviousRFIModel)
+                  (implicit headerCarrier: HeaderCarrier, tavcUser:TAVCUser): Future[Result]= {
+    validFormData.hadPreviousRFI match {
+      case Constants.StandardRadioButtonYesValue => Future.successful(Redirect(routes.HadOtherInvestmentsController.show()))
+      case Constants.StandardRadioButtonNoValue => {
+        if (hadOtherInvestmentsModel.isDefined && hadOtherInvestmentsModel.get.hadOtherInvestments.equals(Constants.StandardRadioButtonNoValue)) {
+          clearPreviousInvestments(s4lConnector)
+        }
+        Future.successful(Redirect(routes.HadOtherInvestmentsController.show()))
+      }
+    }
   }
 }
