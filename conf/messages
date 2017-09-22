@@ -574,7 +574,7 @@ summaryQuestion.hasCommercialSale =Sold any goods or services commercially
 summaryQuestion.commercialSaleDate =Date of first commercial sale
 summaryQuestion.hasTradeStartDate =Started trading yet
 summaryQuestion.tradeStartDate =Trade start date
-summaryQuestion.knowledgeIntensive =Knowledge intensive
+summaryQuestion.knowledgeIntensive =Apply as knowledge intensive company
 summaryQuestion.operatingCosts =Operating costs
 summaryQuestion.rdCosts =Research and development costs
 summaryQuestion.percentageStaffWithMasters =Percentage of staff with master's degrees
@@ -588,6 +588,8 @@ summaryQuestion.IsSeventyPercentSpent = Spent at least 70% of the money raised
 summaryQuestion.shareIssueDate = Date of share issue
 summaryQuestion.businessGrossAssets = Gross assets immediately before share issue
 summaryQuestion.fullTimeEmployees = Full-time employees at share issue date
+summaryQuestion.businessGrossAssetsAfterIssue=Gross assets immediately after share issue
+summaryQuestion.isCompanyKnowledgeIntensiveModel =Knowledge intensive
 
 page.investment.PreviousScheme.investmentAmount.OutOfRange=Enter an amount between 1 and 999999999
 page.investment.PreviousScheme.otherScheme.OutOfRange=Other scheme name should be no more than 50 characters
@@ -610,6 +612,12 @@ page.summaryQuestion.shareClass=Class of shares issued
 page.summaryQuestion.sharesIssues=Number of shares issued
 page.summaryQuestion.amountRaised=Total amount raised
 page.summaryQuestion.amountSpent=Total amount spent
+page.summaryQuestion.investmentGrow=Planned investment intention
+page.summaryQuestion.newProduct=New product market
+page.summaryQuestion.newGeoMarket=New geographic market
+page.summaryQuestion.turnoverCosts=Average annual turnover
+page.summaryQuestion.marketDescription=Market description
+page.summaryQuestion.thirtyDayRuleModel=Investments received within 30 day period
 
 #summary questions section four
 page.summaryQuestion.investorsSection=Section 4: Investors and nominees
@@ -622,6 +630,9 @@ page.summaryQuestion.isSharesValueReceived=Was any value received
 page.summaryQuestion.sharesValueReceived=What value was received
 page.summaryQuestion.isSharesValueChanged=Any changes in share capital
 page.summaryQuestion.sharesValueChanges=What were the changes
+page.repayments.type.label=Type of repayment or repurchase:
+page.repayments.date.label=Date of repayment or repurchase:
+page.repayments.amount.label=Amount repaid or repurchased:
 
 #summary questions section five
 page.summaryQuestion.companyDetailsSectionFive=Section 5: Contact details for this application
@@ -838,10 +849,11 @@ page.companyDetails.fullTimeEmployeeCount.guidance.three = For example, someone 
 page.shareDetails.totalAmountSpent.heading=How much of the investment from this share issue has been spent?
 page.shareDetails.totalAmountSpent.title=How much of the investment from this share issue has been spent?
 
-# SEIS Full Time Employee Count Error
+# Full Time Employee Count Error
 page.companyDetails.fullTimeEmployeeCountError.error = This is because your company had 25 or more full-time equivalent employees on the share issue date.
 
 page.eis.companyDetails.fullTimeEmployeeCountError.error = This is because your company had 250 or more full-time equivalent employees on the share issue date.
+page.eiski.companyDetails.fullTimeEmployeeCountError.error = This is because your company had 500 or more full-time equivalent employees on the share issue date.
 
 # SEIS Nominal Value of Shares
 page.nominalValueOfShares.title = What was the nominal value of each share when they were issued?
