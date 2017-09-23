@@ -21,9 +21,8 @@ import common.{Constants, KeystoreKeys}
 import config.FrontendGlobal.internalServerErrorTemplate
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector, SubmissionConnector}
-import controllers.Helpers.ControllerHelpers
 import forms.ShareIssueDateForm._
-import models.{HasInvestmentTradeStartedModel, ShareIssueDateModel, TradeStartDateModel}
+import models._
 import play.api.Logger
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import views.html.eis.companyDetails.ShareIssueDate
@@ -57,14 +56,33 @@ trait ShareIssueDateController extends FrontendController with AuthorisedAndEnro
 
   val submit = AuthorisedAndEnrolled.async { implicit user => implicit request =>
 
-    def routeRequest(hasInvestmentTradeStarted: HasInvestmentTradeStartedModel, shareIssueDate: ShareIssueDateModel) = {
+    def routeRequest(qualifyingBusinessDay: Int, qualifyingBusinessMonth: Int, qualifyingBusinessYear: Int, shareIssueDate: ShareIssueDateModel) = {
 
-      submissionConnector.validateSubmissionPeriod(hasInvestmentTradeStarted.hasInvestmentTradeStartedDay.get,
-                                                   hasInvestmentTradeStarted.hasInvestmentTradeStartedMonth.get,
-                                                   hasInvestmentTradeStarted.hasInvestmentTradeStartedYear.get,
+      submissionConnector.validateSubmissionPeriod(qualifyingBusinessDay, qualifyingBusinessMonth, qualifyingBusinessYear,
                                                    shareIssueDate.day.get, shareIssueDate.month.get, shareIssueDate.year.get) map {
         case canProceed => if (canProceed) Redirect(routes.GrossAssetsController.show())
                            else Redirect(routes.ShareIssueDateErrorController.show())
+      }
+    }
+
+    def getQualifyingBusinessType(shareIssueDateModel: ShareIssueDateModel, qualifyBusinessActivityModel: QualifyBusinessActivityModel) = {
+      qualifyBusinessActivityModel.isQualifyBusinessActivity match {
+        case Constants.qualifyPrepareToTrade =>   {
+          s4lConnector.fetchAndGetFormData[HasInvestmentTradeStartedModel](KeystoreKeys.hasInvestmentTradeStarted) flatMap {
+            case Some(data) => if (data.hasDate) routeRequest(data.hasInvestmentTradeStartedDay.get, data.hasInvestmentTradeStartedMonth.get,
+              data.hasInvestmentTradeStartedYear.get, shareIssueDateModel)
+            else Future.successful(Redirect(routes.HasInvestmentTradeStartedController.show()))
+            case None => Future.successful(Redirect(routes.HasInvestmentTradeStartedController.show()))
+          }
+        }
+        case Constants.qualifyResearchAndDevelopment =>   {
+          s4lConnector.fetchAndGetFormData[ResearchStartDateModel](KeystoreKeys.researchStartDate) flatMap {
+            case Some(data) => if (data.hasDate) routeRequest(data.researchStartDay.get, data.researchStartMonth.get,
+              data.researchStartYear.get, shareIssueDateModel)
+            else Future.successful(Redirect(routes.ResearchStartDateController.show()))
+            case None => Future.successful(Redirect(routes.ResearchStartDateController.show()))
+          }
+        }
       }
     }
 
@@ -74,10 +92,15 @@ trait ShareIssueDateController extends FrontendController with AuthorisedAndEnro
       },
       validFormData => {
         s4lConnector.saveFormData(KeystoreKeys.shareIssueDate, validFormData)
-        s4lConnector.fetchAndGetFormData[HasInvestmentTradeStartedModel](KeystoreKeys.hasInvestmentTradeStarted) flatMap {
-          case Some(data) => if(data.hasDate) routeRequest(data, validFormData)
-                             else Future.successful(Redirect(routes.HasInvestmentTradeStartedController.show()))
-          case None => Future.successful(Redirect(routes.HasInvestmentTradeStartedController.show()))
+        (for{
+          businessActivity <-  s4lConnector.fetchAndGetFormData[QualifyBusinessActivityModel](KeystoreKeys.isQualifyBusinessActivity)
+          result <- getQualifyingBusinessType(validFormData, businessActivity.get)
+        } yield result) recover {
+          case e: NoSuchElementException => Redirect(routes.QualifyBusinessActivityController.show())
+          case e: Exception => {
+            Logger.warn(s"[ShareIssueDateController][submit] - Submit Exception: ${e.getMessage}")
+            InternalServerError(internalServerErrorTemplate)
+          }
         }
       }
     )

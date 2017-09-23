@@ -16,6 +16,7 @@
 
 package models
 
+import common.Constants
 import play.api.libs.json.{Json, OFormat}
 import utils.DateFormatter
 
@@ -24,6 +25,11 @@ case class ResearchStartDateModel(hasStartedResearch: String, researchStartDay: 
   val toDate = if(researchStartDay.isDefined && researchStartMonth.isDefined &&
     researchStartYear.isDefined) s"${researchStartDay.get}-${researchStartMonth.get}-${researchStartYear.get}"
   else ""
+
+  val hasDate = {
+    hasStartedResearch == Constants.StandardRadioButtonYesValue && researchStartDay.isDefined && researchStartMonth.isDefined &&
+      researchStartYear.isDefined
+  }
 }
 
 object ResearchStartDateModel extends DateFormatter{

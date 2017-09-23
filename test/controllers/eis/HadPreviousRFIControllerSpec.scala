@@ -21,10 +21,12 @@ import common.{Constants, KeystoreKeys}
 import config.FrontendAuthConnector
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
-import models.{HadPreviousRFIModel, PreviousSchemeModel}
+import models.{HadOtherInvestmentsModel, HadPreviousRFIModel, PreviousSchemeModel}
 import org.mockito.Matchers
 import org.mockito.Mockito._
+import play.api.libs.json.Json
 import play.api.test.Helpers._
+import uk.gov.hmrc.http.cache.client.CacheMap
 
 import scala.concurrent.Future
 
@@ -36,6 +38,8 @@ class HadPreviousRFIControllerSpec extends BaseSpec {
     override lazy val s4lConnector = mockS4lConnector
     override lazy val enrolmentConnector = mockEnrolmentConnector
   }
+
+  val cacheMapRemovedPreviousInvestments: CacheMap = CacheMap("", Map("" -> Json.toJson(Vector[PreviousSchemeModel]())))
 
   "HadPreviousRFIController" should {
     "use the correct keystore connector" in {
@@ -49,9 +53,12 @@ class HadPreviousRFIControllerSpec extends BaseSpec {
     }
   }
 
-  def setupMocks(hadPreviousRFIModel: Option[HadPreviousRFIModel] = None): Unit = {
+  def setupMocks(hadPreviousRFIModel: Option[HadPreviousRFIModel] = None, hadOtherInvestments: Option[HadOtherInvestmentsModel] = None): Unit = {
     when(mockS4lConnector.fetchAndGetFormData[HadPreviousRFIModel](Matchers.eq(KeystoreKeys.hadPreviousRFI))(Matchers.any(), Matchers.any(), Matchers.any()))
       .thenReturn(Future.successful(hadPreviousRFIModel))
+    when(mockS4lConnector.fetchAndGetFormData[HadOtherInvestmentsModel](Matchers.eq(KeystoreKeys.hadOtherInvestments))
+      (Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(hadOtherInvestments))
   }
 
   "Sending a GET request to HadPreviousRFIController when authenticated and enrolled for EIS" should {
@@ -74,6 +81,7 @@ class HadPreviousRFIControllerSpec extends BaseSpec {
 
   "Sending a valid 'Yes' form submit to the HadPreviousRFIController when authenticated and enrolled for EIS" should {
     "REDIRECT to the correct page in the flow" in {
+      setupMocks()
       mockEnrolledRequest(eisSchemeTypesModel)
       val formInput = "hadPreviousRFI" -> Constants.StandardRadioButtonYesValue
       submitWithSessionAndAuth(TestController.submit,formInput)(
@@ -87,7 +95,24 @@ class HadPreviousRFIControllerSpec extends BaseSpec {
 
   "Sending a valid 'No' form submit to the HadPreviousRFIController when authenticated and enrolled for EIS" should {
     "REDIRECT to the correct page in the flow" in {
+      setupMocks()
       mockEnrolledRequest(eisSchemeTypesModel)
+      val formInput = "hadPreviousRFI" -> Constants.StandardRadioButtonNoValue
+      submitWithSessionAndAuth(TestController.submit,formInput)(
+        result => {
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(routes.HadOtherInvestmentsController.show().url)
+        }
+      )
+    }
+  }
+
+  "Sending a valid 'No' form submit to the HadPreviousRFIController when authenticated and enrolled for EIS" should {
+    "REDIRECT to the correct page in the flow and remove previous investors when hadOtherInvestments is also 'No'" in {
+      setupMocks(hadOtherInvestments = Some(hadOtherInvestmentsModelNo))
+      mockEnrolledRequest(eisSchemeTypesModel)
+      when(mockS4lConnector.saveFormData(Matchers.eq(KeystoreKeys.previousSchemes), Matchers.any())(Matchers.any(), Matchers.any(),Matchers.any()))
+        .thenReturn(cacheMapRemovedPreviousInvestments)
       val formInput = "hadPreviousRFI" -> Constants.StandardRadioButtonNoValue
       submitWithSessionAndAuth(TestController.submit,formInput)(
         result => {
@@ -100,6 +125,7 @@ class HadPreviousRFIControllerSpec extends BaseSpec {
 
   "Sending an invalid form submission with validation errors to the HadPreviousRFIController when authenticated and enrolled for EIS" should {
     "load the page with a BAD_REQUEST when a backlink is found" in {
+      setupMocks()
       when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.backLinkSubsidiaries))(Matchers.any(), Matchers.any(),Matchers.any()))
         .thenReturn(Future.successful(Some(routes.FullTimeEmployeeCountController.show().url)))
       mockEnrolledRequest(eisSchemeTypesModel)
