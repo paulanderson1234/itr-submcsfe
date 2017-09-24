@@ -294,7 +294,7 @@ class AnnualLimitExceededErrorControllerSpec extends BaseSpec {
       when(mockS4lConnector.fetchAndGetFormData[HadPreviousRFIModel](Matchers.eq(KeystoreKeys.hadPreviousRFI))(Matchers.any(), Matchers.any(), Matchers.any()))
         .thenReturn(Future.successful(Option(keyStoreSavedHadPreviousRFINo)))
       when(mockS4lConnector.fetchAndGetFormData[HadOtherInvestmentsModel](Matchers.eq(KeystoreKeys.hadOtherInvestments))
-        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(hadOtherInvestmentsModelNo)))
+            (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Option(hadOtherInvestmentsModelNo)))
       when(mockS4lConnector.fetchAndGetFormData[CommercialSaleModel](Matchers.eq(KeystoreKeys.commercialSale))(Matchers.any(), Matchers.any(), Matchers.any()))
         .thenReturn(Future.successful(Option(keyStoreSavedCommercialSale10YearsLessOneDay)))
       when(mockS4lConnector.fetchAndGetFormData[SubsidiariesModel](Matchers.eq(KeystoreKeys.subsidiaries))(Matchers.any(), Matchers.any(), Matchers.any()))

@@ -170,8 +170,6 @@ class NumberOfPreviouslyIssuedSharesControllerSpec extends BaseSpec{
 
   }
 
-
-  /**TODO Redirect to correct location when page created **/
   "Submitting to the NumberOfPreviouslyIssuedSharesController when authenticated and enrolled" should {
     "redirect to the NumberOfPreviouslyIssuedShares page if the form 'was not' previously populated" in {
 

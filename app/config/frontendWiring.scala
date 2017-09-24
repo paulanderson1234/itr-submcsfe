@@ -57,8 +57,8 @@ object TAVCShortLivedCache extends ShortLivedCache {
 }
 
 object WhitelistFilter extends AkamaiWhitelistFilter
-  with RunMode with MicroserviceFilterSupport{
 
+  with RunMode with MicroserviceFilterSupport{
   //implicit val system = ActorSystem("crf")
   //implicit def mat: Materializer = ActorMaterializer()
 

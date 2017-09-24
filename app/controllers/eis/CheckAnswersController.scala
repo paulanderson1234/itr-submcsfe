@@ -87,7 +87,8 @@ trait CheckAnswersController extends FrontendController with AuthorisedAndEnroll
       checkAnswer =>
         s4lConnector.fetchAndGetFormData[SchemeTypesModel](KeystoreKeys.selectedSchemes).map {
           case Some(schemeTypes) => Ok(CheckAnswers(checkAnswer, schemeTypes))
-          case None => Redirect(controllers.routes.ApplicationHubController.show())
+          case None =>
+            Redirect(controllers.routes.ApplicationHubController.show())
         }.recover {
           case e: Exception => Logger.warn(s"[CheckAnswersController][show] Exception calling fetchAndGetFormData: ${e.getMessage}")
             InternalServerError(internalServerErrorTemplate)

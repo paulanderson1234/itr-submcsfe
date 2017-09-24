@@ -21,11 +21,12 @@ import common.{Constants, KeystoreKeys}
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import forms.IsCompanyKnowledgeIntensiveForm._
-import models.{IsCompanyKnowledgeIntensiveModel, KiProcessingModel}
+import models.{IsCompanyKnowledgeIntensiveModel, IsKnowledgeIntensiveModel, KiProcessingModel}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import play.api.mvc._
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
+
 import scala.concurrent.Future
 import views.html.eis.companyDetails
 import views.html.eis.companyDetails.IsCompanyKnowledgeIntensive
@@ -50,23 +51,27 @@ trait IsCompanyKnowledgeIntensiveController extends FrontendController with Auth
 
   val submit = AuthorisedAndEnrolled.async { implicit user => implicit request =>
 
-    def routeRequest(kiModel: Option[KiProcessingModel], isKnowledgeIntensive: Boolean): Future[Result] = {
+    def routeRequest(kiModel: Option[KiProcessingModel], isCompanyAssertingKnowledgeIntensive: Boolean): Future[Result] = {
       kiModel match {
         case Some(data) if data.dateConditionMet.isEmpty => {
           Future.successful(Redirect(routes.DateOfIncorporationController.show()))
         }
         case Some(dataWithDateCondition) => {
-          if (!isKnowledgeIntensive) {
+          if (!isCompanyAssertingKnowledgeIntensive) {
             // user has said not knowledge intensive so reset the KIProcessing model so it correctly calculates the KI Flag
             // Clear the processing data (keeping the date and is  company KI info)
-            s4lConnector.saveFormData(KeystoreKeys.kiProcessingModel, KiProcessingModel(companyAssertsIsKi = Some(isKnowledgeIntensive),
+            s4lConnector.saveFormData(KeystoreKeys.kiProcessingModel, KiProcessingModel(companyAssertsIsKi = Some(isCompanyAssertingKnowledgeIntensive),
               dateConditionMet = dataWithDateCondition.dateConditionMet))
             s4lConnector.saveFormData(KeystoreKeys.backLinkFullTimeEmployeeCount, routes.IsCompanyKnowledgeIntensiveController.show().url)
+
+            // if user is not asserting they are KI need to clear any previous answer model for whether they also want to apply as Ki
+            s4lConnector.saveFormData(KeystoreKeys.isKnowledgeIntensive, IsKnowledgeIntensiveModel(Constants.StandardRadioButtonNoValue))
             Future.successful(Redirect(routes.FullTimeEmployeeCountController.show()))
           }
           else {
-            // don't update KIProcessing model here by setting companyAssertsIsKi as next page collects that datat which
-            // is used for page logic later. It should not be set here but only if they visited the next page.
+            // said is ki
+            s4lConnector.saveFormData(KeystoreKeys.kiProcessingModel,
+              dataWithDateCondition.copy(companyAssertsIsKi = Some(isCompanyAssertingKnowledgeIntensive)))
             Future.successful(Redirect(routes.IsKnowledgeIntensiveController.show()))
           }
         }

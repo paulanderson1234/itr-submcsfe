@@ -100,8 +100,50 @@ class PercentageStaffWithMastersControllerSpec extends BaseSpec {
   }
 
   "Sending a valid 'Yes' form submit with falseKi in the KI Model to the PercentageStaffWithMastersController when Authenticated and enrolled" should {
+    "redirect to the is company ki page" in {
+      setupSubmitMocks(Some(false), Some(kiModelAssertsKiFalse))
+      mockEnrolledRequest(eisSchemeTypesModel)
+      val formInput = "staffWithMasters" -> Constants.StandardRadioButtonYesValue
+      submitWithSessionAndAuth(TestController.submit,formInput)(
+        result => {
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(routes.IsCompanyKnowledgeIntensiveController.show().url)
+        }
+      )
+    }
+  }
+
+  "Sending a valid 'Yes' form submit with missing company wish to apply KI in the KI Model to the PercentageStaffWithMastersController" should {
     "redirect to the isKI page" in {
-      setupSubmitMocks(Some(false), Some(isKiKIModel))
+      setupSubmitMocks(Some(false), Some(kiModelMissingWantApplyKi))
+      mockEnrolledRequest(eisSchemeTypesModel)
+      val formInput = "staffWithMasters" -> Constants.StandardRadioButtonYesValue
+      submitWithSessionAndAuth(TestController.submit,formInput)(
+        result => {
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(routes.DateOfIncorporationController.show().url)
+        }
+      )
+    }
+  }
+
+  "Sending a valid 'Yes' form submit with missing asserts ki in the KI Model to the PercentageStaffWithMastersController" should {
+    "redirect to the isKI page" in {
+      setupSubmitMocks(Some(false), Some(kiModelMissingAssertKi))
+      mockEnrolledRequest(eisSchemeTypesModel)
+      val formInput = "staffWithMasters" -> Constants.StandardRadioButtonYesValue
+      submitWithSessionAndAuth(TestController.submit,formInput)(
+        result => {
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(routes.DateOfIncorporationController.show().url)
+        }
+      )
+    }
+  }
+
+  "Sending a valid 'Yes' form submit with company wants to apply KI is false in the KI Model to the PercentageStaffWithMastersController" should {
+    "redirect to the expected page" in {
+      setupSubmitMocks(Some(false), Some(kiModelWantApplyKiFalse))
       mockEnrolledRequest(eisSchemeTypesModel)
       val formInput = "staffWithMasters" -> Constants.StandardRadioButtonYesValue
       submitWithSessionAndAuth(TestController.submit,formInput)(
@@ -112,6 +154,8 @@ class PercentageStaffWithMastersControllerSpec extends BaseSpec {
       )
     }
   }
+
+
 
   "Sending a valid 'Yes' form submit without a KI Model to the PercentageStaffWithMastersController when Authenticated and enrolled" should {
     "redirect to the date of incorporation page" in {

@@ -59,7 +59,7 @@ trait IsKnowledgeIntensiveController extends FrontendController with AuthorisedA
           Future.successful(Redirect(routes.IsCompanyKnowledgeIntensiveController.show()))
         }
         case Some(dataWithDateCondition) => {
-          if (!wantsToApplyKi & dataWithDateCondition.companyAssertsIsKi.getOrElse(false)) {
+          if (!wantsToApplyKi & dataWithDateCondition.companyWishesToApplyKi.getOrElse(false)) {
             // user changed from yes to no. Clear the processing data (keeping the date and isKi info)
             s4lConnector.saveFormData(KeystoreKeys.kiProcessingModel,
               KiProcessingModel(companyAssertsIsKi = dataWithDateCondition.companyAssertsIsKi,
@@ -74,7 +74,8 @@ trait IsKnowledgeIntensiveController extends FrontendController with AuthorisedA
             Future.successful(Redirect(routes.FullTimeEmployeeCountController.show()))
           }
           else {
-            s4lConnector.saveFormData(KeystoreKeys.kiProcessingModel, dataWithDateCondition.copy(companyWishesToApplyKi = Some(wantsToApplyKi)))
+            s4lConnector.saveFormData(KeystoreKeys.kiProcessingModel,
+              dataWithDateCondition.copy(companyWishesToApplyKi = Some(wantsToApplyKi)))
             if (wantsToApplyKi) Future.successful(Redirect(routes.OperatingCostsController.show()))
             else {
               s4lConnector.saveFormData(KeystoreKeys.backLinkFullTimeEmployeeCount, routes.IsKnowledgeIntensiveController.show().url)

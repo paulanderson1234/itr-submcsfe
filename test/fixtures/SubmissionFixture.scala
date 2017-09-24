@@ -349,8 +349,9 @@ trait SubmissionFixture {
   //TODO: this model sets EIS values to None - need to test ESI version of this too
   val validSEISAnswersModel = ComplianceStatementAnswersModel(
     CompanyDetailsAnswersModel(natureOfBusinessValid, dateOfIncorporationValid, QualifyBusinessActivityModel(Constants.qualifyResearchAndDevelopment),
-      None, Some(ResearchStartDateModel("Yes", Some(1), Some(4), Some(2016))), None, shareIssueDateModel, GrossAssetsModel(1000),
-      FullTimeEmployeeCountModel(1), None),
+      hasInvestmentTradeStartedModel = None, researchStartDateModel = Some(ResearchStartDateModel("Yes", Some(1), Some(4), Some(2016))), seventyPercentSpentModel = None,
+      shareIssueDateModel = shareIssueDateModel, grossAssetsModel = GrossAssetsModel(1000),
+      grossAssetsAfterModel = None,fullTimeEmployeeCountModel = FullTimeEmployeeCountModel(1), commercialSaleModel = None),
     PreviousSchemesAnswersModel(HadPreviousRFIModel("Yes"), HadOtherInvestmentsModel("Yes"),
       Some(List(PreviousSchemeModel("test", 1, Some(1), Some("Name"), Some(1), Some(2), Some(2015), Some(1))))),
     ShareDetailsAnswersModel(ShareDescriptionModel(""),
@@ -360,5 +361,5 @@ trait SubmissionFixture {
     ContactDetailsAnswersModel(ContactDetailsModel("", "", None, None, ""),
       ConfirmCorrespondAddressModel("Yes", fullCorrespondenceAddress)),
     SupportingDocumentsUploadModel("Yes"),
-    SchemeTypesModel(eis = false, seis = true), None, None, CostsAnswerModel(None, None))
+    SchemeTypesModel(eis = false, seis = true), None, None, CostsAnswerModel(None, None),None, None,None, None)
 }

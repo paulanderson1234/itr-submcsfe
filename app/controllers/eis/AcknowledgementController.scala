@@ -21,10 +21,12 @@ import common.{Constants, KeystoreKeys}
 import config.FrontendGlobal._
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector, SubmissionConnector}
+import controllers.Helpers.TotalAmountRaisedHelper
 import controllers.feedback
 import models._
 import models.investorDetails.InvestorDetailsModel
 import models.registration.RegistrationDetailsModel
+import models.repayments.{AnySharesRepaymentModel, SharesRepaymentDetailsModel}
 import models.submission._
 import play.Logger
 import play.api.Play.current
@@ -50,11 +52,11 @@ object AcknowledgementController extends AcknowledgementController {
 trait AcknowledgementController extends FrontendController with AuthorisedAndEnrolledForTAVC {
 
   override val acceptedFlows = Seq(Seq(EIS))
-
   val submissionConnector: SubmissionConnector
   val registrationDetailsService: RegistrationDetailsService
   val fileUploadService: FileUploadService
 
+  //noinspection ScalaStyle
   def getAnswers(implicit hc: HeaderCarrier, user: TAVCUser): Future[Option[ComplianceStatementAnswersModel]] = {
     val companyDetailsAnswers = getCompanyDetailsAnswers
     val previousSchemesAnswers = getPreviousSchemesAnswersModel
@@ -63,8 +65,13 @@ trait AcknowledgementController extends FrontendController with AuthorisedAndEnr
     val contactDetailsAnswers = getContactDetailsAnswerModel
     val supportingDocumentsUpload = s4lConnector.fetchAndGetFormData[SupportingDocumentsUploadModel](KeystoreKeys.supportingDocumentsUpload)
     val schemeType = s4lConnector.fetchAndGetFormData[SchemeTypesModel](KeystoreKeys.selectedSchemes)
+    val kiAnswers = getKiProcessingAnswerModel
     val marketInfoAnswers = getMarketInfoAnswerModel
     val costAnswers = getCostAnswerModel
+    val thirtyDayRuleAnswers = getThirtyDayRuleAnswerModel
+    val investmentGrowAnswers = getInvestmentGrowAnswersModel
+    val subsidiariesAnswers = getSubsidiariesAnswersModel
+    val repaidSharesAnswers = getRepaidSharesAnswersModel
 
     def createModel(companyDetailsAnswersModel: Option[CompanyDetailsAnswersModel],
                     previousSchemesAnswersModel: Option[PreviousSchemesAnswersModel],
@@ -72,9 +79,15 @@ trait AcknowledgementController extends FrontendController with AuthorisedAndEnr
                     investorDetailsAnswersModel: Option[InvestorDetailsAnswersModel],
                     contactDetailsAnswersModel: Option[ContactDetailsAnswersModel],
                     supportingDocumentsUploadModel: Option[SupportingDocumentsUploadModel],
-                    schemeTypeModel:Option[SchemeTypesModel],
+                    schemeTypeModel: Option[SchemeTypesModel],
                     marketInfoAnswersModel: Option[MarketInfoAnswersModel],
-                    costsAnswersModel: CostsAnswerModel) = {
+                    kiAnswersModel: Option[KiAnswersModel],
+                    costsAnswersModel: CostsAnswerModel,
+                    thirtyDayRuleAnswersModel: Option[ThirtyDayRuleAnswersModel],
+                    investmentGrowAnswersModel: Option[InvestmentGrowAnswersModel],
+                    subsidiariesAnswersModel: Option[SubsidiariesAnswersModel],
+                    repaidSharesAnswersModel:Option[RepaidSharesAnswersModel]) = {
+
       for {
         companyDetailsAnswersModel <- companyDetailsAnswersModel
         previousSchemesAnswersModel <- previousSchemesAnswersModel
@@ -84,8 +97,10 @@ trait AcknowledgementController extends FrontendController with AuthorisedAndEnr
         supportingDocumentsUploadModel <- supportingDocumentsUploadModel
         schemeTypeModel <- schemeTypeModel
 
+
       } yield ComplianceStatementAnswersModel(companyDetailsAnswersModel, previousSchemesAnswersModel, shareDetailsAnswersModel, investorDetailsAnswersModel,
-        contactDetailsAnswersModel, supportingDocumentsUploadModel,schemeTypeModel,None, marketInfoAnswersModel, costsAnswersModel)
+        contactDetailsAnswersModel,supportingDocumentsUploadModel, schemeTypeModel, kiAnswersModel, marketInfoAnswersModel, costsAnswersModel, thirtyDayRuleAnswersModel,
+        investmentGrowAnswersModel, subsidiariesAnswersModel, repaidSharesAnswersModel)
     }
 
     for {
@@ -97,10 +112,15 @@ trait AcknowledgementController extends FrontendController with AuthorisedAndEnr
       supportingDocumentsUploadModel <- supportingDocumentsUpload
       schemeTypeModel <- schemeType
       marketInfoAnswersModel <- marketInfoAnswers
+      kiAnswersModel <- kiAnswers
       costsAnswersModel <- costAnswers
+      thirtyDayRuleAnswersModel <- thirtyDayRuleAnswers
+      investmentGrowAnswersModel <- investmentGrowAnswers
+      subsidiariesAnswersModel <- subsidiariesAnswers
+      repaidSharesAnswersModel <- repaidSharesAnswers
     } yield createModel(companyDetailsAnswersModel, previousSchemesAnswersModel, shareDetailsAnswersModel, investorDetailsAnswersModel,
-      contactDetailsAnswersModel, supportingDocumentsUploadModel, schemeTypeModel, marketInfoAnswersModel, costsAnswersModel
-    )
+      contactDetailsAnswersModel, supportingDocumentsUploadModel, schemeTypeModel, marketInfoAnswersModel, kiAnswersModel,costsAnswersModel, thirtyDayRuleAnswersModel,
+      investmentGrowAnswersModel, subsidiariesAnswersModel, repaidSharesAnswersModel)
   }
 
   def getCompanyDetailsAnswers(implicit hc: HeaderCarrier, user: TAVCUser): Future[Option[CompanyDetailsAnswersModel]] = {
@@ -109,9 +129,9 @@ trait AcknowledgementController extends FrontendController with AuthorisedAndEnr
     val qualifyingBusinessActivity = s4lConnector.fetchAndGetFormData[QualifyBusinessActivityModel](KeystoreKeys.isQualifyBusinessActivity)
     val hasInvestmentTradeStartedModel = s4lConnector.fetchAndGetFormData[HasInvestmentTradeStartedModel](KeystoreKeys.hasInvestmentTradeStarted)
     val researchStartDate = s4lConnector.fetchAndGetFormData[ResearchStartDateModel](KeystoreKeys.researchStartDate)
-    val seventyPercent = s4lConnector.fetchAndGetFormData[SeventyPercentSpentModel](KeystoreKeys.seventyPercentSpent)
     val shareIssueDate = s4lConnector.fetchAndGetFormData[ShareIssueDateModel](KeystoreKeys.shareIssueDate)
     val grossAssets = s4lConnector.fetchAndGetFormData[GrossAssetsModel](KeystoreKeys.grossAssets)
+    val grossAssetsAfter = s4lConnector.fetchAndGetFormData[GrossAssetsAfterIssueModel](KeystoreKeys.grossAssetsAfterIssue)
     val fullTimeEmployeeCount = s4lConnector.fetchAndGetFormData[FullTimeEmployeeCountModel](KeystoreKeys.fullTimeEmployeeCount)
     val commercialSale = s4lConnector.fetchAndGetFormData[CommercialSaleModel](KeystoreKeys.commercialSale)
 
@@ -120,9 +140,9 @@ trait AcknowledgementController extends FrontendController with AuthorisedAndEnr
                     qualifyingBusinessActivityModel: Option[QualifyBusinessActivityModel],
                     hasInvestmentTradeStartedModel: Option[HasInvestmentTradeStartedModel],
                     researchStartDateModel: Option[ResearchStartDateModel],
-                    seventyPercentSpentModel: Option[SeventyPercentSpentModel],
                     shareIssueDateModel: Option[ShareIssueDateModel],
                     grossAssetsModel: Option[GrossAssetsModel],
+                    grossAssetsAfterModel: Option[GrossAssetsAfterIssueModel],
                     fullTimeEmployeeCountModel: Option[FullTimeEmployeeCountModel],
                     commercialSaleModel: Option[CommercialSaleModel]) = {
       for {
@@ -133,8 +153,8 @@ trait AcknowledgementController extends FrontendController with AuthorisedAndEnr
         grossAssetsModel <- grossAssetsModel
         fullTimeEmployeeCountModel <- fullTimeEmployeeCountModel
       } yield {
-        CompanyDetailsAnswersModel(natureOfBusinessModel, dateOfIncorporationModel, qualifyingBusinessActivityModel,
-          hasInvestmentTradeStartedModel, researchStartDateModel, seventyPercentSpentModel, shareIssueDateModel, grossAssetsModel, fullTimeEmployeeCountModel, commercialSaleModel)
+        CompanyDetailsAnswersModel(natureOfBusinessModel, dateOfIncorporationModel, qualifyingBusinessActivityModel, hasInvestmentTradeStartedModel,
+          researchStartDateModel,seventyPercentSpentModel = None, shareIssueDateModel, grossAssetsModel, grossAssetsAfterModel,fullTimeEmployeeCountModel, commercialSaleModel)
       }
     }
 
@@ -144,14 +164,14 @@ trait AcknowledgementController extends FrontendController with AuthorisedAndEnr
       qualifyingBusinessActivityModel <- qualifyingBusinessActivity
       tradeStartDateModel <- hasInvestmentTradeStartedModel
       researchStartDateModel <- researchStartDate
-      seventyPercentModel <- seventyPercent
       shareIssueDateModel <- shareIssueDate
       grossAssetsModel <- grossAssets
+      grossAssetsAfterModel <- grossAssetsAfter
       fullTimeEmployeeCountModel <- fullTimeEmployeeCount
       commercialSaleModel <- commercialSale
     } yield {
       createModel(natureOfBusinessModel, dateOfIncorporationModel, qualifyingBusinessActivityModel, tradeStartDateModel, researchStartDateModel,
-        seventyPercentModel, shareIssueDateModel, grossAssetsModel, fullTimeEmployeeCountModel, commercialSaleModel)
+        shareIssueDateModel, grossAssetsModel, grossAssetsAfterModel, fullTimeEmployeeCountModel, commercialSaleModel)
     }
   }
 
@@ -175,29 +195,43 @@ trait AcknowledgementController extends FrontendController with AuthorisedAndEnr
     } yield createModel(hadPreviousRFIModel, otherInvestmentsModel, previousSchemeModel)
   }
 
+  def getRepaidSharesAnswersModel(implicit hc: HeaderCarrier, user: TAVCUser): Future[Option[RepaidSharesAnswersModel]] = {
+
+    val anySharesRepayment = s4lConnector.fetchAndGetFormData[AnySharesRepaymentModel](KeystoreKeys.anySharesRepayment)
+    val shareRepayments = s4lConnector.fetchAndGetFormData[List[SharesRepaymentDetailsModel]](KeystoreKeys.sharesRepaymentDetails)
+
+    def createModel(anySharesRepaymentModel: Option[AnySharesRepaymentModel],
+                    shareRepaymentsModel: Option[List[SharesRepaymentDetailsModel]]) = {
+      for {
+        anySharesRepaymentModel <- anySharesRepaymentModel
+      } yield RepaidSharesAnswersModel(anySharesRepaymentModel, shareRepaymentsModel)
+    }
+    for {
+      anySharesRepaymentModel <- anySharesRepayment
+      shareRepaymentsModel <- shareRepayments
+    } yield createModel(anySharesRepaymentModel, shareRepaymentsModel)
+  }
+
   def getShareDetailsAnswersModel(implicit hc: HeaderCarrier, user: TAVCUser): Future[Option[ShareDetailsAnswersModel]] = {
     val shareDescription = s4lConnector.fetchAndGetFormData[ShareDescriptionModel](KeystoreKeys.shareDescription)
     val numberOfShares = s4lConnector.fetchAndGetFormData[NumberOfSharesModel](KeystoreKeys.numberOfShares)
     val totalAmountRaised = s4lConnector.fetchAndGetFormData[TotalAmountRaisedModel](KeystoreKeys.totalAmountRaised)
-    val totalAmountSpent = s4lConnector.fetchAndGetFormData[TotalAmountSpentModel](KeystoreKeys.totalAmountSpent)
 
     def createModel(shareDescriptionModel: Option[ShareDescriptionModel],
                     numberOfSharesModel: Option[NumberOfSharesModel],
-                    totalAmountRaisedModel: Option[TotalAmountRaisedModel],
-                    totalAmountSpentModel: Option[TotalAmountSpentModel]) = {
+                    totalAmountRaisedModel: Option[TotalAmountRaisedModel]) = {
       for {
         shareDescriptionModel <- shareDescriptionModel
         numberOfSharesModel <- numberOfSharesModel
         totalAmountRaisedModel <- totalAmountRaisedModel
-      } yield ShareDetailsAnswersModel(shareDescriptionModel, numberOfSharesModel, totalAmountRaisedModel, totalAmountSpentModel)
+      } yield ShareDetailsAnswersModel(shareDescriptionModel, numberOfSharesModel, totalAmountRaisedModel, totalAmountSpentModel = None)
     }
 
     for {
       shareDescriptionModel <- shareDescription
       numberOfSharesModel <- numberOfShares
       totalAmountRaisedModel <- totalAmountRaised
-      totalAmountSpentModel <- totalAmountSpent
-    } yield createModel(shareDescriptionModel, numberOfSharesModel, totalAmountRaisedModel, totalAmountSpentModel)
+    } yield createModel(shareDescriptionModel, numberOfSharesModel, totalAmountRaisedModel)
   }
 
   def getInvestorDetailsAnswersModel(implicit hc: HeaderCarrier, user: TAVCUser): Future[Option[InvestorDetailsAnswersModel]] = {
@@ -208,7 +242,6 @@ trait AcknowledgementController extends FrontendController with AuthorisedAndEnr
     def createModel(investorList: Option[Vector[InvestorDetailsModel]],
                     valueReceivedModel: Option[WasAnyValueReceivedModel],
                     shareCapitalChangesModel: Option[ShareCapitalChangesModel]) = {
-
       for {
         investorList <- investorList
         valueReceivedModel <- valueReceivedModel
@@ -245,23 +278,30 @@ trait AcknowledgementController extends FrontendController with AuthorisedAndEnr
     val newGeographicalMarket = s4lConnector.fetchAndGetFormData[NewGeographicalMarketModel](KeystoreKeys.newGeographicalMarket)
     val newProduct = s4lConnector.fetchAndGetFormData[NewProductModel](KeystoreKeys.newProduct)
     val marketDescription = s4lConnector.fetchAndGetFormData[MarketDescriptionModel](KeystoreKeys.marketDescription)
+    val isMarketRouteApplicable = TotalAmountRaisedHelper.checkIfMarketInfoApplies(s4lConnector)
+    val turnoverApiCheckPassed = s4lConnector.fetchAndGetFormData[Boolean](KeystoreKeys.turnoverAPiCheckPassed)
 
     def createModel(newGeographicalMarketModel: Option[NewGeographicalMarketModel],
-                    newProductModel: Option[NewProductModel], marketDescriptionModel:Option[MarketDescriptionModel]) = {
+                    newProductModel: Option[NewProductModel], marketDescriptionModel: Option[MarketDescriptionModel],
+                    isMarketRouteApplicable: MarketRoutingCheckResult,
+                    turnoverApiCheckPassedModel:Option[Boolean]) = {
       for {
         newGeographicalMarketModel <- newGeographicalMarketModel
         newProductModel <- newProductModel
-      } yield MarketInfoAnswersModel(newGeographicalMarketModel, newProductModel,marketDescriptionModel)
+      } yield MarketInfoAnswersModel(newGeographicalMarketModel, newProductModel, marketDescriptionModel, isMarketRouteApplicable, turnoverApiCheckPassedModel)
     }
 
     for {
       newGeographicalMarketModel <- newGeographicalMarket
       newProductModel <- newProduct
       marketDescriptionModel <- marketDescription
-    } yield createModel(newGeographicalMarketModel, newProductModel,marketDescriptionModel)
+      isMarketRouteApplicable <- isMarketRouteApplicable
+      turnoverApiCheckPassedModel <- turnoverApiCheckPassed
+    } yield createModel(newGeographicalMarketModel, newProductModel, marketDescriptionModel, isMarketRouteApplicable, turnoverApiCheckPassedModel)
   }
 
   def getCostAnswerModel(implicit hc: HeaderCarrier, user: TAVCUser): Future[CostsAnswerModel] = {
+
     val turnoverCosts = s4lConnector.fetchAndGetFormData[AnnualTurnoverCostsModel](KeystoreKeys.turnoverCosts)
     val operatingCosts = s4lConnector.fetchAndGetFormData[OperatingCostsModel](KeystoreKeys.operatingCosts)
     for {
@@ -279,7 +319,7 @@ trait AcknowledgementController extends FrontendController with AuthorisedAndEnr
                     kiProcessingModel: Option[KiProcessingModel]) = {
       for {
         kiProcessingModel <- kiProcessingModel
-      } yield KiAnswersModel(kiProcessingModel,tenYearPlanModel)
+      } yield KiAnswersModel(kiProcessingModel, tenYearPlanModel)
     }
 
     for {
@@ -288,7 +328,58 @@ trait AcknowledgementController extends FrontendController with AuthorisedAndEnr
     } yield createModel(tenYearPlanModel, kiProcessingModel)
   }
 
+  def getSubsidiariesAnswersModel(implicit hc: HeaderCarrier, user: TAVCUser): Future[Option[SubsidiariesAnswersModel]] = {
 
+    //TODO: Include address/sunsidiary trade name when available. Will be hard coded in target model for now.
+    val subsidiariesSpendInvest = s4lConnector.fetchAndGetFormData[SubsidiariesSpendingInvestmentModel](KeystoreKeys.subsidiariesSpendingInvestment)
+    val subsidiariesNinetyOwned = s4lConnector.fetchAndGetFormData[SubsidiariesNinetyOwnedModel](KeystoreKeys.subsidiariesNinetyOwned)
+
+    def createModel(subsidiariesSpendInvestModel: Option[SubsidiariesSpendingInvestmentModel],
+                    subsidiariesNinetyOwnedModel: Option[SubsidiariesNinetyOwnedModel]) = {
+      for {
+        subsidiariesSpendInvestModel <- subsidiariesSpendInvestModel
+        subsidiariesNinetyOwnedModel <- subsidiariesNinetyOwnedModel
+      } yield SubsidiariesAnswersModel(subsidiariesSpendInvestModel, subsidiariesNinetyOwnedModel)
+    }
+
+    for {
+      subsidiariesSpendInvestModel <- subsidiariesSpendInvest
+      subsidiariesNinetyOwnedModel <- subsidiariesNinetyOwned
+    } yield createModel(subsidiariesSpendInvestModel, subsidiariesNinetyOwnedModel)
+  }
+
+
+  def getThirtyDayRuleAnswerModel(implicit hc: HeaderCarrier, user: TAVCUser): Future[Option[ThirtyDayRuleAnswersModel]] = {
+
+    val thirtyYearRule = s4lConnector.fetchAndGetFormData[ThirtyDayRuleModel](KeystoreKeys.thirtyDayRule)
+    val turnoverApiCheckPassed = s4lConnector.fetchAndGetFormData[Boolean](KeystoreKeys.turnoverAPiCheckPassed)
+
+    def createModel(thirtyYearRuleModel: Option[ThirtyDayRuleModel], turnoverApiCheckPassedModel:Option[Boolean]) = {
+      for {
+        thirtyYearRuleModel <- thirtyYearRuleModel
+        turnoverApiCheckPassedModel <- turnoverApiCheckPassedModel
+      } yield ThirtyDayRuleAnswersModel(thirtyYearRuleModel, turnoverApiCheckPassedModel)
+    }
+
+    for {
+      thirtyYearRuleModel <- thirtyYearRule
+      turnoverApiCheckPassedModel <- turnoverApiCheckPassed
+    } yield createModel(thirtyYearRuleModel, turnoverApiCheckPassedModel)
+  }
+
+  def getInvestmentGrowAnswersModel(implicit hc: HeaderCarrier, user: TAVCUser): Future[Option[InvestmentGrowAnswersModel]] = {
+    val investmentGrow = s4lConnector.fetchAndGetFormData[InvestmentGrowModel](KeystoreKeys.investmentGrow)
+
+    def createModel(investmentGrowModel: Option[InvestmentGrowModel]) = {
+      for {
+        investmentGrowModel <- investmentGrowModel
+      } yield InvestmentGrowAnswersModel(investmentGrowModel)
+    }
+
+    for {
+      investmentGrowModel <- investmentGrow
+    } yield createModel(investmentGrowModel)
+  }
 
   def processResult(answerModel: ComplianceStatementAnswersModel, tavcReferenceNumber: String,
                     registrationDetailsModel: Option[RegistrationDetailsModel])
@@ -337,6 +428,7 @@ trait AcknowledgementController extends FrontendController with AuthorisedAndEnr
       InternalServerError(internalServerErrorTemplate)
     }
   }
+
   //noinspection ScalaStyle
   val show = AuthorisedAndEnrolled.async { implicit user =>
     implicit request =>
@@ -344,11 +436,11 @@ trait AcknowledgementController extends FrontendController with AuthorisedAndEnr
       val sourceWithRef = for {
         tavcReferenceNumber <- getTavCReferenceNumber()
         answersModel <- getAnswers
-        isValid <- answersModel.get.validateEis(submissionConnector)
+        isValid <- answersModel.fold(Future.successful(false))(_.validateEis(submissionConnector, s4lConnector))
         registrationDetailsModel <- registrationDetailsService.getRegistrationDetails(tavcReferenceNumber)
       } yield if (isValid) (answersModel, tavcReferenceNumber, registrationDetailsModel) else (None, tavcReferenceNumber, registrationDetailsModel)
 
-      sourceWithRef.flatMap{
+      sourceWithRef.flatMap {
         case (Some(answersModel), tavcReferenceNumber, registrationDetailsModel) => {
           if (fileUploadService.getUploadFeatureEnabled) processResultUpload(answersModel, tavcReferenceNumber, registrationDetailsModel)
           else processResult(answersModel, tavcReferenceNumber, registrationDetailsModel)
@@ -398,4 +490,3 @@ trait AcknowledgementController extends FrontendController with AuthorisedAndEnr
   }
 
 }
-

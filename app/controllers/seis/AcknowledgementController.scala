@@ -83,7 +83,8 @@ trait AcknowledgementController extends FrontendController with AuthorisedAndEnr
         supportingDocumentsUploadModel <- supportingDocumentsUploadModel
         schemeTypeModel <- schemeTypeModel
       } yield ComplianceStatementAnswersModel(companyDetailsAnswersModel, previousSchemesAnswersModel, shareDetailsAnswersModel, investorDetailsAnswersModel,
-        contactDetailsAnswersModel, supportingDocumentsUploadModel,schemeTypeModel, None, None, CostsAnswerModel(None, None))
+        contactDetailsAnswersModel, supportingDocumentsUploadModel,schemeTypeModel, kiAnswersModel = None,
+        marketInfo = None, CostsAnswerModel(None, None), thirtyDayRuleAnswersModel = None, investmentGrow = None, subsidiaries = None, repaidSharesAnswersModel = None)
     }
 
     for {
@@ -128,8 +129,8 @@ trait AcknowledgementController extends FrontendController with AuthorisedAndEnr
         grossAssetsModel <- grossAssetsModel
         fullTimeEmployeeCountModel <- fullTimeEmployeeCountModel
       } yield {
-        CompanyDetailsAnswersModel(natureOfBusinessModel, dateOfIncorporationModel, qualifyingBusinessActivityModel,
-          hasInvestmentTradeStartedModel, researchStartDateModel, seventyPercentSpentModel, shareIssueDateModel, grossAssetsModel, fullTimeEmployeeCountModel, None)
+        CompanyDetailsAnswersModel(natureOfBusinessModel, dateOfIncorporationModel, qualifyingBusinessActivityModel, hasInvestmentTradeStartedModel,
+          researchStartDateModel,seventyPercentSpentModel, shareIssueDateModel, grossAssetsModel, grossAssetsAfterModel = None, fullTimeEmployeeCountModel, commercialSaleModel = None)
       }
     }
 
@@ -290,10 +291,10 @@ trait AcknowledgementController extends FrontendController with AuthorisedAndEnr
 
       val sourceWithRef = for {
         tavcReferenceNumber <- getTavCReferenceNumber()
-        seisAnswersModel <- getAnswers
-        isValid <- seisAnswersModel.get.validateSeis(submissionConnector)
+        answersModel <- getAnswers
+        isValid <- answersModel.fold(Future.successful(false))(_.validateSeis(submissionConnector))
         registrationDetailsModel <- registrationDetailsService.getRegistrationDetails(tavcReferenceNumber)
-      } yield if (isValid) (seisAnswersModel, tavcReferenceNumber, registrationDetailsModel) else (None, tavcReferenceNumber, registrationDetailsModel)
+      } yield if (isValid) (answersModel, tavcReferenceNumber, registrationDetailsModel) else (None, tavcReferenceNumber, registrationDetailsModel)
 
       sourceWithRef.flatMap{
         case (Some(seisAnswersModel), tavcReferenceNumber, registrationDetailsModel) => {

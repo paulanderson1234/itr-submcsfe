@@ -24,7 +24,7 @@ import uk.gov.hmrc.play.frontend.controller.FrontendController
 import forms.TurnoverCostsForm._
 import common.{Constants, KeystoreKeys}
 import config.FrontendGlobal._
-import models.{TotalAmountRaisedModel, AnnualTurnoverCostsModel, SubsidiariesModel}
+import models._
 import models.submission.CostModel
 import play.Logger
 import play.api.libs.json.Json
@@ -64,13 +64,19 @@ trait TurnoverCostsController extends FrontendController with AuthorisedAndEnrol
          case Some(true) => subsidiaries match {
            case Some(data)  if data.ownSubsidiaries == Constants.StandardRadioButtonYesValue =>
              s4lConnector.saveFormData(KeystoreKeys.backLinkSubSpendingInvestment, routes.TurnoverCostsController.show().url)
+             s4lConnector.saveFormData(KeystoreKeys.turnoverAPiCheckPassed, true)
                 Future.successful(Redirect(routes.SubsidiariesSpendingInvestmentController.show()))
            case Some(_) =>
              s4lConnector.saveFormData(KeystoreKeys.backLinkMarketDescription, routes.TurnoverCostsController.show().url)
+             s4lConnector.saveFormData(KeystoreKeys.turnoverAPiCheckPassed, true)
              Future.successful(Redirect(routes.MarketDescriptionController.show()))
-           case _ =>  Future.successful(Redirect(routes.SubsidiariesController.show()))
+           case _ =>
+             s4lConnector.saveFormData(KeystoreKeys.turnoverAPiCheckPassed, true)
+             Future.successful(Redirect(routes.SubsidiariesController.show()))
          }
-         case _ => Future.successful(Redirect(routes.ThirtyDayRuleController.show()))
+         case _ =>
+           s4lConnector.saveFormData(KeystoreKeys.turnoverAPiCheckPassed, false)
+           Future.successful(Redirect(routes.ThirtyDayRuleController.show()))
        }
     }
 
