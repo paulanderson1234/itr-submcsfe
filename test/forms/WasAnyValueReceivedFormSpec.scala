@@ -27,8 +27,8 @@ import uk.gov.hmrc.play.test.UnitSpec
 
 class WasAnyValueReceivedFormSpec extends UnitSpec with OneAppPerSuite {
 
-  lazy val maxLengthText = MockDataGenerator.randomAlphanumericString(Constants.shortTextLimit)
-  lazy val overMaxLengthText = MockDataGenerator.randomAlphanumericString(Constants.shortTextLimit  + 1)
+  lazy val maxLengthText = MockDataGenerator.randomAlphanumericString(Constants.SuggestedTextMaxLengthLower)
+  lazy val overMaxLengthText = MockDataGenerator.randomAlphanumericString(Constants.SuggestedTextMaxLengthLower  + 1)
 
   "Creating a form" when {
 
