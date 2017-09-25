@@ -81,7 +81,7 @@ object Transformers {
 
   def poundToPence(pounds: Either[String, Int]): String = {
     pounds match {
-      case Left(poundsMatch) => poundsMatch ++ getPenceSuffix(poundsMatch)
+      case Left(poundsMatch) => getPenceSuffix(poundsMatch)
       case Right(poundsMatch) => (poundsMatch * 100).toString
     }
   }
