@@ -223,7 +223,7 @@ trait BaseSpec extends UnitSpec with OneAppPerSuite with MockitoSugar with FakeR
 
   val fileId = "1"
 
-  val qualifyPrepareToTrade = QualifyBusinessActivityModel(Constants.qualifyPrepareToTrade)
+  val qualifyTrade = QualifyBusinessActivityModel(Constants.qualifyTrade)
   val qualifyResearchAndDevelopment = QualifyBusinessActivityModel(Constants.qualifyResearchAndDevelopment)
 
   val repaymentTypeShares = SharesRepaymentTypeModel(Constants.repaymentTypeShares, Some(1))

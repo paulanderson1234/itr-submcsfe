@@ -61,7 +61,7 @@ class QualifyBusinessActivityControllerSpec extends BaseSpec {
 
   "Sending a GET request to QualifyBusinessActivityController when authenticated and enrolled" should {
     "return a 200 when something is fetched from storage" in {
-      setupMocks(Some(qualifyPrepareToTrade))
+      setupMocks(Some(qualifyTrade))
       mockEnrolledRequest(seisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show())(
         result => status(result) shouldBe OK
@@ -79,7 +79,7 @@ class QualifyBusinessActivityControllerSpec extends BaseSpec {
 
   "Sending a valid trade selection form submission to the QualifyBusinessActivityController when authenticated and enrolled" should {
     "redirect to the Has Investment Trade Started page" in {
-      val formInput = "isQualifyBusinessActivity" -> Constants.qualifyPrepareToTrade
+      val formInput = "isQualifyBusinessActivity" -> Constants.qualifyTrade
       setupMocks()
       mockEnrolledRequest(seisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,formInput)(

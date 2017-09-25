@@ -294,9 +294,9 @@ object DesSubmissionCSModel {
 
   private def readDesBusinessActivity(companyDetailsAnswersModel: CompanyDetailsAnswersModel): Option[String] = {
     companyDetailsAnswersModel.qualifyBusinessActivityModel.isQualifyBusinessActivity match {
-      case Constants.qualifyPrepareToTrade => Some(BusinessActivity.preparingToTrade.toString)
+      case Constants.qualifyTrade => Some(BusinessActivity.trade.toString)
       case Constants.qualifyResearchAndDevelopment => Some(BusinessActivity.researchAndDevelopment.toString)
-      case _ => Some(BusinessActivity.trade.toString)
+      case _ => Some(BusinessActivity.preparingToTrade.toString)
     }
   }
 
@@ -328,7 +328,7 @@ object DesSubmissionCSModel {
 
   private def readDesTradeDateCommenced(companyDetailsAnswersModel: CompanyDetailsAnswersModel): String = {
     companyDetailsAnswersModel.qualifyBusinessActivityModel.isQualifyBusinessActivity match {
-      case Constants.qualifyPrepareToTrade => readPrepareToTradeDateCommenced(companyDetailsAnswersModel)
+      case Constants.qualifyTrade => readPrepareToTradeDateCommenced(companyDetailsAnswersModel)
       case Constants.qualifyResearchAndDevelopment => readResearchTradeDateCommenced(companyDetailsAnswersModel)
       case _ => Constants.standardIgnoreYearValue
     }

@@ -43,7 +43,7 @@ class CompanyDetailsAnswersModelSpec extends UnitSpec with MockitoSugar {
   "Calling .validate on CompanyDetailsAnswersModel" should {
     val completeModel = CompanyDetailsAnswersModel(NatureOfBusinessModel(""),
       DateOfIncorporationModel(Some(1), Some(2), Some(2015)),
-      QualifyBusinessActivityModel(Constants.qualifyPrepareToTrade),
+      QualifyBusinessActivityModel(Constants.qualifyTrade),
       Some(HasInvestmentTradeStartedModel("Yes", Some(1), Some(2), Some(2016))),
       Some(ResearchStartDateModel("Yes", Some(1), Some(2), Some(2016))),
       Some(SeventyPercentSpentModel("Yes")),

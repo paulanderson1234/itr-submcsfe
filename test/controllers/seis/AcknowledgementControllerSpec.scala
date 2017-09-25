@@ -139,7 +139,7 @@ class AcknowledgementControllerSpec extends BaseSpec {
     when(mockS4lConnector.fetchAndGetFormData[ConfirmCorrespondAddressModel](Matchers.eq(KeystoreKeys.confirmContactAddress))
       (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(confirmCorrespondAddressModel)))
     when(mockS4lConnector.fetchAndGetFormData[QualifyBusinessActivityModel](Matchers.eq(KeystoreKeys.isQualifyBusinessActivity))
-      (Matchers.any(), Matchers.any(),Matchers.any())).thenReturn(Future.successful(Some(qualifyPrepareToTrade)))
+      (Matchers.any(), Matchers.any(),Matchers.any())).thenReturn(Future.successful(Some(qualifyTrade)))
     when(mockS4lConnector.fetchAndGetFormData[DateOfIncorporationModel](Matchers.eq(KeystoreKeys.dateOfIncorporation))
       (Matchers.any(), Matchers.any(),Matchers.any())).thenReturn(Future.successful(Some(dateOfIncorporationModel)))
     when(mockS4lConnector.fetchAndGetFormData[NatureOfBusinessModel](Matchers.eq(KeystoreKeys.natureOfBusiness))

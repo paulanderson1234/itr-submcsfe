@@ -77,7 +77,7 @@ class CheckAnswersControllerSpec extends BaseSpec with CheckAnswersSpec {
       .thenReturn(Future.successful(investorDetailsModel))
 
     when(mockS4lConnector.fetchAndGetFormData[QualifyBusinessActivityModel](Matchers.eq(KeystoreKeys.isQualifyBusinessActivity))
-      (Matchers.any(), Matchers.any(),Matchers.any())).thenReturn(Future.successful(Some(qualifyPrepareToTrade)))
+      (Matchers.any(), Matchers.any(),Matchers.any())).thenReturn(Future.successful(Some(qualifyTrade)))
     when(mockS4lConnector.fetchAndGetFormData[ShareDescriptionModel](Matchers.eq(KeystoreKeys.shareDescription))
       (Matchers.any(), Matchers.any(), Matchers.any()))
       .thenReturn(Future.successful(Some(shareDescriptionModel)))

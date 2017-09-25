@@ -150,7 +150,7 @@ case class CompanyDetailsAnswersModel(natureOfBusinessModel: NatureOfBusinessMod
 
     qualifyBusinessActivityModel.isQualifyBusinessActivity match {
       case Constants.qualifyResearchAndDevelopment => researchStartDateModel.flatMap(validateResearch).getOrElse(Future.successful(false))
-      case Constants.qualifyPrepareToTrade => hasInvestmentTradeStartedModel.flatMap(validateTrade).getOrElse(Future.successful(false))
+      case Constants.qualifyTrade => hasInvestmentTradeStartedModel.flatMap(validateTrade).getOrElse(Future.successful(false))
       case _ => Future.successful(false)
     }
   }
@@ -187,7 +187,7 @@ case class CompanyDetailsAnswersModel(natureOfBusinessModel: NatureOfBusinessMod
 
     qualifyBusinessActivityModel.isQualifyBusinessActivity match {
       case Constants.qualifyResearchAndDevelopment => researchStartDateModel.flatMap(validateResearch).getOrElse(Future.successful(false))
-      case Constants.qualifyPrepareToTrade => hasInvestmentTradeStartedModel.flatMap(validateTrade).getOrElse(Future.successful(false))
+      case Constants.qualifyTrade => hasInvestmentTradeStartedModel.flatMap(validateTrade).getOrElse(Future.successful(false))
       case _ => Future.successful(false)
     }
   }
@@ -254,7 +254,7 @@ case class ShareDetailsAnswersModel(shareDescriptionModel: ShareDescriptionModel
 
     qualifyBusinessActivityModel.isQualifyBusinessActivity match {
       case Constants.qualifyResearchAndDevelopment => researchStartDateModel.flatMap(validateResearch).getOrElse(Future.successful(false))
-      case Constants.qualifyPrepareToTrade => hasInvestmentTradeStartedModel.flatMap(validateTrade).getOrElse(Future.successful(false))
+      case Constants.qualifyTrade => hasInvestmentTradeStartedModel.flatMap(validateTrade).getOrElse(Future.successful(false))
       case _ => Future.successful(false)
     }
   }

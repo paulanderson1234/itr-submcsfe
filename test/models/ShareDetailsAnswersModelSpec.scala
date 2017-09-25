@@ -51,24 +51,24 @@ class ShareDetailsAnswersModelSpec extends UnitSpec with MockitoSugar {
 
       "provided with no TradeStartDate data when the qualifying business activity is trade" in {
         await(completeModel
-          .validateSeis(QualifyBusinessActivityModel(Constants.qualifyPrepareToTrade), None, None, setupMockConnector())) shouldBe false
+          .validateSeis(QualifyBusinessActivityModel(Constants.qualifyTrade), None, None, setupMockConnector())) shouldBe false
       }
 
       "provided with a missing TradeStartDate when one should be present" in {
         await(completeModel
-          .validateSeis(QualifyBusinessActivityModel(Constants.qualifyPrepareToTrade),
+          .validateSeis(QualifyBusinessActivityModel(Constants.qualifyTrade),
             Some(HasInvestmentTradeStartedModel("Yes", None, None, None)), None, setupMockConnector())) shouldBe false
       }
 
       "provided with an empty TradeStartDate and no TotalAmountSpentModel" in {
         await(completeModel.copy(totalAmountSpentModel = None)
-          .validateSeis(QualifyBusinessActivityModel(Constants.qualifyPrepareToTrade),
+          .validateSeis(QualifyBusinessActivityModel(Constants.qualifyTrade),
             Some(HasInvestmentTradeStartedModel("No", None, None, None)), None, setupMockConnector())) shouldBe false
       }
 
       "provided with a TradeStartDate less than four months ago with no TotalAmountSpentModel" in {
         await(completeModel.copy(totalAmountSpentModel = None)
-          .validateSeis(QualifyBusinessActivityModel(Constants.qualifyPrepareToTrade),
+          .validateSeis(QualifyBusinessActivityModel(Constants.qualifyTrade),
             Some(HasInvestmentTradeStartedModel("Yes", Some(1), Some(1), Some(2016))), None, setupMockConnector(Some(false)))) shouldBe false
       }
 
@@ -100,19 +100,19 @@ class ShareDetailsAnswersModelSpec extends UnitSpec with MockitoSugar {
 
       "provided with an empty TradeStartDate and a TotalAmountSpentModel" in {
         await(completeModel
-          .validateSeis(QualifyBusinessActivityModel(Constants.qualifyPrepareToTrade),
+          .validateSeis(QualifyBusinessActivityModel(Constants.qualifyTrade),
             Some(HasInvestmentTradeStartedModel("No", None, None, None)), None, setupMockConnector())) shouldBe true
       }
 
       "provided with a TradeStartDate less than four months ago with a TotalAmountSpentModel" in {
         await(completeModel
-          .validateSeis(QualifyBusinessActivityModel(Constants.qualifyPrepareToTrade),
+          .validateSeis(QualifyBusinessActivityModel(Constants.qualifyTrade),
             Some(HasInvestmentTradeStartedModel("Yes", Some(1), Some(1), Some(2016))), None, setupMockConnector(Some(false)))) shouldBe true
       }
 
       "provided with a TradeStartDate more than four months ago with no TotalAmountSpentModel" in {
         await(completeModel.copy(totalAmountSpentModel = None)
-          validateSeis(QualifyBusinessActivityModel(Constants.qualifyPrepareToTrade),
+          validateSeis(QualifyBusinessActivityModel(Constants.qualifyTrade),
           Some(HasInvestmentTradeStartedModel("Yes", Some(1), Some(1), Some(2016))), None, setupMockConnector(Some(true)))) shouldBe true
       }
 

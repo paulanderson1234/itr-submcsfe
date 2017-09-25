@@ -35,7 +35,7 @@ trait Constants {
 
   val shortTextLimit: Int = 250
 
-  val businessActivityPreparation = "Preparing To Trade"
+  val businessActivityPreparation = "Trade"
   val businessActivityRAndD = "Research And Development"
   val businessActivityTrade = "Trade"
 
@@ -85,7 +85,7 @@ trait Constants {
   val EmailNotVerified = "SEND_EMAIL"
   val EmailVerificationError = "ERROR"
 
-  val qualifyPrepareToTrade = "Preparing to Trade"
+  val qualifyTrade = "Trade"
   val qualifyResearchAndDevelopment = "Research and Development"
 
   val investor = "Investor"

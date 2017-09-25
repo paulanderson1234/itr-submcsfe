@@ -32,7 +32,7 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
     "Verify that the Check Answers page contains the correct elements for Section 1: Company details" +
       " when it is fully populated with company detail models and had trade start date is true" in {
       val model = SEISCheckAnswersModel(Some(registeredAddressModel), Some(dateOfIncorporationModel), Some(natureOfBusinessModel),
-        Vector(), None, None, Some(qualifyPrepareToTrade), Some(hasInvestmentTradeStartedModelYes),
+        Vector(), None, None, Some(qualifyTrade), Some(hasInvestmentTradeStartedModelYes),
         Some(isSeventyPercentSpentModelYes), Some(shareIssuetDateModel), grossAssets, fullTimeEmployees, None, None, None, None, None,
         None, None, None, false)
       val page = CheckAnswers(model)(authorisedFakeRequest, applicationMessages)
@@ -67,7 +67,7 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
       companyDetailsTableTBody.select("tr").get(2).getElementById("qualifyBusinessActivity-question").text() shouldBe
         Messages("summaryQuestion.bussinessPurpose")
       companyDetailsTableTBody.select("tr").get(2).getElementById("qualifyBusinessActivity-answer").text() shouldBe
-        qualifyPrepareToTrade.isQualifyBusinessActivity
+        qualifyTrade.isQualifyBusinessActivity
       companyDetailsTableTBody.select("tr").get(2).getElementById("qualifyBusinessActivity-link")
         .attr("href") shouldEqual controllers.seis.routes.QualifyBusinessActivityController.show().url
       //hasInvestmentTradeStarted
@@ -118,7 +118,7 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
     "Verify that the Check Answers page contains the correct elements for Section 1: Company details" +
       " when it is fully populated with company detail models and had trade start date is false" in {
       val model = SEISCheckAnswersModel(Some(registeredAddressModel), Some(dateOfIncorporationModel),
-        Some(natureOfBusinessModel), Vector(), None, None, Some(qualifyPrepareToTrade), Some(hasInvestmentTradeStartedModelYes),
+        Some(natureOfBusinessModel), Vector(), None, None, Some(qualifyTrade), Some(hasInvestmentTradeStartedModelYes),
         Some(isSeventyPercentSpentModelYes), Some(shareIssuetDateModel), grossAssets, fullTimeEmployees, None, None, None, None, None,
         None, None, None, false)
       val page = CheckAnswers(model)(authorisedFakeRequest, applicationMessages)
@@ -153,7 +153,7 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
       companyDetailsTableTBody.select("tr").get(2).getElementById("qualifyBusinessActivity-question").text() shouldBe
         Messages("summaryQuestion.bussinessPurpose")
       companyDetailsTableTBody.select("tr").get(2).getElementById("qualifyBusinessActivity-answer").text() shouldBe
-        qualifyPrepareToTrade.isQualifyBusinessActivity
+        qualifyTrade.isQualifyBusinessActivity
       companyDetailsTableTBody.select("tr").get(2).getElementById("qualifyBusinessActivity-link")
         .attr("href") shouldEqual controllers.seis.routes.QualifyBusinessActivityController.show().url
       //hasInvestmentTradeStarted
