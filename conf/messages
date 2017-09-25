@@ -53,6 +53,8 @@ common.error.hard.incorrect.info.end=or submit a Compliance Statement when your 
 common.returnToDashboard=Return to dashboard
 common.page.forename.label=First Name
 common.page.surname.label=Last Name
+common.suggestedLimit.hint.short=Suggested limit: 20 words
+common.suggestedLimit.hint.long=Suggested limit: 200 words
 
 ## Common date Messages ##
 common.date.fields.day=Day
