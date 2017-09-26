@@ -93,16 +93,10 @@ trait CheckAnswersController extends FrontendController with AuthorisedAndEnroll
 
 
   def show (envelopeId: Option[String]) : Action[AnyContent]= AuthorisedAndEnrolled.async { implicit user => implicit request =>
-    if(envelopeId.fold("")(_.toString).length > 0) {
-        s4lConnector.saveFormData(KeystoreKeys.envelopeId, envelopeId.getOrElse(""))
-      }
 
     checkAnswersModel.flatMap {
       checkAnswers =>
         Future.successful(Ok(CheckAnswers(checkAnswers)))
-    }.recover {
-      case e: Exception => Logger.warn(s"[CheckAnswersController][show] Exception calling checkAnswersModel: ${e.getMessage}")
-        InternalServerError(internalServerErrorTemplate)
     }
   }
 

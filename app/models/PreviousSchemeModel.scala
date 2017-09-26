@@ -48,7 +48,7 @@ object PreviousSchemeModel extends DateFormatter with CostFormatter {
       case (true,true) => Array(investmentSpent)
       case (false,true) =>  Array(dateOfIssue, investmentSpent)
       case (true,false) => Array(investmentAmount, investmentSpent)
-      case (false,false) => Array(investmentSpent,dateOfIssue, investmentAmount)
+      case (false,false) => Array(dateOfIssue, investmentSpent, investmentAmount)
     }
   }
 

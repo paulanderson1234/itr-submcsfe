@@ -90,7 +90,7 @@
             @textRowHelperBasic("knowledgeIntensive", Messages("summaryQuestion.knowledgeIntensive"),checkAnswersModel.isKnowledgeIntensiveModel.get.isKnowledgeIntensive, Some(controllers.eis.routes.IsKnowledgeIntensiveController.show().toString))
             }
             <!--If Knowledge Intensive is Yes-->
-            @if(checkAnswersModel.isKnowledgeIntensiveModel.isDefined){
+            @if(checkAnswersModel.isCompanyKnowledgeIntensiveModel.isDefined && checkAnswersModel.isKnowledgeIntensiveModel.isDefined){
                 @if(checkAnswersModel.isCompanyKnowledgeIntensiveModel.get.isCompanyKnowledgeIntensive == Messages("common.radioYesLabel") && checkAnswersModel.isKnowledgeIntensiveModel.get.isKnowledgeIntensive == Messages("common.radioYesLabel")){
                     <!-- Operating and R&D Costs -->
                     @if(checkAnswersModel.operatingCostsModel.isDefined){
@@ -212,7 +212,7 @@
             <!-- Value received -->
             @if(checkAnswersModel.valueReceived.isDefined){
             @if(checkAnswersModel.valueReceived.get.wasAnyValueReceived == Messages("common.radioYesLabel")){
-            @textRowHelperMultiLineQuestion("valueReceived", Array(Messages("page.summaryQuestion.isSharesValueReceived"), "", Messages("page.summaryQuestion.sharesValueReceived")), Array(checkAnswersModel.valueReceived.get.wasAnyValueReceived, "", checkAnswersModel.valueReceived.get.aboutValueReceived.get), Some(controllers.seis.routes.WasAnyValueReceivedController.show().url))
+            @textRowHelperMultiLineQuestion("valueReceived", Array(Messages("page.summaryQuestion.isSharesValueReceived"), "", Messages("page.summaryQuestion.sharesValueReceived")), Array(checkAnswersModel.valueReceived.get.wasAnyValueReceived, "", checkAnswersModel.valueReceived.get.aboutValueReceived.get), Some(controllers.eis.routes.WasAnyValueReceivedController.show().url))
             }else{
             @textRowHelperBasic("valueReceived", Messages("page.summaryQuestion.isSharesValueReceived"), checkAnswersModel.valueReceived.get.wasAnyValueReceived, Some(controllers.eis.routes.WasAnyValueReceivedController.show().url))
             }
@@ -220,7 +220,7 @@
             <!-- Share Capital Changes -->
             @if(checkAnswersModel.shareCapitalChanges.isDefined){
             @if(checkAnswersModel.shareCapitalChanges.get.hasChanges == Messages("common.radioYesLabel")){
-            @textRowHelperMultiLineQuestion("shareCapitalChanges", Array(Messages("page.summaryQuestion.isSharesValueChanged"), "", Messages("page.summaryQuestion.sharesValueChanges")), Array(checkAnswersModel.shareCapitalChanges.get.hasChanges, "", checkAnswersModel.shareCapitalChanges.get.changesDescription.get), Some(controllers.seis.routes.ShareCapitalChangesController.show().url))
+            @textRowHelperMultiLineQuestion("shareCapitalChanges", Array(Messages("page.summaryQuestion.isSharesValueChanged"), "", Messages("page.summaryQuestion.sharesValueChanges")), Array(checkAnswersModel.shareCapitalChanges.get.hasChanges, "", checkAnswersModel.shareCapitalChanges.get.changesDescription.get), Some(controllers.eis.routes.ShareCapitalChangesController.show().url))
             }else{
             @textRowHelperBasic("shareCapitalChanges", Messages("page.summaryQuestion.isSharesValueChanged"), checkAnswersModel.shareCapitalChanges.get.hasChanges, Some(controllers.eis.routes.ShareCapitalChangesController.show().url))
             }

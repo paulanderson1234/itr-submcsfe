@@ -57,7 +57,8 @@ trait CheckAnswersSpec extends ViewSpec {
     when(mockS4lConnector.fetchAndGetFormData[Vector[SharesRepaymentDetailsModel]](Matchers.eq(KeystoreKeys.sharesRepaymentDetails))
       (Matchers.any(), Matchers.any(), Matchers.any()))
       .thenReturn(Some(validSharesRepaymentDetailsVector))
-    when(mockS4lConnector.fetchAndGetFormData[IsCompanyKnowledgeIntensiveModel](Matchers.any())(Matchers.any(), Matchers.any(),Matchers.any()))
+    when(mockS4lConnector.fetchAndGetFormData[IsCompanyKnowledgeIntensiveModel](Matchers.eq(KeystoreKeys.isCompanyKnowledgeIntensive))
+      (Matchers.any(), Matchers.any(),Matchers.any()))
       .thenReturn(Future.successful(Some(isCompanyKnowledgeIntensiveModelYes)))
     when(mockS4lConnector.fetchAndGetFormData[MarketDescriptionModel](Matchers.eq(KeystoreKeys.marketDescription))
       (Matchers.any(), Matchers.any(), Matchers.any()))
@@ -85,6 +86,7 @@ trait CheckAnswersSpec extends ViewSpec {
     when(mockS4lConnector.fetchAndGetFormData[AnySharesRepaymentModel](Matchers.eq(KeystoreKeys.anySharesRepayment))
       (Matchers.any(), Matchers.any(), Matchers.any()))
       .thenReturn(Future.successful(Some(anySharesRepaymentModelYes)))
+
   }
 
   def setupMocks(): Unit = {
@@ -123,6 +125,14 @@ trait CheckAnswersSpec extends ViewSpec {
       .thenReturn(Future.successful(Some(ShareCapitalChangesModel(Constants.StandardRadioButtonYesValue, Some("test")))))
     when(mockS4lConnector.fetchAndGetFormData[SupportingDocumentsUploadModel](Matchers.eq(KeystoreKeys.supportingDocumentsUpload))
       (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(SupportingDocumentsUploadModel("No"))))
+    when(mockS4lConnector.fetchAndGetFormData[SeventyPercentSpentModel](Matchers.eq(KeystoreKeys.seventyPercentSpent))
+      (Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(Some(isSeventyPercentSpentModelYes)))
+    when(mockS4lConnector.fetchAndGetFormData[TotalAmountSpentModel](Matchers.eq(KeystoreKeys.totalAmountSpent))(Matchers.any(), Matchers.any(),Matchers.any()))
+      .thenReturn(Future.successful(Some(TotalAmountSpentModel(5))))
+    when(mockS4lConnector.fetchAndGetFormData[ResearchStartDateModel](Matchers.eq(KeystoreKeys.researchStartDate))
+      (Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(Some(researchStartDateModelYes)))
   }
 
   def previousRFISetup(hadPreviousRFIModel: Option[HadPreviousRFIModel] = None,

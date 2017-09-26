@@ -89,9 +89,9 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
         Messages("summaryQuestion.hasCommercialSale")
       companyDetailsTableTBody.select("tr").get(4).getElementById("commercialSale-Answer0").text() shouldBe
         commercialSaleModelYes.hasCommercialSale
-      companyDetailsTableTBody.select("tr").get(4).getElementById("commercialSale-Question1").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(4).getElementById("commercialSale-Question2").text() shouldBe
         Messages("summaryQuestion.commercialSaleDate")
-      companyDetailsTableTBody.select("tr").get(4).getElementById("commercialSale-Answer1").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(4).getElementById("commercialSale-Answer2").text() shouldBe
         CommercialSaleModel.toDateString(commercialSaleModelYes.commercialSaleDay.get,commercialSaleModelYes.commercialSaleMonth.get,commercialSaleModelYes.commercialSaleYear.get)
       companyDetailsTableTBody.select("tr").get(4).getElementById("commercialSale-link")
         .attr("href") shouldEqual controllers.eis.routes.CommercialSaleController.show().url
@@ -138,64 +138,60 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
 
 
       //Operating costs
-      companyDetailsTableTBody.select("tr").get(10).getElementById("operatingCosts-question").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(10).getElementById("operatingCosts-Question0").text() shouldBe
         Messages("summaryQuestion.operatingCosts")
 
-      companyDetailsTableTBody.select("tr").get(10).getElementById("operatingCosts-Line0").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(10).getElementById("operatingCosts-Question3").text() shouldBe
+        Messages("summaryQuestion.rdCosts")
+
+      companyDetailsTableTBody.select("tr").get(10).getElementById("operatingCosts-Answer0").text() shouldBe
         OperatingCostsModel.getOperatingAndRDCostsAsFormattedString(operatingCostsModel.operatingCosts1stYear, Messages("page.companyDetails.OperatingCosts.row.heading.one"))
 
-      companyDetailsTableTBody.select("tr").get(10).getElementById("operatingCosts-Line1").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(10).getElementById("operatingCosts-Answer1").text() shouldBe
         OperatingCostsModel.getOperatingAndRDCostsAsFormattedString(operatingCostsModel.operatingCosts2ndYear, Messages("page.companyDetails.OperatingCosts.row.heading.two"))
 
-      companyDetailsTableTBody.select("tr").get(10).getElementById("operatingCosts-Line2").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(10).getElementById("operatingCosts-Answer2").text() shouldBe
         OperatingCostsModel.getOperatingAndRDCostsAsFormattedString(operatingCostsModel.operatingCosts3rdYear, Messages("page.companyDetails.OperatingCosts.row.heading.three"))
 
       companyDetailsTableTBody.select("tr").get(10).getElementById("operatingCosts-link")
         .attr("href") shouldEqual controllers.eis.routes.OperatingCostsController.show().url
 
-
-      //R&D costs
-      companyDetailsTableTBody.select("tr").get(11).getElementById("rdCosts-question").text() shouldBe
-        Messages("summaryQuestion.rdCosts")
-
-      companyDetailsTableTBody.select("tr").get(11).getElementById("rdCosts-Line0").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(10).getElementById("operatingCosts-Answer3").text() shouldBe
         OperatingCostsModel.getOperatingAndRDCostsAsFormattedString(operatingCostsModel.rAndDCosts1stYear, Messages("page.companyDetails.OperatingCosts.row.heading.one"))
 
-      companyDetailsTableTBody.select("tr").get(11).getElementById("rdCosts-Line1").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(10).getElementById("operatingCosts-Answer4").text() shouldBe
         OperatingCostsModel.getOperatingAndRDCostsAsFormattedString(operatingCostsModel.rAndDCosts2ndYear, Messages("page.companyDetails.OperatingCosts.row.heading.two"))
 
-      companyDetailsTableTBody.select("tr").get(11).getElementById("rdCosts-Line2").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(10).getElementById("operatingCosts-Answer5").text() shouldBe
         OperatingCostsModel.getOperatingAndRDCostsAsFormattedString(operatingCostsModel.rAndDCosts3rdYear, Messages("page.companyDetails.OperatingCosts.row.heading.three"))
 
-      companyDetailsTableTBody.select("tr").get(11).getElementById("rdCosts-link")
-        .attr("href") shouldEqual controllers.eis.routes.OperatingCostsController.show().url
       //Percentage of staff with masters
-      companyDetailsTableTBody.select("tr").get(12).getElementById("percentageStaffWithMasters-question").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(11).getElementById("percentageStaffWithMasters-question").text() shouldBe
         Messages("summaryQuestion.percentageStaffWithMasters")
-      companyDetailsTableTBody.select("tr").get(12).getElementById("percentageStaffWithMasters-answer").text() shouldBe
-        PercentageStaffWithMastersModel.staffWithMastersToString(percentageStaffWithMastersModelYes.staffWithMasters)
-      companyDetailsTableTBody.select("tr").get(12).getElementById("percentageStaffWithMasters-link")
+      companyDetailsTableTBody.select("tr").get(11).getElementById("percentageStaffWithMasters-answer").text() shouldBe
+        PercentageStaffWithMastersModel.staffWithMastersToString(percentageStaffWithMastersModelNo.staffWithMasters)
+      companyDetailsTableTBody.select("tr").get(11).getElementById("percentageStaffWithMasters-link")
         .attr("href") shouldEqual controllers.eis.routes.PercentageStaffWithMastersController.show().url
 
       //Ten year plan
-      companyDetailsTableTBody.select("tr").get(13).getElementById("tenYearPlan-Question0").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(12).getElementById("tenYearPlan-Question0").text() shouldBe
         Messages("summaryQuestion.developmentPlan")
-      companyDetailsTableTBody.select("tr").get(13).getElementById("tenYearPlan-Answer0").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(12).getElementById("tenYearPlan-Answer0").text() shouldBe
         tenYearPlanModelYes.hasTenYearPlan
-      companyDetailsTableTBody.select("tr").get(13).getElementById("tenYearPlan-Question1").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(12).getElementById("tenYearPlan-Question1").text() shouldBe
         Messages("summaryQuestion.developmentPlanDesc")
-      companyDetailsTableTBody.select("tr").get(13).getElementById("tenYearPlan-Answer1").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(12).getElementById("tenYearPlan-Answer1").text() shouldBe
         tenYearPlanModelYes.tenYearPlanDesc.get
 
-      companyDetailsTableTBody.select("tr").get(13).getElementById("tenYearPlan-link")
+      companyDetailsTableTBody.select("tr").get(12).getElementById("tenYearPlan-link")
         .attr("href") shouldEqual controllers.eis.routes.TenYearPlanController.show().url
 
       //Fulltime employees
-      companyDetailsTableTBody.select("tr").get(14).getElementById("fullTimeEmployees-question").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(13).getElementById("fullTimeEmployees-question").text() shouldBe
         Messages("summaryQuestion.fullTimeEmployees")
-      companyDetailsTableTBody.select("tr").get(14).getElementById("fullTimeEmployees-answer").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(13).getElementById("fullTimeEmployees-answer").text() shouldBe
         fullTimeEmployeeModel.employeeCount.toString()
-      companyDetailsTableTBody.select("tr").get(14).getElementById("fullTimeEmployees-link")
+      companyDetailsTableTBody.select("tr").get(13).getElementById("fullTimeEmployees-link")
         .attr("href") shouldEqual controllers.eis.routes.FullTimeEmployeeCountController.show().url
 
       document.getElementById("submit").text() shouldBe Messages("page.checkAndSubmit.checkAnswers.button.confirm")
@@ -258,9 +254,9 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
         Messages("summaryQuestion.hasCommercialSale")
       companyDetailsTableTBody.select("tr").get(4).getElementById("commercialSale-Answer0").text() shouldBe
         commercialSaleModelYes.hasCommercialSale
-      companyDetailsTableTBody.select("tr").get(4).getElementById("commercialSale-Question1").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(4).getElementById("commercialSale-Question2").text() shouldBe
         Messages("summaryQuestion.commercialSaleDate")
-      companyDetailsTableTBody.select("tr").get(4).getElementById("commercialSale-Answer1").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(4).getElementById("commercialSale-Answer2").text() shouldBe
         CommercialSaleModel.toDateString(commercialSaleModelYes.commercialSaleDay.get,commercialSaleModelYes.commercialSaleMonth.get,commercialSaleModelYes.commercialSaleYear.get)
       companyDetailsTableTBody.select("tr").get(4).getElementById("commercialSale-link")
         .attr("href") shouldEqual controllers.eis.routes.CommercialSaleController.show().url
@@ -307,51 +303,48 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
 
 
       //Operating costs
-      companyDetailsTableTBody.select("tr").get(10).getElementById("operatingCosts-question").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(10).getElementById("operatingCosts-Question0").text() shouldBe
         Messages("summaryQuestion.operatingCosts")
 
-      companyDetailsTableTBody.select("tr").get(10).getElementById("operatingCosts-Line0").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(10).getElementById("operatingCosts-Question3").text() shouldBe
+        Messages("summaryQuestion.rdCosts")
+
+      companyDetailsTableTBody.select("tr").get(10).getElementById("operatingCosts-Answer0").text() shouldBe
         OperatingCostsModel.getOperatingAndRDCostsAsFormattedString(operatingCostsModel.operatingCosts1stYear, Messages("page.companyDetails.OperatingCosts.row.heading.one"))
 
-      companyDetailsTableTBody.select("tr").get(10).getElementById("operatingCosts-Line1").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(10).getElementById("operatingCosts-Answer1").text() shouldBe
         OperatingCostsModel.getOperatingAndRDCostsAsFormattedString(operatingCostsModel.operatingCosts2ndYear, Messages("page.companyDetails.OperatingCosts.row.heading.two"))
 
-      companyDetailsTableTBody.select("tr").get(10).getElementById("operatingCosts-Line2").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(10).getElementById("operatingCosts-Answer2").text() shouldBe
         OperatingCostsModel.getOperatingAndRDCostsAsFormattedString(operatingCostsModel.operatingCosts3rdYear, Messages("page.companyDetails.OperatingCosts.row.heading.three"))
 
       companyDetailsTableTBody.select("tr").get(10).getElementById("operatingCosts-link")
         .attr("href") shouldEqual controllers.eis.routes.OperatingCostsController.show().url
 
-
-      //R&D costs
-      companyDetailsTableTBody.select("tr").get(11).getElementById("rdCosts-question").text() shouldBe
-        Messages("summaryQuestion.rdCosts")
-
-      companyDetailsTableTBody.select("tr").get(11).getElementById("rdCosts-Line0").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(10).getElementById("operatingCosts-Answer3").text() shouldBe
         OperatingCostsModel.getOperatingAndRDCostsAsFormattedString(operatingCostsModel.rAndDCosts1stYear, Messages("page.companyDetails.OperatingCosts.row.heading.one"))
 
-      companyDetailsTableTBody.select("tr").get(11).getElementById("rdCosts-Line1").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(10).getElementById("operatingCosts-Answer4").text() shouldBe
         OperatingCostsModel.getOperatingAndRDCostsAsFormattedString(operatingCostsModel.rAndDCosts2ndYear, Messages("page.companyDetails.OperatingCosts.row.heading.two"))
 
-      companyDetailsTableTBody.select("tr").get(11).getElementById("rdCosts-Line2").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(10).getElementById("operatingCosts-Answer5").text() shouldBe
         OperatingCostsModel.getOperatingAndRDCostsAsFormattedString(operatingCostsModel.rAndDCosts3rdYear, Messages("page.companyDetails.OperatingCosts.row.heading.three"))
 
-      companyDetailsTableTBody.select("tr").get(11).getElementById("rdCosts-link")
-        .attr("href") shouldEqual controllers.eis.routes.OperatingCostsController.show().url
+
       //Percentage of staff with masters
-      companyDetailsTableTBody.select("tr").get(12).getElementById("percentageStaffWithMasters-question").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(11).getElementById("percentageStaffWithMasters-question").text() shouldBe
         Messages("summaryQuestion.percentageStaffWithMasters")
-      companyDetailsTableTBody.select("tr").get(12).getElementById("percentageStaffWithMasters-answer").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(11).getElementById("percentageStaffWithMasters-answer").text() shouldBe
         PercentageStaffWithMastersModel.staffWithMastersToString(percentageStaffWithMastersModelYes.staffWithMasters)
-      companyDetailsTableTBody.select("tr").get(12).getElementById("percentageStaffWithMasters-link")
+      companyDetailsTableTBody.select("tr").get(11).getElementById("percentageStaffWithMasters-link")
         .attr("href") shouldEqual controllers.eis.routes.PercentageStaffWithMastersController.show().url
 
       //Fulltime employees
-      companyDetailsTableTBody.select("tr").get(13).getElementById("fullTimeEmployees-question").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(12).getElementById("fullTimeEmployees-question").text() shouldBe
         Messages("summaryQuestion.fullTimeEmployees")
-      companyDetailsTableTBody.select("tr").get(13).getElementById("fullTimeEmployees-answer").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(12).getElementById("fullTimeEmployees-answer").text() shouldBe
         fullTimeEmployeeModel.employeeCount.toString()
-      companyDetailsTableTBody.select("tr").get(13).getElementById("fullTimeEmployees-link")
+      companyDetailsTableTBody.select("tr").get(12).getElementById("fullTimeEmployees-link")
         .attr("href") shouldEqual controllers.eis.routes.FullTimeEmployeeCountController.show().url
 
       document.getElementById("submit").text() shouldBe Messages("page.checkAndSubmit.checkAnswers.button.confirm")
@@ -409,6 +402,14 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
       companyDetailsTableTBody.select("tr").get(2).getElementById("qualifyBusinessActivity-link")
         .attr("href") shouldEqual controllers.eis.routes.QualifyBusinessActivityController.show().url
 
+      //Date of first commercial sale
+      companyDetailsTableTBody.select("tr").get(4).getElementById("commercialSale-question").text() shouldBe
+        Messages("summaryQuestion.hasCommercialSale")
+      companyDetailsTableTBody.select("tr").get(4).getElementById("commercialSale-answer").text() shouldBe
+        commercialSaleModelNo.hasCommercialSale
+      companyDetailsTableTBody.select("tr").get(4).getElementById("commercialSale-link")
+        .attr("href") shouldEqual controllers.eis.routes.CommercialSaleController.show().url
+
       //shareIssueDate
       companyDetailsTableTBody.select("tr").get(5).getElementById("shareIssueDate-question").text() shouldBe
         Messages("summaryQuestion.shareIssueDate")
@@ -451,51 +452,47 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
 
 
       //Operating costs
-      companyDetailsTableTBody.select("tr").get(10).getElementById("operatingCosts-question").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(10).getElementById("operatingCosts-Question0").text() shouldBe
         Messages("summaryQuestion.operatingCosts")
 
-      companyDetailsTableTBody.select("tr").get(10).getElementById("operatingCosts-Line0").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(10).getElementById("operatingCosts-Question3").text() shouldBe
+        Messages("summaryQuestion.rdCosts")
+
+      companyDetailsTableTBody.select("tr").get(10).getElementById("operatingCosts-Answer0").text() shouldBe
         OperatingCostsModel.getOperatingAndRDCostsAsFormattedString(operatingCostsModel.operatingCosts1stYear, Messages("page.companyDetails.OperatingCosts.row.heading.one"))
 
-      companyDetailsTableTBody.select("tr").get(10).getElementById("operatingCosts-Line1").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(10).getElementById("operatingCosts-Answer1").text() shouldBe
         OperatingCostsModel.getOperatingAndRDCostsAsFormattedString(operatingCostsModel.operatingCosts2ndYear, Messages("page.companyDetails.OperatingCosts.row.heading.two"))
 
-      companyDetailsTableTBody.select("tr").get(10).getElementById("operatingCosts-Line2").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(10).getElementById("operatingCosts-Answer2").text() shouldBe
         OperatingCostsModel.getOperatingAndRDCostsAsFormattedString(operatingCostsModel.operatingCosts3rdYear, Messages("page.companyDetails.OperatingCosts.row.heading.three"))
 
       companyDetailsTableTBody.select("tr").get(10).getElementById("operatingCosts-link")
         .attr("href") shouldEqual controllers.eis.routes.OperatingCostsController.show().url
 
-
-      //R&D costs
-      companyDetailsTableTBody.select("tr").get(11).getElementById("rdCosts-question").text() shouldBe
-        Messages("summaryQuestion.rdCosts")
-
-      companyDetailsTableTBody.select("tr").get(11).getElementById("rdCosts-Line0").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(10).getElementById("operatingCosts-Answer3").text() shouldBe
         OperatingCostsModel.getOperatingAndRDCostsAsFormattedString(operatingCostsModel.rAndDCosts1stYear, Messages("page.companyDetails.OperatingCosts.row.heading.one"))
 
-      companyDetailsTableTBody.select("tr").get(11).getElementById("rdCosts-Line1").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(10).getElementById("operatingCosts-Answer4").text() shouldBe
         OperatingCostsModel.getOperatingAndRDCostsAsFormattedString(operatingCostsModel.rAndDCosts2ndYear, Messages("page.companyDetails.OperatingCosts.row.heading.two"))
 
-      companyDetailsTableTBody.select("tr").get(11).getElementById("rdCosts-Line2").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(10).getElementById("operatingCosts-Answer5").text() shouldBe
         OperatingCostsModel.getOperatingAndRDCostsAsFormattedString(operatingCostsModel.rAndDCosts3rdYear, Messages("page.companyDetails.OperatingCosts.row.heading.three"))
 
-      companyDetailsTableTBody.select("tr").get(11).getElementById("rdCosts-link")
-        .attr("href") shouldEqual controllers.eis.routes.OperatingCostsController.show().url
       //Percentage of staff with masters
-      companyDetailsTableTBody.select("tr").get(12).getElementById("percentageStaffWithMasters-question").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(11).getElementById("percentageStaffWithMasters-question").text() shouldBe
         Messages("summaryQuestion.percentageStaffWithMasters")
-      companyDetailsTableTBody.select("tr").get(12).getElementById("percentageStaffWithMasters-answer").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(11).getElementById("percentageStaffWithMasters-answer").text() shouldBe
         PercentageStaffWithMastersModel.staffWithMastersToString(percentageStaffWithMastersModelYes.staffWithMasters)
-      companyDetailsTableTBody.select("tr").get(12).getElementById("percentageStaffWithMasters-link")
+      companyDetailsTableTBody.select("tr").get(11).getElementById("percentageStaffWithMasters-link")
         .attr("href") shouldEqual controllers.eis.routes.PercentageStaffWithMastersController.show().url
 
       //Fulltime employees
-      companyDetailsTableTBody.select("tr").get(13).getElementById("fullTimeEmployees-question").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(12).getElementById("fullTimeEmployees-question").text() shouldBe
         Messages("summaryQuestion.fullTimeEmployees")
-      companyDetailsTableTBody.select("tr").get(13).getElementById("fullTimeEmployees-answer").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(12).getElementById("fullTimeEmployees-answer").text() shouldBe
         fullTimeEmployeeModel.employeeCount.toString()
-      companyDetailsTableTBody.select("tr").get(13).getElementById("fullTimeEmployees-link")
+      companyDetailsTableTBody.select("tr").get(12).getElementById("fullTimeEmployees-link")
         .attr("href") shouldEqual controllers.eis.routes.FullTimeEmployeeCountController.show().url
 
       document.getElementById("submit").text() shouldBe Messages("page.checkAndSubmit.checkAnswers.button.confirm")
@@ -557,9 +554,9 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
         Messages("summaryQuestion.hasCommercialSale")
       companyDetailsTableTBody.select("tr").get(4).getElementById("commercialSale-Answer0").text() shouldBe
         commercialSaleModelYes.hasCommercialSale
-      companyDetailsTableTBody.select("tr").get(4).getElementById("commercialSale-Question1").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(4).getElementById("commercialSale-Question2").text() shouldBe
         Messages("summaryQuestion.commercialSaleDate")
-      companyDetailsTableTBody.select("tr").get(4).getElementById("commercialSale-Answer1").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(4).getElementById("commercialSale-Answer2").text() shouldBe
         CommercialSaleModel.toDateString(commercialSaleModelYes.commercialSaleDay.get, commercialSaleModelYes.commercialSaleMonth.get, commercialSaleModelYes.commercialSaleYear.get)
       companyDetailsTableTBody.select("tr").get(4).getElementById("commercialSale-link")
         .attr("href") shouldEqual controllers.eis.routes.CommercialSaleController.show().url
@@ -592,7 +589,7 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
       companyDetailsTableTBody.select("tr").get(8).getElementById("isCompanyKnowledgeIntensive-question").text() shouldBe
         Messages("summaryQuestion.isCompanyKnowledgeIntensiveModel")
       companyDetailsTableTBody.select("tr").get(8).getElementById("isCompanyKnowledgeIntensive-answer").text() shouldBe
-        isKnowledgeIntensiveModelYes.isKnowledgeIntensive
+        isKnowledgeIntensiveModelNo.isKnowledgeIntensive
       companyDetailsTableTBody.select("tr").get(8).getElementById("isCompanyKnowledgeIntensive-link")
         .attr("href") shouldEqual controllers.eis.routes.IsCompanyKnowledgeIntensiveController.show().url
 
@@ -600,7 +597,7 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
       companyDetailsTableTBody.select("tr").get(9).getElementById("knowledgeIntensive-question").text() shouldBe
         Messages("summaryQuestion.knowledgeIntensive")
       companyDetailsTableTBody.select("tr").get(9).getElementById("knowledgeIntensive-answer").text() shouldBe
-        isKnowledgeIntensiveModelYes.isKnowledgeIntensive
+        isKnowledgeIntensiveModelNo.isKnowledgeIntensive
       companyDetailsTableTBody.select("tr").get(9).getElementById("knowledgeIntensive-link")
         .attr("href") shouldEqual controllers.eis.routes.IsKnowledgeIntensiveController.show().url
 
@@ -672,9 +669,9 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
         Messages("summaryQuestion.hasCommercialSale")
       companyDetailsTableTBody.select("tr").get(4).getElementById("commercialSale-Answer0").text() shouldBe
         commercialSaleModelYes.hasCommercialSale
-      companyDetailsTableTBody.select("tr").get(4).getElementById("commercialSale-Question1").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(4).getElementById("commercialSale-Question2").text() shouldBe
         Messages("summaryQuestion.commercialSaleDate")
-      companyDetailsTableTBody.select("tr").get(4).getElementById("commercialSale-Answer1").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(4).getElementById("commercialSale-Answer2").text() shouldBe
         CommercialSaleModel.toDateString(commercialSaleModelYes.commercialSaleDay.get,commercialSaleModelYes.commercialSaleMonth.get,commercialSaleModelYes.commercialSaleYear.get)
       companyDetailsTableTBody.select("tr").get(4).getElementById("commercialSale-link")
         .attr("href") shouldEqual controllers.eis.routes.CommercialSaleController.show().url
@@ -721,51 +718,47 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
 
 
       //Operating costs
-      companyDetailsTableTBody.select("tr").get(10).getElementById("operatingCosts-question").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(10).getElementById("operatingCosts-Question0").text() shouldBe
         Messages("summaryQuestion.operatingCosts")
 
-      companyDetailsTableTBody.select("tr").get(10).getElementById("operatingCosts-Line0").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(10).getElementById("operatingCosts-Question3").text() shouldBe
+        Messages("summaryQuestion.rdCosts")
+
+      companyDetailsTableTBody.select("tr").get(10).getElementById("operatingCosts-Answer0").text() shouldBe
         OperatingCostsModel.getOperatingAndRDCostsAsFormattedString(operatingCostsModel.operatingCosts1stYear, Messages("page.companyDetails.OperatingCosts.row.heading.one"))
 
-      companyDetailsTableTBody.select("tr").get(10).getElementById("operatingCosts-Line1").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(10).getElementById("operatingCosts-Answer1").text() shouldBe
         OperatingCostsModel.getOperatingAndRDCostsAsFormattedString(operatingCostsModel.operatingCosts2ndYear, Messages("page.companyDetails.OperatingCosts.row.heading.two"))
 
-      companyDetailsTableTBody.select("tr").get(10).getElementById("operatingCosts-Line2").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(10).getElementById("operatingCosts-Answer2").text() shouldBe
         OperatingCostsModel.getOperatingAndRDCostsAsFormattedString(operatingCostsModel.operatingCosts3rdYear, Messages("page.companyDetails.OperatingCosts.row.heading.three"))
 
       companyDetailsTableTBody.select("tr").get(10).getElementById("operatingCosts-link")
         .attr("href") shouldEqual controllers.eis.routes.OperatingCostsController.show().url
 
-
-      //R&D costs
-      companyDetailsTableTBody.select("tr").get(11).getElementById("rdCosts-question").text() shouldBe
-        Messages("summaryQuestion.rdCosts")
-
-      companyDetailsTableTBody.select("tr").get(11).getElementById("rdCosts-Line0").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(10).getElementById("operatingCosts-Answer3").text() shouldBe
         OperatingCostsModel.getOperatingAndRDCostsAsFormattedString(operatingCostsModel.rAndDCosts1stYear, Messages("page.companyDetails.OperatingCosts.row.heading.one"))
 
-      companyDetailsTableTBody.select("tr").get(11).getElementById("rdCosts-Line1").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(10).getElementById("operatingCosts-Answer4").text() shouldBe
         OperatingCostsModel.getOperatingAndRDCostsAsFormattedString(operatingCostsModel.rAndDCosts2ndYear, Messages("page.companyDetails.OperatingCosts.row.heading.two"))
 
-      companyDetailsTableTBody.select("tr").get(11).getElementById("rdCosts-Line2").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(10).getElementById("operatingCosts-Answer5").text() shouldBe
         OperatingCostsModel.getOperatingAndRDCostsAsFormattedString(operatingCostsModel.rAndDCosts3rdYear, Messages("page.companyDetails.OperatingCosts.row.heading.three"))
 
-      companyDetailsTableTBody.select("tr").get(11).getElementById("rdCosts-link")
-        .attr("href") shouldEqual controllers.eis.routes.OperatingCostsController.show().url
       //Percentage of staff with masters
-      companyDetailsTableTBody.select("tr").get(12).getElementById("percentageStaffWithMasters-question").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(11).getElementById("percentageStaffWithMasters-question").text() shouldBe
         Messages("summaryQuestion.percentageStaffWithMasters")
-      companyDetailsTableTBody.select("tr").get(12).getElementById("percentageStaffWithMasters-answer").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(11).getElementById("percentageStaffWithMasters-answer").text() shouldBe
         PercentageStaffWithMastersModel.staffWithMastersToString(percentageStaffWithMastersModelYes.staffWithMasters)
-      companyDetailsTableTBody.select("tr").get(12).getElementById("percentageStaffWithMasters-link")
+      companyDetailsTableTBody.select("tr").get(11).getElementById("percentageStaffWithMasters-link")
         .attr("href") shouldEqual controllers.eis.routes.PercentageStaffWithMastersController.show().url
 
       //Fulltime employees
-      companyDetailsTableTBody.select("tr").get(13).getElementById("fullTimeEmployees-question").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(12).getElementById("fullTimeEmployees-question").text() shouldBe
         Messages("summaryQuestion.fullTimeEmployees")
-      companyDetailsTableTBody.select("tr").get(13).getElementById("fullTimeEmployees-answer").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(12).getElementById("fullTimeEmployees-answer").text() shouldBe
         fullTimeEmployeeModel.employeeCount.toString()
-      companyDetailsTableTBody.select("tr").get(13).getElementById("fullTimeEmployees-link")
+      companyDetailsTableTBody.select("tr").get(12).getElementById("fullTimeEmployees-link")
         .attr("href") shouldEqual controllers.eis.routes.FullTimeEmployeeCountController.show().url
 
       document.getElementById("submit").text() shouldBe Messages("page.checkAndSubmit.checkAnswers.button.confirm")
@@ -829,9 +822,9 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
         Messages("summaryQuestion.hasCommercialSale")
       companyDetailsTableTBody.select("tr").get(4).getElementById("commercialSale-Answer0").text() shouldBe
         commercialSaleModelYes.hasCommercialSale
-      companyDetailsTableTBody.select("tr").get(4).getElementById("commercialSale-Question1").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(4).getElementById("commercialSale-Question2").text() shouldBe
         Messages("summaryQuestion.commercialSaleDate")
-      companyDetailsTableTBody.select("tr").get(4).getElementById("commercialSale-Answer1").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(4).getElementById("commercialSale-Answer2").text() shouldBe
         CommercialSaleModel.toDateString(commercialSaleModelYes.commercialSaleDay.get,commercialSaleModelYes.commercialSaleMonth.get,commercialSaleModelYes.commercialSaleYear.get)
       companyDetailsTableTBody.select("tr").get(4).getElementById("commercialSale-link")
         .attr("href") shouldEqual controllers.eis.routes.CommercialSaleController.show().url
@@ -878,64 +871,60 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
 
 
       //Operating costs
-      companyDetailsTableTBody.select("tr").get(10).getElementById("operatingCosts-question").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(10).getElementById("operatingCosts-Question0").text() shouldBe
         Messages("summaryQuestion.operatingCosts")
 
-      companyDetailsTableTBody.select("tr").get(10).getElementById("operatingCosts-Line0").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(10).getElementById("operatingCosts-Question3").text() shouldBe
+        Messages("summaryQuestion.rdCosts")
+
+      companyDetailsTableTBody.select("tr").get(10).getElementById("operatingCosts-Answer0").text() shouldBe
         OperatingCostsModel.getOperatingAndRDCostsAsFormattedString(operatingCostsModel.operatingCosts1stYear, Messages("page.companyDetails.OperatingCosts.row.heading.one"))
 
-      companyDetailsTableTBody.select("tr").get(10).getElementById("operatingCosts-Line1").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(10).getElementById("operatingCosts-Answer1").text() shouldBe
         OperatingCostsModel.getOperatingAndRDCostsAsFormattedString(operatingCostsModel.operatingCosts2ndYear, Messages("page.companyDetails.OperatingCosts.row.heading.two"))
 
-      companyDetailsTableTBody.select("tr").get(10).getElementById("operatingCosts-Line2").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(10).getElementById("operatingCosts-Answer2").text() shouldBe
         OperatingCostsModel.getOperatingAndRDCostsAsFormattedString(operatingCostsModel.operatingCosts3rdYear, Messages("page.companyDetails.OperatingCosts.row.heading.three"))
 
       companyDetailsTableTBody.select("tr").get(10).getElementById("operatingCosts-link")
         .attr("href") shouldEqual controllers.eis.routes.OperatingCostsController.show().url
 
-
-      //R&D costs
-      companyDetailsTableTBody.select("tr").get(11).getElementById("rdCosts-question").text() shouldBe
-        Messages("summaryQuestion.rdCosts")
-
-      companyDetailsTableTBody.select("tr").get(11).getElementById("rdCosts-Line0").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(10).getElementById("operatingCosts-Answer3").text() shouldBe
         OperatingCostsModel.getOperatingAndRDCostsAsFormattedString(operatingCostsModel.rAndDCosts1stYear, Messages("page.companyDetails.OperatingCosts.row.heading.one"))
 
-      companyDetailsTableTBody.select("tr").get(11).getElementById("rdCosts-Line1").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(10).getElementById("operatingCosts-Answer4").text() shouldBe
         OperatingCostsModel.getOperatingAndRDCostsAsFormattedString(operatingCostsModel.rAndDCosts2ndYear, Messages("page.companyDetails.OperatingCosts.row.heading.two"))
 
-      companyDetailsTableTBody.select("tr").get(11).getElementById("rdCosts-Line2").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(10).getElementById("operatingCosts-Answer5").text() shouldBe
         OperatingCostsModel.getOperatingAndRDCostsAsFormattedString(operatingCostsModel.rAndDCosts3rdYear, Messages("page.companyDetails.OperatingCosts.row.heading.three"))
 
-      companyDetailsTableTBody.select("tr").get(11).getElementById("rdCosts-link")
-        .attr("href") shouldEqual controllers.eis.routes.OperatingCostsController.show().url
       //Percentage of staff with masters
-      companyDetailsTableTBody.select("tr").get(12).getElementById("percentageStaffWithMasters-question").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(11).getElementById("percentageStaffWithMasters-question").text() shouldBe
         Messages("summaryQuestion.percentageStaffWithMasters")
-      companyDetailsTableTBody.select("tr").get(12).getElementById("percentageStaffWithMasters-answer").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(11).getElementById("percentageStaffWithMasters-answer").text() shouldBe
         PercentageStaffWithMastersModel.staffWithMastersToString(percentageStaffWithMastersModelNo.staffWithMasters)
-      companyDetailsTableTBody.select("tr").get(12).getElementById("percentageStaffWithMasters-link")
+      companyDetailsTableTBody.select("tr").get(11).getElementById("percentageStaffWithMasters-link")
         .attr("href") shouldEqual controllers.eis.routes.PercentageStaffWithMastersController.show().url
 
       //Ten year plan
-      companyDetailsTableTBody.select("tr").get(13).getElementById("tenYearPlan-Question0").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(12).getElementById("tenYearPlan-Question0").text() shouldBe
         Messages("summaryQuestion.developmentPlan")
-      companyDetailsTableTBody.select("tr").get(13).getElementById("tenYearPlan-Answer0").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(12).getElementById("tenYearPlan-Answer0").text() shouldBe
         tenYearPlanModelYes.hasTenYearPlan
-      companyDetailsTableTBody.select("tr").get(13).getElementById("tenYearPlan-Question1").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(12).getElementById("tenYearPlan-Question1").text() shouldBe
         Messages("summaryQuestion.developmentPlanDesc")
-      companyDetailsTableTBody.select("tr").get(13).getElementById("tenYearPlan-Answer1").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(12).getElementById("tenYearPlan-Answer1").text() shouldBe
         tenYearPlanModelYes.tenYearPlanDesc.get
 
-      companyDetailsTableTBody.select("tr").get(13).getElementById("tenYearPlan-link")
+      companyDetailsTableTBody.select("tr").get(12).getElementById("tenYearPlan-link")
         .attr("href") shouldEqual controllers.eis.routes.TenYearPlanController.show().url
 
       //Fulltime employees
-      companyDetailsTableTBody.select("tr").get(14).getElementById("fullTimeEmployees-question").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(13).getElementById("fullTimeEmployees-question").text() shouldBe
         Messages("summaryQuestion.fullTimeEmployees")
-      companyDetailsTableTBody.select("tr").get(14).getElementById("fullTimeEmployees-answer").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(13).getElementById("fullTimeEmployees-answer").text() shouldBe
         fullTimeEmployeeModel.employeeCount.toString()
-      companyDetailsTableTBody.select("tr").get(14).getElementById("fullTimeEmployees-link")
+      companyDetailsTableTBody.select("tr").get(13).getElementById("fullTimeEmployees-link")
         .attr("href") shouldEqual controllers.eis.routes.FullTimeEmployeeCountController.show().url
 
       document.getElementById("submit").text() shouldBe Messages("page.checkAndSubmit.checkAnswers.button.confirm")
