@@ -30,7 +30,7 @@ object WasAnyValueReceivedForm {
   val wasAnyValueReceivedForm = Form(
     mapping(
       "wasAnyValueReceived" -> nonEmptyText,
-      "descriptionTextArea" -> text(maxLength = Constants.shortTextLimit)
+      "descriptionTextArea" -> text(maxLength = Constants.SuggestedTextMaxLengthLower)
         .transform(stringToOptionString, optionStringToString)
     )(WasAnyValueReceivedModel.apply)(WasAnyValueReceivedModel.unapply)
       .verifying(Messages("error.required"), model =>
