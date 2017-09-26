@@ -16,29 +16,43 @@
 
 package models
 
+import models.investorDetails.InvestorDetailsModel
+import models.repayments.{AnySharesRepaymentModel, SharesRepaymentDetailsModel}
+
 case class CheckAnswersModel(
-                              yourCompanyNeedModel: Option[YourCompanyNeedModel],
-                              taxpayerReferenceModel: Option[TaxpayerReferenceModel],
                               registeredAddressModel: Option[RegisteredAddressModel],
                               dateOfIncorporationModel: Option[DateOfIncorporationModel],
                               natureOfBusinessModel: Option[NatureOfBusinessModel],
                               commercialSaleModel: Option[CommercialSaleModel],
+                              isCompanyKnowledgeIntensiveModel: Option[IsCompanyKnowledgeIntensiveModel],
                               isKnowledgeIntensiveModel: Option[IsKnowledgeIntensiveModel],
                               operatingCostsModel: Option[OperatingCostsModel],
                               percentageStaffWithMastersModel: Option[PercentageStaffWithMastersModel],
                               tenYearPlanModel: Option[TenYearPlanModel],
-                              subsidiariesModel: Option[SubsidiariesModel],
                               hadPreviousRFIModel: Option[HadPreviousRFIModel],
                               previousSchemes: Vector[PreviousSchemeModel],
                               totalAmountRaisedModel: Option[TotalAmountRaisedModel],
-                              usedInvestmentReasonBeforeModel: Option[UsedInvestmentReasonBeforeModel],
-                              previousBeforeDOFCSModel: Option[PreviousBeforeDOFCSModel],
+                              thirtyDayRuleModel: Option[ThirtyDayRuleModel],
+                              anySharesRepaymentModel : Option[AnySharesRepaymentModel],
                               newGeographicalMarketModel: Option[NewGeographicalMarketModel],
                               newProductModel: Option[NewProductModel],
-                              subsidiariesSpendingInvestmentModel: Option[SubsidiariesSpendingInvestmentModel],
-                              subsidiariesNinetyOwnedModel: Option[SubsidiariesNinetyOwnedModel],
                               contactDetailsModel: Option[ContactDetailsModel],
                               contactAddressModel: Option[AddressModel],
                               investmentGrowModel: Option[InvestmentGrowModel],
+                              qualifyBusinessActivity: Option[QualifyBusinessActivityModel],
+                              hasInvestmentTradeStarted: Option[HasInvestmentTradeStartedModel],
+                              shareIssueDate: Option[ShareIssueDateModel],
+                              grossAssets: Option[GrossAssetsModel],
+                              fullTimeEmployees: Option[FullTimeEmployeeCountModel],
+                              shareDescription: Option[ShareDescriptionModel],
+                              numberOfShares: Option[NumberOfSharesModel],
+                              investorDetails: Option[Vector[InvestorDetailsModel]],
+                              valueReceived: Option[WasAnyValueReceivedModel],
+                              shareCapitalChanges: Option[ShareCapitalChangesModel],
+                              marketDescription: Option[MarketDescriptionModel],
+                              repaymentDetails: Option[Vector[SharesRepaymentDetailsModel]],
+                              grossAssetsAfterIssue: Option[GrossAssetsAfterIssueModel],
+                              turnoverCosts: Option[AnnualTurnoverCostsModel],
+                              researchStartDateModel: Option[ResearchStartDateModel],
                               attachmentsEnabled: Boolean
                               )

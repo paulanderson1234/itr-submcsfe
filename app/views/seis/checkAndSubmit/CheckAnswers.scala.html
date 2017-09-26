@@ -55,7 +55,7 @@
         @if(checkAnswersModel.isSeventyPercentSpent.isDefined){
         @textRowHelperBasic("isSeventyPercentSpent", Messages("summaryQuestion.IsSeventyPercentSpent"), checkAnswersModel.isSeventyPercentSpent.get.isSeventyPercentSpent, Some(controllers.seis.routes.SeventyPercentSpentController.show().url))
         }
-        <!-- Total Amount Spent -->
+        <!-- Share Issue Date -->
         @if(checkAnswersModel.shareIssueDate.isDefined){
         @textRowHelperBasic("shareIssueDate", Messages("summaryQuestion.shareIssueDate"), ShareIssueDateModel.toDateString(checkAnswersModel.shareIssueDate.get.day.get, checkAnswersModel.shareIssueDate.get.month.get, checkAnswersModel.shareIssueDate.get.year.get), Some(controllers.seis.routes.ShareIssueDateController.show().url))
         }

@@ -21,7 +21,6 @@ import common.KeystoreKeys
 import config.FrontendAuthConnector
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
-import models.EisSeisProcessingModel
 import org.mockito.Matchers
 import org.mockito.Mockito._
 import play.api.test.Helpers._
@@ -52,6 +51,8 @@ class CheckAnswersControllerSpec extends BaseSpec with CheckAnswersSpec {
 
   "Sending a GET request to CheckAnswersController with a populated set of models when authenticated and enrolled" should {
     "return a 200 when the page is loaded" in {
+      setupMocks()
+      setupEISMocks()
       previousRFISetup(Some(hadPreviousRFIModelYes))
       investmentSetup(Some(totalAmountRaisedModel),Some(usedInvestmentReasonBeforeModelYes),Some(previousBeforeDOFCSModelYes),
         Some(newGeographicalMarketModelYes),Some(newProductMarketModelYes),Some(subsidiariesSpendingInvestmentModelYes),Some(subsidiariesNinetyOwnedModelNo),
@@ -70,6 +71,8 @@ class CheckAnswersControllerSpec extends BaseSpec with CheckAnswersSpec {
 
   "Sending a GET request to CheckAnswersController with an empty set of models when authenticated and enrolled" should {
     "return a 200 when the page is loaded" in {
+      setupMocks()
+      setupEISMocks()
       previousRFISetup()
       investmentSetup()
       contactDetailsSetup()
@@ -84,6 +87,8 @@ class CheckAnswersControllerSpec extends BaseSpec with CheckAnswersSpec {
 
   "Sending a GET request (with envelope id None) to CheckAnswersController with an empty set of models when authenticated and enrolled" should {
     "return a 200 when the page is loaded" in {
+      setupMocks()
+      setupEISMocks()
       previousRFISetup()
       investmentSetup()
       contactDetailsSetup()
@@ -98,6 +103,8 @@ class CheckAnswersControllerSpec extends BaseSpec with CheckAnswersSpec {
 
   "Sending a GET request (with empty envelope id) to CheckAnswersController with an empty set of models when authenticated and enrolled" should {
     "return a 200 when the page is loaded" in {
+      setupMocks()
+      setupEISMocks()
       previousRFISetup()
       investmentSetup()
       contactDetailsSetup()
@@ -110,9 +117,11 @@ class CheckAnswersControllerSpec extends BaseSpec with CheckAnswersSpec {
     }
   }
 
-  "Sending a submission to the CheckAnswersController with one or more attachments for EIS" should {
+  "Sending a submission to the CheckAnswersController for EIS" should {
 
     "redirect to the acknowledgement page when authenticated and enrolled" in {
+      setupMocks()
+      setupEISMocks()
       when(TestController.enrolmentConnector.getTAVCEnrolment(Matchers.any())(Matchers.any()))
         .thenReturn(Future.successful(Some(Enrolment("HMRC-TAVC-ORG",Seq(Identifier("TavcReference","1234")),"Activated"))))
       when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.envelopeId))
@@ -121,26 +130,10 @@ class CheckAnswersControllerSpec extends BaseSpec with CheckAnswersSpec {
       submitWithSessionAndAuth(TestController.submit)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(routes.AttachmentsAcknowledgementController.show().url)
+          redirectLocation(result) shouldBe Some(routes.DeclarationController.show().url)
         }
       )
     }
   }
 
-  "Sending a submission to the CheckAnswersController with no attachments for EIS" should {
-
-    "redirect to the acknowledgement page when authenticated and enrolled" in {
-      when(TestController.enrolmentConnector.getTAVCEnrolment(Matchers.any())(Matchers.any()))
-        .thenReturn(Future.successful(Some(Enrolment("HMRC-TAVC-ORG",Seq(Identifier("TavcReference","1234")),"Activated"))))
-      when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.envelopeId))
-        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
-      mockEnrolledRequest(eisSchemeTypesModel)
-      submitWithSessionAndAuth(TestController.submit)(
-        result => {
-          status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(routes.AcknowledgementController.show().url)
-        }
-      )
-    }
-  }
 }

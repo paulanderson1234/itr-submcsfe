@@ -40,7 +40,6 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
 
       lazy val companyDetailsTableTBody = document.getElementById("company-details-table").select("tbody")
 
-      document.title() shouldBe Messages("page.checkAndSubmit.checkAnswers.heading")
       document.getElementById("main-heading").text() shouldBe Messages("page.checkAndSubmit.checkAnswers.heading")
       document.getElementById("description-one").text() shouldBe Messages("page.checkAndSubmit.checkAnswers.description.one") + " " + Messages("page.checkAndSubmit.checkAnswers.scheme.seis")
       document.getElementById("description-two").text() shouldBe Messages("page.checkAndSubmit.checkAnswers.description.two")
@@ -126,8 +125,6 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
 
       lazy val companyDetailsTableTBody = document.getElementById("company-details-table").select("tbody")
 
-
-      document.title() shouldBe Messages("page.checkAndSubmit.checkAnswers.heading")
       document.getElementById("main-heading").text() shouldBe Messages("page.checkAndSubmit.checkAnswers.heading")
       document.getElementById("description-one").text() shouldBe Messages("page.checkAndSubmit.checkAnswers.description.one") + " " + Messages("page.checkAndSubmit.checkAnswers.scheme.seis")
       document.getElementById("description-two").text() shouldBe Messages("page.checkAndSubmit.checkAnswers.description.two")
@@ -210,7 +207,6 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
 
       lazy val companyDetailsTableTBody = document.getElementById("company-details-table").select("tbody")
 
-      document.title() shouldBe Messages("page.checkAndSubmit.checkAnswers.heading")
       document.getElementById("main-heading").text() shouldBe Messages("page.checkAndSubmit.checkAnswers.heading")
       document.getElementById("description-one").text() shouldBe Messages("page.checkAndSubmit.checkAnswers.description.one") + " " + Messages("page.checkAndSubmit.checkAnswers.scheme.seis")
       document.getElementById("description-two").text() shouldBe Messages("page.checkAndSubmit.checkAnswers.description.two")
@@ -236,9 +232,7 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
       lazy val companyDetailsTableTBody = document.getElementById("company-details-table").select("tbody")
       lazy val notAvailableMessage = Messages("common.notAvailable")
 
-
-      document.title() shouldBe Messages("page.checkAndSubmit.checkAnswers.heading")
-      document.getElementById("main-heading").text() shouldBe Messages("page.checkAndSubmit.checkAnswers.heading")
+document.getElementById("main-heading").text() shouldBe Messages("page.checkAndSubmit.checkAnswers.heading")
       document.getElementById("description-one").text() shouldBe Messages("page.checkAndSubmit.checkAnswers.description.one") + " " + Messages("page.checkAndSubmit.checkAnswers.scheme.seis")
       document.getElementById("description-two").text() shouldBe Messages("page.checkAndSubmit.checkAnswers.description.two")
 

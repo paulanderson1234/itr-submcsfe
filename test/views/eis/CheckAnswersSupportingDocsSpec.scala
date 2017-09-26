@@ -16,15 +16,15 @@
 
 package views.eis
 
-import auth.{MockConfigEISFlow, MockAuthConnector}
-import config.FrontendAppConfig
+import auth.{MockAuthConnector, MockConfigEISFlow}
+import common.Constants
 import controllers.eis.CheckAnswersController
+import models._
 import org.jsoup.Jsoup
-import org.jsoup.nodes.Document
 import play.api.i18n.Messages
 import play.api.i18n.Messages.Implicits._
-import play.api.test.Helpers._
 import views.helpers.CheckAnswersSpec
+import views.html.eis.checkAndSubmit.CheckAnswers
 
 class CheckAnswersSupportingDocsSpec extends CheckAnswersSpec {
 
@@ -39,20 +39,23 @@ class CheckAnswersSupportingDocsSpec extends CheckAnswersSpec {
 
     "Verify that the Check Answers page contains the correct elements for Section 5: Supporting Documents" +
       " when the page is loaded" in new Setup {
-      val document: Document = {
-        previousRFISetup()
-        investmentSetup()
-        contactDetailsSetup()
-        companyDetailsSetup()
-        contactAddressSetup()
-        val result = TestController.show(None).apply(authorisedFakeRequest.withFormUrlEncodedBody())
-        Jsoup.parse(contentAsString(result))
-      }
+      val model = CheckAnswersModel(Some(registeredAddressModel), Some(dateOfIncorporationModel), Some(natureOfBusinessModel),
+        Some(commercialSaleModelYes), Some(isCompanyKnowledgeIntensiveModelYes), Some(isKnowledgeIntensiveModelYes),
+        Some(operatingCostsModel), Some(percentageStaffWithMastersModelNo), Some(tenYearPlanModelYes), Some(hadPreviousRFIModelYes),
+        Vector(), Some(totalAmountRaisedValid), Some(thirtyDayRuleModelYes), Some(anySharesRepaymentModelYes), Some(newGeographicalMarketModelYes),
+        Some(newProductMarketModelYes), Some(contactDetailsModel), Some(addressModel), Some(investmentGrowModel), Some(qualifyPrepareToTrade),
+        Some(hasInvestmentTradeStartedModelYes), Some(shareIssuetDateModel), Some(grossAssetsModel), Some(fullTimeEmployeeModel),
+        Some(shareDescriptionModel), Some(numberOfSharesModel), Some(listOfInvestorsWithShareHoldings), Some(WasAnyValueReceivedModel(Constants.StandardRadioButtonYesValue,
+          Some("text"))), Some(ShareCapitalChangesModel(Constants.StandardRadioButtonYesValue, Some("test"))), Some(MarketDescriptionModel("test")),
+        Some(validSharesRepaymentDetailsVector), Some(grossAssetsAfterIssueModel),
+        Some(turnoverCostsValid), Some(researchStartDateModelYes), false)
 
+      val page = CheckAnswers(model)(authorisedFakeRequest, applicationMessages)
+      val document = Jsoup.parse(page.body)
 
-      document.title() shouldBe Messages("page.checkAndSubmit.checkAnswers.heading")
       document.getElementById("main-heading").text() shouldBe Messages("page.checkAndSubmit.checkAnswers.heading")
-      document.getElementById("description-one").text() shouldBe Messages("page.checkAndSubmit.checkAnswers.description.one")
+      document.getElementById("description-one").text() shouldBe Messages("page.checkAndSubmit.checkAnswers.description.one") +" " +
+        Messages("page.checkAndSubmit.checkAnswers.scheme.eis")
       document.getElementById("description-two").text() shouldBe Messages("page.checkAndSubmit.checkAnswers.description.two")
 
       lazy val supportingDocsTableBody = document.getElementById("supporting-docs-table").select("tbody")

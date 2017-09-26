@@ -23,6 +23,8 @@ import config.FrontendGlobal.internalServerErrorTemplate
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.Helpers.PreviousSchemesHelper
 import models._
+import models.investorDetails.InvestorDetailsModel
+import models.repayments.{AnySharesRepaymentModel, SharesRepaymentDetailsModel}
 import models.submission.SchemeTypesModel
 import play.api.Logger
 import uk.gov.hmrc.play.frontend.controller.FrontendController
@@ -48,65 +50,58 @@ trait CheckAnswersController extends FrontendController with AuthorisedAndEnroll
 
 
   def checkAnswersModel(implicit headerCarrier: HeaderCarrier, user: TAVCUser) : Future[CheckAnswersModel] = for {
-    yourCompanyNeed <- s4lConnector.fetchAndGetFormData[YourCompanyNeedModel](KeystoreKeys.yourCompanyNeed)
-    taxPayerReference <- s4lConnector.fetchAndGetFormData[TaxpayerReferenceModel](KeystoreKeys.taxpayerReference)
     registeredAddress <- s4lConnector.fetchAndGetFormData[RegisteredAddressModel](KeystoreKeys.registeredAddress)
     dateOfIncorporation <- s4lConnector.fetchAndGetFormData[DateOfIncorporationModel](KeystoreKeys.dateOfIncorporation)
     natureOfBusiness <- s4lConnector.fetchAndGetFormData[NatureOfBusinessModel](KeystoreKeys.natureOfBusiness)
     commercialSale <- s4lConnector.fetchAndGetFormData[CommercialSaleModel](KeystoreKeys.commercialSale)
+    isCompanyKnowledgeIntensive <- s4lConnector.fetchAndGetFormData[IsCompanyKnowledgeIntensiveModel](KeystoreKeys.isCompanyKnowledgeIntensive)
     isKnowledgeIntensive <- s4lConnector.fetchAndGetFormData[IsKnowledgeIntensiveModel](KeystoreKeys.isKnowledgeIntensive)
     operatingCosts <- s4lConnector.fetchAndGetFormData[OperatingCostsModel](KeystoreKeys.operatingCosts)
     percentageStaffWithMasters <- s4lConnector.fetchAndGetFormData[PercentageStaffWithMastersModel](KeystoreKeys.percentageStaffWithMasters)
     tenYearPlan <- s4lConnector.fetchAndGetFormData[TenYearPlanModel](KeystoreKeys.tenYearPlan)
-    subsidiaries <- s4lConnector.fetchAndGetFormData[SubsidiariesModel](KeystoreKeys.subsidiaries)
     hadPreviousRFI <- s4lConnector.fetchAndGetFormData[HadPreviousRFIModel](KeystoreKeys.hadPreviousRFI)
     previousSchemes <- getAllInvestmentFromKeystore(s4lConnector)
     totalAmountRaised <- s4lConnector.fetchAndGetFormData[TotalAmountRaisedModel](KeystoreKeys.totalAmountRaised)
-    usedInvestmentReasonBefore <- s4lConnector.fetchAndGetFormData[UsedInvestmentReasonBeforeModel](KeystoreKeys.usedInvestmentReasonBefore)
-    previousBeforeDOFCS <- s4lConnector.fetchAndGetFormData[PreviousBeforeDOFCSModel](KeystoreKeys.previousBeforeDOFCS)
+    thirtyDayRuleModel <- s4lConnector.fetchAndGetFormData[ThirtyDayRuleModel](KeystoreKeys.thirtyDayRule)
+    anySharesRepaymentModel <- s4lConnector.fetchAndGetFormData[AnySharesRepaymentModel](KeystoreKeys.anySharesRepayment)
     newGeographicalMarket <- s4lConnector.fetchAndGetFormData[NewGeographicalMarketModel](KeystoreKeys.newGeographicalMarket)
     newProduct <- s4lConnector.fetchAndGetFormData[NewProductModel](KeystoreKeys.newProduct)
-    subsidiariesSpendingInvestment <- s4lConnector.fetchAndGetFormData[SubsidiariesSpendingInvestmentModel](KeystoreKeys.subsidiariesSpendingInvestment)
-    subsidiariesNinetyOwned <- s4lConnector.fetchAndGetFormData[SubsidiariesNinetyOwnedModel](KeystoreKeys.subsidiariesNinetyOwned)
     contactDetails <- s4lConnector.fetchAndGetFormData[ContactDetailsModel](KeystoreKeys.contactDetails)
     contactAddress <- s4lConnector.fetchAndGetFormData[AddressModel](KeystoreKeys.contactAddress)
     investmentGrowModel <- s4lConnector.fetchAndGetFormData[InvestmentGrowModel](KeystoreKeys.investmentGrow)
-  }yield new CheckAnswersModel(yourCompanyNeed,taxPayerReference,registeredAddress,dateOfIncorporation
-    ,natureOfBusiness,commercialSale,isKnowledgeIntensive,operatingCosts
-    ,percentageStaffWithMasters,tenYearPlan,subsidiaries,hadPreviousRFI, previousSchemes, totalAmountRaised
-    ,usedInvestmentReasonBefore,previousBeforeDOFCS,newGeographicalMarket,newProduct,subsidiariesSpendingInvestment,
-    subsidiariesNinetyOwned,contactDetails,contactAddress,investmentGrowModel, applicationConfig.uploadFeatureEnabled)
+    qualifyBusinessActivity <- s4lConnector.fetchAndGetFormData[QualifyBusinessActivityModel](KeystoreKeys.isQualifyBusinessActivity)
+    hasInvestmentTradeStarted <- s4lConnector.fetchAndGetFormData[HasInvestmentTradeStartedModel](KeystoreKeys.hasInvestmentTradeStarted)
+    shareIssueDate <- s4lConnector.fetchAndGetFormData[ShareIssueDateModel](KeystoreKeys.shareIssueDate)
+    grossAssets <- s4lConnector.fetchAndGetFormData[GrossAssetsModel](KeystoreKeys.grossAssets)
+    fullTimeEmployees <- s4lConnector.fetchAndGetFormData[FullTimeEmployeeCountModel](KeystoreKeys.fullTimeEmployeeCount)
+    shareDescription <- s4lConnector.fetchAndGetFormData[ShareDescriptionModel](KeystoreKeys.shareDescription)
+    numberOfShares <- s4lConnector.fetchAndGetFormData[NumberOfSharesModel](KeystoreKeys.numberOfShares)
+    investorDetails <- s4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails)
+    valueReceived <- s4lConnector.fetchAndGetFormData[WasAnyValueReceivedModel](KeystoreKeys.wasAnyValueReceived)
+    shareCapitalChanges <- s4lConnector.fetchAndGetFormData[ShareCapitalChangesModel](KeystoreKeys.shareCapitalChanges)
+    marketDescription <- s4lConnector.fetchAndGetFormData[MarketDescriptionModel](KeystoreKeys.marketDescription)
+    repaymentDetails <- s4lConnector.fetchAndGetFormData[Vector[SharesRepaymentDetailsModel]](KeystoreKeys.sharesRepaymentDetails)
+    grossAssetsAfterIssue <- s4lConnector.fetchAndGetFormData[GrossAssetsAfterIssueModel](KeystoreKeys.grossAssetsAfterIssue)
+    researchStartDateModel <- s4lConnector.fetchAndGetFormData[ResearchStartDateModel](KeystoreKeys.researchStartDate)
+    turnoverCosts <- s4lConnector.fetchAndGetFormData[AnnualTurnoverCostsModel](KeystoreKeys.turnoverCosts)
+  }yield new CheckAnswersModel(registeredAddress,dateOfIncorporation,natureOfBusiness,commercialSale,isCompanyKnowledgeIntensive, isKnowledgeIntensive,
+    operatingCosts,percentageStaffWithMasters,tenYearPlan,hadPreviousRFI, previousSchemes, totalAmountRaised,
+    thirtyDayRuleModel,anySharesRepaymentModel,newGeographicalMarket,newProduct,contactDetails,contactAddress,
+    investmentGrowModel, qualifyBusinessActivity,hasInvestmentTradeStarted, shareIssueDate,grossAssets,fullTimeEmployees,
+    shareDescription, numberOfShares,investorDetails,valueReceived,shareCapitalChanges, marketDescription,repaymentDetails,
+    grossAssetsAfterIssue,turnoverCosts,researchStartDateModel, applicationConfig.uploadFeatureEnabled)
 
 
   def show (envelopeId: Option[String]) : Action[AnyContent]= AuthorisedAndEnrolled.async { implicit user => implicit request =>
-    if(envelopeId.fold("")(_.toString).length > 0) {
-        s4lConnector.saveFormData(KeystoreKeys.envelopeId, envelopeId.getOrElse(""))
-      }
 
     checkAnswersModel.flatMap {
-      checkAnswer =>
-        s4lConnector.fetchAndGetFormData[SchemeTypesModel](KeystoreKeys.selectedSchemes).map {
-          case Some(schemeTypes) => Ok(CheckAnswers(checkAnswer, schemeTypes))
-          case None => Redirect(controllers.routes.ApplicationHubController.show())
-        }.recover {
-          case e: Exception => Logger.warn(s"[CheckAnswersController][show] Exception calling fetchAndGetFormData: ${e.getMessage}")
-            InternalServerError(internalServerErrorTemplate)
-        }
-    }.recover {
-      case e: Exception => Logger.warn(s"[CheckAnswersController][show] Exception calling checkAnswersModel: ${e.getMessage}")
-        InternalServerError(internalServerErrorTemplate)
+      checkAnswers =>
+        Future.successful(Ok(CheckAnswers(checkAnswers)))
     }
   }
 
   val submit = AuthorisedAndEnrolled.async { implicit user => implicit request =>
-    s4lConnector.fetchAndGetFormData[String](KeystoreKeys.envelopeId).flatMap{
-      envelopeId => {
-        if(envelopeId.isEmpty)
-          Future.successful(Redirect(routes.AcknowledgementController.show()))
-        else
-          Future.successful(Redirect(routes.AttachmentsAcknowledgementController.show()))
-      }
-    }
+    Future.successful(Redirect(controllers.eis.routes.DeclarationController.show()))
   }
 
 
