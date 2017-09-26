@@ -79,6 +79,9 @@ trait SubmissionFixture {
       .thenReturn(Future.successful(Some(ContactDetailsModel("", "", None, None, ""))))
     when(mockS4lConnector.fetchAndGetFormData[ConfirmCorrespondAddressModel](Matchers.eq(KeystoreKeys.confirmContactAddress))(Matchers.any(), Matchers.any(),Matchers.any()))
       .thenReturn(Future.successful(Some(ConfirmCorrespondAddressModel("Yes", fullCorrespondenceAddress))))
+    when(mockS4lConnector.fetchAndGetFormData[AddressModel](Matchers.eq(KeystoreKeys.contactAddress))
+      (Matchers.any(), Matchers.any(),Matchers.any()))
+      .thenReturn(Future.successful(Some(fullCorrespondenceAddress)))
     when(mockS4lConnector.fetchAndGetFormData[SupportingDocumentsUploadModel](Matchers.eq(KeystoreKeys.supportingDocumentsUpload))(Matchers.any(), Matchers.any(),Matchers.any()))
       .thenReturn(Future.successful(Some(SupportingDocumentsUploadModel("Yes"))))
 
@@ -358,8 +361,7 @@ trait SubmissionFixture {
       NumberOfSharesModel(5), TotalAmountRaisedModel(5), Some(TotalAmountSpentModel(5))),
     InvestorDetailsAnswersModel(validInvestors,
       WasAnyValueReceivedModel("No", None), ShareCapitalChangesModel("No", None)),
-    ContactDetailsAnswersModel(ContactDetailsModel("", "", None, None, ""),
-      ConfirmCorrespondAddressModel("Yes", fullCorrespondenceAddress)),
+    ContactDetailsAnswersModel(ContactDetailsModel("", "", None, None, ""),fullCorrespondenceAddress),
     SupportingDocumentsUploadModel("Yes"),
     SchemeTypesModel(eis = false, seis = true), None, None, CostsAnswerModel(None, None),None, None,None, None)
 }

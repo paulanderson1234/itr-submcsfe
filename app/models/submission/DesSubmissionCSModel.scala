@@ -260,12 +260,13 @@ object DesSubmissionCSModel {
   }
 
   private def readAddressDetails(contactDetailsAnswersModel: ContactDetailsAnswersModel): DesAddressType = {
-    DesAddressType(contactDetailsAnswersModel.correspondAddressModel.address.addressline1,
-      contactDetailsAnswersModel.correspondAddressModel.address.addressline2,
-      contactDetailsAnswersModel.correspondAddressModel.address.addressline3,
-      contactDetailsAnswersModel.correspondAddressModel.address.addressline4,
-      contactDetailsAnswersModel.correspondAddressModel.address.postcode,
-      contactDetailsAnswersModel.correspondAddressModel.address.countryCode)
+    DesAddressType(
+      contactDetailsAnswersModel.correspondAddressModel.addressline1,
+      contactDetailsAnswersModel.correspondAddressModel.addressline2,
+      contactDetailsAnswersModel.correspondAddressModel.addressline3,
+      contactDetailsAnswersModel.correspondAddressModel.addressline4,
+      contactDetailsAnswersModel.correspondAddressModel.postcode,
+      contactDetailsAnswersModel.correspondAddressModel.countryCode)
   }
 
   private def readDesSubmission(answerModel: ComplianceStatementAnswersModel,
