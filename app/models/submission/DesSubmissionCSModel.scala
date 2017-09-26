@@ -305,16 +305,15 @@ object DesSubmissionCSModel {
   }
 
   private def readDesMarketInfo(answerModel: ComplianceStatementAnswersModel): Option[DesMarketInfo] = {
-    def getMarketDescription(marketDescriptionModel: Option[MarketDescriptionModel]) : Option[String] = {
-      if(marketDescriptionModel.nonEmpty) Some(marketDescriptionModel.fold("")(_.text)) else None
+    def getMarketDescription(marketDescriptionModel: Option[MarketDescriptionModel], marketInfo:MarketInfoAnswersModel) : Option[String] = {
+      if(marketInfo.newGeographicMarket.isNewGeographicalMarket == Constants.StandardRadioButtonYesValue ||
+        marketInfo.newProductMarket.isNewProduct == Constants.StandardRadioButtonYesValue && marketDescriptionModel.nonEmpty) Some(marketDescriptionModel.fold("")(_.text)) else None
     }
 
     answerModel.marketInfo match{
-      case Some(marketInfo) if marketInfo.isMarketRouteApplicable.isMarketInfoRoute &&
-        (marketInfo.newGeographicMarket.isNewGeographicalMarket == Constants.StandardRadioButtonYesValue ||
-        marketInfo.newProductMarket.isNewProduct == Constants.StandardRadioButtonYesValue ) =>
+      case Some(marketInfo) if marketInfo.isMarketRouteApplicable.isMarketInfoRoute  =>
         Some(DesMarketInfo(answerToBoolean(marketInfo.newGeographicMarket.isNewGeographicalMarket),
-          answerToBoolean(marketInfo.newProductMarket.isNewProduct),getMarketDescription(marketInfo.marketDescription)))
+          answerToBoolean(marketInfo.newProductMarket.isNewProduct), getMarketDescription(marketInfo.marketDescription, marketInfo)))
       case _  => None
     }
 
