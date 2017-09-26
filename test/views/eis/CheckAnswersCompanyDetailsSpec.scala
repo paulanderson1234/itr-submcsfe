@@ -81,7 +81,7 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
       companyDetailsTableTBody.select("tr").get(2).getElementById("qualifyBusinessActivity-question").text() shouldBe
         Messages("summaryQuestion.bussinessPurpose")
       companyDetailsTableTBody.select("tr").get(2).getElementById("qualifyBusinessActivity-answer").text() shouldBe
-        qualifyPrepareToTrade.isQualifyBusinessActivity
+        Messages("page.companyDetails.qualifyBusinessActivity.bullet.one")
       companyDetailsTableTBody.select("tr").get(2).getElementById("qualifyBusinessActivity-link")
         .attr("href") shouldEqual controllers.eis.routes.QualifyBusinessActivityController.show().url
       //Date of first commercial sale
@@ -246,7 +246,7 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
       companyDetailsTableTBody.select("tr").get(2).getElementById("qualifyBusinessActivity-question").text() shouldBe
         Messages("summaryQuestion.bussinessPurpose")
       companyDetailsTableTBody.select("tr").get(2).getElementById("qualifyBusinessActivity-answer").text() shouldBe
-        qualifyPrepareToTrade.isQualifyBusinessActivity
+        Messages("page.companyDetails.qualifyBusinessActivity.bullet.one")
       companyDetailsTableTBody.select("tr").get(2).getElementById("qualifyBusinessActivity-link")
         .attr("href") shouldEqual controllers.eis.routes.QualifyBusinessActivityController.show().url
       //Date of first commercial sale
@@ -398,7 +398,7 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
       companyDetailsTableTBody.select("tr").get(2).getElementById("qualifyBusinessActivity-question").text() shouldBe
         Messages("summaryQuestion.bussinessPurpose")
       companyDetailsTableTBody.select("tr").get(2).getElementById("qualifyBusinessActivity-answer").text() shouldBe
-        qualifyPrepareToTrade.isQualifyBusinessActivity
+        Messages("page.companyDetails.qualifyBusinessActivity.bullet.one")
       companyDetailsTableTBody.select("tr").get(2).getElementById("qualifyBusinessActivity-link")
         .attr("href") shouldEqual controllers.eis.routes.QualifyBusinessActivityController.show().url
 
@@ -546,7 +546,7 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
       companyDetailsTableTBody.select("tr").get(2).getElementById("qualifyBusinessActivity-question").text() shouldBe
         Messages("summaryQuestion.bussinessPurpose")
       companyDetailsTableTBody.select("tr").get(2).getElementById("qualifyBusinessActivity-answer").text() shouldBe
-        qualifyPrepareToTrade.isQualifyBusinessActivity
+        Messages("page.companyDetails.qualifyBusinessActivity.bullet.one")
       companyDetailsTableTBody.select("tr").get(2).getElementById("qualifyBusinessActivity-link")
         .attr("href") shouldEqual controllers.eis.routes.QualifyBusinessActivityController.show().url
       //Date of first commercial sale
@@ -622,7 +622,7 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
         Some(commercialSaleModelYes), Some(isCompanyKnowledgeIntensiveModelYes), Some(isKnowledgeIntensiveModelYes),
         Some(operatingCostsModel), Some(percentageStaffWithMastersModelYes), None, Some(hadPreviousRFIModelYes),
         Vector(), Some(totalAmountRaisedValid), Some(thirtyDayRuleModelYes), Some(anySharesRepaymentModelYes), Some(newGeographicalMarketModelYes),
-        Some(newProductMarketModelYes), Some(contactDetailsModel), Some(addressModel), Some(investmentGrowModel), Some(qualifyPrepareToTrade),
+        Some(newProductMarketModelYes), Some(contactDetailsModel), Some(addressModel), Some(investmentGrowModel), Some(qualifyResearchAndDevelopment),
         Some(hasInvestmentTradeStartedModelYes), Some(shareIssuetDateModel), Some(grossAssetsModel), Some(fullTimeEmployeeModel),
         Some(shareDescriptionModel), Some(numberOfSharesModel), Some(listOfInvestorsWithShareHoldings),
         Some(WasAnyValueReceivedModel(Constants.StandardRadioButtonYesValue, Some("text"))),
@@ -661,7 +661,7 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
       companyDetailsTableTBody.select("tr").get(2).getElementById("qualifyBusinessActivity-question").text() shouldBe
         Messages("summaryQuestion.bussinessPurpose")
       companyDetailsTableTBody.select("tr").get(2).getElementById("qualifyBusinessActivity-answer").text() shouldBe
-        qualifyPrepareToTrade.isQualifyBusinessActivity
+        Messages("page.companyDetails.qualifyBusinessActivity.bullet.two")
       companyDetailsTableTBody.select("tr").get(2).getElementById("qualifyBusinessActivity-link")
         .attr("href") shouldEqual controllers.eis.routes.QualifyBusinessActivityController.show().url
       //Date of first commercial sale
@@ -814,7 +814,7 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
       companyDetailsTableTBody.select("tr").get(2).getElementById("qualifyBusinessActivity-question").text() shouldBe
         Messages("summaryQuestion.bussinessPurpose")
       companyDetailsTableTBody.select("tr").get(2).getElementById("qualifyBusinessActivity-answer").text() shouldBe
-        qualifyPrepareToTrade.isQualifyBusinessActivity
+        Messages("page.companyDetails.qualifyBusinessActivity.bullet.one")
       companyDetailsTableTBody.select("tr").get(2).getElementById("qualifyBusinessActivity-link")
         .attr("href") shouldEqual controllers.eis.routes.QualifyBusinessActivityController.show().url
       //Date of first commercial sale

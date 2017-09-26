@@ -38,8 +38,10 @@
             }
 
             <!-- Qualify business activity -->
-            @if(checkAnswersModel.qualifyBusinessActivity.isDefined){
-            @textRowHelperBasic("qualifyBusinessActivity", Messages("summaryQuestion.bussinessPurpose"),checkAnswersModel.qualifyBusinessActivity.get.isQualifyBusinessActivity, Some(controllers.eis.routes.QualifyBusinessActivityController.show().url))
+            @if(checkAnswersModel.qualifyBusinessActivity.isDefined && checkAnswersModel.qualifyBusinessActivity.get.isQualifyBusinessActivity == Constants.qualifyPrepareToTrade){
+            @textRowHelperBasic("qualifyBusinessActivity", Messages("summaryQuestion.bussinessPurpose"), Messages("page.companyDetails.qualifyBusinessActivity.bullet.one"), Some(controllers.eis.routes.QualifyBusinessActivityController.show().url))
+            }else{
+            @textRowHelperBasic("qualifyBusinessActivity", Messages("summaryQuestion.bussinessPurpose"), Messages("page.companyDetails.qualifyBusinessActivity.bullet.two"), Some(controllers.eis.routes.QualifyBusinessActivityController.show().url))
             }
             <!-- Is Business activity started -->
             @if(checkAnswersModel.qualifyBusinessActivity.isDefined && checkAnswersModel.qualifyBusinessActivity.get.isQualifyBusinessActivity == Constants.qualifyPrepareToTrade){
