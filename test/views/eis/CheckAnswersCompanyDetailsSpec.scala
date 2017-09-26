@@ -593,20 +593,12 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
       companyDetailsTableTBody.select("tr").get(8).getElementById("isCompanyKnowledgeIntensive-link")
         .attr("href") shouldEqual controllers.eis.routes.IsCompanyKnowledgeIntensiveController.show().url
 
-      //Is Knowledge Intensive
-      companyDetailsTableTBody.select("tr").get(9).getElementById("knowledgeIntensive-question").text() shouldBe
-        Messages("summaryQuestion.knowledgeIntensive")
-      companyDetailsTableTBody.select("tr").get(9).getElementById("knowledgeIntensive-answer").text() shouldBe
-        isKnowledgeIntensiveModelNo.isKnowledgeIntensive
-      companyDetailsTableTBody.select("tr").get(9).getElementById("knowledgeIntensive-link")
-        .attr("href") shouldEqual controllers.eis.routes.IsKnowledgeIntensiveController.show().url
-
       //Fulltime employees
-      companyDetailsTableTBody.select("tr").get(10).getElementById("fullTimeEmployees-question").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(9).getElementById("fullTimeEmployees-question").text() shouldBe
         Messages("summaryQuestion.fullTimeEmployees")
-      companyDetailsTableTBody.select("tr").get(10).getElementById("fullTimeEmployees-answer").text() shouldBe
+      companyDetailsTableTBody.select("tr").get(9).getElementById("fullTimeEmployees-answer").text() shouldBe
         fullTimeEmployeeModel.employeeCount.toString()
-      companyDetailsTableTBody.select("tr").get(10).getElementById("fullTimeEmployees-link")
+      companyDetailsTableTBody.select("tr").get(9).getElementById("fullTimeEmployees-link")
         .attr("href") shouldEqual controllers.eis.routes.FullTimeEmployeeCountController.show().url
       document.getElementById("submit").text() shouldBe Messages("page.checkAndSubmit.checkAnswers.button.confirm")
       document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.SupportingDocumentsController.show().url
