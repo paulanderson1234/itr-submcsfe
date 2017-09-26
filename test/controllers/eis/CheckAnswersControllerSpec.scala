@@ -21,7 +21,6 @@ import common.KeystoreKeys
 import config.FrontendAuthConnector
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
-import models.EisSeisProcessingModel
 import org.mockito.Matchers
 import org.mockito.Mockito._
 import play.api.test.Helpers._
@@ -52,6 +51,7 @@ class CheckAnswersControllerSpec extends BaseSpec with CheckAnswersSpec {
 
   "Sending a GET request to CheckAnswersController with a populated set of models when authenticated and enrolled" should {
     "return a 200 when the page is loaded" in {
+      setupMocks()
       previousRFISetup(Some(hadPreviousRFIModelYes))
       investmentSetup(Some(totalAmountRaisedModel),Some(usedInvestmentReasonBeforeModelYes),Some(previousBeforeDOFCSModelYes),
         Some(newGeographicalMarketModelYes),Some(newProductMarketModelYes),Some(subsidiariesSpendingInvestmentModelYes),Some(subsidiariesNinetyOwnedModelNo),
@@ -75,6 +75,7 @@ class CheckAnswersControllerSpec extends BaseSpec with CheckAnswersSpec {
       contactDetailsSetup()
       companyDetailsSetup()
       contactAddressSetup()
+      setupMocks()
       mockEnrolledRequest(eisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show(envelopeId))(
         result => status(result) shouldBe OK
@@ -89,6 +90,7 @@ class CheckAnswersControllerSpec extends BaseSpec with CheckAnswersSpec {
       contactDetailsSetup()
       companyDetailsSetup()
       contactAddressSetup()
+      setupMocks()
       mockEnrolledRequest(eisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show(None))(
         result => status(result) shouldBe OK
@@ -103,6 +105,7 @@ class CheckAnswersControllerSpec extends BaseSpec with CheckAnswersSpec {
       contactDetailsSetup()
       companyDetailsSetup()
       contactAddressSetup()
+      setupMocks()
       mockEnrolledRequest(eisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show(Some("")))(
         result => status(result) shouldBe OK
@@ -117,6 +120,7 @@ class CheckAnswersControllerSpec extends BaseSpec with CheckAnswersSpec {
         .thenReturn(Future.successful(Some(Enrolment("HMRC-TAVC-ORG",Seq(Identifier("TavcReference","1234")),"Activated"))))
       when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.envelopeId))
         (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some("test")))
+      setupMocks()
       mockEnrolledRequest(eisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit)(
         result => {
@@ -135,6 +139,7 @@ class CheckAnswersControllerSpec extends BaseSpec with CheckAnswersSpec {
       when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.envelopeId))
         (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
       mockEnrolledRequest(eisSchemeTypesModel)
+      setupMocks()
       submitWithSessionAndAuth(TestController.submit)(
         result => {
           status(result) shouldBe SEE_OTHER

@@ -42,6 +42,7 @@
             @textRowHelperBasic("qualifyBusinessActivity", Messages("summaryQuestion.bussinessPurpose"),checkAnswersModel.qualifyBusinessActivity.get.isQualifyBusinessActivity, Some(controllers.eis.routes.QualifyBusinessActivityController.show().url))
             }
             <!-- Is Business activity started -->
+            @if(checkAnswersModel.qualifyBusinessActivity.isDefined && checkAnswersModel.qualifyBusinessActivity.get.isQualifyBusinessActivity == Constants.qualifyPrepareToTrade){
             @if(checkAnswersModel.hasInvestmentTradeStarted.isDefined){
             @if(checkAnswersModel.hasInvestmentTradeStarted.get.hasDate){
             @textRowHelperMultiLineQuestion("hasInvestmentTradeStarted", Array(Messages("summaryQuestion.bussinessStatus"), "", Messages("summaryQuestion.bussinessActivityStarted")), Array(checkAnswersModel.hasInvestmentTradeStarted.get.hasInvestmentTradeStarted, "", HasInvestmentTradeStartedModel.toDateString(checkAnswersModel.hasInvestmentTradeStarted.get.hasInvestmentTradeStartedDay.get, checkAnswersModel.hasInvestmentTradeStarted.get.hasInvestmentTradeStartedMonth.get, checkAnswersModel.hasInvestmentTradeStarted.get.hasInvestmentTradeStartedYear.get)), Some(controllers.eis.routes.HasInvestmentTradeStartedController.show().url))
@@ -49,12 +50,20 @@
             @textRowHelperBasic("hasInvestmentTradeStarted", Messages("summaryQuestion.bussinessStatus"), checkAnswersModel.hasInvestmentTradeStarted.get.hasInvestmentTradeStarted, Some(controllers.eis.routes.HasInvestmentTradeStartedController.show().url))
             }
             }
-
+            }else{
+            @if(checkAnswersModel.researchStartDateModel.isDefined){
+            @if(checkAnswersModel.researchStartDateModel.get.hasDate){
+            @textRowHelperMultiLineQuestion("researchStartDateModel", Array(Messages("summaryQuestion.bussinessStatus"), "", Messages("summaryQuestion.bussinessActivityStarted")), Array(checkAnswersModel.researchStartDateModel.get.hasStartedResearch, "", ResearchStartDateModel.toDateString(checkAnswersModel.researchStartDateModel.get.researchStartDay.get, checkAnswersModel.researchStartDateModel.get.researchStartMonth.get, checkAnswersModel.researchStartDateModel.get.researchStartYear.get)), Some(controllers.eis.routes.ResearchStartDateController.show().url))
+            }else{
+            @textRowHelperBasic("hasInvestmentTradeStarted", Messages("summaryQuestion.bussinessStatus"), checkAnswersModel.researchStartDateModel.get.hasStartedResearch, Some(controllers.eis.routes.ResearchStartDateController.show().url))
+            }
+            }
+            }
             <!-- Date of First Commercial Sale -->
             @if(checkAnswersModel.commercialSaleModel.isDefined){
                 @defining(checkAnswersModel.commercialSaleModel.get) { commercialSaleModel =>
                     @if(commercialSaleModel.hasCommercialSale == Messages("common.radioYesLabel")){
-                        @textRowHelperMultiLineQuestion("commercialSale", Array(Messages("summaryQuestion.hasCommercialSale"),Messages("summaryQuestion.commercialSaleDate")),Array(commercialSaleModel.hasCommercialSale, CommercialSaleModel.toDateString(commercialSaleModel.commercialSaleDay.get, commercialSaleModel.commercialSaleMonth.get, commercialSaleModel.commercialSaleYear.get)), Some(controllers.eis.routes.CommercialSaleController.show().toString), None)
+                        @textRowHelperMultiLineQuestion("commercialSale", Array(Messages("summaryQuestion.hasCommercialSale"),"", Messages("summaryQuestion.commercialSaleDate")),Array(commercialSaleModel.hasCommercialSale, "", CommercialSaleModel.toDateString(commercialSaleModel.commercialSaleDay.get, commercialSaleModel.commercialSaleMonth.get, commercialSaleModel.commercialSaleYear.get)), Some(controllers.eis.routes.CommercialSaleController.show().toString), None)
                     } else {
                         @textRowHelperBasic("commercialSale", Messages("summaryQuestion.hasCommercialSale"), commercialSaleModel.hasCommercialSale, Some(controllers.eis.routes.CommercialSaleController.show().toString))
                     }
@@ -87,12 +96,10 @@
                     @if(checkAnswersModel.operatingCostsModel.isDefined){
                         @defining(checkAnswersModel.operatingCostsModel.get) { operatingAndRDCosts =>
                             <!-- Operating Costs -->
-                           @textRowHelperMultiLine("operatingCosts", Messages("summaryQuestion.operatingCosts"), Array(OperatingCostsModel.getOperatingAndRDCostsAsFormattedString(operatingAndRDCosts.operatingCosts1stYear,Messages("page.companyDetails.OperatingCosts.row.heading.one")),
+                           @textRowHelperMultiLineQuestion("operatingCosts", Array(Messages("summaryQuestion.operatingCosts"), "","",Messages("summaryQuestion.rdCosts"),"",""), Array(OperatingCostsModel.getOperatingAndRDCostsAsFormattedString(operatingAndRDCosts.operatingCosts1stYear,Messages("page.companyDetails.OperatingCosts.row.heading.one")),
                                                             OperatingCostsModel.getOperatingAndRDCostsAsFormattedString(operatingAndRDCosts.operatingCosts2ndYear,Messages("page.companyDetails.OperatingCosts.row.heading.two")),
-                                                            OperatingCostsModel.getOperatingAndRDCostsAsFormattedString(operatingAndRDCosts.operatingCosts3rdYear,Messages("page.companyDetails.OperatingCosts.row.heading.three"))),
-                                                            Some(controllers.eis.routes.OperatingCostsController.show().toString), Some(true) )
-                            <!-- R&D Costs -->
-                           @textRowHelperMultiLine("rdCosts", Messages("summaryQuestion.rdCosts"), Array(OperatingCostsModel.getOperatingAndRDCostsAsFormattedString(operatingAndRDCosts.rAndDCosts1stYear,Messages("page.companyDetails.OperatingCosts.row.heading.one")),
+                                                            OperatingCostsModel.getOperatingAndRDCostsAsFormattedString(operatingAndRDCosts.operatingCosts3rdYear,Messages("page.companyDetails.OperatingCosts.row.heading.three")),
+                                                            OperatingCostsModel.getOperatingAndRDCostsAsFormattedString(operatingAndRDCosts.rAndDCosts1stYear,Messages("page.companyDetails.OperatingCosts.row.heading.one")),
                                                             OperatingCostsModel.getOperatingAndRDCostsAsFormattedString(operatingAndRDCosts.rAndDCosts2ndYear,Messages("page.companyDetails.OperatingCosts.row.heading.two")),
                                                             OperatingCostsModel.getOperatingAndRDCostsAsFormattedString(operatingAndRDCosts.rAndDCosts3rdYear,Messages("page.companyDetails.OperatingCosts.row.heading.three"))),
                                                             Some(controllers.eis.routes.OperatingCostsController.show().toString), Some(true))
@@ -193,7 +200,7 @@
             }
             <!-- Shares or debentures repaid or repurchased -->
             @if(checkAnswersModel.anySharesRepaymentModel.isDefined){
-            @textRowHelperBasic("anySharesRepaymentModel", Messages("page.summaryQuestion.anySharesRepayment"), checkAnswersModel.anySharesRepaymentModel.get.anySharesRepayment, Some(controllers.eis.routes.AnySharesRepaymentController.show().url))
+            @textRowHelperBasic("anySharesRepaymentModel", Messages("page.summaryQuestion.investorShares"), checkAnswersModel.anySharesRepaymentModel.get.anySharesRepayment, Some(controllers.eis.routes.AnySharesRepaymentController.show().url))
             }
             @if(checkAnswersModel.repaymentDetails.isDefined && checkAnswersModel.repaymentDetails.get.length > 0){
             @for((repayment, index) <- checkAnswersModel.repaymentDetails.get.zipWithIndex){

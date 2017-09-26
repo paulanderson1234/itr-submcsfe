@@ -48,18 +48,18 @@ class CheckAnswersPreviousSchemeSpec extends CheckAnswersSpec {
         previousSchemesValid(0).schemeTypeDesc, previousSchemesValid(0).otherSchemeName)
       document.getElementById("previousScheme-0-Line0").text shouldBe
         s"${Messages("page.investment.amount.label")} ${getAmountAsFormattedString(previousSchemesValid(0).investmentAmount)}"
-      document.getElementById("previousScheme-0-Line1").text shouldBe
-        s"${Messages("page.investment.amountSpent.label")} ${getAmountAsFormattedString(previousSchemesValid(0).investmentSpent.get)}"
       document.getElementById("previousScheme-0-Line2").text shouldBe
+        s"${Messages("page.investment.amountSpent.label")} ${getAmountAsFormattedString(previousSchemesValid(0).investmentSpent.get)}"
+      document.getElementById("previousScheme-0-Line1").text shouldBe
         s"${Messages("page.investment.dateOfShareIssue.label")} ${toDateString(previousSchemesValid(0).day.get,previousSchemesValid(0).month.get,
           previousSchemesValid(0).year.get)}"
       document.getElementById("previousScheme-0-link").attr("href") shouldBe controllers.seis.routes.ReviewPreviousSchemesController.show().url
       document.getElementById("previousScheme-1-question").text shouldBe PreviousSchemeModel.getSchemeName(previousSchemesValid(1).schemeTypeDesc,previousSchemesValid(1).otherSchemeName)
       document.getElementById("previousScheme-1-Line0").text shouldBe
         s"${Messages("page.investment.amount.label")} ${getAmountAsFormattedString(previousSchemesValid(1).investmentAmount)}"
-      document.getElementById("previousScheme-1-Line1").text shouldBe
-        s"${Messages("page.investment.amountSpent.label")} ${getAmountAsFormattedString(previousSchemesValid(1).investmentSpent.get)}"
       document.getElementById("previousScheme-1-Line2").text shouldBe
+        s"${Messages("page.investment.amountSpent.label")} ${getAmountAsFormattedString(previousSchemesValid(1).investmentSpent.get)}"
+      document.getElementById("previousScheme-1-Line1").text shouldBe
         s"${Messages("page.investment.dateOfShareIssue.label")} ${toDateString(previousSchemesValid(1).day.get,previousSchemesValid(1).month.get,
           previousSchemesValid(1).year.get)}"
       document.getElementById("previousScheme-1-link").attr("href") shouldBe controllers.seis.routes.ReviewPreviousSchemesController.show().url
@@ -67,9 +67,9 @@ class CheckAnswersPreviousSchemeSpec extends CheckAnswersSpec {
         previousSchemesValid(2).schemeTypeDesc,previousSchemesValid(2).otherSchemeName)
       document.getElementById("previousScheme-2-Line0").text shouldBe
         s"${Messages("page.investment.amount.label")} ${getAmountAsFormattedString(previousSchemesValid(2).investmentAmount)}"
-      document.getElementById("previousScheme-2-Line1").text shouldBe
-        s"${Messages("page.investment.amountSpent.label")} ${getAmountAsFormattedString(previousSchemesValid(2).investmentSpent.get)}"
       document.getElementById("previousScheme-2-Line2").text shouldBe
+        s"${Messages("page.investment.amountSpent.label")} ${getAmountAsFormattedString(previousSchemesValid(2).investmentSpent.get)}"
+      document.getElementById("previousScheme-2-Line1").text shouldBe
         s"${Messages("page.investment.dateOfShareIssue.label")} ${toDateString(previousSchemesValid(2).day.get,previousSchemesValid(2).month.get,
           previousSchemesValid(2).year.get)}"
       document.getElementById("previousScheme-2-link").attr("href") shouldBe controllers.seis.routes.ReviewPreviousSchemesController.show().url

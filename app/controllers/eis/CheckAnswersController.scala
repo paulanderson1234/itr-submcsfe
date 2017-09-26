@@ -82,13 +82,14 @@ trait CheckAnswersController extends FrontendController with AuthorisedAndEnroll
     marketDescription <- s4lConnector.fetchAndGetFormData[MarketDescriptionModel](KeystoreKeys.marketDescription)
     repaymentDetails <- s4lConnector.fetchAndGetFormData[Vector[SharesRepaymentDetailsModel]](KeystoreKeys.sharesRepaymentDetails)
     grossAssetsAfterIssue <- s4lConnector.fetchAndGetFormData[GrossAssetsAfterIssueModel](KeystoreKeys.grossAssetsAfterIssue)
+    researchStartDateModel <- s4lConnector.fetchAndGetFormData[ResearchStartDateModel](KeystoreKeys.researchStartDate)
     turnoverCosts <- s4lConnector.fetchAndGetFormData[AnnualTurnoverCostsModel](KeystoreKeys.turnoverCosts)
   }yield new CheckAnswersModel(registeredAddress,dateOfIncorporation,natureOfBusiness,commercialSale,isCompanyKnowledgeIntensive, isKnowledgeIntensive,
     operatingCosts,percentageStaffWithMasters,tenYearPlan,hadPreviousRFI, previousSchemes, totalAmountRaised,
     thirtyDayRuleModel,anySharesRepaymentModel,newGeographicalMarket,newProduct,contactDetails,contactAddress,
     investmentGrowModel, qualifyBusinessActivity,hasInvestmentTradeStarted, shareIssueDate,grossAssets,fullTimeEmployees,
     shareDescription, numberOfShares,investorDetails,valueReceived,shareCapitalChanges, marketDescription,repaymentDetails,
-    grossAssetsAfterIssue,turnoverCosts, applicationConfig.uploadFeatureEnabled)
+    grossAssetsAfterIssue,turnoverCosts,researchStartDateModel, applicationConfig.uploadFeatureEnabled)
 
 
   def show (envelopeId: Option[String]) : Action[AnyContent]= AuthorisedAndEnrolled.async { implicit user => implicit request =>
@@ -106,14 +107,7 @@ trait CheckAnswersController extends FrontendController with AuthorisedAndEnroll
   }
 
   val submit = AuthorisedAndEnrolled.async { implicit user => implicit request =>
-    s4lConnector.fetchAndGetFormData[String](KeystoreKeys.envelopeId).flatMap{
-      envelopeId => {
-        if(envelopeId.isEmpty)
-          Future.successful(Redirect(routes.AcknowledgementController.show()))
-        else
-          Future.successful(Redirect(routes.AttachmentsAcknowledgementController.show()))
-      }
-    }
+    Future.successful(Redirect(controllers.eis.routes.DeclarationController.show()))
   }
 
 
