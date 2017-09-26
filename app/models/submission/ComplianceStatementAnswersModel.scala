@@ -277,7 +277,7 @@ case class InvestorDetailsAnswersModel(investors: Vector[InvestorDetailsModel],
 }
 
 case class ContactDetailsAnswersModel(contactDetailsModel: ContactDetailsModel,
-                                      correspondAddressModel: ConfirmCorrespondAddressModel)
+                                      correspondAddressModel: AddressModel)
 
 case class MarketInfoAnswersModel(newGeographicMarket: NewGeographicalMarketModel,
                                   newProductMarket: NewProductModel,

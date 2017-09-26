@@ -220,10 +220,10 @@ trait AcknowledgementController extends FrontendController with AuthorisedAndEnr
 
   private def getContactDetailsAnswerModel(implicit hc: HeaderCarrier, user: TAVCUser): Future[Option[ContactDetailsAnswersModel]] = {
     val contactDetails = s4lConnector.fetchAndGetFormData[ContactDetailsModel](KeystoreKeys.contactDetails)
-    val correspondenceAddress = s4lConnector.fetchAndGetFormData[ConfirmCorrespondAddressModel](KeystoreKeys.confirmContactAddress)
+    val correspondenceAddress = s4lConnector.fetchAndGetFormData[AddressModel](KeystoreKeys.contactAddress)
 
     def createModel(contactDetailsModel: Option[ContactDetailsModel],
-                    correspondenceAddressModel: Option[ConfirmCorrespondAddressModel]) = {
+                    correspondenceAddressModel: Option[AddressModel]) = {
       for {
         contactDetailsModel <- contactDetailsModel
         correspondenceAddressModel <- correspondenceAddressModel
