@@ -44,11 +44,11 @@ object PreviousSchemeModel extends DateFormatter with CostFormatter {
     val dateOfIssue = if(previousSchemeModel.day.isDefined && previousSchemeModel.month.isDefined && previousSchemeModel.year.isDefined)
       s"${Messages("page.investment.dateOfShareIssue.label")} ${toDateString(previousSchemeModel.day.get,previousSchemeModel.month.get,
         previousSchemeModel.year.get)}" else ""
-    (investmentAmount.isEmpty, dateOfIssue.isEmpty) match {
+    (dateOfIssue.isEmpty, investmentAmount.isEmpty) match {
       case (true,true) => Array(investmentSpent)
-      case (true,false) =>  Array(investmentSpent,dateOfIssue)
-      case (false,true) => Array(investmentSpent,investmentAmount)
-      case (false,false) => Array(investmentSpent,investmentAmount,dateOfIssue)
+      case (false,true) =>  Array(dateOfIssue, investmentSpent)
+      case (true,false) => Array(investmentAmount, investmentSpent)
+      case (false,false) => Array(dateOfIssue, investmentSpent, investmentAmount)
     }
   }
 

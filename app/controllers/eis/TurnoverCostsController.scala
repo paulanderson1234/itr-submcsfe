@@ -85,7 +85,6 @@ trait TurnoverCostsController extends FrontendController with AuthorisedAndEnrol
         Future.successful(BadRequest(TurnoverCosts(formWithErrors)))
       },
       validFormData => {
-        //TODO: add the annual aveage turnover check and navigtion to error or correct page etc..subsidiaries temporary
         s4lConnector.saveFormData(KeystoreKeys.turnoverCosts, validFormData)
         (for {
           subsidiaries <- s4lConnector.fetchAndGetFormData[SubsidiariesModel](KeystoreKeys.subsidiaries)

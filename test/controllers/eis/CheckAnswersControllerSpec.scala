@@ -14,17 +14,15 @@
  * limitations under the License.
  */
 
-package controllers.seis
+package controllers.eis
 
-import auth.{MockAuthConnector, MockConfig}
-import common.{Constants, KeystoreKeys}
-import config.{FrontendAppConfig, FrontendAuthConnector}
+import auth.{Enrolment, Identifier, MockAuthConnector, MockConfig}
+import common.KeystoreKeys
+import config.FrontendAuthConnector
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
-import models.investorDetails.{InvestorDetailsModel, PreviousShareHoldingModel}
-import models._
 import org.mockito.Matchers
-import org.mockito.Mockito.when
+import org.mockito.Mockito._
 import play.api.test.Helpers._
 import views.helpers.CheckAnswersSpec
 
@@ -46,9 +44,6 @@ class CheckAnswersControllerSpec extends BaseSpec with CheckAnswersSpec {
     "use the correct keystore connector" in {
       CheckAnswersController.s4lConnector shouldBe S4LConnector
     }
-    "use the correct config" in {
-      CheckAnswersController.applicationConfig shouldBe FrontendAppConfig
-    }
     "use the correct enrolment connector" in {
       CheckAnswersController.enrolmentConnector shouldBe EnrolmentConnector
     }
@@ -56,13 +51,18 @@ class CheckAnswersControllerSpec extends BaseSpec with CheckAnswersSpec {
 
   "Sending a GET request to CheckAnswersController with a populated set of models when authenticated and enrolled" should {
     "return a 200 when the page is loaded" in {
-      previousRFISetup(Some(hadPreviousRFIModelYes))
       setupMocks()
+      setupEISMocks()
+      previousRFISetup(Some(hadPreviousRFIModelYes))
+      investmentSetup(Some(totalAmountRaisedModel),Some(usedInvestmentReasonBeforeModelYes),Some(previousBeforeDOFCSModelYes),
+        Some(newGeographicalMarketModelYes),Some(newProductMarketModelYes),Some(subsidiariesSpendingInvestmentModelYes),Some(subsidiariesNinetyOwnedModelNo),
+        Some(investmentGrowModel))
       contactDetailsSetup(Some(contactDetailsModel))
       contactAddressSetup(Some(contactAddressModel))
-      seisCompanyDetailsSetup(Some(registeredAddressModel), Some(dateOfIncorporationModel),
-        Some(natureOfBusinessModel), Some(subsidiariesModelYes), Some(tradeStartDateModelYes))
-      mockEnrolledRequest(seisSchemeTypesModel)
+      companyDetailsSetup(Some(yourCompanyNeedModel),Some(taxpayerReferenceModel),Some(registeredAddressModel),Some(dateOfIncorporationModel),
+        Some(natureOfBusinessModel),Some(commercialSaleModelYes),Some(isKnowledgeIntensiveModelYes),Some(operatingCostsModel),
+        Some(percentageStaffWithMastersModelYes),Some(tenYearPlanModelYes),Some(subsidiariesModelYes))
+      mockEnrolledRequest(eisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show(envelopeId))(
         result => status(result) shouldBe OK
       )
@@ -71,13 +71,14 @@ class CheckAnswersControllerSpec extends BaseSpec with CheckAnswersSpec {
 
   "Sending a GET request to CheckAnswersController with an empty set of models when authenticated and enrolled" should {
     "return a 200 when the page is loaded" in {
-      previousRFISetup()
-      seisInvestmentSetup()
-      contactDetailsSetup()
-      seisCompanyDetailsSetup()
-      contactAddressSetup()
       setupMocks()
-      mockEnrolledRequest(seisSchemeTypesModel)
+      setupEISMocks()
+      previousRFISetup()
+      investmentSetup()
+      contactDetailsSetup()
+      companyDetailsSetup()
+      contactAddressSetup()
+      mockEnrolledRequest(eisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show(envelopeId))(
         result => status(result) shouldBe OK
       )
@@ -86,13 +87,14 @@ class CheckAnswersControllerSpec extends BaseSpec with CheckAnswersSpec {
 
   "Sending a GET request (with envelope id None) to CheckAnswersController with an empty set of models when authenticated and enrolled" should {
     "return a 200 when the page is loaded" in {
-      previousRFISetup()
-      seisInvestmentSetup()
-      contactDetailsSetup()
-      seisCompanyDetailsSetup()
-      contactAddressSetup()
       setupMocks()
-      mockEnrolledRequest(seisSchemeTypesModel)
+      setupEISMocks()
+      previousRFISetup()
+      investmentSetup()
+      contactDetailsSetup()
+      companyDetailsSetup()
+      contactAddressSetup()
+      mockEnrolledRequest(eisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show(None))(
         result => status(result) shouldBe OK
       )
@@ -101,48 +103,37 @@ class CheckAnswersControllerSpec extends BaseSpec with CheckAnswersSpec {
 
   "Sending a GET request (with empty envelope id) to CheckAnswersController with an empty set of models when authenticated and enrolled" should {
     "return a 200 when the page is loaded" in {
-      previousRFISetup()
-      seisInvestmentSetup()
-      contactDetailsSetup()
-      seisCompanyDetailsSetup()
-      contactAddressSetup()
       setupMocks()
-      mockEnrolledRequest(seisSchemeTypesModel)
+      setupEISMocks()
+      previousRFISetup()
+      investmentSetup()
+      contactDetailsSetup()
+      companyDetailsSetup()
+      contactAddressSetup()
+      mockEnrolledRequest(eisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show(Some("")))(
         result => status(result) shouldBe OK
       )
     }
   }
 
-  "Sending a submission to the CheckAnswersController with one or more attachments for SEIS" should {
+  "Sending a submission to the CheckAnswersController for EIS" should {
 
     "redirect to the acknowledgement page when authenticated and enrolled" in {
+      setupMocks()
+      setupEISMocks()
+      when(TestController.enrolmentConnector.getTAVCEnrolment(Matchers.any())(Matchers.any()))
+        .thenReturn(Future.successful(Some(Enrolment("HMRC-TAVC-ORG",Seq(Identifier("TavcReference","1234")),"Activated"))))
       when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.envelopeId))
         (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some("test")))
-      setupMocks()
-      mockEnrolledRequest(seisSchemeTypesModel)
+      mockEnrolledRequest(eisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(controllers.seis.routes.DeclarationController.show().url)
+          redirectLocation(result) shouldBe Some(routes.DeclarationController.show().url)
         }
       )
     }
   }
 
-  "Sending a submission to the CheckAnswersController with no attachments for SEIS" should {
-
-    "redirect to the declaration page when authenticated and enrolled" in {
-      when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.envelopeId))
-        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
-      setupMocks()
-      mockEnrolledRequest(seisSchemeTypesModel)
-      submitWithSessionAndAuth(TestController.submit)(
-        result => {
-          status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(controllers.seis.routes.DeclarationController.show().url)
-        }
-      )
-    }
-  }
 }

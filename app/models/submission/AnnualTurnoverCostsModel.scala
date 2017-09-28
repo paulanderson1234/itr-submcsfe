@@ -22,7 +22,16 @@ import utils.CostFormatter
 case class AnnualTurnoverCostsModel(amount1:String, amount2:String, amount3: String, amount4:String, amount5:String,
                                     firstYear: String, secondYear: String, thirdYear: String, fourthYear: String, fifthYear: String)
 
+
 object AnnualTurnoverCostsModel extends CostFormatter{
   implicit val format = Json.format[AnnualTurnoverCostsModel]
   implicit val writes = Json.writes[AnnualTurnoverCostsModel]
+
+  def averagedAnnualTurnover(annualTurnOverYears: String*): String = {
+    if(annualTurnOverYears.nonEmpty)
+      String.valueOf((annualTurnOverYears.foldLeft(0.0){
+        (d, s) => d + s.toDouble
+      } / annualTurnOverYears.size) * 0.50)
+    else ""
+  }
 }

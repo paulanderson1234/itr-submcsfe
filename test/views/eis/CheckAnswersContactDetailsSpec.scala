@@ -16,9 +16,11 @@
 
 package views.eis
 
-import auth.{MockConfigEISFlow, MockAuthConnector}
+import auth.{MockAuthConnector, MockConfigEISFlow}
+import common.Constants
 import config.FrontendAppConfig
 import controllers.eis.CheckAnswersController
+import models._
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.i18n.Messages
@@ -26,6 +28,7 @@ import play.api.i18n.Messages.Implicits._
 import play.api.test.Helpers._
 import utils.CountriesHelper
 import views.helpers.CheckAnswersSpec
+import views.html.eis.checkAndSubmit.CheckAnswers
 
 class CheckAnswersContactDetailsSpec extends CheckAnswersSpec {
 
@@ -40,20 +43,24 @@ class CheckAnswersContactDetailsSpec extends CheckAnswersSpec {
 
     "Verify that the Check Answers page contains the correct elements for Section 4: Contact Details" +
       " when the contact details model is fully populated" in new Setup {
-      lazy val document: Document = {
-        previousRFISetup()
-        investmentSetup()
-        contactDetailsSetup(Some(contactDetailsModel))
-        contactAddressSetup(Some(contactAddressModel))
-        companyDetailsSetup()
-        val result = TestController.show(None).apply(authorisedFakeRequest.withFormUrlEncodedBody())
-        Jsoup.parse(contentAsString(result))
-      }
+      val model = CheckAnswersModel(Some(registeredAddressModel), Some(dateOfIncorporationModel), Some(natureOfBusinessModel),
+        Some(commercialSaleModelYes), Some(isCompanyKnowledgeIntensiveModelYes), Some(isKnowledgeIntensiveModelYes),
+        Some(operatingCostsModel), Some(percentageStaffWithMastersModelNo), Some(tenYearPlanModelYes), Some(hadPreviousRFIModelYes),
+        Vector(), Some(totalAmountRaisedValid), Some(thirtyDayRuleModelYes), Some(anySharesRepaymentModelYes), Some(newGeographicalMarketModelYes),
+        Some(newProductMarketModelYes), Some(contactDetailsModel), Some(contactAddressModel), Some(investmentGrowModel), Some(qualifyTrade),
+        Some(hasInvestmentTradeStartedModelYes), Some(shareIssuetDateModel), Some(grossAssetsModel), Some(fullTimeEmployeeModel),
+        Some(shareDescriptionModel), Some(numberOfSharesModel), Some(listOfInvestorsWithShareHoldings), Some(WasAnyValueReceivedModel(Constants.StandardRadioButtonYesValue,
+          Some("text"))), Some(ShareCapitalChangesModel(Constants.StandardRadioButtonYesValue, Some("test"))), Some(MarketDescriptionModel("test")),
+        Some(validSharesRepaymentDetailsVector), Some(grossAssetsAfterIssueModel),
+        Some(turnoverCostsValid), Some(researchStartDateModelYes), false)
+
+      val page = CheckAnswers(model)(authorisedFakeRequest, applicationMessages)
+      val document = Jsoup.parse(page.body)
 
       lazy val contactDetailsTable = document.getElementById("contactDetails-table").select("tbody")
 
       //Section table heading
-      document.getElementById("contactDetailsSection-table-heading").text() shouldBe Messages("page.summaryQuestion.companyDetailsSectionFour")
+      document.getElementById("contactDetailsSection-table-heading").text() shouldBe Messages("page.summaryQuestion.companyDetailsSectionFive")
 
       // contactDetails
       contactDetailsTable.select("tr").get(0).getElementById("contactDetails-question").text() shouldBe
@@ -89,21 +96,25 @@ class CheckAnswersContactDetailsSpec extends CheckAnswersSpec {
 
     "Verify that the Check Answers page contains an empty table for Section 4: Contact Details" +
       " when the contact details model is not populated" in new Setup {
-      lazy val document: Document = {
-        previousRFISetup()
-        investmentSetup()
-        contactDetailsSetup()
-        companyDetailsSetup()
-        contactAddressSetup()
-        val result = TestController.show(None).apply(authorisedFakeRequest.withFormUrlEncodedBody())
-        Jsoup.parse(contentAsString(result))
-      }
+      val model = CheckAnswersModel(Some(registeredAddressModel), Some(dateOfIncorporationModel), Some(natureOfBusinessModel),
+        Some(commercialSaleModelYes), Some(isCompanyKnowledgeIntensiveModelYes), Some(isKnowledgeIntensiveModelYes),
+        Some(operatingCostsModel), Some(percentageStaffWithMastersModelNo), Some(tenYearPlanModelYes), Some(hadPreviousRFIModelYes),
+        Vector(), Some(totalAmountRaisedValid), Some(thirtyDayRuleModelYes), Some(anySharesRepaymentModelYes), Some(newGeographicalMarketModelYes),
+        Some(newProductMarketModelYes), None, None, Some(investmentGrowModel), Some(qualifyTrade),
+        Some(hasInvestmentTradeStartedModelYes), Some(shareIssuetDateModel), Some(grossAssetsModel), Some(fullTimeEmployeeModel),
+        Some(shareDescriptionModel), Some(numberOfSharesModel), Some(listOfInvestorsWithShareHoldings), Some(WasAnyValueReceivedModel(Constants.StandardRadioButtonYesValue,
+          Some("text"))), Some(ShareCapitalChangesModel(Constants.StandardRadioButtonYesValue, Some("test"))), Some(MarketDescriptionModel("test")),
+        Some(validSharesRepaymentDetailsVector), Some(grossAssetsAfterIssueModel),
+        Some(turnoverCostsValid), Some(researchStartDateModelYes), false)
+
+      val page = CheckAnswers(model)(authorisedFakeRequest, applicationMessages)
+      val document = Jsoup.parse(page.body)
 
       lazy val contactDetailsTable = document.getElementById("contactDetails-table").select("tbody")
       lazy val notAvailableMessage = Messages("common.notAvailable")
 
       //Section table heading
-      document.getElementById("contactDetailsSection-table-heading").text() shouldBe Messages("page.summaryQuestion.companyDetailsSectionFour")
+      document.getElementById("contactDetailsSection-table-heading").text() shouldBe Messages("page.summaryQuestion.companyDetailsSectionFive")
 
       contactDetailsTable.select("tr").size() shouldBe 0
     }

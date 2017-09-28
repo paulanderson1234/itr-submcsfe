@@ -28,21 +28,6 @@ import views.html.seis.checkAndSubmit.CheckAnswers
 
 class CheckAnswersInvestorSpec extends CheckAnswersSpec {
 
-  val shareHoldersModelForReview = Vector(PreviousShareHoldingModel(investorShareIssueDateModel = Some(investorShareIssueDateModel1),
-    numberOfPreviouslyIssuedSharesModel = Some (numberOfPreviouslyIssuedSharesModel1),
-    previousShareHoldingNominalValueModel = Some(previousShareHoldingNominalValueModel1),
-    previousShareHoldingDescriptionModel = Some(previousShareHoldingDescriptionModel1),
-    processingId = Some(1), investorProcessingId = Some(2)))
-
-  val investorModelForReview = InvestorDetailsModel(Some(investorModel2), Some(companyOrIndividualModel2), Some(companyDetailsModel2), None,
-    Some(numberOfSharesPurchasedModel2), Some(howMuchSpentOnSharesModel2), Some(isExistingShareHolderModelYes),
-    previousShareHoldingModels = Some(shareHoldersModelForReview), processingId = Some(2))
-
-  val listOfInvestorsEmptyShareHoldings =  Vector(validModelWithPrevShareHoldings.copy(previousShareHoldingModels = Some(Vector())))
-  val listOfInvestorsWithShareHoldings =  Vector(investorModelForReview)
-  val listOfInvestorsMissingNumberOfPreviouslyIssuedShares =  Vector(validModelWithPrevShareHoldings.copy(previousShareHoldingModels =
-    Some(Vector(PreviousShareHoldingModel(previousShareHoldingDescriptionModel = Some(previousShareHoldingDescriptionModel1), processingId = Some(1))))))
-
   val wasAnyValueReceivedModel = Some(WasAnyValueReceivedModel(Constants.StandardRadioButtonYesValue,
     Some("text")))
 
