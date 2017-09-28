@@ -16,6 +16,7 @@
 
 package views.seis
 
+import common.Constants
 import controllers.seis.routes
 import models.PreviousSchemeModel
 import org.jsoup.Jsoup
@@ -28,9 +29,7 @@ import views.html.seis.previousInvestment.ReviewPreviousSchemes
 class ReviewPreviousSchemesSpec extends ViewSpec {
 
 
-  val expectedTotalInvestmentAmount = previousSchemeVectorList.foldLeft(0)(_ + _.investmentAmount)
-
-  val notAvailable = "N/A"
+  val expectedTotalInvestmentAmount: Int = previousSchemeVectorList.foldLeft(0)(_ + _.investmentAmount)
 
   "The Review Previous Schemes page" should {
 
@@ -70,7 +69,7 @@ class ReviewPreviousSchemesSpec extends ViewSpec {
         reviewSchemesTableBody.select("tr").get(index).getElementById(s"scheme-amount-raised-$index").text() shouldBe
           PreviousSchemeModel.getAmountAsFormattedString(previousScheme.investmentAmount)
         reviewSchemesTableBody.select("tr").get(index).getElementById(s"scheme-amount-spent-$index").text() shouldBe {
-          if(previousScheme.investmentSpent.isDefined) PreviousSchemeModel.getAmountAsFormattedString(previousScheme.investmentSpent.get) else notAvailable
+          if(previousScheme.investmentSpent.isDefined) PreviousSchemeModel.getAmountAsFormattedString(previousScheme.investmentSpent.get) else Constants.notApplicable
         }
         reviewSchemesTableBody.select("tr").get(index).getElementById(s"change-$index").text() shouldBe
           Messages("common.base.change")
@@ -85,7 +84,7 @@ class ReviewPreviousSchemesSpec extends ViewSpec {
       reviewSchemesTableBody.select("tr").get(previousSchemeVectorList.size).getElementById("total-investment-amount").text() shouldBe
         PreviousSchemeModel.getAmountAsFormattedString(expectedTotalInvestmentAmount)
       reviewSchemesTableBody.select("tr").get(previousSchemeVectorList.size + 1).getElementById("add-scheme").attr("href") shouldBe
-        routes.ReviewPreviousSchemesController.add.toString
+        routes.ReviewPreviousSchemesController.add().toString
       document.body.getElementById("next").text() shouldEqual Messages("common.button.snc")
       document.body.getElementById("get-help-action").text shouldBe Messages("common.error.help.text")
     }

@@ -19,6 +19,7 @@ package controllers.feedback
 import java.net.URLEncoder
 
 import auth.{ALLFLOWS, AuthorisedAndEnrolledForTAVC}
+import common.Constants
 import play.api.Logger
 import play.api.http.{Status => HttpStatus}
 import play.api.mvc.{Action, AnyContent, Request, RequestHeader}
@@ -113,7 +114,7 @@ trait FeedbackController extends FrontendController with AuthorisedAndEnrolledFo
 
   def thankyou: Action[AnyContent] = AuthorisedAndEnrolled.async {
     implicit user => implicit request =>
-      val ticketId = request.session.get(TICKET_ID).getOrElse("N/A")
+      val ticketId = request.session.get(TICKET_ID).getOrElse(Constants.notApplicable)
       val referer = request.session.get(REFERER).getOrElse("/investment-tax-relief-cs/")
       Future.successful(Ok(feedback_thankyou(feedbackThankYouPartialUrl(ticketId), referer)).withSession(request.session - REFERER))
   }
@@ -126,7 +127,7 @@ trait FeedbackController extends FrontendController with AuthorisedAndEnrolledFo
   }
 
   object TavcHeaderCarrierForPartialsConverter extends HeaderCarrierForPartialsConverter {
-    override val crypto = encryptCookieString _
+    override val crypto: (String) => String = encryptCookieString _
 
     def encryptCookieString(cookie: String) : String = {
       SessionCookieCryptoFilter.encrypt(cookie)

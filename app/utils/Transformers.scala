@@ -60,7 +60,7 @@ object Transformers {
     case value: Int => NumberFormat.getNumberInstance.format(value)
     case value: Long => NumberFormat.getNumberInstance.format(value)
     case value: BigDecimal => NumberFormat.getNumberInstance.format(value)
-    case _ => "N/A"
+    case _ => Constants.notApplicable
   }
 
 
