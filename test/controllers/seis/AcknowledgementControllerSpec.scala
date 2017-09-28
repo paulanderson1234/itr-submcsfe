@@ -67,8 +67,6 @@ class AcknowledgementControllerSpec extends BaseSpec {
   }
 
   class SetupPageMinimum() {
-    when(mockSubmissionConnector.submitAdvancedAssurance(Matchers.any(), Matchers.any())(Matchers.any()))
-      .thenReturn(Future.successful(HttpResponse(OK, Some(Json.toJson(submissionResponse)))))
     setUpMocksMinimumRequiredModels(mockS4lConnector)
     setUpMocksRegistrationService(mockRegistrationDetailsService)
   }
@@ -233,16 +231,6 @@ class AcknowledgementControllerSpec extends BaseSpec {
     }
   }
 
-  "Sending an Authenticated and Enrolled GET request with a session to AcknowledgementController" should {
-    "return a 200 and delete the current application when a valid submission data is submitted with minimum expected data" in new SetupPageMinimum {
-      when(mockFileUploadService.getUploadFeatureEnabled).thenReturn(false)
-      when(mockS4lConnector.clearCache()(Matchers.any(), Matchers.any())).thenReturn(HttpResponse(NO_CONTENT))
-      setupMocks()
-      mockEnrolledRequest(seisSchemeTypesModel)
-      val result = TestController.show.apply(authorisedFakeRequest)
-      status(result) shouldBe SEE_OTHER
-    }
-  }
 
   "Sending an Authenticated and Enrolled GET request with a session to AcknowledgementController" should {
     "return a 303 redirect if mandatory NatureOfBusinessModel is missing from keystore" in {

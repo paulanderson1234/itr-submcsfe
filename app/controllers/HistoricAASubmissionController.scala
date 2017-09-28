@@ -46,12 +46,12 @@ trait HistoricAASubmissionController extends FrontendController with AuthorisedA
   val show = AuthorisedAndEnrolled.async { implicit user => implicit request =>
     (for{
       tavcRef <- getTavCReferenceNumber()
-      submissionDetails <- submissionService.getEtmpSubmissionDetails(tavcRef)
+      submissionDetails <- submissionService.getEtmpReturnsSummary(tavcRef)
     } yield Ok(HistoricAASubmission(submissionDetails.get.submissions.map{
       submission => submission.copy(submissionDate = etmpDateToDateString(submission.submissionDate))
     }))).recover{
       case e: Exception => {
-        Logger.warn(s"[HistoricAASubmissionController][show] - Exception retrieving historic AA submissions: ${e.getMessage}")
+        Logger.warn(s"[HistoricAASubmissionController][show] - Exception retrieving historic returns summary: ${e.getMessage}")
         InternalServerError(internalServerErrorTemplate)
       }
     }
