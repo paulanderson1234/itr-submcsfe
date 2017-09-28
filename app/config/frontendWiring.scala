@@ -65,6 +65,6 @@ object WhitelistFilter extends AkamaiWhitelistFilter
   override def whitelist: Seq[String] = FrontendAppConfig.whitelist
 
   override def excludedPaths: Seq[Call] = { FrontendAppConfig.whitelistExcluded.map { path =>  Call("GET", path) } }
-  override def destination: Call = Call("GET", "https://www.tax.service.gov.uk/shutter/investment-tax-relief-cs")
+      override def destination: Call = Call("GET", "https://www.tax.service.gov.uk/shutter/investment-tax-relief-cs")
 }
 

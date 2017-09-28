@@ -45,10 +45,15 @@ trait NominalValueOfSharesController extends FrontendController with AuthorisedA
   val show: Action[AnyContent] = AuthorisedAndEnrolled.async {
     implicit user =>
       implicit request =>
-        s4lConnector.fetchAndGetFormData[NominalValueOfSharesModel](KeystoreKeys.nominalValueOfShares).map {
-          case Some(data) => Ok(views.html.seis.shareDetails.NominalValueOfShares(nominalValueOfSharesForm.fill(data)))
-          case None => Ok(views.html.seis.shareDetails.NominalValueOfShares(nominalValueOfSharesForm))
-        }
+
+        //        s4lConnector.fetchAndGetFormData[NominalValueOfSharesModel](KeystoreKeys.nominalValueOfShares).map {
+        //          case Some(data) => Ok(views.html.seis.shareDetails.NominalValueOfShares(nominalValueOfSharesForm.fill(data)))
+        //          case None => Ok(views.html.seis.shareDetails.NominalValueOfShares(nominalValueOfSharesForm))
+        //        }
+
+        // Not in flow so route past this page to total amount raised if called. This page may come back later
+        Future.successful(Redirect(routes.TotalAmountRaisedController.show()))
+
   }
 
   val submit: Action[AnyContent] = AuthorisedAndEnrolled.async {

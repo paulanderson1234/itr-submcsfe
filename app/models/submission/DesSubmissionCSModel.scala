@@ -545,7 +545,8 @@ object DesSubmissionCSModel {
         readShareHoldingDescription(shareHoldings.previousShareHoldingDescriptionModel.get),
         readShareHoldingDateOfIssue(shareHoldings.investorShareIssueDateModel.get),
         UnitType.shares.toString,
-        readShareHoldingNominalValue(shareHoldings.previousShareHoldingNominalValueModel.get),
+        //readShareHoldingNominalValue(shareHoldings.previousShareHoldingNominalValueModel.get),
+        CostModel("0"),
         shareHoldings.numberOfPreviouslyIssuedSharesModel.get.previouslyIssuedShares,
         CostModel("0"))
     }
