@@ -239,9 +239,6 @@ trait SubmissionFixture {
   val testAgentRef = "AARN1234567"
   val tavcReferenceId = "XATAVC000123456"
 
-  val marketInfo = SubmitMarketInfoModel(newGeographicalMarketModel = NewGeographicalMarketModel(Constants.StandardRadioButtonNoValue),
-    newProductModel = NewProductModel(Constants.StandardRadioButtonYesValue))
-
    val opcostFull = OperatingCostsModel(operatingCosts1stYear = "101", operatingCosts2ndYear = "102",
     operatingCosts3rdYear = "103", rAndDCosts1stYear = "201", rAndDCosts2ndYear = "202", rAndDCosts3rdYear = "203",
      firstYear = "2005", secondYear = "2004", thirdYear = "2003")
@@ -262,15 +259,6 @@ trait SubmissionFixture {
   val startDateModelModelNo = TradeStartDateModel(tradeStartDay = Some(5), tradeStartMonth = Some(6),
     tradeStartYear = Some(2007), hasTradeStartDate = Constants.StandardRadioButtonNoValue)
 
-  val subsidiaryPerformingTradeMinimumReq = SubsidiaryPerformingTradeModel(ninetyOwnedModel = SubsidiariesNinetyOwnedModel(Constants.StandardRadioButtonYesValue),
-    organisationName = "Made up test subsidiary org name")
-  val subsidiaryPerformingTradeWithAddress = SubsidiaryPerformingTradeModel(ninetyOwnedModel =
-    SubsidiariesNinetyOwnedModel(Constants.StandardRadioButtonYesValue), organisationName = "Made up test subsidiary org name",
-    companyAddress = Some(fullCorrespondenceAddress))
-
-  val subsidiaryPerformingTradeWithFull = SubsidiaryPerformingTradeModel(ninetyOwnedModel =
-    SubsidiariesNinetyOwnedModel("true"), organisationName = "Made up test subsidiary org name",
-    companyAddress = Some(fullCorrespondenceAddress), ctUtr = Some("1234567891"), crn = Some("555589852"))
 
   val previousSchemesFull = Vector(PreviousSchemeModel(schemeTypeDesc = Constants.schemeTypeEis, investmentAmount = 2000,
     day = Some(1),
@@ -295,34 +283,8 @@ trait SubmissionFixture {
       otherSchemeName = Some("Other 3"))
   )
 
-  val organisationFull = OrganisationDetailsModel(utr = Some("1234567891"), organisationName = "my org name",
-    chrn = Some("2222222222"), startDate = dateOfIncorporationModel, firstDateOfCommercialSale = Some("2009-04-01"),
-    ctUtr = Some("5555555555"), crn = Some("crnvalue"), companyAddress = Some(fullCorrespondenceAddress),
-    previousRFIs = Some(previousSchemesFull.toList))
-
   val tradeStartDateModelYes = TradeStartDateModel(Constants.StandardRadioButtonYesValue, Some(1), Some(1), Some(2001))
   val tradeStartDateModelNo = TradeStartDateModel(Constants.StandardRadioButtonNoValue, None, None, None)
-
-  val model = AdvancedAssuranceSubmissionType(
-    agentReferenceNumber = Some(testAgentRef),
-    acknowledgementReference = Some("AARN1234567"),
-    whatWillUseForModel = Some(WhatWillUseForModel(None)),
-    natureOfBusinessModel = NatureOfBusinessModel("Some nature of business description"),
-    contactDetailsModel = fullContactDetailsModel,
-    correspondenceAddress = fullCorrespondenceAddress,
-    schemeTypes = schemeTypesEIS,
-    marketInfo = Some(marketInfo),
-    dateTradeCommenced = tradeStartDateModelYes.toDate,
-    annualCosts = Some(costsFull),
-    annualTurnover = Some(turnover),
-    proposedInvestmentModel = TotalAmountRaisedModel(250000),
-    investmentGrowModel = InvestmentGrowModel("It will help me invest in new equipment and R&D"),
-    knowledgeIntensive = Some(KiModel(skilledEmployeesConditionMet = true, innovationConditionMet = Some("reason met"), kiConditionMet = Some(true))),
-    subsidiaryPerformingTrade = Some(subsidiaryPerformingTradeWithFull),
-    organisationDetails = organisationFull
-  )
-
-  val fullSubmissionSourceData = Submission(model)
 
   val kiProcModelValid = KiProcessingModel(companyAssertsIsKi = Some(true), companyWishesToApplyKi = Some(true), dateConditionMet = Some(true), hasPercentageWithMasters = Some(true), costsConditionMet = Some(true))
   val kiProcModelValidAssertNo = KiProcessingModel(companyAssertsIsKi = Some(false), companyWishesToApplyKi = Some(true), dateConditionMet = Some(true), hasPercentageWithMasters = Some(true), costsConditionMet = Some(true))

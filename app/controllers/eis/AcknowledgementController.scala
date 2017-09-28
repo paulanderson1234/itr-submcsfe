@@ -390,7 +390,7 @@ trait AcknowledgementController extends FrontendController with AuthorisedAndEnr
           s4lConnector.clearCache()
           Ok(views.html.eis.checkAndSubmit.Acknowledgement(submissionResponse.json.as[SubmissionResponse]))
         case _ => {
-          Logger.warn(s"[AcknowledgementController][createSubmissionDetailsModel] - " +
+          Logger.warn(s"[AcknowledgementController][getSubsidiariesAnswersModel] - " +
             s"HTTP Submission failed. Response Code: ${submissionResponse.status}")
           InternalServerError
         }
@@ -416,7 +416,7 @@ trait AcknowledgementController extends FrontendController with AuthorisedAndEnr
             }
           }
         case _ => {
-          Logger.warn(s"[AcknowledgementController][createSubmissionDetailsModel] - " +
+          Logger.warn(s"[AcknowledgementController][processResultUpload] - " +
             s"HTTP Submission failed. Response Code: ${submissionResponse.status}")
           Future.successful(InternalServerError)
         }
@@ -460,33 +460,6 @@ trait AcknowledgementController extends FrontendController with AuthorisedAndEnr
     } else {
       Constants.standardIgnoreYearValue
     }
-  }
-
-  private def buildSubsidiaryPerformingTrade(subsidiariesSpendInvest: Option[SubsidiariesSpendingInvestmentModel],
-                                             subsidiariesNinetyOwned: Option[SubsidiariesNinetyOwnedModel],
-                                             tradeName: String,
-                                             tradeAddress: Option[AddressModel]): Option[SubsidiaryPerformingTradeModel] = {
-
-    if (subsidiariesSpendInvest.fold("")(_.subSpendingInvestment) == Constants.StandardRadioButtonYesValue)
-      Some(SubsidiaryPerformingTradeModel(ninetyOwnedModel = subsidiariesNinetyOwned.get,
-        organisationName = tradeName, companyAddress = tradeAddress,
-        ctUtr = None, crn = None))
-    else None
-  }
-
-  private def buildOrganisationDetails(commercialSale: Option[CommercialSaleModel],
-                                       dateOfIncorporation: DateOfIncorporationModel,
-                                       companyName: String,
-                                       companyAddress: AddressModel,
-                                       previousSchemes: List[PreviousSchemeModel]): OrganisationDetailsModel = {
-
-    OrganisationDetailsModel(utr = None, organisationName = companyName, chrn = None, startDate = dateOfIncorporation,
-      firstDateOfCommercialSale = if (commercialSale.fold("")(_.hasCommercialSale) == Constants.StandardRadioButtonYesValue) {
-        val date = commercialSale.get
-        Some(Validation.dateToDesFormat(date.commercialSaleDay.get, date.commercialSaleMonth.get, date.commercialSaleYear.get))
-      } else None,
-      ctUtr = None, crn = None, companyAddress = Some(companyAddress),
-      previousRFIs = if (previousSchemes.nonEmpty) Some(previousSchemes) else None)
   }
 
 }

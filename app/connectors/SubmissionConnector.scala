@@ -18,7 +18,7 @@ package connectors
 
 import config.{FrontendAppConfig, WSHttp}
 import models.registration.RegistrationDetailsModel
-import models.submission.{ComplianceStatementAnswersModel, DesSubmissionCSModel, DesSubmitAdvancedAssuranceModel, Submission}
+import models.submission.{ComplianceStatementAnswersModel, DesSubmissionCSModel}
 import models.{TotalAmountRaisedModel, AnnualTurnoverCostsModel, GrossAssetsModel}
 import play.api.Logger
 import play.api.libs.json.{JsValue, Json}
@@ -83,17 +83,6 @@ trait SubmissionConnector {
     http.GET[Option[Boolean]](s"$serviceUrl/investment-tax-relief/gross-assets/gross-assets-checker/check-total/gross-amount/" +
       s"$schemeType/${grossAssetAmount.grossAmount.toLongExact}")
 
-  }
-
-  def submitAdvancedAssurance(submissionRequest: Submission, tavcReferenceNumber: String)(implicit hc: HeaderCarrier): Future[HttpResponse] = {
-    if(tavcReferenceNumber.isEmpty) {
-      Logger.warn("[SubmissionConnector][submitAdvancedAssurance] An empty tavcReferenceNumber was passed")
-    }
-    require(tavcReferenceNumber.nonEmpty, "[SubmissionConnector][submitAdvancedAssurance] An empty tavcReferenceNumber was passed")
-
-    val json = Json.toJson(submissionRequest)
-    val targetSubmissionModel = Json.parse(json.toString()).as[DesSubmitAdvancedAssuranceModel]
-    http.POST[JsValue, HttpResponse](s"$serviceUrl/investment-tax-relief/advanced-assurance/$tavcReferenceNumber/submit", Json.toJson(targetSubmissionModel))
   }
 
   def submitComplianceStatement(submissionRequest: ComplianceStatementAnswersModel, tavcReferenceNumber: String,

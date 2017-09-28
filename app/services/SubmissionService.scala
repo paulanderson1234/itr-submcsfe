@@ -17,14 +17,13 @@
 package services
 
 import auth.TAVCUser
-import connectors.{S4LConnector, SubmissionConnector}
+import connectors.SubmissionConnector
 import models.submission.SubmissionDetailsModel
 import play.api.Logger
 import play.api.libs.json.{JsError, JsSuccess}
 import uk.gov.hmrc.play.http.HeaderCarrier
 
 import scala.concurrent.ExecutionContext.Implicits.global
-
 import scala.concurrent.Future
 
 trait SubmissionService {

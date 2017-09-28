@@ -59,16 +59,16 @@ class AcknowledgementControllerSpec extends BaseSpec {
   }
 
   class SetupPageMinimum() {
-
-    when(mockSubmissionConnector.submitAdvancedAssurance(Matchers.any(), Matchers.any())(Matchers.any()))
-      .thenReturn(Future.successful(HttpResponse(OK, Some(Json.toJson(submissionResponse)))))
+//
+//    when(mockSubmissionConnector.submitAdvancedAssurance(Matchers.any(), Matchers.any())(Matchers.any()))
+//      .thenReturn(Future.successful(HttpResponse(OK, Some(Json.toJson(submissionResponse)))))
     setUpMocksMinimumRequiredModels(mockS4lConnector)
     setUpMocksRegistrationService(mockRegistrationDetailsService)
   }
 
   def setupMocks(): Unit = {
-    when(mockSubmissionConnector.submitAdvancedAssurance(Matchers.any(), Matchers.any())(Matchers.any()))
-      .thenReturn(Future.successful(HttpResponse(OK, Some(Json.toJson(submissionResponse)))))
+//    when(mockSubmissionConnector.submitAdvancedAssurance(Matchers.any(), Matchers.any())(Matchers.any()))
+//      .thenReturn(Future.successful(HttpResponse(OK, Some(Json.toJson(submissionResponse)))))
     when(mockS4lConnector.fetchAndGetFormData[SchemeTypesModel](Matchers.eq(KeystoreKeys.selectedSchemes))
       (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Some(schemeTypesEIS))
   }
