@@ -103,6 +103,11 @@ trait SubmissionConnector {
     }
     require(tavcReferenceNumber.nonEmpty, "[SubmissionConnector][submitComplainceStatement] An empty tavcReferenceNumber was passed")
 
+    if(registrationDetailsModel.isEmpty) {
+      Logger.warn("[SubmissionConnector][submitComplainceStatement] An empty registrationDetailsModel was passed")
+    }
+    require(registrationDetailsModel.nonEmpty, "[SubmissionConnector][submitComplainceStatement] An empty registrationDetailsModel was passed")
+
     http.POST[JsValue, HttpResponse](s"$serviceUrl/investment-tax-relief/compliance-statement/$tavcReferenceNumber/submit",
       Json.toJson(DesSubmissionCSModel.readDesSubmissionCSModel(submissionRequest, registrationDetailsModel)))
   }

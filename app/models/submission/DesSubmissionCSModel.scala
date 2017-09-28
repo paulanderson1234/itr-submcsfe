@@ -333,7 +333,8 @@ object DesSubmissionCSModel {
   }
 
   private def readResearchTradeDateCommenced(companyDetailsAnswersModel: CompanyDetailsAnswersModel): String = {
-    if(companyDetailsAnswersModel.researchStartDateModel.isDefined)
+    if(companyDetailsAnswersModel.researchStartDateModel.isDefined
+      && companyDetailsAnswersModel.researchStartDateModel.get.hasDate)
       Validation.dateToDesFormat(companyDetailsAnswersModel.researchStartDateModel.get.researchStartDay.get,
         companyDetailsAnswersModel.researchStartDateModel.get.researchStartMonth.get,
         companyDetailsAnswersModel.researchStartDateModel.get.researchStartYear.get)
