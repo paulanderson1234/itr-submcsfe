@@ -14,9 +14,6 @@
         s"previous-shareholding-$id",
         model.previousShareHoldingDescriptionModel.map(_.description).getOrElse(Messages("page.investors.reviewInvestorDetails.incomplete")),
         Array(
-            model.previousShareHoldingNominalValueModel.map { model =>
-                Messages("page.investors.reviewInvestorDetails.shareholdings.nominalValue", s"£${Transformers.numberToFormattedNumber(model.nominalValue)}")
-            }.getOrElse(Messages("page.investors.reviewInvestorDetails.incomplete")),
 
             model.investorShareIssueDateModel.flatMap { date =>
                 date.formatDateToString.map { dateString =>
@@ -43,12 +40,6 @@
         <table id="investor-details-table">
             @tableHeaderHelper("investor-details", Messages("page.investors.reviewInvestorDetails.investor.subheading", investor.investorOrNomineeModel.map(_.addInvestorOrNominee).get))
             <tbody>
-                @textRowHelperBasic(
-                    "investor-or-nominee",
-                    Messages("page.investors.reviewInvestorDetails.investor.investorOrNominee"),
-                    investor.investorOrNomineeModel.map(_.addInvestorOrNominee).getOrElse(Messages("page.investors.reviewInvestorDetails.incomplete")),
-                    Some(controllers.seis.routes.ReviewInvestorDetailsController.change(Constants.AddInvestorOrNomineeController, investor.processingId.get).url)
-                )
 
                 @textRowHelperBasic(
                     "company-or-individual",
