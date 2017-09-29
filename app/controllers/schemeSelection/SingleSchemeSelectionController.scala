@@ -75,9 +75,9 @@ trait SingleSchemeSelectionController extends FrontendController with Authorised
                            (implicit request: Request[AnyContent]): Result = {
     schemeTypesModel match {
       //EIS Flow
-      case SchemeTypesModel(true,false,false,false) => Redirect(controllers.eis.routes.NatureOfBusinessController.show().url)
+      case SchemeTypesModel(true,false,false,false) => Redirect(controllers.eis.routes.InitialDeclarationController.show().url)
       //SEIS Flow
-      case SchemeTypesModel(false,true,false,false) => Redirect(controllers.seis.routes.NatureOfBusinessController.show().url)
+      case SchemeTypesModel(false,true,false,false) => Redirect(controllers.seis.routes.InitialDeclarationController.show().url)
       //Invalid Flow
       case _ => BadRequest(SingleSchemeSelection(singleSchemeSelectionForm.fill(singleSchemeTypesModel)))
     }

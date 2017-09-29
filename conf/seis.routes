@@ -171,3 +171,5 @@ GET       /share-capital-changes                        controllers.seis.ShareCa
 POST      /share-capital-changes                        controllers.seis.ShareCapitalChangesController.submit
 
 GET        /declaration                          controllers.seis.DeclarationController.show
+
+GET        /initial-declaration                          controllers.seis.InitialDeclarationController.show

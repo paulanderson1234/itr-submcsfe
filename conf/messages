@@ -787,6 +787,8 @@ page.introduction.hub.existing.eis-seis.type=Advance Assurance - Enterprise Inve
 page.introduction.hub.existing.eis-vct.type=Advance Assurance - Enterprise Investment Scheme and Venture Capital Trust Scheme
 page.introduction.hub.existing.seis-vct.type=Advance Assurance - Seed Enterprise Investment Scheme and Venture Capital Trust Scheme
 page.introduction.hub.existing.eis-seis-vct.type=Advance Assurance - Enterprise Investment Scheme, Seed Enterprise Investment Scheme and Venture Capital Trust scheme
+page.introduction.hub.existing.compliance.statement.type=Compliance Statement - Enterprise Investment Scheme
+page.introduction.hub.existing.compliance.statement.seis.type=Compliance Statement - Seed Enterprise Investment Scheme
 
 #hub temp link to advanced assurance history
 page.PreviouslySubmitted.heading=Previously submitted applications
@@ -1213,6 +1215,16 @@ page.declaration.description=By submitting this Compliance Statement, you agree 
 page.declaration.warning=If you submit untrue or misleading information you could be fined up to £3,000
 page.declaration.submit=I agree and submit
 page.declaration.doNotAgree=I don''t agree
+
+#Initial Declaration
+page.initial.declaration.title=Meeting the terms and conditions
+page.initial.declaration.heading=Meeting the terms and conditions
+page.initial.declaration.description=By completing this Compliance Statement you agree:
+page.initial.declaration.description.bullet.one=that your company and shares meet the
+page.initial.declaration.description.bullet.two=terms and conditions of the Enterprise Investment Scheme
+page.initial.declaration.description.bullet.three=to tell us within 60 days of an event that means you no longer meet these conditions
+page.initial.declaration.submit=I agree
+page.initial.declaration.doNotAgree=I don''t agree
 
 # AnySharesRepayment page
 page.AnySharesRepayment.title=Have any shares or debentures been repaid or repurchased?

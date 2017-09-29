@@ -87,7 +87,7 @@ class SingleSchemeSelectionControllerSpec extends BaseSpec {
       submitWithSessionAndAuth(TestController.submit(),formInput)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(controllers.eis.routes.NatureOfBusinessController.show().url)
+          redirectLocation(result) shouldBe Some(controllers.eis.routes.InitialDeclarationController.show().url)
         }
       )
     }
@@ -103,7 +103,7 @@ class SingleSchemeSelectionControllerSpec extends BaseSpec {
       submitWithSessionAndAuth(TestController.submit(),formInput)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(controllers.seis.routes.NatureOfBusinessController.show().url)
+          redirectLocation(result) shouldBe Some(controllers.seis.routes.InitialDeclarationController.show().url)
         }
       )
     }
