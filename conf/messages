@@ -967,6 +967,10 @@ page.shares.shareDescription.bullet.two=ordinary shares
 page.shares.shareDescription.bullet.three=seed shares
 page.shares.shareDescription.question.hint=Suggested limit: 20 words
 page.shares.ShareDescription.location=It''s on your company''s Register of Members and share certificates.
+page.shares.shareDescription.text.two=In your answer:
+page.shares.shareDescription.bullet.four=tell us the nominal value of each type of share when they were issued
+page.shares.shareDescription.bullet.five=add one type of share at a time
+
 
 #share issue date page
 validation.error.ShareIssueDate.Future=Share issue date cannot be a future date
@@ -1085,9 +1089,11 @@ page.investors.numberOfPreviouslyIssuedShares.title=How many shares were previou
 #PreviousShareHoldingsDescription
 page.investors.previousShareHoldingDescription.title = What were the shares issued to this {0} called?
 page.investors.previousShareHoldingDescription.heading = What were the shares issued to this {0} called?
-page.investors.previousShareHoldingDescription.example.text = Add one type of share at a time.
+page.investors.previousShareHoldingDescription.example.text =In your answer:
 page.investors.previousShareHoldingDescription.question.hint = Suggested limit: 20 words
 page.investors.previousShareHoldingDescription.location = It''s on your company''s Register of Members.
+page.investors.previousShareHoldingDescription.bullet.one=add one type of share at a time
+page.investors.previousShareHoldingDescription.bullet.two=tell us the nominal value of each type of share when they were issued
 
 #AddAnotherInvestor
 page.investors.addAnotherInvestor.title = Do you want to add another investor or nominee?
