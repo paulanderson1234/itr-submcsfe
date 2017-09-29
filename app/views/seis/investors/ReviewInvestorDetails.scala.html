@@ -45,7 +45,7 @@
             "investor-or-nominee",
             Messages("page.investors.reviewInvestorDetails.investor.investorOrNominee"),
             investor.investorOrNomineeModel.map(_.addInvestorOrNominee).getOrElse(Messages("page.investors.reviewInvestorDetails.incomplete")),
-            Some(controllers.eis.routes.ReviewInvestorDetailsController.change(Constants.AddInvestorOrNomineeController, investor.processingId.get).url)
+            Some(controllers.seis.routes.ReviewInvestorDetailsController.change(Constants.AddInvestorOrNomineeController, investor.processingId.get).url)
             )
                 @textRowHelperBasic(
                     "company-or-individual",
