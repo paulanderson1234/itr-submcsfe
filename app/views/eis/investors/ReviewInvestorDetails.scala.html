@@ -41,6 +41,14 @@
             @tableHeaderHelper("investor-details", Messages("page.investors.reviewInvestorDetails.investor.subheading", investor.investorOrNomineeModel.map(_.addInvestorOrNominee).get))
             <tbody>
 
+
+             @textRowHelperBasic(
+                "investor-or-nominee",
+                Messages("page.investors.reviewInvestorDetails.investor.investorOrNominee"),
+                investor.investorOrNomineeModel.map(_.addInvestorOrNominee).getOrElse(Messages("page.investors.reviewInvestorDetails.incomplete")),
+                Some(controllers.eis.routes.ReviewInvestorDetailsController.change(Constants.AddInvestorOrNomineeController, investor.processingId.get).url)
+                )
+
                 @textRowHelperBasic(
                     "company-or-individual",
                     Messages("page.investors.reviewInvestorDetails.investor.companyOrIndividual"),
@@ -110,17 +118,17 @@
         <table id="previous-shareholdings-table">
             @tableHeaderHelper("previous-shareholdings", Messages("page.investors.reviewInvestorDetails.shareholdings.subheading"))
             <tbody>
-                @textRowHelperBasic(
-                    "is-existing-shareholder",
-                    Messages("page.investors.reviewInvestorDetails.shareholdings.isExistingShareholder"),
-                    investor.isExistingShareHolderModel.map(_.isExistingShareHolder).getOrElse(Messages("page.investors.reviewInvestorDetails.incomplete")),
 
-                    if (investor.showIsExistingShareholderChangeLink) {
-                        Some(controllers.eis.routes.ReviewInvestorDetailsController.change(Constants.IsExistingShareHolderController, investor.processingId.get).url)
-                    } else None,
-                    complete = investor.isExistingShareHolderModel.isDefined && investor.validateShareHoldings
-                )
+            @textRowHelperBasic(
+            "is-existing-shareholder",
+            Messages("page.investors.reviewInvestorDetails.shareholdings.isExistingShareholder"),
+            investor.isExistingShareHolderModel.map(_.isExistingShareHolder).getOrElse(Messages("page.investors.reviewInvestorDetails.incomplete")),
 
+            if (investor.showIsExistingShareholderChangeLink) {
+            Some(controllers.eis.routes.ReviewInvestorDetailsController.change(Constants.IsExistingShareHolderController, investor.processingId.get).url)
+            } else None,
+            complete = investor.isExistingShareHolderModel.isDefined && investor.validateShareHoldings
+            )
                 @if(investor.isExistingShareHolderModel.map(_.isExistingShareHolder == Constants.StandardRadioButtonYesValue).getOrElse(false)) {
                     @investor.previousShareHoldingModels.map(_.map { model =>
                         previousShareholdingRow(model, model.processingId.getOrElse(1))
