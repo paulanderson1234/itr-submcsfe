@@ -63,9 +63,10 @@ trait OperatingCostsController extends FrontendController with AuthorisedAndEnro
           // missing expected data - send user back
           Future.successful(Redirect(routes.DateOfIncorporationController.show()))
         }
-        case Some(dataWithPrevious) if !dataWithPrevious.companyAssertsIsKi.get => {
+        case Some(dataWithPrevious) if !dataWithPrevious.companyAssertsIsKi.get =>
+          Future.successful(Redirect(routes.IsCompanyKnowledgeIntensiveController.show()))
+        case Some(dataWithPrevious) if !dataWithPrevious.companyWishesToApplyKi.get =>
           Future.successful(Redirect(routes.IsKnowledgeIntensiveController.show()))
-        }
         case Some(dataWithDateConditionMet) => {
           // all good - save the cost condition returned from API and navigate accordingly
           s4lConnector.saveFormData(KeystoreKeys.kiProcessingModel, dataWithDateConditionMet.copy(costsConditionMet = isCostConditionMet))
@@ -117,7 +118,7 @@ trait OperatingCostsController extends FrontendController with AuthorisedAndEnro
   }
 
   def isMissingData(data: KiProcessingModel): Boolean = {
-    data.dateConditionMet.isEmpty || data.companyAssertsIsKi.isEmpty
+    data.dateConditionMet.isEmpty || data.companyAssertsIsKi.isEmpty || data.companyWishesToApplyKi.isEmpty
   }
 
 }

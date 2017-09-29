@@ -120,7 +120,7 @@ class TotalAmountRaisedControllerSpec extends BaseSpec {
 
   "Sending a valid form submit and date validation API condition true to the TotalAmountRaisedController" should {
     "redirect to the expected page if valid trade activity has that started is found in s4l but no research date" in {
-      setupSubmissionMocks(tradeDateConditionMet, Some(qualifyPrepareToTrade),
+      setupSubmissionMocks(tradeDateConditionMet, Some(qualifyTrade),
         Some(hasInvestmentTradeStartedModelYes), None, None)
       mockEnrolledRequest(seisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,
@@ -136,7 +136,7 @@ class TotalAmountRaisedControllerSpec extends BaseSpec {
 
   "Sending a valid form submit and date validation API condition false to the TotalAmountRaisedController" should {
     "redirect to the expected page if valid trade activity has that started in s4l but no research date" in {
-      setupSubmissionMocks(tradeDateConditionNotMet, Some(qualifyPrepareToTrade),
+      setupSubmissionMocks(tradeDateConditionNotMet, Some(qualifyTrade),
         Some(hasInvestmentTradeStartedModelYes), None, None)
       mockEnrolledRequest(seisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,
@@ -198,7 +198,7 @@ class TotalAmountRaisedControllerSpec extends BaseSpec {
 
   "Sending a valid form submit and date validation API condition None (not called) to the TotalAmountRaisedController" should {
     "redirect to the expected page if a valid trade activity that has NOT Started is found in s4l and no trade date" in {
-      setupSubmissionMocks(None, Some(qualifyPrepareToTrade),
+      setupSubmissionMocks(None, Some(qualifyTrade),
         Some(hasInvestmentTradeStartedModelNo), None, None)
       mockEnrolledRequest(seisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,
@@ -287,7 +287,7 @@ class TotalAmountRaisedControllerSpec extends BaseSpec {
 
   "Sending a valid form submit where valid trade buiness activity and trade date exist in S4L to the TotalAmountRaisedController" should {
     "return a 500 internal server error if the API return None instead of the expected true/false response" in {
-      setupSubmissionMocks(None, Some(qualifyPrepareToTrade),
+      setupSubmissionMocks(None, Some(qualifyTrade),
       Some(hasInvestmentTradeStartedModelYes), None, None)
       mockEnrolledRequest(seisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,

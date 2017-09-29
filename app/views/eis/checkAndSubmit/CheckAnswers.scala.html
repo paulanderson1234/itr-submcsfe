@@ -38,13 +38,13 @@
             }
 
             <!-- Qualify business activity -->
-            @if(checkAnswersModel.qualifyBusinessActivity.isDefined && checkAnswersModel.qualifyBusinessActivity.get.isQualifyBusinessActivity == Constants.qualifyPrepareToTrade){
+            @if(checkAnswersModel.qualifyBusinessActivity.isDefined && checkAnswersModel.qualifyBusinessActivity.get.isQualifyBusinessActivity == Constants.businessActivityTrade){
             @textRowHelperBasic("qualifyBusinessActivity", Messages("summaryQuestion.bussinessPurpose"), Messages("page.companyDetails.qualifyBusinessActivity.bullet.one"), Some(controllers.eis.routes.QualifyBusinessActivityController.show().url))
             }else{
             @textRowHelperBasic("qualifyBusinessActivity", Messages("summaryQuestion.bussinessPurpose"), Messages("page.companyDetails.qualifyBusinessActivity.bullet.two"), Some(controllers.eis.routes.QualifyBusinessActivityController.show().url))
             }
             <!-- Is Business activity started -->
-            @if(checkAnswersModel.qualifyBusinessActivity.isDefined && checkAnswersModel.qualifyBusinessActivity.get.isQualifyBusinessActivity == Constants.qualifyPrepareToTrade){
+            @if(checkAnswersModel.qualifyBusinessActivity.isDefined && checkAnswersModel.qualifyBusinessActivity.get.isQualifyBusinessActivity == Constants.businessActivityTrade){
             @if(checkAnswersModel.hasInvestmentTradeStarted.isDefined){
             @if(checkAnswersModel.hasInvestmentTradeStarted.get.hasDate){
             @textRowHelperMultiLineQuestion("hasInvestmentTradeStarted", Array(Messages("summaryQuestion.bussinessStatus"), "", Messages("summaryQuestion.bussinessActivityStarted")), Array(checkAnswersModel.hasInvestmentTradeStarted.get.hasInvestmentTradeStarted, "", HasInvestmentTradeStartedModel.toDateString(checkAnswersModel.hasInvestmentTradeStarted.get.hasInvestmentTradeStartedDay.get, checkAnswersModel.hasInvestmentTradeStarted.get.hasInvestmentTradeStartedMonth.get, checkAnswersModel.hasInvestmentTradeStarted.get.hasInvestmentTradeStartedYear.get)), Some(controllers.eis.routes.HasInvestmentTradeStartedController.show().url))

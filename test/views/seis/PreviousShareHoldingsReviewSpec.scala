@@ -51,8 +51,8 @@ class PreviousShareHoldingsReviewSpec extends ViewSpec {
       //head
       reviewShareHoldingsTableHead.select("tr").get(0).getElementById("share-holdings-table-heading").text() shouldBe
         Messages("page.investors.previousShareHoldingReview.heading.one")
-      reviewShareHoldingsTableHead.select("tr").get(0).getElementById("amount-raised-table-heading").text() shouldBe
-        Messages("page.investors.previousShareHoldingReview.heading.two")
+//      reviewShareHoldingsTableHead.select("tr").get(0).getElementById("amount-raised-table-heading").text() shouldBe
+//        Messages("page.investors.previousShareHoldingReview.heading.two")
       reviewShareHoldingsTableHead.select("tr").get(0).getElementById("date-table-heading").text() shouldBe
         Messages("page.investors.previousShareHoldingReview.heading.three")
       reviewShareHoldingsTableHead.select("tr").get(0).getElementById("count-table-heading").text() shouldBe
@@ -61,8 +61,8 @@ class PreviousShareHoldingsReviewSpec extends ViewSpec {
       for((previousShareHoldingModel, index) <- investorModelForReview.previousShareHoldingModels.get.zipWithIndex) {
         reviewShareHoldingsTableBody.select("tr").get(index).getElementById(s"share-desc-$index").text() shouldBe
           previousShareHoldingModel.previousShareHoldingDescriptionModel.get.description
-        reviewShareHoldingsTableBody.select("tr").get(index).getElementById(s"share-nominal-value-$index").text() shouldBe
-          PreviousShareHoldingModel.getAmountAsFormattedString(previousShareHoldingModel.previousShareHoldingNominalValueModel.get.nominalValue)
+//        reviewShareHoldingsTableBody.select("tr").get(index).getElementById(s"share-nominal-value-$index").text() shouldBe
+//          PreviousShareHoldingModel.getAmountAsFormattedString(previousShareHoldingModel.previousShareHoldingNominalValueModel.get.nominalValue)
         reviewShareHoldingsTableBody.select("tr").get(index).getElementById(s"share-purchase-date-$index").text() shouldBe
           PreviousShareHoldingModel.toDateString(previousShareHoldingModel.investorShareIssueDateModel.get.investorShareIssueDateDay.get,
             previousShareHoldingModel.investorShareIssueDateModel.get.investorShareIssueDateMonth.get,

@@ -52,7 +52,6 @@ trait WasAnyValueReceivedController extends FrontendController with AuthorisedAn
         }
       }
       else {
-        //TODO: Route to the beginning of flow as no backlink found
         Future.successful(Redirect(routes.AnySharesRepaymentController.show()))
       }
     }

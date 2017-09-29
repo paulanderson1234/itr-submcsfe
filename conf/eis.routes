@@ -101,9 +101,6 @@ POST       /delete-previous-scheme                  controllers.eis.DeletePrevio
 GET        /acknowledgement                         controllers.eis.AcknowledgementController.show
 POST       /acknowledgement                         controllers.eis.AcknowledgementController.submit
 
-GET        /attachments-acknowledgement             controllers.eis.AttachmentsAcknowledgementController.show
-POST       /attachments-acknowledgement             controllers.eis.AttachmentsAcknowledgementController.submit
-
 GET       /lifetime-allowance-exceeded-error        controllers.eis.LifetimeAllowanceExceededErrorController.show
 POST      /lifetime-allowance-exceeded-error        controllers.eis.LifetimeAllowanceExceededErrorController.submit
 

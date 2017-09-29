@@ -95,7 +95,6 @@ object AnnualCostModel{
   implicit val formats = Json.format[AnnualCostModel]
 }
 case class DesAnnualCostsModel(
-                                nodata:Option[String],
                                 annualCost: Seq[AnnualCostModel]
                               )
 object DesAnnualCostsModel{
@@ -109,7 +108,6 @@ object TurnoverCostModel{
   implicit val formats = Json.format[TurnoverCostModel]
 }
 case class DesAnnualTurnoversModel(
-                                    nodata:Option[String],
                                     annualTurnover: Seq[TurnoverCostModel]
                                   )
 object DesAnnualTurnoversModel{

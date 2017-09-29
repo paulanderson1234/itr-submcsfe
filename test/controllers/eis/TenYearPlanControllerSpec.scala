@@ -39,8 +39,8 @@ class TenYearPlanControllerSpec extends BaseSpec {
     override lazy val enrolmentConnector = mockEnrolmentConnector
   }
 
-  val noMastersKIModel = KiProcessingModel(Some(true), Some(true), Some(true), None, Some(true), Some(true))
-  val ineligibleKIModel = KiProcessingModel(Some(true), Some(false), Some(false), Some(false), None, Some(false))
+  val noMastersKIModel = KiProcessingModel(Some(true), Some(true), Some(true), None, Some(true), Some(true), Some(true))
+  val ineligibleKIModel = KiProcessingModel(Some(true), Some(false), Some(false), Some(false), None, Some(false), Some(true))
 
   def setupShowMocks(tenYearPlanModel: Option[TenYearPlanModel] = None, kiProcessingModel: Option[KiProcessingModel] = None): Unit = {
     when(mockS4lConnector.fetchAndGetFormData[TenYearPlanModel](Matchers.any())(Matchers.any(), Matchers.any(),Matchers.any()))
@@ -91,8 +91,23 @@ class TenYearPlanControllerSpec extends BaseSpec {
   }
 
   "Sending a valid No form submission to the TenYearPlanController with a false KI Model" should {
-    "redirect to the subsidiaries page if no and and no description" in {
-      setupSubmitMocks(Some(false), Some(isKiKIModel))
+    "redirect to the isKI page if no and and no description" in {
+      setupSubmitMocks(Some(false), Some(kiModelAssertsKiFalse))
+      mockEnrolledRequest(eisSchemeTypesModel)
+      submitWithSessionAndAuth(TestController.submit,
+        "hasTenYearPlan" -> Constants.StandardRadioButtonNoValue,
+        "descriptionTextArea" -> "")(
+        result => {
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(routes.IsCompanyKnowledgeIntensiveController.show().url)
+        }
+      )
+    }
+  }
+
+  "Sending a valid No form submission to the TenYearPlanController with a false KI Model" should {
+    "redirect to the expected page if no and and no description" in {
+      setupSubmitMocks(Some(false), Some(kiModelWantApplyKiFalse))
       mockEnrolledRequest(eisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,
         "hasTenYearPlan" -> Constants.StandardRadioButtonNoValue,
@@ -100,6 +115,36 @@ class TenYearPlanControllerSpec extends BaseSpec {
         result => {
           status(result) shouldBe SEE_OTHER
           redirectLocation(result) shouldBe Some(routes.IsKnowledgeIntensiveController.show().url)
+        }
+      )
+    }
+  }
+
+  "Sending a valid No form submission to the TenYearPlanController with a Missing assetsKi in KI Model" should {
+    "redirect to the expected page if no and and no description" in {
+      setupSubmitMocks(Some(false), Some(kiModelMissingAssertKi))
+      mockEnrolledRequest(eisSchemeTypesModel)
+      submitWithSessionAndAuth(TestController.submit,
+        "hasTenYearPlan" -> Constants.StandardRadioButtonNoValue,
+        "descriptionTextArea" -> "")(
+        result => {
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(routes.DateOfIncorporationController.show().url)
+        }
+      )
+    }
+  }
+
+  "Sending a valid No form submission to the TenYearPlanController with a Missing wants apply Ki in KI Model" should {
+    "redirect to the expected page if no and and no description" in {
+      setupSubmitMocks(Some(false), Some(kiModelMissingWantApplyKi))
+      mockEnrolledRequest(eisSchemeTypesModel)
+      submitWithSessionAndAuth(TestController.submit,
+        "hasTenYearPlan" -> Constants.StandardRadioButtonNoValue,
+        "descriptionTextArea" -> "")(
+        result => {
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(routes.DateOfIncorporationController.show().url)
         }
       )
     }

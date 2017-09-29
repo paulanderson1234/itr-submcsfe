@@ -34,9 +34,11 @@ case class KiProcessingModel(
                               costsConditionMet : Option[Boolean] = None,
                               hasPercentageWithMasters : Option[Boolean] = None,
                               hasTenYearPlan : Option[Boolean] = None,
-                              secondaryCondtionsMet : Option[Boolean] = None
+                              secondaryCondtionsMet : Option[Boolean] = None,
+                              companyWishesToApplyKi : Option[Boolean] = None
                             ){
   val isKi: Boolean = if(companyAssertsIsKi.getOrElse(false) &&
+    companyWishesToApplyKi.getOrElse(false) &&
     dateConditionMet.getOrElse(false) &&
     costsConditionMet.getOrElse(false) &&
     secondaryCondtionsMet.getOrElse(false)) true else false

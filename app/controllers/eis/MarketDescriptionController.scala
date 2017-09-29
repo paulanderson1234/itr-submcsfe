@@ -49,10 +49,7 @@ trait MarketDescriptionController extends FrontendController with AuthorisedAndE
           case None => Ok(MarketDescription(marketDescriptionForm, backUrl.get))
         }
       }
-      else {
-        //TODO: Route to the beginning of flow as no backlink found
-        Future.successful(Redirect(controllers.routes.ApplicationHubController.show()))
-      }
+      else Future.successful(Redirect(controllers.routes.ApplicationHubController.show()))
     }
 
     for {

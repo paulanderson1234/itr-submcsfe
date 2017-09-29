@@ -67,7 +67,7 @@ trait ShareIssueDateController extends FrontendController with AuthorisedAndEnro
 
     def getQualifyingBusinessType(shareIssueDateModel: ShareIssueDateModel, qualifyBusinessActivityModel: QualifyBusinessActivityModel) = {
       qualifyBusinessActivityModel.isQualifyBusinessActivity match {
-        case Constants.qualifyPrepareToTrade =>   {
+        case Constants.qualifyTrade =>   {
           s4lConnector.fetchAndGetFormData[HasInvestmentTradeStartedModel](KeystoreKeys.hasInvestmentTradeStarted) flatMap {
             case Some(data) => if (data.hasDate) routeRequest(data.hasInvestmentTradeStartedDay.get, data.hasInvestmentTradeStartedMonth.get,
               data.hasInvestmentTradeStartedYear.get, shareIssueDateModel)

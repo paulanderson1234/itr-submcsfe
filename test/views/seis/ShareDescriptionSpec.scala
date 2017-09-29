@@ -44,6 +44,11 @@ class ShareDescriptionSpec extends ViewSpec {
         document.getElementById("bullet-one").text() shouldBe Messages("page.shares.shareDescription.bullet.one")
         document.getElementById("bullet-two").text() shouldBe Messages("page.shares.shareDescription.bullet.two")
         document.getElementById("bullet-three").text() shouldBe Messages("page.shares.shareDescription.bullet.three")
+
+        document.getElementById("description-one").text() shouldBe Messages("page.shares.shareDescription.text.two")
+        document.getElementById("bullet-four").text() shouldBe Messages("page.shares.shareDescription.bullet.four")
+        document.getElementById("bullet-five").text() shouldBe Messages("page.shares.shareDescription.bullet.five")
+
         document.getElementById("desc-one").text() shouldBe Messages("page.shares.shareDescription.question.hint")
         document.getElementsByTag("legend").text() shouldBe Messages("page.shares.shareDescription.title")
         document.getElementsByTag("legend").hasClass("visuallyhidden") shouldBe true
@@ -75,6 +80,11 @@ class ShareDescriptionSpec extends ViewSpec {
         document.getElementById("bullet-one").text() shouldBe Messages("page.shares.shareDescription.bullet.one")
         document.getElementById("bullet-two").text() shouldBe Messages("page.shares.shareDescription.bullet.two")
         document.getElementById("bullet-three").text() shouldBe Messages("page.shares.shareDescription.bullet.three")
+
+        document.getElementById("description-one").text() shouldBe Messages("page.shares.shareDescription.text.two")
+        document.getElementById("bullet-four").text() shouldBe Messages("page.shares.shareDescription.bullet.four")
+        document.getElementById("bullet-five").text() shouldBe Messages("page.shares.shareDescription.bullet.five")
+
         document.getElementById("desc-one").text() shouldBe Messages("page.shares.shareDescription.question.hint")
         document.getElementsByTag("legend").text() shouldBe Messages("page.shares.shareDescription.title")
         document.getElementsByTag("legend").hasClass("visuallyhidden") shouldBe true

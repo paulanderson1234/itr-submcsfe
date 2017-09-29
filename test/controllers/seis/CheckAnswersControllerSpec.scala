@@ -31,7 +31,7 @@ import views.helpers.CheckAnswersSpec
 import scala.concurrent.Future
 
 class CheckAnswersControllerSpec extends BaseSpec with CheckAnswersSpec {
-  
+
   object TestController extends CheckAnswersController {
     override lazy val applicationConfig = MockConfig
     override lazy val authConnector = MockAuthConnector

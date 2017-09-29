@@ -17,6 +17,13 @@
     <p id="description-one" class="lede">@Messages("page.investors.previousShareHoldingDescription.example.text")</p>
 </div>
 
+<div class="form-group">
+    <ul class="list list-bullet">
+        <li id="help-bullet-one">@Messages("page.investors.previousShareHoldingDescription.bullet.one")</li>
+        <li id="help-bullet-two">@Messages("page.investors.previousShareHoldingDescription.bullet.two")</li>
+    </ul>
+</div>
+
 @form(action = controllers.eis.routes.PreviousShareHoldingDescriptionController.submit(Some(companyOrIndividual), Some(investorProcessingId))) {
 
 <fieldset>

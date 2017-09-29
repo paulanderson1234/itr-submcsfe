@@ -14,9 +14,6 @@
         s"previous-shareholding-$id",
         model.previousShareHoldingDescriptionModel.map(_.description).getOrElse(Messages("page.investors.reviewInvestorDetails.incomplete")),
         Array(
-            model.previousShareHoldingNominalValueModel.map { model =>
-                Messages("page.investors.reviewInvestorDetails.shareholdings.nominalValue", s"£${Transformers.numberToFormattedNumber(model.nominalValue)}")
-            }.getOrElse(Messages("page.investors.reviewInvestorDetails.incomplete")),
 
             model.investorShareIssueDateModel.flatMap { date =>
                 date.formatDateToString.map { dateString =>
@@ -43,11 +40,13 @@
         <table id="investor-details-table">
             @tableHeaderHelper("investor-details", Messages("page.investors.reviewInvestorDetails.investor.subheading", investor.investorOrNomineeModel.map(_.addInvestorOrNominee).get))
             <tbody>
-                @textRowHelperBasic(
-                    "investor-or-nominee",
-                    Messages("page.investors.reviewInvestorDetails.investor.investorOrNominee"),
-                    investor.investorOrNomineeModel.map(_.addInvestorOrNominee).getOrElse(Messages("page.investors.reviewInvestorDetails.incomplete")),
-                    Some(controllers.eis.routes.ReviewInvestorDetailsController.change(Constants.AddInvestorOrNomineeController, investor.processingId.get).url)
+
+
+             @textRowHelperBasic(
+                "investor-or-nominee",
+                Messages("page.investors.reviewInvestorDetails.investor.investorOrNominee"),
+                investor.investorOrNomineeModel.map(_.addInvestorOrNominee).getOrElse(Messages("page.investors.reviewInvestorDetails.incomplete")),
+                Some(controllers.eis.routes.ReviewInvestorDetailsController.change(Constants.AddInvestorOrNomineeController, investor.processingId.get).url)
                 )
 
                 @textRowHelperBasic(
@@ -119,17 +118,17 @@
         <table id="previous-shareholdings-table">
             @tableHeaderHelper("previous-shareholdings", Messages("page.investors.reviewInvestorDetails.shareholdings.subheading"))
             <tbody>
-                @textRowHelperBasic(
-                    "is-existing-shareholder",
-                    Messages("page.investors.reviewInvestorDetails.shareholdings.isExistingShareholder"),
-                    investor.isExistingShareHolderModel.map(_.isExistingShareHolder).getOrElse(Messages("page.investors.reviewInvestorDetails.incomplete")),
 
-                    if (investor.showIsExistingShareholderChangeLink) {
-                        Some(controllers.eis.routes.ReviewInvestorDetailsController.change(Constants.IsExistingShareHolderController, investor.processingId.get).url)
-                    } else None,
-                    complete = investor.isExistingShareHolderModel.isDefined && investor.validateShareHoldings
-                )
+            @textRowHelperBasic(
+            "is-existing-shareholder",
+            Messages("page.investors.reviewInvestorDetails.shareholdings.isExistingShareholder"),
+            investor.isExistingShareHolderModel.map(_.isExistingShareHolder).getOrElse(Messages("page.investors.reviewInvestorDetails.incomplete")),
 
+            if (investor.showIsExistingShareholderChangeLink) {
+            Some(controllers.eis.routes.ReviewInvestorDetailsController.change(Constants.IsExistingShareHolderController, investor.processingId.get).url)
+            } else None,
+            complete = investor.isExistingShareHolderModel.isDefined && investor.validateShareHoldings
+            )
                 @if(investor.isExistingShareHolderModel.map(_.isExistingShareHolder == Constants.StandardRadioButtonYesValue).getOrElse(false)) {
                     @investor.previousShareHoldingModels.map(_.map { model =>
                         previousShareholdingRow(model, model.processingId.getOrElse(1))

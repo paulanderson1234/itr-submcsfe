@@ -35,12 +35,13 @@ package connectors
 import java.util.UUID
 
 import auth.MockConfig
+import common.Constants
 import common.Constants._
 import models._
 import play.api.test.Helpers._
 import fixtures.SubmissionFixture
-import forms.GrossAssetsAfterIssueForm
 import models.registration.RegistrationDetailsModel
+import models.submission._
 import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.play.OneServerPerSuite
 import org.mockito.Matchers
@@ -74,6 +75,21 @@ class SubmissionConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndA
   val tradeStartYearNo = false
   val grossAssetsAmount = 1000
   val grossAssetsAfterIssueAmount = 16000000
+
+  def retrieveCSSourceModel(email: String): ComplianceStatementAnswersModel = ComplianceStatementAnswersModel(
+    CompanyDetailsAnswersModel(natureOfBusinessValid, dateOfIncorporationValid, QualifyBusinessActivityModel(Constants.qualifyResearchAndDevelopment),
+      None, Some(ResearchStartDateModel("Yes", Some(1), Some(4), Some(2016))), None, shareIssueDateModel, GrossAssetsModel(1000), None,
+      FullTimeEmployeeCountModel(1),None),
+    PreviousSchemesAnswersModel(HadPreviousRFIModel("Yes"), HadOtherInvestmentsModel("Yes"),
+      Some(List(PreviousSchemeModel("test", 1, Some(1), Some("Name"), Some(1), Some(2), Some(2015), Some(1))))),
+    ShareDetailsAnswersModel(ShareDescriptionModel(""),
+      NumberOfSharesModel(5), TotalAmountRaisedModel(5), Some(TotalAmountSpentModel(5))),
+    InvestorDetailsAnswersModel(validInvestors,
+      WasAnyValueReceivedModel("No", None), ShareCapitalChangesModel("No", None)),
+    ContactDetailsAnswersModel(ContactDetailsModel("", "", None, None, email), fullCorrespondenceAddress),
+    SupportingDocumentsUploadModel("Yes"),
+    SchemeTypesModel(eis = false, seis = true),kiAnswersModel = None,
+    marketInfo = None, CostsAnswerModel(None, None), thirtyDayRuleAnswersModel = None, investmentGrow = None, subsidiaries = None, repaidSharesAnswersModel = None)
 
   object TargetSubmissionConnector extends SubmissionConnector with FrontendController {
     override val serviceUrl = MockConfig.submissionUrl
@@ -145,81 +161,6 @@ class SubmissionConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndA
 
       val result = TargetSubmissionConnector.checkAveragedAnnualTurnover(totalAmountRaised,annualTurnoverCosts)
       await(result) shouldBe Some(validResponse)
-    }
-  }
-
-  "Calling submitAdvancedAssurance with a valid model" should {
-
-    "return a OK" in {
-
-      val validRequest = fullSubmissionSourceData
-      when(mockHttp.POST[JsValue, HttpResponse](Matchers.any(), Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
-        .thenReturn(Future.successful(HttpResponse(OK)))
-      val result = TargetSubmissionConnector.submitAdvancedAssurance(validRequest, tavcReferenceId)
-      await(result).status shouldBe OK
-    }
-  }
-
-  "Calling submitAdvancedAssurance with a valid model but empty tavcRef" should {
-
-    "return throw an illegal argument exception" in {
-
-      val validRequest = fullSubmissionSourceData
-      when(mockHttp.POST[JsValue, HttpResponse](Matchers.any(), Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
-        .thenReturn(Future.successful(HttpResponse(OK)))
-
-      val exception = the[IllegalArgumentException] thrownBy TargetSubmissionConnector.submitAdvancedAssurance(fullSubmissionSourceData, "")
-      exception.getMessage shouldBe "requirement failed: [SubmissionConnector][submitAdvancedAssurance] An empty tavcReferenceNumber was passed"
-    }
-  }
-
-  "Calling submitAdvancedAssurance with a email containing 'badrequest'" should {
-
-    "return a BAD_REQUEST error" in {
-
-      val request = fullSubmissionSourceData
-      when(mockHttp.POST[JsValue, HttpResponse](Matchers.any(), Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
-        .thenReturn(Future.successful(HttpResponse(BAD_REQUEST)))
-      val result = TargetSubmissionConnector.submitAdvancedAssurance(request, tavcReferenceId)
-      await(result).status shouldBe BAD_REQUEST
-    }
-  }
-
-
-  "Calling submitAdvancedAssurance with a email containing 'forbidden'" should {
-
-    "return a FORBIDDEN Error" in {
-
-      val request = fullSubmissionSourceData
-      when(mockHttp.POST[JsValue, HttpResponse](Matchers.any(), Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
-        .thenReturn(Future.successful(HttpResponse(FORBIDDEN)))
-      val result = TargetSubmissionConnector.submitAdvancedAssurance(request, tavcReferenceId)
-      await(result).status shouldBe FORBIDDEN
-    }
-  }
-
-
-  "Calling submitAdvancedAssurance with a email containing 'serviceunavailable'" should {
-
-    "return a SERVICE UNAVAILABLE ERROR" in {
-
-      val request = fullSubmissionSourceData
-      when(mockHttp.POST[JsValue, HttpResponse](Matchers.any(), Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
-        .thenReturn(Future.successful(HttpResponse(SERVICE_UNAVAILABLE)))
-      val result = TargetSubmissionConnector.submitAdvancedAssurance(request, tavcReferenceId)
-      await(result).status shouldBe SERVICE_UNAVAILABLE
-    }
-  }
-
-  "Calling submitAdvancedAssurance with a email containing 'internalservererror'" should {
-
-    "return a INTERNAL SERVER ERROR" in {
-
-      val request = fullSubmissionSourceData
-      when(mockHttp.POST[JsValue, HttpResponse](Matchers.any(), Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
-        .thenReturn(Future.successful(HttpResponse(INTERNAL_SERVER_ERROR)))
-      val result = TargetSubmissionConnector.submitAdvancedAssurance(request, tavcReferenceId)
-      await(result).status shouldBe INTERNAL_SERVER_ERROR
     }
   }
 
@@ -323,13 +264,13 @@ class SubmissionConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndA
   "Calling getAASubmissionDetails" should {
     "throw an error if the TAVCRef is empty" in {
       intercept[IllegalArgumentException] {
-        TargetSubmissionConnector.getAASubmissionDetails("")
+        TargetSubmissionConnector.getReturnsSummary("")
       }
     }
     "return a response if a valid TAVCRef is given" in {
       when(mockHttp.GET[HttpResponse](Matchers.any())(Matchers.any(), Matchers.any()))
         .thenReturn(Future.successful(HttpResponse(OK)))
-      val result = TargetSubmissionConnector.getAASubmissionDetails(tavcReferenceId)
+      val result = TargetSubmissionConnector.getReturnsSummary(tavcReferenceId)
       await(result).status shouldBe OK
     }
   }
@@ -385,6 +326,96 @@ class SubmissionConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndA
         s"${TargetSubmissionConnector.serviceUrl}/investment-tax-relief/gross-assets/gross-assets-after-issue-checker/check-total/gross-amount/$grossAssetsAfterIssueAmount"))
         (Matchers.any(), Matchers.any())).thenReturn(Some(falseResponse))
       await(result) shouldBe Some(falseResponse)
+    }
+  }
+
+  "Calling submitComplianceStatement with a valid model" should {
+
+    "return a OK" in {
+
+      val validRequest = validSEISAnswersModel
+      when(mockHttp.POST[JsValue, HttpResponse](Matchers.any(), Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(HttpResponse(OK)))
+      val result = TargetSubmissionConnector.submitComplianceStatement(validRequest, tavcReferenceId, Some(registrationDetailsModel))
+      await(result).status shouldBe OK
+    }
+  }
+
+  "Calling submitComplianceStatement with a valid model but empty tavcRef" should {
+
+    "return throw an illegal argument exception" in {
+
+      val validRequest = validSEISAnswersModel
+      when(mockHttp.POST[JsValue, HttpResponse](Matchers.any(), Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(HttpResponse(OK)))
+
+      val exception = the[IllegalArgumentException] thrownBy
+        TargetSubmissionConnector.submitComplianceStatement(validRequest, "", Some(registrationDetailsModel))
+      exception.getMessage shouldBe "requirement failed: [SubmissionConnector][submitComplainceStatement] An empty tavcReferenceNumber was passed"
+    }
+  }
+
+  "Calling submitComplianceStatement with a valid model but empty registration details" should {
+
+    "return throw an illegal argument exception" in {
+
+      val validRequest = validSEISAnswersModel
+      when(mockHttp.POST[JsValue, HttpResponse](Matchers.any(), Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(HttpResponse(OK)))
+
+      val exception = the[IllegalArgumentException] thrownBy
+        TargetSubmissionConnector.submitComplianceStatement(validRequest, tavcReferenceId, None)
+      exception.getMessage shouldBe "requirement failed: [SubmissionConnector][submitComplainceStatement] An empty registrationDetailsModel was passed"
+    }
+  }
+
+  "Calling submitComplianceStatement with a email containing 'badrequest'" should {
+
+    "return a BAD_REQUEST error" in {
+
+      val request = retrieveCSSourceModel("badrequest@badrequest.com")
+      when(mockHttp.POST[JsValue, HttpResponse](Matchers.any(), Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(HttpResponse(BAD_REQUEST)))
+      val result = TargetSubmissionConnector.submitComplianceStatement(request, tavcReferenceId, Some(registrationDetailsModel))
+      await(result).status shouldBe BAD_REQUEST
+    }
+  }
+
+
+  "Calling submitComplianceStatement with a email containing 'forbidden'" should {
+
+    "return a FORBIDDEN Error" in {
+
+      val request = retrieveCSSourceModel("forbidden@forbidden.com")
+      when(mockHttp.POST[JsValue, HttpResponse](Matchers.any(), Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(HttpResponse(FORBIDDEN)))
+      val result = TargetSubmissionConnector.submitComplianceStatement(request, tavcReferenceId, Some(registrationDetailsModel))
+      await(result).status shouldBe FORBIDDEN
+    }
+  }
+
+
+  "Calling submitComplianceStatement with a email containing 'serviceunavailable'" should {
+
+    "return a SERVICE UNAVAILABLE ERROR" in {
+
+      val request = retrieveCSSourceModel("serviceunavailable@serviceunavailable.com")
+      when(mockHttp.POST[JsValue, HttpResponse](Matchers.any(), Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(HttpResponse(SERVICE_UNAVAILABLE)))
+      val result = TargetSubmissionConnector.submitComplianceStatement(request, tavcReferenceId, Some(registrationDetailsModel))
+      await(result).status shouldBe SERVICE_UNAVAILABLE
+    }
+  }
+
+  "Calling submitComplianceStatement with a email containing 'internalservererror'" should {
+
+    "return a INTERNAL SERVER ERROR" in {
+
+      val request = retrieveCSSourceModel("internalservererror@internalservererror.com")
+      when(mockHttp.POST[JsValue, HttpResponse](Matchers.any(), Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
+        .thenReturn(Future.successful(HttpResponse(INTERNAL_SERVER_ERROR)))
+      val result = TargetSubmissionConnector.submitComplianceStatement(request, tavcReferenceId, Some(registrationDetailsModel))
+      await(result).status shouldBe INTERNAL_SERVER_ERROR
     }
   }
 }
