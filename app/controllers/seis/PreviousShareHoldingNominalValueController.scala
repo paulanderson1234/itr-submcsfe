@@ -48,8 +48,8 @@ trait PreviousShareHoldingNominalValueController extends FrontendController with
     implicit user =>
       implicit request =>
 
-        s4lConnector.saveFormData(KeystoreKeys.backLinkInvestorShareIssueDate,
-          routes.PreviousShareHoldingDescriptionController.show(investorProcessingId, Some(id)).url)
+//        s4lConnector.saveFormData(KeystoreKeys.backLinkInvestorShareIssueDate,
+//          routes.PreviousShareHoldingDescriptionController.show(investorProcessingId, Some(id)).url)
 
         // this page is no longer in the flow but just in case it's called by pass it. Page is kept as may come back in future
         Future.successful(Redirect(routes.InvestorShareIssueDateController.show(investorProcessingId, id)))

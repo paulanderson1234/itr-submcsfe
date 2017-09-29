@@ -39,7 +39,7 @@ class PreviousShareHoldingNominalValueControllerSpec extends BaseSpec{
     override lazy val authConnector: AuthConnector = MockAuthConnector
   }
 
-  val backUrl = Some(controllers.eis.routes.PreviousShareHoldingDescriptionController.show(2).url)
+  val backUrl = Some(controllers.eis.routes.PreviousShareHoldingDescriptionController.show(1).url)
   val obviouslyInvalidId = 9999
 
   val listOfInvestorsEmptyShareHoldings =  Vector(validModelWithPrevShareHoldings.copy(previousShareHoldingModels = Some(Vector())))
@@ -78,8 +78,11 @@ class PreviousShareHoldingNominalValueControllerSpec extends BaseSpec{
 
   "Sending a GET request to PreviousShareHoldingNominalValue Controller when authenticated and enrolled" should {
 
-    "'REDIRECT' to AddInvestorOrNominee page" when {
-      "there is no 'back link' present" in {
+    "'REDIRECT' to expected page" when {
+      "there is a backlink set for the next page present" in {
+//        when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.backLinkInvestorShareIssueDate))
+//          (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(backUrl))
+
         mockEnrolledRequest(eisSchemeTypesModel)
         setupMocks(None, None)
         showWithSessionAndAuth(controller.show(2, 1))(
@@ -90,6 +93,22 @@ class PreviousShareHoldingNominalValueControllerSpec extends BaseSpec{
         )
       }
     }
+
+//    "'REDIRECT' to expected beginning of flow page" when {
+//      "there is no next page'back link' set" in {
+//        when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.backLinkInvestorShareIssueDate))
+//          (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
+//
+//        mockEnrolledRequest(eisSchemeTypesModel)
+//        setupMocks(None, None)
+//        showWithSessionAndAuth(controller.show(2, 1))(
+//          result => {
+//            status(result) shouldBe SEE_OTHER
+//            redirectLocation(result) shouldBe Some(routes.AddInvestorOrNomineeController.show().url)
+//          }
+//        )
+//      }
+//    }
 
 //
 //    "'REDIRECT' to AddInvestorOrNominee page" when {

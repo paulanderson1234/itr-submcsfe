@@ -50,9 +50,9 @@ trait PreviousShareHoldingNominalValueController extends FrontendController with
 
         // this page is no longer inb flow but just in case it's called by pass it. Page is kept as may come back in future
 
-        s4lConnector.saveFormData(KeystoreKeys.backLinkInvestorShareIssueDate,
-          routes.PreviousShareHoldingDescriptionController.show(investorProcessingId, Some(id)).url)
-        
+//        s4lConnector.saveFormData(KeystoreKeys.backLinkInvestorShareIssueDate,
+//          routes.PreviousShareHoldingDescriptionController.show(investorProcessingId, Some(id)).url)
+
         Future.successful(Redirect(routes.InvestorShareIssueDateController.show(investorProcessingId, id)))
 
 //        def process(backUrl: Option[String]) = {
