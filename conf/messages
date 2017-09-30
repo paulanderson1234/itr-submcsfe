@@ -963,9 +963,9 @@ page.shares.shareDescription.title=What were the shares issued on {0} called?
 page.shares.shareDescription.heading=What were the shares issued on {0} called?
 page.shares.shareDescription.example.text=In your answer:
 page.shares.shareDescription.question.hint=Suggested limit: 20 words
-page.shares.ShareDescription.location=It''s on your company''s Register of Members and share certificates.
-page.shares.shareDescription.bullet.one=tell us the nominal value of each type of share when they were issued
-page.shares.shareDescription.bullet.two=add one type of share at a time
+page.shares.ShareDescription.location=The name and nominal value of the shares are on your company''s Register of Members.
+page.shares.shareDescription.bullet.one=add one type of share at a time
+page.shares.shareDescription.bullet.two=tell us the nominal value of each type of share when they were issued
 
 
 #share issue date page
@@ -1087,7 +1087,7 @@ page.investors.previousShareHoldingDescription.title = What were the shares issu
 page.investors.previousShareHoldingDescription.heading = What were the shares issued to this {0} called?
 page.investors.previousShareHoldingDescription.example.text =In your answer:
 page.investors.previousShareHoldingDescription.question.hint = Suggested limit: 20 words
-page.investors.previousShareHoldingDescription.location = It''s on your company''s Register of Members.
+page.investors.previousShareHoldingDescription.location = The name and nominal value of the shares are on your company''s Register of Members.
 page.investors.previousShareHoldingDescription.bullet.one=add one type of share at a time
 page.investors.previousShareHoldingDescription.bullet.two=tell us the nominal value of each type of share when they were issued
 
