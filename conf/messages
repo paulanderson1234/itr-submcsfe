@@ -1038,6 +1038,7 @@ validation.error.HasInvestmentTradeStarted.Future = Business activity start date
 # number of shares
 page.shareDetails.numberOfShares.title=How many of these shares did your company issue?
 page.shareDetails.numberOfShares.heading=How many of these shares did your company issue?
+page.shareDetails.numberOfShares.info=You must only include shares issued to investors seeking tax relief from this share issue.
 
 #Create Investors or Nominee
 page.investors.AddInvestorOrNominee.title=Add each investor or nominee
