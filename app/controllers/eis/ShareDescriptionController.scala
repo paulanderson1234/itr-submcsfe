@@ -24,8 +24,10 @@ import common.KeystoreKeys
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import forms.ShareDescriptionForm._
-import models.ShareDescriptionModel
+import models.{ShareDescriptionModel, ShareIssueDateModel}
+import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
+import utils.DateFormatter
 import views.html.eis.shareDetails.ShareDescription
 
 import scala.concurrent.Future
@@ -38,16 +40,25 @@ object ShareDescriptionController extends ShareDescriptionController {
 
 }
 
-trait ShareDescriptionController extends FrontendController with AuthorisedAndEnrolledForTAVC {
+trait ShareDescriptionController extends FrontendController with AuthorisedAndEnrolledForTAVC with DateFormatter{
 
   override val acceptedFlows = Seq(Seq(EIS))
 
   val show = AuthorisedAndEnrolled.async { implicit user => implicit request =>
-    def routeRequest(backUrl: Option[String]) = {
+    def routeRequest(backUrl: Option[String], shareIssueDate:Option[ShareIssueDateModel]) = {
       if (backUrl.isDefined) {
-        s4lConnector.fetchAndGetFormData[ShareDescriptionModel](KeystoreKeys.shareDescription).map {
-          case Some(data) => Ok(ShareDescription(shareDescriptionForm.fill(data), backUrl.get))
-          case None => Ok(ShareDescription(shareDescriptionForm, backUrl.get))
+        if(shareIssueDate.isDefined) {
+          val date = shareIssueDate.get
+          s4lConnector.fetchAndGetFormData[ShareDescriptionModel](KeystoreKeys.shareDescription).map {
+            case Some(data) => Ok(ShareDescription(shareDescriptionForm.fill(data),
+              backUrl.get, dateToStringWithNoZeroDay(date.day.get, date.month.get, date.year.get)))
+            case None => Ok(ShareDescription(shareDescriptionForm, backUrl.get,
+              dateToStringWithNoZeroDay(date.day.get, date.month.get, date.year.get)))
+          }
+        }
+        else
+        {
+          Future.successful(Redirect(controllers.eis.routes.ShareIssueDateController.show()))
         }
       }
       else {
@@ -57,15 +68,18 @@ trait ShareDescriptionController extends FrontendController with AuthorisedAndEn
 
     for {
       link <- ControllerHelpers.getSavedBackLink(KeystoreKeys.backLinkShareDescription, s4lConnector)
-      route <- routeRequest(link)
+      shareIssueDate <- s4lConnector.fetchAndGetFormData[ShareIssueDateModel](KeystoreKeys.shareIssueDate)
+      route <- routeRequest(link, shareIssueDate)
     } yield route
   }
 
-  val submit = AuthorisedAndEnrolled.async { implicit user => implicit request =>
+
+
+  def submit(shareIssueDate:String): Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user => implicit request =>
     shareDescriptionForm.bindFromRequest().fold(
       formWithErrors => {
         ControllerHelpers.getSavedBackLink(KeystoreKeys.backLinkShareDescription, s4lConnector).flatMap(url =>
-          Future.successful(BadRequest(ShareDescription(formWithErrors, url.get))))
+          Future.successful(BadRequest(ShareDescription(formWithErrors, url.get, shareIssueDate))))
       },
       validFormData => {
         s4lConnector.saveFormData(KeystoreKeys.shareDescription, validFormData)
@@ -73,4 +87,5 @@ trait ShareDescriptionController extends FrontendController with AuthorisedAndEn
       }
     )
   }
+
 }

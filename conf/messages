@@ -959,17 +959,13 @@ page.companyDetails.SeventyPercentError.heading=You can''t use this service yet
 page.companyDetails.SeventyPercentError.reason=This is because you haven''t spent enough of the SEIS Investment.
 
 # Share Description
-page.shares.shareDescription.title=What class of shares were issued?
-page.shares.shareDescription.heading=What class of shares were issued?
-page.shares.shareDescription.example.text=For example:
-page.shares.shareDescription.bullet.one=non-voting shares
-page.shares.shareDescription.bullet.two=ordinary shares
-page.shares.shareDescription.bullet.three=seed shares
+page.shares.shareDescription.title=What were the shares issued on {0} called?
+page.shares.shareDescription.heading=What were the shares issued on {0} called?
+page.shares.shareDescription.example.text=In your answer:
 page.shares.shareDescription.question.hint=Suggested limit: 20 words
 page.shares.ShareDescription.location=It''s on your company''s Register of Members and share certificates.
-page.shares.shareDescription.text.two=In your answer:
-page.shares.shareDescription.bullet.four=tell us the nominal value of each type of share when they were issued
-page.shares.shareDescription.bullet.five=add one type of share at a time
+page.shares.shareDescription.bullet.one=tell us the nominal value of each type of share when they were issued
+page.shares.shareDescription.bullet.two=add one type of share at a time
 
 
 #share issue date page
