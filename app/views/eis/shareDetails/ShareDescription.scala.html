@@ -3,42 +3,32 @@
 @import common.Constants
 @import views.html.helpers.{backButtonWithProgress, errorSummary, textArea, externalLink}
 
-@(shareDescriptionForm: Form[ShareDescriptionModel], backUrl: String)(implicit request: Request[_], messages: Messages)
+@(shareDescriptionForm: Form[ShareDescriptionModel], backUrl: String, shareIssueDate: String)(implicit request: Request[_], messages: Messages)
 
-@main_template(Messages("page.shares.shareDescription.title")) {
+@main_template(Messages("page.shares.shareDescription.title", shareIssueDate)) {
 
 @backButtonWithProgress(backUrl, Messages("common.section.progress.details.three"))
 
     @errorSummary(shareDescriptionForm, "share-description", "descriptionTextArea")
 
-    <h1 id="main-heading" class="form-title heading-xlarge">@Messages("page.shares.shareDescription.heading")</h1>
+    <h1 id="main-heading" class="form-title heading-xlarge">@Messages("page.shares.shareDescription.heading", shareIssueDate)</h1>
 
     <div class="form-group">
-        <p id="description-two" class="lede">@Messages("page.shares.shareDescription.example.text")</p>
+        <p id="description-one" class="lede">@Messages("page.shares.shareDescription.example.text")</p>
+    </div>
+
+    <div class="form-group">
         <ul class="list list-bullet">
             <li id="bullet-one">@Messages("page.shares.shareDescription.bullet.one")</li>
             <li id="bullet-two">@Messages("page.shares.shareDescription.bullet.two")</li>
-            <li id="bullet-three">@Messages("page.shares.shareDescription.bullet.three")</li>
         </ul>
     </div>
 
 
-    <div class="form-group">
-        <p id="description-one">@Messages("page.shares.shareDescription.text.two")</p>
-    </div>
-
-    <div class="form-group">
-        <ul class="list list-bullet">
-            <li id="bullet-four">@Messages("page.shares.shareDescription.bullet.four")</li>
-            <li id="bullet-five">@Messages("page.shares.shareDescription.bullet.five")</li>
-        </ul>
-    </div>
-
-
-    @form(action = controllers.eis.routes.ShareDescriptionController.submit()) {
+    @form(action = controllers.eis.routes.ShareDescriptionController.submit(shareIssueDate)) {
 
     <fieldset>
-        <legend class="visuallyhidden">@Messages("page.shares.shareDescription.heading")</legend>
+        <legend class="visuallyhidden">@Messages("page.shares.shareDescription.heading", shareIssueDate)</legend>
         <div class="form-group">
             <span class = "form-hint" id="desc-one">@Messages("page.shares.shareDescription.question.hint")</span>
             @textArea(
@@ -46,7 +36,7 @@
             '_cols -> "45",
             '_rows -> "3",
             '_maxLength-> Constants.shortTextLimit,
-            '_label-> Messages("page.shares.shareDescription.heading"),
+            '_label-> Messages("page.shares.shareDescription.heading", shareIssueDate),
             '_labelTextClass-> "visuallyhidden"
             )
         </div>

@@ -959,17 +959,13 @@ page.companyDetails.SeventyPercentError.heading=You can''t use this service yet
 page.companyDetails.SeventyPercentError.reason=This is because you haven''t spent enough of the SEIS Investment.
 
 # Share Description
-page.shares.shareDescription.title=What class of shares were issued?
-page.shares.shareDescription.heading=What class of shares were issued?
-page.shares.shareDescription.example.text=For example:
-page.shares.shareDescription.bullet.one=non-voting shares
-page.shares.shareDescription.bullet.two=ordinary shares
-page.shares.shareDescription.bullet.three=seed shares
+page.shares.shareDescription.title=What were the shares issued on {0} called?
+page.shares.shareDescription.heading=What were the shares issued on {0} called?
+page.shares.shareDescription.example.text=In your answer:
 page.shares.shareDescription.question.hint=Suggested limit: 20 words
-page.shares.ShareDescription.location=It''s on your company''s Register of Members and share certificates.
-page.shares.shareDescription.text.two=In your answer:
-page.shares.shareDescription.bullet.four=tell us the nominal value of each type of share when they were issued
-page.shares.shareDescription.bullet.five=add one type of share at a time
+page.shares.ShareDescription.location=The name and nominal value of the shares are on your company''s Register of Members.
+page.shares.shareDescription.bullet.one=add one type of share at a time
+page.shares.shareDescription.bullet.two=tell us the nominal value of each type of share when they were issued
 
 
 #share issue date page
@@ -1042,6 +1038,7 @@ validation.error.HasInvestmentTradeStarted.Future = Business activity start date
 # number of shares
 page.shareDetails.numberOfShares.title=How many of these shares did your company issue?
 page.shareDetails.numberOfShares.heading=How many of these shares did your company issue?
+page.shareDetails.numberOfShares.info=You must only include shares issued to investors seeking tax relief from this share issue.
 
 #Create Investors or Nominee
 page.investors.AddInvestorOrNominee.title=Add each investor or nominee
@@ -1091,7 +1088,7 @@ page.investors.previousShareHoldingDescription.title = What were the shares issu
 page.investors.previousShareHoldingDescription.heading = What were the shares issued to this {0} called?
 page.investors.previousShareHoldingDescription.example.text =In your answer:
 page.investors.previousShareHoldingDescription.question.hint = Suggested limit: 20 words
-page.investors.previousShareHoldingDescription.location = It''s on your company''s Register of Members.
+page.investors.previousShareHoldingDescription.location = The name and nominal value of the shares are on your company''s Register of Members.
 page.investors.previousShareHoldingDescription.bullet.one=add one type of share at a time
 page.investors.previousShareHoldingDescription.bullet.two=tell us the nominal value of each type of share when they were issued
 

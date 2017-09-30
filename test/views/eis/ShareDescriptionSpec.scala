@@ -28,32 +28,28 @@ import views.html.eis.shareDetails.ShareDescription
 
 class ShareDescriptionSpec extends ViewSpec {
 
+  val shareIssueDate = "1 January 2008"
+
   "The share description page" should {
     "show the correct elements" when {
       "there is no share description model" in {
         val page = ShareDescription(shareDescriptionForm,
-          controllers.eis.routes.HadOtherInvestmentsController.show().toString)(authorisedFakeRequest, applicationMessages)
+          controllers.eis.routes.HadOtherInvestmentsController.show().toString, shareIssueDate)(authorisedFakeRequest, applicationMessages)
         val document = Jsoup.parse(page.body)
 
-        document.title() shouldBe Messages("page.shares.shareDescription.title")
-        document.getElementById("main-heading").text() shouldBe Messages("page.shares.shareDescription.heading")
+        document.title() shouldBe Messages("page.shares.shareDescription.title", shareIssueDate)
+        document.getElementById("main-heading").text() shouldBe Messages("page.shares.shareDescription.heading", shareIssueDate)
         document.getElementById("back-link").text() shouldBe Messages("common.button.back")
         document.getElementById("back-link").attr("href") shouldBe controllers.eis.routes.HadOtherInvestmentsController.show().url
         document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.three")
-        document.getElementById("description-two").text() shouldBe Messages("page.shares.shareDescription.example.text")
+        document.getElementById("description-one").text() shouldBe Messages("page.shares.shareDescription.example.text")
         document.getElementById("bullet-one").text() shouldBe Messages("page.shares.shareDescription.bullet.one")
         document.getElementById("bullet-two").text() shouldBe Messages("page.shares.shareDescription.bullet.two")
-        document.getElementById("bullet-three").text() shouldBe Messages("page.shares.shareDescription.bullet.three")
-
-        document.getElementById("description-one").text() shouldBe Messages("page.shares.shareDescription.text.two")
-        document.getElementById("bullet-four").text() shouldBe Messages("page.shares.shareDescription.bullet.four")
-        document.getElementById("bullet-five").text() shouldBe Messages("page.shares.shareDescription.bullet.five")
-
 
         document.getElementById("desc-one").text() shouldBe Messages("page.shares.shareDescription.question.hint")
-        document.getElementsByTag("legend").text() shouldBe Messages("page.shares.shareDescription.title")
+        document.getElementsByTag("legend").text() shouldBe Messages("page.shares.shareDescription.title", shareIssueDate)
         document.getElementsByTag("legend").hasClass("visuallyhidden") shouldBe true
-        document.getElementById("labelTextId").text() shouldBe Messages("page.shares.shareDescription.heading")
+        document.getElementById("labelTextId").text() shouldBe Messages("page.shares.shareDescription.heading", shareIssueDate)
         document.getElementById("labelTextId").hasClass("visuallyhidden") shouldBe true
         document.body.getElementById("descriptionTextArea").attr("maxlength") shouldBe s"${Constants.shortTextLimit}"
         document.getElementsByTag("textarea").attr("name") shouldBe "descriptionTextArea"
@@ -81,27 +77,22 @@ class ShareDescriptionSpec extends ViewSpec {
 
         val shareDescriptionModel = ShareDescriptionModel(maxLengthText)
         val page = ShareDescription(shareDescriptionForm.fill(shareDescriptionModel),
-          controllers.eis.routes.HadOtherInvestmentsController.show().toString)(authorisedFakeRequest, applicationMessages)
+          controllers.eis.routes.HadOtherInvestmentsController.show().toString, shareIssueDate)(authorisedFakeRequest, applicationMessages)
         val document = Jsoup.parse(page.body)
 
-        document.title() shouldBe Messages("page.shares.shareDescription.title")
-        document.getElementById("main-heading").text() shouldBe Messages("page.shares.shareDescription.heading")
+        document.title() shouldBe Messages("page.shares.shareDescription.title", shareIssueDate)
+        document.getElementById("main-heading").text() shouldBe Messages("page.shares.shareDescription.heading", shareIssueDate)
         document.getElementById("back-link").text() shouldBe Messages("common.button.back")
         document.getElementById("back-link").attr("href") shouldBe controllers.eis.routes.HadOtherInvestmentsController.show().url
         document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.three")
-        document.getElementById("description-two").text() shouldBe Messages("page.shares.shareDescription.example.text")
+        document.getElementById("description-one").text() shouldBe Messages("page.shares.shareDescription.example.text")
         document.getElementById("bullet-one").text() shouldBe Messages("page.shares.shareDescription.bullet.one")
         document.getElementById("bullet-two").text() shouldBe Messages("page.shares.shareDescription.bullet.two")
-        document.getElementById("bullet-three").text() shouldBe Messages("page.shares.shareDescription.bullet.three")
-
-        document.getElementById("description-one").text() shouldBe Messages("page.shares.shareDescription.text.two")
-        document.getElementById("bullet-four").text() shouldBe Messages("page.shares.shareDescription.bullet.four")
-        document.getElementById("bullet-five").text() shouldBe Messages("page.shares.shareDescription.bullet.five")
 
         document.getElementById("desc-one").text() shouldBe Messages("page.shares.shareDescription.question.hint")
-        document.getElementsByTag("legend").text() shouldBe Messages("page.shares.shareDescription.title")
+        document.getElementsByTag("legend").text() shouldBe Messages("page.shares.shareDescription.title", shareIssueDate)
         document.getElementsByTag("legend").hasClass("visuallyhidden") shouldBe true
-        document.getElementById("labelTextId").text() shouldBe Messages("page.shares.shareDescription.heading")
+        document.getElementById("labelTextId").text() shouldBe Messages("page.shares.shareDescription.heading", shareIssueDate)
         document.getElementById("labelTextId").hasClass("visuallyhidden") shouldBe true
         document.body.getElementById("descriptionTextArea").attr("maxlength") shouldBe s"${Constants.shortTextLimit}"
         document.body.getElementById("descriptionTextArea").text() shouldBe maxLengthText
@@ -115,13 +106,13 @@ class ShareDescriptionSpec extends ViewSpec {
 
       "Verify that the Share Description page contains the correct elements when an invalid ShareDescriptionModel is passed" in {
         val page = ShareDescription(shareDescriptionForm.bind(Map("descriptionTextArea" -> "")),
-          controllers.eis.routes.ReviewPreviousSchemesController.show().toString)(authorisedFakeRequest, applicationMessages)
+          controllers.eis.routes.ReviewPreviousSchemesController.show().toString, shareIssueDate)(authorisedFakeRequest, applicationMessages)
         val document = Jsoup.parse(page.body)
 
-        document.title() shouldBe Messages("page.shares.shareDescription.title")
+        document.title() shouldBe Messages("page.shares.shareDescription.title", shareIssueDate)
         document.getElementById("back-link").attr("href") shouldBe controllers.eis.routes.ReviewPreviousSchemesController.show().url
         document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe true
-        document.getElementById("error-summary-heading").text shouldBe Messages("common.error.summary.heading")
+        document.getElementById("error-summary-heading").text shouldBe Messages("common.error.summary.heading", shareIssueDate)
         document.getElementById("descriptionTextArea-error-summary").text shouldBe Messages("common.error.fieldRequired")
         document.getElementsByClass("error-notification").text shouldBe Messages("common.error.fieldRequired")
       }

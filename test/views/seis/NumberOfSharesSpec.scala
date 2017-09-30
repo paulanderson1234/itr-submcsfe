@@ -57,6 +57,10 @@ class NumberOfSharesSpec extends ViewSpec {
         document.select("h1").text() shouldBe Messages("page.shareDetails.numberOfShares.heading")
       }
 
+      "have the correct description" in {
+        document.getElementById("description").text() shouldBe Messages("page.shareDetails.numberOfShares.info")
+      }
+
       "have a form posting to the correct route" in {
         document.select("form").attr("action") shouldBe controllers.seis.routes.NumberOfSharesController.submit().url
       }
@@ -103,6 +107,10 @@ class NumberOfSharesSpec extends ViewSpec {
 
       "have the correct heading" in {
         document.select("h1").text() shouldBe Messages("page.shareDetails.numberOfShares.heading")
+      }
+
+      "have the correct description" in {
+        document.getElementById("description").text() shouldBe Messages("page.shareDetails.numberOfShares.info")
       }
 
       "have a form posting to the correct route" in {
