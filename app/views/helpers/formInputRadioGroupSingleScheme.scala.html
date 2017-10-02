@@ -23,9 +23,7 @@
 @fieldsetClass = {@elements.args.get('_groupClass)}
 @labelAfter = @{ elements.args.get('_labelAfter).getOrElse(false).asInstanceOf[Boolean] }
 @Label= @{"Label".asInstanceOf[String]}
-@eisDescription = {@elements.args.get('_eisDescription)}
-@seisDescription = {@elements.args.get('_seisDescription)}
-@vctDescription = {@elements.args.get('_vctDescription)}
+@schemeDescription = {@elements.args.get('_schemeDescription)}
 
 <div class="@if(elements.hasErrors){ form-field--error}">
     <fieldset id="@field.id" class="@fieldsetClass"
@@ -79,11 +77,7 @@
         </label>
     </div>
     }
-    @if(value.equals(Constants.schemeTypeEis)){
-    @eisDescription
-    }else{ @if(value.equals(Constants.schemeTypeSeis)){
-    @seisDescription
-    }}
     }
+    @schemeDescription
     </fieldset>
 </div>

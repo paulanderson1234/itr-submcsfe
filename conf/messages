@@ -235,11 +235,10 @@ page.schemeSelection.SchemeSelction.hint=You can apply for up to 3 schemes
 page.schemeSelection.SchemeSelection.checkbox.seis=Seed Enterprise Investment Scheme
 page.schemeSelection.SchemeSelection.checkbox.eis=Enterprise Investment Scheme
 page.schemeSelection.SchemeSelection.checkbox.vct=Venture Capital Trust
-page.schemeSelection.SchemeSelection.help.seis.subHeading=What''s the Seed Enterprise Investment Scheme?
 page.schemeSelection.SchemeSelection.help.seis.text=The Seed Enterprise Investment Scheme helps startup companies raise investment by offering tax reliefs to individual investors who buy new shares in the company. Tax relief is available on a maximum of £150,000 received over the last 3 years.
 page.schemeSelection.SchemeSelection.help.seis.findOutMore=Find out more about the
 page.schemeSelection.SchemeSelection.help.seis.link=Seed Enterprise Investment Scheme
-page.schemeSelection.SchemeSelection.help.eis.subHeading=What''s the Enterprise Investment Scheme?
+page.schemeSelection.SchemeSelection.help.subHeading=Find out more about these schemes
 page.schemeSelection.SchemeSelection.help.eis.text=The Enterprise Investment Scheme helps small and medium sized companies attract investment by offering tax reliefs to individual investors who buy new shares in the company. Tax relief is available on a maximum of:
 page.schemeSelection.SchemeSelection.help.eis.bullet.one=£5 million received in 1 year
 page.schemeSelection.SchemeSelection.help.eis.bullet.two=£12 million received over the company''s lifetime
@@ -248,11 +247,12 @@ page.schemeSelection.SchemeSelection.help.eis.link=Enterprise Investment Scheme
 
 
 #single scheme selection page
-page.schemeSelection.SchemeSelection.singlescheme.title=Which scheme are you applying for?
-page.schemeSelection.SchemeSelection.singlescheme.heading=Which scheme are you applying for?
+page.schemeSelection.SchemeSelection.singlescheme.title=Which scheme are you submitting a Compliance Statement for?
+page.schemeSelection.SchemeSelection.singlescheme.heading=Which scheme are you submitting a Compliance Statement for?
 page.schemeSelection.SchemeSelection.radiobutton.seis=Seed Enterprise Investment Scheme
 page.schemeSelection.SchemeSelection.radiobutton.eis=Enterprise Investment Scheme
 page.schemeSelection.SchemeSelection.radiobutton.vct=Venture Capital Trust
+page.schemeSelection.SchemeSelection.desc=You can only complete one Compliance Statement at a time.
 
 #Utr page
 page.companyDetails.utr.heading=What''s your Company Unique Taxpayer Reference?

@@ -5,9 +5,9 @@
 
 @(singleSchemeSelectionForm: Form[SingleSchemeTypesModel])(implicit request: Request[_], messages: Messages)
 
-@eisDescription = {
+@schemeDescription = {
 <details>
-    <summary><span id="EIS-help" class="summary">@Messages("page.schemeSelection.SchemeSelection.help.eis.subHeading")</span></summary>
+    <summary><span id="help" class="summary">@Messages("page.schemeSelection.SchemeSelection.help.subHeading")</span></summary>
     <div class="panel panel-indent panel-border-narrow">
         <p id="EIS-help-text">@Messages("page.schemeSelection.SchemeSelection.help.eis.text")</p>
         <ul class ="list list-bullet">
@@ -19,14 +19,6 @@
             "https://www.gov.uk/government/publications/the-enterprise-investment-scheme-introduction/enterprise-investment-scheme",
             Some("the-enterprise-investment-scheme"))
         </p>
-    </div>
-</details>
-}
-
-@seisDescription = {
-<details>
-    <summary><span id="SEIS-help" class="summary">@Messages("page.schemeSelection.SchemeSelection.help.seis.subHeading")</span></summary>
-    <div class="panel panel-indent panel-border-narrow">
         <p id="SEIS-help-text">@Messages("page.schemeSelection.SchemeSelection.help.seis.text")</p>
         <p id="SEIS-guidance-link">@Messages("page.schemeSelection.SchemeSelection.help.seis.findOutMore")
             @externalLink(Messages("page.schemeSelection.SchemeSelection.help.seis.link"),
@@ -48,6 +40,7 @@
 @form(action = controllers.schemeSelection.routes.SingleSchemeSelectionController.submit()) {
 
 <div class="form-group">
+    <p id="scheme-selection-desc">@Messages("page.schemeSelection.SchemeSelection.desc")</p>
     @formInputRadioGroupSingleScheme(
     field = singleSchemeSelectionForm("singleSchemeSelection"),
     Seq(Constants.schemeTypeEis -> Messages("page.schemeSelection.SchemeSelection.radiobutton.eis"),
@@ -57,8 +50,7 @@
     '_labelAfter -> true,
     '_labelClass -> "block-label",
     '_groupClass -> "block",
-    '_eisDescription -> eisDescription,
-    '_seisDescription -> seisDescription
+    '_schemeDescription -> schemeDescription
     )
 </div>
 
