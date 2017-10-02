@@ -269,3 +269,5 @@ GET        /delete-shares-repayment/:repaymentId                       controlle
 POST       /delete-shares-repayment/:repaymentProcessingId             controllers.eis.DeleteSharesRepaymentController.submit(repaymentProcessingId: Int)
 
 GET        /initial-declaration                          controllers.eis.InitialDeclarationController.show
+
+GET        /terms-and-conditions                          controllers.eis.TermsAndConditionsController.show

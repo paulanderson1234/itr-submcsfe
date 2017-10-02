@@ -1312,3 +1312,36 @@ page.repayments.previousShareRepaymentsReview.add=Add more repaid or repurchased
 page.repayments.deleteSharesRepayment.title=Confirm that you want to remove these repaid or repurchased investments
 page.repayments.deleteSharesRepayment.heading=Confirm that you want to remove these repaid or repurchased investments
 page.repayments.deleteSharesRepayment.description=This will remove {0} from your list of repaid or repurchased investments.
+
+# Terms and Conditions
+page.termsAndConditions.heading=Terms and conditions
+page.termsAndConditions.title=Terms and conditions
+page.termsAndConditions.declaration=I declare that:
+page.termsAndConditions.declaration.one.heading=1. The following conditions were met:
+page.termsAndConditions.declaration.one.bullet.one=the shares haven''t been issued, and the money raised won''t be spent as part of any '"disqualifying arrangements'"
+page.termsAndConditions.declaration.one.bullet.two=the money raised by the share issue has or will be spent for the purpose of the business activity listed in this Compliance Statement before the 3 year anniversary of the share issue
+page.termsAndConditions.declaration.one.bullet.three=no other business activity has been or will be carried on by the issuing company or by a 51% subsidiary before the start of the business activity that the shares were issued for
+
+page.termsAndConditions.declaration.two.heading=2. The following conditions were met at the share issue date:
+page.termsAndConditions.declaration.two.bullet.one=the shares were issued for cash and were fully paid for by the time they were issued
+page.termsAndConditions.declaration.two.bullet.two=the shares were issued to raise money for a qualifying business activity to be carried out by the issuing company or by a qualifying 90% subsidiary
+page.termsAndConditions.declaration.two.bullet.three=the shares were issued for commercial purposes and not with the purpose of avoiding tax
+page.termsAndConditions.declaration.two.bullet.four=the issuing arrangements did not include any '"pre-arranged exits'"
+page.termsAndConditions.declaration.two.bullet.five=the company had fewer than 25 full-time equivalent employees
+page.termsAndConditions.declaration.two.bullet.six=immediately before the share issue the company and its subsidiaries'' assets didn''t exceed £200,000
+page.termsAndConditions.declaration.two.bullet.seven=before the share issue, neither the company, nor any company which is a subsidiary at the time of issue, has had investment from a Venture Capital Trust (VCT) or has provided a Compliance Statement under the Enterprise Investment Scheme (EIS)
+page.termsAndConditions.declaration.two.bullet.eight=the new qualifying business activity that the shares were issued for hasn’t been carried on by the issuing company or by any other person at any date earlier than 2 years prior to the share issue date
+page.termsAndConditions.declaration.two.bullet.nine=the company was an unquoted company and there were no arrangements in existence for it to stop being so
+
+page.termsAndConditions.declaration.three.heading=3. The following conditions were met from the date of the incorporation of the company to the date of this declaration. The company intends to meet them until the third anniversary of the share issue date:
+page.termsAndConditions.declaration.three.bullet.one=the company hasn''t controlled another company which isn''t a qualifying subsidiary, and there are no arrangements that could mean the requirement stops being met
+page.termsAndConditions.declaration.three.bullet.two=the company hasn''t been controlled by another company (or by another company and any person connected with that other company), and there are no arrangements that could mean the requirement stops being met
+page.termsAndConditions.declaration.three.bullet.three=the company or any qualifying 90% subsidiary has never been a member of a partnership
+
+page.termsAndConditions.declaration.four.heading=4. The following conditions have been met from the share issue date. The company intends to meet them until the third anniversary of the share issue date:
+page.termsAndConditions.declaration.four.bullet.one.eis=the shares are ordinary shares which have never carried any preferential right to the company''s assets or any right to be redeemed. They must meet the requirements of EIS about restrictions on preferential rights to dividends
+page.termsAndConditions.declaration.four.bullet.one.seis=the shares are ordinary shares which have never carried any preferential right to the company''s assets or any right to be redeemed. They must meet the requirements of SEIS about restrictions on preferential rights to dividends
+page.termsAndConditions.declaration.four.bullet.two=the company either exists for the purpose of carrying out one or more new qualifying business activities or is the parent company of a trading group
+page.termsAndConditions.declaration.four.bullet.three=the company issuing the shares has a permanent establishment in the UK
+page.termsAndConditions.declaration.four.bullet.four=the company only has qualifying subsidiaries
+page.termsAndConditions.declaration.four.bullet.five=any property managing subsidiary is a qualifying 90% subsidiary
