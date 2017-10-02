@@ -25,6 +25,7 @@ import models.investorDetails.InvestorDetailsModel
 import org.mockito.Matchers
 import org.mockito.Mockito._
 import play.api.test.Helpers._
+import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.frontend.auth.connectors.AuthConnector
 
 import scala.concurrent.Future
@@ -54,6 +55,10 @@ class PreviousShareHoldingDescriptionControllerSpec extends BaseSpec{
     when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.backLinkShareClassAndDescription))
       (Matchers.any(), Matchers.any(), Matchers.any()))
       .thenReturn(Future.successful(backURL))
+
+    when(mockS4lConnector.saveFormData(Matchers.eq(KeystoreKeys.backLinkInvestorShareIssueDate),
+      Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(CacheMap("", Map())))
   }
 
   "The Previous Share Holding Description controller" should {
@@ -181,7 +186,7 @@ class PreviousShareHoldingDescriptionControllerSpec extends BaseSpec{
         result => {
           status(result) shouldBe SEE_OTHER
           redirectLocation(result) shouldBe
-            Some(controllers.eis.routes.PreviousShareHoldingNominalValueController.show(listOfInvestorsComplete.head.processingId.get,
+            Some(controllers.eis.routes.InvestorShareIssueDateController.show(listOfInvestorsComplete.head.processingId.get,
               listOfInvestorsComplete.head.previousShareHoldingModels.get.head.processingId.get + 1).url)
         }
       )
@@ -201,7 +206,7 @@ class PreviousShareHoldingDescriptionControllerSpec extends BaseSpec{
         result => {
           status(result) shouldBe SEE_OTHER
           redirectLocation(result) shouldBe
-            Some(controllers.eis.routes.PreviousShareHoldingNominalValueController.show(listOfInvestorsComplete.head.processingId.get,
+            Some(controllers.eis.routes.InvestorShareIssueDateController.show(listOfInvestorsComplete.head.processingId.get,
               listOfInvestorsComplete.head.previousShareHoldingModels.get.head.processingId.get).url)
         }
       )

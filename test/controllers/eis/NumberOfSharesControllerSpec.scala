@@ -114,7 +114,7 @@ class NumberOfSharesControllerSpec extends BaseSpec {
         submitWithSessionAndAuth(controller.submit,formInput)(
           result => {
             status(result) shouldBe SEE_OTHER
-            redirectLocation(result) shouldBe Some(controllers.eis.routes.NominalValueOfSharesController.show().url)
+            redirectLocation(result) shouldBe Some(controllers.eis.routes.TotalAmountRaisedController.show().url)
           }
         )
       }

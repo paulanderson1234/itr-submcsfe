@@ -68,22 +68,45 @@ class NominalValueOfSharesControllerSpec extends BaseSpec {
       NominalValueOfSharesController.enrolmentConnector shouldBe EnrolmentConnector
     }
 
-    "return a 200 on a GET request" when {
+    "return a 301 on a GET request" when {
 
       "no data is already stored" in {
         setupMocks(None)
         showWithSessionAndAuth(controller.show)(
-          result => status(result) shouldBe 200
+          result => {
+            status(result) shouldBe 303
+            redirectLocation(result) shouldBe Some(controllers.eis.routes.TotalAmountRaisedController.show().url)
+          }
         )
       }
 
       "data is already stored" in {
         setupMocks(Some(NominalValueOfSharesModel(20.0)))
         showWithSessionAndAuth(controller.show)(
-          result => status(result) shouldBe 200
+          result => {
+            status(result) shouldBe 303
+            redirectLocation(result) shouldBe Some(controllers.eis.routes.TotalAmountRaisedController.show().url)
+          }
         )
       }
     }
+
+//    "return a 200 on a GET request" when {
+//
+//      "no data is already stored" in {
+//        setupMocks(None)
+//        showWithSessionAndAuth(controller.show)(
+//          result => status(result) shouldBe 200
+//        )
+//      }
+//
+//      "data is already stored" in {
+//        setupMocks(Some(NominalValueOfSharesModel(20.0)))
+//        showWithSessionAndAuth(controller.show)(
+//          result => status(result) shouldBe 200
+//        )
+//      }
+//    }
 
     "return a 303 on a successful POST request" in {
       setupMocks(None)

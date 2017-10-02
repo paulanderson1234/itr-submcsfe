@@ -18,7 +18,7 @@ package connectors
 
 import config.{FrontendAppConfig, WSHttp}
 import models.registration.RegistrationDetailsModel
-import models.submission.{ComplianceStatementAnswersModel, DesSubmissionCSModel, DesSubmitAdvancedAssuranceModel, Submission}
+import models.submission.{ComplianceStatementAnswersModel, DesSubmissionCSModel}
 import models.{TotalAmountRaisedModel, AnnualTurnoverCostsModel, GrossAssetsModel}
 import play.api.Logger
 import play.api.libs.json.{JsValue, Json}
@@ -85,22 +85,12 @@ trait SubmissionConnector {
 
   }
 
-  def submitAdvancedAssurance(submissionRequest: Submission, tavcReferenceNumber: String)(implicit hc: HeaderCarrier): Future[HttpResponse] = {
-    if(tavcReferenceNumber.isEmpty) {
-      Logger.warn("[SubmissionConnector][submitAdvancedAssurance] An empty tavcReferenceNumber was passed")
-    }
-    require(tavcReferenceNumber.nonEmpty, "[SubmissionConnector][submitAdvancedAssurance] An empty tavcReferenceNumber was passed")
-
-    val json = Json.toJson(submissionRequest)
-    val targetSubmissionModel = Json.parse(json.toString()).as[DesSubmitAdvancedAssuranceModel]
-    http.POST[JsValue, HttpResponse](s"$serviceUrl/investment-tax-relief/advanced-assurance/$tavcReferenceNumber/submit", Json.toJson(targetSubmissionModel))
-  }
-
   def submitComplianceStatement(submissionRequest: ComplianceStatementAnswersModel, tavcReferenceNumber: String,
                                 registrationDetailsModel: Option[RegistrationDetailsModel])(implicit hc: HeaderCarrier): Future[HttpResponse] = {
     if(tavcReferenceNumber.isEmpty) {
       Logger.warn("[SubmissionConnector][submitComplainceStatement] An empty tavcReferenceNumber was passed")
     }
+
     require(tavcReferenceNumber.nonEmpty, "[SubmissionConnector][submitComplainceStatement] An empty tavcReferenceNumber was passed")
 
     if(registrationDetailsModel.isEmpty) {
@@ -112,13 +102,13 @@ trait SubmissionConnector {
       Json.toJson(DesSubmissionCSModel.readDesSubmissionCSModel(submissionRequest, registrationDetailsModel)))
   }
 
-  def getAASubmissionDetails(tavcReferenceNumber: String)(implicit hc: HeaderCarrier): Future[HttpResponse] = {
+  def getReturnsSummary(tavcReferenceNumber: String)(implicit hc: HeaderCarrier): Future[HttpResponse] = {
     if(tavcReferenceNumber.isEmpty) {
-      Logger.warn("[SubmissionConnector][getAASubmissionSummary] An empty tavcReferenceNumber was passed")
+      Logger.warn("[SubmissionConnector][getReturnsSummary] An empty tavcReferenceNumber was passed")
     }
-    require(tavcReferenceNumber.nonEmpty, "[SubmissionConnector][getAASubmissionSummary] An empty tavcReferenceNumber was passed")
+    require(tavcReferenceNumber.nonEmpty, "[SubmissionConnector][getReturnsSummary] An empty tavcReferenceNumber was passed")
 
-    http.GET[HttpResponse](s"$serviceUrl/investment-tax-relief/advanced-assurance/$tavcReferenceNumber/submission-details")
+    http.GET[HttpResponse](s"$serviceUrl/investment-tax-relief/returns/$tavcReferenceNumber/submission-details")
   }
 
   def getRegistrationDetails(safeID: String)(implicit hc: HeaderCarrier): Future[HttpResponse] = {

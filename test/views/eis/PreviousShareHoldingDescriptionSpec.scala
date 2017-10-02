@@ -46,7 +46,8 @@ class PreviousShareHoldingDescriptionSpec  extends BaseSpec {
       document.select("h1").text() shouldBe "What were the shares issued to this company called?"
 
       document.body.getElementById("description-one").text() shouldBe Messages("page.investors.previousShareHoldingDescription.example.text")
-      document.body.getElementById("desc-one").text() shouldBe Messages("page.investors.previousShareHoldingDescription.question.hint")
+      document.body.getElementById("help-bullet-one").text() shouldBe Messages("page.investors.previousShareHoldingDescription.bullet.one")
+      document.body.getElementById("help-bullet-two").text() shouldBe Messages("page.investors.previousShareHoldingDescription.bullet.two")
 
       document.body.getElementById("share-description-where-to-find").text() shouldBe  Messages("page.investors.previousShareHoldingDescription.location")
       document.body.getElementById("help").text() shouldBe  Messages("common.help.whereToFind")
@@ -85,6 +86,8 @@ class PreviousShareHoldingDescriptionSpec  extends BaseSpec {
       document.select("h1").text() shouldBe "What were the shares issued to this individual called?"
 
       document.body.getElementById("description-one").text() shouldBe Messages("page.investors.previousShareHoldingDescription.example.text")
+      document.body.getElementById("help-bullet-one").text() shouldBe Messages("page.investors.previousShareHoldingDescription.bullet.one")
+      document.body.getElementById("help-bullet-two").text() shouldBe Messages("page.investors.previousShareHoldingDescription.bullet.two")
       document.body.getElementById("desc-one").text() shouldBe Messages("page.investors.previousShareHoldingDescription.question.hint")
 
       document.body.getElementById("share-description-where-to-find").text() shouldBe  Messages("page.investors.previousShareHoldingDescription.location")
@@ -126,6 +129,8 @@ class PreviousShareHoldingDescriptionSpec  extends BaseSpec {
       document.select("h1").text() shouldBe "What were the shares issued to this individual called?"
 
       document.body.getElementById("description-one").text() shouldBe Messages("page.investors.previousShareHoldingDescription.example.text")
+      document.body.getElementById("help-bullet-one").text() shouldBe Messages("page.investors.previousShareHoldingDescription.bullet.one")
+      document.body.getElementById("help-bullet-two").text() shouldBe Messages("page.investors.previousShareHoldingDescription.bullet.two")
       document.body.getElementById("desc-one").text() shouldBe Messages("page.investors.previousShareHoldingDescription.question.hint")
 
       document.body.getElementById("share-description-where-to-find").text() shouldBe  Messages("page.investors.previousShareHoldingDescription.location")

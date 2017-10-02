@@ -15,6 +15,10 @@
 
     <h1 class="heading-xlarge" id="main-heading">@Messages("page.shareDetails.numberOfShares.heading")</h1>
 
+    <div class="form-group">
+        <p id="description" class="lede">@Messages("page.shareDetails.numberOfShares.info")</p>
+    </div>
+
     @form(action = controllers.eis.routes.NumberOfSharesController.submit()) {
         <fieldset>
             <legend class="visuallyhidden">@Messages("page.shareDetails.numberOfShares.heading")</legend>
@@ -30,6 +34,7 @@
                 )
             </div>
         </fieldset>
+
         <div class="form-group">
             <button class="btn button" type="submit" id="next">@Messages("common.button.snc")</button>
         </div>

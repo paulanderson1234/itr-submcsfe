@@ -39,16 +39,17 @@ class CompanyDetailsAnswersModelSpec extends UnitSpec with MockitoSugar {
     connector
   }
 
+  //TODO: ADD methof for EIS too
   "Calling .validate on CompanyDetailsAnswersModel" should {
     val completeModel = CompanyDetailsAnswersModel(NatureOfBusinessModel(""),
       DateOfIncorporationModel(Some(1), Some(2), Some(2015)),
-      QualifyBusinessActivityModel(Constants.qualifyPrepareToTrade),
+      QualifyBusinessActivityModel(Constants.qualifyTrade),
       Some(HasInvestmentTradeStartedModel("Yes", Some(1), Some(2), Some(2016))),
       Some(ResearchStartDateModel("Yes", Some(1), Some(2), Some(2016))),
       Some(SeventyPercentSpentModel("Yes")),
       ShareIssueDateModel(Some(1), Some(2), Some(2015)),
-      GrossAssetsModel(1000),
-      FullTimeEmployeeCountModel(1)
+      GrossAssetsModel(1000), None,
+      FullTimeEmployeeCountModel(1), None
     )
 
     "return a false" when {

@@ -115,14 +115,17 @@ trait BaseSpec extends UnitSpec with OneAppPerSuite with MockitoSugar with FakeR
   val isCompanyKnowledgeIntensiveModelYes = IsCompanyKnowledgeIntensiveModel(Constants.StandardRadioButtonYesValue)
   val isCompanyKnowledgeIntensiveModelNo = IsCompanyKnowledgeIntensiveModel(Constants.StandardRadioButtonNoValue)
 
-  val kiProcessingModelMet = KiProcessingModel(None, Some(true), Some(false), Some(false), Some(false))
-  val kiProcessingModelNotMet = KiProcessingModel(Some(false),Some(false), Some(false), Some(false), Some(false))
+  val kiProcessingModelMet = KiProcessingModel(None, Some(true), Some(false), Some(false), Some(false), Some(false))
+  val kiProcessingModelNotMet = KiProcessingModel(Some(false),Some(false), Some(false), Some(false), Some(false),companyWishesToApplyKi = Some(true))
 
-  val kiProcessingModelIsKi = KiProcessingModel(Some(true), Some(true), Some(true), Some(true), Some(true), Some(true))
+  val kiProcessingModelIsKi = KiProcessingModel(Some(true), Some(true), Some(true), Some(true), Some(true), Some(true), Some(true))
 
-  val trueKIModel = KiProcessingModel(Some(true), Some(true), Some(true), Some(true), None, Some(true))
-  val falseKIModel = KiProcessingModel(Some(false), Some(false), Some(false), Some(false), None, Some(false))
-  val isKiKIModel = KiProcessingModel(Some(false), Some(true), Some(true), Some(true), Some(true), Some(true))
+  val trueKIModel = KiProcessingModel(Some(true), Some(true), Some(true), Some(true), None, Some(true), Some(true))
+  val falseKIModel = KiProcessingModel(Some(false), Some(false), Some(false), Some(false), None, Some(false), Some(true))
+  val kiModelAssertsKiFalse = KiProcessingModel(Some(false), Some(true), Some(true), Some(true), Some(true), Some(true), Some(true))
+  val kiModelMissingWantApplyKi = KiProcessingModel(Some(true), Some(true), Some(true), Some(true), Some(true), Some(true), None)
+  val kiModelMissingAssertKi = KiProcessingModel(None, Some(true), Some(true), Some(true), Some(true), Some(true), Some(true))
+  val kiModelWantApplyKiFalse = KiProcessingModel(Some(true), Some(true), Some(true), Some(true), Some(true), Some(true), Some(false))
   val missingDataKIModel = KiProcessingModel(Some(true),None, Some(true), Some(true), Some(true), Some(true))
 
   val hadPreviousRFIModelYes = HadPreviousRFIModel(Constants.StandardRadioButtonYesValue)
@@ -220,7 +223,7 @@ trait BaseSpec extends UnitSpec with OneAppPerSuite with MockitoSugar with FakeR
 
   val fileId = "1"
 
-  val qualifyPrepareToTrade = QualifyBusinessActivityModel(Constants.qualifyPrepareToTrade)
+  val qualifyTrade = QualifyBusinessActivityModel(Constants.qualifyTrade)
   val qualifyResearchAndDevelopment = QualifyBusinessActivityModel(Constants.qualifyResearchAndDevelopment)
 
   val repaymentTypeShares = SharesRepaymentTypeModel(Constants.repaymentTypeShares, Some(1))

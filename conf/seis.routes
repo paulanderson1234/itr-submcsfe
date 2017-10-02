@@ -88,7 +88,8 @@ GET        /full-time-employee-count               controllers.seis.FullTimeEmpl
 POST       /full-time-employee-count               controllers.seis.FullTimeEmployeeCountController.submit
 
 GET        /share-description                     controllers.seis.ShareDescriptionController.show
-POST       /share-description                     controllers.seis.ShareDescriptionController.submit
+#POST       /share-description                     controllers.seis.ShareDescriptionController.submit
+POST       /share-description                     controllers.seis.ShareDescriptionController.submit(shareIssueDate:String)
 
 GET        /number-of-shares                      controllers.seis.NumberOfSharesController.show
 POST       /number-of-shares                      controllers.seis.NumberOfSharesController.submit

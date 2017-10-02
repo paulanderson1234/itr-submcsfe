@@ -43,8 +43,8 @@ class QualifyBusinessActivityFormSpec extends UnitSpec with OneAppPerSuite{
     )
   }
 
-  val qualifyBusinessActivityJson = """{"isQualifyBusinessActivity":"Preparing to Trade"}"""
-  val qualifyBusinessActivityModel = QualifyBusinessActivityModel("Preparing to Trade")
+  val qualifyBusinessActivityJson = """{"isQualifyBusinessActivity":"Trade"}"""
+  val qualifyBusinessActivityModel = QualifyBusinessActivityModel("Trade")
 
   "The Qualifying Business Activity Form" should {
     "Return an error if no radio button is selected" in {
@@ -67,7 +67,7 @@ class QualifyBusinessActivityFormSpec extends UnitSpec with OneAppPerSuite{
   "The Qualifying Business Activity Form" should {
     "not return an error if the 'Doing business or getting ready to do business' option is selected" in {
       val request = FakeRequest("GET", "/").withFormUrlEncodedBody(
-        "isQualifyBusinessActivity" -> Constants.qualifyPrepareToTrade
+        "isQualifyBusinessActivity" -> Constants.qualifyTrade
       )
       bindWithError(request) match {
         case Some(err) => {
@@ -109,7 +109,7 @@ class QualifyBusinessActivityFormSpec extends UnitSpec with OneAppPerSuite{
     "call apply correctly on the model" in {
       implicit val formats = Json.format[QualifyBusinessActivityModel]
       val qualifyBusinessActivityForm = QualifyBusinessActivityForm.qualifyBusinessActivityForm.fill(qualifyBusinessActivityModel)
-      qualifyBusinessActivityForm.get.isQualifyBusinessActivity shouldBe Constants.qualifyPrepareToTrade
+      qualifyBusinessActivityForm.get.isQualifyBusinessActivity shouldBe Constants.qualifyTrade
     }
 
     // form json to model - unapply

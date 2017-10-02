@@ -225,7 +225,57 @@ class OperatingCostsControllerSpec extends BaseSpec {
       submitWithSessionAndAuth(TestController.submit,formInput:_*)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(routes.IsKnowledgeIntensiveController.show().url)
+          redirectLocation(result) shouldBe Some(routes.IsCompanyKnowledgeIntensiveController.show().url)
+        }
+      )
+    }
+  }
+
+  "Sending an valid submit with missing company assets KI Model to the OperatingCostsController when authenticated and enrolled" should {
+    "redirect to IsKI page" in {
+      setupSubmitMocks(Some(false), Some(kiModelMissingAssertKi))
+      mockEnrolledRequest(eisSchemeTypesModel)
+      val formInput = Seq(
+        "operatingCosts1stYear" -> "100",
+        "operatingCosts2ndYear" -> "100",
+        "operatingCosts3rdYear" -> "100",
+        "rAndDCosts1stYear" -> "0",
+        "rAndDCosts2ndYear" -> "0",
+        "rAndDCosts3rdYear" -> "0",
+        "firstYear" -> "2005",
+        "secondYear" -> "2004",
+        "thirdYear" -> "2003"
+      )
+
+      submitWithSessionAndAuth(TestController.submit, formInput: _*)(
+        result => {
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(routes.DateOfIncorporationController.show().url)
+        }
+      )
+    }
+  }
+
+  "Sending an valid submit with missing wants to apply in KI Model to the OperatingCostsController when authenticated and enrolled" should {
+    "redirect to IsKI page" in {
+      setupSubmitMocks(Some(false), Some(kiModelMissingWantApplyKi))
+      mockEnrolledRequest(eisSchemeTypesModel)
+      val formInput = Seq(
+        "operatingCosts1stYear" -> "100",
+        "operatingCosts2ndYear" -> "100",
+        "operatingCosts3rdYear" -> "100",
+        "rAndDCosts1stYear" -> "0",
+        "rAndDCosts2ndYear" -> "0",
+        "rAndDCosts3rdYear" -> "0",
+        "firstYear" -> "2005",
+        "secondYear" -> "2004",
+        "thirdYear" -> "2003"
+      )
+
+      submitWithSessionAndAuth(TestController.submit, formInput: _*)(
+        result => {
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(routes.DateOfIncorporationController.show().url)
         }
       )
     }

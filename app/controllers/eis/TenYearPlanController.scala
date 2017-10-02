@@ -60,10 +60,10 @@ trait TenYearPlanController extends FrontendController with AuthorisedAndEnrolle
       kiModel match {
         // check previous answers present
         case Some(data) if isMissingData(data) =>
-
-          /** not sure if we are still using isMissingData **/
           Future.successful(Redirect(routes.DateOfIncorporationController.show()))
         case Some(dataWithPrevious) if !dataWithPrevious.companyAssertsIsKi.get =>
+          Future.successful(Redirect(routes.IsCompanyKnowledgeIntensiveController.show()))
+        case Some(dataWithPrevious) if !dataWithPrevious.companyWishesToApplyKi.get =>
           Future.successful(Redirect(routes.IsKnowledgeIntensiveController.show()))
         case Some(dataWithPreviousValid) => {
           // all good - save the cost condition result returned from API and navigate accordingly
@@ -112,7 +112,7 @@ trait TenYearPlanController extends FrontendController with AuthorisedAndEnrolle
   }
 
   def isMissingData(data: KiProcessingModel): Boolean = {
-    data.dateConditionMet.isEmpty || data.companyAssertsIsKi.isEmpty ||
+    data.dateConditionMet.isEmpty || data.companyAssertsIsKi.isEmpty || data.companyWishesToApplyKi.isEmpty ||
       data.costsConditionMet.isEmpty || data.hasPercentageWithMasters.isEmpty
   }
 

@@ -101,7 +101,7 @@ class ControllerHelpersSpec extends BaseSpec {
       await(result) shouldBe None
     }
     "return None if qualifyBusinessActivityModel trade exists in S4L but start date or research date are not present in S4L" in {
-      setupMocks(Some(qualifyPrepareToTrade), None, None)
+      setupMocks(Some(qualifyTrade), None, None)
       val result = controllerHelper.getTradeStartDateForBusinessActivity(mockS4lConnector)
       await(result) shouldBe None
     }
@@ -111,17 +111,17 @@ class ControllerHelpersSpec extends BaseSpec {
       await(result) shouldBe None
     }
     "return the trade start date if the qualifyBusinessActivityModel exists and set to Trade in S4L" in {
-      setupMocks(Some(qualifyPrepareToTrade), None, Some(hasInvestmentTradeStartedModelYes))
+      setupMocks(Some(qualifyTrade), None, Some(hasInvestmentTradeStartedModelYes))
       val result = controllerHelper.getTradeStartDateForBusinessActivity(mockS4lConnector)
       await(result) shouldEqual Some(hasInvestmentTradeStartedModelYes)
     }
     "return the trade start date if the qualifyBusinessActivityModel exists and set to Trade but both dates are in S4L" in {
-      setupMocks(Some(qualifyPrepareToTrade),  Some(researchStartDateModelYes), Some(hasInvestmentTradeStartedModelYes))
+      setupMocks(Some(qualifyTrade),  Some(researchStartDateModelYes), Some(hasInvestmentTradeStartedModelYes))
       val result = controllerHelper.getTradeStartDateForBusinessActivity(mockS4lConnector)
       await(result) shouldEqual Some(hasInvestmentTradeStartedModelYes)
     }
     "return the empty trade start date if the qualifyBusinessActivityModel in S4L is trade but it hasn't started yet" in {
-      setupMocks(Some(qualifyPrepareToTrade), None, Some(hasInvestmentTradeStartedModelNo))
+      setupMocks(Some(qualifyTrade), None, Some(hasInvestmentTradeStartedModelNo))
       val result = controllerHelper.getTradeStartDateForBusinessActivity(mockS4lConnector)
       await(result) shouldEqual Some(hasInvestmentTradeStartedModelNo)
     }

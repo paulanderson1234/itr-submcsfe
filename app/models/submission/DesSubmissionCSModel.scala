@@ -20,8 +20,9 @@ import common.Constants
 import models.investorDetails._
 import models.registration.RegistrationDetailsModel
 import models._
+import models.repayments.SharesRepaymentDetailsModel
 import play.api.libs.json.Json
-import utils.{Transformers, Validation}
+import utils.{Converters, Transformers, Validation}
 
 
 case class DesIndividualDetailsModel(
@@ -61,9 +62,9 @@ object DesPreviousOwnershipModel{
 case class DesTradeModel(
                           businessActivity: Option[String],
                           baDescription: String,
-                          marketInfo: Option[DesMarketInfo],
+                          marketInfo: Option[DesMarketInfo], // eis only
                           thirtyDayRule: Option[Boolean],
-                          dateTradeCommenced: String, // Not required for CS but required in DES scheme
+                          dateTradeCommenced: String,
                           annualCosts: Option[DesAnnualCostsModel],
                           annualTurnover:  Option[DesAnnualTurnoversModel],
                           previousOwnership: Option[DesPreviousOwnershipModel]
@@ -102,7 +103,6 @@ object DesSubsidiaryPerformingTrade{
   implicit val formats = Json.format[DesSubsidiaryPerformingTrade]
 }
 case class DesGroupHoldingsModel(
-                                  nodata:Option[String],
                                   groupHolding: Seq[UnitIssueModel]
                                 )
 object DesGroupHoldingsModel{
@@ -160,7 +160,6 @@ object DesRFIModel{
   implicit val formats = Json.format[DesRFIModel]
 }
 case class DesRFICostsModel(
-                             nodata:Option[String],
                              previousRFI: Seq[DesRFIModel]
                            )
 object DesRFICostsModel{
@@ -171,7 +170,7 @@ case class DesOrganisationModel(
                                  utr:Option[String],
                                  chrn:Option[String],
                                  startDate:String,
-                                 firstDateOfCommercialSale:Option[String],
+                                 firstDateOfCommercialSale:Option[String], //esi only
                                  orgDetails: DesCompanyDetailsModel,
                                  previousRFIs: Option[DesRFICostsModel]
                                )
@@ -204,7 +203,6 @@ object DesComplianceStatement{
 }
 
 case class DesSubmission(
-                          notRequired: Option[String],
                           complianceStatement: DesComplianceStatement
                         )
 object DesSubmission{
@@ -262,31 +260,32 @@ object DesSubmissionCSModel {
   }
 
   private def readAddressDetails(contactDetailsAnswersModel: ContactDetailsAnswersModel): DesAddressType = {
-    DesAddressType(contactDetailsAnswersModel.correspondAddressModel.address.addressline1,
-      contactDetailsAnswersModel.correspondAddressModel.address.addressline2,
-      contactDetailsAnswersModel.correspondAddressModel.address.addressline3,
-      contactDetailsAnswersModel.correspondAddressModel.address.addressline4,
-      contactDetailsAnswersModel.correspondAddressModel.address.postcode,
-      contactDetailsAnswersModel.correspondAddressModel.address.countryCode)
+    DesAddressType(
+      contactDetailsAnswersModel.correspondAddressModel.addressline1,
+      contactDetailsAnswersModel.correspondAddressModel.addressline2,
+      contactDetailsAnswersModel.correspondAddressModel.addressline3,
+      contactDetailsAnswersModel.correspondAddressModel.addressline4,
+      contactDetailsAnswersModel.correspondAddressModel.postcode,
+      contactDetailsAnswersModel.correspondAddressModel.countryCode)
   }
 
   private def readDesSubmission(answerModel: ComplianceStatementAnswersModel,
                         registrationDetailsModel: Option[RegistrationDetailsModel]): DesSubmission = {
-    DesSubmission(None, readDesComplianceStatement(answerModel, registrationDetailsModel))
+    DesSubmission(readDesComplianceStatement(answerModel, registrationDetailsModel))
   }
 
   private def readDesComplianceStatement(answerModel: ComplianceStatementAnswersModel,
                                  registrationDetailsModel: Option[RegistrationDetailsModel]): DesComplianceStatement = {
     DesComplianceStatement(getSchemeType(answerModel.schemeTypes), readDesTradeModel(answerModel),
       readDesInvestmentDetailsModel(answerModel),
-      readDesSubsidiaryPerformingTrade(answerModel), readDesKnowledgeIncentice(answerModel),
-      readDesInvestorDetailsModel(answerModel), readDesRepaymentsModel(answerModel),
+      readDesSubsidiaryPerformingTrade(answerModel), readDesKnowledgeIntensive(answerModel),
+      readDesInvestorDetailsModel(answerModel),  DesRepaymentsModel(readDesRepaymentsModel(answerModel)),
       readDesValueReceived(answerModel.investorDetailsAnswersModel),
       readDesOrganisationModel(answerModel, registrationDetailsModel))
   }
 
   private def readDesTradeModel(answerModel: ComplianceStatementAnswersModel): DesTradeModel = {
-    DesTradeModel(readDesBussinessActivity(answerModel.companyDetailsAnswersModel),
+    DesTradeModel(readDesBusinessActivity(answerModel.companyDetailsAnswersModel),
       readDesBaDescription(answerModel.companyDetailsAnswersModel),
       readDesMarketInfo(answerModel), readDesThirtyDayRule(answerModel),
       readDesTradeDateCommenced(answerModel.companyDetailsAnswersModel),
@@ -294,11 +293,11 @@ object DesSubmissionCSModel {
       readDesPreviousOwnershipModel(answerModel))
   }
 
-  private def readDesBussinessActivity(companyDetailsAnswersModel: CompanyDetailsAnswersModel): Option[String] = {
+  private def readDesBusinessActivity(companyDetailsAnswersModel: CompanyDetailsAnswersModel): Option[String] = {
     companyDetailsAnswersModel.qualifyBusinessActivityModel.isQualifyBusinessActivity match {
-      case Constants.qualifyPrepareToTrade => Some(BusinessActivity.preparingToTrade.toString)
+      case Constants.qualifyTrade => Some(BusinessActivity.trade.toString)
       case Constants.qualifyResearchAndDevelopment => Some(BusinessActivity.researchAndDevelopment.toString)
-      case _ => Some(BusinessActivity.trade.toString)
+      case _ => Some(BusinessActivity.preparingToTrade.toString)
     }
   }
 
@@ -307,16 +306,29 @@ object DesSubmissionCSModel {
   }
 
   private def readDesMarketInfo(answerModel: ComplianceStatementAnswersModel): Option[DesMarketInfo] = {
-    None
+    def getMarketDescription(marketDescriptionModel: Option[MarketDescriptionModel], marketInfo:MarketInfoAnswersModel) : Option[String] = {
+      if(marketInfo.newGeographicMarket.isNewGeographicalMarket == Constants.StandardRadioButtonYesValue ||
+        marketInfo.newProductMarket.isNewProduct == Constants.StandardRadioButtonYesValue && marketDescriptionModel.nonEmpty) Some(marketDescriptionModel.fold("")(_.text)) else None
+    }
+
+    answerModel.marketInfo match{
+      case Some(marketInfo) if marketInfo.isMarketRouteApplicable.isMarketInfoRoute  =>
+        Some(DesMarketInfo(answerToBoolean(marketInfo.newGeographicMarket.isNewGeographicalMarket),
+          answerToBoolean(marketInfo.newProductMarket.isNewProduct), getMarketDescription(marketInfo.marketDescription, marketInfo)))
+      case _  => None
+    }
+
   }
 
   private def readDesThirtyDayRule(answerModel: ComplianceStatementAnswersModel): Option[Boolean] = {
-    Some(true)
+    if(shouldPopulateMarektInfo(answerModel.marketInfo) && answerModel.thirtyDayRuleAnswersModel.fold(false)(!_.turnoverApiCheckPassed))
+      answerModel.thirtyDayRuleAnswersModel.fold(None:Option[Boolean])(rule => Some(answerToBoolean(rule.thirtyDayRuleModel.thirtyDayRule))) else
+    None
   }
 
   private def readDesTradeDateCommenced(companyDetailsAnswersModel: CompanyDetailsAnswersModel): String = {
     companyDetailsAnswersModel.qualifyBusinessActivityModel.isQualifyBusinessActivity match {
-      case Constants.qualifyPrepareToTrade => readPrepareToTradeDateCommenced(companyDetailsAnswersModel)
+      case Constants.qualifyTrade => readPrepareToTradeDateCommenced(companyDetailsAnswersModel)
       case Constants.qualifyResearchAndDevelopment => readResearchTradeDateCommenced(companyDetailsAnswersModel)
       case _ => Constants.standardIgnoreYearValue
     }
@@ -343,31 +355,39 @@ object DesSubmissionCSModel {
   }
 
   private def readDesAnnualCostsModel(answerModel: ComplianceStatementAnswersModel): Option[DesAnnualCostsModel] = {
-    //DesAnnualCostsModel(None, readDesAnnualCostModel(answerModel))
-    None
-  }
-  private def readDesAnnualCostModel(answerModel: ComplianceStatementAnswersModel): Vector[AnnualCostModel] = {
-    Vector.empty :+ AnnualCostModel("", readDesOperatingCost(answerModel), readDesResearchAndDevelopmentCost(answerModel))
+
+    // eis only. only populate if says are ki and aslo wants to appy for ki and we have costs too..
+    if(answerModel.costsAnswersModel.operatingCosts.nonEmpty &&
+      answerModel.kiAnswersModel.fold(false)(kiModel => kiModel.kiProcessingModel.companyWishesToApplyKi.fold(false)(_.self))
+      && answerModel.kiAnswersModel.fold(false)(kiModel => kiModel.kiProcessingModel.companyAssertsIsKi.fold(false)(_.self))
+    )
+      answerModel.costsAnswersModel.operatingCosts.fold(Some(DesAnnualCostsModel(List.empty)))(list =>
+        Some(DesAnnualCostsModel(Converters.operatingCostsToList(list))))
+    else None
   }
 
-  private def readDesOperatingCost(answerModel: ComplianceStatementAnswersModel): CostModel = {
-    CostModel("")
-  }
-
-  private def readDesResearchAndDevelopmentCost(answerModel: ComplianceStatementAnswersModel): CostModel = {
-    CostModel("")
-  }
   private def readDesAnnualTurnoversModel(answerModel: ComplianceStatementAnswersModel): Option[DesAnnualTurnoversModel] = {
-    //DesAnnualTurnoversModel(Some("nodata"), re)
-    None
+    //EIS only. only populate the turnover costs if new prod mkt or new geo mkt is true and we have turnover costs
+    answerModel.marketInfo match{
+      case Some(marketInfo) if answerModel.costsAnswersModel.turnoverCostModel.nonEmpty &&
+        marketInfo.isMarketRouteApplicable.isMarketInfoRoute && (marketInfo.newGeographicMarket.isNewGeographicalMarket == Constants.StandardRadioButtonYesValue ||
+        marketInfo.newProductMarket.isNewProduct == Constants.StandardRadioButtonYesValue) =>
+        Some(DesAnnualTurnoversModel(answerModel.costsAnswersModel.turnoverCostModel.fold(List[TurnoverCostModel]())(list => Converters.turnoverCostsToList(list))))
+      case _  => None
+    }
   }
+
   private def readDesPreviousOwnershipModel(answerModel: ComplianceStatementAnswersModel): Option[DesPreviousOwnershipModel] = {
     None
   }
 
   private def readDesInvestmentDetailsModel(answerModel: ComplianceStatementAnswersModel): DesInvestmentDetailsModel = {
-    DesInvestmentDetailsModel(Constants.notApplicable, readUnitIssueModel(answerModel),
+    DesInvestmentDetailsModel(readGrowthDescription(answerModel), readUnitIssueModel(answerModel),
       readTotalAmountSpent(answerModel.shareDetailsAnswersModel), readDesOrganisationStatusDetails(answerModel))
+  }
+
+  private def readGrowthDescription(answerModel: ComplianceStatementAnswersModel): String = {
+    answerModel.investmentGrow.fold(Constants.notApplicable)(_.investmentGrowModel.investmentGrowDesc)
   }
 
   private def readUnitIssueModel(answerModel: ComplianceStatementAnswersModel): UnitIssueModel = {
@@ -407,7 +427,7 @@ object DesSubmissionCSModel {
     Some(DesOrganisationStatusModel(readFTECount(answerModel.companyDetailsAnswersModel),
       readShareChangesDescription(answerModel.investorDetailsAnswersModel.shareCapitalChangesModel),
         CostModel(Transformers.poundToPence(Left(answerModel.companyDetailsAnswersModel.grossAssetsModel.grossAmount.toString()))),
-        CostModel("0")))
+      readGrossAssestsAfter(answerModel.companyDetailsAnswersModel)))
   }
 
   def readFTECount(companyDetailsAnswersModel: CompanyDetailsAnswersModel): BigDecimal ={
@@ -421,11 +441,32 @@ object DesSubmissionCSModel {
   }
 
   private def readDesSubsidiaryPerformingTrade(answerModel: ComplianceStatementAnswersModel): Option[DesSubsidiaryPerformingTrade] = {
-    None
+
+    //TODO: this is always empty currently but will need address, trade name, crn etc instead of None's below when built
+    if (answerModel.subsidiaries.fold("")(model => model.subsidiariesSpendInvest.subSpendingInvestment) == Constants.StandardRadioButtonYesValue)
+      Some(DesSubsidiaryPerformingTrade(answerToBoolean(answerModel.subsidiaries.get.subsidiariesNinetyOwned.ownNinetyPercent),
+        DesCompanyDetailsModel(Constants.notApplicable, ctUtr = None, crn = None, companyAddress = None)))
+    else None
   }
 
-  private def readDesKnowledgeIncentice(answerModel: ComplianceStatementAnswersModel): Option[KiModel] = {
-    None
+  private def readGrossAssestsAfter(companyDetailsAnswersModel: CompanyDetailsAnswersModel): CostModel = {
+    companyDetailsAnswersModel.grossAssetsAfterModel.fold(CostModel("0"))(model => CostModel(Transformers.poundToPence(Left(model.grossAmount.toString()))))
+  }
+
+  private def readDesKnowledgeIntensive(answerModel: ComplianceStatementAnswersModel): Option[KiModel] = {
+
+    // eis only
+    answerModel.kiAnswersModel match {
+      case Some(ki) =>
+        val kiAnswersModel = answerModel.kiAnswersModel.get
+        if (kiAnswersModel.kiProcessingModel.companyWishesToApplyKi.getOrElse(false))
+          Some(KiModel(skilledEmployeesConditionMet = kiAnswersModel.kiProcessingModel.hasPercentageWithMasters.getOrElse(false),
+            innovationConditionMet = if (kiAnswersModel.tenYearPlanModel.nonEmpty) kiAnswersModel.tenYearPlanModel.get.tenYearPlanDesc else None,
+            kiConditionMet = Some(kiAnswersModel.kiProcessingModel.isKi)))
+        else None
+      case _ => None
+    }
+
   }
 
   private def readDesInvestorDetailsModel(answerModel: ComplianceStatementAnswersModel): DesInvestorDetailsModel = {
@@ -494,7 +535,7 @@ object DesSubmissionCSModel {
 
   private def readDesGroupHoldingsModel(investorDetailsModel: InvestorDetailsModel): Option[DesGroupHoldingsModel] = {
     if(investorDetailsModel.previousShareHoldingModels.isDefined)
-      Some(DesGroupHoldingsModel(None, readPreviousGroupHoldings(investorDetailsModel.previousShareHoldingModels.get)))
+      Some(DesGroupHoldingsModel(readPreviousGroupHoldings(investorDetailsModel.previousShareHoldingModels.get)))
     else None
   }
 
@@ -504,7 +545,8 @@ object DesSubmissionCSModel {
         readShareHoldingDescription(shareHoldings.previousShareHoldingDescriptionModel.get),
         readShareHoldingDateOfIssue(shareHoldings.investorShareIssueDateModel.get),
         UnitType.shares.toString,
-        readShareHoldingNominalValue(shareHoldings.previousShareHoldingNominalValueModel.get),
+        //readShareHoldingNominalValue(shareHoldings.previousShareHoldingNominalValueModel.get),
+        CostModel("0"),
         shareHoldings.numberOfPreviouslyIssuedSharesModel.get.previouslyIssuedShares,
         CostModel("0"))
     }
@@ -525,8 +567,52 @@ object DesSubmissionCSModel {
     CostModel(Transformers.poundToPence(Left(previousShareHoldingNominalValueModel.nominalValue.toString())))
   }
 
-  private def readDesRepaymentsModel(answerModel: ComplianceStatementAnswersModel) : DesRepaymentsModel = {
-    DesRepaymentsModel(Vector.empty)
+  private def readDesRepaymentsModel(answerModel: ComplianceStatementAnswersModel) : Vector[DesRepaymentModel] = {
+
+    if (answerModel.repaidSharesAnswersModel.nonEmpty && answerModel.repaidSharesAnswersModel.get.sharesRepaymentDetailsModel.nonEmpty &&
+      answerModel.repaidSharesAnswersModel.fold("")(model => model.anySharesRepaymentModel.anySharesRepayment) == Constants.StandardRadioButtonYesValue) {
+
+      val list = answerModel.repaidSharesAnswersModel.get.sharesRepaymentDetailsModel.get
+
+      list.foldLeft(Vector.empty[DesRepaymentModel]) {
+        (desRepaymentsModel, shareRepaymenDetailsModel) =>
+          desRepaymentsModel :+ DesRepaymentModel(readRepaymentDate(shareRepaymenDetailsModel), readRepaymentAmount(shareRepaymenDetailsModel),
+            readRepaymentType(shareRepaymenDetailsModel),
+            readRepaymentHoldersName(shareRepaymenDetailsModel), readRepaymentSubsidiary(shareRepaymenDetailsModel))
+      }
+    } else Vector.empty[DesRepaymentModel]
+   // Vector.empty[DesRepaymentModel]
+  }
+
+  private def readRepaymentDate(sharesRepaymentDetailsModel: SharesRepaymentDetailsModel): Option[String] = {
+
+    if(sharesRepaymentDetailsModel.dateSharesRepaidModel.nonEmpty) {
+      val date = sharesRepaymentDetailsModel.dateSharesRepaidModel.get
+      Some(Validation.dateToDesFormat(date.day.get, date.month.get, date.year.get))
+    }
+    else None
+  }
+
+  private def readRepaymentHoldersName(sharesRepaymentDetailsModel: SharesRepaymentDetailsModel): Option[DesContactName] = {
+    if(sharesRepaymentDetailsModel.whoRepaidSharesModel.nonEmpty)
+      Some(DesContactName(sharesRepaymentDetailsModel.whoRepaidSharesModel.get.forename, sharesRepaymentDetailsModel.whoRepaidSharesModel.get.surname))
+    else None
+  }
+
+  private def readRepaymentType(sharesRepaymentDetailsModel: SharesRepaymentDetailsModel): Option[String] = {
+    if(sharesRepaymentDetailsModel.sharesRepaymentTypeModel.nonEmpty)
+    Some(sharesRepaymentDetailsModel.sharesRepaymentTypeModel.get.sharesRepaymentType) else None
+  }
+
+  private def readRepaymentSubsidiary(sharesRepaymentDetailsModel: SharesRepaymentDetailsModel): Option[String] = {
+   None
+  }
+
+  private def readRepaymentAmount(sharesRepaymentDetailsModel: SharesRepaymentDetailsModel) : CostModel = {
+    require(sharesRepaymentDetailsModel.amountSharesRepaymentModel.nonEmpty,
+      "DesSubmissionCSModel.readRepaymentAmount. Empty readRepaymentAmount passed when not expected.")
+
+    CostModel(Transformers.poundToPence(Left(sharesRepaymentDetailsModel.amountSharesRepaymentModel.get.amount.toString)))
   }
 
   private def readDesValueReceived(investorDetailsAnswersModel: InvestorDetailsAnswersModel): Option[String] = {
@@ -536,22 +622,32 @@ object DesSubmissionCSModel {
   private def readDesOrganisationModel(answerModel: ComplianceStatementAnswersModel,
                                registrationDetailsModel: Option[RegistrationDetailsModel]): DesOrganisationModel = {
     DesOrganisationModel(None, None, readDateOfIncorporation(answerModel.companyDetailsAnswersModel),
-      None, readDesOrganisationDetails(registrationDetailsModel), readPreviousRFICostModel(answerModel))
+      readFirstDateOfCommercialSale(answerModel.companyDetailsAnswersModel), readDesOrganisationDetails(registrationDetailsModel),
+      readPreviousRFICostModel(answerModel))
   }
 
   private def readDateOfIncorporation(companyDetailsAnswersModel: CompanyDetailsAnswersModel) : String = {
-    if(companyDetailsAnswersModel.dateOfIncorporationModel.day.isDefined)
-      Validation.dateToDesFormat(companyDetailsAnswersModel.dateOfIncorporationModel.day.get,
-        companyDetailsAnswersModel.dateOfIncorporationModel.month.get, companyDetailsAnswersModel.dateOfIncorporationModel.year.get)
-    else Constants.standardIgnoreYearValue
+    require(companyDetailsAnswersModel.dateOfIncorporationModel.day.nonEmpty && companyDetailsAnswersModel.dateOfIncorporationModel.month.nonEmpty
+      && companyDetailsAnswersModel.dateOfIncorporationModel.year.nonEmpty,
+      "DesSubmissionCSModel.readDateOfIncorporation. Empty dateOfIncorporationModel passed when not expected.")
+
+    Validation.dateToDesFormat(companyDetailsAnswersModel.dateOfIncorporationModel.day.get,
+      companyDetailsAnswersModel.dateOfIncorporationModel.month.get, companyDetailsAnswersModel.dateOfIncorporationModel.year.get)
+  }
+
+  private def readFirstDateOfCommercialSale(companyDetailsAnswersModel: CompanyDetailsAnswersModel) : Option[String] = {
+    if(companyDetailsAnswersModel.commercialSaleModel.fold("")(_.hasCommercialSale) == Constants.StandardRadioButtonYesValue) {
+      val date = companyDetailsAnswersModel.commercialSaleModel.get
+      Some(Validation.dateToDesFormat(date.commercialSaleDay.get,
+        date.commercialSaleMonth.get, date.commercialSaleYear.get))
+    }
+    else None
   }
 
   private def readDesOrganisationDetails(registrationDetailsModel: Option[RegistrationDetailsModel]): DesCompanyDetailsModel = {
-    if(registrationDetailsModel.isDefined)
+    require(registrationDetailsModel.nonEmpty, "DesSubmissionCSModel.readDesOrganisationDetails. Empty registration details passed when not expected.")
       DesCompanyDetailsModel(registrationDetailsModel.get.organisationName, None, None,
         readOrgAddress(registrationDetailsModel.get.addressModel))
-    else
-      DesCompanyDetailsModel("COMPANY", None, None, None)
   }
 
   private def readOrgAddress(addressModel: AddressModel): Option[DesAddressType] = {
@@ -563,7 +659,7 @@ object DesSubmissionCSModel {
   private def readPreviousRFICostModel(answerModel: ComplianceStatementAnswersModel) : Option[DesRFICostsModel] = {
     if (answerModel.previousSchemesAnswersModel.previousSchemeModel.isDefined
       && answerModel.previousSchemesAnswersModel.previousSchemeModel.get.nonEmpty)
-      Some(DesRFICostsModel(None, readPreviousRFI(answerModel.previousSchemesAnswersModel)))
+      Some(DesRFICostsModel(readPreviousRFI(answerModel.previousSchemesAnswersModel)))
     else
       None
 
@@ -595,6 +691,15 @@ object DesSubmissionCSModel {
 
   private def getSchemeType(schemeTypes:SchemeTypesModel) : String = {
     if(schemeTypes.eis) SchemeType.eis.toString else SchemeType.seis.toString
+  }
+
+  private def shouldPopulateMarektInfo(marketInfo: Option[MarketInfoAnswersModel]) : Boolean = {
+    marketInfo match{
+      case Some(mktInfo) if mktInfo.isMarketRouteApplicable.isMarketInfoRoute &&
+        (mktInfo.newGeographicMarket.isNewGeographicalMarket == Constants.StandardRadioButtonYesValue ||
+        mktInfo.newProductMarket.isNewProduct == Constants.StandardRadioButtonYesValue) => true
+      case _  => false
+    }
   }
 
   private def answerToBoolean(input:String): Boolean = {

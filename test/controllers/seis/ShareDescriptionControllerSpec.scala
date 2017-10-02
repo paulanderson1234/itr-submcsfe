@@ -31,6 +31,8 @@ import scala.concurrent.Future
 class ShareDescriptionControllerSpec extends BaseSpec {
 
   lazy val validBackLink = controllers.seis.routes.HadOtherInvestmentsController.show().toString
+  val shareIssueDateString = "1 January 2008"
+  val validShareIssueDateModel = ShareIssueDateModel(Some(1), Some(1), Some(2008))
 
   object TestController extends ShareDescriptionController {
     override lazy val applicationConfig = MockConfig
@@ -51,18 +53,22 @@ class ShareDescriptionControllerSpec extends BaseSpec {
     }
   }
 
-  def setupMocks(shareDescriptionModel: Option[ShareDescriptionModel] = None, backUrl: Option[String] = None): Unit = {
+  def setupMocks(shareDescriptionModel: Option[ShareDescriptionModel] = None, backUrl: Option[String] = None,
+                 shareIssueDate: Option[ShareIssueDateModel] = None) :Unit = {
     when(mockS4lConnector.fetchAndGetFormData[ShareDescriptionModel](Matchers.eq(KeystoreKeys.shareDescription))
       (Matchers.any(), Matchers.any(), Matchers.any()))
       .thenReturn(Future.successful(shareDescriptionModel))
     when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.backLinkShareDescription))
       (Matchers.any(), Matchers.any(), Matchers.any()))
       .thenReturn(Future.successful(backUrl))
+    when(mockS4lConnector.fetchAndGetFormData[ShareIssueDateModel](Matchers.eq(KeystoreKeys.shareIssueDate))
+      (Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(shareIssueDate))
   }
 
   "Sending a GET request to ShareDescriptionController when authenticated and enrolled" should {
     "redirect to the 'HadOtherInvestments' page when no valid back link is present" in {
-      setupMocks()
+      setupMocks(shareIssueDate = Some(validShareIssueDateModel))
       mockEnrolledRequest(seisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show())(
         result => {
@@ -71,16 +77,16 @@ class ShareDescriptionControllerSpec extends BaseSpec {
         }
       )
     }
-    "return a 200 when something is fetched from keystore when a valid back link is present" in {
-      setupMocks(Some(shareDescriptionModel), Some(validBackLink))
+    "return a 200 when something is fetched from keystore when a valid back and share issue date link ae present" in {
+      setupMocks(Some(shareDescriptionModel), Some(validBackLink), Some(validShareIssueDateModel))
       mockEnrolledRequest(seisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show())(
         result => status(result) shouldBe OK
       )
     }
 
-    "provide an empty model and return a 200 when nothing is fetched using keystore when a valid back link is present" in {
-      setupMocks(None, Some(validBackLink))
+    "provide an empty model and return a 200 when nothing is fetched using keystore when a valid back link and share issue date link ae present" in {
+      setupMocks(None, Some(validBackLink), Some(validShareIssueDateModel))
       mockEnrolledRequest(seisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show())(
         result => status(result) shouldBe OK
@@ -94,7 +100,7 @@ class ShareDescriptionControllerSpec extends BaseSpec {
       mockEnrolledRequest(seisSchemeTypesModel)
       val formInput = "descriptionTextArea" -> "some text so it's valid"
 
-      submitWithSessionAndAuth(TestController.submit,formInput)(
+      submitWithSessionAndAuth(TestController.submit(shareIssueDateString),formInput)(
         result => {
           status(result) shouldBe SEE_OTHER
           redirectLocation(result) shouldBe Some(routes.NumberOfSharesController.show().url)
@@ -108,7 +114,7 @@ class ShareDescriptionControllerSpec extends BaseSpec {
       setupMocks(None, Some(validBackLink))
       mockEnrolledRequest(seisSchemeTypesModel)
       val formInput = "descriptionTextArea" -> ""
-      submitWithSessionAndAuth(TestController.submit,formInput)(
+      submitWithSessionAndAuth(TestController.submit(shareIssueDateString),formInput)(
         result => {
           status(result) shouldBe BAD_REQUEST
         }

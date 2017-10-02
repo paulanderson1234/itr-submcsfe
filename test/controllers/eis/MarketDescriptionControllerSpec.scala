@@ -93,7 +93,6 @@ class MarketDescriptionControllerSpec extends BaseSpec {
       showWithSessionAndAuth(TestController.show())(
         result => {
           status(result) shouldBe SEE_OTHER
-          //TODO: navigate to correct start of flow page when available
           redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
         }
       )

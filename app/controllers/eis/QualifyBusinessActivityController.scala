@@ -60,7 +60,7 @@ trait QualifyBusinessActivityController extends FrontendController with Authoris
         s4lConnector.saveFormData(KeystoreKeys.isQualifyBusinessActivity, validFormData)
         validFormData.isQualifyBusinessActivity match {
 
-          case Constants.qualifyPrepareToTrade => {
+          case Constants.qualifyTrade => {
             Future.successful(Redirect(routes.HasInvestmentTradeStartedController.show()))
           }
           case Constants.qualifyResearchAndDevelopment => {

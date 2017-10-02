@@ -39,6 +39,6 @@ trait HasInvestmentTradeStartedErrorController extends FrontendController with A
   override val acceptedFlows = Seq(Seq(EIS))
 
   val show = AuthorisedAndEnrolled.async { implicit user => implicit request =>
-    Future successful(Ok(HasInvestmentTradeStartedError()))
+    Future successful Ok(HasInvestmentTradeStartedError())
   }
 }
