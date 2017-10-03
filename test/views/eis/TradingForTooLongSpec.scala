@@ -34,7 +34,7 @@ class TradingForTooLongSpec extends ViewSpec with FakeRequestHelper {
     lazy val document: Document = Jsoup.parse(view.body)
 
     "contain the correct title" in {
-      document.title shouldBe Messages("page.investment.TradingForTooLong.title")
+      document.title shouldBe Messages("common.error.soft.title")
     }
 
     "contain a back link" which {

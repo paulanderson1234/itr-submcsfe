@@ -1,4 +1,8 @@
+#overrdie for play's max length error
+error.maxLength=You can''t enter more than {0} characters
+
 #common
+
 common.button.next=Next
 common.button.continue=Continue
 common.button.continueNextSection=Continue to next section
@@ -750,23 +754,11 @@ page.investment.AnnualTurnoverError.heading=You don''t qualify for the scheme
 page.investment.AnnualTurnoverError.description=The amount you''re trying to raise must be at least 50% of your average annual turnover.
 page.investment.AnnualTurnoverError.guidance=Link back to guidance
 
-#EISSEIS annual turnover error
-page.eisseis.investment.AnnualTurnoverError.title=You don''t qualify for any of the schemes
-page.eisseis.investment.AnnualTurnoverError.heading=You don''t qualify for any of the schemes
-page.eisseis.investment.AnnualTurnoverError.description=The amount you''re trying to raise must be at least 50% of your average annual turnover.
-
 #Trading For Too Long long error
 page.investment.TradingForTooLong.reason=Your company:
 page.investment.TradingForTooLong.bullet.one=has been trading for too long to get tax relief on investment
 page.investment.TradingForTooLong.bullet.two=is not starting a new business activity that needs investment
 page.investment.TradingForTooLong.link.schemeGuidance=Link back to guidance
-
-#EISSEIS trading for too long error
-page.eisseis.investment.TradingForTooLong.title=You don''t qualify for any of the schemes
-page.eisseis.investment.TradingForTooLong.heading=You don''t qualify for any of the schemes
-page.eisseis.investment.TradingForTooLong.reason=Your company:
-page.eisseis.investment.TradingForTooLong.bullet.one=has been trading for too long to get tax relief on investment
-page.eisseis.investment.TradingForTooLong.bullet.two=is not starting a new business activity that needs investment
 
 #signout page
 page.signout.SignedOut.title = You''re signed out
@@ -811,33 +803,8 @@ page.investment.companyDetails.postcode.label=Postcode
 page.investment.companyDetails.country.label=Country
 page.address.country.select = Select one country
 
-# EISSEIS trade start date
-page.eisseis.companyDetails.tradeStartDate.title=Has the trade you want investment in started?
-page.eisseis.companyDetails.tradeStartDate.heading=Has the trade you want investment in started?
-page.eisseis.companyDetails.text=The trade has started if your goods or services are available to the public. You may not have made a sale yet.
-page.eisseis.companyDetails.TradeStartDate.question.hint=When did this trade start?
+# trade start date
 validation.error.TradeStartDate.Future = Trade start date cannot be a future date
-
-#EISSEIS trade start date error
-page.eisseis.companyDetails.tradeStartDateError.title=You don''t qualify for the Seed Enterprise Investment Scheme
-page.eisseis.companyDetails.tradeStartDateError.heading=You don''t qualify for the Seed Enterprise Investment Scheme
-page.eisseis.companyDetails.tradeStartDateError.trading.over.two.years=This is because the trade you want investment in started more than 2 years ago.
-page.eisseis.companyDetails.tradeStartDateError.whatNext.continue=You can continue with your application for:
-page.eisseis.companyDetails.tradeStartDateError.whatNext.scheme.eis=the Enterprise Investment Scheme
-page.eisseis.companyDetails.tradeStartDateError.whatNext.scheme.vct=the Venture Capital Trust scheme
-
-#EISSEIS not first trade error
-page.eisseis.companyDetails.notFirstTradeError.title=You don''t qualify for the Seed Enterprise Investment Scheme
-page.eisseis.companyDetails.notFirstTradeError.heading=You don''t qualify for the Seed Enterprise Investment Scheme
-page.eisseis.companyDetails.notFirstTradeError.trading.reason=This is because your company carried out another trade before the one you''re seeking investment in.
-page.eisseis.companyDetails.notFirstTradeError.whatNext.continue=You can continue with your application for:
-page.eisseis.companyDetails.notFirstTradeError.whatNext.scheme.eis=the Enterprise Investment Scheme
-page.eisseis.companyDetails.notFirstTradeError.whatNext.scheme.vct=the Venture Capital Trust scheme
-
-# EISSEIS is first trade
-page.eisseis.companyDetails.isFirstTrade.title=Is this the first trade your company has carried out?
-page.eisseis.companyDetails.isFirstTrade.heading=Is this the first trade your company has carried out?
-page.eisseis.companyDetails.isFirstTrade.legend=Is this the first trade your company has carried out?
 
 #SEIS Full Time Employee Count Page
 page.companyDetails.fullTimeEmployeeCount.title = How many full-time equivalent employees did your company have when the shares were issued?
@@ -900,14 +867,6 @@ page.seis.checkAndSubmit.acknowledgement.upload.two = now, or you can upload the
 page.seis.checkAndSubmit.acknowledgement.upload.dashboard = Venture Capital Schemes dashboard
 page.seis.checkAndSubmit.acknowledgement.button.confirm=Finish
 
-
-# EIS SEIS VCT Previous scheme error
-page.eisseis.previousInvestment.InvalidPreviousScheme.title=You don''t qualify for the Seed Enterprise Investment Scheme
-page.eisseis.previousInvestment.InvalidPreviousScheme.heading=You don''t qualify for the Seed Enterprise Investment Scheme
-page.eisseis.previousInvestment.InvalidPreviousScheme.reason=This is because your company has already raised investment through the Enterprise Investment Scheme or received investment from a Venture Capital Trust.
-page.eisseis.previousInvestment.InvalidPreviousScheme.next.text=You can continue with your application for:
-page.eisseis.previousInvestment.InvalidPreviousScheme.next.eis=the Enterprise Investment Scheme
-page.eisseis.previousInvestment.InvalidPreviousScheme.next.vct=the Venture Capital Trust scheme
 
 # EIS SEIS lifetime allowance exceeded page
 page.eisseis.investment.LifetimeAllowanceExceeded.title=You don''t qualify for any of the schemes
@@ -1000,14 +959,14 @@ page.companyDetails.SeventyPercentError.heading=You can''t use this service yet
 page.companyDetails.SeventyPercentError.reason=This is because you haven''t spent enough of the SEIS Investment.
 
 # Share Description
-page.shares.shareDescription.title=What class of shares were issued?
-page.shares.shareDescription.heading=What class of shares were issued?
-page.shares.shareDescription.example.text=For example:
-page.shares.shareDescription.bullet.one=non-voting shares
-page.shares.shareDescription.bullet.two=ordinary shares
-page.shares.shareDescription.bullet.three=seed shares
+page.shares.shareDescription.title=What were the shares issued on {0} called?
+page.shares.shareDescription.heading=What were the shares issued on {0} called?
+page.shares.shareDescription.example.text=In your answer:
 page.shares.shareDescription.question.hint=Suggested limit: 20 words
-page.shares.ShareDescription.location=It''s on your company''s Register of Members and share certificates.
+page.shares.ShareDescription.location=The name and nominal value of the shares are on your company''s Register of Members.
+page.shares.shareDescription.bullet.one=add one type of share at a time
+page.shares.shareDescription.bullet.two=tell us the nominal value of each type of share when they were issued
+
 
 #share issue date page
 validation.error.ShareIssueDate.Future=Share issue date cannot be a future date
@@ -1079,6 +1038,7 @@ validation.error.HasInvestmentTradeStarted.Future = Business activity start date
 # number of shares
 page.shareDetails.numberOfShares.title=How many of these shares did your company issue?
 page.shareDetails.numberOfShares.heading=How many of these shares did your company issue?
+page.shareDetails.numberOfShares.info=You must only include shares issued to investors seeking tax relief from this share issue.
 
 #Create Investors or Nominee
 page.investors.AddInvestorOrNominee.title=Add each investor or nominee
@@ -1126,9 +1086,11 @@ page.investors.numberOfPreviouslyIssuedShares.title=How many shares were previou
 #PreviousShareHoldingsDescription
 page.investors.previousShareHoldingDescription.title = What were the shares issued to this {0} called?
 page.investors.previousShareHoldingDescription.heading = What were the shares issued to this {0} called?
-page.investors.previousShareHoldingDescription.example.text = Add one type of share at a time.
+page.investors.previousShareHoldingDescription.example.text =In your answer:
 page.investors.previousShareHoldingDescription.question.hint = Suggested limit: 20 words
-page.investors.previousShareHoldingDescription.location = It''s on your company''s Register of Members.
+page.investors.previousShareHoldingDescription.location = The name and nominal value of the shares are on your company''s Register of Members.
+page.investors.previousShareHoldingDescription.bullet.one=add one type of share at a time
+page.investors.previousShareHoldingDescription.bullet.two=tell us the nominal value of each type of share when they were issued
 
 #AddAnotherInvestor
 page.investors.addAnotherInvestor.title = Do you want to add another investor or nominee?

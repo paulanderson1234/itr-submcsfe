@@ -36,8 +36,8 @@ import scala.concurrent.Future
 
 class PreviousBeforeDOFCSSpec extends ViewSpec with DateFormatter {
 
-  val kiModel = KiProcessingModel(Some(true),Some(true),Some(true),Some(true),Some(true),Some(true))
-  val nonKiModel = KiProcessingModel(Some(false),Some(false),Some(false),Some(false),Some(false),Some(false))
+  val kiModel = KiProcessingModel(Some(true),Some(true),Some(true),Some(true),Some(true),Some(true), Some(true))
+  val nonKiModel = KiProcessingModel(Some(false),Some(false),Some(false),Some(false),Some(false),Some(false), Some(false))
   val commercialDate = toDateString(commercialSaleDay,commercialSaleMonth,commercialSaleYear)
   val secondDate = (difference: Int) => {
     val newDate = new DateTime(commercialSaleYear, commercialSaleMonth, commercialSaleDay, 0, 0).plusYears(difference)

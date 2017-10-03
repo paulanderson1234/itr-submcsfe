@@ -18,7 +18,6 @@ package views.eis
 
 import controllers.helpers.FakeRequestHelper
 import forms.IndividualDetailsForm.individualDetailsForm
-import forms.NominalValueOfSharesForm.nominalValueOfSharesForm
 import org.jsoup.Jsoup
 import play.api.i18n.Messages
 import play.api.i18n.Messages.Implicits._

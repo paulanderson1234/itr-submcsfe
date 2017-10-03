@@ -84,18 +84,18 @@ trait PreviousShareHoldingDescriptionController extends FrontendController with 
           validFormData.processingId match {
             case Some(_) => PreviousInvestorShareHoldersHelper.updateShareClassAndDescription(s4lConnector, validFormData).map {
               data => {
-                s4lConnector.saveFormData(KeystoreKeys.backLinkIsPreviousShareHoldingNominalValue,
+                s4lConnector.saveFormData(KeystoreKeys.backLinkInvestorShareIssueDate,
                   routes.PreviousShareHoldingDescriptionController.show(data.investorProcessingId.get, data.processingId).url)
-                Redirect(routes.PreviousShareHoldingNominalValueController.show(data.investorProcessingId.get, data.processingId.get))
+                Redirect(routes.InvestorShareIssueDateController.show(data.investorProcessingId.get, data.processingId.get))
               }
             }
             case None => PreviousInvestorShareHoldersHelper.addShareClassAndDescription(s4lConnector, validFormData, investorProcessingId.get).map {
               data => {
                 s4lConnector.saveFormData(KeystoreKeys.backLinkShareClassAndDescription,
                   routes.PreviousShareHoldingsReviewController.show(data.investorProcessingId.get).url)
-                s4lConnector.saveFormData(KeystoreKeys.backLinkIsPreviousShareHoldingNominalValue,
+                s4lConnector.saveFormData(KeystoreKeys.backLinkInvestorShareIssueDate,
                   routes.PreviousShareHoldingDescriptionController.show(data.investorProcessingId.get, data.processingId).url)
-                Redirect(routes.PreviousShareHoldingNominalValueController.show(data.investorProcessingId.get, data.processingId.get))
+                Redirect(routes.InvestorShareIssueDateController.show(data.investorProcessingId.get, data.processingId.get))
               }
             }
           }

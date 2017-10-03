@@ -98,7 +98,7 @@ class ShareIssueDateControllerSpec extends BaseSpec {
 
   "Sending a valid form submit to the ShareIssueDateController when authenticated and enrolled" should {
     "redirect to correct page when submission date is within the submission period for TRADE" in {
-      setupMocks(shareIssueDateModel = Some(shareIssueDateModel), qualifyBusinessActivityModel = Some(qualifyPrepareToTrade),
+      setupMocks(shareIssueDateModel = Some(shareIssueDateModel), qualifyBusinessActivityModel = Some(qualifyTrade),
         hasInvestmentTradeStartedModel = Some(hasInvestmentTradeStartedModelYes))
       when(TestController.submissionConnector.validateSubmissionPeriod(Matchers.any(), Matchers.any(), Matchers.any(),
         Matchers.any(), Matchers.any(), Matchers.any())(Matchers.any())).thenReturn(true)
@@ -119,7 +119,7 @@ class ShareIssueDateControllerSpec extends BaseSpec {
 
   "Sending a valid form submit to the ShareIssueDateController when authenticated and enrolled" should {
     "redirect to correct error page when submission date is not within the submission period for TRADE" in {
-      setupMocks(shareIssueDateModel = Some(shareIssueDateModel), qualifyBusinessActivityModel = Some(qualifyPrepareToTrade),
+      setupMocks(shareIssueDateModel = Some(shareIssueDateModel), qualifyBusinessActivityModel = Some(qualifyTrade),
         hasInvestmentTradeStartedModel = Some(hasInvestmentTradeStartedModelYes))
       when(TestController.submissionConnector.validateSubmissionPeriod(Matchers.any(), Matchers.any(), Matchers.any(),
         Matchers.any(), Matchers.any(), Matchers.any())(Matchers.any())).thenReturn(false)
@@ -162,7 +162,7 @@ class ShareIssueDateControllerSpec extends BaseSpec {
 
   "Sending a valid form submit to the ShareIssueDateController when authenticated and enrolled" should {
     "redirect to correct error page when submission date is not within the submission period for RESEARCH AND DEVELOPMENT" in {
-      setupMocks(shareIssueDateModel = Some(shareIssueDateModel), qualifyBusinessActivityModel = Some(qualifyPrepareToTrade),
+      setupMocks(shareIssueDateModel = Some(shareIssueDateModel), qualifyBusinessActivityModel = Some(qualifyTrade),
         hasInvestmentTradeStartedModel = Some(hasInvestmentTradeStartedModelYes))
       when(TestController.submissionConnector.validateSubmissionPeriod(Matchers.any(), Matchers.any(), Matchers.any(),
         Matchers.any(), Matchers.any(), Matchers.any())(Matchers.any())).thenReturn(false)
@@ -205,7 +205,7 @@ class ShareIssueDateControllerSpec extends BaseSpec {
 
   "Sending a valid form submit to the ShareIssueDateController when authenticated and enrolled" should {
     "redirect to HasInvestmentTradeStarted page if the model is not in storage" in {
-      setupMocks(shareIssueDateModel = Some(shareIssueDateModel), qualifyBusinessActivityModel = Some(qualifyPrepareToTrade),
+      setupMocks(shareIssueDateModel = Some(shareIssueDateModel), qualifyBusinessActivityModel = Some(qualifyTrade),
         hasInvestmentTradeStartedModel = None)
       mockEnrolledRequest(eisSchemeTypesModel)
 
@@ -225,7 +225,7 @@ class ShareIssueDateControllerSpec extends BaseSpec {
 
   "Sending a valid form submit to the ShareIssueDateController when authenticated and enrolled" should {
     "redirect to HasInvestmentTradeStarted page if the model has invalid data" in {
-      setupMocks(shareIssueDateModel = Some(shareIssueDateModel), qualifyBusinessActivityModel = Some(qualifyPrepareToTrade),
+      setupMocks(shareIssueDateModel = Some(shareIssueDateModel), qualifyBusinessActivityModel = Some(qualifyTrade),
         hasInvestmentTradeStartedModel = Some(hasInvestmentTradeStartedModelNo))
       mockEnrolledRequest(eisSchemeTypesModel)
 
@@ -285,7 +285,7 @@ class ShareIssueDateControllerSpec extends BaseSpec {
 
   "Sending a valid form submit to the ShareIssueDateController when authenticated and enrolled" should {
     "error when an undefined exception occurs" in {
-      setupMocks(shareIssueDateModel = Some(shareIssueDateModel), qualifyBusinessActivityModel = Some(qualifyPrepareToTrade),
+      setupMocks(shareIssueDateModel = Some(shareIssueDateModel), qualifyBusinessActivityModel = Some(qualifyTrade),
         hasInvestmentTradeStartedModel = Some(hasInvestmentTradeStartedModelYes))
       when(TestController.submissionConnector.validateSubmissionPeriod(Matchers.any(), Matchers.any(), Matchers.any(),
         Matchers.any(), Matchers.any(), Matchers.any())(Matchers.any())).thenReturn(Future.failed(failedResponse))

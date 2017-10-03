@@ -38,7 +38,7 @@ class TotalAmountRaisedSpec extends ViewSpec {
       document.title() shouldBe Messages("page.shareDetails.totalAmountRaised.title")
       document.getElementById("main-heading").text() shouldBe Messages("page.shareDetails.totalAmountRaised.heading")
       document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.three")
-      document.body.getElementById("back-link").attr("href") shouldEqual routes.NominalValueOfSharesController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual routes.NumberOfSharesController.show().url
       document.getElementById("label-amount").select("span").hasClass("visuallyhidden") shouldBe true
       document.getElementById("label-amount").select(".visuallyhidden").text() shouldBe Messages("page.shareDetails.totalAmountRaised.heading")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
@@ -53,7 +53,7 @@ class TotalAmountRaisedSpec extends ViewSpec {
       document.title() shouldBe Messages("page.shareDetails.totalAmountRaised.title")
       document.getElementById("main-heading").text() shouldBe Messages("page.shareDetails.totalAmountRaised.heading")
       document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.three")
-      document.body.getElementById("back-link").attr("href") shouldEqual routes.NominalValueOfSharesController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual routes.NumberOfSharesController.show().url
       document.getElementById("label-amount").select("span").hasClass("visuallyhidden") shouldBe true
       document.getElementById("label-amount").select(".visuallyhidden").text() shouldBe Messages("page.shareDetails.totalAmountRaised.heading")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
@@ -68,7 +68,7 @@ class TotalAmountRaisedSpec extends ViewSpec {
       document.title() shouldBe Messages("page.shareDetails.totalAmountRaised.title")
       document.getElementById("main-heading").text() shouldBe Messages("page.shareDetails.totalAmountRaised.heading")
       document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.three")
-      document.body.getElementById("back-link").attr("href") shouldEqual routes.NominalValueOfSharesController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual routes.NumberOfSharesController.show().url
       document.getElementById("label-amount").select("span").hasClass("visuallyhidden") shouldBe true
       document.getElementById("label-amount").select(".visuallyhidden").text() shouldBe Messages("page.shareDetails.totalAmountRaised.heading")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")

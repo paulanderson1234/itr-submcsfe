@@ -46,13 +46,14 @@ class SEISAnswersModelSpec extends UnitSpec with MockitoSugar {
       .thenReturn(Future.successful(validCompany))
     when(mockSchemes.validate)
       .thenReturn(validSchemes)
-    when(mockShares.validate(Matchers.any(), Matchers.any(), Matchers.any(), Matchers.any())(Matchers.any()))
+    when(mockShares.validateSeis(Matchers.any(), Matchers.any(), Matchers.any(), Matchers.any())(Matchers.any()))
       .thenReturn(Future.successful(validShares))
     when(mockInvestors.validate)
       .thenReturn(validInvestors)
 
+    //TODO: Mock one for EIS models populated too
     ComplianceStatementAnswersModel(mockCompany, mockSchemes, mockShares, mockInvestors, mock[ContactDetailsAnswersModel], mock[SupportingDocumentsUploadModel],
-      mock[SchemeTypesModel])
+      mock[SchemeTypesModel], None, None, CostsAnswerModel(None, None),None, None, None, None)
   }
 
   "Calling .validate on SEISAnswersModel" should {

@@ -57,14 +57,14 @@ object TAVCShortLivedCache extends ShortLivedCache {
 }
 
 object WhitelistFilter extends AkamaiWhitelistFilter
-  with RunMode with MicroserviceFilterSupport{
 
+  with RunMode with MicroserviceFilterSupport{
   //implicit val system = ActorSystem("crf")
   //implicit def mat: Materializer = ActorMaterializer()
 
   override def whitelist: Seq[String] = FrontendAppConfig.whitelist
 
   override def excludedPaths: Seq[Call] = { FrontendAppConfig.whitelistExcluded.map { path =>  Call("GET", path) } }
-  override def destination: Call = Call("GET", "https://www.tax.service.gov.uk/shutter/investment-tax-relief-cs")
+      override def destination: Call = Call("GET", "https://www.tax.service.gov.uk/shutter/investment-tax-relief-cs")
 }
 

@@ -60,7 +60,7 @@ object Transformers {
     case value: Int => NumberFormat.getNumberInstance.format(value)
     case value: Long => NumberFormat.getNumberInstance.format(value)
     case value: BigDecimal => NumberFormat.getNumberInstance.format(value)
-    case _ => "N/A"
+    case _ => Constants.notApplicable
   }
 
 
@@ -74,9 +74,14 @@ object Transformers {
       Option(contactDetails.email)).flatten
   }
 
+  val penceSuffix = "00"
+  def getPenceSuffix(amount:String): String ={
+    if (amount.matches("[0]+")) amount else amount.concat(penceSuffix)
+  }
+
   def poundToPence(pounds: Either[String, Int]): String = {
     pounds match {
-      case Left(poundsMatch) => poundsMatch ++ "00"
+      case Left(poundsMatch) => getPenceSuffix(poundsMatch)
       case Right(poundsMatch) => (poundsMatch * 100).toString
     }
   }

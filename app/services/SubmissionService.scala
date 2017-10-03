@@ -17,28 +17,27 @@
 package services
 
 import auth.TAVCUser
-import connectors.{S4LConnector, SubmissionConnector}
+import connectors.SubmissionConnector
 import models.submission.SubmissionDetailsModel
 import play.api.Logger
 import play.api.libs.json.{JsError, JsSuccess}
 import uk.gov.hmrc.play.http.HeaderCarrier
 
 import scala.concurrent.ExecutionContext.Implicits.global
-
 import scala.concurrent.Future
 
 trait SubmissionService {
 
   val submissionConnector: SubmissionConnector
 
-  def getEtmpSubmissionDetails(tavcRef: String)(implicit hc: HeaderCarrier, user: TAVCUser): Future[Option[SubmissionDetailsModel]] = {
-    submissionConnector.getAASubmissionDetails(tavcRef) map {
+  def getEtmpReturnsSummary(tavcRef: String)(implicit hc: HeaderCarrier, user: TAVCUser): Future[Option[SubmissionDetailsModel]] = {
+    submissionConnector.getReturnsSummary(tavcRef) map {
       submissionDetails =>
         submissionDetails.json.validate[SubmissionDetailsModel] match {
           case data: JsSuccess[SubmissionDetailsModel] =>
             Some(data.value)
           case e: JsError =>
-            Logger.warn(s"[SubmissionService][getEtmpSubmissionDetails] - Failed to parse JSON response. Errors=${e.errors}")
+            Logger.warn(s"[SubmissionService][getEtmpReturnsSummary] - Failed to parse JSON response. Errors=${e.errors}")
             None
         }
     }

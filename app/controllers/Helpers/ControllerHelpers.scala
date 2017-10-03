@@ -62,7 +62,7 @@ trait ControllerHelpers {
 
       if (businessActivity.nonEmpty) {
         businessActivity.get.isQualifyBusinessActivity match {
-          case Constants.qualifyPrepareToTrade => Future.successful(tradeStartDateStarted)
+          case Constants.qualifyTrade => Future.successful(tradeStartDateStarted)
           case Constants.qualifyResearchAndDevelopment => if (researchDateStarted.nonEmpty)
             Future.successful(
               Some(HasInvestmentTradeStartedModel(researchDateStarted.get.hasStartedResearch, researchDateStarted.get.researchStartDay,

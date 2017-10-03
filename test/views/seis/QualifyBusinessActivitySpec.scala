@@ -48,7 +48,7 @@ class QualifyBusinessActivitySpec extends ViewSpec {
 
     "Verify whether the company is qualified for the trading process" in new SEISSetup {
       val document: Document = {
-        setupMocks(Some(qualifyPrepareToTrade))
+        setupMocks(Some(qualifyTrade))
         val result = TestController.show.apply(authorisedFakeRequest)
         Jsoup.parse(contentAsString(result))
       }
@@ -56,7 +56,7 @@ class QualifyBusinessActivitySpec extends ViewSpec {
       document.getElementById("main-heading").text() shouldBe Messages("page.companyDetails.qualifyBusinessActivity.heading")
       document.getElementById("main-heading").hasClass("heading-xlarge") shouldBe true
       document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.one")
-      document.getElementById("isQualifyBusinessActivity-preparing_to_tradeLabel").text() shouldBe Messages("page.companyDetails.qualifyBusinessActivity.bullet.one")
+      document.getElementById("isQualifyBusinessActivity-tradeLabel").text() shouldBe Messages("page.companyDetails.qualifyBusinessActivity.bullet.one")
       document.getElementById("isQualifyBusinessActivity-research_and_developmentLabel").text() shouldBe Messages("page.companyDetails.qualifyBusinessActivity.bullet.two")
       document.body.getElementById("back-link").attr("href") shouldEqual controllers.seis.routes.DateOfIncorporationController.show().url
       document.body.getElementById("help").text shouldBe Messages("page.companyDetails.qualifyBusinessActivity.help.heading")
@@ -79,7 +79,7 @@ class QualifyBusinessActivitySpec extends ViewSpec {
       document.getElementById("main-heading").text() shouldBe Messages("page.companyDetails.qualifyBusinessActivity.heading")
       document.getElementById("main-heading").hasClass("heading-xlarge") shouldBe true
       document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.one")
-      document.getElementById("isQualifyBusinessActivity-preparing_to_tradeLabel").text() shouldBe Messages("page.companyDetails.qualifyBusinessActivity.bullet.one")
+      document.getElementById("isQualifyBusinessActivity-tradeLabel").text() shouldBe Messages("page.companyDetails.qualifyBusinessActivity.bullet.one")
       document.getElementById("isQualifyBusinessActivity-research_and_developmentLabel").text() shouldBe Messages("page.companyDetails.qualifyBusinessActivity.bullet.two")
       document.body.getElementById("back-link").attr("href") shouldEqual controllers.seis.routes.DateOfIncorporationController.show().url
       document.body.getElementById("help").text shouldBe Messages("page.companyDetails.qualifyBusinessActivity.help.heading")

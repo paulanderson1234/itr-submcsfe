@@ -25,9 +25,9 @@ case class PreviousShareHoldingModel(investorShareIssueDateModel: Option[Investo
                                      previousShareHoldingDescriptionModel: Option[PreviousShareHoldingDescriptionModel] = None,
                                      processingId: Option[Int] = None, investorProcessingId: Option[Int] = None){
 
-  /** Validates that all PreviousShareHolding fields exist**/
-  def validate: Boolean = investorShareIssueDateModel.isDefined && numberOfPreviouslyIssuedSharesModel.isDefined &&
-                          previousShareHoldingNominalValueModel.isDefined && previousShareHoldingDescriptionModel.isDefined
+  /** Validates that all PreviousShareHolding fields exist. previousShareHoldingNominalValueModel bypassed so not included in validate**/
+  def validate: Boolean = investorShareIssueDateModel.isDefined && numberOfPreviouslyIssuedSharesModel.isDefined  &&
+    previousShareHoldingDescriptionModel.isDefined //&& previousShareHoldingNominalValueModel.isDefined
 }
 
 object PreviousShareHoldingModel extends DateFormatter with CostFormatter{

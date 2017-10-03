@@ -101,9 +101,6 @@ POST       /delete-previous-scheme                  controllers.eis.DeletePrevio
 GET        /acknowledgement                         controllers.eis.AcknowledgementController.show
 POST       /acknowledgement                         controllers.eis.AcknowledgementController.submit
 
-GET        /attachments-acknowledgement             controllers.eis.AttachmentsAcknowledgementController.show
-POST       /attachments-acknowledgement             controllers.eis.AttachmentsAcknowledgementController.submit
-
 GET       /lifetime-allowance-exceeded-error        controllers.eis.LifetimeAllowanceExceededErrorController.show
 POST      /lifetime-allowance-exceeded-error        controllers.eis.LifetimeAllowanceExceededErrorController.submit
 
@@ -221,7 +218,8 @@ GET        /nominal-value-of-shares               controllers.eis.NominalValueOf
 POST       /nominal-value-of-shares               controllers.eis.NominalValueOfSharesController.submit
 
 GET        /share-description                     controllers.eis.ShareDescriptionController.show
-POST       /share-description                     controllers.eis.ShareDescriptionController.submit
+#POST       /share-description                     controllers.eis.ShareDescriptionController.submit
+POST       /share-description                     controllers.eis.ShareDescriptionController.submit(shareIssueDate:String)
 
 GET       /amount-shares-repayment/:id                controllers.eis.AmountSharesRepaymentController.show(id: Int)
 POST      /amount-shares-repayment                controllers.eis.AmountSharesRepaymentController.submit

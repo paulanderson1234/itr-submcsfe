@@ -38,8 +38,7 @@ trait ResearchStartDateErrorController extends FrontendController with Authorise
 
   override val acceptedFlows = Seq(Seq(EIS),Seq(VCT),Seq(EIS,VCT))
 
-  val show = 
-    AuthorisedAndEnrolled.async { implicit user => implicit request =>
+  val show = AuthorisedAndEnrolled.async { implicit user => implicit request =>
 	  Future.successful(Ok(ResearchStartDateError()))
     }
   

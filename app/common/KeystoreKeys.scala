@@ -143,6 +143,9 @@ trait KeystoreKeys {
   //application in progress key
   val applicationInProgress: String = "applicationInProgress"
 
+  // turnover API Check
+  val turnoverAPiCheckPassed: String = "api:turnoverAPiCheck"
+
   //scheme selection
   val selectedSchemes: String = "selectedScheme"
 

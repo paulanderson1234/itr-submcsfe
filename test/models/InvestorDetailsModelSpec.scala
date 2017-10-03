@@ -101,12 +101,15 @@ class InvestorDetailsModelSpec extends BaseSpec{
       "the investor details is missing the share holding share issue date" in {
         invalidMissingShareIssueDate.validate shouldBe false
       }
+
+      // NOTE: The follwing two pages are now bypassed and so should not fail validation
       "the investor details is missing the share holding number of previously issued shares" in {
         invalidMissingNumberOfPreviouslyIssuedShares.validate shouldBe false
       }
       "the investor details is missing the share holing nominal value" in {
-        invalidMissingNominalValue.validate shouldBe false
+        invalidMissingNominalValue.validate shouldBe true
       }
+
       "the investor details is missing the share holding share description" in {
         invalidMissingShareDescription.validate shouldBe false
       }
