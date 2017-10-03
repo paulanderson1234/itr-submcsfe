@@ -87,13 +87,13 @@ trait ControllerHelpers {
   def routeToScheme(schemeTypesModel: SchemeTypesModel)(implicit request: Request[AnyContent]): String = {
     schemeTypesModel match {
       //EIS Flow
-      case SchemeTypesModel(true, false, false, false) => controllers.eis.routes.NatureOfBusinessController.show().url
+      case SchemeTypesModel(true, false, false, false) => controllers.eis.routes.InitialDeclarationController.show().url
       //SEIS Flow
-      case SchemeTypesModel(false, true, false, false) => controllers.seis.routes.NatureOfBusinessController.show().url
+      case SchemeTypesModel(false, true, false, false) => controllers.seis.routes.InitialDeclarationController.show().url
       //VCT Flow
-      case SchemeTypesModel(false, false, false, true) => controllers.eis.routes.NatureOfBusinessController.show().url
+      case SchemeTypesModel(false, false, false, true) => controllers.eis.routes.InitialDeclarationController.show().url
       //EIS VCT Flow
-      case SchemeTypesModel(true, false, false, true) => controllers.eis.routes.NatureOfBusinessController.show().url
+      case SchemeTypesModel(true, false, false, true) => controllers.eis.routes.InitialDeclarationController.show().url
       //Assume EIS
       case _ => controllers.eis.routes.NatureOfBusinessController.show().url
     }
@@ -102,13 +102,13 @@ trait ControllerHelpers {
   def schemeDescriptionFromTypes(schemeTypesModel: Option[SchemeTypesModel])(implicit request: Request[AnyContent], messages: Messages): String = {
     schemeTypesModel match {
       //EIS Flow
-      case Some(SchemeTypesModel(true, false, false, false)) => Messages("page.introduction.hub.existing.advanced.assurance.type")
+      case Some(SchemeTypesModel(true, false, false, false)) => Messages("page.introduction.hub.existing.compliance.statement.type")
       //SEIS Flow
-      case Some(SchemeTypesModel(false, true, false, false)) => Messages("page.introduction.hub.existing.seis.type")
+      case Some(SchemeTypesModel(false, true, false, false)) => Messages("page.introduction.hub.existing.compliance.statement.seis.type")
       //Assume EIS
-      case Some(_) => Messages("page.introduction.hub.existing.advanced.assurance.type")
+      case Some(_) => Messages("page.introduction.hub.existing.compliance.statement.type")
       //Assume EIS
-      case None => Messages("page.introduction.hub.existing.advanced.assurance.type")
+      case None => Messages("page.introduction.hub.existing.compliance.statement.type")
     }
   }
 

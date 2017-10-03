@@ -1,0 +1,41 @@
+@import common.Constants
+@import views.html.helpers.backButton
+@import uk.gov.hmrc.play.views.html.helpers.form
+
+@()(implicit request: Request[_], messages: Messages)
+
+@main_template(title = Messages("page.initial.declaration.title"), bodyClasses = None) {
+
+    @backButton(controllers.routes.ApplicationHubController.show().url)
+
+    <h1 class="heading-xlarge" id="main-heading">@Messages("page.initial.declaration.heading")</h1>
+
+    <div class="form-group">
+        <p class="lede" id="description">@Messages("page.initial.declaration.description")</p>
+    </div>
+
+    <div class="form-group">
+        <ul class="list list-bullet">
+            <li id="help-bullet-one">@Messages("page.initial.declaration.description.bullet.one") <a href="@controllers.seis.routes.TermsAndConditionsController.show()" target="_blank">@Messages("page.initial.declaration.description.bullet.two.seis")</a></li>
+            <li id="help-bullet-three">@Messages("page.initial.declaration.description.bullet.three")</li>
+        </ul>
+    </div>
+
+    <div id="warning" class="form-group">
+        <h2 id="warningMessage" class="important-notice">
+            @Messages("page.declaration.warning")
+        </h2>
+    </div>
+
+
+    @form(action = controllers.seis.routes.NatureOfBusinessController.show()) {
+        <div class="form-group">
+            <button class="btn button" type="submit" id="next">@Messages("page.initial.declaration.submit")</button>
+        </div>
+    }
+
+    <div class="form-group">
+       <a id="do-not-agree" href="@controllers.routes.ApplicationHubController.show()">@Messages("page.declaration.doNotAgree")</a>
+    </div>
+
+}

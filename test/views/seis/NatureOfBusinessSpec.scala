@@ -46,7 +46,7 @@ class NatureOfBusinessSpec extends ViewSpec {
       document.getElementById("bullet-two").text() shouldBe Messages("page.companyDetails.natureofbusiness.bullet.two")
       document.getElementById("bullet-three").text() shouldBe Messages("page.companyDetails.natureofbusiness.bullet.three")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
-      document.body.getElementById("back-link").attr("href") shouldEqual controllers.routes.ApplicationHubController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual controllers.seis.routes.InitialDeclarationController.show().url
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.one")
       document.select("input").attr("maxLength") shouldBe Constants.shortTextLimit.toString
       document.select("button").attr("type") shouldBe "submit"
@@ -71,7 +71,7 @@ class NatureOfBusinessSpec extends ViewSpec {
       document.getElementById("bullet-two").text() shouldBe Messages("page.companyDetails.natureofbusiness.bullet.two")
       document.getElementById("bullet-three").text() shouldBe Messages("page.companyDetails.natureofbusiness.bullet.three")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
-      document.body.getElementById("back-link").attr("href") shouldEqual controllers.routes.ApplicationHubController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual controllers.seis.routes.InitialDeclarationController.show().url
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.one")
       document.select("input").attr("maxLength") shouldBe Constants.shortTextLimit.toString
       document.select("button").attr("type") shouldBe "submit"
