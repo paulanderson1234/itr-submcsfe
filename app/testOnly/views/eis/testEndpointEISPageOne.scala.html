@@ -2,11 +2,22 @@
 @import testOnly.models.TestPreviousSchemesModel
 @import uk.gov.hmrc.play.views.html.helpers.form
 @import common.Constants
-@import views.html.helpers.{externalLink,formHint, formInputRadioGroup, backButtonWithProgress, input, inputWithCurrencySymbol, formInlineDateInput, hiddenField, errorSummary, formHiddenYesNoRadioNoError, textArea, dropdown}
+@import views.html.helpers.{externalLink,formHint, formInputRadioGroup, backButtonWithProgress, input, inputWithCurrencySymbol, formInlineDateInput, hiddenField, errorSummary, formHiddenYesNoRadioNoError, formShowYesNoRadioContent, textArea, dropdown}
 
-@(natureOfBusinessForm: Form[NatureOfBusinessModel],dateOfIncorporationForm: Form[DateOfIncorporationModel], commercialSaleForm: Form[CommercialSaleModel],
-  isKnowledgeIntensiveForm: Form[IsKnowledgeIntensiveModel], testOperatingCostsForm: Form[OperatingCostsModel], percentageStaffWithMastersForm: Form[PercentageStaffWithMastersModel],
-  tenYearPlanForm: Form[TenYearPlanModel], hadPreviousRFIForm: Form[HadPreviousRFIModel], testPreviousSchemesForm: Form[TestPreviousSchemesModel], previousSchemesSize: Int, hadOtherInvestmentsForm: Form[HadOtherInvestmentsModel])(implicit request: Request[_], messages: Messages)
+@(natureOfBusinessForm: Form[NatureOfBusinessModel],
+  dateOfIncorporationForm: Form[DateOfIncorporationModel],
+  qualifyBusinessActivityForm: Form[QualifyBusinessActivityModel],
+  hasInvestmentTradeStartedForm: Form[HasInvestmentTradeStartedModel],
+  researchStartDateForm: Form[ResearchStartDateModel],
+  commercialSaleForm: Form[CommercialSaleModel],
+  shareIssueDateForm: Form[ShareIssueDateModel],
+  grossAssetsForm: Form[GrossAssetsModel],
+  grossAssetsAfterIssueForm: Form[GrossAssetsAfterIssueModel],
+  isCompanyKnowledgeIntensiveForm: Form[IsCompanyKnowledgeIntensiveModel],
+  isKnowledgeIntensiveForm: Form[IsKnowledgeIntensiveModel],
+  testOperatingCostsForm: Form[OperatingCostsModel],
+  percentageStaffWithMastersForm: Form[PercentageStaffWithMastersModel],
+  tenYearPlanForm: Form[TenYearPlanModel])(implicit request: Request[_], messages: Messages)
 @main_template(Messages("page.test.page-one.title")) {
 <div class="grid-row">
 
@@ -34,6 +45,49 @@
         true, Some(Messages("common.date.hint.example")), None)
     </div>
 
+    <h2>What will the money your company has raised be used for?</h2>
+    <div class="form-group">
+        @formInputRadioGroup(
+        field = qualifyBusinessActivityForm("isQualifyBusinessActivity"),
+        Seq(
+        Constants.qualifyPrepareToTrade -> Messages("page.companyDetails.qualifyBusinessActivity.bullet.one"),
+        Constants.qualifyResearchAndDevelopment -> Messages("page.companyDetails.qualifyBusinessActivity.bullet.two")),
+        '_legend -> Messages("page.companyDetails.qualifyBusinessActivity.legend"),
+        '_legendClass -> "visuallyhidden",
+        '_labelAfter -> true,
+        '_labelClass -> "block-label",
+        '_legendID -> "isQualifyBusinessActivity",
+        '_groupClass -> "inline"
+        )
+    </div>
+
+    <h2>Has Investment Trade Started</h2>
+    <div class="form-group">
+        @formShowYesNoRadioContent(
+        hasInvestmentTradeStartedForm,
+        "hasInvestmentTradeStarted",
+        Messages("page.companyDetails.HasInvestmentTradeStarted.question.hint"),
+        formInlineDateInput(hasInvestmentTradeStartedForm,"hasInvestmentTradeStarted",Some(Messages("page.companyDetails.HasInvestmentTradeStarted.question.hint")),
+        false, Some(Messages("common.date.hint.example")), None),
+        None,
+        Some("visuallyhidden")
+        )
+    </div>
+
+    <h2>Research Started Date</h2>
+    <div class="form-group">
+        @formShowYesNoRadioContent(
+        researchStartDateForm,
+        "hasStartedResearch",
+        Messages("page.companyDetails.researchStartDate.heading"),
+        formInlineDateInput(researchStartDateForm, "researchStart",
+        Some(Messages("page.companyDetails.researchStartDate.question")), false,
+        Some(Messages("common.date.hint.example")), None),
+        None,
+        Some("visuallyhidden")
+        )
+    </div>
+
     <h2>First Commercial Sale</h2>
     <div class="form-group">
         @formInputRadioGroup(
@@ -52,7 +106,44 @@
         true, Some(Messages("page.companyDetails.CommercialSale.question.hint")), None)
     </div>
 
+    <h2>Share Issue Date</h2>
+    <div class="form-group">
+        @formInlineDateInput(shareIssueDateForm, "shareIssue", Some(Messages("page.companyDetails.ShareIssueDate.legend")),
+        true, Some(Messages("common.date.hint.example")), None)
+    </div>
+
+    <h2>Gross Assets Before and After</h2>
+    <div class="form-group">
+        @inputWithCurrencySymbol(
+        grossAssetsForm("grossAmount"),
+        '_divClass -> "form-label",
+        '_labelId -> "label-amount",
+        '_label -> Messages("page.grossAssets.amount.heading"),
+        '_labelTextClass -> "visuallyhidden",
+        '_inputClass -> "input--no-spinner input--left-padding",
+        '_type -> "text",
+        '_maxlength -> "9",
+        'id -> "amount"
+        )
+    </div>
+
     <h2>Is your company KI?</h2>
+    <div class="form-group">
+        @formInputRadioGroup(
+        field = isCompanyKnowledgeIntensiveForm("isCompanyKnowledgeIntensive"),
+        Seq(
+        Constants.StandardRadioButtonYesValue->Messages("common.radioYesLabel"),
+        Constants.StandardRadioButtonNoValue->Messages("common.radioNoLabel")),
+        '_legend -> Messages("page.companyDetails.IsCompanyKnowledgeIntensive.heading"),
+        '_legendClass -> "visuallyhidden",
+        '_labelAfter -> true,
+        '_labelClass -> "block-label",
+        '_groupClass -> "inline"
+        )
+    </div>
+
+
+    <h2>Applying as KI?</h2>
     <div class="form-group">
         @formInputRadioGroup(
         field = isKnowledgeIntensiveForm("isKnowledgeIntensive"),
@@ -66,6 +157,7 @@
         '_groupClass -> "inline"
         )
     </div>
+
 
     <h2>Operating Costs</h2>
     <table>
@@ -237,122 +329,7 @@
         Some("visuallyhidden")
         )
     </div>
-    <h2>Used Investment Scheme Before</h2>
-    <div class="form-group">
-        @formInputRadioGroup(
-        field = hadPreviousRFIForm("hadPreviousRFI"),
-        Seq(
-        Constants.StandardRadioButtonYesValue -> Messages("common.radioYesLabel"),
-        Constants.StandardRadioButtonNoValue -> Messages("common.radioNoLabel")),
-        '_legend -> Messages("page.previousInvestment.hadPreviousRFI.heading"),
-        '_legendClass -> "visuallyhidden",
-        '_labelAfter -> true,
-        '_labelClass -> "block-label",
-        '_legendID -> "hadPreviousRFI",
-        '_groupClass -> "inline"
-        )
-    </div>
 
-    <h2>Had other previous investments Before</h2>
-    <div class="form-group">
-        @formInputRadioGroup(
-        field = hadOtherInvestmentsForm("hadOtherInvestments"),
-        Seq(
-        Constants.StandardRadioButtonYesValue -> Messages("common.radioYesLabel"),
-        Constants.StandardRadioButtonNoValue -> Messages("common.radioNoLabel")),
-        '_legend -> Messages("page.previousInvestment.hadOtherInvestments.heading"),
-        '_legendClass -> "visuallyhidden",
-        '_labelAfter -> true,
-        '_labelClass -> "block-label",
-        '_legendID -> "hadOtherInvestments",
-        '_groupClass -> "inline"
-        )
-    </div>
-
-    <h2>Add Previous Scheme</h2>
-
-    @for(previousScheme <- 0 to previousSchemesSize - 1) {
-        <div class="form-group">
-            <h3>Scheme @(previousScheme + 1)</h3>
-            <div class="form-group">
-                @formInputRadioGroup(
-                field = testPreviousSchemesForm(s"testPreviousSchemes[$previousScheme].schemeTypeDesc"),
-                Seq(
-                Constants.schemeTypeEis->Messages("page.previousInvestment.schemeType.eis"),
-                Constants.schemeTypeSeis->Messages("page.previousInvestment.schemeType.seis"),
-                Constants.schemeTypeSitr->Messages("page.previousInvestment.schemeType.sitr"),
-                Constants.schemeTypeVct->Messages("page.previousInvestment.schemeType.vct"),
-                Constants.schemeTypeOther->Messages("page.previousInvestment.schemeType.other")),
-                '_legend -> Messages("page.investment.PreviousScheme.schemeType"),
-                '_legendClass -> "heading-small",
-                '_legendID -> "scheme-type",
-                '_labelAfter -> true,
-                '_labelClass -> "block-label"
-                )
-            </div>
-
-            <div class="panel-indent form-group"  id="other-scheme">
-                @input(
-                testPreviousSchemesForm(s"testPreviousSchemes[$previousScheme].previousSchemeOtherSchemeName"),
-                '_divClass -> "form-label",
-                '_labelId -> "label-other-scheme",
-                '_hintId -> "label-other-scheme-hint",
-                '_label -> Messages("page.investment.PreviousScheme.otherSchemeName.label"),
-                '_labelTextClass -> "heading-small block",
-                '_inputHint -> "",
-                '_inputClass -> "",
-                '_type -> "text",
-                '_maxlength -> "50",
-                'id -> "previousSchemeOtherSchemeName"
-                )
-
-            </div>
-            <div class="form-group"></div>
-
-            <div class="form-group divider--top--thick">
-                @inputWithCurrencySymbol(
-                testPreviousSchemesForm(s"testPreviousSchemes[$previousScheme].previousSchemeInvestmentAmount"),
-                '_divClass -> "form-label",
-                '_labelId -> "label-amount",
-                '_hintId -> "label-amount-hint",
-                '_label -> Messages("page.investment.PreviousScheme.investmentAmount"),
-                '_labelTextClass -> "heading-small block",
-                '_inputHint -> "",
-                '_inputClass -> "input--normal input--no-spinner input--left-padding",
-                '_type -> "text",
-                '_maxlength -> "9",
-                'id -> "previousSchemeInvestmentAmount"
-                )
-            </div>
-
-            <div class="panel-indent" id="investment-spent">
-                @inputWithCurrencySymbol(
-                testPreviousSchemesForm(s"testPreviousSchemes[$previousScheme].previousSchemeInvestmentSpent"),
-                '_divClass -> "form-label",
-                '_labelId -> "label-amount-spent",
-                '_hintId -> "label-amount-spent-hint",
-                '_label -> Messages("page.previousInvestment.amountSpent.label"),
-                '_labelTextClass -> "heading-small block",
-                '_inputHint -> "",
-                '_inputClass -> "input--normal input--no-spinner input--left-padding",
-                '_type -> "text",
-                '_maxlength -> "9",
-                'id -> "previousSchemeInvestmentSpent"
-                )
-            </div>
-            <div class="form-group"></div>
-
-            <div class="form-group divider--top--thick"></div>
-
-            @formInlineDateInput(testPreviousSchemesForm,s"testPreviousSchemes[$previousScheme].previousSchemeInvestment",
-            Some(Messages("page.previousInvestment.reviewPreviousSchemes.dateOfShareIssue")),
-            false, Some(Messages("common.date.hint.example")), Some("heading-small"))
-
-            <div>
-                <input type="hidden" name="testPreviousSchemes[@previousScheme].previousSchemeProcessingId" id="testPreviousSchemes[@previousScheme].previousSchemeProcessingId" value="@{previousScheme + 1}" />
-            </div>
-        </div>
-    }
 
 
     <div class="form-group">
@@ -364,7 +341,7 @@
             @Messages("page.test.clear-cache.button")
         </a>
 
-        <a class="btn button" id="page-two" href="@testOnly.controllers.eis.routes.TestEndpointEISController.showPageTwo()">
+        <a class="btn button" id="page-two" href="@testOnly.controllers.eis.routes.TestEndpointEISController.showPageTwo(None)">
             @Messages("page.test.page-two.button")
         </a>
 

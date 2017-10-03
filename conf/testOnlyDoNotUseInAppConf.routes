@@ -12,10 +12,10 @@
 GET        /investment-tax-relief-cs/test-only/clear-cache                                 testOnly.controllers.ClearCacheController.clearCache
 
 #eis
-GET        /investment-tax-relief-cs/test-only/test-endpoint/eis/page-1                        testOnly.controllers.eis.TestEndpointEISController.showPageOne(schemes: Option[Int])
+GET        /investment-tax-relief-cs/test-only/test-endpoint/eis/page-1                        testOnly.controllers.eis.TestEndpointEISController.showPageOne
 POST       /investment-tax-relief-cs/test-only/test-endpoint/eis/page-1                        testOnly.controllers.eis.TestEndpointEISController.submitPageOne
 
-GET        /investment-tax-relief-cs/test-only/test-endpoint/eis/page-2                        testOnly.controllers.eis.TestEndpointEISController.showPageTwo
+GET        /investment-tax-relief-cs/test-only/test-endpoint/eis/page-2                        testOnly.controllers.eis.TestEndpointEISController.showPageTwo(schemes: Option[Int])
 POST       /investment-tax-relief-cs/test-only/test-endpoint/eis/page-2                        testOnly.controllers.eis.TestEndpointEISController.submitPageTwo
 
 #seis
