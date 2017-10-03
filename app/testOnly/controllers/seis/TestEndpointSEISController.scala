@@ -171,6 +171,7 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
     saveInvestorDetails(populateIvestorTestData(investorModelOptions.value.fold("1")(_.testInvestorModeOptions)))
     saveBackLinks()
     saveSchemeType()
+    saveDoUpload()
     Future.successful(Ok(
       testOnly.views.html.seis.testEndpointSEISPageTwo(
         investorModelOptions,
@@ -250,6 +251,11 @@ trait TestEndpointSEISController extends FrontendController with AuthorisedAndEn
 
   private def saveSchemeType()(implicit hc: HeaderCarrier, user: TAVCUser) = {
     s4lConnector.saveFormData[SchemeTypesModel](KeystoreKeys.selectedSchemes, SchemeTypesModel(seis = true))
+  }
+
+  private def saveDoUpload()(implicit hc: HeaderCarrier, user: TAVCUser) = {
+    s4lConnector.saveFormData[SupportingDocumentsUploadModel](KeystoreKeys.supportingDocumentsUpload,
+      SupportingDocumentsUploadModel(Constants.StandardRadioButtonNoValue))
   }
 
   def fillForm[A](s4lKey: String, form: Form[A])(implicit hc: HeaderCarrier, user: TAVCUser, format: Format[A]): Future[Form[A]] = {
