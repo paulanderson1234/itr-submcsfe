@@ -19,10 +19,9 @@ package views.seis
 import models.submission.SubmissionResponse
 import org.jsoup.Jsoup
 import play.api.i18n.Messages
-import play.api.test.Helpers._
+import play.api.i18n.Messages.Implicits._
 import views.helpers.ViewSpec
 import views.html.seis.checkAndSubmit.Acknowledgement
-import play.api.i18n.Messages.Implicits._
 
 class AcknowledgementSpec extends ViewSpec {
 
