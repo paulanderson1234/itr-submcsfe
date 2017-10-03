@@ -17,7 +17,7 @@
 package controllers.eis
 
 import auth._
-import common.KeystoreKeys
+import common.{Constants, KeystoreKeys}
 import config.FrontendAuthConnector
 import connectors.{EnrolmentConnector, S4LConnector, SubmissionConnector}
 import controllers.helpers.BaseSpec
@@ -28,7 +28,9 @@ import play.api.test.Helpers._
 import services.FileUploadService
 import uk.gov.hmrc.play.http.HttpResponse
 import auth.AuthEnrolledTestController.{INTERNAL_SERVER_ERROR => _, NO_CONTENT => _, OK => _, SEE_OTHER => _, _}
-import models.{ContactDetailsModel, SubmissionRequest, YourCompanyNeedModel}
+import models.investorDetails.{InvestorDetailsModel, PreviousShareHoldingModel}
+import models._
+import models.repayments.{AnySharesRepaymentModel, SharesRepaymentDetailsModel}
 import models.submission.{SchemeTypesModel, SubmissionResponse}
 
 import scala.concurrent.Future
@@ -41,6 +43,10 @@ class AcknowledgementControllerSpec extends BaseSpec {
   val submissionRequestValid = SubmissionRequest(contactValid, yourCompanyNeed)
   val submissionRequestInvalid = SubmissionRequest(contactInvalid, yourCompanyNeed)
   val submissionResponse = SubmissionResponse("2014-12-17", "FBUND09889765")
+  val turnoverCheckPassedTrue = true
+  val turnoverCheckPassedFalse = false
+
+  implicit val user = mock[TAVCUser]
 
 
   object TestController extends AcknowledgementController {
@@ -54,24 +60,9 @@ class AcknowledgementControllerSpec extends BaseSpec {
   }
 
   class SetupPageFull() {
-    setUpMocks(mockS4lConnector)
     setUpMocksRegistrationService(mockRegistrationDetailsService)
   }
 
-  class SetupPageMinimum() {
-//
-//    when(mockSubmissionConnector.submitAdvancedAssurance(Matchers.any(), Matchers.any())(Matchers.any()))
-//      .thenReturn(Future.successful(HttpResponse(OK, Some(Json.toJson(submissionResponse)))))
-    setUpMocksMinimumRequiredModels(mockS4lConnector)
-    setUpMocksRegistrationService(mockRegistrationDetailsService)
-  }
-
-  def setupMocks(): Unit = {
-//    when(mockSubmissionConnector.submitAdvancedAssurance(Matchers.any(), Matchers.any())(Matchers.any()))
-//      .thenReturn(Future.successful(HttpResponse(OK, Some(Json.toJson(submissionResponse)))))
-    when(mockS4lConnector.fetchAndGetFormData[SchemeTypesModel](Matchers.eq(KeystoreKeys.selectedSchemes))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Some(schemeTypesEIS))
-  }
 
   "AcknowledgementController" should {
     "use the correct keystore connector" in {
@@ -91,189 +82,123 @@ class AcknowledgementControllerSpec extends BaseSpec {
     }
   }
 
-  //TODO:  eis tests
-//  "Sending an Authenticated and Enrolled GET request with a session to AcknowledgementController" should {
-//    "return a 200 and delete the current application when a valid submission data is submitted" in new SetupPageFull {
-//      when(mockFileUploadService.getUploadFeatureEnabled).thenReturn(false)
-//      when(mockS4lConnector.clearCache()(Matchers.any(),Matchers.any())).thenReturn(HttpResponse(NO_CONTENT))
-//      setupMocks()
-//      mockEnrolledRequest(eisSchemeTypesModel)
-//      val result = TestController.show.apply(authorisedFakeRequest)
-//      status(result) shouldBe OK
-//    }
-//  }
-//
-//  "Sending an Authenticated and Enrolled GET request with a session to AcknowledgementController" should {
-//    "return a 200, close the file upload envelope and " +
-//      "delete the current application when a valid submission data is submitted with the file upload flag enabled" in new SetupPageFull {
-//      when(mockFileUploadService.getUploadFeatureEnabled).thenReturn(true)
-//      when(mockFileUploadService.closeEnvelope(Matchers.any(), Matchers.any())(Matchers.any(),Matchers.any(), Matchers.any())).thenReturn(Future(HttpResponse(OK)))
-//      when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.envelopeId))
-//        (Matchers.any(), Matchers.any(),Matchers.any())).thenReturn(Future.successful(envelopeId))
-//      when(mockS4lConnector.clearCache()(Matchers.any(),Matchers.any())).thenReturn(HttpResponse(NO_CONTENT))
-//      setupMocks()
-//      mockEnrolledRequest(eisSchemeTypesModel)
-//      val result = TestController.show.apply(authorisedFakeRequest)
-//      status(result) shouldBe OK
-//    }
-//  }
-//
-//  "Sending an Authenticated and Enrolled GET request with a session to AcknowledgementController" should {
-//    "return a 200 and delete the current application when a valid submission data is submitted with minimum expected data" in new SetupPageMinimum {
-//      when(mockFileUploadService.getUploadFeatureEnabled).thenReturn(false)
-//      when(mockS4lConnector.clearCache()(Matchers.any(),Matchers.any())).thenReturn(HttpResponse(NO_CONTENT))
-//      setupMocks()
-//      mockEnrolledRequest(eisSchemeTypesModel)
-//      val result = TestController.show.apply(authorisedFakeRequest)
-//      status(result) shouldBe OK
-//    }
-//  }
-//
-//  "Sending an Authenticated and Enrolled GET request with a session to AcknowledgementController" should {
-//    "return a 303 redirect if mandatory KiProcessingModel is missing from keystore" in {
-//      setUpMocksTestMinimumRequiredModels(mockS4lConnector, mockRegistrationDetailsService, kiModel = None,
-//        Some(natureOfBusinessValid), Some(contactValid), Some(totalAmountRaisedValid),
-//        Some(investmentGrowValid), Some(dateOfIncorporationValid), Some(fullCorrespondenceAddress), true)
-//      setupMocks()
-//      mockEnrolledRequest(eisSchemeTypesModel)
-//      val result = TestController.show.apply(authorisedFakeRequest)
-//      status(result) shouldBe SEE_OTHER
-//      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
-//    }
-//  }
-//
-//  "Sending an Authenticated and Enrolled GET request with a session to AcknowledgementController" should {
-//    "return a 303 redirect if mandatory NatureOfBusinessModel is missing from keystore" in {
-//
-//      setUpMocksTestMinimumRequiredModels(mockS4lConnector, mockRegistrationDetailsService, Some(kiProcModelValid),
-//        natureBusiness = None, Some(contactValid), Some(totalAmountRaisedValid),
-//        Some(investmentGrowValid), Some(dateOfIncorporationValid), Some(fullCorrespondenceAddress), true)
-//      setupMocks()
-//      mockEnrolledRequest(eisSchemeTypesModel)
-//      val result = TestController.show.apply(authorisedFakeRequest)
-//      status(result) shouldBe SEE_OTHER
-//      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
-//    }
-//  }
-//
-//  "Sending an Authenticated and Enrolled GET request with a session to AcknowledgementController" should {
-//    "return a 303 redirect if mandatory ContactDetailsModel is missing from keystore" in {
-//
-//      setUpMocksTestMinimumRequiredModels(mockS4lConnector, mockRegistrationDetailsService, Some(kiProcModelValid),
-//        Some(natureOfBusinessValid), contactDetails = None, Some(totalAmountRaisedValid),
-//        Some(investmentGrowValid), Some(dateOfIncorporationValid), Some(fullCorrespondenceAddress), true)
-//      setupMocks()
-//      mockEnrolledRequest(eisSchemeTypesModel)
-//      val result = TestController.show.apply(authorisedFakeRequest)
-//      status(result) shouldBe SEE_OTHER
-//      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
-//    }
-//  }
-//
-//  "Sending an Authenticated and Enrolled GET request with a session to AcknowledgementController" should {
-//    "return a 303 redirect if mandatory ProposedInvestmentModel is missing from keystore" in {
-//
-//      setUpMocksTestMinimumRequiredModels(mockS4lConnector, mockRegistrationDetailsService, Some(kiProcModelValid),
-//        Some(natureOfBusinessValid), Some(contactValid), totalAmountRaised = None,
-//        Some(investmentGrowValid), Some(dateOfIncorporationValid), Some(fullCorrespondenceAddress), true)
-//      setupMocks()
-//      mockEnrolledRequest(eisSchemeTypesModel)
-//      val result = TestController.show.apply(authorisedFakeRequest)
-//      status(result) shouldBe SEE_OTHER
-//      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
-//    }
-//  }
-//
-//  "Sending an Authenticated and Enrolled GET request with a session to AcknowledgementController" should {
-//    "return a 303 redirect if mandatory InvestmentGrowModel is missing from keystore" in {
-//
-//      setUpMocksTestMinimumRequiredModels(mockS4lConnector, mockRegistrationDetailsService, Some(kiProcModelValid),
-//        Some(natureOfBusinessValid), Some(contactValid), Some(totalAmountRaisedValid),
-//        investGrow = None, Some(dateOfIncorporationValid), Some(fullCorrespondenceAddress), true)
-//      setupMocks()
-//      mockEnrolledRequest(eisSchemeTypesModel)
-//      val result = TestController.show.apply(authorisedFakeRequest)
-//      status(result) shouldBe SEE_OTHER
-//      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
-//    }
-//  }
-//
-//  "Sending an Authenticated and Enrolled GET request with a session to AcknowledgementController" should {
-//    "return a 303 redirect if mandatory DateOfIncorporationModel is missing from keystore" in {
-//
-//      setUpMocksTestMinimumRequiredModels(mockS4lConnector, mockRegistrationDetailsService, Some(kiProcModelValid),
-//        Some(natureOfBusinessValid), Some(contactValid), Some(totalAmountRaisedValid),
-//        Some(investmentGrowValid), dateIncorp = None, Some(fullCorrespondenceAddress), true)
-//      setupMocks()
-//      mockEnrolledRequest(eisSchemeTypesModel)
-//      val result = TestController.show.apply(authorisedFakeRequest)
-//      status(result) shouldBe SEE_OTHER
-//      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
-//    }
-//  }
-//
-//  "Sending an Authenticated and Enrolled GET request with a session to AcknowledgementController" should {
-//    "return a 303 redirect if mandatory AddressModel (contact address) is missing from keystore" in {
-//
-//      setUpMocksTestMinimumRequiredModels(mockS4lConnector, mockRegistrationDetailsService, Some(kiProcModelValid),
-//        Some(natureOfBusinessValid), Some(contactValid), Some(totalAmountRaisedValid),
-//        Some(investmentGrowValid), Some(dateOfIncorporationValid), contactAddress = None, true)
-//      setupMocks()
-//      mockEnrolledRequest(eisSchemeTypesModel)
-//      val result = TestController.show.apply(authorisedFakeRequest)
-//      status(result) shouldBe SEE_OTHER
-//      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
-//    }
-//  }
-//
-//  "Sending an Authenticated and Enrolled GET request with a session to AcknowledgementController" should {
-//    "return a 303 redirect if mandatory registrationDetailsModel is from registration details service" in {
-//
-//      setUpMocksTestMinimumRequiredModels(mockS4lConnector, mockRegistrationDetailsService, Some(kiProcModelValid),
-//        Some(natureOfBusinessValid), Some(contactValid), Some(totalAmountRaisedValid),
-//        Some(investmentGrowValid), Some(dateOfIncorporationValid), Some(fullCorrespondenceAddress), false)
-//      setupMocks()
-//      mockEnrolledRequest(eisSchemeTypesModel)
-//      val result = TestController.show.apply(authorisedFakeRequest)
-//      status(result) shouldBe SEE_OTHER
-//      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
-//    }
-//  }
-//
-//  "Sending an Authenticated and Enrolled GET request with a session to AcknowledgementController" should {
-//    "return a 200 if KI is set to false" in {
-//      when(mockS4lConnector.clearCache()(Matchers.any(),Matchers.any())).thenReturn(HttpResponse(NO_CONTENT))
-//      setUpMocksTestMinimumRequiredModels(mockS4lConnector, mockRegistrationDetailsService, Some(kiProcModelValidAssertNo),
-//        Some(natureOfBusinessValid), Some(contactDetailsValid), Some(totalAmountRaisedValid),
-//        Some(investmentGrowValid), Some(dateOfIncorporationValid), Some(fullCorrespondenceAddress), true)
-//      setupMocks()
-//      mockEnrolledRequest(eisSchemeTypesModel)
-//      val result = TestController.show.apply(authorisedFakeRequest)
-//      status(result) shouldBe OK
-//    }
-//  }
-//
-//  "Sending an Authenticated and Enrolled GET request with a session to AcknowledgementController" should {
-//    "return a 5xx when an invalid email is submitted" in new SetupPageFull {
-//      when(mockS4lConnector.fetchAndGetFormData[SchemeTypesModel](Matchers.eq(KeystoreKeys.selectedSchemes))
-//        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Some(schemeTypesEIS))
-//      when(mockSubmissionConnector.submitAdvancedAssurance(Matchers.any(), Matchers.any())(Matchers.any()))
-//        .thenReturn(Future.successful(HttpResponse(INTERNAL_SERVER_ERROR)))
-//      mockEnrolledRequest(eisSchemeTypesModel)
-//      val result = TestController.show.apply(authorisedFakeRequest)
-//      status(result) shouldBe INTERNAL_SERVER_ERROR
-//    }
-//  }
-//
-//  "Sending a POST request to the Acknowledgement controller when authenticated and enrolled" should {
-//    "redirect to the feedback page" in {
-//      mockEnrolledRequest(eisSchemeTypesModel)
-//      submitWithSessionAndAuth(TestController.submit)(
-//        result => {
-//          status(result) shouldBe SEE_OTHER
-//          redirectLocation(result) shouldBe Some(controllers.feedback.routes.FeedbackController.show().url)
-//        }
-//      )
-//    }
-//  }
+  val shareHoldersModelForReview = Vector(PreviousShareHoldingModel(investorShareIssueDateModel = Some(investorShareIssueDateModel1),
+    numberOfPreviouslyIssuedSharesModel = Some(numberOfPreviouslyIssuedSharesModel1),
+    previousShareHoldingNominalValueModel = Some(previousShareHoldingNominalValueModel1),
+    previousShareHoldingDescriptionModel = Some(previousShareHoldingDescriptionModel1),
+    processingId = Some(1), investorProcessingId = Some(2)))
+
+  val investorModelForReview = InvestorDetailsModel(Some(investorModel2), Some(companyOrIndividualModel2), Some(companyDetailsModel2), None,
+    Some(numberOfSharesPurchasedModel2), Some(howMuchSpentOnSharesModel2), Some(isExistingShareHolderModelYes),
+    previousShareHoldingModels = Some(shareHoldersModelForReview), processingId = Some(2))
+
+  val listOfInvestorsEmptyShareHoldings = Vector(validModelWithPrevShareHoldings.copy(previousShareHoldingModels = Some(Vector())))
+  val listOfInvestorsWithShareHoldings = Vector(investorModelForReview)
+  val listOfInvestorsMissingNumberOfPreviouslyIssuedShares = Vector(validModelWithPrevShareHoldings.copy(previousShareHoldingModels =
+    Some(Vector(PreviousShareHoldingModel(previousShareHoldingDescriptionModel = Some(previousShareHoldingDescriptionModel1), processingId = Some(1))))))
+
+  //noinspection ScalaStyle
+  def setupMocks(): Unit = {
+    when(mockS4lConnector.fetchAndGetFormData[GrossAssetsModel](Matchers.eq(KeystoreKeys.grossAssets))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(GrossAssetsModel(12345))))
+    when(mockS4lConnector.fetchAndGetFormData[FullTimeEmployeeCountModel](Matchers.eq(KeystoreKeys.fullTimeEmployeeCount))
+      (Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(Some(FullTimeEmployeeCountModel(22))))
+    when(mockS4lConnector.fetchAndGetFormData[ShareIssueDateModel](Matchers.eq(KeystoreKeys.shareIssueDate))
+      (Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(Some(shareIssuetDateModel)))
+    when(mockSubmissionConnector.submitComplianceStatement(Matchers.any(), Matchers.any(), Matchers.any())(Matchers.any()))
+      .thenReturn(Future.successful(HttpResponse(OK, Some(Json.toJson(submissionResponse)))))
+    when(mockS4lConnector.fetchAndGetFormData[TradeStartDateModel](Matchers.eq(KeystoreKeys.tradeStartDate))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Some(tradeStartDateModelYes))
+    when(mockS4lConnector.fetchAndGetFormData[SchemeTypesModel](Matchers.eq(KeystoreKeys.selectedSchemes))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Some(schemeTypesSEIS))
+    when(mockS4lConnector.fetchAndGetFormData[HadPreviousRFIModel](Matchers.eq(KeystoreKeys.hadPreviousRFI))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(hadPreviousRFIModelYes)))
+    when(mockS4lConnector.fetchAndGetFormData[HadOtherInvestmentsModel](Matchers.eq(KeystoreKeys.hadOtherInvestments))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(hadOtherInvestmentsModelYes)))
+    when(mockS4lConnector.fetchAndGetFormData[List[PreviousSchemeModel]](Matchers.eq(KeystoreKeys.previousSchemes))(Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(Some(List(PreviousSchemeModel("test", 1, Some(1), Some("Name"), Some(1), Some(2), Some(2015), Some(1))))))
+    when(mockS4lConnector.fetchAndGetFormData[ShareDescriptionModel](Matchers.eq(KeystoreKeys.shareDescription))
+      (Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(Some(shareDescriptionModel)))
+    when(mockS4lConnector.fetchAndGetFormData[NumberOfSharesModel](Matchers.eq(KeystoreKeys.numberOfShares))
+      (Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(Some(numberOfSharesModel)))
+    when(mockS4lConnector.fetchAndGetFormData[TotalAmountRaisedModel](Matchers.eq(KeystoreKeys.totalAmountRaised))
+      (Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(Some(TotalAmountRaisedModel(12345))))
+    when(mockS4lConnector.fetchAndGetFormData[TotalAmountSpentModel](Matchers.eq(KeystoreKeys.totalAmountSpent))(Matchers.any(),
+      Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(Some(TotalAmountSpentModel(12345))))
+    when(mockS4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](Matchers.eq(KeystoreKeys.investorDetails))
+      (Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(Some(listOfInvestorsWithShareHoldings)))
+    when(mockS4lConnector.fetchAndGetFormData[WasAnyValueReceivedModel](Matchers.eq(KeystoreKeys.wasAnyValueReceived))(Matchers.any(),
+      Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(Some(WasAnyValueReceivedModel(Constants.StandardRadioButtonYesValue,
+        Some("text")))))
+    when(mockS4lConnector.fetchAndGetFormData[ShareCapitalChangesModel](Matchers.eq(KeystoreKeys.shareCapitalChanges))
+      (Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(Some(ShareCapitalChangesModel(Constants.StandardRadioButtonYesValue, Some("test")))))
+    when(mockS4lConnector.fetchAndGetFormData[SupportingDocumentsUploadModel](Matchers.eq(KeystoreKeys.supportingDocumentsUpload))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(SupportingDocumentsUploadModel("No"))))
+    when(mockS4lConnector.fetchAndGetFormData[ContactDetailsModel](Matchers.eq(KeystoreKeys.contactDetails))
+      (Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(Some(contactDetailsModel)))
+    when(mockS4lConnector.fetchAndGetFormData[ConfirmCorrespondAddressModel](Matchers.eq(KeystoreKeys.confirmContactAddress))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(confirmCorrespondAddressModel)))
+    when(mockS4lConnector.fetchAndGetFormData[QualifyBusinessActivityModel](Matchers.eq(KeystoreKeys.isQualifyBusinessActivity))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(qualifyTrade)))
+    when(mockS4lConnector.fetchAndGetFormData[DateOfIncorporationModel](Matchers.eq(KeystoreKeys.dateOfIncorporation))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(dateOfIncorporationModel)))
+    when(mockS4lConnector.fetchAndGetFormData[NatureOfBusinessModel](Matchers.eq(KeystoreKeys.natureOfBusiness))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(natureOfBusinessModel)))
+    when(mockS4lConnector.fetchAndGetFormData[SubsidiariesModel](Matchers.eq(KeystoreKeys.subsidiaries))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(subsidiariesModelYes)))
+    when(mockS4lConnector.fetchAndGetFormData[TradeStartDateModel](Matchers.eq(KeystoreKeys.tradeStartDate))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(tradeStartDateModelYes)))
+    when(mockS4lConnector.fetchAndGetFormData[HasInvestmentTradeStartedModel](Matchers.eq(KeystoreKeys.hasInvestmentTradeStarted))
+      (Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(None))
+    when(mockS4lConnector.fetchAndGetFormData[ResearchStartDateModel](Matchers.eq(KeystoreKeys.researchStartDate))(Matchers.any(), Matchers.any(),
+      Matchers.any())).thenReturn(Future.successful(Some(researchStartDateModelYes)))
+    when(mockS4lConnector.fetchAndGetFormData[SeventyPercentSpentModel](Matchers.eq(KeystoreKeys.seventyPercentSpent))
+      (Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(Some(isSeventyPercentSpentModelYes)))
+    when(mockS4lConnector.fetchAndGetFormData[SchemeTypesModel](Matchers.eq(KeystoreKeys.selectedSchemes))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(schemeTypesSEIS)))
+    when(mockS4lConnector.fetchAndGetFormData[SchemeTypesModel](Matchers.eq(KeystoreKeys.selectedSchemes))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(schemeTypesSEIS)))
+    when(mockS4lConnector.fetchAndGetFormData[KiProcessingModel](Matchers.eq(KeystoreKeys.kiProcessingModel))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(trueKIModel)))
+    when(mockS4lConnector.fetchAndGetFormData[TenYearPlanModel](Matchers.eq(KeystoreKeys.tenYearPlan))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(tenYearPlanModelYes)))
+    when(mockS4lConnector.fetchAndGetFormData[NewGeographicalMarketModel](Matchers.eq(KeystoreKeys.newGeographicalMarket))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(newGeographicalMarketModelYes)))
+    when(mockS4lConnector.fetchAndGetFormData[NewProductModel](Matchers.eq(KeystoreKeys.newProduct))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(newProductMarketModelYes)))
+    when(mockS4lConnector.fetchAndGetFormData[MarketDescriptionModel](Matchers.eq(KeystoreKeys.marketDescription))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(MarketDescriptionModel("test"))))
+    when(mockS4lConnector.fetchAndGetFormData[Boolean](Matchers.eq(KeystoreKeys.turnoverAPiCheckPassed))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(turnoverCheckPassedTrue)))
+    when(mockS4lConnector.fetchAndGetFormData[AnnualTurnoverCostsModel](Matchers.eq(KeystoreKeys.turnoverCosts))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(turnoverCostsValid)))
+    when(mockS4lConnector.fetchAndGetFormData[OperatingCostsModel](Matchers.eq(KeystoreKeys.operatingCosts))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(operatingCostsValid)))
+    when(mockS4lConnector.fetchAndGetFormData[ThirtyDayRuleModel](Matchers.eq(KeystoreKeys.thirtyDayRule))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(thirtyDayRuleModelYes)))
+    when(mockS4lConnector.fetchAndGetFormData[InvestmentGrowModel](Matchers.eq(KeystoreKeys.investmentGrow))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(investmentGrowValid)))
+    when(mockS4lConnector.fetchAndGetFormData[SubsidiariesSpendingInvestmentModel](Matchers.eq(KeystoreKeys.subsidiariesSpendingInvestment))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(subsidiariesSpendingInvestmentModelNo)))
+    when(mockS4lConnector.fetchAndGetFormData[SubsidiariesNinetyOwnedModel](Matchers.eq(KeystoreKeys.subsidiariesNinetyOwned))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(subsidiariesNinetyOwnedModelYes)))
+    when(mockS4lConnector.fetchAndGetFormData[AnySharesRepaymentModel](Matchers.eq(KeystoreKeys.anySharesRepayment))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(anySharesRepaymentModelYes)))
+    when(mockS4lConnector.fetchAndGetFormData[List[SharesRepaymentDetailsModel]](Matchers.eq(KeystoreKeys.sharesRepaymentDetails))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(validSharesRepaymentDetailsVector.toList)
+    ))
+  }
+
 }

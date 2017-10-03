@@ -16,8 +16,6 @@
 
 package controllers.seis
 
-import java.util.concurrent.TimeUnit.SECONDS
-
 import auth.AuthEnrolledTestController.{INTERNAL_SERVER_ERROR => _, NO_CONTENT => _, OK => _, SEE_OTHER => _, _}
 import auth._
 import common.{Constants, KeystoreKeys}
@@ -27,7 +25,7 @@ import controllers.feedback
 import controllers.helpers.BaseSpec
 import models._
 import models.investorDetails.{InvestorDetailsModel, PreviousShareHoldingModel}
-import models.submission.{SchemeTypesModel, SubmissionResponse}
+import models.submission.{ContactDetailsAnswersModel, CostsAnswerModel, InvestorDetailsAnswersModel, ShareDetailsAnswersModel, _}
 import org.mockito.Matchers
 import org.mockito.Mockito._
 import play.api.libs.json.Json
@@ -35,8 +33,8 @@ import play.api.test.Helpers._
 import services.FileUploadService
 import uk.gov.hmrc.play.http.HttpResponse
 
-import scala.concurrent.duration.Duration
-import scala.concurrent.{Await, Future}
+
+import scala.concurrent.Future
 
 class AcknowledgementControllerSpec extends BaseSpec {
 
@@ -60,19 +58,14 @@ class AcknowledgementControllerSpec extends BaseSpec {
   }
 
   class SetupPageFull() {
-    setUpMocks(mockS4lConnector)
     setUpMocksRegistrationService(mockRegistrationDetailsService)
     when(mockS4lConnector.fetchAndGetFormData[TradeStartDateModel](Matchers.eq(KeystoreKeys.tradeStartDate))
       (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Some(tradeStartDateModelYes))
   }
 
-  class SetupPageMinimum() {
-    setUpMocksMinimumRequiredModels(mockS4lConnector)
-    setUpMocksRegistrationService(mockRegistrationDetailsService)
-  }
 
   val shareHoldersModelForReview = Vector(PreviousShareHoldingModel(investorShareIssueDateModel = Some(investorShareIssueDateModel1),
-    numberOfPreviouslyIssuedSharesModel = Some (numberOfPreviouslyIssuedSharesModel1),
+    numberOfPreviouslyIssuedSharesModel = Some(numberOfPreviouslyIssuedSharesModel1),
     previousShareHoldingNominalValueModel = Some(previousShareHoldingNominalValueModel1),
     previousShareHoldingDescriptionModel = Some(previousShareHoldingDescriptionModel1),
     processingId = Some(1), investorProcessingId = Some(2)))
@@ -81,12 +74,13 @@ class AcknowledgementControllerSpec extends BaseSpec {
     Some(numberOfSharesPurchasedModel2), Some(howMuchSpentOnSharesModel2), Some(isExistingShareHolderModelYes),
     previousShareHoldingModels = Some(shareHoldersModelForReview), processingId = Some(2))
 
-  val listOfInvestorsEmptyShareHoldings =  Vector(validModelWithPrevShareHoldings.copy(previousShareHoldingModels = Some(Vector())))
-  val listOfInvestorsWithShareHoldings =  Vector(investorModelForReview)
-  val listOfInvestorsMissingNumberOfPreviouslyIssuedShares =  Vector(validModelWithPrevShareHoldings.copy(previousShareHoldingModels =
+  val listOfInvestorsEmptyShareHoldings = Vector(validModelWithPrevShareHoldings.copy(previousShareHoldingModels = Some(Vector())))
+  val listOfInvestorsWithShareHoldings = Vector(investorModelForReview)
+  val listOfInvestorsMissingNumberOfPreviouslyIssuedShares = Vector(validModelWithPrevShareHoldings.copy(previousShareHoldingModels =
     Some(Vector(PreviousShareHoldingModel(previousShareHoldingDescriptionModel = Some(previousShareHoldingDescriptionModel1), processingId = Some(1))))))
 
-  def setupMocks(): Unit = {
+  //noinspection ScalaStyle
+  def setupSeisSubmissionMocks(): Unit = {
     when(mockS4lConnector.fetchAndGetFormData[GrossAssetsModel](Matchers.eq(KeystoreKeys.grossAssets))
       (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(GrossAssetsModel(12345))))
     when(mockS4lConnector.fetchAndGetFormData[FullTimeEmployeeCountModel](Matchers.eq(KeystoreKeys.fullTimeEmployeeCount))
@@ -105,7 +99,7 @@ class AcknowledgementControllerSpec extends BaseSpec {
       (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(hadPreviousRFIModelYes)))
     when(mockS4lConnector.fetchAndGetFormData[HadOtherInvestmentsModel](Matchers.eq(KeystoreKeys.hadOtherInvestments))
       (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(hadOtherInvestmentsModelYes)))
-    when(mockS4lConnector.fetchAndGetFormData[List[PreviousSchemeModel]](Matchers.eq(KeystoreKeys.previousSchemes))(Matchers.any(), Matchers.any(),Matchers.any()))
+    when(mockS4lConnector.fetchAndGetFormData[List[PreviousSchemeModel]](Matchers.eq(KeystoreKeys.previousSchemes))(Matchers.any(), Matchers.any(), Matchers.any()))
       .thenReturn(Future.successful(Some(List(PreviousSchemeModel("test", 1, Some(1), Some("Name"), Some(1), Some(2), Some(2015), Some(1))))))
     when(mockS4lConnector.fetchAndGetFormData[ShareDescriptionModel](Matchers.eq(KeystoreKeys.shareDescription))
       (Matchers.any(), Matchers.any(), Matchers.any()))
@@ -132,18 +126,18 @@ class AcknowledgementControllerSpec extends BaseSpec {
     when(mockS4lConnector.fetchAndGetFormData[SupportingDocumentsUploadModel](Matchers.eq(KeystoreKeys.supportingDocumentsUpload))
       (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(SupportingDocumentsUploadModel("No"))))
     when(mockS4lConnector.fetchAndGetFormData[ContactDetailsModel](Matchers.eq(KeystoreKeys.contactDetails))
-      (Matchers.any(), Matchers.any(),Matchers.any()))
+      (Matchers.any(), Matchers.any(), Matchers.any()))
       .thenReturn(Future.successful(Some(contactDetailsModel)))
     when(mockS4lConnector.fetchAndGetFormData[ConfirmCorrespondAddressModel](Matchers.eq(KeystoreKeys.confirmContactAddress))
       (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(confirmCorrespondAddressModel)))
     when(mockS4lConnector.fetchAndGetFormData[QualifyBusinessActivityModel](Matchers.eq(KeystoreKeys.isQualifyBusinessActivity))
-      (Matchers.any(), Matchers.any(),Matchers.any())).thenReturn(Future.successful(Some(qualifyTrade)))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(qualifyTrade)))
     when(mockS4lConnector.fetchAndGetFormData[DateOfIncorporationModel](Matchers.eq(KeystoreKeys.dateOfIncorporation))
-      (Matchers.any(), Matchers.any(),Matchers.any())).thenReturn(Future.successful(Some(dateOfIncorporationModel)))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(dateOfIncorporationModel)))
     when(mockS4lConnector.fetchAndGetFormData[NatureOfBusinessModel](Matchers.eq(KeystoreKeys.natureOfBusiness))
-      (Matchers.any(), Matchers.any(),Matchers.any())).thenReturn(Future.successful(Some(natureOfBusinessModel)))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(natureOfBusinessModel)))
     when(mockS4lConnector.fetchAndGetFormData[SubsidiariesModel](Matchers.eq(KeystoreKeys.subsidiaries))
-      (Matchers.any(), Matchers.any(),Matchers.any())).thenReturn(Future.successful(Some(subsidiariesModelYes)))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(subsidiariesModelYes)))
     when(mockS4lConnector.fetchAndGetFormData[TradeStartDateModel](Matchers.eq(KeystoreKeys.tradeStartDate))
       (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(tradeStartDateModelYes)))
     when(mockS4lConnector.fetchAndGetFormData[HasInvestmentTradeStartedModel](Matchers.eq(KeystoreKeys.hasInvestmentTradeStarted))
@@ -156,7 +150,67 @@ class AcknowledgementControllerSpec extends BaseSpec {
       .thenReturn(Future.successful(Some(isSeventyPercentSpentModelYes)))
     when(mockS4lConnector.fetchAndGetFormData[SchemeTypesModel](Matchers.eq(KeystoreKeys.selectedSchemes))
       (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(schemeTypesSEIS)))
+    when(mockS4lConnector.fetchAndGetFormData[AddressModel](Matchers.eq(KeystoreKeys.contactAddress))(Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(Some(fullCorrespondenceAddress)))
+
+    when(mockS4lConnector.fetchAndGetFormData[GrossAssetsAfterIssueModel](Matchers.eq(KeystoreKeys.grossAssetsAfterIssue))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
+
+    when(mockS4lConnector.fetchAndGetFormData[CommercialSaleModel](Matchers.eq(KeystoreKeys.commercialSale))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
+
+    when(mockS4lConnector.fetchAndGetFormData[TurnoverCostModel](Matchers.eq(KeystoreKeys.turnoverCosts))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
+
+    when(mockS4lConnector.fetchAndGetFormData[OperatingCostsModel](Matchers.eq(KeystoreKeys.operatingCosts))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
+
+    when(mockS4lConnector.fetchAndGetFormData[ThirtyDayRuleModel](Matchers.eq(KeystoreKeys.thirtyDayRule))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
+
+    when(mockS4lConnector.fetchAndGetFormData[InvestmentGrowModel](Matchers.eq(KeystoreKeys.investmentGrow))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
+
+    when(mockS4lConnector.fetchAndGetFormData[SubsidiariesSpendingInvestmentModel](Matchers.eq(KeystoreKeys.subsidiariesSpendingInvestment))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
+
+    when(mockS4lConnector.fetchAndGetFormData[SubsidiariesNinetyOwnedModel](Matchers.eq(KeystoreKeys.subsidiariesNinetyOwned))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
+
+    when(mockS4lConnector.fetchAndGetFormData[TenYearPlanModel](Matchers.eq(KeystoreKeys.tenYearPlan))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
+
+    when(mockS4lConnector.fetchAndGetFormData[KiProcessingModel](Matchers.eq(KeystoreKeys.kiProcessingModel))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
+
+    when(mockS4lConnector.fetchAndGetFormData[KiProcessingModel](Matchers.eq(KeystoreKeys.newGeographicalMarket))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
+
+    when(mockS4lConnector.fetchAndGetFormData[KiProcessingModel](Matchers.eq(KeystoreKeys.newProduct))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
+
+    when(mockS4lConnector.fetchAndGetFormData[KiProcessingModel](Matchers.eq(KeystoreKeys.marketDescription))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
+
+
   }
+
+  //      .thenReturn(Future.successful(Some(List(PreviousSchemeModel("test", 1, Some(1), Some("Name"), Some(1), Some(2), Some(2015), Some(1))))))
+  //TODO: this model sets EIS values to None - need to test ESI version of this too
+  val SEISAnswersModel = ComplianceStatementAnswersModel(
+    CompanyDetailsAnswersModel(natureOfBusinessModel, dateOfIncorporationModel, QualifyBusinessActivityModel(Constants.qualifyTrade),
+      hasInvestmentTradeStartedModel = None, researchStartDateModel = Some(researchStartDateModelYes), seventyPercentSpentModel = Some(isSeventyPercentSpentModelYes),
+      shareIssueDateModel = shareIssuetDateModel, grossAssetsModel = GrossAssetsModel(12345),
+      grossAssetsAfterModel = None, fullTimeEmployeeCountModel = FullTimeEmployeeCountModel(22), commercialSaleModel = None),
+    PreviousSchemesAnswersModel(hadPreviousRFIModelYes, hadOtherInvestmentsModelYes,
+      Some(List(PreviousSchemeModel("test", 1, Some(1), Some("Name"), Some(1), Some(2), Some(2015), Some(1))))),
+    ShareDetailsAnswersModel(shareDescriptionModel,
+      numberOfSharesModel, TotalAmountRaisedModel(12345), Some(TotalAmountSpentModel(12345))),
+    InvestorDetailsAnswersModel(listOfInvestorsWithShareHoldings,
+      WasAnyValueReceivedModel(Constants.StandardRadioButtonYesValue, Some("text")), ShareCapitalChangesModel(Constants.StandardRadioButtonYesValue, Some("test"))),
+    ContactDetailsAnswersModel(contactDetailsModel, fullCorrespondenceAddress),
+    SupportingDocumentsUploadModel("No"),
+    SchemeTypesModel(eis = false, seis = true), None, None, CostsAnswerModel(None, None), None, None, None, None)
 
   "AcknowledgementController" should {
     "use the correct keystore connector" in {
@@ -179,16 +233,18 @@ class AcknowledgementControllerSpec extends BaseSpec {
   "Extracting all the answers from the SEIS flow" should {
 
     "return an error if any of the calls to save for later fail" in {
-      setupMocksCs(mockS4lConnector)
+      setupSeisSubmissionMocks()
       when(mockS4lConnector.fetchAndGetFormData[NatureOfBusinessModel](Matchers.eq(KeystoreKeys.natureOfBusiness))(Matchers.any(),
         Matchers.any(), Matchers.any())).thenReturn(Future.failed(new Exception("test error")))
       when(mockS4lConnector.fetchAndGetFormData[SchemeTypesModel](Matchers.eq(KeystoreKeys.selectedSchemes))
         (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(schemeTypesSEIS)))
       intercept[Exception](await(TestController.getAnswers)).getMessage shouldBe "test error"
     }
+  }
 
+  "Extracting all the answers from the SEIS flowccc" should {
     "return a None if any of the mandatory data is missing" in {
-      setupMocksCs(mockS4lConnector)
+      setupSeisSubmissionMocks()
       when(mockS4lConnector.fetchAndGetFormData[SchemeTypesModel](Matchers.eq(KeystoreKeys.selectedSchemes))
         (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(schemeTypesSEIS)))
       when(mockS4lConnector.fetchAndGetFormData[NatureOfBusinessModel](Matchers.eq(KeystoreKeys.natureOfBusiness))(Matchers.any(),
@@ -196,11 +252,12 @@ class AcknowledgementControllerSpec extends BaseSpec {
 
       await(TestController.getAnswers) shouldBe None
     }
+  }
 
+  "Extracting all the answers from the SEIS flowcccsss" should {
     "return a valid model if all required data is found" in {
-      setupMocksCs(mockS4lConnector)
-
-      await(TestController.getAnswers).contains(validSEISAnswersModel) shouldBe true
+      setupSeisSubmissionMocks()
+      await(TestController.getAnswers.get) shouldBe SEISAnswersModel
     }
   }
 
@@ -208,7 +265,7 @@ class AcknowledgementControllerSpec extends BaseSpec {
     "return a 200 and delete the current application when a valid submission data is submitted" in new SetupPageFull {
       when(mockFileUploadService.getUploadFeatureEnabled).thenReturn(false)
       when(mockS4lConnector.clearCache()(Matchers.any(), Matchers.any())).thenReturn(HttpResponse(NO_CONTENT))
-      setupMocks()
+      setupSeisSubmissionMocks()
       mockEnrolledRequest(seisSchemeTypesModel)
       val result = TestController.show.apply(authorisedFakeRequest)
       status(result) shouldBe SEE_OTHER
@@ -224,21 +281,16 @@ class AcknowledgementControllerSpec extends BaseSpec {
       when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.envelopeId))
         (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(envelopeId))
       when(mockS4lConnector.clearCache()(Matchers.any(), Matchers.any())).thenReturn(HttpResponse(NO_CONTENT))
-      setupMocks()
+      setupSeisSubmissionMocks()
       mockEnrolledRequest(seisSchemeTypesModel)
       val result = TestController.show.apply(authorisedFakeRequest)
       status(result) shouldBe SEE_OTHER
     }
   }
 
-
   "Sending an Authenticated and Enrolled GET request with a session to AcknowledgementController" should {
     "return a 303 redirect if mandatory NatureOfBusinessModel is missing from keystore" in {
-
-      setUpMocksTestMinimumRequiredModels(mockS4lConnector, mockRegistrationDetailsService, Some(kiProcModelValid),
-        natureBusiness = None, Some(contactValid), Some(totalAmountRaisedValid),
-        Some(investmentGrowValid), Some(dateOfIncorporationValid), Some(fullCorrespondenceAddress), true)
-      setupMocks()
+      setupSeisSubmissionMocks()
       mockEnrolledRequest(seisSchemeTypesModel)
       val result = TestController.show.apply(authorisedFakeRequest)
       status(result) shouldBe SEE_OTHER
@@ -248,11 +300,7 @@ class AcknowledgementControllerSpec extends BaseSpec {
 
   "Sending an Authenticated and Enrolled GET request with a session to AcknowledgementController" should {
     "return a 303 redirect if mandatory ContactDetailsModel is missing from keystore" in {
-
-      setUpMocksTestMinimumRequiredModels(mockS4lConnector, mockRegistrationDetailsService, Some(kiProcModelValid),
-        Some(natureOfBusinessValid), contactDetails = None, Some(totalAmountRaisedValid),
-        Some(investmentGrowValid), Some(dateOfIncorporationValid), Some(fullCorrespondenceAddress), true)
-      setupMocks()
+      setupSeisSubmissionMocks()
       mockEnrolledRequest(seisSchemeTypesModel)
       val result = TestController.show.apply(authorisedFakeRequest)
       status(result) shouldBe SEE_OTHER
@@ -262,11 +310,7 @@ class AcknowledgementControllerSpec extends BaseSpec {
 
   "Sending an Authenticated and Enrolled GET request with a session to AcknowledgementController" should {
     "return a 303 redirect if mandatory ProposedInvestmentModel is missing from keystore" in {
-
-      setUpMocksTestMinimumRequiredModels(mockS4lConnector, mockRegistrationDetailsService, Some(kiProcModelValid),
-        Some(natureOfBusinessValid), Some(contactValid), totalAmountRaised = None,
-        Some(investmentGrowValid), Some(dateOfIncorporationValid), Some(fullCorrespondenceAddress), true)
-      setupMocks()
+      setupSeisSubmissionMocks()
       mockEnrolledRequest(seisSchemeTypesModel)
       val result = TestController.show.apply(authorisedFakeRequest)
       status(result) shouldBe SEE_OTHER
@@ -276,11 +320,7 @@ class AcknowledgementControllerSpec extends BaseSpec {
 
   "Sending an Authenticated and Enrolled GET request with a session to AcknowledgementController" should {
     "return a 303 redirect if mandatory DateOfIncorporationModel is missing from keystore" in {
-
-      setUpMocksTestMinimumRequiredModels(mockS4lConnector, mockRegistrationDetailsService, Some(kiProcModelValid),
-        Some(natureOfBusinessValid), Some(contactValid), Some(totalAmountRaisedValid),
-        Some(investmentGrowValid), dateIncorp = None, Some(fullCorrespondenceAddress), true)
-      setupMocks()
+      setupSeisSubmissionMocks()
       mockEnrolledRequest(seisSchemeTypesModel)
       val result = TestController.show.apply(authorisedFakeRequest)
       status(result) shouldBe SEE_OTHER
@@ -290,11 +330,7 @@ class AcknowledgementControllerSpec extends BaseSpec {
 
   "Sending an Authenticated and Enrolled GET request with a session to AcknowledgementController" should {
     "return a 303 redirect if mandatory AddressModel (contact address) is missing from keystore" in {
-
-      setUpMocksTestMinimumRequiredModels(mockS4lConnector, mockRegistrationDetailsService, Some(kiProcModelValid),
-        Some(natureOfBusinessValid), Some(contactValid), Some(totalAmountRaisedValid),
-        Some(investmentGrowValid), Some(dateOfIncorporationValid), contactAddress = None, true)
-      setupMocks()
+      setupSeisSubmissionMocks()
       mockEnrolledRequest(seisSchemeTypesModel)
       val result = TestController.show.apply(authorisedFakeRequest)
       status(result) shouldBe SEE_OTHER
@@ -304,11 +340,7 @@ class AcknowledgementControllerSpec extends BaseSpec {
 
   "Sending an Authenticated and Enrolled GET request with a session to AcknowledgementController" should {
     "return a 303 redirect if mandatory registrationDetailsModel is from registration details service" in {
-
-      setUpMocksTestMinimumRequiredModels(mockS4lConnector, mockRegistrationDetailsService, Some(kiProcModelValid),
-        Some(natureOfBusinessValid), Some(contactValid), Some(totalAmountRaisedValid),
-        Some(investmentGrowValid), Some(dateOfIncorporationValid), Some(fullCorrespondenceAddress), false)
-      setupMocks()
+      setupSeisSubmissionMocks()
       mockEnrolledRequest(seisSchemeTypesModel)
       val result = TestController.show.apply(authorisedFakeRequest)
       status(result) shouldBe SEE_OTHER
@@ -323,7 +355,7 @@ class AcknowledgementControllerSpec extends BaseSpec {
       when(mockSubmissionConnector.submitComplianceStatement(Matchers.any(), Matchers.any(), Matchers.any())(Matchers.any()))
         .thenReturn(Future.successful(HttpResponse(INTERNAL_SERVER_ERROR)))
       mockEnrolledRequest(seisSchemeTypesModel)
-      setupMocks()
+      setupSeisSubmissionMocks()
       val result = TestController.show.apply(authorisedFakeRequest)
       status(result) shouldBe SEE_OTHER
     }
@@ -332,7 +364,7 @@ class AcknowledgementControllerSpec extends BaseSpec {
   "Sending a POST request to the Acknowledgement controller when authenticated and enrolled" should {
     "redirect to the feedback page" in {
       mockEnrolledRequest(seisSchemeTypesModel)
-      setupMocks()
+      setupSeisSubmissionMocks()
       submitWithSessionAndAuth(TestController.submit)(
         result => {
           status(result) shouldBe SEE_OTHER
