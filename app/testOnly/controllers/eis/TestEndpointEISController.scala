@@ -23,6 +23,7 @@ import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.Helpers.PreviousSchemesHelper
 import models._
 import forms._
+import models.investorDetails.InvestorDetailsModel
 import models.submission.SchemeTypesModel
 import play.api.data.Form
 import play.api.libs.json.Format
@@ -33,6 +34,7 @@ import uk.gov.hmrc.play.frontend.controller.FrontendController
 import uk.gov.hmrc.play.http.HeaderCarrier
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
+import testOnly.controllers.InvestorTestHelper
 
 import scala.concurrent.Future
 
@@ -215,8 +217,11 @@ trait TestEndpointEISController extends FrontendController with AuthorisedAndEnr
     val contactDetails = bindForm[ContactDetailsModel](KeystoreKeys.manualContactDetails, ContactDetailsForm.contactDetailsForm)
     val confirmCorrespondAddress = bindConfirmContactAddress()
     val contactAddress = bindForm[AddressModel](KeystoreKeys.manualContactAddress, ContactAddressForm.contactAddressForm)
+
+    saveInvestorDetails(populateIvestorTestData(investorModelOptions.value.fold("1")(_.testInvestorModeOptions)))
     saveBackLinks()
     saveSchemeType()
+    saveDoUpload()
     Future.successful(Ok(
       testOnly.views.html.eis.testEndpointEISPageTwo(
         fullTimeEmployeeCount,
@@ -240,6 +245,39 @@ trait TestEndpointEISController extends FrontendController with AuthorisedAndEnr
     ))
   }
 
+  private def saveInvestorDetails(investorDetails: Vector[InvestorDetailsModel])(implicit hc: HeaderCarrier, user: TAVCUser) = {
+    s4lConnector.saveFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails, investorDetails)
+  }
+
+  private def populateIvestorTestData(options: String = "1"): Vector[InvestorDetailsModel] = {
+    options match {
+
+      // single investor no holdings
+      case "1" => InvestorTestHelper.getInvestors(1, 0)
+
+      // Single Investor with 5 holdings"
+      case "2" => InvestorTestHelper.getInvestors(1, 5)
+
+      //  5 Investors with 4 holdings each
+      case "3" => InvestorTestHelper.getInvestors(5, 4)
+
+      // 5 Investors with 4 holdings each. Last Holding incomplete
+      case "4" => InvestorTestHelper.getInvestors(5, 4, includeIncompleteShareHolding = true)
+
+      // 5 Investors with 4 holdings each. Last Investor incomplete (0 holdings)
+      case "5" => InvestorTestHelper.getInvestors(5, 4, includeIncompleteInvestor = true)
+
+      // 20 complete Investors with 5 holdings each
+      case "6" => InvestorTestHelper.getInvestors(20, 5)
+
+      // 20 complete Investors with 0 holdings each
+      case "7" => InvestorTestHelper.getInvestors(20, 0)
+
+      // catch all
+      case _ => InvestorTestHelper.getInvestors(1, 5)
+    }
+  }
+
   private def saveBackLinks()(implicit hc: HeaderCarrier, user: TAVCUser) = {
     s4lConnector.saveFormData[Boolean](KeystoreKeys.applicationInProgress, true)
     s4lConnector.saveFormData[String](KeystoreKeys.backLinkFullTimeEmployeeCount, routes.TestEndpointEISController.showPageOne.url)
@@ -255,6 +293,11 @@ trait TestEndpointEISController extends FrontendController with AuthorisedAndEnr
     s4lConnector.saveFormData[String](KeystoreKeys.backLinkSubsidiaries, routes.TestEndpointEISController.showPageOne.url)
     s4lConnector.saveFormData[String](KeystoreKeys.backLinkSubSpendingInvestment, routes.TestEndpointEISController.showPageOne.url)
     s4lConnector.saveFormData[String](KeystoreKeys.backLinkSupportingDocs, routes.TestEndpointEISController.showPageOne.url)
+  }
+
+  private def saveDoUpload()(implicit hc: HeaderCarrier, user: TAVCUser) = {
+    s4lConnector.saveFormData[SupportingDocumentsUploadModel](KeystoreKeys.supportingDocumentsUpload,
+      SupportingDocumentsUploadModel(Constants.StandardRadioButtonNoValue))
   }
 
   private def saveSchemeType()(implicit hc: HeaderCarrier, user: TAVCUser) = {
