@@ -1,11 +1,13 @@
 @import models._
+@import models.repayments.AnySharesRepaymentModel
 @import testOnly.models._
 @import uk.gov.hmrc.play.views.html.helpers.form
 @import common.Constants
 @import utils.CountriesHelper
 @import views.html.helpers.{externalLink,formHint, formInputRadioGroup, backButtonWithProgress, input, inputWithCurrencySymbol, formInlineDateInput, hiddenField, errorSummary, formHiddenYesNoRadioNoError, textArea, dropdown, formHiddenYesNoRadio}
 
-@(wasAnyValueReceivedForm: Form[WasAnyValueReceivedModel],
+@(anySharesRepaymentForm: Form[AnySharesRepaymentModel],
+  wasAnyValueReceivedForm: Form[WasAnyValueReceivedModel],
   shareCapitalChangesForm: Form[ShareCapitalChangesModel],
   confirmContactDetailsForm: Form[ConfirmContactDetailsModel],
   contactDetailsForm: Form[ContactDetailsModel],
@@ -15,6 +17,22 @@
 <div class="grid-row">
 
     @form(action = testOnly.controllers.eis.routes.TestEndpointEISController.submitPageThree()) {
+
+    <h2>Any Shares Repayment</h2>
+    <div class="form-group">
+        @formInputRadioGroup(
+        field = anySharesRepaymentForm("anySharesRepayment"),
+        Seq(
+        Constants.StandardRadioButtonYesValue -> Messages("common.radioYesLabel"),
+        Constants.StandardRadioButtonNoValue -> Messages("common.radioNoLabel")),
+        '_legend -> Messages("page.AnySharesRepayment.legend"),
+        '_legendClass -> "visuallyhidden",
+        '_labelAfter -> true,
+        '_labelClass -> "block-label",
+        '_legendID -> "anySharesRepayment",
+        '_groupClass -> "inline"
+        )
+    </div>
 
     <h2>Was Any Value Recieved</h2>
     <div class="form-group">

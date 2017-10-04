@@ -22,8 +22,9 @@ import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.Helpers.PreviousSchemesHelper
 import models._
-import forms._
 import models.investorDetails.InvestorDetailsModel
+import forms._
+import models.repayments.AnySharesRepaymentModel
 import models.submission.SchemeTypesModel
 import play.api.data.Form
 import play.api.libs.json.Format
@@ -148,6 +149,7 @@ trait TestEndpointEISController extends FrontendController with AuthorisedAndEnr
 
   def showPageThree: Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user => implicit request =>
     for {
+      anySharesRepaymentForm <- fillForm[AnySharesRepaymentModel](KeystoreKeys.anySharesRepayment,AnySharesRepaymentForm.anySharesRepaymentForm)
       valueReceivedForm <- fillForm[WasAnyValueReceivedModel](KeystoreKeys.wasAnyValueReceived,WasAnyValueReceivedForm.wasAnyValueReceivedForm)
       shareLoanCapitalForm <- fillForm[ShareCapitalChangesModel](KeystoreKeys.shareCapitalChanges,ShareCapitalChangesForm.shareCapitalChangesForm)
       confirmContactDetailsForm <- fillForm[ConfirmContactDetailsModel](KeystoreKeys.confirmContactDetails, ConfirmContactDetailsForm.confirmContactDetailsForm)
@@ -157,6 +159,7 @@ trait TestEndpointEISController extends FrontendController with AuthorisedAndEnr
       contactAddressForm <- fillForm[AddressModel](KeystoreKeys.manualContactAddress, ContactAddressForm.contactAddressForm)
     } yield Ok(
       testOnly.views.html.eis.testEndpointEISPageThree(
+        anySharesRepaymentForm,
         valueReceivedForm,
         shareLoanCapitalForm,
         confirmContactDetailsForm,
@@ -267,6 +270,7 @@ trait TestEndpointEISController extends FrontendController with AuthorisedAndEnr
 
 
   def submitPageThree: Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user => implicit request =>
+    val anySharesRepayment = bindForm[AnySharesRepaymentModel](KeystoreKeys.anySharesRepayment,AnySharesRepaymentForm.anySharesRepaymentForm)
     val valueReceived = bindForm[WasAnyValueReceivedModel](KeystoreKeys.wasAnyValueReceived,WasAnyValueReceivedForm.wasAnyValueReceivedForm)
     val shareLoanCapital = bindForm[ShareCapitalChangesModel](KeystoreKeys.shareCapitalChanges,ShareCapitalChangesForm.shareCapitalChangesForm)
     val confirmContactDetails = bindConfirmContactDetails()
@@ -278,6 +282,7 @@ trait TestEndpointEISController extends FrontendController with AuthorisedAndEnr
     saveDoUpload()
     Future.successful(Ok(
       testOnly.views.html.eis.testEndpointEISPageThree(
+        anySharesRepayment,
         valueReceived,
         shareLoanCapital,
         confirmContactDetails,
