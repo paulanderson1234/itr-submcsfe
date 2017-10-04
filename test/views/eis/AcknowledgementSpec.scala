@@ -20,7 +20,6 @@ import models.submission.SubmissionResponse
 import org.jsoup.Jsoup
 import play.api.i18n.Messages
 import play.api.i18n.Messages.Implicits._
-import play.api.test.Helpers._
 import views.helpers.ViewSpec
 import views.html.eis.checkAndSubmit.Acknowledgement
 
@@ -29,52 +28,151 @@ class AcknowledgementSpec extends ViewSpec {
   val submissionResponse = SubmissionResponse("2014-12-17T09:30:47Z","FBUND09889765")
 
   "The Acknowledgement page" should {
+    lazy val page = Acknowledgement(submissionResponse)(fakeRequest,applicationMessages)
+    lazy val document = Jsoup.parse(page.body)
 
-    "contain the correct elements when loaded" in {
-
-      lazy val page = Acknowledgement(submissionResponse)(fakeRequest,applicationMessages)
-      lazy val document = Jsoup.parse(contentAsString(page))
-      //title
+    "have the correct title" in {
       document.title() shouldBe Messages("page.checkAndSubmit.acknowledgement.title")
-      //banner
-      document.body.getElementById("submission-confirmation").text() shouldBe Messages("page.checkAndSubmit.acknowledgement.submissionConfirmation")
-      document.body.getElementById("ref-number-heading").text() shouldBe Messages("page.checkAndSubmit.acknowledgement.refNumberHeading")
-      document.body.getElementById("ref-number").text() shouldBe submissionResponse.formBundleNumber
-      //legal text
-      document.body.getElementById("legal-not-complete").text() shouldBe Messages("page.checkAndSubmit.acknowledgement.application.not.complete")
+    }
 
-      //supporting docs
-      document.body.getElementById("supporting-docs").text() shouldBe Messages("page.checkAndSubmit.acknowledgement.supporting.docs.heading")
-      document.body.getElementById("remember-to-include").text() shouldBe Messages("page.checkAndSubmit.acknowledgement.review")
-      document.body.getElementById("business-plan").text() shouldBe Messages("page.checkAndSubmit.acknowledgement.doc.one")
-      document.body.getElementById("company-accounts").text() shouldBe Messages("page.checkAndSubmit.acknowledgement.doc.two")
-      document.body.getElementById("shareholder-agree").text() shouldBe Messages("page.checkAndSubmit.acknowledgement.doc.three")
-      document.body.getElementById("memorandum-articles").text() shouldBe Messages("page.checkAndSubmit.acknowledgement.doc.four")
-      document.body.getElementById("prospectus-docs").text() shouldBe Messages("page.checkAndSubmit.acknowledgement.doc.five")
+    "have a transaction banner" which {
+      lazy val banner = document.select("div.transaction-banner--complete")
 
-      //email to
-      document.body.getElementById("email-docs").text() shouldBe Messages("page.checkAndSubmit.acknowledgement.email.docs.heading")
-      document.body.getElementById("email-to").getElementById("email-docs-to").text() shouldEqual (Messages("page.checkAndSubmit.acknowledgement.emailTo"))
-      document.body.getElementById("email-to").getElementById("email-to-ref").attr("href") shouldEqual "mailto:enterprise.centre@hmrc.gsi.gov.uk"
-      document.body.getElementById("email-docs-include").text() shouldBe (Messages("page.checkAndSubmit.acknowledgement.email.include"))
-      document.body.getElementById("email-name").text() shouldBe Messages("page.checkAndSubmit.acknowledgement.email.one")
-      document.body.getElementById("email-utr").text() shouldBe Messages("page.checkAndSubmit.acknowledgement.email.two")
-      document.body.getElementById("email-whitelister").text() shouldBe Messages("page.checkAndSubmit.acknowledgement.email.three")
-      document.body.getElementById("email-docs-size").text() shouldBe Messages("page.checkAndSubmit.acknowledgement.email.size")
+      "has the correct heading" in {
+        banner.select("h1").text() shouldBe Messages("page.checkAndSubmit.acknowledgement.title")
+      }
 
-      //post to
-      document.body.getElementById("post-docs").text() shouldBe Messages("page.checkAndSubmit.acknowledgement.post.docs.heading")
-      document.body.getElementById("post-to").text() shouldBe Messages("page.checkAndSubmit.acknowledgement.post.to")
+      "has a paragraph regarding the reference number" in {
+        banner.select("p").text() shouldBe Messages("page.checkAndSubmit.acknowledgement.refNumberHeading")
+      }
 
-      //waiting times
-      document.body.getElementById("waiting-time").text() shouldBe Messages("page.checkAndSubmit.acknowledgement.waitingTime.heading")
-      document.body.getElementById("course-of-action").text() shouldBe Messages("page.checkAndSubmit.acknowledgement.courseOfAction")
+      "has a span containing the reference number" in {
+        banner.select("span").text() shouldBe "FBUND09889765"
+      }
+    }
 
-      //get help
-      document.body.getElementById("get-help-action").text shouldBe Messages("common.error.help.text")
+    "have a what next section" which {
+      lazy val section = document.select("div.column-two-thirds > div.form-group").get(1)
 
-      //finish button
-      document.body.getElementById("submit").text() shouldBe Messages("page.checkAndSubmit.acknowledgement.button.confirm")
+      "has the correct subheading" in {
+        section.select("h2").text() shouldBe Messages("common.error.soft.secondaryHeading")
+      }
+
+      "has a list heading" in {
+        section.select("p").get(0).text() shouldBe Messages("page.checkAndSubmit.acknowledgement.whatNext.list.heading")
+      }
+
+      "has a list" which {
+        lazy val list = section.select("ul")
+
+        "has the correct first element" in {
+          list.select("li").get(0).text() shouldBe Messages("page.checkAndSubmit.acknowledgement.whatNext.list.one")
+        }
+
+        "has the correct second element" in {
+          list.select("li").get(1).text() shouldBe Messages("page.checkAndSubmit.acknowledgement.whatNext.list.two")
+        }
+      }
+
+      "has a description of the outcome" in {
+        section.select("p").get(1).text() shouldBe Messages("page.checkAndSubmit.acknowledgement.whatNext.outcome")
+      }
+
+      "has a description of the certificate issue process" in {
+        section.select("p").get(2).text() shouldBe Messages("page.eis.checkAndSubmit.acknowledgement.whatNext.issue")
+      }
+
+      "has a warning about claiming relief" in {
+        section.select("p.important-notice").text() shouldBe Messages("page.checkAndSubmit.acknowledgement.whatNext.certificate.warning")
+      }
+
+      "has a description of the failed condition process" in {
+        section.select("p").get(4).text() shouldBe Messages("page.checkAndSubmit.acknowledgement.whatNext.conditions")
+      }
+    }
+
+    "have a supporting documents section" which {
+      lazy val section = document.select("div.column-two-thirds > div.form-group").get(2)
+
+      "has the correct subheading" in {
+        section.select("h2").text() shouldBe Messages("page.checkAndSubmit.acknowledgement.supporting.docs.heading")
+      }
+
+      "has the correct list heading" in {
+        section.select("p").get(0).text() shouldBe Messages("page.checkAndSubmit.acknowledgement.review")
+      }
+
+      "has a list" which {
+        lazy val list = section.select("ul")
+
+        "has the correct first element" in {
+          list.select("li").get(0).text() shouldBe Messages("page.supportingDocuments.bullet.one")
+        }
+
+        "has the correct second element" in {
+          list.select("li").get(1).text() shouldBe Messages("page.supportingDocuments.bullet.two")
+        }
+
+        "has the correct third element" in {
+          list.select("li").get(2).text() shouldBe Messages("page.supportingDocuments.bullet.three")
+        }
+
+        "has the correct fourth element" in {
+          list.select("li").get(3).text() shouldBe Messages("page.supportingDocuments.bullet.four")
+        }
+
+        "has the correct fifth element" in {
+          list.select("li").get(4).text() shouldBe Messages("page.supportingDocuments.bullet.five")
+        }
+      }
+    }
+
+    "has a final instructions paragraph" which {
+      lazy val paragraph = document.select("div.column-two-thirds > div.form-group").get(3).select("p")
+
+      "has the first part of the message" in {
+        paragraph.select("span").first().text() shouldBe Messages("page.checkAndSubmit.acknowledgement.upload.one")
+      }
+
+      "has the second part of the message as a link" which {
+        lazy val link = paragraph.select("a").first()
+
+        "links to the upload page" in {
+          link.attr("href") shouldBe controllers.eis.routes.SupportingDocumentsController.show().url
+        }
+
+        "has the correct part of the message" in {
+          link.text() shouldBe Messages("page.checkAndSubmit.acknowledgement.upload.link")
+        }
+      }
+
+      "has the third part of the message" in {
+        paragraph.select("span").last().text() shouldBe Messages("page.checkAndSubmit.acknowledgement.upload.two")
+      }
+
+      "has the fourth part of the message as a link" which {
+        lazy val link = paragraph.select("a").last()
+
+        "links to the hub" in {
+          link.attr("href") shouldBe controllers.routes.ApplicationHubController.show().url
+        }
+
+        "has the correct part of the message" in {
+          link.text() shouldBe Messages("page.checkAndSubmit.acknowledgement.upload.dashboard")
+        }
+      }
+    }
+
+    "has a finish button" which {
+      lazy val button = document.select("a.button")
+
+      "links to the feedback page" in {
+        button.attr("href") shouldBe controllers.feedback.routes.FeedbackController.show().url
+      }
+
+      "has the correct part of the message" in {
+        button.text() shouldBe Messages("page.checkAndSubmit.acknowledgement.button.confirm")
+      }
     }
   }
 

@@ -1,5 +1,5 @@
 @import common.Constants
-@import views.html.helpers.backButton
+@import views.html.helpers.{backButton, externalLink}
 @import uk.gov.hmrc.play.views.html.helpers.form
 
 @()(implicit request: Request[_], messages: Messages)
@@ -16,7 +16,10 @@
 
     <div class="form-group">
         <ul class="list list-bullet">
-            <li id="help-bullet-one">@Messages("page.initial.declaration.description.bullet.one") <a href="@controllers.eis.routes.TermsAndConditionsController.show()" target="_blank">@Messages("page.initial.declaration.description.bullet.two.eis")</a></li>
+            <li id="help-bullet-one">@Messages("page.initial.declaration.description.bullet.one")
+                @externalLink(Messages("page.initial.declaration.description.bullet.two.eis"),
+                "terms-and-conditions",
+                Some("initial-declaration"))</li>
             <li id="help-bullet-three">@Messages("page.initial.declaration.description.bullet.three")</li>
         </ul>
     </div>

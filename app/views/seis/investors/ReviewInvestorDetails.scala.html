@@ -15,10 +15,9 @@
         model.previousShareHoldingDescriptionModel.map(_.description).getOrElse(Messages("page.investors.reviewInvestorDetails.incomplete")),
         Array(
 
-            model.investorShareIssueDateModel.flatMap { date =>
-                date.formatDateToString.map { dateString =>
-                    Messages("page.investors.reviewInvestorDetails.shareholdings.dateOfInvestment", dateString)
-                }
+            model.investorShareIssueDateModel.map { date =>
+                Messages("page.investors.reviewInvestorDetails.shareholdings.dateOfInvestment", PreviousShareHoldingModel.toDateString(date.investorShareIssueDateDay.get,
+                date.investorShareIssueDateMonth.get, date.investorShareIssueDateYear.get))
             }.getOrElse(Messages("page.investors.reviewInvestorDetails.incomplete")),
 
             model.numberOfPreviouslyIssuedSharesModel.map { model =>
