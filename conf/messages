@@ -5,31 +5,17 @@ error.maxLength=You can''t enter more than {0} characters
 
 common.button.next=Next
 common.button.continue=Continue
-common.button.continueNextSection=Continue to next section
-common.button.continueFirstSection=Continue to first section
-common.button.continueThirdSection=Continue to Section 3
 common.button.snc=Save and continue
 common.button.delete=Delete
-common.button.sign-in=Sign in
 common.button.back=Back
-common.button.start=Start now
-common.button.findAddress=Find address
 common.button.checkAnswers=Check your answers
 common.button.upload=Upload
 common.button.cancel=Cancel and go back
 common.errorSummary.label=The following errors were identified on this page.
 common.radioNoLabel=No
 common.radioYesLabel=Yes
-common.err.postcode.required=Please enter a valid postcode
-common.home=Home
-common.signInOut=Sign in/out
-common.feedbackFirst=This is a new service – your
-common.feedbackSecond=will help us to improve it.
-common.feedbackLinkText=feedback
-common.readMore=Read more
 common.error.fieldRequired=This field is required
 common.error.summary.heading=This page has errors
-common.readMore=Read more
 common.base.yes=Yes
 common.base.no=No
 common.day=Day
@@ -37,11 +23,9 @@ common.month=Month
 common.year=Year
 common.base.change = Change
 common.base.remove = Remove
-common.pound = £
 common.notAvailable=None
 common.notAvailableAcronym=N/A
 common.address.postcode=Postcode
-common.address.findUKAddress=Find UK address
 common.back.dashboard=Dashboard
 common.changeAnswers.incorrect.text=If this is incorrect you can
 common.changeAnswers.link=change your answers
@@ -57,7 +41,6 @@ common.error.hard.incorrect.info.end=or submit a Compliance Statement when your 
 common.returnToDashboard=Return to dashboard
 common.page.forename.label=First Name
 common.page.surname.label=Last Name
-common.suggestedLimit.hint.short=Suggested limit: 20 words
 common.suggestedLimit.hint.long=Suggested limit: 200 words
 
 ## Common date Messages ##
@@ -68,7 +51,6 @@ common.date.hint=For example, 4 9 2016
 common.externalLink=opens in a new window
 common.date.error.invalidDate=Enter a valid date
 common.date.hint.example= For example, 31 3 1980
-common.date.error.invalidDate=Date must have a valid day, month and a year with 4 numbers
 
 ##common section headings##
 common.section.progress.details.one=Section 1 of 6: Company details
@@ -80,7 +62,6 @@ common.section.progress.details.six=Section 6 of 6: Supporting documents
 
 ## Common report error ##
 common.error.help.text=Get help with this page.
-common.error.summary.heading=This page has errors
 
 ## Common help link ##
 common.help.whereToFind = Where can I find this?
@@ -89,26 +70,20 @@ common.help.whereToFind = Where can I find this?
 validation.error.country=Country must be no more than 20 valid characters if entered
 validation.error.postcode=Please enter a valid postcode
 validation.error.crn=Please enter a valid CRN
-validation.error.invalidDate=You have not entered a valid date
 validation.error.utrTenChar=Only 10 numeric digits should be entered
 validation.common.error.fieldRequired=This field is required
 validation.common.error.shortTextSize = Enter a description of 250 characters or less
 validation.error.DateNotEntered=You must enter a valid day, month and year
-validation.error.enterDate=Please enter a date
-validation.error.operatingCosts=Please enter a value into
 validation.error.fourDigitYear=Enter a valid year
-validation.error.mandatoryname=Enter a valid company name
 validation.error.optionaladdresssline=Use fewer than 28 characters in the address line
 validation.error.mandatoryaddresssline=Address line must be entered
 validation.error.telephoneNumber=Enter a valid telephone number
-validation.error.postcode=Enter a valid postcode
 validation.error.countryCode=Country must be entered
 validation.error.linefouraddresssline=Use fewer than 18 characters in the address line
 validation.error.countrypostcode=Postcode must be entered if country selected is United Kingdom
 validation.error.email=Enter a valid email address
 validation.error.employeeCount.notANumber = Enter a valid number for your employee count
 validation.error.employeeCount.size = The employee count should be between {0} and 9999999999999
-validation.error.employeeCount.precision = Enter a value with fewer than 13 decimal places for your employee count
 
 validation.error.howMuchSpentOnShares.size = The amount spent should be between 0 and 99999999999
 validation.error.howMuchSpentOnShares.notANumber = Enter a valid number for the amount spent
@@ -126,7 +101,6 @@ validation.error.grossAssets.decimalPlaces =The gross assets amount should not c
 validation.error.grossAssets.negative = The gross assets amount should not be negative
 
 validation.error.totalAmountRaised.size = The total amount raised should be between 0 and 999999999
-validation.error.totalAmountRaised.int.size = The total amount raised should be between 0 and 2147483647
 validation.error.totalAmountRaised.notANumber = Enter a valid number for the total amount raised
 validation.error.totalAmountRaised.decimalPlaces = The total amount raised should not contain decimal places
 validation.error.totalAmountRaised.negative = The total amount raised should not be negative
@@ -135,11 +109,6 @@ validation.error.nominalValueOfShares.decimalPlaces = The share value should not
 validation.error.nominalValueOfShares.size =  The share value should be between 0 and 9999999999999
 validation.error.nominalValueOfShares.negative = The share value should not be negative
 validation.error.nominalValueOfShares.notANumber = Enter a valid number for the share value
-
-validation.error.previousShareHoldingNominalValue.decimalPlaces = The share value should not contain decimal places
-validation.error.previousShareHoldingNominalValue.size =  The share value should be between 0 and 9999999999999
-validation.error.previousShareHoldingNominalValue.negative = The share value should not be negative
-validation.error.previousShareHoldingNominalValue.notANumber = Enter a valid number for the share value
 
 validation.error.numberOfPreviouslyIssuedShares.notANumber = Enter a valid number for the number of previously issued shares
 validation.error.numberOfPreviouslyIssuedShares.size =  The number of previously issued shares should be between 1 and 9999999999999
@@ -156,89 +125,8 @@ validation.error.numberOfSharesPurchased.notANumber=Enter a valid number for you
 session.timeout.message=Your session has ended
 session.timeout.startAgain=Start again
 
-#Welcome page
-page.start.welcome.title=Get tax relief for your investors
-page.start.welcome.heading=Get tax relief for your investors
-page.start.welcome.description.one=If you have a small or medium-sized company the government can help it grow by offering tax relief to your investors.
-page.start.welcome.description.two=This service lets you:
-page.start.welcome.bullet.learn=learn about tax relief schemes
-page.start.welcome.bullet.eligible=find out if your company''s eligible for them
-page.start.welcome.bullet.certify=prove to potential investors that they''ll get tax relief
-page.start.welcome.bullet.claim=help your investors claim tax relief
-page.start.welcome.apply.link=How to apply
-page.start.welcome.helpFirst=You will not be able to save your application.
-page.start.welcome.helpSecond=On completion you will be able to download your application to email as an attachment.
-page.start.welcome.schemeGuidance=scheme guidance
-
-
-#How To Apply page
-page.introduction.HowToApply.title=How to apply
-page.introduction.HowToApply.heading=How to apply
-page.introduction.HowToApply.number.fillOut= Fill out an application for an assurance letter
-page.introduction.HowToApply.number.send= Send your application and supporting documents to us
-page.introduction.HowToApply.number.receive= We''ll send your assurance letter
-page.introduction.HowToApply.fillOut.description= Assurance letters show potential investors that they may get tax relief by buying shares in your company.
-page.introduction.HowToApply.receive.description=If your application''s successful we''ll post your assurance letter to you or someone you nominate. You can then show it to potential investors.
-page.introduction.HowToApply.notBinding=Assurance letters aren''t guarantees or legally binding.
-page.introduction.HowToApply.send.descriptionOne=You can do this by email or post.
-page.introduction.HowToApply.send.descriptionTwo=When you send your application you''ll need to include your:
-page.introduction.HowToApply.number.sendOne=company accounts
-page.introduction.HowToApply.number.sendTwo=memorandum and articles of association
-page.introduction.HowToApply.number.sendThree=documents like prospectuses that you''ll use to attract investment
-
-#Qualifying for Scheme page
-page.introduction.qualifyingForScheme.title=Qualifying for the scheme
-page.introduction.qualifyingForScheme.heading.one=Business areas that don''t qualify
-page.introduction.qualifyingForScheme.description.one=Your company must have issued shares in the past 2 years.
-page.introduction.qualifyingForScheme.description.two=When it issued shares it must also have:
-page.introduction.qualifyingForScheme.description.three=You can find other conditions in the
-page.introduction.qualifyingForScheme.description.four=You can''t apply if your company''s involved in:
-page.introduction.qualifyingForScheme.description.five=There are also
-page.introduction.qualifyingForScheme.bullet.UKbase=had a permanent UK base
-page.introduction.qualifyingForScheme.bullet.listed=not been listed on a stock exchange, or had plans to be listed
-page.introduction.qualifyingForScheme.bullet.numEmployees=had fewer than 250 employees, or 500 if you''ve spent a certain amount of your operating costs on research and development
-page.introduction.qualifyingForScheme.bullet.farming=farming
-page.introduction.qualifyingForScheme.bullet.legal=legal or financial services
-page.introduction.qualifyingForScheme.bullet.property=buying or selling property or land
-page.introduction.qualifyingForScheme.bullet.hotels=running hotels or rental accommodation
-page.introduction.qualifyingForScheme.bullet.electricity=generating or exporting electricity
-page.introduction.qualifyingForScheme.link.schemeGuidance=scheme guidance
-page.introduction.qualifyingForScheme.link.unqualifiedBusiness=other business areas that don''t qualify
-
-#examples pages (to be deleted later)
-page.examples.CompanyAddress.title=Company address details
-page.examples.CompanyAddress.description=Please provide the following information
-page.examples.CompanyAddress.addressline1.label=Address line 1
-page.examples.CompanyAddress.addressline2.label=Address line 2
-page.examples.CompanyAddress.addressline3.label=Address line 3 (optional)
-page.examples.CompanyAddress.addressline4.label=Address line 4 (optional)
-page.examples.CompanyAddress.postcode.label=Postcode
-page.examples.CompanyAddress.country.label=Country (optional)
-page.examples.ContactDetails.title=Contact details
-page.examples.ContactDetails.heading=Contact details
-page.examples.DateFirstSale.heading=Date of first sale
-page.examples.DateFirstSale.title=Date of first sale
-page.examples.DateFirstSale.question=When was the date of first commercial sale for the company?
-page.examples.ContactDetails.description=Please provide the following information
-page.examples.ContactDetails.forename.label=Forename
-page.examples.ContactDetails.surname.label=Surname
-page.examples.ContactDetails.email.label=Email address
-validation.error.DateOfFirstSale.Future=Date of first sale cannot be a future date
-page.examples.DoSubmission.question=Do you want to submit your application?
-page.examples.DoSubmission.title=Submit application?
-page.examples.DoSubmission.heading=Submit application?
-page.examples.DoSubmission.helptext=You can download your application and email it to HMRC
-page.examples.Confirmation.title=Confirmation
-page.examples.Confirmation.heading=Confirmation
-
 #Scheme selection page
 validation.error.schemeSelection=Please select at least one scheme.
-page.schemeSelection.SchemeSelection.title=Which schemes are you applying for?
-page.schemeSelection.SchemeSelection.heading=Which schemes are you applying for?
-page.schemeSelection.SchemeSelction.hint=You can apply for up to 3 schemes
-page.schemeSelection.SchemeSelection.checkbox.seis=Seed Enterprise Investment Scheme
-page.schemeSelection.SchemeSelection.checkbox.eis=Enterprise Investment Scheme
-page.schemeSelection.SchemeSelection.checkbox.vct=Venture Capital Trust
 page.schemeSelection.SchemeSelection.help.seis.text=The Seed Enterprise Investment Scheme helps startup companies raise investment by offering tax reliefs to individual investors who buy new shares in the company. Tax relief is available on a maximum of £150,000 received over the last 3 years.
 page.schemeSelection.SchemeSelection.help.seis.findOutMore=Find out more about the
 page.schemeSelection.SchemeSelection.help.seis.link=Seed Enterprise Investment Scheme
@@ -255,20 +143,7 @@ page.schemeSelection.SchemeSelection.singlescheme.title=Which scheme are you sub
 page.schemeSelection.SchemeSelection.singlescheme.heading=Which scheme are you submitting a Compliance Statement for?
 page.schemeSelection.SchemeSelection.radiobutton.seis=Seed Enterprise Investment Scheme
 page.schemeSelection.SchemeSelection.radiobutton.eis=Enterprise Investment Scheme
-page.schemeSelection.SchemeSelection.radiobutton.vct=Venture Capital Trust
 page.schemeSelection.SchemeSelection.desc=You can only complete one Compliance Statement at a time.
-
-#Utr page
-page.companyDetails.utr.heading=What''s your Company Unique Taxpayer Reference?
-page.companyDetails.utr.title=What''s your Company Unique Taxpayer Reference?
-page.companyDetails.utr.question.hint=If your UTR is 13 digits long, only enter the last 10
-page.companyDetails.utr.help.text=You can usually find it in letters we''ve sent to you, next to headings like “Tax Reference”, “UTR” or “Official Use”.
-
-#Your company need page
-page.introduction.YourCompanyNeed.title=What does your company need?
-page.introduction.YourCompanyNeed.heading=What does your company need?
-page.introduction.YourCompanyNeed.advancedAssurance=A letter to show to potential investors
-page.introduction.YourCompanyNeed.complianceStatement=A reference number so investors can claim relief
 
 #Date of incorporation page
 validation.error.DateOfIncorporation.Future=Date of incorporation cannot be a future date
@@ -277,34 +152,6 @@ page.companyDetails.DateOfIncorporation.heading= When was your company incorpora
 page.companyDetails.DateOfIncorporation.question= When was your company incorporated?
 page.companyDetails.DateOfIncorporation.location= It''s on your certificate of incorporation. You can also find it by searching for your company on the
 page.companyDetails.DateOfIncorporation.companiesHouse = Companies House database
-
-#What we'll ask you page
-page.introduction.WhatWeAskYou.title=What we''ll ask you
-page.introduction.WhatWeAskYou.heading.one=Section 1: Company details
-page.introduction.WhatWeAskYou.heading.two=Section 2: Previous tax relief investment schemes
-page.introduction.WhatWeAskYou.heading.three=Section 3: This investment
-page.introduction.WhatWeAskYou.heading.four=Section 4: Contact details
-page.introduction.WhatWeAskYou.heading.five=Section 5: Supporting documents
-page.introduction.WhatWeAskYou.description.one=You can''t save your progress, so make sure you have everything you need before you start your application.
-page.introduction.WhatWeAskYou.description.two=Applying takes up to an hour.
-page.introduction.WhatWeAskYou.bullet.compIncorporated=When your company was incorporated
-page.introduction.WhatWeAskYou.bullet.compDo=What your company does
-page.introduction.WhatWeAskYou.bullet.soldCommercially=When it first sold something commercially
-page.introduction.WhatWeAskYou.bullet.ownsControlsComp=If your company owns or controls any other companies
-page.introduction.WhatWeAskYou.bullet.spentRAndD=If your company''s spent a certain amount of its operating costs on research and development
-page.introduction.WhatWeAskYou.bullet.prevTaxRelief=If your company''s used tax relief investments before
-page.introduction.WhatWeAskYou.bullet.investRaised=How much the investments raised
-page.introduction.WhatWeAskYou.bullet.sharesIssued=When you issued shares under them
-page.introduction.WhatWeAskYou.bullet.nameSchemes=The names of the schemes
-page.introduction.WhatWeAskYou.bullet.howUseInvest=How you''ll use the investment (up to 200 words)
-page.introduction.WhatWeAskYou.bullet.amountToRaise=How much you want to raise
-page.introduction.WhatWeAskYou.bullet.whoToContact=Who you''d like us to contact
-page.introduction.WhatWeAskYou.bullet.contactDetails=Their contact details
-page.introduction.WhatWeAskYou.bullet.companyAccounts=Your company accounts
-page.introduction.WhatWeAskYou.bullet.otherCompAccounts=The accounts of other companies that your business owns or controls
-page.introduction.WhatWeAskYou.bullet.memorandum=Your memorandum and articles of association
-page.introduction.WhatWeAskYou.bullet.prospectuses=Prospectuses and anything else you''ll use to attract investment
-page.introduction.WhatWeAskYou.print.text=Print this page
 
 #commercial sale page
 page.companyDetails.CommercialSale.title=Has your company had its first commercial sale yet? If so, when?
@@ -323,7 +170,7 @@ page.companyDetails.IsCompanyKnowledgeIntensive.ki-requirement-two = 15% or more
 page.companyDetails.IsCompanyKnowledgeIntensive.ki-requirement-also = You also need either:
 page.companyDetails.IsCompanyKnowledgeIntensive.ki-requirement-three = 20% or more of your research and development staff to have master''s degrees
 page.companyDetails.IsCompanyKnowledgeIntensive.ki-requirement-four = a plan to develop, or an already developed, product that you''ll own the rights to
-page.companyDetails.IsCompanyKnowledgeIntensive.ki-info=You''ll need to meet this condition when you get the investment and for 3 years afterwards.
+
 #Do You Want To Apply As Knowledge Intensive Page
 page.companyDetails.ApplyForKI.title = Do you want to apply as a knowledge intensive company?
 page.companyDetails.ApplyForKI.heading = Do you want to apply as a knowledge intensive company?
@@ -408,11 +255,6 @@ page.companyDetails.TurnoverCosts.help.text= It''s the amount of money your comp
 page.companyDetails.Subsidiaries.title = Does your company own or control any other companies?
 page.companyDetails.Subsidiaries.heading = Does your company own or control any other companies?
 
-#Registered Address page
-page.companyDetails.RegisteredAddress.title=What''s your company''s registered address?
-page.companyDetails.RegisteredAddress.heading=What''s your company''s registered address?
-page.companyDetails.RegisteredAddress.description.one=Enter the address manually
-
 #nature of business page
 page.companyDetails.natureofbusiness.heading=What does your company do?
 page.companyDetails.natureofbusiness.title=What does your company do?
@@ -424,7 +266,6 @@ page.companyDetails.natureofbusiness.bullet.three=sound recording and music publ
 
 #proposed investment amount
 page.investment.amount.invalidAmount=Enter an amount in the correct format e.g. 10000
-page.investment.amount.OutOfRange=Enter an amount between 1 and 5000000
 page.investment.amount.title=How much investment do you want to raise?
 page.investment.amount.heading=How much investment do you want to raise?
 page.investment.amount.hint=The total amount can''t be more than £5 million
@@ -466,8 +307,6 @@ page.knowledgeIntensive.TenYearPlan.question.hint.two = Your company could own t
 page.knowledgeIntensive.TenYearPlan.question.hint.three = Within 10 years of the investment, most of your company''s business activities must use, or make money from what you''ve developed.
 page.knowledgeIntensive.TenYearPlan.question.hint.four = Suggested limit: 200 words
 page.knowledgeIntensive.TenYearPlan.description.one = How does your company plan to do that?
-page.knowledgeIntensive.TenYearPlan.description.two = Based on the information you''ve given your company isn''t knowledge intensive
-validation.error.DescriptionEnteredForNoOption=If ''No'' is selected description should be removed from the ''Yes'' option.
 
 #had previous RFI
 page.previousInvestment.hadPreviousRFI.title=Has your company used a tax relief investment scheme before?
@@ -524,20 +363,15 @@ page.investment.InvestmentGrow.businessplan.link=how to write a business plan
 page.supportingDocuments.SupportingDocuments.title=Supporting documents
 page.supportingDocuments.SupportingDocuments.heading=Supporting documents
 page.supportingDocuments.SupportingDocuments.text.one=Check and submit your answers on the next page. Once you''ve submitted, you''ll need to separately email your company''s:
-page.supportingDocuments.SupportingDocuments.bullet.one=business plan
-page.supportingDocuments.SupportingDocuments.bullet.two=shareholder agreements or drafts
-page.supportingDocuments.SupportingDocuments.bullet.three=memorandum and articles of association
-page.supportingDocuments.SupportingDocuments.bullet.four=prospectuses and other documents for attracting investment
-page.supportingDocuments.SupportingDocuments.bullet.five=last annual accounts or cash flow forecast if you haven''t submitted accounts yet
+page.supportingDocuments.bullet.one=business plan
+page.supportingDocuments.bullet.two=shareholder agreements or drafts
+page.supportingDocuments.bullet.three=memorandum and articles of association
+page.supportingDocuments.bullet.four=prospectuses and other documents for attracting investment
+page.supportingDocuments.bullet.five=last annual accounts or cash flow forecast if you haven''t submitted accounts yet
 page.supportingDocuments.SupportingDocuments.text.two=If these aren''t up-to-date you should also tell us about any changes you''ll be making to them.
 
 #supporting docs upload
 page.supportingDocumentsUpload.heading=To complete your Compliance Statement, we''ll need your company''s:
-page.supportingDocumentsUpload.bullet.one=business plan
-page.supportingDocumentsUpload.bullet.two=shareholder agreements or drafts
-page.supportingDocumentsUpload.bullet.three=memorandum and articles of association
-page.supportingDocumentsUpload.bullet.four= prospectuses and other documents for attracting investment
-page.supportingDocumentsUpload.bullet.five=last annual accounts or cash flow forecast if you haven''t submitted accounts yet
 page.supportingDocumentsUpload.docs.current=You don''t need to resend these documents if you''ve sent them to us before. If your documents aren''t up-to-date, you need to tell us about any changes.
 page.supportingDocumentsUpload.upload.instruction=You can either upload your documents now, or after you have checked and submitted your application.
 page.supportingDocumentsUpload.send.confirm=Do you want to upload your documents now?
@@ -566,27 +400,20 @@ page.checkAndSubmit.checkAnswers.suportingDocs.desc=To complete your Compliance 
 page.checkAndSubmit.checkDocuments.title=Check your documents
 page.checkAndSubmit.checkDocuments.heading=Check your documents
 page.checkAndSubmit.checkDocuments.outsideFlow.desc=Check you''ve uploaded the correct supporting documents.
-page.checkAndSubmit.checkDocuments.outsideFlow.table.heading=Your supporting documents
 page.checkAndSubmit.checkDocuments.button.confirm=Submit
 
 #summaryQuestions
 summaryQuestion.companyDetailsSection =Section 1: Company details
-summaryQuestion.companyName =Company name
-summaryQuestion.utr =Company Unique Taxpayer Reference
-summaryQuestion.registeredAddress =Registered address
 summaryQuestion.dateOfIncorporation =Date of incorporation
 summaryQuestion.natureOfBusiness =What your company does
 summaryQuestion.hasCommercialSale =Sold any goods or services commercially
 summaryQuestion.commercialSaleDate =Date of first commercial sale
-summaryQuestion.hasTradeStartDate =Started trading yet
-summaryQuestion.tradeStartDate =Trade start date
 summaryQuestion.knowledgeIntensive =Apply as knowledge intensive company
 summaryQuestion.operatingCosts =Operating costs
 summaryQuestion.rdCosts =Research and development costs
 summaryQuestion.percentageStaffWithMasters =Percentage of staff with master's degrees
 summaryQuestion.developmentPlan =Plan to develop something that you''ll own the rights to
 summaryQuestion.developmentPlanDesc =How your company will do that
-summaryQuestion.subsidiaries =Own or control any other companies
 summaryQuestion.bussinessPurpose = What will the money raised be used for
 summaryQuestion.bussinessStatus = Business activity started
 summaryQuestion.bussinessActivityStarted = Date business activity started
@@ -629,9 +456,6 @@ page.summaryQuestion.thirtyDayRuleModel=Investments received within 30 day perio
 page.summaryQuestion.investorsSection=Section 4: Investors and nominees
 page.summaryQuestion.noOfInvestors=Number of investors and nominees
 page.summaryQuestion.investorShares=Shares or debentures repaid or repurchased
-page.summaryQuestion.sharesRepaymentType=Type of repayment or repurchase:
-page.summaryQuestion.sharesRepaymentDate=Date of repayment or repurchase:
-page.summaryQuestion.sharesRepaymentAmount=Amount repaid or repurchased:
 page.summaryQuestion.isSharesValueReceived=Was any value received
 page.summaryQuestion.sharesValueReceived=What value was received
 page.summaryQuestion.isSharesValueChanged=Any changes in share capital
@@ -688,25 +512,12 @@ page.checkAndSubmit.acknowledgement.whatNext.certificate.warning = Your investor
 page.checkAndSubmit.acknowledgement.whatNext.conditions = If your company and shares do not meet the conditions, we''ll explain why and may ask you for more information. You''ll also be able to appeal against this decision.
 page.checkAndSubmit.acknowledgement.supporting.docs.heading=Sending your supporting documents
 page.checkAndSubmit.acknowledgement.review=We need your company''s:
-page.checkAndSubmit.acknowledgement.doc.one=business plan
-page.checkAndSubmit.acknowledgement.doc.two=shareholder agreements
-page.checkAndSubmit.acknowledgement.doc.three=memorandum and articles of association
-page.checkAndSubmit.acknowledgement.doc.four=prospectuses and other documents you used to attract the investment
-page.checkAndSubmit.acknowledgement.doc.five=last annual accounts or cash flow forecast if you haven''t submitted accounts yet
 page.checkAndSubmit.acknowledgement.upload.one = You can
 page.checkAndSubmit.acknowledgement.upload.link = upload your supporting documents
 page.checkAndSubmit.acknowledgement.upload.two = now, or you can upload them later from the
 page.checkAndSubmit.acknowledgement.upload.dashboard = Venture Capital Schemes dashboard
 page.checkAndSubmit.acknowledgement.button.confirm=Finish
 
-
-#lifetime allowance exceeded page - REMOVE THIS SECTION WHEN PROPOSED INVESTMENT GONE AND OLD ERROR PAGE REMOVED
-##=======================================================================================
-page.investment.LifetimeAllowanceExceeded.title=You don''t qualify for the scheme
-page.investment.LifetimeAllowanceExceeded.heading=You don''t qualify for the scheme
-page.investment.LifetimeAllowanceExceeded.reason=You''ve already raised more than {0} million from tax relief investment schemes.
-page.investment.LifetimeAllowanceExceeded.link=Back to investment schemes
-##====================================================================================================
 
 #lifetime allowance exceeded new
 page.LifetimeAllowanceExceededWarning.description=This is because your company has already raised {0} million of relevant investment in its lifetime.
@@ -741,18 +552,10 @@ page.investment.PreviousScheme.oneAtATime =Add them one at a time.
 page.investment.PreviousScheme.button.add=Add this scheme
 page.investment.PreviousScheme.button.update=Update this scheme
 page.investment.PreviousScheme.title=Which schemes or investments has your company used?
-validation.error.InvestmentSpent.Present=Investment amount raised should not be entered for this scheme type
-validation.error.SchemeName.Present=Scheme name should not be entered for this scheme type
 page.investment.PreviousScheme.location=It should be on the certificates you gave to your shareholders. You can also find it by searching for your company on the
 page.investment.PreviousScheme.companiesHouse = Companies House database
 page.investment.PreviousScheme.howToFind=How can you find this out?
 page.investment.PreviousScheme.investmentAmount=Investment amount raised
-
-#annual turnover error
-page.investment.AnnualTurnoverError.title=You don''t qualify for the scheme
-page.investment.AnnualTurnoverError.heading=You don''t qualify for the scheme
-page.investment.AnnualTurnoverError.description=The amount you''re trying to raise must be at least 50% of your average annual turnover.
-page.investment.AnnualTurnoverError.guidance=Link back to guidance
 
 #Trading For Too Long long error
 page.investment.TradingForTooLong.reason=Your company:
@@ -772,13 +575,6 @@ page.introduction.hub.button=Create a new application
 page.introduction.hub.existing.heading=Applications in progress
 page.introduction.hub.existing.table.heading=Application type
 page.introduction.hub.new.heading=You have no unsubmitted applications
-page.introduction.hub.existing.advanced.assurance.type=Advance Assurance - Enterprise Investment Scheme
-page.introduction.hub.existing.seis.type=Advance Assurance - Seed Enterprise Investment Scheme
-page.introduction.hub.existing.vct.type=Advance Assurance - Venture Capital Trust scheme
-page.introduction.hub.existing.eis-seis.type=Advance Assurance - Enterprise Investment Scheme and Seed Enterprise Investment Scheme
-page.introduction.hub.existing.eis-vct.type=Advance Assurance - Enterprise Investment Scheme and Venture Capital Trust Scheme
-page.introduction.hub.existing.seis-vct.type=Advance Assurance - Seed Enterprise Investment Scheme and Venture Capital Trust Scheme
-page.introduction.hub.existing.eis-seis-vct.type=Advance Assurance - Enterprise Investment Scheme, Seed Enterprise Investment Scheme and Venture Capital Trust scheme
 page.introduction.hub.existing.compliance.statement.type=Compliance Statement - Enterprise Investment Scheme
 page.introduction.hub.existing.compliance.statement.seis.type=Compliance Statement - Seed Enterprise Investment Scheme
 
@@ -803,7 +599,6 @@ page.investment.companyDetails.addressline3.label=Address line 3 (optional)
 page.investment.companyDetails.addressline4.label=Address line 4 (optional)
 page.investment.companyDetails.postcode.label=Postcode
 page.investment.companyDetails.country.label=Country
-page.address.country.select = Select one country
 
 # trade start date
 validation.error.TradeStartDate.Future = Trade start date cannot be a future date
@@ -839,19 +634,12 @@ page.individualDetails.addressline2.label= Address line 2
 page.individualDetails.addressline3.label= Address line 3 (optional)
 page.individualDetails.addressline4.label= Address line 4 (optional)
 page.individualDetails.postcode.label= Postcode
-page.individualDetails.country.label= Country
 
 # SEIS Check Answers
 page.seis.checkAndSubmit.checkAnswers.description.one=You''re applying for Advance Assurance for the Seed Enterprise Investment Scheme.
 
 # SEIS acknowledgement
 page.seis.checkAndSubmit.acknowledgement.whatNext.issue = If your company and shares meet the conditions of the Seed Enterprise Investment Scheme, we''ll authorise you to issue certificates to your investors. We''ll send you the certificates and information on how to issue them.
-
-
-# EIS SEIS lifetime allowance exceeded page
-page.eisseis.investment.LifetimeAllowanceExceeded.title=You don''t qualify for any of the schemes
-page.eisseis.investment.LifetimeAllowanceExceeded.heading=You don''t qualify for any of the schemes
-page.eisseis.investment.LifetimeAllowanceExceeded.reason=This is because you''ve already raised {0} million or more from tax relief investment schemes.
 
 #Delete Previous Scheme confirmation
 page.deletePreviousScheme.title=Confirm you want to remove this scheme or investment
@@ -866,24 +654,6 @@ page.test.page-one.button=Go to Page One
 page.test.page-two.title=Test Endpoint Page Two
 page.test.page-two.button=Go to Page Two
 
-#EIS attachments acknowledgement
-page.checkAndSubmit.eis.attachments.acknowledgement.title=You''ve sent your application
-page.checkAndSubmit.eis.attachments.acknowledgement.happens.next=We''ll contact you within 4 weeks to let you know the outcome of your application.
-page.checkAndSubmit.eis.attachments.acknowledgement.submissionConfirmation=You''ve sent your application
-page.checkAndSubmit.eis.attachments.acknowledgement.refNumberHeading=Make a note of your reference number:
-
-#EISSEIS attachments acknowledgement
-page.checkAndSubmit.eisseis.attachments.acknowledgement.title=You''ve sent your application
-page.checkAndSubmit.eisseis.attachments.acknowledgement.happens.next=We''ll contact you within 4 weeks to let you know the outcome of your application.
-page.checkAndSubmit.eisseis.attachments.acknowledgement.submissionConfirmation=You''ve sent your application
-page.checkAndSubmit.eisseis.attachments.acknowledgement.refNumberHeading=Make a note of your reference number:
-
-#SEIS attachments acknowledgement
-page.checkAndSubmit.seis.attachments.acknowledgement.title=You''ve sent your application
-page.checkAndSubmit.seis.attachments.acknowledgement.happens.next=We''ll contact you within 4 weeks to let you know the outcome of your application.
-page.checkAndSubmit.seis.attachments.acknowledgement.submissionConfirmation=You''ve sent your application
-page.checkAndSubmit.seis.attachments.acknowledgement.refNumberHeading=Make a note of your reference number:
-
 # OUTSIDE FLOW file upload acknowledgement
 page.hubPartials.fileUpload.acknowledgement.title=You''ve uploaded your documents
 page.hubPartials.fileUpload.acknowledgement.submission.confirmation=You''ve uploaded your documents
@@ -891,7 +661,6 @@ page.hubPartials.fileUpload.acknowledgement.what.happens.text=Once we''ve receiv
 page.hubPartials.fileUpload.acknowledgement.button.confirm=Finish
 page.introduction.hub.upload.link=Upload documents
 page.introduction.hub.upload.desc=to support an application.
-
 
 #AA Applications
 page.historicSubmissions.applications.aa.section.dashboard=Dashboard
@@ -909,12 +678,8 @@ page.historicSubmissions.applications.aa.no-previous.text=You have not submitted
 
 
 #Gross assets pages
-page.grossAssets.amount.invalidAmount=Enter an amount in the correct format e.g. 10000
-page.grossAssets.amount.OutOfRange=Enter an amount between 0 and 999999999
 page.grossAssets.amount.title=What were your company''s gross assets worth immediately before the share issue?
 page.grossAssets.amount.heading=What were your company''s gross assets worth immediately before the share issue?
-page.grossAssets.help.link=What happens if I don''t raise this amount?
-page.grossAssets.help.link.text=You might still be eligible for the scheme, as long as you don''t raise more than £5 million in a year.
 
 #Gross assets after issue page
 page.grossAssetsAfterIssue.amount.title=What were your company''s gross assets worth immediately after the share issue?
@@ -952,9 +717,7 @@ page.shares.shareDescription.bullet.two=tell us the nominal value of each type o
 validation.error.ShareIssueDate.Future=Share issue date cannot be a future date
 page.companyDetails.ShareIssueDate.title= When did your company issue the shares in this Compliance Statement?
 page.companyDetails.ShareIssueDate.heading= When did your company issue the shares in this Compliance Statement?
-page.companyDetails.ShareIssueDate.question= When did your company issue the shares in this Compliance Statement?
 page.companyDetails.ShareIssueDate.legend= When did your company issue the shares in this Compliance Statement?
-date.hint.shareIssueDate= For example, 31 3 1980
 page.companyDetails.ShareIssueDate.location= It''s on your company''s Register of Members.
 
 #share issue date error page
@@ -1046,7 +809,6 @@ page.investors.isExistingShareHolder.legend = Did this {0} already own shares in
 #Investor Share Issue Date
 page.investors.investorShareIssueDate.title = When were these previous shares issued?
 page.investors.investorShareIssueDate.heading = When were these previous shares issued?
-page.investors.investorShareIssueDate.legend = When were these previous shares issued?
 validation.error.InvestorShareIssueDate.Future = Investor previous shares issued date cannot be a future date
 
 #Number of shares purchased
@@ -1077,19 +839,13 @@ page.investors.addAnotherInvestor.title = Do you want to add another investor or
 page.investors.addAnotherInvestor.heading = Do you want to add another investor or nominee?
 page.investors.addAnotherInvestor.legend = Do you want to add another investor or nominee?
 
-#InvestorShareIssueDate
-page.investors.investorShareIssueDate.title = When were these previous shares issued?
-page.investors.investorShareIssueDate.heading = When were these previous shares issued?
-
 #AddAnotherShareholding
 page.investors.AddAnotherShareholding.title = Do you want to add another previous shareholding?
 
 #Delete Investor
 page.investors.deleteInvestor.title=Confirm that you want to remove this {0}
 page.investors.deleteInvestor.heading=Confirm that you want to remove this {0}
-page.investors.deleteInvestor.investorOrNominee=investor or nominee
 page.investors.deleteInvestor.confirm=This will remove {0} from your list of investors and nominees.
-page.investors.deleteInvestor.cancel=Cancel remove and go back
 page.investors.deleteInvestor.confirm.noName=This {0} will be permanently removed from your list of investors and nominees.
 
 #Review Investors
@@ -1104,7 +860,6 @@ page.investors.reviewInvestorDetails.investor.purchasedShares = How many shares 
 page.investors.reviewInvestorDetails.investor.totalSpent = How much did they spend in total
 page.investors.reviewInvestorDetails.shareholdings.subheading = Previous shareholdings
 page.investors.reviewInvestorDetails.shareholdings.isExistingShareholder = Do they have previous shareholdings
-page.investors.reviewInvestorDetails.shareholdings.nominalValue = Nominal value: {0}
 page.investors.reviewInvestorDetails.shareholdings.dateOfInvestment = Date of investment: {0}
 page.investors.reviewInvestorDetails.shareholdings.numberOfShares = Number of shares purchased: {0}
 page.investors.reviewInvestorDetails.shareholdings.addAnotherShareholding = Add another previous shareholding
@@ -1136,11 +891,9 @@ page.investors.DeletePreviousShareHolder.message.two = (date of purchase {0})
 page.investors.DeletePreviousShareHolder.message.three = from your list of previous shareholdings.
 
 #Share Capital Changes date
-validation.error.shareCapitalChanges.Future=Date of investment date cannot be a future date
 page.shareCapitalChanges.suggested=Suggested limit: 20 words
 page.shareCapitalChanges.question=What were the changes?
 page.shareCapitalChanges.heading=Have there been any changes in your company''s share capital since {0}?
-page.shareCapitalChanges.question.hint=Have there been any changes in your company''s share capital since {0}?
 page.shareCapitalChanges.title=Have there been any changes in your company''s share capital since {0}?
 
 page.shareCapitalChanges.info.title=For example, your company might have:
@@ -1165,7 +918,6 @@ page.initial.declaration.description.bullet.two.eis=terms and conditions of the 
 page.initial.declaration.description.bullet.two.seis=terms and conditions of the Seed Enterprise Investment Scheme
 page.initial.declaration.description.bullet.three=to tell us within 60 days of an event that means you no longer meet these conditions
 page.initial.declaration.submit=I agree
-page.initial.declaration.doNotAgree=I don''t agree
 
 # AnySharesRepayment page
 page.AnySharesRepayment.title=Have any shares or debentures been repaid or repurchased?
@@ -1230,9 +982,6 @@ page.WhoRepaidShares.heading=Who was repaid for their shares or debentures or ha
 # DateSharesRepaid page
 page.DateSharesRepaid.title=When was the repayment or repurchase made?
 page.DateSharesRepaid.heading=When was the repayment or repurchase made?
-
-# validation messages for generic validation section:
-validation.error.dateSharesRepaid.Future=Date of Repayment or repurchase cannot be a future date
 
 #share Repayment type page
 page.sharesRepaymentType.shares=Shares

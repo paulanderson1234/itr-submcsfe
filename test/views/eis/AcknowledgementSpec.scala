@@ -106,23 +106,23 @@ class AcknowledgementSpec extends ViewSpec {
         lazy val list = section.select("ul")
 
         "has the correct first element" in {
-          list.select("li").get(0).text() shouldBe Messages("page.checkAndSubmit.acknowledgement.doc.one")
+          list.select("li").get(0).text() shouldBe Messages("page.supportingDocuments.bullet.one")
         }
 
         "has the correct second element" in {
-          list.select("li").get(1).text() shouldBe Messages("page.checkAndSubmit.acknowledgement.doc.two")
+          list.select("li").get(1).text() shouldBe Messages("page.supportingDocuments.bullet.two")
         }
 
         "has the correct third element" in {
-          list.select("li").get(2).text() shouldBe Messages("page.checkAndSubmit.acknowledgement.doc.three")
+          list.select("li").get(2).text() shouldBe Messages("page.supportingDocuments.bullet.three")
         }
 
         "has the correct fourth element" in {
-          list.select("li").get(3).text() shouldBe Messages("page.checkAndSubmit.acknowledgement.doc.four")
+          list.select("li").get(3).text() shouldBe Messages("page.supportingDocuments.bullet.four")
         }
 
         "has the correct fifth element" in {
-          list.select("li").get(4).text() shouldBe Messages("page.checkAndSubmit.acknowledgement.doc.five")
+          list.select("li").get(4).text() shouldBe Messages("page.supportingDocuments.bullet.five")
         }
       }
     }
@@ -154,7 +154,7 @@ class AcknowledgementSpec extends ViewSpec {
         lazy val link = paragraph.select("a").last()
 
         "links to the hub" in {
-          link.attr("href") shouldBe "/hub"
+          link.attr("href") shouldBe controllers.routes.ApplicationHubController.show().url
         }
 
         "has the correct part of the message" in {

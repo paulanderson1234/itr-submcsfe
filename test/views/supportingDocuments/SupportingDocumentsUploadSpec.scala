@@ -44,11 +44,11 @@ class SupportingDocumentsUploadSpec extends ViewSpec {
       document.getElementById("main-heading").text() shouldBe Messages("page.supportingDocuments.SupportingDocuments.heading")
       document.getElementById("intro").text() shouldBe Messages("page.supportingDocumentsUpload.outFlow.heading")
 
-      document.getElementById("bullet-one").text() shouldBe Messages("page.supportingDocumentsUpload.bullet.one")
-      document.getElementById("bullet-two").text() shouldBe Messages("page.supportingDocumentsUpload.bullet.two")
-      document.getElementById("bullet-three").text() shouldBe Messages("page.supportingDocumentsUpload.bullet.three")
-      document.getElementById("bullet-four").text() shouldBe Messages("page.supportingDocumentsUpload.bullet.four")
-      document.getElementById("bullet-five").text() shouldBe Messages("page.supportingDocumentsUpload.bullet.five")
+      document.getElementById("bullet-one").text() shouldBe Messages("page.supportingDocuments.bullet.one")
+      document.getElementById("bullet-two").text() shouldBe Messages("page.supportingDocuments.bullet.two")
+      document.getElementById("bullet-three").text() shouldBe Messages("page.supportingDocuments.bullet.three")
+      document.getElementById("bullet-four").text() shouldBe Messages("page.supportingDocuments.bullet.four")
+      document.getElementById("bullet-five").text() shouldBe Messages("page.supportingDocuments.bullet.five")
       document.getElementById("docs-current").text() shouldBe Messages("page.supportingDocumentsUpload.docs.current")
       document.getElementById("noticeMessage").text() shouldBe Messages("page.supportingDocumentsUpload.outFlow.Note")
 

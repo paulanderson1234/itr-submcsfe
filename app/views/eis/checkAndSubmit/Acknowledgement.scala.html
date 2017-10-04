@@ -52,11 +52,11 @@
             <p id="remember-to-include">@Messages("page.checkAndSubmit.acknowledgement.review")</p>
 
             <ul class="list list-bullet">
-                <li id="business-plan">@Messages("page.checkAndSubmit.acknowledgement.doc.one")</li>
-                <li id="company-accounts">@Messages("page.checkAndSubmit.acknowledgement.doc.two")</li>
-                <li id="shareholder-agree">@Messages("page.checkAndSubmit.acknowledgement.doc.three")</li>
-                <li id="memorandum-articles">@Messages("page.checkAndSubmit.acknowledgement.doc.four")</li>
-                <li id="prospectus-docs">@Messages("page.checkAndSubmit.acknowledgement.doc.five")</li>
+                <li id="business-plan">@Messages("page.supportingDocuments.bullet.one")</li>
+                <li id="company-accounts">@Messages("page.supportingDocuments.bullet.two")</li>
+                <li id="shareholder-agree">@Messages("page.supportingDocuments.bullet.three")</li>
+                <li id="memorandum-articles">@Messages("page.supportingDocuments.bullet.four")</li>
+                <li id="prospectus-docs">@Messages("page.supportingDocuments.bullet.five")</li>
             </ul>
         </div>
 
@@ -65,7 +65,7 @@
                 <span>@Messages("page.checkAndSubmit.acknowledgement.upload.one")</span>
                 <a href="@controllers.eis.routes.SupportingDocumentsController.show().url">@Messages("page.checkAndSubmit.acknowledgement.upload.link")</a>
                 <span>@Messages("page.checkAndSubmit.acknowledgement.upload.two")</span>
-                <a href="/hub">@Messages("page.checkAndSubmit.acknowledgement.upload.dashboard")</a>.
+                <a href="@controllers.routes.ApplicationHubController.show()">@Messages("page.checkAndSubmit.acknowledgement.upload.dashboard")</a>.
             </p>
 
         </div>
