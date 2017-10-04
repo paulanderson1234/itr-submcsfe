@@ -39,7 +39,8 @@ trait ShareRepaymentsTestHelper {
       whoRepaidSharesModel = if(makeIncomplete) None else Some(WhoRepaidSharesModel(TestDataGenerator.randomAlphaString(3),
         TestDataGenerator.randomAlphaString(3), Some(shareRepaymentId))),
       sharesRepaymentTypeModel = if(makeIncomplete) None else Some(SharesRepaymentTypeModel(TestDataGenerator.randomWordString(3), Some(shareRepaymentId))),
-      dateSharesRepaidModel = if (makeIncomplete) None else Some(DateSharesRepaidModel(Some(1), Some(2), Some(1990), Some(shareRepaymentId))),
+      dateSharesRepaidModel = if (makeIncomplete) None else
+        Some(DateSharesRepaidModel(Some(1), Some(2), Some(1990), Some(shareRepaymentId))),
       amountSharesRepaymentModel = if(makeIncomplete) None else Some(AmountSharesRepaymentModel(TestDataGenerator.randomDecimalAmount,Some(shareRepaymentId))),
       processingId = Some(shareRepaymentId))
   }

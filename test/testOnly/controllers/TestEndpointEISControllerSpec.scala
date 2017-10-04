@@ -43,53 +43,6 @@ class TestEndpointEISControllerSpec extends BaseSpec {
 
   implicit val user = TAVCUser(ggUser.allowedAuthContext,internalId)
 
-  def setupShowMocks(): Unit = {
-    when(mockS4lConnector.fetchAndGetFormData[NatureOfBusinessModel](Matchers.eq(KeystoreKeys.natureOfBusiness))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
-    when(mockS4lConnector.fetchAndGetFormData[DateOfIncorporationModel](Matchers.eq(KeystoreKeys.dateOfIncorporation))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
-    when(mockS4lConnector.fetchAndGetFormData[CommercialSaleModel](Matchers.eq(KeystoreKeys.commercialSale))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
-    when(mockS4lConnector.fetchAndGetFormData[OperatingCostsModel](Matchers.eq(KeystoreKeys.operatingCosts))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
-    when(mockS4lConnector.fetchAndGetFormData[IsKnowledgeIntensiveModel](Matchers.eq(KeystoreKeys.isKnowledgeIntensive))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
-    when(mockS4lConnector.fetchAndGetFormData[PercentageStaffWithMastersModel](Matchers.eq(KeystoreKeys.percentageStaffWithMasters))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
-    when(mockS4lConnector.fetchAndGetFormData[TenYearPlanModel](Matchers.eq(KeystoreKeys.tenYearPlan))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
-    when(mockS4lConnector.fetchAndGetFormData[HadPreviousRFIModel](Matchers.eq(KeystoreKeys.hadPreviousRFI))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
-    when(mockS4lConnector.fetchAndGetFormData[UsedInvestmentReasonBeforeModel](Matchers.eq(KeystoreKeys.usedInvestmentReasonBefore))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
-    when(mockS4lConnector.fetchAndGetFormData[Vector[PreviousSchemeModel]](Matchers.eq(KeystoreKeys.previousSchemes))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
-    when(mockS4lConnector.fetchAndGetFormData[TotalAmountRaisedModel](Matchers.eq(KeystoreKeys.totalAmountRaised))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
-    when(mockS4lConnector.fetchAndGetFormData[PreviousBeforeDOFCSModel](Matchers.eq(KeystoreKeys.previousBeforeDOFCS))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
-    when(mockS4lConnector.fetchAndGetFormData[NewGeographicalMarketModel](Matchers.eq(KeystoreKeys.newGeographicalMarket))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
-    when(mockS4lConnector.fetchAndGetFormData[NewProductModel](Matchers.eq(KeystoreKeys.newProduct))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
-    when(mockS4lConnector.fetchAndGetFormData[AnnualTurnoverCostsModel](Matchers.eq(KeystoreKeys.turnoverCosts))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
-    when(mockS4lConnector.fetchAndGetFormData[InvestmentGrowModel](Matchers.eq(KeystoreKeys.investmentGrow))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
-    when(mockS4lConnector.fetchAndGetFormData[ConfirmContactDetailsModel](Matchers.eq(KeystoreKeys.confirmContactDetails))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
-    when(mockS4lConnector.fetchAndGetFormData[ContactDetailsModel](Matchers.eq(KeystoreKeys.manualContactDetails))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
-    when(mockS4lConnector.fetchAndGetFormData[ConfirmCorrespondAddressModel](Matchers.eq(KeystoreKeys.confirmContactAddress))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
-    when(mockS4lConnector.fetchAndGetFormData[AddressModel](Matchers.eq(KeystoreKeys.manualContactAddress))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
-    when(mockS4lConnector.fetchAndGetFormData[HadOtherInvestmentsModel](Matchers.eq(KeystoreKeys.hadOtherInvestments))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
-    when(mockS4lConnector.fetchAndGetFormData[String](Matchers.any())
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
-  }
-
   def setupFillFormMocks(natureOfBusinessModel: Option[NatureOfBusinessModel]): Unit = {
     when(mockS4lConnector.fetchAndGetFormData[NatureOfBusinessModel](Matchers.eq(KeystoreKeys.natureOfBusiness))
       (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(natureOfBusinessModel))
@@ -121,7 +74,8 @@ class TestEndpointEISControllerSpec extends BaseSpec {
 
       "Return OK" in {
         mockEnrolledRequest()
-        setupShowMocks()
+        when(mockS4lConnector.fetchAndGetFormData[String](Matchers.any())
+          (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
         showWithSessionAndAuth(TestController.showPageOne())(
           result => status(result) shouldBe OK
         )
@@ -152,7 +106,8 @@ class TestEndpointEISControllerSpec extends BaseSpec {
 
       "Return OK" in {
         mockEnrolledRequest()
-        setupShowMocks()
+        when(mockS4lConnector.fetchAndGetFormData[String](Matchers.any())
+          (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
         showWithSessionAndAuth(TestController.showPageTwo(None))(
           result => status(result) shouldBe OK
         )
@@ -169,6 +124,39 @@ class TestEndpointEISControllerSpec extends BaseSpec {
       "Return OK" in {
         mockEnrolledRequest()
         submitWithSessionAndAuth(TestController.submitPageTwo())(
+          result => status(result) shouldBe OK
+        )
+      }
+
+    }
+
+  }
+
+
+  "TestEndpointEISController.showPageThree" when {
+
+    "Called as an authorised and enrolled user" should {
+
+      "Return OK" in {
+        mockEnrolledRequest()
+        when(mockS4lConnector.fetchAndGetFormData[String](Matchers.any())
+          (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
+        showWithSessionAndAuth(TestController.showPageThree())(
+          result => status(result) shouldBe OK
+        )
+      }
+
+    }
+
+  }
+
+  "TestEndpointEISController.submitPageThree" when {
+
+    "Called as an authorised and enrolled user" should {
+
+      "Return OK" in {
+        mockEnrolledRequest()
+        submitWithSessionAndAuth(TestController.submitPageThree())(
           result => status(result) shouldBe OK
         )
       }
