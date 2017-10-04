@@ -145,6 +145,29 @@ trait TestEndpointEISController extends FrontendController with AuthorisedAndEnr
     )
   }
 
+
+  def showPageThree: Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user => implicit request =>
+    for {
+      valueReceivedForm <- fillForm[WasAnyValueReceivedModel](KeystoreKeys.wasAnyValueReceived,WasAnyValueReceivedForm.wasAnyValueReceivedForm)
+      shareLoanCapitalForm <- fillForm[ShareCapitalChangesModel](KeystoreKeys.shareCapitalChanges,ShareCapitalChangesForm.shareCapitalChangesForm)
+      confirmContactDetailsForm <- fillForm[ConfirmContactDetailsModel](KeystoreKeys.confirmContactDetails, ConfirmContactDetailsForm.confirmContactDetailsForm)
+      contactDetailsForm <- fillForm[ContactDetailsModel](KeystoreKeys.manualContactDetails, ContactDetailsForm.contactDetailsForm)
+      confirmCorrespondAddressForm <- fillForm[ConfirmCorrespondAddressModel](KeystoreKeys.confirmContactAddress,
+        ConfirmCorrespondAddressForm.confirmCorrespondAddressForm)
+      contactAddressForm <- fillForm[AddressModel](KeystoreKeys.manualContactAddress, ContactAddressForm.contactAddressForm)
+    } yield Ok(
+      testOnly.views.html.eis.testEndpointEISPageThree(
+        valueReceivedForm,
+        shareLoanCapitalForm,
+        confirmContactDetailsForm,
+        contactDetailsForm,
+        confirmCorrespondAddressForm,
+        contactAddressForm
+      )
+    )
+  }
+
+
   def submitPageOne: Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user => implicit request =>
     val natureOfBusiness = bindForm[NatureOfBusinessModel](KeystoreKeys.natureOfBusiness, NatureOfBusinessForm.natureOfBusinessForm)
     val dateOfIncorporation = bindForm[DateOfIncorporationModel](KeystoreKeys.dateOfIncorporation, DateOfIncorporationForm.dateOfIncorporationForm)
@@ -219,9 +242,6 @@ trait TestEndpointEISController extends FrontendController with AuthorisedAndEnr
     val contactAddress = bindForm[AddressModel](KeystoreKeys.manualContactAddress, ContactAddressForm.contactAddressForm)
 
     saveInvestorDetails(populateIvestorTestData(investorModelOptions.value.fold("1")(_.testInvestorModeOptions)))
-    saveBackLinks()
-    saveSchemeType()
-    saveDoUpload()
     Future.successful(Ok(
       testOnly.views.html.eis.testEndpointEISPageTwo(
         fullTimeEmployeeCount,
@@ -244,6 +264,30 @@ trait TestEndpointEISController extends FrontendController with AuthorisedAndEnr
       )
     ))
   }
+
+
+  def submitPageThree: Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user => implicit request =>
+    val valueReceived = bindForm[WasAnyValueReceivedModel](KeystoreKeys.wasAnyValueReceived,WasAnyValueReceivedForm.wasAnyValueReceivedForm)
+    val shareLoanCapital = bindForm[ShareCapitalChangesModel](KeystoreKeys.shareCapitalChanges,ShareCapitalChangesForm.shareCapitalChangesForm)
+    val confirmContactDetails = bindConfirmContactDetails()
+    val contactDetails = bindForm[ContactDetailsModel](KeystoreKeys.manualContactDetails, ContactDetailsForm.contactDetailsForm)
+    val confirmCorrespondAddress = bindConfirmContactAddress()
+    val contactAddress = bindForm[AddressModel](KeystoreKeys.manualContactAddress, ContactAddressForm.contactAddressForm)
+    saveBackLinks()
+    saveSchemeType()
+    saveDoUpload()
+    Future.successful(Ok(
+      testOnly.views.html.eis.testEndpointEISPageThree(
+        valueReceived,
+        shareLoanCapital,
+        confirmContactDetails,
+        contactDetails,
+        confirmCorrespondAddress,
+        contactAddress
+      )
+    ))
+  }
+
 
   private def saveInvestorDetails(investorDetails: Vector[InvestorDetailsModel])(implicit hc: HeaderCarrier, user: TAVCUser) = {
     s4lConnector.saveFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails, investorDetails)
