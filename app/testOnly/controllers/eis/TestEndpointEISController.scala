@@ -24,8 +24,7 @@ import controllers.Helpers.PreviousSchemesHelper
 import models._
 import models.investorDetails.InvestorDetailsModel
 import forms._
-import models.repayments.AnySharesRepaymentModel
-import models.repayments.SharesRepaymentDetailsModel
+import models.repayments.{AnySharesRepaymentModel, SharesRepaymentDetailsModel, WhoRepaidSharesModel}
 import models.submission.SchemeTypesModel
 import play.api.data.Form
 import play.api.libs.json.Format
@@ -255,6 +254,7 @@ trait TestEndpointEISController extends FrontendController with AuthorisedAndEnr
 
     val shareRepaymentsModelOptions = bindForm[TestShareRepaymentsOptionsModel](keyStoreKeyShareRepaymentsModelOptions,
       TestShareRepaymentsOptionsForm.testShareRepaymentsOptionsForm)
+
     saveShareRepaymentsDetails(populateShareRepaymentsTestData(shareRepaymentsModelOptions.value.fold("1")(_.testShareRepaymentsOptionsModel)))
 
     val valueReceived = bindForm[WasAnyValueReceivedModel](KeystoreKeys.wasAnyValueReceived,WasAnyValueReceivedForm.wasAnyValueReceivedForm)
@@ -291,7 +291,7 @@ trait TestEndpointEISController extends FrontendController with AuthorisedAndEnr
   }
 
   private def saveSubsidiaries()(implicit hc: HeaderCarrier, user: TAVCUser) = {
-    s4lConnector.saveFormData[SubsidiariesModel](KeystoreKeys.sharesRepaymentDetails, SubsidiariesModel(Constants.StandardRadioButtonNoValue))
+    s4lConnector.saveFormData[SubsidiariesModel](KeystoreKeys.subsidiaries, SubsidiariesModel(Constants.StandardRadioButtonNoValue))
   }
 
 
