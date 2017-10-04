@@ -25,6 +25,7 @@ import models._
 import models.investorDetails.InvestorDetailsModel
 import forms._
 import models.repayments.AnySharesRepaymentModel
+import models.repayments.SharesRepaymentDetailsModel
 import models.submission.SchemeTypesModel
 import play.api.data.Form
 import play.api.libs.json.Format
@@ -35,7 +36,7 @@ import uk.gov.hmrc.play.frontend.controller.FrontendController
 import uk.gov.hmrc.play.http.HeaderCarrier
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
-import testOnly.controllers.InvestorTestHelper
+import testOnly.controllers.{InvestorTestHelper, ShareRepaymentsTestHelper}
 
 import scala.concurrent.Future
 
@@ -46,6 +47,7 @@ trait TestEndpointEISController extends FrontendController with AuthorisedAndEnr
   val s4lConnector: S4LConnector
   val defaultPreviousSchemesSize = 2
   val keyStoreKeyInvestorModelOptions = "testonly:keyStoreKeyInvestorModelOptions"
+  val keyStoreKeyShareRepaymentsModelOptions = "testonly:keyStoreKeyShareRepaymentsModelOptions"
 
   val kiProcessingModelYes = KiProcessingModel(Some(true), Some(true), Some(true), Some(true), Some(true), Some(true))
   val kiProcessingModelNo = KiProcessingModel(Some(false), Some(false), Some(false), Some(false), Some(false), Some(false))
@@ -57,7 +59,7 @@ trait TestEndpointEISController extends FrontendController with AuthorisedAndEnr
         dateOfIncorporationForm <- fillForm[DateOfIncorporationModel](KeystoreKeys.dateOfIncorporation, DateOfIncorporationForm.dateOfIncorporationForm)
         qualifyingBusinessForm <- fillForm[QualifyBusinessActivityModel](KeystoreKeys.isQualifyBusinessActivity,
           QualifyBusinessActivityForm.qualifyBusinessActivityForm)
-        tradeStartDateForm <- fillForm[HasInvestmentTradeStartedModel](KeystoreKeys.tradeStartDate, HasInvestmentTradeStartedForm.hasInvestmentTradeStartedForm)
+        tradeStartDateForm <- fillForm[HasInvestmentTradeStartedModel](KeystoreKeys.hasInvestmentTradeStarted, HasInvestmentTradeStartedForm.hasInvestmentTradeStartedForm)
         researchStartDateForm <- fillForm[ResearchStartDateModel](KeystoreKeys.researchStartDate, ResearchStartDateForm.researchStartDateForm)
         commercialSaleForm <- fillForm[CommercialSaleModel](KeystoreKeys.commercialSale, CommercialSaleForm.commercialSaleForm)
         shareIssueDateForm <- fillForm[ShareIssueDateModel](KeystoreKeys.shareIssueDate, ShareIssueDateForm.shareIssueDateForm)
@@ -70,9 +72,6 @@ trait TestEndpointEISController extends FrontendController with AuthorisedAndEnr
           PercentageStaffWithMastersForm.percentageStaffWithMastersForm)
         tenYearPlanForm <- fillForm[TenYearPlanModel](KeystoreKeys.tenYearPlan, TenYearPlanForm.tenYearPlanForm)
 
-//        hadPreviousRFIForm <- fillForm[HadPreviousRFIModel](KeystoreKeys.hadPreviousRFI, HadPreviousRFIForm.hadPreviousRFIForm)
-//        previousSchemesForm <- fillPreviousSchemesForm
-//        hadOtherInvestmentsForm <- fillForm[HadOtherInvestmentsModel](KeystoreKeys.hadOtherInvestments, HadOtherInvestmentsForm.hadOtherInvestmentsForm)
       } yield Ok(
         testOnly.views.html.eis.testEndpointEISPageOne(
           natureOfBusinessForm,
@@ -90,10 +89,6 @@ trait TestEndpointEISController extends FrontendController with AuthorisedAndEnr
           percentageStaffWithMastersForm,
           tenYearPlanForm
 
-//          hadPreviousRFIForm,
-//          previousSchemesForm,
-//          schemes.getOrElse(defaultPreviousSchemesSize),
-//          hadOtherInvestmentsForm
         )
       )
   }
@@ -118,11 +113,6 @@ trait TestEndpointEISController extends FrontendController with AuthorisedAndEnr
       investmentGrowForm <- fillForm[InvestmentGrowModel](KeystoreKeys.investmentGrow, InvestmentGrowForm.investmentGrowForm)
       testInvestorModeOptionsForm <- fillForm[TestInvestorModeOptionsModel](keyStoreKeyInvestorModelOptions,
         TestInvestorModeOptionsForm.testInvestorModeOptionsForm)
-      confirmContactDetailsForm <- fillForm[ConfirmContactDetailsModel](KeystoreKeys.confirmContactDetails, ConfirmContactDetailsForm.confirmContactDetailsForm)
-      contactDetailsForm <- fillForm[ContactDetailsModel](KeystoreKeys.manualContactDetails, ContactDetailsForm.contactDetailsForm)
-      confirmCorrespondAddressForm <- fillForm[ConfirmCorrespondAddressModel](KeystoreKeys.confirmContactAddress,
-        ConfirmCorrespondAddressForm.confirmCorrespondAddressForm)
-      contactAddressForm <- fillForm[AddressModel](KeystoreKeys.manualContactAddress, ContactAddressForm.contactAddressForm)
     } yield Ok(
       testOnly.views.html.eis.testEndpointEISPageTwo(
         fullTimeEmployeeCountForm,
@@ -150,6 +140,8 @@ trait TestEndpointEISController extends FrontendController with AuthorisedAndEnr
   def showPageThree: Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user => implicit request =>
     for {
       anySharesRepaymentForm <- fillForm[AnySharesRepaymentModel](KeystoreKeys.anySharesRepayment,AnySharesRepaymentForm.anySharesRepaymentForm)
+      testShareRepaymentsModeOptionsForm <- fillForm[TestShareRepaymentsOptionsModel](keyStoreKeyShareRepaymentsModelOptions,
+        TestShareRepaymentsOptionsForm.testShareRepaymentsOptionsForm)
       valueReceivedForm <- fillForm[WasAnyValueReceivedModel](KeystoreKeys.wasAnyValueReceived,WasAnyValueReceivedForm.wasAnyValueReceivedForm)
       shareLoanCapitalForm <- fillForm[ShareCapitalChangesModel](KeystoreKeys.shareCapitalChanges,ShareCapitalChangesForm.shareCapitalChangesForm)
       confirmContactDetailsForm <- fillForm[ConfirmContactDetailsModel](KeystoreKeys.confirmContactDetails, ConfirmContactDetailsForm.confirmContactDetailsForm)
@@ -157,9 +149,11 @@ trait TestEndpointEISController extends FrontendController with AuthorisedAndEnr
       confirmCorrespondAddressForm <- fillForm[ConfirmCorrespondAddressModel](KeystoreKeys.confirmContactAddress,
         ConfirmCorrespondAddressForm.confirmCorrespondAddressForm)
       contactAddressForm <- fillForm[AddressModel](KeystoreKeys.manualContactAddress, ContactAddressForm.contactAddressForm)
+
     } yield Ok(
       testOnly.views.html.eis.testEndpointEISPageThree(
         anySharesRepaymentForm,
+        testShareRepaymentsModeOptionsForm,
         valueReceivedForm,
         shareLoanCapitalForm,
         confirmContactDetailsForm,
@@ -189,10 +183,6 @@ trait TestEndpointEISController extends FrontendController with AuthorisedAndEnr
     val percentageStaffWithMasters = bindForm[PercentageStaffWithMastersModel](KeystoreKeys.percentageStaffWithMasters,
       PercentageStaffWithMastersForm.percentageStaffWithMastersForm)
     val tenYearPlan = bindForm[TenYearPlanModel](KeystoreKeys.tenYearPlan, TenYearPlanForm.tenYearPlanForm)
-
-//    val hadPreviousRFI = bindForm[HadPreviousRFIModel](KeystoreKeys.hadPreviousRFI, HadPreviousRFIForm.hadPreviousRFIForm)
-//    val testPreviousSchemes = bindPreviousSchemesForm()
-//    val hadOtherInvestments = bindForm[HadOtherInvestmentsModel](KeystoreKeys.hadOtherInvestments, HadOtherInvestmentsForm.hadOtherInvestmentsForm)
     saveBackLinks()
     saveSchemeType()
     Future.successful(Ok(
@@ -211,11 +201,6 @@ trait TestEndpointEISController extends FrontendController with AuthorisedAndEnr
         testOperatingCosts,
         percentageStaffWithMasters,
         tenYearPlan
-
-//        hadPreviousRFI,
-//        testPreviousSchemes,
-//        defaultPreviousSchemesSize,
-//        hadOtherInvestments
       )
     ))
   }
@@ -239,10 +224,6 @@ trait TestEndpointEISController extends FrontendController with AuthorisedAndEnr
     val marketDescription = bindForm[MarketDescriptionModel](KeystoreKeys.marketDescription, MarketDescriptionForm.marketDescriptionForm)
     val investmentGrow = bindForm[InvestmentGrowModel](KeystoreKeys.investmentGrow, InvestmentGrowForm.investmentGrowForm)
     val investorModelOptions = bindForm[TestInvestorModeOptionsModel](keyStoreKeyInvestorModelOptions, TestInvestorModeOptionsForm.testInvestorModeOptionsForm)
-    val confirmContactDetails = bindConfirmContactDetails()
-    val contactDetails = bindForm[ContactDetailsModel](KeystoreKeys.manualContactDetails, ContactDetailsForm.contactDetailsForm)
-    val confirmCorrespondAddress = bindConfirmContactAddress()
-    val contactAddress = bindForm[AddressModel](KeystoreKeys.manualContactAddress, ContactAddressForm.contactAddressForm)
 
     saveInvestorDetails(populateIvestorTestData(investorModelOptions.value.fold("1")(_.testInvestorModeOptions)))
     Future.successful(Ok(
@@ -271,6 +252,11 @@ trait TestEndpointEISController extends FrontendController with AuthorisedAndEnr
 
   def submitPageThree: Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user => implicit request =>
     val anySharesRepayment = bindForm[AnySharesRepaymentModel](KeystoreKeys.anySharesRepayment,AnySharesRepaymentForm.anySharesRepaymentForm)
+
+    val shareRepaymentsModelOptions = bindForm[TestShareRepaymentsOptionsModel](keyStoreKeyShareRepaymentsModelOptions,
+      TestShareRepaymentsOptionsForm.testShareRepaymentsOptionsForm)
+    saveShareRepaymentsDetails(populateShareRepaymentsTestData(shareRepaymentsModelOptions.value.fold("1")(_.testShareRepaymentsOptionsModel)))
+
     val valueReceived = bindForm[WasAnyValueReceivedModel](KeystoreKeys.wasAnyValueReceived,WasAnyValueReceivedForm.wasAnyValueReceivedForm)
     val shareLoanCapital = bindForm[ShareCapitalChangesModel](KeystoreKeys.shareCapitalChanges,ShareCapitalChangesForm.shareCapitalChangesForm)
     val confirmContactDetails = bindConfirmContactDetails()
@@ -280,9 +266,11 @@ trait TestEndpointEISController extends FrontendController with AuthorisedAndEnr
     saveBackLinks()
     saveSchemeType()
     saveDoUpload()
+    saveSubsidiaries()
     Future.successful(Ok(
       testOnly.views.html.eis.testEndpointEISPageThree(
         anySharesRepayment,
+        shareRepaymentsModelOptions,
         valueReceived,
         shareLoanCapital,
         confirmContactDetails,
@@ -297,6 +285,15 @@ trait TestEndpointEISController extends FrontendController with AuthorisedAndEnr
   private def saveInvestorDetails(investorDetails: Vector[InvestorDetailsModel])(implicit hc: HeaderCarrier, user: TAVCUser) = {
     s4lConnector.saveFormData[Vector[InvestorDetailsModel]](KeystoreKeys.investorDetails, investorDetails)
   }
+
+  private def saveShareRepaymentsDetails(shareRepaymentsDetails: Vector[SharesRepaymentDetailsModel])(implicit hc: HeaderCarrier, user: TAVCUser) = {
+    s4lConnector.saveFormData[Vector[SharesRepaymentDetailsModel]](KeystoreKeys.sharesRepaymentDetails, shareRepaymentsDetails)
+  }
+
+  private def saveSubsidiaries()(implicit hc: HeaderCarrier, user: TAVCUser) = {
+    s4lConnector.saveFormData[SubsidiariesModel](KeystoreKeys.sharesRepaymentDetails, SubsidiariesModel(Constants.StandardRadioButtonNoValue))
+  }
+
 
   private def populateIvestorTestData(options: String = "1"): Vector[InvestorDetailsModel] = {
     options match {
@@ -326,6 +323,27 @@ trait TestEndpointEISController extends FrontendController with AuthorisedAndEnr
       case _ => InvestorTestHelper.getInvestors(1, 5)
     }
   }
+
+  private def populateShareRepaymentsTestData(options: String = "1"): Vector[SharesRepaymentDetailsModel] = {
+    options match {
+
+      // Single Complete Share Repayment
+      case "1" => ShareRepaymentsTestHelper.getShareRepayments(1)
+
+      // Single Incomplete Share Repayment"
+      case "2" => ShareRepaymentsTestHelper.getShareRepayments(1, includeIncompleteShareRepayment = true)
+
+      //  5 Complete Share Repayments
+      case "3" => ShareRepaymentsTestHelper.getShareRepayments(5)
+
+      // 5 Share Repayments (4 Complete and 1 Incomplete)
+      case "4" => ShareRepaymentsTestHelper.getShareRepayments(5, includeIncompleteShareRepayment = true)
+
+      // catch all
+      case _ => ShareRepaymentsTestHelper.getShareRepayments(1)
+    }
+  }
+
 
   private def saveBackLinks()(implicit hc: HeaderCarrier, user: TAVCUser) = {
     s4lConnector.saveFormData[Boolean](KeystoreKeys.applicationInProgress, true)

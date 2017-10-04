@@ -122,7 +122,7 @@ class TestEndpointEISControllerSpec extends BaseSpec {
       "Return OK" in {
         mockEnrolledRequest()
         setupShowMocks()
-        showWithSessionAndAuth(TestController.showPageOne(None))(
+        showWithSessionAndAuth(TestController.showPageOne())(
           result => status(result) shouldBe OK
         )
       }
@@ -153,7 +153,7 @@ class TestEndpointEISControllerSpec extends BaseSpec {
       "Return OK" in {
         mockEnrolledRequest()
         setupShowMocks()
-        showWithSessionAndAuth(TestController.showPageTwo())(
+        showWithSessionAndAuth(TestController.showPageTwo(None))(
           result => status(result) shouldBe OK
         )
       }

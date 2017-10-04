@@ -7,12 +7,13 @@
 @import views.html.helpers.{externalLink,formHint, formInputRadioGroup, backButtonWithProgress, input, inputWithCurrencySymbol, formInlineDateInput, hiddenField, errorSummary, formHiddenYesNoRadioNoError, textArea, dropdown, formHiddenYesNoRadio}
 
 @(anySharesRepaymentForm: Form[AnySharesRepaymentModel],
-  wasAnyValueReceivedForm: Form[WasAnyValueReceivedModel],
-  shareCapitalChangesForm: Form[ShareCapitalChangesModel],
-  confirmContactDetailsForm: Form[ConfirmContactDetailsModel],
-  contactDetailsForm: Form[ContactDetailsModel],
-  confirmCorrespondAddressForm: Form[ConfirmCorrespondAddressModel],
-  contactAddressForm: Form[AddressModel])(implicit request: Request[_], messages: Messages)
+testShareRepaymentsOptionsForm: Form[TestShareRepaymentsOptionsModel],
+wasAnyValueReceivedForm: Form[WasAnyValueReceivedModel],
+shareCapitalChangesForm: Form[ShareCapitalChangesModel],
+confirmContactDetailsForm: Form[ConfirmContactDetailsModel],
+contactDetailsForm: Form[ContactDetailsModel],
+confirmCorrespondAddressForm: Form[ConfirmCorrespondAddressModel],
+contactAddressForm: Form[AddressModel])(implicit request: Request[_], messages: Messages)
 @main_template(Messages("page.test.page-three.title")) {
 <div class="grid-row">
 
@@ -31,6 +32,24 @@
         '_labelClass -> "block-label",
         '_legendID -> "anySharesRepayment",
         '_groupClass -> "inline"
+        )
+    </div>
+
+    <h2>Share Repayments</h2>
+    <div class="form-group">
+        @formInputRadioGroup(
+        field = testShareRepaymentsOptionsForm("testShareRepaymentsOptions"),
+        Seq(
+        "1" -> "Single Share Repayment",
+        "2" -> "Single Incomplete Share Repayment",
+        "3" -> "5 Complete Share Repayments",
+        "4" -> "4 Complete Share Repayments and 1 Incomplete"),
+        '_legend -> "Select the share repayments population option desired",
+        '_legendClass -> "visuallyhidden",
+        '_labelAfter -> true,
+        '_labelClass -> "block-label",
+        '_legendID -> "shareRepaymentsPopulationOptions",
+        '_groupClass -> "block"
         )
     </div>
 
