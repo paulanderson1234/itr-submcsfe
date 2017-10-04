@@ -680,7 +680,7 @@ page.checkAndSubmit.acknowledgement.submissionConfirmation=Your Compliance State
 page.checkAndSubmit.acknowledgement.refNumberHeading=Your reference number is:
 page.checkAndSubmit.acknowledgement.refNumber.note=Make a note of your reference number. If you need to contact us, we can use it to help identify your submission.
 page.checkAndSubmit.acknowledgement.whatNext.list.heading = You need to send us your supporting documents if:
-page.checkAndSubmit.acknowledgement.whatNext.list.one = you haven't sent them to us before
+page.checkAndSubmit.acknowledgement.whatNext.list.one = you haven''t sent them to us before
 page.checkAndSubmit.acknowledgement.whatNext.list.two = they''ve changed or been updated since you first sent them
 page.checkAndSubmit.acknowledgement.whatNext.outcome = Once we''ve received your supporting documents, we''ll review your Compliance Statement and let you know the outcome within 4 weeks.
 page.eis.checkAndSubmit.acknowledgement.whatNext.issue = If your company and shares meet the conditions of the Enterprise Investment Scheme, we''ll authorise you to issue certificates to your investors. We''ll send you the certificates and information on how to issue them.
@@ -845,30 +845,7 @@ page.individualDetails.country.label= Country
 page.seis.checkAndSubmit.checkAnswers.description.one=You''re applying for Advance Assurance for the Seed Enterprise Investment Scheme.
 
 # SEIS acknowledgement
-page.seis.checkAndSubmit.acknowledgement.title=Your Compliance Statement has been received
-page.seis.checkAndSubmit.acknowledgement.submissionConfirmation=Your Compliance Statement has been received
-page.seis.checkAndSubmit.acknowledgement.refNumberHeading=Your reference number is:
-page.seis.checkAndSubmit.acknowledgement.refNumber.note=Make a note of your reference number. If you need to contact us, we can use it to help identify your submission.
-page.seis.checkAndSubmit.acknowledgement.whatNext.list.heading = You need to send us your supporting documents if:
-page.seis.checkAndSubmit.acknowledgement.whatNext.list.one = you haven't sent them to us before
-page.seis.checkAndSubmit.acknowledgement.whatNext.list.two = they''ve changed or been updated since you first sent them
-page.seis.checkAndSubmit.acknowledgement.whatNext.outcome = Once we''ve received your supporting documents, we''ll review your Compliance Statement and let you know the outcome within 4 weeks.
 page.seis.checkAndSubmit.acknowledgement.whatNext.issue = If your company and shares meet the conditions of the Seed Enterprise Investment Scheme, we''ll authorise you to issue certificates to your investors. We''ll send you the certificates and information on how to issue them.
-page.eis.checkAndSubmit.acknowledgement.whatNext.issue = If your company and shares meet the conditions of the Enterprise Investment Scheme, we''ll authorise you to issue certificates to your investors. We''ll send you the certificates and information on how to issue them.
-page.seis.checkAndSubmit.acknowledgement.whatNext.certificate.warning = Your investors must have their certificates before they claim any tax relief
-page.seis.checkAndSubmit.acknowledgement.whatNext.conditions = If your company and shares do not meet the conditions, we''ll explain why and may ask you for more information. You''ll also be able to appeal against this decision.
-page.seis.checkAndSubmit.acknowledgement.supporting.docs.heading=Sending your supporting documents
-page.seis.checkAndSubmit.acknowledgement.review=We need your company''s:
-page.seis.checkAndSubmit.acknowledgement.doc.one=business plan
-page.seis.checkAndSubmit.acknowledgement.doc.two=shareholder agreements
-page.seis.checkAndSubmit.acknowledgement.doc.three=memorandum and articles of association
-page.seis.checkAndSubmit.acknowledgement.doc.four=prospectuses and other documents you used to attract the investment
-page.seis.checkAndSubmit.acknowledgement.doc.five=last annual accounts or cash flow forecast if you haven''t submitted accounts yet
-page.seis.checkAndSubmit.acknowledgement.upload.one = You can
-page.seis.checkAndSubmit.acknowledgement.upload.link = upload your supporting documents
-page.seis.checkAndSubmit.acknowledgement.upload.two = now, or you can upload them later from the
-page.seis.checkAndSubmit.acknowledgement.upload.dashboard = Venture Capital Schemes dashboard
-page.seis.checkAndSubmit.acknowledgement.button.confirm=Finish
 
 
 # EIS SEIS lifetime allowance exceeded page
