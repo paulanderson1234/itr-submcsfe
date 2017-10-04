@@ -110,6 +110,11 @@ validation.error.nominalValueOfShares.size =  The share value should be between 
 validation.error.nominalValueOfShares.negative = The share value should not be negative
 validation.error.nominalValueOfShares.notANumber = Enter a valid number for the share value
 
+validation.error.previousShareHoldingNominalValue.decimalPlaces = The share value should not contain decimal places
+validation.error.previousShareHoldingNominalValue.size =  The share value should be between 0 and 9999999999999
+validation.error.previousShareHoldingNominalValue.negative = The share value should not be negative
+validation.error.previousShareHoldingNominalValue.notANumber = Enter a valid number for the share value
+
 validation.error.numberOfPreviouslyIssuedShares.notANumber = Enter a valid number for the number of previously issued shares
 validation.error.numberOfPreviouslyIssuedShares.size =  The number of previously issued shares should be between 1 and 9999999999999
 
