@@ -24,7 +24,7 @@ import controllers.Helpers.PreviousSchemesHelper
 import models._
 import models.investorDetails.InvestorDetailsModel
 import forms._
-import models.repayments.{AnySharesRepaymentModel, SharesRepaymentDetailsModel, WhoRepaidSharesModel}
+import models.repayments.{AnySharesRepaymentModel, SharesRepaymentDetailsModel}
 import models.submission.SchemeTypesModel
 import play.api.data.Form
 import play.api.libs.json.Format
@@ -48,8 +48,8 @@ trait TestEndpointEISController extends FrontendController with AuthorisedAndEnr
   val keyStoreKeyInvestorModelOptions = "testonly:keyStoreKeyInvestorModelOptions"
   val keyStoreKeyShareRepaymentsModelOptions = "testonly:keyStoreKeyShareRepaymentsModelOptions"
 
-  val kiProcessingModelYes = KiProcessingModel(Some(true), Some(true), Some(true), Some(true), Some(true), Some(true))
-  val kiProcessingModelNo = KiProcessingModel(Some(false), Some(false), Some(false), Some(false), Some(false), Some(false))
+  val kiProcessingModelYes = KiProcessingModel(Some(true), Some(true), Some(true), Some(true), Some(true), Some(true), Some(true))
+  val kiProcessingModelNo = KiProcessingModel(Some(false), Some(false), Some(false), Some(false), Some(false), Some(false), Some(false))
 
   def showPageOne: Action[AnyContent] = AuthorisedAndEnrolled.async {
     implicit user => implicit request =>
@@ -175,9 +175,8 @@ trait TestEndpointEISController extends FrontendController with AuthorisedAndEnr
     val shareIssuDate = bindForm[ShareIssueDateModel](KeystoreKeys.shareIssueDate, ShareIssueDateForm.shareIssueDateForm)
     val grossAssetsBefore = bindForm[GrossAssetsModel](KeystoreKeys.grossAssets, GrossAssetsForm.grossAssetsForm)
     val grossAssetsAfter = bindForm[GrossAssetsAfterIssueModel](KeystoreKeys.grossAssetsAfterIssue, GrossAssetsAfterIssueForm.grossAssetsAfterIssueForm)
-    val isCompanyKnowledgeIntensive = bindForm[IsCompanyKnowledgeIntensiveModel](KeystoreKeys.isCompanyKnowledgeIntensive,
-      IsCompanyKnowledgeIntensiveForm.isCompanyKnowledgeIntensiveForm)
-    val isKnowledgeIntensive = bindKIForm()
+    val isCompanyKnowledgeIntensive = bindKIFormOne()
+    val isKnowledgeIntensive = bindKIFormTwo()
     val testOperatingCosts = bindForm[OperatingCostsModel](KeystoreKeys.operatingCosts, TestOperatingCostsForm.testOperatingCostsForm)
     val percentageStaffWithMasters = bindForm[PercentageStaffWithMastersModel](KeystoreKeys.percentageStaffWithMasters,
       PercentageStaffWithMastersForm.percentageStaffWithMastersForm)
@@ -438,7 +437,7 @@ trait TestEndpointEISController extends FrontendController with AuthorisedAndEnr
           formWithErrors
         },
         validFormData => {
-          if(useAddress) s4lConnector.saveFormData(KeystoreKeys.contactAddress, validFormData)
+          if (useAddress) s4lConnector.saveFormData(KeystoreKeys.contactAddress, validFormData)
         }
       )
     }
@@ -449,7 +448,7 @@ trait TestEndpointEISController extends FrontendController with AuthorisedAndEnr
       },
       validFormData => {
         s4lConnector.saveFormData(KeystoreKeys.confirmContactAddress, validFormData)
-        if(validFormData.contactAddressUse == Constants.StandardRadioButtonYesValue) {
+        if (validFormData.contactAddressUse == Constants.StandardRadioButtonYesValue) {
           s4lConnector.saveFormData(KeystoreKeys.contactAddress, validFormData.address)
           bindContactAddress(useAddress = false)
         } else bindContactAddress(useAddress = true)
@@ -458,7 +457,26 @@ trait TestEndpointEISController extends FrontendController with AuthorisedAndEnr
     )
   }
 
-  def bindKIForm()(implicit request: Request[AnyContent], user: TAVCUser): Form[IsKnowledgeIntensiveModel] = {
+
+  def bindKIFormOne()(implicit request: Request[AnyContent], user: TAVCUser): Form[IsCompanyKnowledgeIntensiveModel] = {
+    IsCompanyKnowledgeIntensiveForm.isCompanyKnowledgeIntensiveForm.bindFromRequest().fold(
+      formWithErrors => {
+        formWithErrors
+      },
+      validFormData => {
+        if(validFormData.isCompanyKnowledgeIntensive == Constants.StandardRadioButtonYesValue)  {
+          s4lConnector.saveFormData(KeystoreKeys.kiProcessingModel, kiProcessingModelYes)
+          s4lConnector.saveFormData(KeystoreKeys.isCompanyKnowledgeIntensive, validFormData)
+        } else {
+          s4lConnector.saveFormData(KeystoreKeys.kiProcessingModel, kiProcessingModelNo)
+          s4lConnector.saveFormData(KeystoreKeys.isCompanyKnowledgeIntensive, validFormData)
+        }
+        IsCompanyKnowledgeIntensiveForm.isCompanyKnowledgeIntensiveForm.fill(validFormData)
+      }
+    )
+  }
+
+  def bindKIFormTwo()(implicit request: Request[AnyContent], user: TAVCUser): Form[IsKnowledgeIntensiveModel] = {
     IsKnowledgeIntensiveForm.isKnowledgeIntensiveForm.bindFromRequest().fold(
       formWithErrors => {
         formWithErrors
@@ -475,7 +493,6 @@ trait TestEndpointEISController extends FrontendController with AuthorisedAndEnr
       }
     )
   }
-
 
   def bindPreviousSchemesForm()(implicit request: Request[AnyContent], user: TAVCUser): Form[TestPreviousSchemesModel] = {
     TestPreviousSchemesForm.testPreviousSchemesForm.bindFromRequest().fold(

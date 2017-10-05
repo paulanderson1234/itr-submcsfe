@@ -14,6 +14,34 @@ confirmContactDetailsForm: Form[ConfirmContactDetailsModel],
 contactDetailsForm: Form[ContactDetailsModel],
 confirmCorrespondAddressForm: Form[ConfirmCorrespondAddressModel],
 contactAddressForm: Form[AddressModel])(implicit request: Request[_], messages: Messages)
+
+@additionalContent() = {
+<h2 class="heading-medium">@Messages("page.investors.wasAnyValueReceived.subHeading")</h2>
+
+<p>@Messages("page.investors.wasAnyValueReceived.additionalGuidance.title")</p>
+
+<ul class="list list-bullet">
+    <li>@Messages("page.investors.wasAnyValueReceived.additionalGuidance.list.one")</li>
+    <li>@Messages("page.investors.wasAnyValueReceived.additionalGuidance.list.two")</li>
+    <li>@Messages("page.investors.wasAnyValueReceived.additionalGuidance.list.three")</li>
+    <li>@Messages("page.investors.wasAnyValueReceived.additionalGuidance.list.four")</li>
+    <li>@Messages("page.investors.wasAnyValueReceived.additionalGuidance.list.five")</li>
+</ul>
+
+<div class="form-group">
+    <span class = "form-hint" id="desc-one">@Messages("common.suggestedLimit.hint.long")</span>
+    @textArea(
+    wasAnyValueReceivedForm("descriptionTextArea"),
+    '_cols -> "45",
+    '_rows -> "5",
+    '_maxLength-> Constants.SuggestedTextMaxLengthLower,
+    '_label-> Messages("page.investors.wasAnyValueReceived.title"),
+    '_labelTextClass-> "visuallyhidden"
+    )
+</div>
+}
+
+
 @main_template(Messages("page.test.page-three.title")) {
 <div class="grid-row">
 
@@ -55,13 +83,13 @@ contactAddressForm: Form[AddressModel])(implicit request: Request[_], messages: 
 
     <h2>Was Any Value Recieved</h2>
     <div class="form-group">
-        @textArea(
-        wasAnyValueReceivedForm("descriptionTextArea"),
-        '_cols -> "45",
-        '_rows -> "5",
-        '_maxLength-> Constants.SuggestedTextMaxLengthLower,
-        '_label-> Messages("page.investors.wasAnyValueReceived.title"),
-        '_labelTextClass-> "visuallyhidden"
+        @formHiddenYesNoRadio(
+        wasAnyValueReceivedForm,
+        "wasAnyValueReceived",
+        Messages("page.investors.wasAnyValueReceived.title"),
+        additionalContent(),
+        None,
+        Some("visuallyhidden")
         )
     </div>
 

@@ -238,12 +238,48 @@ class TestEndpointEISControllerSpec extends BaseSpec {
 
   }
 
-  "TestEndpointEISController.bindKIForm" when {
+
+  "TestEndpointEISController.bindKIFormOne" when {
 
     "Sent a valid form with Yes" should {
 
       "Return the valid form" in {
-        val result = TestController.bindKIForm()(fakeRequest.withFormUrlEncodedBody("isKnowledgeIntensive" -> Constants.StandardRadioButtonYesValue),user)
+        val result = TestController.bindKIFormOne()(fakeRequest.withFormUrlEncodedBody("isCompanyKnowledgeIntensive" ->
+          Constants.StandardRadioButtonYesValue), user)
+        await(result).get shouldBe IsCompanyKnowledgeIntensiveModel(Constants.StandardRadioButtonYesValue)
+      }
+
+    }
+
+    "Sent a valid form with No" should {
+
+      "Return the valid form" in {
+        val result = TestController.bindKIFormOne()(fakeRequest.withFormUrlEncodedBody("isCompanyKnowledgeIntensive" ->
+          Constants.StandardRadioButtonNoValue), user)
+        await(result).get shouldBe IsCompanyKnowledgeIntensiveModel(Constants.StandardRadioButtonNoValue)
+      }
+
+    }
+
+    "Sent an invalid form" should {
+
+      "Return the invalid form with errors" in {
+
+        val result = TestController.bindKIFormOne()(fakeRequest, user)
+        await(result).hasErrors shouldBe true
+      }
+
+    }
+  }
+
+
+
+  "TestEndpointEISController.bindKIFormTwo" when {
+
+    "Sent a valid form with Yes" should {
+
+      "Return the valid form" in {
+        val result = TestController.bindKIFormTwo()(fakeRequest.withFormUrlEncodedBody("isKnowledgeIntensive" -> Constants.StandardRadioButtonYesValue),user)
         await(result).get shouldBe IsKnowledgeIntensiveModel(Constants.StandardRadioButtonYesValue)
       }
 
@@ -252,7 +288,7 @@ class TestEndpointEISControllerSpec extends BaseSpec {
     "Sent a valid form with No" should {
 
       "Return the valid form" in {
-        val result = TestController.bindKIForm()(fakeRequest.withFormUrlEncodedBody("isKnowledgeIntensive" -> Constants.StandardRadioButtonNoValue),user)
+        val result = TestController.bindKIFormTwo()(fakeRequest.withFormUrlEncodedBody("isKnowledgeIntensive" -> Constants.StandardRadioButtonNoValue),user)
         await(result).get shouldBe IsKnowledgeIntensiveModel(Constants.StandardRadioButtonNoValue)
       }
 
@@ -262,7 +298,7 @@ class TestEndpointEISControllerSpec extends BaseSpec {
 
       "Return the invalid form with errors" in {
 
-        val result = TestController.bindKIForm()(fakeRequest,user)
+        val result = TestController.bindKIFormTwo()(fakeRequest,user)
         await(result).hasErrors shouldBe true
       }
 
