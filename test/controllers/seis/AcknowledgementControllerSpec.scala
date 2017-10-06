@@ -63,21 +63,21 @@ class AcknowledgementControllerSpec extends BaseSpec {
       (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Some(tradeStartDateModelYes))
   }
 
-
-  val shareHoldersModelForReview = Vector(PreviousShareHoldingModel(investorShareIssueDateModel = Some(investorShareIssueDateModel1),
-    numberOfPreviouslyIssuedSharesModel = Some(numberOfPreviouslyIssuedSharesModel1),
-    previousShareHoldingNominalValueModel = Some(previousShareHoldingNominalValueModel1),
-    previousShareHoldingDescriptionModel = Some(previousShareHoldingDescriptionModel1),
-    processingId = Some(1), investorProcessingId = Some(2)))
-
-  val investorModelForReview = InvestorDetailsModel(Some(investorModel2), Some(companyOrIndividualModel2), Some(companyDetailsModel2), None,
-    Some(numberOfSharesPurchasedModel2), Some(howMuchSpentOnSharesModel2), Some(isExistingShareHolderModelYes),
-    previousShareHoldingModels = Some(shareHoldersModelForReview), processingId = Some(2))
-
-  val listOfInvestorsEmptyShareHoldings = Vector(validModelWithPrevShareHoldings.copy(previousShareHoldingModels = Some(Vector())))
-  val listOfInvestorsWithShareHoldings = Vector(investorModelForReview)
-  val listOfInvestorsMissingNumberOfPreviouslyIssuedShares = Vector(validModelWithPrevShareHoldings.copy(previousShareHoldingModels =
-    Some(Vector(PreviousShareHoldingModel(previousShareHoldingDescriptionModel = Some(previousShareHoldingDescriptionModel1), processingId = Some(1))))))
+//
+//  val shareHoldersModelForReview = Vector(PreviousShareHoldingModel(investorShareIssueDateModel = Some(investorShareIssueDateModel1),
+//    numberOfPreviouslyIssuedSharesModel = Some(numberOfPreviouslyIssuedSharesModel1),
+//    previousShareHoldingNominalValueModel = Some(previousShareHoldingNominalValueModel1),
+//    previousShareHoldingDescriptionModel = Some(previousShareHoldingDescriptionModel1),
+//    processingId = Some(1), investorProcessingId = Some(2)))
+//
+//  val investorModelForReview = InvestorDetailsModel(Some(investorModel2), Some(companyOrIndividualModel2), Some(companyDetailsModel2), None,
+//    Some(numberOfSharesPurchasedModel2), Some(howMuchSpentOnSharesModel2), Some(isExistingShareHolderModelYes),
+//    previousShareHoldingModels = Some(shareHoldersModelForReview), processingId = Some(2))
+//
+//  val listOfInvestorsEmptyShareHoldings = Vector(validModelWithPrevShareHoldings.copy(previousShareHoldingModels = Some(Vector())))
+//  val listOfInvestorsWithShareHoldings = Vector(investorModelForReview)
+//  val listOfInvestorsMissingNumberOfPreviouslyIssuedShares = Vector(validModelWithPrevShareHoldings.copy(previousShareHoldingModels =
+//    Some(Vector(PreviousShareHoldingModel(previousShareHoldingDescriptionModel = Some(previousShareHoldingDescriptionModel1), processingId = Some(1))))))
 
   //noinspection ScalaStyle
   def setupSeisSubmissionMocks(): Unit = {
@@ -115,7 +115,7 @@ class AcknowledgementControllerSpec extends BaseSpec {
       .thenReturn(Future.successful(Some(TotalAmountSpentModel(12345))))
     when(mockS4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](Matchers.eq(KeystoreKeys.investorDetails))
       (Matchers.any(), Matchers.any(), Matchers.any()))
-      .thenReturn(Future.successful(Some(listOfInvestorsWithShareHoldings)))
+      .thenReturn(Future.successful(Some(listOfInvestorsWithShareHoldingsForSubmission)))
     when(mockS4lConnector.fetchAndGetFormData[WasAnyValueReceivedModel](Matchers.eq(KeystoreKeys.wasAnyValueReceived))(Matchers.any(),
       Matchers.any(), Matchers.any()))
       .thenReturn(Future.successful(Some(WasAnyValueReceivedModel(Constants.StandardRadioButtonYesValue,
@@ -206,7 +206,7 @@ class AcknowledgementControllerSpec extends BaseSpec {
       Some(List(PreviousSchemeModel("test", 1, Some(1), Some("Name"), Some(1), Some(2), Some(2015), Some(1))))),
     ShareDetailsAnswersModel(shareDescriptionModel,
       numberOfSharesModel, TotalAmountRaisedModel(12345), Some(TotalAmountSpentModel(12345))),
-    InvestorDetailsAnswersModel(listOfInvestorsWithShareHoldings,
+    InvestorDetailsAnswersModel(listOfInvestorsWithShareHoldingsForSubmission,
       WasAnyValueReceivedModel(Constants.StandardRadioButtonYesValue, Some("text")), ShareCapitalChangesModel(Constants.StandardRadioButtonYesValue, Some("test"))),
     ContactDetailsAnswersModel(contactDetailsModel, fullCorrespondenceAddress),
     SupportingDocumentsUploadModel("No"),

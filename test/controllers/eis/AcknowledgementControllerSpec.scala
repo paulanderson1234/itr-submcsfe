@@ -16,53 +16,37 @@
 
 package controllers.eis
 
+import auth.AuthEnrolledTestController.{INTERNAL_SERVER_ERROR => _, NO_CONTENT => _, OK => _, SEE_OTHER => _, _}
 import auth._
 import common.{Constants, KeystoreKeys}
 import config.FrontendAuthConnector
 import connectors.{EnrolmentConnector, S4LConnector, SubmissionConnector}
 import controllers.helpers.BaseSpec
+import models._
+import models.submission.{ContactDetailsAnswersModel, CostsAnswerModel, InvestorDetailsAnswersModel, ShareDetailsAnswersModel, _}
 import org.mockito.Matchers
 import org.mockito.Mockito._
-import play.api.libs.json.Json
 import play.api.test.Helpers._
 import services.FileUploadService
 import uk.gov.hmrc.play.http.HttpResponse
-import auth.AuthEnrolledTestController.{INTERNAL_SERVER_ERROR => _, NO_CONTENT => _, OK => _, SEE_OTHER => _, _}
-import models.investorDetails.{InvestorDetailsModel, PreviousShareHoldingModel}
-import models._
-import models.repayments.{AnySharesRepaymentModel, SharesRepaymentDetailsModel}
-import models.submission.{SchemeTypesModel, SubmissionResponse}
+import fixtures.ModelSubmissionFixture
+import models.repayments.SharesRepaymentDetailsModel
 
 import scala.concurrent.Future
 
-class AcknowledgementControllerSpec extends BaseSpec {
-
-  val contactValid = ContactDetailsModel("first", "last", Some("07000 111222"), None, "test@test.com")
-  val contactInvalid = ContactDetailsModel("first", "last", Some("07000 111222"), None, "test@badrequest.com")
-  val yourCompanyNeed = YourCompanyNeedModel("AA")
-  val submissionRequestValid = SubmissionRequest(contactValid, yourCompanyNeed)
-  val submissionRequestInvalid = SubmissionRequest(contactInvalid, yourCompanyNeed)
-  val submissionResponse = SubmissionResponse("2014-12-17", "FBUND09889765")
-  val turnoverCheckPassedTrue = true
-  val turnoverCheckPassedFalse = false
+class AcknowledgementControllerSpec extends BaseSpec with ModelSubmissionFixture{
 
   implicit val user = mock[TAVCUser]
-
 
   object TestController extends AcknowledgementController {
     override lazy val applicationConfig = MockConfig
     override lazy val authConnector = MockAuthConnector
     override lazy val enrolmentConnector = mockEnrolmentConnector
-    override val registrationDetailsService = mockRegistrationDetailsService
+    override lazy val registrationDetailsService = mockRegistrationDetailsService
     override lazy val s4lConnector = mockS4lConnector
-    override val submissionConnector = mockSubmissionConnector
+    override lazy val submissionConnector = mockSubmissionConnector
     override lazy val fileUploadService = mockFileUploadService
   }
-
-  class SetupPageFull() {
-    setUpMocksRegistrationService(mockRegistrationDetailsService)
-  }
-
 
   "AcknowledgementController" should {
     "use the correct keystore connector" in {
@@ -82,123 +66,1020 @@ class AcknowledgementControllerSpec extends BaseSpec {
     }
   }
 
-  val shareHoldersModelForReview = Vector(PreviousShareHoldingModel(investorShareIssueDateModel = Some(investorShareIssueDateModel1),
-    numberOfPreviouslyIssuedSharesModel = Some(numberOfPreviouslyIssuedSharesModel1),
-    previousShareHoldingNominalValueModel = Some(previousShareHoldingNominalValueModel1),
-    previousShareHoldingDescriptionModel = Some(previousShareHoldingDescriptionModel1),
-    processingId = Some(1), investorProcessingId = Some(2)))
-
-  val investorModelForReview = InvestorDetailsModel(Some(investorModel2), Some(companyOrIndividualModel2), Some(companyDetailsModel2), None,
-    Some(numberOfSharesPurchasedModel2), Some(howMuchSpentOnSharesModel2), Some(isExistingShareHolderModelYes),
-    previousShareHoldingModels = Some(shareHoldersModelForReview), processingId = Some(2))
-
-  val listOfInvestorsEmptyShareHoldings = Vector(validModelWithPrevShareHoldings.copy(previousShareHoldingModels = Some(Vector())))
-  val listOfInvestorsWithShareHoldings = Vector(investorModelForReview)
-  val listOfInvestorsMissingNumberOfPreviouslyIssuedShares = Vector(validModelWithPrevShareHoldings.copy(previousShareHoldingModels =
-    Some(Vector(PreviousShareHoldingModel(previousShareHoldingDescriptionModel = Some(previousShareHoldingDescriptionModel1), processingId = Some(1))))))
-
-  //noinspection ScalaStyle
-  def setupMocks(): Unit = {
-    when(mockS4lConnector.fetchAndGetFormData[GrossAssetsModel](Matchers.eq(KeystoreKeys.grossAssets))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(GrossAssetsModel(12345))))
-    when(mockS4lConnector.fetchAndGetFormData[FullTimeEmployeeCountModel](Matchers.eq(KeystoreKeys.fullTimeEmployeeCount))
-      (Matchers.any(), Matchers.any(), Matchers.any()))
-      .thenReturn(Future.successful(Some(FullTimeEmployeeCountModel(22))))
-    when(mockS4lConnector.fetchAndGetFormData[ShareIssueDateModel](Matchers.eq(KeystoreKeys.shareIssueDate))
-      (Matchers.any(), Matchers.any(), Matchers.any()))
-      .thenReturn(Future.successful(Some(shareIssuetDateModel)))
-    when(mockSubmissionConnector.submitComplianceStatement(Matchers.any(), Matchers.any(), Matchers.any())(Matchers.any()))
-      .thenReturn(Future.successful(HttpResponse(OK, Some(Json.toJson(submissionResponse)))))
-    when(mockS4lConnector.fetchAndGetFormData[TradeStartDateModel](Matchers.eq(KeystoreKeys.tradeStartDate))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Some(tradeStartDateModelYes))
-    when(mockS4lConnector.fetchAndGetFormData[SchemeTypesModel](Matchers.eq(KeystoreKeys.selectedSchemes))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Some(schemeTypesSEIS))
-    when(mockS4lConnector.fetchAndGetFormData[HadPreviousRFIModel](Matchers.eq(KeystoreKeys.hadPreviousRFI))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(hadPreviousRFIModelYes)))
-    when(mockS4lConnector.fetchAndGetFormData[HadOtherInvestmentsModel](Matchers.eq(KeystoreKeys.hadOtherInvestments))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(hadOtherInvestmentsModelYes)))
-    when(mockS4lConnector.fetchAndGetFormData[List[PreviousSchemeModel]](Matchers.eq(KeystoreKeys.previousSchemes))(Matchers.any(), Matchers.any(), Matchers.any()))
-      .thenReturn(Future.successful(Some(List(PreviousSchemeModel("test", 1, Some(1), Some("Name"), Some(1), Some(2), Some(2015), Some(1))))))
-    when(mockS4lConnector.fetchAndGetFormData[ShareDescriptionModel](Matchers.eq(KeystoreKeys.shareDescription))
-      (Matchers.any(), Matchers.any(), Matchers.any()))
-      .thenReturn(Future.successful(Some(shareDescriptionModel)))
-    when(mockS4lConnector.fetchAndGetFormData[NumberOfSharesModel](Matchers.eq(KeystoreKeys.numberOfShares))
-      (Matchers.any(), Matchers.any(), Matchers.any()))
-      .thenReturn(Future.successful(Some(numberOfSharesModel)))
-    when(mockS4lConnector.fetchAndGetFormData[TotalAmountRaisedModel](Matchers.eq(KeystoreKeys.totalAmountRaised))
-      (Matchers.any(), Matchers.any(), Matchers.any()))
-      .thenReturn(Future.successful(Some(TotalAmountRaisedModel(12345))))
-    when(mockS4lConnector.fetchAndGetFormData[TotalAmountSpentModel](Matchers.eq(KeystoreKeys.totalAmountSpent))(Matchers.any(),
-      Matchers.any(), Matchers.any()))
-      .thenReturn(Future.successful(Some(TotalAmountSpentModel(12345))))
-    when(mockS4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](Matchers.eq(KeystoreKeys.investorDetails))
-      (Matchers.any(), Matchers.any(), Matchers.any()))
-      .thenReturn(Future.successful(Some(listOfInvestorsWithShareHoldings)))
-    when(mockS4lConnector.fetchAndGetFormData[WasAnyValueReceivedModel](Matchers.eq(KeystoreKeys.wasAnyValueReceived))(Matchers.any(),
-      Matchers.any(), Matchers.any()))
-      .thenReturn(Future.successful(Some(WasAnyValueReceivedModel(Constants.StandardRadioButtonYesValue,
-        Some("text")))))
-    when(mockS4lConnector.fetchAndGetFormData[ShareCapitalChangesModel](Matchers.eq(KeystoreKeys.shareCapitalChanges))
-      (Matchers.any(), Matchers.any(), Matchers.any()))
-      .thenReturn(Future.successful(Some(ShareCapitalChangesModel(Constants.StandardRadioButtonYesValue, Some("test")))))
-    when(mockS4lConnector.fetchAndGetFormData[SupportingDocumentsUploadModel](Matchers.eq(KeystoreKeys.supportingDocumentsUpload))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(SupportingDocumentsUploadModel("No"))))
-    when(mockS4lConnector.fetchAndGetFormData[ContactDetailsModel](Matchers.eq(KeystoreKeys.contactDetails))
-      (Matchers.any(), Matchers.any(), Matchers.any()))
-      .thenReturn(Future.successful(Some(contactDetailsModel)))
-    when(mockS4lConnector.fetchAndGetFormData[ConfirmCorrespondAddressModel](Matchers.eq(KeystoreKeys.confirmContactAddress))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(confirmCorrespondAddressModel)))
-    when(mockS4lConnector.fetchAndGetFormData[QualifyBusinessActivityModel](Matchers.eq(KeystoreKeys.isQualifyBusinessActivity))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(qualifyTrade)))
-    when(mockS4lConnector.fetchAndGetFormData[DateOfIncorporationModel](Matchers.eq(KeystoreKeys.dateOfIncorporation))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(dateOfIncorporationModel)))
-    when(mockS4lConnector.fetchAndGetFormData[NatureOfBusinessModel](Matchers.eq(KeystoreKeys.natureOfBusiness))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(natureOfBusinessModel)))
-    when(mockS4lConnector.fetchAndGetFormData[SubsidiariesModel](Matchers.eq(KeystoreKeys.subsidiaries))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(subsidiariesModelYes)))
-    when(mockS4lConnector.fetchAndGetFormData[TradeStartDateModel](Matchers.eq(KeystoreKeys.tradeStartDate))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(tradeStartDateModelYes)))
-    when(mockS4lConnector.fetchAndGetFormData[HasInvestmentTradeStartedModel](Matchers.eq(KeystoreKeys.hasInvestmentTradeStarted))
-      (Matchers.any(), Matchers.any(), Matchers.any()))
-      .thenReturn(Future.successful(None))
-    when(mockS4lConnector.fetchAndGetFormData[ResearchStartDateModel](Matchers.eq(KeystoreKeys.researchStartDate))(Matchers.any(), Matchers.any(),
-      Matchers.any())).thenReturn(Future.successful(Some(researchStartDateModelYes)))
-    when(mockS4lConnector.fetchAndGetFormData[SeventyPercentSpentModel](Matchers.eq(KeystoreKeys.seventyPercentSpent))
-      (Matchers.any(), Matchers.any(), Matchers.any()))
-      .thenReturn(Future.successful(Some(isSeventyPercentSpentModelYes)))
-    when(mockS4lConnector.fetchAndGetFormData[SchemeTypesModel](Matchers.eq(KeystoreKeys.selectedSchemes))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(schemeTypesSEIS)))
-    when(mockS4lConnector.fetchAndGetFormData[SchemeTypesModel](Matchers.eq(KeystoreKeys.selectedSchemes))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(schemeTypesSEIS)))
-    when(mockS4lConnector.fetchAndGetFormData[KiProcessingModel](Matchers.eq(KeystoreKeys.kiProcessingModel))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(trueKIModel)))
-    when(mockS4lConnector.fetchAndGetFormData[TenYearPlanModel](Matchers.eq(KeystoreKeys.tenYearPlan))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(tenYearPlanModelYes)))
-    when(mockS4lConnector.fetchAndGetFormData[NewGeographicalMarketModel](Matchers.eq(KeystoreKeys.newGeographicalMarket))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(newGeographicalMarketModelYes)))
-    when(mockS4lConnector.fetchAndGetFormData[NewProductModel](Matchers.eq(KeystoreKeys.newProduct))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(newProductMarketModelYes)))
-    when(mockS4lConnector.fetchAndGetFormData[MarketDescriptionModel](Matchers.eq(KeystoreKeys.marketDescription))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(MarketDescriptionModel("test"))))
-    when(mockS4lConnector.fetchAndGetFormData[Boolean](Matchers.eq(KeystoreKeys.turnoverAPiCheckPassed))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(turnoverCheckPassedTrue)))
-    when(mockS4lConnector.fetchAndGetFormData[AnnualTurnoverCostsModel](Matchers.eq(KeystoreKeys.turnoverCosts))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(turnoverCostsValid)))
-    when(mockS4lConnector.fetchAndGetFormData[OperatingCostsModel](Matchers.eq(KeystoreKeys.operatingCosts))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(operatingCostsValid)))
-    when(mockS4lConnector.fetchAndGetFormData[ThirtyDayRuleModel](Matchers.eq(KeystoreKeys.thirtyDayRule))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(thirtyDayRuleModelYes)))
-    when(mockS4lConnector.fetchAndGetFormData[InvestmentGrowModel](Matchers.eq(KeystoreKeys.investmentGrow))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(investmentGrowValid)))
-    when(mockS4lConnector.fetchAndGetFormData[SubsidiariesSpendingInvestmentModel](Matchers.eq(KeystoreKeys.subsidiariesSpendingInvestment))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(subsidiariesSpendingInvestmentModelNo)))
-    when(mockS4lConnector.fetchAndGetFormData[SubsidiariesNinetyOwnedModel](Matchers.eq(KeystoreKeys.subsidiariesNinetyOwned))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(subsidiariesNinetyOwnedModelYes)))
-    when(mockS4lConnector.fetchAndGetFormData[AnySharesRepaymentModel](Matchers.eq(KeystoreKeys.anySharesRepayment))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(anySharesRepaymentModelYes)))
-    when(mockS4lConnector.fetchAndGetFormData[List[SharesRepaymentDetailsModel]](Matchers.eq(KeystoreKeys.sharesRepaymentDetails))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(validSharesRepaymentDetailsVector.toList)
-    ))
+  "Extracting all the answers from the EIS flow" should {
+    "return a valid model if all required data is found and calling validate should pass" in {
+      setupEisSubmissionMocks()
+      val model = await(TestController.getAnswers.get)
+      model shouldBe EISAnswersModel
+      await(model.validateEis(mockSubmissionConnector, mockS4lConnector)) shouldBe true
+    }
   }
 
+  "Extracting all the answers from the EIS flow" should {
+   "return an error if any of the calls to save for later fail" in {
+      setupEisSubmissionMocks()
+      when(mockS4lConnector.fetchAndGetFormData[NatureOfBusinessModel](Matchers.eq(KeystoreKeys.natureOfBusiness))(Matchers.any(),
+        Matchers.any(), Matchers.any())).thenReturn(Future.failed(new Exception("test error")))
+      when(mockS4lConnector.fetchAndGetFormData[SchemeTypesModel](Matchers.eq(KeystoreKeys.selectedSchemes))
+        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(schemeTypesEIS)))
+      intercept[Exception](await(TestController.getAnswers)).getMessage shouldBe "test error"
+    }
+  }
+  
+  "Extracting all the answers from the EIS flow" should {
+    "return a None if any of the mandatory data is missing (nature of business)" in {
+      setupEisSubmissionMocks(natureOfBusiness = None)
+      await(TestController.getAnswers) shouldBe None
+
+      mockEnrolledRequest(eisSchemeTypesModel)
+      val result = TestController.show.apply(authorisedFakeRequest)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+    }
+  }
+
+  "Extracting all the answers from the EIS flow" should {
+    "return a None if any of the mandatory data is missing (date of incorporation)" in {
+      setupEisSubmissionMocks(dateOfIncorporation = None)
+      await(TestController.getAnswers) shouldBe None
+
+      mockEnrolledRequest(eisSchemeTypesModel)
+      val result = TestController.show.apply(authorisedFakeRequest)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+    }
+  }
+
+  "Extracting all the answers from the EIS flow" should {
+    "return a None if any of the mandatory data is missing (qualifying business activity)" in {
+      mockEnrolledRequest(eisSchemeTypesModel)
+      setupEisSubmissionMocks(qualifyBusinessActivity = None)
+      await(TestController.getAnswers) shouldBe None
+
+      val result = TestController.show.apply(authorisedFakeRequest)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+    }
+  }
+
+  "Extracting all the answers from the EIS flow" should {
+    "return a None if any of the mandatory data is missing (share issue date)" in {
+      mockEnrolledRequest(eisSchemeTypesModel)
+      setupEisSubmissionMocks(shareIssueDate = None)
+      await(TestController.getAnswers) shouldBe None
+
+      val result = TestController.show.apply(authorisedFakeRequest)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+    }
+  }
+
+  "Extracting all the answers from the EIS flow" should {
+    "return a None if any of the mandatory data is missing in storage (gross assets)" in {
+      mockEnrolledRequest(eisSchemeTypesModel)
+      setupEisSubmissionMocks(grossAssets = None)
+      await(TestController.getAnswers) shouldBe None
+
+      val result = TestController.show.apply(authorisedFakeRequest)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+    }
+  }
+
+
+  "Extracting all the answers from the EIS flow" should {
+    "return a None if any of the mandatory data is missing in storage(full time employee count)" in {
+      mockEnrolledRequest(eisSchemeTypesModel)
+      setupEisSubmissionMocks(fullTimeEmploymentCount = None)
+      await(TestController.getAnswers) shouldBe None
+
+      val result = TestController.show.apply(authorisedFakeRequest)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+    }
+  }
+
+  "Extracting all the answers from the EIS flow" should {
+    "return a model if gross assets after is not present in storage but fail validation" in {
+      mockEnrolledRequest(eisSchemeTypesModel)
+      setupEisSubmissionMocks(grossAssetsAfterIssue = None)
+      val model = await(TestController.getAnswers)
+      model.nonEmpty shouldBe true
+
+      await(model.get.validateEis(mockSubmissionConnector, mockS4lConnector)) shouldBe false
+
+      val result = TestController.show.apply(authorisedFakeRequest)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+    }
+  }
+
+  "Extracting all the answers from the EIS flow" should {
+    "return a model if commercial sale is not present in storage but fail validation" in {
+      mockEnrolledRequest(eisSchemeTypesModel)
+      setupEisSubmissionMocks(commercialSale = None)
+      val model = await(TestController.getAnswers)
+      model.nonEmpty shouldBe true
+
+      await(model.get.validateEis(mockSubmissionConnector, mockS4lConnector)) shouldBe false
+
+      val result = TestController.show.apply(authorisedFakeRequest)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+    }
+  }
+
+  "Extracting all the answers from the EIS flow" should {
+    "return a model if both trade date and research date are not present in storage but fail validation" in {
+      mockEnrolledRequest(eisSchemeTypesModel)
+      setupEisSubmissionMocks(hasInvestmentTradeStarted = None, researchStartDate = None)
+      val model = await(TestController.getAnswers)
+      model.nonEmpty shouldBe true
+
+      await(model.get.validateEis(mockSubmissionConnector, mockS4lConnector)) shouldBe false
+
+      val result = TestController.show.apply(authorisedFakeRequest)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+    }
+  }
+
+  "Extracting all the answers from the EIS flow" should {
+    "return a None if any of the mandatory data is missing in storage(HadPreviousRFIModel)" in {
+      mockEnrolledRequest(eisSchemeTypesModel)
+      setupEisSubmissionMocks(hadPreviousRFI = None)
+      await(TestController.getAnswers) shouldBe None
+
+      val result = TestController.show.apply(authorisedFakeRequest)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+    }
+  }
+
+  "Extracting all the answers from the EIS flow" should {
+    "return a None if any of the mandatory data is missing in storage(HadOtherInvestmentsModel)" in {
+      mockEnrolledRequest(eisSchemeTypesModel)
+      setupEisSubmissionMocks(hadOtherInvestments = None)
+      await(TestController.getAnswers) shouldBe None
+
+      val result = TestController.show.apply(authorisedFakeRequest)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+    }
+  }
+
+  "Extracting all the answers from the EIS flow" should {
+    "return a None if any of the mandatory data is missing in storage(ShareDescriptionModel)" in {
+      mockEnrolledRequest(eisSchemeTypesModel)
+      setupEisSubmissionMocks(shareDescription = None)
+      await(TestController.getAnswers) shouldBe None
+
+      val result = TestController.show.apply(authorisedFakeRequest)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+    }
+  }
+
+  "Extracting all the answers from the EIS flow" should {
+    "return a None if any of the mandatory data is missing in storage(NumberOfSharesModel)" in {
+      mockEnrolledRequest(eisSchemeTypesModel)
+      setupEisSubmissionMocks(numberOfShares = None)
+      await(TestController.getAnswers) shouldBe None
+
+      val result = TestController.show.apply(authorisedFakeRequest)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+    }
+  }
+
+  "Extracting all the answers from the EIS flow" should {
+    "return a None if any of the mandatory data is missing in storage(TotalAmountRaisedModel)" in {
+      mockEnrolledRequest(eisSchemeTypesModel)
+      setupEisSubmissionMocks(totalRaised = None)
+      await(TestController.getAnswers) shouldBe None
+
+      val result = TestController.show.apply(authorisedFakeRequest)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+    }
+  }
+
+  "Extracting all the answers from the EIS flow" should {
+    "return a None if any of the mandatory data is missing in storage(InvestorDetailsModel)" in {
+      mockEnrolledRequest(eisSchemeTypesModel)
+      setupEisSubmissionMocks(investorDetails = None)
+      await(TestController.getAnswers) shouldBe None
+
+      val result = TestController.show.apply(authorisedFakeRequest)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+    }
+  }
+
+  "Extracting all the answers from the EIS flow" should {
+    "return a None if any of the mandatory data is missing in storage(WasAnyValueReceivedModel)" in {
+      mockEnrolledRequest(eisSchemeTypesModel)
+      setupEisSubmissionMocks(wasAnyValueReceived = None)
+      await(TestController.getAnswers) shouldBe None
+
+      val result = TestController.show.apply(authorisedFakeRequest)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+    }
+  }
+
+  "Extracting all the answers from the EIS flow" should {
+    "return a None if any of the mandatory data is missing in storage(ShareCapitalChangesModel)" in {
+      mockEnrolledRequest(eisSchemeTypesModel)
+      setupEisSubmissionMocks(shareCapitalChanges = None)
+      await(TestController.getAnswers) shouldBe None
+
+      val result = TestController.show.apply(authorisedFakeRequest)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+    }
+  }
+
+  "Extracting all the answers from the EIS flow" should {
+    "return a None if any of the mandatory data is missing in storage(ContactDetailsModel)" in {
+      mockEnrolledRequest(eisSchemeTypesModel)
+      setupEisSubmissionMocks(contactDetails = None)
+      await(TestController.getAnswers) shouldBe None
+
+      val result = TestController.show.apply(authorisedFakeRequest)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+    }
+  }
+
+  "Extracting all the answers from the EIS flow" should {
+    "return a None if any of the mandatory data is missing in storage(AddressModel)" in {
+      mockEnrolledRequest(eisSchemeTypesModel)
+      setupEisSubmissionMocks(contactAddress = None)
+      await(TestController.getAnswers) shouldBe None
+
+      val result = TestController.show.apply(authorisedFakeRequest)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+    }
+  }
+
+  "Extracting all the answers from the EIS flow" should {
+    "return a None and redirect if investment start date is present but validateHasInvestmentTradeStartedCondition API fails validation" in {
+      mockEnrolledRequest(eisSchemeTypesModel)
+      setupEisSubmissionMocks(getHasInvestmentTradeStartedCondition = Some(false))
+      val model = await(TestController.getAnswers)
+      model.nonEmpty shouldBe true
+
+      await(model.get.validateEis(mockSubmissionConnector, mockS4lConnector)) shouldBe false
+
+      val result = TestController.show.apply(authorisedFakeRequest)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+    }
+  }
+
+  "Extracting all the answers from the EIS flow" should {
+    "return a None and redirect if investment start date is present but validateHasInvestmentTradeStartedCondition API result is missing in storage" in {
+      mockEnrolledRequest(eisSchemeTypesModel)
+      setupEisSubmissionMocks(getHasInvestmentTradeStartedCondition = None)
+      val model = await(TestController.getAnswers)
+      model.nonEmpty shouldBe true
+
+      await(model.get.validateEis(mockSubmissionConnector, mockS4lConnector)) shouldBe false
+
+      val result = TestController.show.apply(authorisedFakeRequest)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+    }
+  }
+
+  "Extracting all the answers from the EIS flow" should {
+    "return a None and redirect if research start date is present for a research business activity" +
+    "but validateHasInvestmentTradeStartedCondition API fails validation" in {
+      mockEnrolledRequest(eisSchemeTypesModel)
+      setupEisSubmissionMocks(qualifyBusinessActivity = Some(qualifyResearchAndDevelopment), getHasInvestmentTradeStartedCondition = Some(false))
+      val model = await(TestController.getAnswers)
+      model.nonEmpty shouldBe true
+
+      await(model.get.validateEis(mockSubmissionConnector, mockS4lConnector)) shouldBe false
+
+      val result = TestController.show.apply(authorisedFakeRequest)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+    }
+  }
+
+  "Extracting all the answers from the EIS flow" should {
+    "return a None and redirect if research start date is present for a research business activity" +
+      "but validateHasInvestmentTradeStartedCondition API is missing in storage" in {
+      mockEnrolledRequest(eisSchemeTypesModel)
+      setupEisSubmissionMocks(qualifyBusinessActivity = Some(qualifyResearchAndDevelopment), getHasInvestmentTradeStartedCondition = None)
+      val model = await(TestController.getAnswers)
+      model.nonEmpty shouldBe true
+
+      await(model.get.validateEis(mockSubmissionConnector, mockS4lConnector)) shouldBe false
+
+      val result = TestController.show.apply(authorisedFakeRequest)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+    }
+  }
+
+  "Extracting all the answers from the EIS flow should fail validation and " should {
+    "return a None and redirect if HadPreviousRFIModel is 'Yes' and previous investments is None" in {
+      mockEnrolledRequest(eisSchemeTypesModel)
+      setupEisSubmissionMocks(hadPreviousRFI = Some(hadPreviousRFIModelYes), hadOtherInvestments = Some(hadOtherInvestmentsModelNo),previousSchemes = None)
+      val model = await(TestController.getAnswers)
+      model.nonEmpty shouldBe true
+
+      await(model.get.validateEis(mockSubmissionConnector, mockS4lConnector)) shouldBe false
+
+      val result = TestController.show.apply(authorisedFakeRequest)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+    }
+  }
+
+  "Extracting all the answers from the EIS flow should fail validation and " should {
+    "return a None and redirect when HadPreviousRFIModel is 'Yes' and previous investments is an empty list" in {
+      mockEnrolledRequest(eisSchemeTypesModel)
+      setupEisSubmissionMocks(hadPreviousRFI = Some(hadPreviousRFIModelYes), hadOtherInvestments = Some(hadOtherInvestmentsModelNo),
+        previousSchemes = Some(List.empty[PreviousSchemeModel]))
+      val model = await(TestController.getAnswers)
+      model.nonEmpty shouldBe true
+
+      await(model.get.validateEis(mockSubmissionConnector, mockS4lConnector)) shouldBe false
+
+      val result = TestController.show.apply(authorisedFakeRequest)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+    }
+  }
+
+  "Extracting all the answers from the EIS flow should fail validation and " should {
+    "return a None and redirect if hadOtherInvestments is 'Yes' and previous investments is None" in {
+      mockEnrolledRequest(eisSchemeTypesModel)
+      setupEisSubmissionMocks(hadPreviousRFI = Some(hadPreviousRFIModelNo), hadOtherInvestments = Some(hadOtherInvestmentsModelYes),previousSchemes = None)
+      val model = await(TestController.getAnswers)
+      model.nonEmpty shouldBe true
+
+      await(model.get.validateEis(mockSubmissionConnector, mockS4lConnector)) shouldBe false
+
+      val result = TestController.show.apply(authorisedFakeRequest)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+    }
+  }
+
+  "Extracting all the answers from the EIS flow should fail validation and " should {
+    "return a None and redirect when hadOtherInvestments is 'Yes' and previous investments is an empty list" in {
+      mockEnrolledRequest(eisSchemeTypesModel)
+      setupEisSubmissionMocks(hadPreviousRFI = Some(hadPreviousRFIModelNo), hadOtherInvestments = Some(hadOtherInvestmentsModelYes),
+        previousSchemes = Some(List.empty[PreviousSchemeModel]))
+      val model = await(TestController.getAnswers)
+      model.nonEmpty shouldBe true
+
+      await(model.get.validateEis(mockSubmissionConnector, mockS4lConnector)) shouldBe false
+
+      val result = TestController.show.apply(authorisedFakeRequest)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+    }
+  }
+
+  "Extracting all the answers from the EIS flow should fail validation and " should {
+    "return a None and redirect if anySharesRepaymentModel is 'Yes' and sharesRepaymentDetailsModel list is None" in {
+      mockEnrolledRequest(eisSchemeTypesModel)
+      setupEisSubmissionMocks(anySharesRepayment = Some(anySharesRepaymentModelYes), sharesRepaymentDetails = None)
+      val model = await(TestController.getAnswers)
+      model.nonEmpty shouldBe true
+
+      await(model.get.validateEis(mockSubmissionConnector, mockS4lConnector)) shouldBe false
+
+      val result = TestController.show.apply(authorisedFakeRequest)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+    }
+  }
+
+  "Extracting all the answers from the EIS flow should fail validation and " should {
+    "return a None and redirect if anySharesRepaymentModel is 'Yes' and sharesRepaymentDetailsModel list is any empty list" in {
+      mockEnrolledRequest(eisSchemeTypesModel)
+      setupEisSubmissionMocks(anySharesRepayment = Some(anySharesRepaymentModelYes), sharesRepaymentDetails = Some(List.empty[SharesRepaymentDetailsModel]))
+      val model = await(TestController.getAnswers)
+      model.nonEmpty shouldBe true
+
+      await(model.get.validateEis(mockSubmissionConnector, mockS4lConnector)) shouldBe false
+
+      val result = TestController.show.apply(authorisedFakeRequest)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+    }
+  }
+
+  "Extracting all the answers from the EIS flow should fail validation and " should {
+    "return a None and redirect if anySharesRepaymentModel is 'Yes' and sharesRepaymentDetailsModel list is a list with incomplete items" in {
+      mockEnrolledRequest(eisSchemeTypesModel)
+      setupEisSubmissionMocks(anySharesRepayment = Some(anySharesRepaymentModelYes), sharesRepaymentDetails = Some(incompleteSharesRepaymentDetailsVector.toList))
+      val model = await(TestController.getAnswers)
+      model.nonEmpty shouldBe true
+
+      await(model.get.validateEis(mockSubmissionConnector, mockS4lConnector)) shouldBe false
+
+      val result = TestController.show.apply(authorisedFakeRequest)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+    }
+  }
+
+  "Extracting all the answers from the EIS flow should fail validation and " should {
+    "return a None and redirect if the investor list has incomplete items" in {
+      mockEnrolledRequest(eisSchemeTypesModel)
+      setupEisSubmissionMocks(investorDetails = Some(listOfInvestorsMissingNumberOfPreviouslyIssuedSharesForSubmission))
+      val model = await(TestController.getAnswers)
+      model.nonEmpty shouldBe true
+
+      await(model.get.validateEis(mockSubmissionConnector, mockS4lConnector)) shouldBe false
+
+      val result = TestController.show.apply(authorisedFakeRequest)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+    }
+  }
+
+  "Extracting all the answers from the EIS flow should fail validation and " should {
+    "return a None and redirect if the Ki Processing model has no date condition met" in {
+      mockEnrolledRequest(eisSchemeTypesModel)
+      setupEisSubmissionMocks(kiProcessingModel = Some(KiProcessingModel(dateConditionMet = None)))
+      val model = await(TestController.getAnswers)
+      model.nonEmpty shouldBe true
+
+      await(model.get.validateEis(mockSubmissionConnector, mockS4lConnector)) shouldBe false
+
+      val result = TestController.show.apply(authorisedFakeRequest)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+    }
+  }
+
+  "Extracting all the answers from the EIS flow should fail validation and " should {
+    "return a None and redirect if the Ki Processing model has date condition met, applyKi = true and assetsKi = true " +
+    "but costs condition met is None" in {
+      mockEnrolledRequest(eisSchemeTypesModel)
+      setupEisSubmissionMocks(kiProcessingModel = Some(KiProcessingModel(dateConditionMet = Some(true), companyAssertsIsKi = Some(true), companyWishesToApplyKi = Some(true),
+        costsConditionMet = None, secondaryCondtionsMet = Some(true))))
+      val model = await(TestController.getAnswers)
+      model.nonEmpty shouldBe true
+
+      await(model.get.validateEis(mockSubmissionConnector, mockS4lConnector)) shouldBe false
+
+      val result = TestController.show.apply(authorisedFakeRequest)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+    }
+  }
+
+  "Extracting all the answers from the EIS flow should fail validation and " should {
+    "return a None and redirect if the Ki Processing model has date condition met, applyKi = true and assetsKi = true " +
+      "but seconday condition met is None" in {
+      mockEnrolledRequest(eisSchemeTypesModel)
+      setupEisSubmissionMocks(kiProcessingModel = Some(KiProcessingModel(dateConditionMet = Some(true), companyAssertsIsKi = Some(true), companyWishesToApplyKi = Some(true),
+        costsConditionMet = Some(true), secondaryCondtionsMet = None)))
+      val model = await(TestController.getAnswers)
+      model.nonEmpty shouldBe true
+
+      await(model.get.validateEis(mockSubmissionConnector, mockS4lConnector)) shouldBe false
+
+      val result = TestController.show.apply(authorisedFakeRequest)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+    }
+  }
+
+  "Extracting all the answers from the EIS flow should fail validation and " should {
+    "return a None and redirect if newGeographicMarket is 'yes' but turnover costs are empty" in {
+      mockEnrolledRequest(eisSchemeTypesModel)
+      setupEisSubmissionMocks(newGeographicalMarket = Some(newGeographicalMarketModelYes), newProduct = Some(newProductMarketModelNo), turnoverCosts = None)
+      val model = await(TestController.getAnswers)
+      model.nonEmpty shouldBe true
+
+      await(model.get.validateEis(mockSubmissionConnector, mockS4lConnector)) shouldBe false
+
+      val result = TestController.show.apply(authorisedFakeRequest)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+    }
+  }
+
+  "Extracting all the answers from the EIS flow should fail validation and " should {
+    "return a None and redirect if newProduct is 'yes' but turnover costs are empty" in {
+      mockEnrolledRequest(eisSchemeTypesModel)
+      setupEisSubmissionMocks(newGeographicalMarket = Some(newGeographicalMarketModelNo), newProduct = Some(newProductMarketModelYes), turnoverCosts = None)
+      val model = await(TestController.getAnswers)
+      model.nonEmpty shouldBe true
+
+      await(model.get.validateEis(mockSubmissionConnector, mockS4lConnector)) shouldBe false
+
+      val result = TestController.show.apply(authorisedFakeRequest)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+    }
+  }
+
+  "Extracting all the answers from the EIS flow should fail validation and " should {
+    "return a None and redirect if newProduct is 'yes', turnover costs exist but 30 day rule is empty if when the API check failed validation" in {
+      mockEnrolledRequest(eisSchemeTypesModel)
+      setupEisSubmissionMocks(newGeographicalMarket = Some(newGeographicalMarketModelNo), newProduct = Some(newProductMarketModelYes),
+        turnoverCosts = Some(turnoverCostsValid), turnoverAPiCheckPassed = Some(turnoverCheckPassedFalse), thirtyDayRule = None)
+      val model = await(TestController.getAnswers)
+      model.nonEmpty shouldBe true
+
+      await(model.get.validateEis(mockSubmissionConnector, mockS4lConnector)) shouldBe false
+
+      val result = TestController.show.apply(authorisedFakeRequest)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+    }
+  }
+
+  "Extracting all the answers from the EIS flow should fail validation and " should {
+    "return a None and redirect if newGeographicMarket is 'yes', turnover costs exist but 30 day rule is empty if when the API check failed validation" in {
+      mockEnrolledRequest(eisSchemeTypesModel)
+      setupEisSubmissionMocks(newGeographicalMarket = Some(newGeographicalMarketModelYes), newProduct = Some(newProductMarketModelNo),
+        turnoverCosts = Some(turnoverCostsValid), turnoverAPiCheckPassed = Some(turnoverCheckPassedFalse), thirtyDayRule = None)
+      val model = await(TestController.getAnswers)
+      model.nonEmpty shouldBe true
+
+      await(model.get.validateEis(mockSubmissionConnector, mockS4lConnector)) shouldBe false
+
+      val result = TestController.show.apply(authorisedFakeRequest)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+    }
+  }
+
+//  def validateTurnoverThirtyDay = {
+//    if (!turnoverApiCheckPassed.fold(true)(_.self)) thirtyDayRuleAnswersModel.nonEmpty else true
+//  }
+//
+//  if(newGeographicMarket.isNewGeographicalMarket == Constants.StandardRadioButtonYesValue ||
+//    newProductMarket.isNewProduct == Constants.StandardRadioButtonYesValue) costsAnswersModel.turnoverCostModel.nonEmpty && validateTurnoverThirtyDay
+//  else true
+
+
+//  "Extracting all the answers from the EIS flow should fail validation and " should {
+//    "return a None and redirect when HadPreviousRFIModel is 'Yes' and previous investments has incomplete items" in {
+//      mockEnrolledRequest(eisSchemeTypesModel)
+//      setupEisSubmissionMocks(hadPreviousRFI = Some(hadPreviousRFIModelYes), previousSchemes = Some(previousSchemesListIncomplete))
+//      val model = await(TestController.getAnswers)
+//      model.nonEmpty shouldBe true
+//
+//      await(model.get.validateEis(mockSubmissionConnector, mockS4lConnector)) shouldBe false
+//
+//      val result = TestController.show.apply(authorisedFakeRequest)
+//      status(result) shouldBe SEE_OTHER
+//      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+//    }
+//  }
+
+
+//  if (hadPreviousRFIModel.hadPreviousRFI == Constants.StandardRadioButtonYesValue ||
+//    otherInvestmentsModel.hadOtherInvestments == Constants.StandardRadioButtonYesValue) previousSchemeModel.exists(_.nonEmpty)
+
+  "Extracting all the answers from the EIS flow should fail validation when MarketRoutingCheckResult returns {true. true} requiring extra validation " should {
+    "and UsedInvestmentReasonBeforeModel is missing. (hadPreviousRFI = Yes condition)" +
+      "(i.e. For a subsequent investment (used previously) and a commercial sale exists and is not Ki and has subsidiaries.)" in {
+      mockEnrolledRequest(eisSchemeTypesModel)
+      setupEisSubmissionMocks(kiProcessingModel = Some(falseKIModel), hadPreviousRFI = Some(keyStoreSavedHadPreviousRFIYes),
+        hadOtherInvestments = Some(hadOtherInvestmentsModelNo) ,commercialSale = Some(keyStoreSavedCommercialSale7YearsOneDay),
+        subsidiaries = Some(keyStoreSavedSubsidiariesYes),
+        dateOfIncorporation = Some(keyStoreSavedDOI3YearsLessOneDay), previousSchemes = Some(previousSchemesList),
+        previousBeforeDOFCS = Some(previousBeforeDOFCSModelYes), usedInvestmentReasonBefore = None)
+      val model = await(TestController.getAnswers)
+      model.nonEmpty shouldBe true
+
+       //ensure this produces a marketInfo result requiring extra validation
+      model.get.marketInfo.get.isMarketRouteApplicable.reasonBeforeValidationRequired shouldBe true
+      model.get.marketInfo.get.isMarketRouteApplicable.isMarketInfoRoute shouldBe true
+
+        // and model validation fails because extra validation fails because usedInvestmentReasonBefore is None"
+        await(model.get.validateEis(mockSubmissionConnector, mockS4lConnector)) shouldBe false
+
+      val result = TestController.show.apply(authorisedFakeRequest)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+    }
+  }
+
+  "Extracting all the answers from the EIS flow should fail validation when MarketRoutingCheckResult returns {true. true} requiring extra validation " should {
+    "and UsedInvestmentReasonBeforeModel is missing. (hadOtherInvestments = Yes condition)" +
+      "(i.e. For a subsequent investment (used previously) and a commercial sale exists and is not Ki and has subsidiaries.)" in {
+      mockEnrolledRequest(eisSchemeTypesModel)
+      setupEisSubmissionMocks(kiProcessingModel = Some(falseKIModel), hadPreviousRFI = Some(keyStoreSavedHadPreviousRFINo),
+        hadOtherInvestments = Some(hadOtherInvestmentsModelYes) ,commercialSale = Some(keyStoreSavedCommercialSale7YearsOneDay),
+        subsidiaries = Some(keyStoreSavedSubsidiariesYes),
+        dateOfIncorporation = Some(keyStoreSavedDOI3YearsLessOneDay), previousSchemes = Some(previousSchemesList), usedInvestmentReasonBefore = None,
+        previousBeforeDOFCS = Some(previousBeforeDOFCSModelYes))
+      val model = await(TestController.getAnswers)
+      model.nonEmpty shouldBe true
+
+      //ensure this produces a marketInfo result requiring extra validation
+      model.get.marketInfo.get.isMarketRouteApplicable.reasonBeforeValidationRequired shouldBe true
+      model.get.marketInfo.get.isMarketRouteApplicable.isMarketInfoRoute shouldBe true
+
+      // and model validation fails because extra validation fails because usedInvestmentReasonBefore is None"
+      await(model.get.validateEis(mockSubmissionConnector, mockS4lConnector)) shouldBe false
+
+      val result = TestController.show.apply(authorisedFakeRequest)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+    }
+  }
+
+  "Extracting all the answers from the EIS flow should fail validation when MarketRoutingCheckResult returns {true. true} requiring extra validation " should {
+    "and PreviousBeforeDOFCSModel is missing. (hadPreviousRFI = Yes condition)" +
+      "(i.e. For a subsequent investment (used previously) and a commercial sale exists and is not Ki and has subsidiaries.)" in {
+      mockEnrolledRequest(eisSchemeTypesModel)
+      setupEisSubmissionMocks(kiProcessingModel = Some(falseKIModel), hadPreviousRFI = Some(keyStoreSavedHadPreviousRFIYes),
+        hadOtherInvestments = Some(hadOtherInvestmentsModelNo) ,commercialSale = Some(keyStoreSavedCommercialSale7YearsOneDay),
+        subsidiaries = Some(keyStoreSavedSubsidiariesYes), dateOfIncorporation = Some(keyStoreSavedDOI3YearsLessOneDay), previousSchemes = Some(previousSchemesList),
+        previousBeforeDOFCS = None, usedInvestmentReasonBefore = Some(usedInvestmentReasonBeforeModelYes))
+      val model = await(TestController.getAnswers)
+      model.nonEmpty shouldBe true
+
+      //ensure this produces a marketInfo result requiring extra validation
+      model.get.marketInfo.get.isMarketRouteApplicable.reasonBeforeValidationRequired shouldBe true
+      model.get.marketInfo.get.isMarketRouteApplicable.isMarketInfoRoute shouldBe true
+
+      // and model validation fails because extra validation fails because PreviousBeforeDOFCSModel is None"
+      await(model.get.validateEis(mockSubmissionConnector, mockS4lConnector)) shouldBe false
+
+      val result = TestController.show.apply(authorisedFakeRequest)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+    }
+  }
+
+  "Extracting all the answers from the EIS flow should fail validation when MarketRoutingCheckResult returns {true. true} requiring extra validation " should {
+    "and PreviousBeforeDOFCSModel is missing. (hadOtherInvestments = Yes condition)" +
+      "(i.e. For a subsequent investment (used previously) and a commercial sale exists and is not Ki and has subsidiaries.)" in {
+      mockEnrolledRequest(eisSchemeTypesModel)
+      setupEisSubmissionMocks(kiProcessingModel = Some(falseKIModel), hadPreviousRFI = Some(keyStoreSavedHadPreviousRFINo),
+        hadOtherInvestments = Some(hadOtherInvestmentsModelYes) ,commercialSale = Some(keyStoreSavedCommercialSale7YearsOneDay),
+        subsidiaries = Some(keyStoreSavedSubsidiariesYes),
+        dateOfIncorporation = Some(keyStoreSavedDOI3YearsLessOneDay), previousSchemes = Some(previousSchemesList),
+        previousBeforeDOFCS = None, usedInvestmentReasonBefore = Some(usedInvestmentReasonBeforeModelYes))
+
+      val model = await(TestController.getAnswers)
+      model.nonEmpty shouldBe true
+
+      //ensure this produces a marketInfo result requiring extra validation
+      model.get.marketInfo.get.isMarketRouteApplicable.reasonBeforeValidationRequired shouldBe true
+      model.get.marketInfo.get.isMarketRouteApplicable.isMarketInfoRoute shouldBe true
+
+      // and model validation fails because extra validation fails because PreviousBeforeDOFCSModel is None"
+      await(model.get.validateEis(mockSubmissionConnector, mockS4lConnector)) shouldBe false
+
+      val result = TestController.show.apply(authorisedFakeRequest)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+    }
+  }
+
+  "Extracting all the answers from the EIS flow should pass validation when MarketRoutingCheckResult returns {true. true} requiring extra validation " should {
+    "and PreviousBeforeDOFCSModel and usedInvestmentReasonBeforeModelYes are both present. (hadOtherInvestments = Yes condition)" +
+      "(i.e. For a subsequent investment (used previously) and a commercial sale exists and is not Ki and has subsidiaries.)" in {
+      mockEnrolledRequest(eisSchemeTypesModel)
+      setupEisSubmissionMocks(kiProcessingModel = Some(falseKIModel), hadPreviousRFI = Some(keyStoreSavedHadPreviousRFINo),
+        hadOtherInvestments = Some(hadOtherInvestmentsModelYes) ,commercialSale = Some(keyStoreSavedCommercialSale7YearsOneDay),
+        subsidiaries = Some(keyStoreSavedSubsidiariesYes),
+        dateOfIncorporation = Some(keyStoreSavedDOI3YearsLessOneDay), previousSchemes = Some(previousSchemesList),
+        previousBeforeDOFCS = Some(previousBeforeDOFCSModelNo), usedInvestmentReasonBefore = Some(usedInvestmentReasonBeforeModelYes))
+
+      val model = await(TestController.getAnswers)
+      model.nonEmpty shouldBe true
+
+      //ensure this produces a marketInfo result requiring extra validation
+      model.get.marketInfo.get.isMarketRouteApplicable.reasonBeforeValidationRequired shouldBe true
+      model.get.marketInfo.get.isMarketRouteApplicable.isMarketInfoRoute shouldBe true
+
+      // and model validation passes because extra validation passes because PreviousBeforeDOFCSModel and UsedInvestmentReasonBeforeModel are both present
+      await(model.get.validateEis(mockSubmissionConnector, mockS4lConnector)) shouldBe true
+
+      val result = TestController.show.apply(authorisedFakeRequest)
+      status(result) shouldBe OK
+    }
+  }
+
+  "Extracting all the answers from the EIS flow should pass validation when MarketRoutingCheckResult returns {true. true} requiring extra validation " should {
+    "and PreviousBeforeDOFCSModel and usedInvestmentReasonBeforeModelYes are both present. (hadPreviousRFI = Yes condition)" +
+      "(i.e. For a subsequent investment (used previously) and a commercial sale exists and is not Ki and has subsidiaries.)" in {
+      mockEnrolledRequest(eisSchemeTypesModel)
+      setupEisSubmissionMocks(kiProcessingModel = Some(falseKIModel), hadPreviousRFI = Some(keyStoreSavedHadPreviousRFIYes),
+        hadOtherInvestments = Some(hadOtherInvestmentsModelNo) ,commercialSale = Some(keyStoreSavedCommercialSale7YearsOneDay),
+        subsidiaries = Some(keyStoreSavedSubsidiariesYes),
+        dateOfIncorporation = Some(keyStoreSavedDOI3YearsLessOneDay), previousSchemes = Some(previousSchemesList),
+        previousBeforeDOFCS = Some(previousBeforeDOFCSModelNo), usedInvestmentReasonBefore = Some(usedInvestmentReasonBeforeModelYes))
+
+      val model = await(TestController.getAnswers)
+      model.nonEmpty shouldBe true
+
+      //ensure this produces a marketInfo result requiring extra validation
+      model.get.marketInfo.get.isMarketRouteApplicable.reasonBeforeValidationRequired shouldBe true
+      model.get.marketInfo.get.isMarketRouteApplicable.isMarketInfoRoute shouldBe true
+
+      // and model validation passes because extra validation passes because PreviousBeforeDOFCSModel and UsedInvestmentReasonBeforeModel are both present
+      await(model.get.validateEis(mockSubmissionConnector, mockS4lConnector)) shouldBe true
+
+      val result = TestController.show.apply(authorisedFakeRequest)
+      status(result) shouldBe OK
+
+    }
+  }
+
+  "Extracting all the answers from the EIS flow should fail validation when MarketRoutingCheckResult returns {true. true} requiring extra validation " should {
+    "and UsedInvestmentReasonBeforeModel is missing. (hadPreviousRFI = Yes condition)" +
+      "(i.e. For a subsequent investment (used previously) and a commercial sale exists when Ki with subsidiaries.)" in {
+      mockEnrolledRequest(eisSchemeTypesModel)
+      setupEisSubmissionMocks(kiProcessingModel = Some(trueKIModel), hadPreviousRFI = Some(keyStoreSavedHadPreviousRFIYes),
+        hadOtherInvestments = Some(hadOtherInvestmentsModelNo) ,commercialSale = Some(keyStoreSavedCommercialSale10YearsOneDay),
+        subsidiaries = Some(keyStoreSavedSubsidiariesYes),
+        dateOfIncorporation = Some(keyStoreSavedDOI3YearsLessOneDay), previousSchemes = Some(previousSchemesList),
+        previousBeforeDOFCS = Some(previousBeforeDOFCSModelYes), usedInvestmentReasonBefore = None)
+      val model = await(TestController.getAnswers)
+      model.nonEmpty shouldBe true
+
+      //ensure this produces a marketInfo result requiring extra validation
+      model.get.marketInfo.get.isMarketRouteApplicable.reasonBeforeValidationRequired shouldBe true
+      model.get.marketInfo.get.isMarketRouteApplicable.isMarketInfoRoute shouldBe true
+
+      // and model validation fails because extra validation fails because usedInvestmentReasonBefore is None"
+      await(model.get.validateEis(mockSubmissionConnector, mockS4lConnector)) shouldBe false
+
+      val result = TestController.show.apply(authorisedFakeRequest)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+    }
+  }
+
+  "Extracting all the answers from the EIS flow should fail validation when MarketRoutingCheckResult returns {true. true} requiring extra validation " should {
+    "and UsedInvestmentReasonBeforeModel is missing. (hadOtherInvestments = Yes condition)" +
+      "(i.e. For a subsequent investment (used previously) and a commercial sale exists when Ki with subsidiaries.)" in {
+      mockEnrolledRequest(eisSchemeTypesModel)
+      setupEisSubmissionMocks(kiProcessingModel = Some(trueKIModel), hadPreviousRFI = Some(keyStoreSavedHadPreviousRFINo),
+        hadOtherInvestments = Some(hadOtherInvestmentsModelYes) ,commercialSale = Some(keyStoreSavedCommercialSale10YearsOneDay),
+        subsidiaries = Some(keyStoreSavedSubsidiariesYes),
+        dateOfIncorporation = Some(keyStoreSavedDOI3YearsLessOneDay), previousSchemes = Some(previousSchemesList), usedInvestmentReasonBefore = None,
+        previousBeforeDOFCS = Some(previousBeforeDOFCSModelYes))
+      val model = await(TestController.getAnswers)
+      model.nonEmpty shouldBe true
+
+      //ensure this produces a marketInfo result requiring extra validation
+      model.get.marketInfo.get.isMarketRouteApplicable.reasonBeforeValidationRequired shouldBe true
+      model.get.marketInfo.get.isMarketRouteApplicable.isMarketInfoRoute shouldBe true
+
+      // and model validation fails because extra validation fails because usedInvestmentReasonBefore is None"
+      await(model.get.validateEis(mockSubmissionConnector, mockS4lConnector)) shouldBe false
+
+      val result = TestController.show.apply(authorisedFakeRequest)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+    }
+  }
+
+  "Extracting all the answers from the EIS flow should fail validation when MarketRoutingCheckResult returns {true. true} requiring extra validation " should {
+    "and PreviousBeforeDOFCSModel is missing. (hadPreviousRFI = Yes condition)" +
+      "(i.e. For a subsequent investment (used previously) and a commercial sale exists when Ki with subsidiaries.)" in {
+      mockEnrolledRequest(eisSchemeTypesModel)
+      setupEisSubmissionMocks(kiProcessingModel = Some(trueKIModel), hadPreviousRFI = Some(keyStoreSavedHadPreviousRFIYes),
+        hadOtherInvestments = Some(hadOtherInvestmentsModelNo) ,commercialSale = Some(keyStoreSavedCommercialSale10YearsOneDay),
+        subsidiaries = Some(keyStoreSavedSubsidiariesYes), dateOfIncorporation = Some(keyStoreSavedDOI3YearsLessOneDay), previousSchemes = Some(previousSchemesList),
+        previousBeforeDOFCS = None, usedInvestmentReasonBefore = Some(usedInvestmentReasonBeforeModelYes))
+      val model = await(TestController.getAnswers)
+      model.nonEmpty shouldBe true
+
+      //ensure this produces a marketInfo result requiring extra validation
+      model.get.marketInfo.get.isMarketRouteApplicable.reasonBeforeValidationRequired shouldBe true
+      model.get.marketInfo.get.isMarketRouteApplicable.isMarketInfoRoute shouldBe true
+
+      // and model validation fails because extra validation fails because PreviousBeforeDOFCSModel is None"
+      await(model.get.validateEis(mockSubmissionConnector, mockS4lConnector)) shouldBe false
+
+      val result = TestController.show.apply(authorisedFakeRequest)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+    }
+  }
+
+  "Extracting all the answers from the EIS flow should fail validation when MarketRoutingCheckResult returns {true. true} requiring extra validation " should {
+    "and PreviousBeforeDOFCSModel is missing. (hadOtherInvestments = Yes condition)" +
+      "(i.e. For a subsequent investment (used previously) and a commercial sale exists when Ki with subsidiaries.)" in {
+      mockEnrolledRequest(eisSchemeTypesModel)
+      setupEisSubmissionMocks(kiProcessingModel = Some(trueKIModel), hadPreviousRFI = Some(keyStoreSavedHadPreviousRFINo),
+        hadOtherInvestments = Some(hadOtherInvestmentsModelYes) ,commercialSale = Some(keyStoreSavedCommercialSale10YearsOneDay),
+        subsidiaries = Some(keyStoreSavedSubsidiariesYes),
+        dateOfIncorporation = Some(keyStoreSavedDOI3YearsLessOneDay), previousSchemes = Some(previousSchemesList),
+        previousBeforeDOFCS = None, usedInvestmentReasonBefore = Some(usedInvestmentReasonBeforeModelYes))
+
+      val model = await(TestController.getAnswers)
+      model.nonEmpty shouldBe true
+
+      //ensure this produces a marketInfo result requiring extra validation
+      model.get.marketInfo.get.isMarketRouteApplicable.reasonBeforeValidationRequired shouldBe true
+      model.get.marketInfo.get.isMarketRouteApplicable.isMarketInfoRoute shouldBe true
+
+      // and model validation fails because extra validation fails because PreviousBeforeDOFCSModel is None"
+      await(model.get.validateEis(mockSubmissionConnector, mockS4lConnector)) shouldBe false
+
+      val result = TestController.show.apply(authorisedFakeRequest)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+    }
+  }
+
+  "Extracting all the answers from the EIS flow should pass validation when MarketRoutingCheckResult returns {true. true} requiring extra validation " should {
+    "and PreviousBeforeDOFCSModel and usedInvestmentReasonBeforeModelYes are both present. (hadOtherInvestments = Yes condition)" +
+      "(i.e. For a subsequent investment (used previously) and a commercial sale exists when Ki with subsidiaries)" in {
+      mockEnrolledRequest(eisSchemeTypesModel)
+      setupEisSubmissionMocks(kiProcessingModel = Some(trueKIModel), hadPreviousRFI = Some(keyStoreSavedHadPreviousRFINo),
+        hadOtherInvestments = Some(hadOtherInvestmentsModelYes) ,commercialSale = Some(keyStoreSavedCommercialSale10YearsOneDay),
+        subsidiaries = Some(keyStoreSavedSubsidiariesYes),
+        dateOfIncorporation = Some(keyStoreSavedDOI3YearsLessOneDay), previousSchemes = Some(previousSchemesList),
+        previousBeforeDOFCS = Some(previousBeforeDOFCSModelNo), usedInvestmentReasonBefore = Some(usedInvestmentReasonBeforeModelYes))
+
+      val model = await(TestController.getAnswers)
+      model.nonEmpty shouldBe true
+
+      //ensure this produces a marketInfo result requiring extra validation
+      model.get.marketInfo.get.isMarketRouteApplicable.reasonBeforeValidationRequired shouldBe true
+      model.get.marketInfo.get.isMarketRouteApplicable.isMarketInfoRoute shouldBe true
+
+      // and model validation passes because extra validation passes because PreviousBeforeDOFCSModel and UsedInvestmentReasonBeforeModel are both present
+      await(model.get.validateEis(mockSubmissionConnector, mockS4lConnector)) shouldBe true
+
+      val result = TestController.show.apply(authorisedFakeRequest)
+      status(result) shouldBe OK
+    }
+  }
+
+  "Extracting all the answers from the EIS flow should pass validation when MarketRoutingCheckResult returns {true. true} requiring extra validation " should {
+    "and PreviousBeforeDOFCSModel and usedInvestmentReasonBeforeModelYes are both present. (hadPreviousRFI = Yes condition)" +
+      "(i.e. For a subsequent investment (used previously) and a commercial sale exists when Ki with subsidiaries.)" in {
+      mockEnrolledRequest(eisSchemeTypesModel)
+      setupEisSubmissionMocks(kiProcessingModel = Some(trueKIModel), hadPreviousRFI = Some(keyStoreSavedHadPreviousRFIYes),
+        hadOtherInvestments = Some(hadOtherInvestmentsModelNo) ,commercialSale = Some(keyStoreSavedCommercialSale10YearsOneDay),
+        subsidiaries = Some(keyStoreSavedSubsidiariesYes),
+        dateOfIncorporation = Some(keyStoreSavedDOI3YearsLessOneDay), previousSchemes = Some(previousSchemesList),
+        previousBeforeDOFCS = Some(previousBeforeDOFCSModelNo), usedInvestmentReasonBefore = Some(usedInvestmentReasonBeforeModelYes))
+
+      val model = await(TestController.getAnswers)
+      model.nonEmpty shouldBe true
+
+      //ensure this produces a marketInfo result requiring extra validation
+      model.get.marketInfo.get.isMarketRouteApplicable.reasonBeforeValidationRequired shouldBe true
+      model.get.marketInfo.get.isMarketRouteApplicable.isMarketInfoRoute shouldBe true
+
+      // and model validation passes because extra validation passes because PreviousBeforeDOFCSModel and UsedInvestmentReasonBeforeModel are both present
+      await(model.get.validateEis(mockSubmissionConnector, mockS4lConnector)) shouldBe true
+
+      val result = TestController.show.apply(authorisedFakeRequest)
+      status(result) shouldBe OK
+
+    }
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  "Sending an Authenticated and Enrolled GET request with a session to AcknowledgementController" should {
+    "return a 200 and delete the current application when a valid submission data is submitted" in  {
+      when(mockFileUploadService.getUploadFeatureEnabled).thenReturn(false)
+      when(mockS4lConnector.clearCache()(Matchers.any(), Matchers.any())).thenReturn(HttpResponse(NO_CONTENT))
+      setupEisSubmissionMocks()
+      mockEnrolledRequest(eisSchemeTypesModel)
+      val result = TestController.show.apply(authorisedFakeRequest)
+      status(result) shouldBe OK
+    }
+  }
+
+  "Sending an Authenticated and Enrolled GET request with a session to AcknowledgementController" should {
+    "return a 200, close the file upload envelope and " +
+      "delete the current application when a valid submission data is submitted with the file upload flag enabled" in  {
+      when(mockFileUploadService.getUploadFeatureEnabled).thenReturn(true)
+      when(mockFileUploadService.closeEnvelope(Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(),
+        Matchers.any())).thenReturn(Future(HttpResponse(OK)))
+      when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.envelopeId))
+        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(envelopeId))
+      when(mockS4lConnector.clearCache()(Matchers.any(), Matchers.any())).thenReturn(HttpResponse(NO_CONTENT))
+      setupEisSubmissionMocks()
+      mockEnrolledRequest(eisSchemeTypesModel)
+      val result = TestController.show.apply(authorisedFakeRequest)
+      status(result) shouldBe OK
+    }
+  }
+
+  "Sending a POST request to the Acknowledgement controller when authenticated and enrolled" should {
+    "redirect to the feedback page" in {
+      mockEnrolledRequest(eisSchemeTypesModel)
+      setupEisSubmissionMocks()
+      submitWithSessionAndAuth(TestController.submit)(
+        result => {
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(controllers.feedback.routes.FeedbackController.show().url)
+        }
+      )
+    }
+  }
+
+
+
+
+
+  private def setUpMocksMarketInfoExtraValidationRequired() : Unit = {
+    setupEisSubmissionMocks(commercialSale = Some(commercialSaleModelYes), hadOtherInvestments = Some(hadOtherInvestmentsModelYes),
+      getHasInvestmentTradeStartedCondition = Some(true), researchStartDate = Some(researchStartDateModelYes))
+  }
+
+  //
+//  "Sending an Authenticated and Enrolled GET request with a session to AcknowledgementController" should {
+//    "return a 303 redirect if mandatory ContactDetailsModel is missing from keystore" in {
+//      setupEisSubmissionMocks()
+//      mockEnrolledRequest(eisSchemeTypesModel)
+//      val result = TestController.show.apply(authorisedFakeRequest)
+//      status(result) shouldBe SEE_OTHER
+//      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+//    }
+//  }
+//
+//  "Sending an Authenticated and Enrolled GET request with a session to AcknowledgementController" should {
+//    "return a 303 redirect if mandatory ProposedInvestmentModel is missing from keystore" in {
+//      setupEisSubmissionMocks()
+//      mockEnrolledRequest(eisSchemeTypesModel)
+//      val result = TestController.show.apply(authorisedFakeRequest)
+//      status(result) shouldBe SEE_OTHER
+//      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+//    }
+//  }
+//
+//  "Sending an Authenticated and Enrolled GET request with a session to AcknowledgementController" should {
+//    "return a 303 redirect if mandatory DateOfIncorporationModel is missing from keystore" in {
+//      setupEisSubmissionMocks()
+//      mockEnrolledRequest(eisSchemeTypesModel)
+//      val result = TestController.show.apply(authorisedFakeRequest)
+//      status(result) shouldBe SEE_OTHER
+//      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+//    }
+//  }
+//
+//  "Sending an Authenticated and Enrolled GET request with a session to AcknowledgementController" should {
+//    "return a 303 redirect if mandatory AddressModel (contact address) is missing from keystore" in {
+//      setupEisSubmissionMocks()
+//      mockEnrolledRequest(eisSchemeTypesModel)
+//      val result = TestController.show.apply(authorisedFakeRequest)
+//      status(result) shouldBe SEE_OTHER
+//      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+//    }
+//  }
+//
+//  "Sending an Authenticated and Enrolled GET request with a session to AcknowledgementController" should {
+//    "return a 303 redirect if mandatory registrationDetailsModel is from registration details service" in {
+//      setupEisSubmissionMocks()
+//      mockEnrolledRequest(eisSchemeTypesModel)
+//      val result = TestController.show.apply(authorisedFakeRequest)
+//      status(result) shouldBe SEE_OTHER
+//      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+//    }
+//  }
+//
+//  "Sending an Authenticated and Enrolled GET request with a session to AcknowledgementController" should {
+//    "return a 5xx when an invalid email is submitted" in new SetupPageFull {
+//      when(mockS4lConnector.fetchAndGetFormData[SchemeTypesModel](Matchers.eq(KeystoreKeys.selectedSchemes))
+//        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Some(schemeTypesEIS))
+//      when(mockSubmissionConnector.submitComplianceStatement(Matchers.any(), Matchers.any(), Matchers.any())(Matchers.any()))
+//        .thenReturn(Future.successful(HttpResponse(INTERNAL_SERVER_ERROR)))
+//      mockEnrolledRequest(eisSchemeTypesModel)
+//      setupEisSubmissionMocks()
+//      val result = TestController.show.apply(authorisedFakeRequest)
+//      status(result) shouldBe SEE_OTHER
+//    }
+//  }
+//
+
+
 }
+

@@ -285,7 +285,7 @@ class TotalAmountRaisedHelperSpec extends BaseSpec {
   // used investment route bypass market question if previousBeforeDOFCSModel and usedInvestmentReasonBeforeModel are both yes
   "For a subsequent investment (used previously) and a commercial sale exists and is not Ki and has subsidiaries " +
     "the TotalAmountRaisedHelper.checkIfMarketInfoApplies method" should {
-    "return the expected MarketRoutingCheckResult (false, fasle) as this is a usedinvestmentBefore route (mktInfoYes) " +
+    "return the expected MarketRoutingCheckResult (false, false) as this is a usedinvestmentBefore route (mktInfoYes) " +
       "but usedInvestmentReasonBefore and previousBeforeDOFCSModel are both yes meaning market info questions are skipped" in {
       setupMocks(Some(falseKIModel), Some(keyStoreSavedHadPreviousRFIYes), Some(hadOtherInvestmentsModelYes), Some(keyStoreSavedCommercialSale7YearsOneDay),
         Some(keyStoreSavedSubsidiariesYes), Some(keyStoreSavedDOI3YearsLessOneDay), Some(previousSchemeTrueKIVectorList), Some(usedInvestmentReasonBeforeModelYes), Some(previousBeforeDOFCSModelYes))
@@ -307,7 +307,7 @@ class TotalAmountRaisedHelperSpec extends BaseSpec {
   // geo market tests for second route
   "For a subsequent investment (used previously) and a commercial sale exists and is not Ki and has subsidiaries " +
     "the TotalAmountRaisedHelper.checkIfMarketInfoApplies method" should {
-    "return the expected MarketRoutingCheckResult (false, fasle) as this is a usedinvestmentBefore route (mktInfoYes) " +
+    "return the expected MarketRoutingCheckResult (false, false) as this is a usedinvestmentBefore route (mktInfoYes) " +
       "but usedInvestmentReasonBefore and previousBeforeDOFCSModel are NOT BOTH  yes (usedInvestmentReasonBeforeModelNo) meaning market info questions are asked and extra validation required" in {
       setupMocks(Some(falseKIModel), Some(keyStoreSavedHadPreviousRFIYes), Some(hadOtherInvestmentsModelYes), Some(keyStoreSavedCommercialSale7YearsOneDay),
         Some(keyStoreSavedSubsidiariesYes), Some(keyStoreSavedDOI3YearsLessOneDay), Some(previousSchemeTrueKIVectorList),
@@ -319,7 +319,7 @@ class TotalAmountRaisedHelperSpec extends BaseSpec {
 
   "For a subsequent investment (used previously) and a commercial sale exists and is not Ki and has subsidiaries " +
     "the TotalAmountRaisedHelper.checkIfMarketInfoApplies method" should {
-    "return the expected MarketRoutingCheckResult (false, fasle) as this is a usedinvestmentBefore route (mktInfoYes) " +
+    "return the expected MarketRoutingCheckResult (false, false) as this is a usedinvestmentBefore route (mktInfoYes) " +
       "but usedInvestmentReasonBefore and previousBeforeDOFCSModel are NOT BOTH  yes (usedInvestmentReasonBeforeModel = None) meaning market info questions are asked and extra validation required" in {
       setupMocks(Some(falseKIModel), Some(keyStoreSavedHadPreviousRFIYes), Some(hadOtherInvestmentsModelYes), Some(keyStoreSavedCommercialSale7YearsOneDay),
         Some(keyStoreSavedSubsidiariesYes), Some(keyStoreSavedDOI3YearsLessOneDay), Some(previousSchemeTrueKIVectorList),
@@ -331,7 +331,7 @@ class TotalAmountRaisedHelperSpec extends BaseSpec {
 
   "For a subsequent investment (used previously) and a commercial sale exists and is not Ki and has subsidiaries " +
     "the TotalAmountRaisedHelper.checkIfMarketInfoApplies method" should {
-    "return the expected MarketRoutingCheckResult (false, fasle) as this is a usedinvestmentBefore route (mktInfoYes) " +
+    "return the expected MarketRoutingCheckResult (false, false) as this is a usedinvestmentBefore route (mktInfoYes) " +
       "but usedInvestmentReasonBefore and previousBeforeDOFCSModel are NOT BOTH  yes (previousBeforeDOFCSModelNo) meaning market info questions are asked and extra validation required" in {
       setupMocks(Some(falseKIModel), Some(keyStoreSavedHadPreviousRFIYes), Some(hadOtherInvestmentsModelYes), Some(keyStoreSavedCommercialSale7YearsOneDay),
         Some(keyStoreSavedSubsidiariesYes), Some(keyStoreSavedDOI3YearsLessOneDay), Some(previousSchemeTrueKIVectorList),
@@ -343,7 +343,7 @@ class TotalAmountRaisedHelperSpec extends BaseSpec {
 
   "For a subsequent investment (used previously) and a commercial sale exists and is not Ki and has subsidiaries " +
     "the TotalAmountRaisedHelper.checkIfMarketInfoApplies method" should {
-    "return the expected MarketRoutingCheckResult (false, fasle) as this is a usedinvestmentBefore route (mktInfoYes) " +
+    "return the expected MarketRoutingCheckResult (false, false) as this is a usedinvestmentBefore route (mktInfoYes) " +
       "but usedInvestmentReasonBefore and previousBeforeDOFCSModel are NOT BOTH  yes (previousBeforeDOFCSModel = None) meaning market info questions are asked and extra validation required" in {
       setupMocks(Some(falseKIModel), Some(keyStoreSavedHadPreviousRFIYes), Some(hadOtherInvestmentsModelYes), Some(keyStoreSavedCommercialSale7YearsOneDay),
         Some(keyStoreSavedSubsidiariesYes), Some(keyStoreSavedDOI3YearsLessOneDay), Some(previousSchemeTrueKIVectorList),
@@ -355,7 +355,7 @@ class TotalAmountRaisedHelperSpec extends BaseSpec {
 
   "For a subsequent investment (used previously) and a commercial sale exists and is not Ki and has subsidiaries " +
     "the TotalAmountRaisedHelper.checkIfMarketInfoApplies method" should {
-    "return the expected MarketRoutingCheckResult (false, fasle) as this is a usedinvestmentBefore route (mktInfoYes) " +
+    "return the expected MarketRoutingCheckResult (false, false) as this is a usedinvestmentBefore route (mktInfoYes) " +
       "but usedInvestmentReasonBefore and previousBeforeDOFCSModel are NOT BOTH  yes (previousBeforeDOFCSModelNo and usedInvestmentReasonBeforeModelNo) meaning market info questions are asked and extra validation required" in {
       setupMocks(Some(falseKIModel), Some(keyStoreSavedHadPreviousRFIYes), Some(hadOtherInvestmentsModelYes), Some(keyStoreSavedCommercialSale7YearsOneDay),
         Some(keyStoreSavedSubsidiariesYes), Some(keyStoreSavedDOI3YearsLessOneDay), Some(previousSchemeTrueKIVectorList),
@@ -367,7 +367,7 @@ class TotalAmountRaisedHelperSpec extends BaseSpec {
 
   "For a subsequent investment (used previously) and a commercial sale exists and is not Ki and has subsidiaries " +
     "the TotalAmountRaisedHelper.checkIfMarketInfoApplies method" should {
-    "return the expected MarketRoutingCheckResult (false, fasle) as this is a usedinvestmentBefore route (mktInfoYes) " +
+    "return the expected MarketRoutingCheckResult (false, false) as this is a usedinvestmentBefore route (mktInfoYes) " +
       "but usedInvestmentReasonBefore and previousBeforeDOFCSModel are NOT BOTH  yes (previousBeforeDOFCSModel = None and usedInvestmentReasonBeforeModel = None) meaning market info questions are asked and extra validation required" in {
       setupMocks(Some(falseKIModel), Some(keyStoreSavedHadPreviousRFIYes), Some(hadOtherInvestmentsModelYes), Some(keyStoreSavedCommercialSale7YearsOneDay),
         Some(keyStoreSavedSubsidiariesYes), Some(keyStoreSavedDOI3YearsLessOneDay), Some(previousSchemeTrueKIVectorList),
@@ -376,6 +376,90 @@ class TotalAmountRaisedHelperSpec extends BaseSpec {
       await(result) shouldBe MarketRoutingCheckResult(isMarketInfoRoute = true, reasonBeforeValidationRequired = true)
     }
   }
+
+
+
+
+
+  "For a subsequent investment (used previously) and a commercial sale exists and when Ki with subsidiaries " +
+    "the TotalAmountRaisedHelper.checkIfMarketInfoApplies method" should {
+    "return the expected MarketRoutingCheckResult (false, false) as this is a usedinvestmentBefore route (mktInfoYes) " +
+      "but usedInvestmentReasonBefore and previousBeforeDOFCSModel are NOT BOTH  yes (usedInvestmentReasonBeforeModelNo) meaning market info questions are asked and extra validation required" in {
+      setupMocks(Some(trueKIModel), Some(keyStoreSavedHadPreviousRFIYes), Some(hadOtherInvestmentsModelYes), Some(keyStoreSavedCommercialSale10YearsOneDay),
+        Some(keyStoreSavedSubsidiariesYes), Some(keyStoreSavedDOI3YearsLessOneDay), Some(previousSchemeTrueKIVectorList),
+        Some(usedInvestmentReasonBeforeModelNo), Some(previousBeforeDOFCSModelYes))
+      val result = totalAmountRaisedHelper.checkIfMarketInfoApplies(mockS4lConnector)
+      await(result) shouldBe MarketRoutingCheckResult(isMarketInfoRoute = true, reasonBeforeValidationRequired = true)
+    }
+  }
+
+  "For a subsequent investment (used previously) and a commercial sale exists and when Ki with subsidiaries " +
+    "the TotalAmountRaisedHelper.checkIfMarketInfoApplies method" should {
+    "return the expected MarketRoutingCheckResult (false, false) as this is a usedinvestmentBefore route (mktInfoYes) " +
+      "but usedInvestmentReasonBefore and previousBeforeDOFCSModel are NOT BOTH  yes (usedInvestmentReasonBeforeModel = None) meaning market info questions are asked and extra validation required" in {
+      setupMocks(Some(trueKIModel), Some(keyStoreSavedHadPreviousRFIYes), Some(hadOtherInvestmentsModelYes), Some(keyStoreSavedCommercialSale10YearsOneDay),
+        Some(keyStoreSavedSubsidiariesYes), Some(keyStoreSavedDOI3YearsLessOneDay), Some(previousSchemeTrueKIVectorList),
+        usedInvestmentReasonBeforeModel = None, Some(previousBeforeDOFCSModelYes))
+      val result = totalAmountRaisedHelper.checkIfMarketInfoApplies(mockS4lConnector)
+      await(result) shouldBe MarketRoutingCheckResult(isMarketInfoRoute = true, reasonBeforeValidationRequired = true)
+    }
+  }
+
+  "For a subsequent investment (used previously) and a commercial sale exists and when Ki with subsidiaries " +
+    "the TotalAmountRaisedHelper.checkIfMarketInfoApplies method" should {
+    "return the expected MarketRoutingCheckResult (false, false) as this is a usedinvestmentBefore route (mktInfoYes) " +
+      "but usedInvestmentReasonBefore and previousBeforeDOFCSModel are NOT BOTH  yes (previousBeforeDOFCSModelNo) meaning market info questions are asked and extra validation required" in {
+      setupMocks(Some(trueKIModel), Some(keyStoreSavedHadPreviousRFIYes), Some(hadOtherInvestmentsModelYes), Some(keyStoreSavedCommercialSale10YearsOneDay),
+        Some(keyStoreSavedSubsidiariesYes), Some(keyStoreSavedDOI3YearsLessOneDay), Some(previousSchemeTrueKIVectorList),
+        Some(usedInvestmentReasonBeforeModelYes), Some(previousBeforeDOFCSModelNo))
+      val result = totalAmountRaisedHelper.checkIfMarketInfoApplies(mockS4lConnector)
+      await(result) shouldBe MarketRoutingCheckResult(isMarketInfoRoute = true, reasonBeforeValidationRequired = true)
+    }
+  }
+
+  "For a subsequent investment (used previously) and a commercial sale exists and when Ki with subsidiaries " +
+    "the TotalAmountRaisedHelper.checkIfMarketInfoApplies method" should {
+    "return the expected MarketRoutingCheckResult (false, false) as this is a usedinvestmentBefore route (mktInfoYes) " +
+      "but usedInvestmentReasonBefore and previousBeforeDOFCSModel are NOT BOTH  yes (previousBeforeDOFCSModel = None) meaning market info questions are asked and extra validation required" in {
+      setupMocks(Some(trueKIModel), Some(keyStoreSavedHadPreviousRFIYes), Some(hadOtherInvestmentsModelYes), Some(keyStoreSavedCommercialSale10YearsOneDay),
+        Some(keyStoreSavedSubsidiariesYes), Some(keyStoreSavedDOI3YearsLessOneDay), Some(previousSchemeTrueKIVectorList),
+        Some(usedInvestmentReasonBeforeModelYes), previousBeforeDOFCSModel = None)
+      val result = totalAmountRaisedHelper.checkIfMarketInfoApplies(mockS4lConnector)
+      await(result) shouldBe MarketRoutingCheckResult(isMarketInfoRoute = true, reasonBeforeValidationRequired = true)
+    }
+  }
+
+  "For a subsequent investment (used previously) and a commercial sale exists and when Ki with subsidiaries " +
+    "the TotalAmountRaisedHelper.checkIfMarketInfoApplies method" should {
+    "return the expected MarketRoutingCheckResult (false, false) as this is a usedinvestmentBefore route (mktInfoYes) " +
+      "but usedInvestmentReasonBefore and previousBeforeDOFCSModel are NOT BOTH  yes (previousBeforeDOFCSModelNo and usedInvestmentReasonBeforeModelNo) meaning market info questions are asked and extra validation required" in {
+      setupMocks(Some(trueKIModel), Some(keyStoreSavedHadPreviousRFIYes), Some(hadOtherInvestmentsModelYes), Some(keyStoreSavedCommercialSale10YearsOneDay),
+        Some(keyStoreSavedSubsidiariesYes), Some(keyStoreSavedDOI3YearsLessOneDay), Some(previousSchemeTrueKIVectorList),
+        Some(usedInvestmentReasonBeforeModelNo), Some(previousBeforeDOFCSModelNo))
+      val result = totalAmountRaisedHelper.checkIfMarketInfoApplies(mockS4lConnector)
+      await(result) shouldBe MarketRoutingCheckResult(isMarketInfoRoute = true, reasonBeforeValidationRequired = true)
+    }
+  }
+
+  "For a subsequent investment (used previously) and a commercial sale exists and when Ki with subsidiaries " +
+    "the TotalAmountRaisedHelper.checkIfMarketInfoApplies method" should {
+    "return the expected MarketRoutingCheckResult (false, false) as this is a usedinvestmentBefore route (mktInfoYes) " +
+      "but usedInvestmentReasonBefore and previousBeforeDOFCSModel are NOT BOTH  yes (previousBeforeDOFCSModel = None and usedInvestmentReasonBeforeModel = None) meaning market info questions are asked and extra validation required" in {
+      setupMocks(Some(trueKIModel), Some(keyStoreSavedHadPreviousRFIYes), Some(hadOtherInvestmentsModelYes), Some(keyStoreSavedCommercialSale10YearsOneDay),
+        Some(keyStoreSavedSubsidiariesYes), Some(keyStoreSavedDOI3YearsLessOneDay), Some(previousSchemeTrueKIVectorList),
+        usedInvestmentReasonBeforeModel = None, previousBeforeDOFCSModel = None)
+      val result = totalAmountRaisedHelper.checkIfMarketInfoApplies(mockS4lConnector)
+      await(result) shouldBe MarketRoutingCheckResult(isMarketInfoRoute = true, reasonBeforeValidationRequired = true)
+    }
+  }
+
+
+
+
+
+
+
+
 
   "For a subsequent investment (used previously) and a commercial sale exists and is Ki and has subsidiaries and has date that IS within range " +
     "the TotalAmountRaisedHelper.checkIfMarketInfoApplies method" should {

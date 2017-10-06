@@ -71,6 +71,9 @@ case class ComplianceStatementAnswersModel(companyDetailsAnswersModel: CompanyDe
     val prevDofcs = s4lConnector.fetchAndGetFormData[PreviousBeforeDOFCSModel](KeystoreKeys.previousBeforeDOFCS)
     val usedInvestmentReasonBefore = s4lConnector.fetchAndGetFormData[UsedInvestmentReasonBeforeModel](KeystoreKeys.usedInvestmentReasonBefore)
 
+
+
+
     def checkMarketInfo(prevDofcs: Option[PreviousBeforeDOFCSModel],
                         usedInvestmentReasonBefore: Option[UsedInvestmentReasonBeforeModel],
                         isMarketRouteApplicable:MarketRoutingCheckResult): Future[Boolean] = {
