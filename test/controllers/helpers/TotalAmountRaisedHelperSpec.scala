@@ -377,10 +377,6 @@ class TotalAmountRaisedHelperSpec extends BaseSpec {
     }
   }
 
-
-
-
-
   "For a subsequent investment (used previously) and a commercial sale exists and when Ki with subsidiaries " +
     "the TotalAmountRaisedHelper.checkIfMarketInfoApplies method" should {
     "return the expected MarketRoutingCheckResult (false, false) as this is a usedinvestmentBefore route (mktInfoYes) " +
@@ -452,14 +448,6 @@ class TotalAmountRaisedHelperSpec extends BaseSpec {
       await(result) shouldBe MarketRoutingCheckResult(isMarketInfoRoute = true, reasonBeforeValidationRequired = true)
     }
   }
-
-
-
-
-
-
-
-
 
   "For a subsequent investment (used previously) and a commercial sale exists and is Ki and has subsidiaries and has date that IS within range " +
     "the TotalAmountRaisedHelper.checkIfMarketInfoApplies method" should {
