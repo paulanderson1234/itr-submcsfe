@@ -595,6 +595,7 @@ trait BaseSpec extends UnitSpec with OneAppPerSuite with MockitoSugar with FakeR
   val previousSchemesList = List(PreviousSchemeModel("test", 1, Some(1), Some("Name"), Some(1), Some(2), Some(2015), Some(1)))
 
   val totalAmountRaisedSubmission = TotalAmountRaisedModel(12345)
+  val totalAmountSpentSubmission = TotalAmountSpentModel(150)
 
   val wasAnyValueReceivedYes = WasAnyValueReceivedModel(Constants.StandardRadioButtonYesValue, Some("text"))
   val wasAnyValueReceivedNo = WasAnyValueReceivedModel(Constants.StandardRadioButtonNoValue, Some("text"))

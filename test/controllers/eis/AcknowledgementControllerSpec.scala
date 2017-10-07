@@ -18,12 +18,11 @@ package controllers.eis
 
 import auth.AuthEnrolledTestController.{INTERNAL_SERVER_ERROR => _, NO_CONTENT => _, OK => _, SEE_OTHER => _, _}
 import auth._
-import common.{Constants, KeystoreKeys}
+import common.KeystoreKeys
 import config.FrontendAuthConnector
 import connectors.{EnrolmentConnector, S4LConnector, SubmissionConnector}
 import controllers.helpers.BaseSpec
 import models._
-import models.submission.{ContactDetailsAnswersModel, CostsAnswerModel, InvestorDetailsAnswersModel, ShareDetailsAnswersModel, _}
 import org.mockito.Matchers
 import org.mockito.Mockito._
 import play.api.test.Helpers._
@@ -31,10 +30,11 @@ import services.FileUploadService
 import uk.gov.hmrc.play.http.HttpResponse
 import fixtures.ModelSubmissionFixture
 import models.repayments.SharesRepaymentDetailsModel
+import models.submission.SchemeTypesModel
 
 import scala.concurrent.Future
 
-class AcknowledgementControllerSpec extends BaseSpec with ModelSubmissionFixture{
+class AcknowledgementControllerSpec extends BaseSpec with ModelSubmissionFixture {
 
   implicit val user = mock[TAVCUser]
 
@@ -76,7 +76,7 @@ class AcknowledgementControllerSpec extends BaseSpec with ModelSubmissionFixture
   }
 
   "Extracting all the answers from the EIS flow" should {
-   "return an error if any of the calls to save for later fail" in {
+    "return an error if any of the calls to save for later fail" in {
       setupEisSubmissionMocks()
       when(mockS4lConnector.fetchAndGetFormData[NatureOfBusinessModel](Matchers.eq(KeystoreKeys.natureOfBusiness))(Matchers.any(),
         Matchers.any(), Matchers.any())).thenReturn(Future.failed(new Exception("test error")))
@@ -85,7 +85,7 @@ class AcknowledgementControllerSpec extends BaseSpec with ModelSubmissionFixture
       intercept[Exception](await(TestController.getAnswers)).getMessage shouldBe "test error"
     }
   }
-  
+
   "Extracting all the answers from the EIS flow" should {
     "return a None if any of the mandatory data is missing (nature of business)" in {
       setupEisSubmissionMocks(natureOfBusiness = None)
@@ -356,7 +356,7 @@ class AcknowledgementControllerSpec extends BaseSpec with ModelSubmissionFixture
 
   "Extracting all the answers from the EIS flow" should {
     "return a None and redirect if research start date is present for a research business activity" +
-    "but validateHasInvestmentTradeStartedCondition API fails validation" in {
+      "but validateHasInvestmentTradeStartedCondition API fails validation" in {
       mockEnrolledRequest(eisSchemeTypesModel)
       setupEisSubmissionMocks(qualifyBusinessActivity = Some(qualifyResearchAndDevelopment), getHasInvestmentTradeStartedCondition = Some(false))
       val model = await(TestController.getAnswers)
@@ -389,7 +389,7 @@ class AcknowledgementControllerSpec extends BaseSpec with ModelSubmissionFixture
   "Extracting all the answers from the EIS flow should fail validation and " should {
     "return a None and redirect if HadPreviousRFIModel is 'Yes' and previous investments is None" in {
       mockEnrolledRequest(eisSchemeTypesModel)
-      setupEisSubmissionMocks(hadPreviousRFI = Some(hadPreviousRFIModelYes), hadOtherInvestments = Some(hadOtherInvestmentsModelNo),previousSchemes = None)
+      setupEisSubmissionMocks(hadPreviousRFI = Some(hadPreviousRFIModelYes), hadOtherInvestments = Some(hadOtherInvestmentsModelNo), previousSchemes = None)
       val model = await(TestController.getAnswers)
       model.nonEmpty shouldBe true
 
@@ -420,7 +420,7 @@ class AcknowledgementControllerSpec extends BaseSpec with ModelSubmissionFixture
   "Extracting all the answers from the EIS flow should fail validation and " should {
     "return a None and redirect if hadOtherInvestments is 'Yes' and previous investments is None" in {
       mockEnrolledRequest(eisSchemeTypesModel)
-      setupEisSubmissionMocks(hadPreviousRFI = Some(hadPreviousRFIModelNo), hadOtherInvestments = Some(hadOtherInvestmentsModelYes),previousSchemes = None)
+      setupEisSubmissionMocks(hadPreviousRFI = Some(hadPreviousRFIModelNo), hadOtherInvestments = Some(hadOtherInvestmentsModelYes), previousSchemes = None)
       val model = await(TestController.getAnswers)
       model.nonEmpty shouldBe true
 
@@ -525,10 +525,10 @@ class AcknowledgementControllerSpec extends BaseSpec with ModelSubmissionFixture
 
   "Extracting all the answers from the EIS flow should fail validation and " should {
     "return a None and redirect if the Ki Processing model has date condition met, applyKi = true and assetsKi = true " +
-    "but costs condition met is None" in {
+      "but costs condition met is None" in {
       mockEnrolledRequest(eisSchemeTypesModel)
-      setupEisSubmissionMocks(kiProcessingModel = Some(KiProcessingModel(dateConditionMet = Some(true), companyAssertsIsKi = Some(true), companyWishesToApplyKi = Some(true),
-        costsConditionMet = None, secondaryCondtionsMet = Some(true))))
+      setupEisSubmissionMocks(kiProcessingModel = Some(KiProcessingModel(dateConditionMet = Some(true), companyAssertsIsKi = Some(true),
+        companyWishesToApplyKi = Some(true), costsConditionMet = None, secondaryCondtionsMet = Some(true))))
       val model = await(TestController.getAnswers)
       model.nonEmpty shouldBe true
 
@@ -619,52 +619,24 @@ class AcknowledgementControllerSpec extends BaseSpec with ModelSubmissionFixture
     }
   }
 
-//  def validateTurnoverThirtyDay = {
-//    if (!turnoverApiCheckPassed.fold(true)(_.self)) thirtyDayRuleAnswersModel.nonEmpty else true
-//  }
-//
-//  if(newGeographicMarket.isNewGeographicalMarket == Constants.StandardRadioButtonYesValue ||
-//    newProductMarket.isNewProduct == Constants.StandardRadioButtonYesValue) costsAnswersModel.turnoverCostModel.nonEmpty && validateTurnoverThirtyDay
-//  else true
-
-
-//  "Extracting all the answers from the EIS flow should fail validation and " should {
-//    "return a None and redirect when HadPreviousRFIModel is 'Yes' and previous investments has incomplete items" in {
-//      mockEnrolledRequest(eisSchemeTypesModel)
-//      setupEisSubmissionMocks(hadPreviousRFI = Some(hadPreviousRFIModelYes), previousSchemes = Some(previousSchemesListIncomplete))
-//      val model = await(TestController.getAnswers)
-//      model.nonEmpty shouldBe true
-//
-//      await(model.get.validateEis(mockSubmissionConnector, mockS4lConnector)) shouldBe false
-//
-//      val result = TestController.show.apply(authorisedFakeRequest)
-//      status(result) shouldBe SEE_OTHER
-//      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
-//    }
-//  }
-
-
-//  if (hadPreviousRFIModel.hadPreviousRFI == Constants.StandardRadioButtonYesValue ||
-//    otherInvestmentsModel.hadOtherInvestments == Constants.StandardRadioButtonYesValue) previousSchemeModel.exists(_.nonEmpty)
-
   "Extracting all the answers from the EIS flow should fail validation when MarketRoutingCheckResult returns {true. true} requiring extra validation " should {
     "and UsedInvestmentReasonBeforeModel is missing. (hadPreviousRFI = Yes condition)" +
       "(i.e. For a subsequent investment (used previously) and a commercial sale exists and is not Ki and has subsidiaries.)" in {
       mockEnrolledRequest(eisSchemeTypesModel)
       setupEisSubmissionMocks(kiProcessingModel = Some(falseKIModel), hadPreviousRFI = Some(keyStoreSavedHadPreviousRFIYes),
-        hadOtherInvestments = Some(hadOtherInvestmentsModelNo) ,commercialSale = Some(keyStoreSavedCommercialSale7YearsOneDay),
+        hadOtherInvestments = Some(hadOtherInvestmentsModelNo), commercialSale = Some(keyStoreSavedCommercialSale7YearsOneDay),
         subsidiaries = Some(keyStoreSavedSubsidiariesYes),
         dateOfIncorporation = Some(keyStoreSavedDOI3YearsLessOneDay), previousSchemes = Some(previousSchemesList),
         previousBeforeDOFCS = Some(previousBeforeDOFCSModelYes), usedInvestmentReasonBefore = None)
       val model = await(TestController.getAnswers)
       model.nonEmpty shouldBe true
 
-       //ensure this produces a marketInfo result requiring extra validation
+      //ensure this produces a marketInfo result requiring extra validation
       model.get.marketInfo.get.isMarketRouteApplicable.reasonBeforeValidationRequired shouldBe true
       model.get.marketInfo.get.isMarketRouteApplicable.isMarketInfoRoute shouldBe true
 
-        // and model validation fails because extra validation fails because usedInvestmentReasonBefore is None"
-        await(model.get.validateEis(mockSubmissionConnector, mockS4lConnector)) shouldBe false
+      // and model validation fails because extra validation fails because usedInvestmentReasonBefore is None"
+      await(model.get.validateEis(mockSubmissionConnector, mockS4lConnector)) shouldBe false
 
       val result = TestController.show.apply(authorisedFakeRequest)
       status(result) shouldBe SEE_OTHER
@@ -677,7 +649,7 @@ class AcknowledgementControllerSpec extends BaseSpec with ModelSubmissionFixture
       "(i.e. For a subsequent investment (used previously) and a commercial sale exists and is not Ki and has subsidiaries.)" in {
       mockEnrolledRequest(eisSchemeTypesModel)
       setupEisSubmissionMocks(kiProcessingModel = Some(falseKIModel), hadPreviousRFI = Some(keyStoreSavedHadPreviousRFINo),
-        hadOtherInvestments = Some(hadOtherInvestmentsModelYes) ,commercialSale = Some(keyStoreSavedCommercialSale7YearsOneDay),
+        hadOtherInvestments = Some(hadOtherInvestmentsModelYes), commercialSale = Some(keyStoreSavedCommercialSale7YearsOneDay),
         subsidiaries = Some(keyStoreSavedSubsidiariesYes),
         dateOfIncorporation = Some(keyStoreSavedDOI3YearsLessOneDay), previousSchemes = Some(previousSchemesList), usedInvestmentReasonBefore = None,
         previousBeforeDOFCS = Some(previousBeforeDOFCSModelYes))
@@ -702,7 +674,7 @@ class AcknowledgementControllerSpec extends BaseSpec with ModelSubmissionFixture
       "(i.e. For a subsequent investment (used previously) and a commercial sale exists and is not Ki and has subsidiaries.)" in {
       mockEnrolledRequest(eisSchemeTypesModel)
       setupEisSubmissionMocks(kiProcessingModel = Some(falseKIModel), hadPreviousRFI = Some(keyStoreSavedHadPreviousRFIYes),
-        hadOtherInvestments = Some(hadOtherInvestmentsModelNo) ,commercialSale = Some(keyStoreSavedCommercialSale7YearsOneDay),
+        hadOtherInvestments = Some(hadOtherInvestmentsModelNo), commercialSale = Some(keyStoreSavedCommercialSale7YearsOneDay),
         subsidiaries = Some(keyStoreSavedSubsidiariesYes), dateOfIncorporation = Some(keyStoreSavedDOI3YearsLessOneDay), previousSchemes = Some(previousSchemesList),
         previousBeforeDOFCS = None, usedInvestmentReasonBefore = Some(usedInvestmentReasonBeforeModelYes))
       val model = await(TestController.getAnswers)
@@ -726,7 +698,7 @@ class AcknowledgementControllerSpec extends BaseSpec with ModelSubmissionFixture
       "(i.e. For a subsequent investment (used previously) and a commercial sale exists and is not Ki and has subsidiaries.)" in {
       mockEnrolledRequest(eisSchemeTypesModel)
       setupEisSubmissionMocks(kiProcessingModel = Some(falseKIModel), hadPreviousRFI = Some(keyStoreSavedHadPreviousRFINo),
-        hadOtherInvestments = Some(hadOtherInvestmentsModelYes) ,commercialSale = Some(keyStoreSavedCommercialSale7YearsOneDay),
+        hadOtherInvestments = Some(hadOtherInvestmentsModelYes), commercialSale = Some(keyStoreSavedCommercialSale7YearsOneDay),
         subsidiaries = Some(keyStoreSavedSubsidiariesYes),
         dateOfIncorporation = Some(keyStoreSavedDOI3YearsLessOneDay), previousSchemes = Some(previousSchemesList),
         previousBeforeDOFCS = None, usedInvestmentReasonBefore = Some(usedInvestmentReasonBeforeModelYes))
@@ -752,7 +724,7 @@ class AcknowledgementControllerSpec extends BaseSpec with ModelSubmissionFixture
       "(i.e. For a subsequent investment (used previously) and a commercial sale exists and is not Ki and has subsidiaries.)" in {
       mockEnrolledRequest(eisSchemeTypesModel)
       setupEisSubmissionMocks(kiProcessingModel = Some(falseKIModel), hadPreviousRFI = Some(keyStoreSavedHadPreviousRFINo),
-        hadOtherInvestments = Some(hadOtherInvestmentsModelYes) ,commercialSale = Some(keyStoreSavedCommercialSale7YearsOneDay),
+        hadOtherInvestments = Some(hadOtherInvestmentsModelYes), commercialSale = Some(keyStoreSavedCommercialSale7YearsOneDay),
         subsidiaries = Some(keyStoreSavedSubsidiariesYes),
         dateOfIncorporation = Some(keyStoreSavedDOI3YearsLessOneDay), previousSchemes = Some(previousSchemesList),
         previousBeforeDOFCS = Some(previousBeforeDOFCSModelNo), usedInvestmentReasonBefore = Some(usedInvestmentReasonBeforeModelYes))
@@ -777,7 +749,7 @@ class AcknowledgementControllerSpec extends BaseSpec with ModelSubmissionFixture
       "(i.e. For a subsequent investment (used previously) and a commercial sale exists and is not Ki and has subsidiaries.)" in {
       mockEnrolledRequest(eisSchemeTypesModel)
       setupEisSubmissionMocks(kiProcessingModel = Some(falseKIModel), hadPreviousRFI = Some(keyStoreSavedHadPreviousRFIYes),
-        hadOtherInvestments = Some(hadOtherInvestmentsModelNo) ,commercialSale = Some(keyStoreSavedCommercialSale7YearsOneDay),
+        hadOtherInvestments = Some(hadOtherInvestmentsModelNo), commercialSale = Some(keyStoreSavedCommercialSale7YearsOneDay),
         subsidiaries = Some(keyStoreSavedSubsidiariesYes),
         dateOfIncorporation = Some(keyStoreSavedDOI3YearsLessOneDay), previousSchemes = Some(previousSchemesList),
         previousBeforeDOFCS = Some(previousBeforeDOFCSModelNo), usedInvestmentReasonBefore = Some(usedInvestmentReasonBeforeModelYes))
@@ -803,7 +775,7 @@ class AcknowledgementControllerSpec extends BaseSpec with ModelSubmissionFixture
       "(i.e. For a subsequent investment (used previously) and a commercial sale exists when Ki with subsidiaries.)" in {
       mockEnrolledRequest(eisSchemeTypesModel)
       setupEisSubmissionMocks(kiProcessingModel = Some(trueKIModel), hadPreviousRFI = Some(keyStoreSavedHadPreviousRFIYes),
-        hadOtherInvestments = Some(hadOtherInvestmentsModelNo) ,commercialSale = Some(keyStoreSavedCommercialSale10YearsOneDay),
+        hadOtherInvestments = Some(hadOtherInvestmentsModelNo), commercialSale = Some(keyStoreSavedCommercialSale10YearsOneDay),
         subsidiaries = Some(keyStoreSavedSubsidiariesYes),
         dateOfIncorporation = Some(keyStoreSavedDOI3YearsLessOneDay), previousSchemes = Some(previousSchemesList),
         previousBeforeDOFCS = Some(previousBeforeDOFCSModelYes), usedInvestmentReasonBefore = None)
@@ -828,7 +800,7 @@ class AcknowledgementControllerSpec extends BaseSpec with ModelSubmissionFixture
       "(i.e. For a subsequent investment (used previously) and a commercial sale exists when Ki with subsidiaries.)" in {
       mockEnrolledRequest(eisSchemeTypesModel)
       setupEisSubmissionMocks(kiProcessingModel = Some(trueKIModel), hadPreviousRFI = Some(keyStoreSavedHadPreviousRFINo),
-        hadOtherInvestments = Some(hadOtherInvestmentsModelYes) ,commercialSale = Some(keyStoreSavedCommercialSale10YearsOneDay),
+        hadOtherInvestments = Some(hadOtherInvestmentsModelYes), commercialSale = Some(keyStoreSavedCommercialSale10YearsOneDay),
         subsidiaries = Some(keyStoreSavedSubsidiariesYes),
         dateOfIncorporation = Some(keyStoreSavedDOI3YearsLessOneDay), previousSchemes = Some(previousSchemesList), usedInvestmentReasonBefore = None,
         previousBeforeDOFCS = Some(previousBeforeDOFCSModelYes))
@@ -853,7 +825,7 @@ class AcknowledgementControllerSpec extends BaseSpec with ModelSubmissionFixture
       "(i.e. For a subsequent investment (used previously) and a commercial sale exists when Ki with subsidiaries.)" in {
       mockEnrolledRequest(eisSchemeTypesModel)
       setupEisSubmissionMocks(kiProcessingModel = Some(trueKIModel), hadPreviousRFI = Some(keyStoreSavedHadPreviousRFIYes),
-        hadOtherInvestments = Some(hadOtherInvestmentsModelNo) ,commercialSale = Some(keyStoreSavedCommercialSale10YearsOneDay),
+        hadOtherInvestments = Some(hadOtherInvestmentsModelNo), commercialSale = Some(keyStoreSavedCommercialSale10YearsOneDay),
         subsidiaries = Some(keyStoreSavedSubsidiariesYes), dateOfIncorporation = Some(keyStoreSavedDOI3YearsLessOneDay), previousSchemes = Some(previousSchemesList),
         previousBeforeDOFCS = None, usedInvestmentReasonBefore = Some(usedInvestmentReasonBeforeModelYes))
       val model = await(TestController.getAnswers)
@@ -877,7 +849,7 @@ class AcknowledgementControllerSpec extends BaseSpec with ModelSubmissionFixture
       "(i.e. For a subsequent investment (used previously) and a commercial sale exists when Ki with subsidiaries.)" in {
       mockEnrolledRequest(eisSchemeTypesModel)
       setupEisSubmissionMocks(kiProcessingModel = Some(trueKIModel), hadPreviousRFI = Some(keyStoreSavedHadPreviousRFINo),
-        hadOtherInvestments = Some(hadOtherInvestmentsModelYes) ,commercialSale = Some(keyStoreSavedCommercialSale10YearsOneDay),
+        hadOtherInvestments = Some(hadOtherInvestmentsModelYes), commercialSale = Some(keyStoreSavedCommercialSale10YearsOneDay),
         subsidiaries = Some(keyStoreSavedSubsidiariesYes),
         dateOfIncorporation = Some(keyStoreSavedDOI3YearsLessOneDay), previousSchemes = Some(previousSchemesList),
         previousBeforeDOFCS = None, usedInvestmentReasonBefore = Some(usedInvestmentReasonBeforeModelYes))
@@ -903,7 +875,7 @@ class AcknowledgementControllerSpec extends BaseSpec with ModelSubmissionFixture
       "(i.e. For a subsequent investment (used previously) and a commercial sale exists when Ki with subsidiaries)" in {
       mockEnrolledRequest(eisSchemeTypesModel)
       setupEisSubmissionMocks(kiProcessingModel = Some(trueKIModel), hadPreviousRFI = Some(keyStoreSavedHadPreviousRFINo),
-        hadOtherInvestments = Some(hadOtherInvestmentsModelYes) ,commercialSale = Some(keyStoreSavedCommercialSale10YearsOneDay),
+        hadOtherInvestments = Some(hadOtherInvestmentsModelYes), commercialSale = Some(keyStoreSavedCommercialSale10YearsOneDay),
         subsidiaries = Some(keyStoreSavedSubsidiariesYes),
         dateOfIncorporation = Some(keyStoreSavedDOI3YearsLessOneDay), previousSchemes = Some(previousSchemesList),
         previousBeforeDOFCS = Some(previousBeforeDOFCSModelNo), usedInvestmentReasonBefore = Some(usedInvestmentReasonBeforeModelYes))
@@ -928,7 +900,7 @@ class AcknowledgementControllerSpec extends BaseSpec with ModelSubmissionFixture
       "(i.e. For a subsequent investment (used previously) and a commercial sale exists when Ki with subsidiaries.)" in {
       mockEnrolledRequest(eisSchemeTypesModel)
       setupEisSubmissionMocks(kiProcessingModel = Some(trueKIModel), hadPreviousRFI = Some(keyStoreSavedHadPreviousRFIYes),
-        hadOtherInvestments = Some(hadOtherInvestmentsModelNo) ,commercialSale = Some(keyStoreSavedCommercialSale10YearsOneDay),
+        hadOtherInvestments = Some(hadOtherInvestmentsModelNo), commercialSale = Some(keyStoreSavedCommercialSale10YearsOneDay),
         subsidiaries = Some(keyStoreSavedSubsidiariesYes),
         dateOfIncorporation = Some(keyStoreSavedDOI3YearsLessOneDay), previousSchemes = Some(previousSchemesList),
         previousBeforeDOFCS = Some(previousBeforeDOFCSModelNo), usedInvestmentReasonBefore = Some(usedInvestmentReasonBeforeModelYes))
@@ -949,25 +921,8 @@ class AcknowledgementControllerSpec extends BaseSpec with ModelSubmissionFixture
     }
   }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   "Sending an Authenticated and Enrolled GET request with a session to AcknowledgementController" should {
-    "return a 200 and delete the current application when a valid submission data is submitted" in  {
+    "return a 200 and delete the current application when a valid submission data is submitted" in {
       when(mockFileUploadService.getUploadFeatureEnabled).thenReturn(false)
       when(mockS4lConnector.clearCache()(Matchers.any(), Matchers.any())).thenReturn(HttpResponse(NO_CONTENT))
       setupEisSubmissionMocks()
@@ -979,7 +934,7 @@ class AcknowledgementControllerSpec extends BaseSpec with ModelSubmissionFixture
 
   "Sending an Authenticated and Enrolled GET request with a session to AcknowledgementController" should {
     "return a 200, close the file upload envelope and " +
-      "delete the current application when a valid submission data is submitted with the file upload flag enabled" in  {
+      "delete the current application when a valid submission data is submitted with the file upload flag enabled" in {
       when(mockFileUploadService.getUploadFeatureEnabled).thenReturn(true)
       when(mockFileUploadService.closeEnvelope(Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(),
         Matchers.any())).thenReturn(Future(HttpResponse(OK)))
@@ -993,10 +948,26 @@ class AcknowledgementControllerSpec extends BaseSpec with ModelSubmissionFixture
     }
   }
 
+  "Sending an Authenticated and Enrolled GET request with a session to AcknowledgementController" should {
+    "return a 500 internal server error if the submitComplianceStatement fails with an internal server error" in {
+      when(mockFileUploadService.getUploadFeatureEnabled).thenReturn(true)
+      when(mockFileUploadService.closeEnvelope(Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(),
+        Matchers.any())).thenReturn(Future(HttpResponse(500)))
+      when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.envelopeId))
+        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(envelopeId))
+      when(mockS4lConnector.clearCache()(Matchers.any(), Matchers.any())).thenReturn(HttpResponse(NO_CONTENT))
+      setupEisSubmissionMocks()
+      when(mockSubmissionConnector.submitComplianceStatement(Matchers.any(), Matchers.any(), Matchers.any())(Matchers.any()))
+        .thenReturn(Future.successful(HttpResponse(INTERNAL_SERVER_ERROR)))
+      mockEnrolledRequest(eisSchemeTypesModel)
+      val result = TestController.show.apply(authorisedFakeRequest)
+      status(result) shouldBe INTERNAL_SERVER_ERROR
+    }
+  }
+
   "Sending a POST request to the Acknowledgement controller when authenticated and enrolled" should {
     "redirect to the feedback page" in {
       mockEnrolledRequest(eisSchemeTypesModel)
-      setupEisSubmissionMocks()
       submitWithSessionAndAuth(TestController.submit)(
         result => {
           status(result) shouldBe SEE_OTHER
@@ -1007,79 +978,4 @@ class AcknowledgementControllerSpec extends BaseSpec with ModelSubmissionFixture
   }
 
 
-
-
-
-  private def setUpMocksMarketInfoExtraValidationRequired() : Unit = {
-    setupEisSubmissionMocks(commercialSale = Some(commercialSaleModelYes), hadOtherInvestments = Some(hadOtherInvestmentsModelYes),
-      getHasInvestmentTradeStartedCondition = Some(true), researchStartDate = Some(researchStartDateModelYes))
-  }
-
-  //
-//  "Sending an Authenticated and Enrolled GET request with a session to AcknowledgementController" should {
-//    "return a 303 redirect if mandatory ContactDetailsModel is missing from keystore" in {
-//      setupEisSubmissionMocks()
-//      mockEnrolledRequest(eisSchemeTypesModel)
-//      val result = TestController.show.apply(authorisedFakeRequest)
-//      status(result) shouldBe SEE_OTHER
-//      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
-//    }
-//  }
-//
-//  "Sending an Authenticated and Enrolled GET request with a session to AcknowledgementController" should {
-//    "return a 303 redirect if mandatory ProposedInvestmentModel is missing from keystore" in {
-//      setupEisSubmissionMocks()
-//      mockEnrolledRequest(eisSchemeTypesModel)
-//      val result = TestController.show.apply(authorisedFakeRequest)
-//      status(result) shouldBe SEE_OTHER
-//      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
-//    }
-//  }
-//
-//  "Sending an Authenticated and Enrolled GET request with a session to AcknowledgementController" should {
-//    "return a 303 redirect if mandatory DateOfIncorporationModel is missing from keystore" in {
-//      setupEisSubmissionMocks()
-//      mockEnrolledRequest(eisSchemeTypesModel)
-//      val result = TestController.show.apply(authorisedFakeRequest)
-//      status(result) shouldBe SEE_OTHER
-//      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
-//    }
-//  }
-//
-//  "Sending an Authenticated and Enrolled GET request with a session to AcknowledgementController" should {
-//    "return a 303 redirect if mandatory AddressModel (contact address) is missing from keystore" in {
-//      setupEisSubmissionMocks()
-//      mockEnrolledRequest(eisSchemeTypesModel)
-//      val result = TestController.show.apply(authorisedFakeRequest)
-//      status(result) shouldBe SEE_OTHER
-//      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
-//    }
-//  }
-//
-//  "Sending an Authenticated and Enrolled GET request with a session to AcknowledgementController" should {
-//    "return a 303 redirect if mandatory registrationDetailsModel is from registration details service" in {
-//      setupEisSubmissionMocks()
-//      mockEnrolledRequest(eisSchemeTypesModel)
-//      val result = TestController.show.apply(authorisedFakeRequest)
-//      status(result) shouldBe SEE_OTHER
-//      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
-//    }
-//  }
-//
-//  "Sending an Authenticated and Enrolled GET request with a session to AcknowledgementController" should {
-//    "return a 5xx when an invalid email is submitted" in new SetupPageFull {
-//      when(mockS4lConnector.fetchAndGetFormData[SchemeTypesModel](Matchers.eq(KeystoreKeys.selectedSchemes))
-//        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Some(schemeTypesEIS))
-//      when(mockSubmissionConnector.submitComplianceStatement(Matchers.any(), Matchers.any(), Matchers.any())(Matchers.any()))
-//        .thenReturn(Future.successful(HttpResponse(INTERNAL_SERVER_ERROR)))
-//      mockEnrolledRequest(eisSchemeTypesModel)
-//      setupEisSubmissionMocks()
-//      val result = TestController.show.apply(authorisedFakeRequest)
-//      status(result) shouldBe SEE_OTHER
-//    }
-//  }
-//
-
-
 }
-

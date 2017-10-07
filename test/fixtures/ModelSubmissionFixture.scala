@@ -63,7 +63,6 @@ trait ModelSubmissionFixture extends BaseSpec{
                                subsidiaries: Option[SubsidiariesModel] = Some(keyStoreSavedSubsidiariesNo),
                                hasInvestmentTradeStarted: Option[HasInvestmentTradeStartedModel] = Some(hasInvestmentTradeStartedModelYes),
                                researchStartDate: Option[ResearchStartDateModel] = Some(researchStartDateModelYes),
-                               selectedSchemes: Option[SchemeTypesModel] = Some(schemeTypesEIS),
                                contactAddress: Option[AddressModel] = Some(fullCorrespondenceAddress),
                                kiProcessingModel: Option[KiProcessingModel] = Some(trueKIModel),
                                commercialSale: Option[CommercialSaleModel] = Some(keyStoreSavedCommercialSale10YearsOneDay),
@@ -131,8 +130,6 @@ trait ModelSubmissionFixture extends BaseSpec{
       (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(subsidiaries))
     when(mockS4lConnector.fetchAndGetFormData[ResearchStartDateModel](Matchers.eq(KeystoreKeys.researchStartDate))(Matchers.any(), Matchers.any(),
       Matchers.any())).thenReturn(Future.successful(researchStartDate))
-    when(mockS4lConnector.fetchAndGetFormData[SchemeTypesModel](Matchers.eq(KeystoreKeys.selectedSchemes))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(selectedSchemes))
     when(mockS4lConnector.fetchAndGetFormData[AddressModel](Matchers.eq(KeystoreKeys.contactAddress))(Matchers.any(), Matchers.any(), Matchers.any()))
       .thenReturn(Future.successful(contactAddress))
     when(mockS4lConnector.fetchAndGetFormData[KiProcessingModel](Matchers.eq(KeystoreKeys.kiProcessingModel))
@@ -211,4 +208,115 @@ trait ModelSubmissionFixture extends BaseSpec{
     investmentGrow = Some(InvestmentGrowAnswersModel(investmentGrowValid)), Some(SubsidiariesAnswersModel(subsidiariesSpendingInvestmentModelNo,subsidiariesNinetyOwnedModelYes)),
     repaidSharesAnswersModel =  Some(RepaidSharesAnswersModel(anySharesRepaymentModelYes, Some(validSharesRepaymentDetailsVector.toList))))
 
+  //noinspection ScalaStyle
+  // THIS MODEL DEFAULTS TO A VALID POPULATED SEIS MODEL IF CALLLED WITH NO PARAMETERS - VALIDATE will PASS
+  def setupSeisSubmissionMocks(
+                               grossAssets: Option[GrossAssetsModel] = Some(validGrossAssets),
+                               fullTimeEmploymentCount: Option[FullTimeEmployeeCountModel] = Some(validFteCount),
+                               shareIssueDate: Option[ShareIssueDateModel] = Some(shareIssuetDateModel),
+                               tradeStartDate: Option[TradeStartDateModel] = Some(tradeStartDateModelYes),
+                               schemeTypes: Option[SchemeTypesModel] = Some(schemeTypesEIS),
+                               hadPreviousRFI: Option[HadPreviousRFIModel] = Some(hadPreviousRFIModelYes),
+                               hadOtherInvestments: Option[HadOtherInvestmentsModel] = Some(hadOtherInvestmentsModelYes),
+                               previousSchemes: Option[List[PreviousSchemeModel]] = Some(previousSchemesList),
+                               shareDescription: Option[ShareDescriptionModel] = Some(shareDescriptionModel),
+                               numberOfShares: Option[NumberOfSharesModel] = Some(numberOfSharesModel),
+                               totalRaised: Option[TotalAmountRaisedModel] = Some(totalAmountRaisedSubmission),
+                               totalAmountSpent: Option[TotalAmountSpentModel] = Some(totalAmountSpentSubmission),
+                               seventyPercentSpent: Option[SeventyPercentSpentModel] = Some(isSeventyPercentSpentModelYes),
+                               investorDetails: Option[Vector[InvestorDetailsModel]] = Some(listOfInvestorsWithShareHoldingsForSubmission),
+                               wasAnyValueReceived: Option[WasAnyValueReceivedModel] = Some(wasAnyValueReceivedYes),
+                               shareCapitalChanges: Option[ShareCapitalChangesModel] = Some(shareCapitalChangesYes),
+                               supportingDocumentsUpload: Option[SupportingDocumentsUploadModel] = Some(SupportingDocumentsUploadNo),
+                               contactDetails: Option[ContactDetailsModel] = Some(contactDetailsModel),
+                               confirmContactAddress: Option[ConfirmCorrespondAddressModel] = Some(confirmCorrespondAddressModel),
+                               qualifyBusinessActivity: Option[QualifyBusinessActivityModel] = Some(qualifyTrade),
+                               dateOfIncorporation: Option[DateOfIncorporationModel] = Some(keyStoreSavedDOI3YearsLessOneDay),
+                               natureOfBusiness: Option[NatureOfBusinessModel] = Some(natureOfBusinessModel),
+                               subsidiaries: Option[SubsidiariesModel] = Some(keyStoreSavedSubsidiariesNo),
+                               hasInvestmentTradeStarted: Option[HasInvestmentTradeStartedModel] = Some(hasInvestmentTradeStartedModelYes),
+                               researchStartDate: Option[ResearchStartDateModel] = Some(researchStartDateModelYes),
+                               contactAddress: Option[AddressModel] = Some(fullCorrespondenceAddress),
+                               getHasInvestmentTradeStartedCondition: Option[Boolean] = Some(true),
+                               getRegistrationDetails: Option[RegistrationDetailsModel] = Some(registrationDetailsModel),
+                               getTavcReferenceNumber: String = "XATAVC000123456") : Unit = {
+
+    when(mockS4lConnector.fetchAndGetFormData[GrossAssetsModel](Matchers.eq(KeystoreKeys.grossAssets))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(grossAssets))
+    when(mockS4lConnector.fetchAndGetFormData[FullTimeEmployeeCountModel](Matchers.eq(KeystoreKeys.fullTimeEmployeeCount))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(fullTimeEmploymentCount))
+    when(mockS4lConnector.fetchAndGetFormData[ShareIssueDateModel](Matchers.eq(KeystoreKeys.shareIssueDate))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(shareIssueDate))
+    when(mockS4lConnector.fetchAndGetFormData[TradeStartDateModel](Matchers.eq(KeystoreKeys.tradeStartDate))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(tradeStartDate)
+    when(mockS4lConnector.fetchAndGetFormData[SchemeTypesModel](Matchers.eq(KeystoreKeys.selectedSchemes))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(schemeTypes)
+    when(mockS4lConnector.fetchAndGetFormData[HadPreviousRFIModel](Matchers.eq(KeystoreKeys.hadPreviousRFI))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(hadPreviousRFI))
+    when(mockS4lConnector.fetchAndGetFormData[HadOtherInvestmentsModel](Matchers.eq(KeystoreKeys.hadOtherInvestments))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(hadOtherInvestments))
+    when(mockS4lConnector.fetchAndGetFormData[List[PreviousSchemeModel]](Matchers.eq(KeystoreKeys.previousSchemes))(Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(previousSchemes))
+    when(mockS4lConnector.fetchAndGetFormData[ShareDescriptionModel](Matchers.eq(KeystoreKeys.shareDescription))
+      (Matchers.any(), Matchers.any(), Matchers.any())) .thenReturn(Future.successful(shareDescription))
+    when(mockS4lConnector.fetchAndGetFormData[NumberOfSharesModel](Matchers.eq(KeystoreKeys.numberOfShares))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(numberOfShares))
+    when(mockS4lConnector.fetchAndGetFormData[TotalAmountRaisedModel](Matchers.eq(KeystoreKeys.totalAmountRaised))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(totalRaised))
+    when(mockS4lConnector.fetchAndGetFormData[Vector[InvestorDetailsModel]](Matchers.eq(KeystoreKeys.investorDetails))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(investorDetails))
+    when(mockS4lConnector.fetchAndGetFormData[WasAnyValueReceivedModel](Matchers.eq(KeystoreKeys.wasAnyValueReceived))(Matchers.any(),
+      Matchers.any(), Matchers.any())).thenReturn(Future.successful(wasAnyValueReceived))
+    when(mockS4lConnector.fetchAndGetFormData[ShareCapitalChangesModel](Matchers.eq(KeystoreKeys.shareCapitalChanges))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(shareCapitalChanges))
+    when(mockS4lConnector.fetchAndGetFormData[SupportingDocumentsUploadModel](Matchers.eq(KeystoreKeys.supportingDocumentsUpload))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(supportingDocumentsUpload))
+    when(mockS4lConnector.fetchAndGetFormData[ContactDetailsModel](Matchers.eq(KeystoreKeys.contactDetails))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(contactDetails))
+    when(mockS4lConnector.fetchAndGetFormData[ConfirmCorrespondAddressModel](Matchers.eq(KeystoreKeys.confirmContactAddress))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(confirmContactAddress))
+    when(mockS4lConnector.fetchAndGetFormData[QualifyBusinessActivityModel](Matchers.eq(KeystoreKeys.isQualifyBusinessActivity))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(qualifyBusinessActivity))
+    when(mockS4lConnector.fetchAndGetFormData[DateOfIncorporationModel](Matchers.eq(KeystoreKeys.dateOfIncorporation))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(dateOfIncorporation))
+    when(mockS4lConnector.fetchAndGetFormData[NatureOfBusinessModel](Matchers.eq(KeystoreKeys.natureOfBusiness))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(natureOfBusiness))
+    when(mockS4lConnector.fetchAndGetFormData[SubsidiariesModel](Matchers.eq(KeystoreKeys.subsidiaries))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(subsidiaries))
+    when(mockS4lConnector.fetchAndGetFormData[ResearchStartDateModel](Matchers.eq(KeystoreKeys.researchStartDate))(Matchers.any(), Matchers.any(),
+      Matchers.any())).thenReturn(Future.successful(researchStartDate))
+    when(mockS4lConnector.fetchAndGetFormData[AddressModel](Matchers.eq(KeystoreKeys.contactAddress))(Matchers.any(), Matchers.any(), Matchers.any()))
+      .thenReturn(Future.successful(contactAddress))
+    when(mockS4lConnector.fetchAndGetFormData[HasInvestmentTradeStartedModel](Matchers.eq(KeystoreKeys.hasInvestmentTradeStarted))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(hasInvestmentTradeStarted))
+    when(mockSubmissionConnector.validateHasInvestmentTradeStartedCondition(Matchers.any(), Matchers.any(), Matchers.any())(Matchers.any()))
+      .thenReturn(Future.successful(getHasInvestmentTradeStartedCondition))
+    when(mockRegistrationDetailsService.getRegistrationDetails(Matchers.any())(Matchers.any(),Matchers.any(), Matchers.any())).
+      thenReturn(Future.successful(getRegistrationDetails))
+    when(mockEnrolmentConnector.getTavcReferenceNumber(Matchers.any())(Matchers.any()))
+      .thenReturn(Future.successful(getTavcReferenceNumber))
+    when(mockS4lConnector.fetchAndGetFormData[TotalAmountSpentModel](Matchers.eq(KeystoreKeys.totalAmountSpent))(Matchers.any(),
+      Matchers.any(), Matchers.any())).thenReturn(Future.successful(totalAmountSpent))
+    when(mockS4lConnector.fetchAndGetFormData[SeventyPercentSpentModel](Matchers.eq(KeystoreKeys.seventyPercentSpent))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(seventyPercentSpent))
+    when(mockSubmissionConnector.submitComplianceStatement(Matchers.any(), Matchers.any(), Matchers.any())(Matchers.any()))
+      .thenReturn(Future.successful(HttpResponse(OK, Some(Json.toJson(submissionResponse)))))
+  }
+
+  // this model is a constructed with the same default values that are mocked in setupEisSubmissionMocks above to compare the expected result
+  val SEISAnswersModel = ComplianceStatementAnswersModel(
+    CompanyDetailsAnswersModel(natureOfBusinessModel, keyStoreSavedDOI3YearsLessOneDay, qualifyBusinessActivityModel = qualifyTrade,
+      hasInvestmentTradeStartedModel = Some(hasInvestmentTradeStartedModelYes), researchStartDateModel = Some(researchStartDateModelYes),
+      seventyPercentSpentModel = Some(isSeventyPercentSpentModelYes),
+      shareIssueDateModel = shareIssuetDateModel, grossAssetsModel = validGrossAssets,
+      grossAssetsAfterModel = None, fullTimeEmployeeCountModel = validFteCount, commercialSaleModel = None),
+    PreviousSchemesAnswersModel(hadPreviousRFIModelYes, hadOtherInvestmentsModelYes, Some(previousSchemesList)),
+    ShareDetailsAnswersModel(shareDescriptionModel,
+      numberOfSharesModel, totalAmountRaisedSubmission, totalAmountSpentModel = Some(totalAmountSpentSubmission)),
+    InvestorDetailsAnswersModel(listOfInvestorsWithShareHoldingsForSubmission,
+      wasAnyValueReceivedYes, shareCapitalChangesYes),
+    ContactDetailsAnswersModel(contactDetailsModel, fullCorrespondenceAddress),
+    supportingDocumentsUploadModel = SupportingDocumentsUploadNo, schemeTypesEIS,
+    kiAnswersModel = None, marketInfo = None, costsAnswersModel = CostsAnswerModel(None, None),
+    thirtyDayRuleAnswersModel = None, investmentGrow = None, subsidiaries = None, repaidSharesAnswersModel = None)
 }
