@@ -37,16 +37,17 @@ class SingleSchemeSelectionSpec extends ViewSpec {
       document.body.getElementById("back-link").attr("href") shouldEqual routes.ApplicationHubController.show().url
       document.title() shouldBe Messages("page.schemeSelection.SchemeSelection.singlescheme.title")
       document.getElementById("main-heading").text() shouldBe Messages("page.schemeSelection.SchemeSelection.singlescheme.heading")
+      document.getElementById("scheme-selection-desc").text() shouldBe Messages("page.schemeSelection.SchemeSelection.desc")
       document.select("#singleSchemeSelection-eis").size() shouldBe 1
       document.getElementById("singleSchemeSelection-eisLabel").text() shouldBe Messages("page.schemeSelection.SchemeSelection.radiobutton.eis")
-      document.getElementById("EIS-help").text() shouldBe Messages("page.schemeSelection.SchemeSelection.help.eis.subHeading")
+      document.getElementById("help").text() shouldBe Messages("page.schemeSelection.SchemeSelection.help.subHeading")
+
       document.getElementById("EIS-help-text").text() shouldBe Messages("page.schemeSelection.SchemeSelection.help.eis.text")
       document.getElementById("EIS-bullet-one").text() shouldBe Messages("page.schemeSelection.SchemeSelection.help.eis.bullet.one")
       document.getElementById("EIS-bullet-two").text() shouldBe Messages("page.schemeSelection.SchemeSelection.help.eis.bullet.two")
 
       document.select("#singleSchemeSelection-seis").size() shouldBe 1
       document.getElementById("singleSchemeSelection-seisLabel").text() shouldBe Messages("page.schemeSelection.SchemeSelection.radiobutton.seis")
-      document.getElementById("SEIS-help").text() shouldBe Messages("page.schemeSelection.SchemeSelection.help.seis.subHeading")
       document.getElementById("SEIS-help-text").text() shouldBe Messages("page.schemeSelection.SchemeSelection.help.seis.text")
 
       document.getElementById("next").text() shouldBe Messages("common.button.snc")

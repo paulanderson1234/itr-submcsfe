@@ -367,8 +367,8 @@ class ReviewInvestorDetailsSpec extends ViewSpec {
             table.select(s"$id-question").text() shouldBe "Class 1 Share"
           }
 
-          "has an answer of 'Date of investment: 01 January 2016 Number of shares purchased: 1,000'" in {
-            table.select(s"$id-answer").text() shouldBe "Date of investment: 01 January 2016 Number of shares purchased: 1,000"
+          "has an answer of 'Date of investment: 01 February 2016 Number of shares purchased: 1,000'" in {
+            table.select(s"$id-answer").text() shouldBe "Date of investment: 01 February 2016 Number of shares purchased: 1,000"
           }
 
           "has a change link to the correct page" in {
@@ -383,8 +383,8 @@ class ReviewInvestorDetailsSpec extends ViewSpec {
             table.select(s"$id-question").text() shouldBe "Class 2 Share"
           }
 
-          "has an answer of 'Date of investment: 01 January 2016 Number of shares purchased: 1,000'" in {
-            table.select(s"$id-answer").text() shouldBe "Date of investment: 01 January 2016 Number of shares purchased: 1,000"
+          "has an answer of 'Date of investment: 01 February 2016 Number of shares purchased: 1,000'" in {
+            table.select(s"$id-answer").text() shouldBe "Date of investment: 01 February 2016 Number of shares purchased: 1,000"
           }
 
           "has a change link to the correct page" in {
@@ -486,8 +486,6 @@ class ReviewInvestorDetailsSpec extends ViewSpec {
           }
 
           "has an answer of 'Incomplete Incomplete'" in {
-            println("===========================================")
-            println(table.select(s"$id-answer").text() )
             table.select(s"$id-answer").text() shouldBe "Incomplete Incomplete"
           }
 

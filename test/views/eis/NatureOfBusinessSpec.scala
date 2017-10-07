@@ -17,7 +17,7 @@
 package views.eis
 
 import common.Constants
-import controllers.routes
+import controllers.eis.routes
 import forms.NatureOfBusinessForm._
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -49,7 +49,7 @@ class NatureOfBusinessSpec extends ViewSpec {
       document.select("input").attr("maxLength") shouldBe Constants.shortTextLimit.toString
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       document.select("button").attr("type") shouldBe "submit"
-      document.body.getElementById("back-link").attr("href") shouldEqual routes.ApplicationHubController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual routes.InitialDeclarationController.show().url
       document.select("a.back-link").text() shouldBe Messages("common.button.back")
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.one")
       document.getElementsByTag("legend").select(".visuallyhidden").text() shouldBe Messages("page.companyDetails.natureofbusiness.heading")
@@ -74,7 +74,7 @@ class NatureOfBusinessSpec extends ViewSpec {
       document.select("input").attr("maxLength") shouldBe Constants.shortTextLimit.toString
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       document.select("button").attr("type") shouldBe "submit"
-      document.body.getElementById("back-link").attr("href") shouldEqual routes.ApplicationHubController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual routes.InitialDeclarationController.show().url
       document.select("a.back-link").text() shouldBe Messages("common.button.back")
       document.getElementsByTag("legend").select(".visuallyhidden").text() shouldBe Messages("page.companyDetails.natureofbusiness.heading")
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.one")
