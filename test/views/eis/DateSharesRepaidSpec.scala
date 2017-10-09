@@ -46,7 +46,7 @@ class DateSharesRepaidSpec extends ViewSpec {
         .thenReturn(Future.successful(dateSharesRepaidModel))
     when(mockS4lConnector.fetchAndGetFormData[Vector[SharesRepaymentDetailsModel]](Matchers.eq(KeystoreKeys.sharesRepaymentDetails))
       (Matchers.any(), Matchers.any(), Matchers.any()))
-      .thenReturn(Some(inCompleteSharesRepaymentDetailsVector))
+      .thenReturn(Some(incompleteSharesRepaymentDetailsVector))
 
     when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.backLinkSharesRepaymentDate))
       (Matchers.any(), Matchers.any(), Matchers.any()))

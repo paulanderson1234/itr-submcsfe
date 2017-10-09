@@ -90,14 +90,11 @@ trait ControllerHelpers {
       case SchemeTypesModel(true, false, false, false) => controllers.eis.routes.InitialDeclarationController.show().url
       //SEIS Flow
       case SchemeTypesModel(false, true, false, false) => controllers.seis.routes.InitialDeclarationController.show().url
-      //VCT Flow
-      case SchemeTypesModel(false, false, false, true) => controllers.eis.routes.InitialDeclarationController.show().url
-      //EIS VCT Flow
-      case SchemeTypesModel(true, false, false, true) => controllers.eis.routes.InitialDeclarationController.show().url
       //Assume EIS
-      case _ => controllers.eis.routes.NatureOfBusinessController.show().url
+      case _ => controllers.eis.routes.InitialDeclarationController.show().url
     }
   }
+
 
   def schemeDescriptionFromTypes(schemeTypesModel: Option[SchemeTypesModel])(implicit request: Request[AnyContent], messages: Messages): String = {
     schemeTypesModel match {

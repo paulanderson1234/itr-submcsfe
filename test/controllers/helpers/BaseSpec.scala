@@ -91,7 +91,7 @@ trait BaseSpec extends UnitSpec with OneAppPerSuite with MockitoSugar with FakeR
   val confirmContactDetailsModel = ConfirmContactDetailsModel(Constants.StandardRadioButtonYesValue, contactDetailsModel)
 
   val contactAddressModel = new AddressModel("ABC XYZ", "1 ABCDE Street", countryCode = "JP")
-  
+
   val investmentGrowModel = InvestmentGrowModel("At vero eos et accusamusi et iusto odio dignissimos ducimus qui blanditiis praesentium " +
     "voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique " +
     "sunt in culpa qui officia deserunt mollitia animi, tid est laborum etttt dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. " +
@@ -581,8 +581,44 @@ trait BaseSpec extends UnitSpec with OneAppPerSuite with MockitoSugar with FakeR
 
   val validSharesRepaymentDetailsVector = Vector.empty :+ sharesRepaymentDetailsForIdOne :+ sharesRepaymentDetailsForIdTwo
 
-  val inCompleteSharesRepaymentDetailsVector = Vector.empty :+ sharesRepaymentDetailsMissingRepaymentAmount
+  val incompleteSharesRepaymentDetailsVector = Vector.empty :+ sharesRepaymentDetailsMissingRepaymentAmount
 
   val emptySharesRepaymentDetailsVector = Vector.empty
+
+  val marketDescriptionPopulated = MarketDescriptionModel("test")
+
+  val validGrossAssets = GrossAssetsModel(54321)
+  val validGrossAssetsAfter = GrossAssetsAfterIssueModel(12345)
+
+  val  validFteCount =  FullTimeEmployeeCountModel(22)
+
+  val previousSchemesList = List(PreviousSchemeModel("test", 1, Some(1), Some("Name"), Some(1), Some(2), Some(2015), Some(1)))
+
+  val totalAmountRaisedSubmission = TotalAmountRaisedModel(12345)
+  val totalAmountSpentSubmission = TotalAmountSpentModel(150)
+
+  val wasAnyValueReceivedYes = WasAnyValueReceivedModel(Constants.StandardRadioButtonYesValue, Some("text"))
+  val wasAnyValueReceivedNo = WasAnyValueReceivedModel(Constants.StandardRadioButtonNoValue, Some("text"))
+
+  val shareCapitalChangesYes = ShareCapitalChangesModel(Constants.StandardRadioButtonYesValue, Some("test"))
+  val shareCapitalChangesNo = ShareCapitalChangesModel(Constants.StandardRadioButtonNoValue, Some("test"))
+
+  val SupportingDocumentsUploadYes = SupportingDocumentsUploadModel(Constants.StandardRadioButtonYesValue)
+  val SupportingDocumentsUploadNo = SupportingDocumentsUploadModel(Constants.StandardRadioButtonNoValue)
+
+  val shareHoldersModelForSubmission = Vector(PreviousShareHoldingModel(investorShareIssueDateModel = Some(investorShareIssueDateModel1),
+    numberOfPreviouslyIssuedSharesModel = Some(numberOfPreviouslyIssuedSharesModel1),
+    previousShareHoldingNominalValueModel = Some(previousShareHoldingNominalValueModel1),
+    previousShareHoldingDescriptionModel = Some(previousShareHoldingDescriptionModel1),
+    processingId = Some(1), investorProcessingId = Some(2)))
+
+  val investorModelForSubmission = InvestorDetailsModel(Some(investorModel2), Some(companyOrIndividualModel2), Some(companyDetailsModel2), None,
+    Some(numberOfSharesPurchasedModel2), Some(howMuchSpentOnSharesModel2), Some(isExistingShareHolderModelYes),
+    previousShareHoldingModels = Some(shareHoldersModelForSubmission), processingId = Some(2))
+
+  val listOfInvestorsEmptyShareHoldingsForSubmission = Vector(validModelWithPrevShareHoldings.copy(previousShareHoldingModels = Some(Vector())))
+  val listOfInvestorsWithShareHoldingsForSubmission = Vector(investorModelForSubmission)
+  val listOfInvestorsMissingNumberOfPreviouslyIssuedSharesForSubmission = Vector(validModelWithPrevShareHoldings.copy(previousShareHoldingModels =
+    Some(Vector(PreviousShareHoldingModel(previousShareHoldingDescriptionModel = Some(previousShareHoldingDescriptionModel1), processingId = Some(1))))))
 
 }

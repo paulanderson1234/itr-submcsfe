@@ -39,7 +39,6 @@ class CompanyDetailsAnswersModelSpec extends UnitSpec with MockitoSugar {
     connector
   }
 
-  //TODO: ADD methof for EIS too
   "Calling .validate on CompanyDetailsAnswersModel" should {
     val completeModel = CompanyDetailsAnswersModel(NatureOfBusinessModel(""),
       DateOfIncorporationModel(Some(1), Some(2), Some(2015)),
@@ -56,48 +55,48 @@ class CompanyDetailsAnswersModelSpec extends UnitSpec with MockitoSugar {
 
       "provided with no TradeStartDate data when the qualifying business activity is trade" in {
         await(completeModel.copy(hasInvestmentTradeStartedModel = None)
-          .validate(setupMockConnector())) shouldBe false
+          .validateSeis(setupMockConnector())) shouldBe false
       }
 
       "provided with a missing TradeStartDate when one should be present" in {
         await(completeModel.copy(hasInvestmentTradeStartedModel = Some(HasInvestmentTradeStartedModel("Yes", None, None, None)))
-          .validate(setupMockConnector())) shouldBe false
+          .validateSeis(setupMockConnector())) shouldBe false
       }
 
       "provided with an empty TradeStartDate and no SeventyPercentSpentModel" in {
         await(completeModel.copy(hasInvestmentTradeStartedModel = Some(HasInvestmentTradeStartedModel("No", None, None, None)),
           seventyPercentSpentModel = None)
-          .validate(setupMockConnector())) shouldBe false
+          .validateSeis(setupMockConnector())) shouldBe false
       }
 
       "provided with a TradeStartDate less than four months ago with no SeventyPercentSpentModel" in {
         await(completeModel.copy(seventyPercentSpentModel = None)
-          .validate(setupMockConnector(Some(false)))) shouldBe false
+          .validateSeis(setupMockConnector(Some(false)))) shouldBe false
       }
 
       "provided with no ResearchStartDate data when the qualifying business activity is research" in {
         await(completeModel.copy(qualifyBusinessActivityModel = QualifyBusinessActivityModel(Constants.qualifyResearchAndDevelopment),
           researchStartDateModel = None)
-          .validate(setupMockConnector())) shouldBe false
+          .validateSeis(setupMockConnector())) shouldBe false
       }
 
       "provided with a missing ResearchStartDate when one should be present" in {
         await(completeModel.copy(qualifyBusinessActivityModel = QualifyBusinessActivityModel(Constants.qualifyResearchAndDevelopment),
           researchStartDateModel = Some(ResearchStartDateModel("Yes", None, None, None)))
-          .validate(setupMockConnector())) shouldBe false
+          .validateSeis(setupMockConnector())) shouldBe false
       }
 
       "provided with an empty ResearchStartDate and no SeventyPercentSpentModel" in {
         await(completeModel.copy(qualifyBusinessActivityModel = QualifyBusinessActivityModel(Constants.qualifyResearchAndDevelopment),
           researchStartDateModel = Some(ResearchStartDateModel("No", None, None, None)),
           seventyPercentSpentModel = None)
-          .validate(setupMockConnector())) shouldBe false
+          .validateSeis(setupMockConnector())) shouldBe false
       }
 
       "provided with a ResearchStartDate less than four months ago with no SeventyPercentSpentModel" in {
         await(completeModel.copy(qualifyBusinessActivityModel = QualifyBusinessActivityModel(Constants.qualifyResearchAndDevelopment),
           seventyPercentSpentModel = None)
-          .validate(setupMockConnector(Some(false)))) shouldBe false
+          .validateSeis(setupMockConnector(Some(false)))) shouldBe false
       }
     }
 
@@ -105,34 +104,34 @@ class CompanyDetailsAnswersModelSpec extends UnitSpec with MockitoSugar {
 
       "provided with an empty TradeStartDate and a SeventyPercentSpentModel" in {
         await(completeModel.copy(hasInvestmentTradeStartedModel = Some(HasInvestmentTradeStartedModel("No", None, None, None)))
-          .validate(setupMockConnector())) shouldBe true
+          .validateSeis(setupMockConnector())) shouldBe true
       }
 
       "provided with a TradeStartDate less than four months ago with a SeventyPercentSpentModel" in {
         await(completeModel
-          .validate(setupMockConnector(Some(false)))) shouldBe true
+          .validateSeis(setupMockConnector(Some(false)))) shouldBe true
       }
 
       "provided with a TradeStartDate more than four months ago with no SeventyPercentSpentModel" in {
         await(completeModel.copy(seventyPercentSpentModel = None)
-          .validate(setupMockConnector(Some(true)))) shouldBe true
+          .validateSeis(setupMockConnector(Some(true)))) shouldBe true
       }
 
       "provided with an empty ResearchStartDate and a SeventyPercentSpentModel" in {
         await(completeModel.copy(qualifyBusinessActivityModel = QualifyBusinessActivityModel(Constants.qualifyResearchAndDevelopment),
           researchStartDateModel = Some(ResearchStartDateModel("No", None, None, None)))
-          .validate(setupMockConnector())) shouldBe true
+          .validateSeis(setupMockConnector())) shouldBe true
       }
 
       "provided with a ResearchStartDate less than four months ago with a SeventyPercentSpentModel" in {
         await(completeModel.copy(qualifyBusinessActivityModel = QualifyBusinessActivityModel(Constants.qualifyResearchAndDevelopment))
-          .validate(setupMockConnector(Some(false)))) shouldBe true
+          .validateSeis(setupMockConnector(Some(false)))) shouldBe true
       }
 
       "provided with a ResearchStartDate more than four months ago with no SeventyPercentSpentModel" in {
         await(completeModel.copy(qualifyBusinessActivityModel = QualifyBusinessActivityModel(Constants.qualifyResearchAndDevelopment),
           seventyPercentSpentModel = None)
-          .validate(setupMockConnector(Some(true)))) shouldBe true
+          .validateSeis(setupMockConnector(Some(true)))) shouldBe true
       }
     }
   }

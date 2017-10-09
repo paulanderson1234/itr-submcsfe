@@ -101,7 +101,7 @@ class AddAnotherInvestorControllerSpec extends BaseSpec {
       setupMocks()
       when(mockS4lConnector.fetchAndGetFormData[Vector[SharesRepaymentDetailsModel]](Matchers.eq(KeystoreKeys.sharesRepaymentDetails))
         (Matchers.any(), Matchers.any(), Matchers.any()))
-        .thenReturn(Some(inCompleteSharesRepaymentDetailsVector))
+        .thenReturn(Some(incompleteSharesRepaymentDetailsVector))
       mockEnrolledRequest(eisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit,formInput)(
         result => {
