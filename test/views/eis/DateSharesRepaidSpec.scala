@@ -115,6 +115,10 @@ class DateSharesRepaidSpec extends ViewSpec {
       
       //Check error present:
       document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe true
+      document.getElementById("error-summary-heading").text shouldBe Messages("common.error.summary.heading")
+      document.getElementById("dateSharesRepaidDay-error-summary").text shouldBe Messages("validation.error.DateNotEntered")
+      document.getElementsByClass("error-notification").text shouldBe Messages("validation.error.DateNotEntered")
+
 
 
     }

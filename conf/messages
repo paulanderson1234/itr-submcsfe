@@ -986,6 +986,7 @@ page.WhoRepaidShares.title=Who was repaid for their shares or debentures or had 
 page.WhoRepaidShares.heading=Who was repaid for their shares or debentures or had them repurchased?
 
 # DateSharesRepaid page
+validation.error.dateSharesRepaid.Future=Date of repayment or repurchase cannot be a future date
 page.DateSharesRepaid.title=When was the repayment or repurchase made?
 page.DateSharesRepaid.heading=When was the repayment or repurchase made?
 
