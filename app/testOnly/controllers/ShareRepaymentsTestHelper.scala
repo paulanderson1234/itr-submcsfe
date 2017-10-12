@@ -42,7 +42,7 @@ trait ShareRepaymentsTestHelper {
         randomAlphaString(Constants.surnameLength), Some(shareRepaymentId))),
       sharesRepaymentTypeModel = if(makeIncomplete) None else Some(SharesRepaymentTypeModel(TestDataGenerator.randomWordString(3), Some(shareRepaymentId))),
       dateSharesRepaidModel = if (makeIncomplete) None else
-        Some(DateSharesRepaidModel(Some(1), Some(2), Some(1990), Some(shareRepaymentId))),
+        Some(TestDataGenerator.randomDateSharesRepaid(shareRepaymentId)),
       amountSharesRepaymentModel = if(makeIncomplete) None else
         Some(AmountSharesRepaymentModel(TestDataGenerator.randomWholeAmount(utils.Validation.financialMaxAmountLength),Some(shareRepaymentId))),
       processingId = Some(shareRepaymentId))

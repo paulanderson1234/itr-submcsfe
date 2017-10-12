@@ -23,6 +23,8 @@ import models.investorDetails.InvestorShareIssueDateModel
 import java.time.{YearMonth, ZoneId}
 import java.util.Date
 
+import models.repayments.DateSharesRepaidModel
+
 object TestDataGenerator {
 
   val date = new Date()
@@ -69,6 +71,7 @@ object TestDataGenerator {
     )
   }
 
+
   def randomCompanyDetails(investorId:Int):CompanyDetailsModel = {
 
     CompanyDetailsModel(
@@ -91,6 +94,15 @@ object TestDataGenerator {
       investorShareIssueDateYear =  Some(getRandomIntBetween(2000, todayYear)),
       investorProcessingId = Some(investorId),
       processingId = Some(processingId)
+    )
+  }
+
+  def randomDateSharesRepaid(repaymentId: Int): DateSharesRepaidModel = {
+    DateSharesRepaidModel(
+      day = Some(getRandomIntBetween(1, 28)),
+      month = Some(getRandomIntBetween(1, 12)),
+      year =  Some(getRandomIntBetween(2000, todayYear)),
+      processingId = Some(repaymentId)
     )
   }
 
