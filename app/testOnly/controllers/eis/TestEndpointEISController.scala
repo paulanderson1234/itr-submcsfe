@@ -35,6 +35,7 @@ import uk.gov.hmrc.play.frontend.controller.FrontendController
 import uk.gov.hmrc.play.http.HeaderCarrier
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
+import testOnly.controllers.seis.routes
 import testOnly.controllers.{InvestorTestHelper, ShareRepaymentsTestHelper}
 
 import scala.concurrent.Future
@@ -359,6 +360,25 @@ trait TestEndpointEISController extends FrontendController with AuthorisedAndEnr
     s4lConnector.saveFormData[String](KeystoreKeys.backLinkSubsidiaries, routes.TestEndpointEISController.showPageOne.url)
     s4lConnector.saveFormData[String](KeystoreKeys.backLinkSubSpendingInvestment, routes.TestEndpointEISController.showPageOne.url)
     s4lConnector.saveFormData[String](KeystoreKeys.backLinkSupportingDocs, routes.TestEndpointEISController.showPageOne.url)
+
+    //Investor Details
+    s4lConnector.saveFormData[String](KeystoreKeys.backLinkAddInvestorOrNominee, routes.TestEndpointEISController.showPageTwo(None).url)
+    s4lConnector.saveFormData[String](KeystoreKeys.backLinkCompanyOrIndividual, routes.TestEndpointEISController.showPageTwo(None).url)
+    s4lConnector.saveFormData[String](KeystoreKeys.backLinkCompanyAndIndividualBoth, routes.TestEndpointEISController.showPageTwo(None).url)
+    s4lConnector.saveFormData[String](KeystoreKeys.backLinkNumberOfSharesPurchased, routes.TestEndpointEISController.showPageTwo(None).url)
+    s4lConnector.saveFormData[String](KeystoreKeys.backLinkHowMuchSpentOnShares, routes.TestEndpointEISController.showPageTwo(None).url)
+    s4lConnector.saveFormData[String](KeystoreKeys.backLinkIsExistingShareHolder, routes.TestEndpointEISController.showPageTwo(None).url)
+    s4lConnector.saveFormData[String](KeystoreKeys.backLinkShareClassAndDescription, routes.TestEndpointEISController.showPageTwo(None).url)
+    s4lConnector.saveFormData[String](KeystoreKeys.backLinkNumberOfPreviouslyIssuedShares, routes.TestEndpointEISController.showPageTwo(None).url)
+    s4lConnector.saveFormData[String](KeystoreKeys.backLinkIsPreviousShareHoldingNominalValue, routes.TestEndpointEISController.showPageTwo(None).url)
+    s4lConnector.saveFormData[String](KeystoreKeys.backLinkInvestorShareIssueDate, routes.TestEndpointEISController.showPageTwo(None).url)
+
+    //Share Repayments
+    s4lConnector.saveFormData[String](KeystoreKeys.backLinkSharesRepaymentAmount, routes.TestEndpointEISController.showPageThree().url)
+    s4lConnector.saveFormData[String](KeystoreKeys.backLinkSharesRepaymentDate, routes.TestEndpointEISController.showPageThree().url)
+    s4lConnector.saveFormData[String](KeystoreKeys.backLinkSharesRepaymentType, routes.TestEndpointEISController.showPageThree().url)
+    s4lConnector.saveFormData[String](KeystoreKeys.backLinkWhoRepaidShares, routes.TestEndpointEISController.showPageThree().url)
+
   }
 
   private def saveDoUpload()(implicit hc: HeaderCarrier, user: TAVCUser) = {
@@ -461,6 +481,7 @@ trait TestEndpointEISController extends FrontendController with AuthorisedAndEnr
   def bindKIFormOne()(implicit request: Request[AnyContent], user: TAVCUser): Form[IsCompanyKnowledgeIntensiveModel] = {
     IsCompanyKnowledgeIntensiveForm.isCompanyKnowledgeIntensiveForm.bindFromRequest().fold(
       formWithErrors => {
+        s4lConnector.saveFormData(KeystoreKeys.kiProcessingModel, kiProcessingModelNo)
         formWithErrors
       },
       validFormData => {
@@ -479,6 +500,7 @@ trait TestEndpointEISController extends FrontendController with AuthorisedAndEnr
   def bindKIFormTwo()(implicit request: Request[AnyContent], user: TAVCUser): Form[IsKnowledgeIntensiveModel] = {
     IsKnowledgeIntensiveForm.isKnowledgeIntensiveForm.bindFromRequest().fold(
       formWithErrors => {
+        s4lConnector.saveFormData(KeystoreKeys.kiProcessingModel, kiProcessingModelNo)
         formWithErrors
       },
       validFormData => {
