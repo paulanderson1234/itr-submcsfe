@@ -54,6 +54,7 @@ trait TestEndpointEISController extends FrontendController with AuthorisedAndEnr
 
   def showPageOne: Action[AnyContent] = AuthorisedAndEnrolled.async {
     implicit user => implicit request =>
+
       for {
         natureOfBusinessForm <- fillForm[NatureOfBusinessModel](KeystoreKeys.natureOfBusiness, NatureOfBusinessForm.natureOfBusinessForm)
         dateOfIncorporationForm <- fillForm[DateOfIncorporationModel](KeystoreKeys.dateOfIncorporation, DateOfIncorporationForm.dateOfIncorporationForm)
@@ -481,7 +482,6 @@ trait TestEndpointEISController extends FrontendController with AuthorisedAndEnr
   def bindKIFormOne()(implicit request: Request[AnyContent], user: TAVCUser): Form[IsCompanyKnowledgeIntensiveModel] = {
     IsCompanyKnowledgeIntensiveForm.isCompanyKnowledgeIntensiveForm.bindFromRequest().fold(
       formWithErrors => {
-        s4lConnector.saveFormData(KeystoreKeys.kiProcessingModel, kiProcessingModelNo)
         formWithErrors
       },
       validFormData => {
@@ -500,7 +500,6 @@ trait TestEndpointEISController extends FrontendController with AuthorisedAndEnr
   def bindKIFormTwo()(implicit request: Request[AnyContent], user: TAVCUser): Form[IsKnowledgeIntensiveModel] = {
     IsKnowledgeIntensiveForm.isKnowledgeIntensiveForm.bindFromRequest().fold(
       formWithErrors => {
-        s4lConnector.saveFormData(KeystoreKeys.kiProcessingModel, kiProcessingModelNo)
         formWithErrors
       },
       validFormData => {

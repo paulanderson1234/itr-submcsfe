@@ -19,6 +19,7 @@ package testOnly.controllers
 import common.Constants
 import models.repayments._
 import testOnly.controllers.TestDataGenerator.randomAlphaString
+import TestDataGenerator._
 
 object ShareRepaymentsTestHelper extends ShareRepaymentsTestHelper {
 
@@ -40,11 +41,11 @@ trait ShareRepaymentsTestHelper {
     SharesRepaymentDetailsModel(
       whoRepaidSharesModel = if(makeIncomplete) None else Some(WhoRepaidSharesModel(randomAlphaString(Constants.forenameLength),
         randomAlphaString(Constants.surnameLength), Some(shareRepaymentId))),
-      sharesRepaymentTypeModel = if(makeIncomplete) None else Some(SharesRepaymentTypeModel(TestDataGenerator.randomWordString(3), Some(shareRepaymentId))),
-      dateSharesRepaidModel = if (makeIncomplete) None else
-        Some(DateSharesRepaidModel(Some(1), Some(2), Some(1990), Some(shareRepaymentId))),
+      sharesRepaymentTypeModel = if(makeIncomplete) None else Some(SharesRepaymentTypeModel(randomRepaymentType(
+        randomWholeAmount(Integer.MAX_VALUE)), Some(shareRepaymentId))),
+      dateSharesRepaidModel = if (makeIncomplete) None else Some(randomDateSharesRepaid(shareRepaymentId)),
       amountSharesRepaymentModel = if(makeIncomplete) None else
-        Some(AmountSharesRepaymentModel(TestDataGenerator.randomWholeAmount(utils.Validation.financialMaxAmountLength),Some(shareRepaymentId))),
+        Some(AmountSharesRepaymentModel(randomWholeAmount(utils.Validation.financialMaxAmountLength),Some(shareRepaymentId))),
       processingId = Some(shareRepaymentId))
   }
 
