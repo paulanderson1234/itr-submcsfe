@@ -17,10 +17,11 @@
 package controllers.eis
 
 import auth.{Enrolment, Identifier, MockAuthConnector, MockConfig}
-import common.KeystoreKeys
+import common.{Constants, KeystoreKeys}
 import config.FrontendAuthConnector
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
+import models.ContactDetailsModel
 import org.mockito.Matchers
 import org.mockito.Mockito._
 import play.api.test.Helpers._
@@ -35,6 +36,7 @@ class CheckAnswersControllerSpec extends BaseSpec with CheckAnswersSpec {
     override lazy val authConnector = MockAuthConnector
     override lazy val s4lConnector = mockS4lConnector
     override lazy val enrolmentConnector = mockEnrolmentConnector
+    override val emailVerificationService = mockEmailVerificationService
   }
 
   "CheckAnswersController" should {
@@ -117,20 +119,42 @@ class CheckAnswersControllerSpec extends BaseSpec with CheckAnswersSpec {
     }
   }
 
-  "Sending a submission to the CheckAnswersController for EIS" should {
 
-    "redirect to the acknowledgement page when authenticated and enrolled" in {
-      setupMocks()
-      setupEISMocks()
-      when(TestController.enrolmentConnector.getTAVCEnrolment(Matchers.any())(Matchers.any()))
-        .thenReturn(Future.successful(Some(Enrolment("HMRC-TAVC-ORG",Seq(Identifier("TavcReference","1234")),"Activated"))))
+  "Sending a submission to the CheckAnswersController for EIS" should {
+    "redirect to the expected page when authenticated and enrolled" in {
       when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.envelopeId))
-        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some("test")))
+        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
+      when(TestController.emailVerificationService.verifyEmailAddress(Matchers.any())(Matchers.any()))
+        .thenReturn(Future.successful(Some(true)))
+      when(mockS4lConnector.fetchAndGetFormData[ContactDetailsModel](Matchers.eq(KeystoreKeys.contactDetails))
+        (Matchers.any(), Matchers.any(),Matchers.any()))
+        .thenReturn(Future.successful(Some(contactDetailsModel)))
       mockEnrolledRequest(eisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit)(
         result => {
           status(result) shouldBe SEE_OTHER
           redirectLocation(result) shouldBe Some(routes.DeclarationController.show().url)
+        }
+      )
+    }
+  }
+
+  "Sending a submission to the CheckAnswersController without email verification for EIS" should {
+    "redirect to the Email verification page" in {
+      when(TestController.enrolmentConnector.getTAVCEnrolment(Matchers.any())(Matchers.any()))
+        .thenReturn(Future.successful(Some(Enrolment("HMRC-TAVC-ORG",Seq(Identifier("TavcReference","1234")),"Activated"))))
+      when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.envelopeId))
+        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some("test")))
+      when(TestController.emailVerificationService.verifyEmailAddress(Matchers.any())(Matchers.any()))
+        .thenReturn(Future.successful(Some(false)))
+      when(mockS4lConnector.fetchAndGetFormData[ContactDetailsModel](Matchers.eq(KeystoreKeys.contactDetails))
+        (Matchers.any(), Matchers.any(),Matchers.any()))
+        .thenReturn(Future.successful(Some(contactDetailsModel)))
+      mockEnrolledRequest(eisSchemeTypesModel)
+      submitWithSessionAndAuth(TestController.submit)(
+        result => {
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(routes.EmailVerificationController.verify(Constants.CheckAnswersReturnUrl).url)
         }
       )
     }

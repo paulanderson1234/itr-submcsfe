@@ -17,7 +17,7 @@
 package controllers.seis
 
 import auth.{AuthorisedAndEnrolledForTAVC, SEIS, TAVCUser}
-import common.KeystoreKeys
+import common.{Constants, KeystoreKeys}
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.Helpers.PreviousSchemesHelper
@@ -30,6 +30,7 @@ import views.html.seis.checkAndSubmit.CheckAnswers
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
 import play.api.mvc.{Action, AnyContent}
+import services.EmailVerificationService
 
 import scala.concurrent.Future
 
@@ -38,11 +39,14 @@ object CheckAnswersController extends CheckAnswersController{
   override lazy val applicationConfig = FrontendAppConfig
   override lazy val authConnector = FrontendAuthConnector
   override lazy val enrolmentConnector = EnrolmentConnector
+  val emailVerificationService = EmailVerificationService
 }
 
 trait CheckAnswersController extends FrontendController with AuthorisedAndEnrolledForTAVC with PreviousSchemesHelper {
 
   override val acceptedFlows = Seq(Seq(SEIS))
+
+  val emailVerificationService : EmailVerificationService
 
   def checkAnswersModel(implicit headerCarrier: HeaderCarrier, user: TAVCUser): Future[SEISCheckAnswersModel] = for {
     registeredAddress <- s4lConnector.fetchAndGetFormData[RegisteredAddressModel](KeystoreKeys.registeredAddress)
@@ -79,6 +83,14 @@ trait CheckAnswersController extends FrontendController with AuthorisedAndEnroll
   }
 
   val submit = AuthorisedAndEnrolled.async { implicit user => implicit request =>
-    Future.successful(Redirect(controllers.seis.routes.DeclarationController.show()))
+    val verifyStatus = for {
+      contactDetails <- s4lConnector.fetchAndGetFormData[ContactDetailsModel](KeystoreKeys.contactDetails)
+      isVerified <- emailVerificationService.verifyEmailAddress(contactDetails.get.email)
+    } yield isVerified.getOrElse(false)
+
+    verifyStatus.flatMap {
+      case true => Future.successful(Redirect(routes.DeclarationController.show()))
+      case false => Future.successful(Redirect(routes.EmailVerificationController.verify(Constants.CheckAnswersReturnUrl)))
+    }
   }
 }

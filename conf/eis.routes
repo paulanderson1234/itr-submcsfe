@@ -269,3 +269,6 @@ POST       /delete-shares-repayment/:repaymentProcessingId             controlle
 GET        /initial-declaration                          controllers.eis.InitialDeclarationController.show
 
 GET        /terms-and-conditions                          controllers.eis.TermsAndConditionsController.show
+
+# Email verification
+GET        /email-verification/:urlPosition         controllers.eis.EmailVerificationController.verify(urlPosition: Int)

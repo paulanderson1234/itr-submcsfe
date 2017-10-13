@@ -17,6 +17,7 @@
 package controllers.eis
 
 import auth.{MockAuthConnector, MockConfig}
+import common.Constants
 import config.FrontendAuthConnector
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
@@ -82,7 +83,7 @@ class ContactDetailsControllerSpec extends BaseSpec {
       submitWithSessionAndAuth(ContactDetailsControllerTest.submit,formInput:_*)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some("/investment-tax-relief-cs/eis/confirm-correspondence-address")
+          redirectLocation(result) shouldBe Some(routes.EmailVerificationController.verify(Constants.ContactDetailsReturnUrl).url)
         }
       )
     }

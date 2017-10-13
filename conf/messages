@@ -126,6 +126,18 @@ validation.error.numberOfShares.notANumber=Enter a valid number for your number 
 validation.error.numberOfSharesPurchased.size = The number of shares count should be between {0} and 9999999999999
 validation.error.numberOfSharesPurchased.notANumber=Enter a valid number for your number of shares
 
+# Email Verification Details
+page.verification.EmailVerification.heading= We''ve sent you an email
+page.verification.EmailVerification.title= We''ve sent you an email
+page.verification.EmailVerification.info.one= We''ve sent an email to
+page.verification.EmailVerification.info.two= . It contains a link you’ll need to continue your registration.
+page.verification.EmailVerification.help.link= If you don't get an email
+page.verification.EmailVerification.help.text.one= Check the email address you''ve entered. If it''s wrong you''ll need to
+page.verification.EmailVerification.help.text.two= start again
+page.verification.EmailVerification.help.text.three= . If it''s right, check for the email in your spam folder. If you''re having problems you can ask us to
+page.verification.EmailVerification.help.text.four= send it again.
+
+
 ## Session Timeout message ##
 session.timeout.message=Your session has ended
 session.timeout.startAgain=Start again
