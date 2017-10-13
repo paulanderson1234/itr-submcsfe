@@ -33,6 +33,7 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
     override lazy val authConnector = MockAuthConnector
     override lazy val s4lConnector = mockS4lConnector
     override lazy val enrolmentConnector = mockEnrolmentConnector
+    override val emailVerificationService = mockEmailVerificationService
   }
 
   "The Check Answers page" should {

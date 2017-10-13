@@ -21,7 +21,6 @@ import common.{Constants, KeystoreKeys}
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
-import models.investorDetails.{InvestorDetailsModel, PreviousShareHoldingModel}
 import models._
 import org.mockito.Matchers
 import org.mockito.Mockito.when
@@ -37,6 +36,7 @@ class CheckAnswersControllerSpec extends BaseSpec with CheckAnswersSpec {
     override lazy val authConnector = MockAuthConnector
     override lazy val s4lConnector = mockS4lConnector
     override lazy val enrolmentConnector = mockEnrolmentConnector
+    override val emailVerificationService = mockEmailVerificationService
   }
 
   "CheckAnswersController" should {
@@ -114,12 +114,13 @@ class CheckAnswersControllerSpec extends BaseSpec with CheckAnswersSpec {
     }
   }
 
-  "Sending a submission to the CheckAnswersController with one or more attachments for SEIS" should {
-
-    "redirect to the acknowledgement page when authenticated and enrolled" in {
-      when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.envelopeId))
-        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some("test")))
-      setupMocks()
+  "Sending a submission to the CheckAnswersController for SEIS" should {
+    "redirect to the expected page when authenticated and enrolled" in {
+      when(TestController.emailVerificationService.verifyEmailAddress(Matchers.any())(Matchers.any()))
+        .thenReturn(Future.successful(Some(true)))
+      when(mockS4lConnector.fetchAndGetFormData[ContactDetailsModel](Matchers.eq(KeystoreKeys.contactDetails))
+        (Matchers.any(), Matchers.any(),Matchers.any()))
+        .thenReturn(Future.successful(Some(contactDetailsModel)))
       mockEnrolledRequest(seisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit)(
         result => {
@@ -130,19 +131,22 @@ class CheckAnswersControllerSpec extends BaseSpec with CheckAnswersSpec {
     }
   }
 
-  "Sending a submission to the CheckAnswersController with no attachments for SEIS" should {
-
-    "redirect to the declaration page when authenticated and enrolled" in {
-      when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.envelopeId))
-        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(None))
-      setupMocks()
+  "Sending a submission to the CheckAnswersController without email verification for SEIS" should {
+    "redirect to the email verification page" in {
+      when(TestController.emailVerificationService.verifyEmailAddress(Matchers.any())(Matchers.any()))
+        .thenReturn(Future.successful(Some(false)))
+      when(mockS4lConnector.fetchAndGetFormData[ContactDetailsModel](Matchers.eq(KeystoreKeys.contactDetails))
+        (Matchers.any(), Matchers.any(),Matchers.any()))
+        .thenReturn(Future.successful(Some(contactDetailsModel)))
       mockEnrolledRequest(seisSchemeTypesModel)
       submitWithSessionAndAuth(TestController.submit)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(controllers.seis.routes.DeclarationController.show().url)
+          redirectLocation(result) shouldBe
+            Some(controllers.seis.routes.EmailVerificationController.verify(Constants.CheckAnswersReturnUrl).url)
         }
       )
     }
   }
+
 }

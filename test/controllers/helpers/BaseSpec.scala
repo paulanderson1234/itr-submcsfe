@@ -33,7 +33,7 @@ import org.scalatest.BeforeAndAfterEach
 import org.scalatest.mock.MockitoSugar
 import org.scalatestplus.play.OneAppPerSuite
 import play.api.libs.json.Json
-import services.{FileUploadService, RegistrationDetailsService, SubscriptionService}
+import services.{EmailVerificationService, FileUploadService, RegistrationDetailsService, SubscriptionService}
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
@@ -49,6 +49,7 @@ trait BaseSpec extends UnitSpec with OneAppPerSuite with MockitoSugar with FakeR
   val mockSubscriptionService= mock[SubscriptionService]
   val mockRegistrationDetailsService = mock[RegistrationDetailsService]
   val mockFileUploadService = mock[FileUploadService]
+  val mockEmailVerificationService = mock[EmailVerificationService]
 
   override def beforeEach() {
     reset(mockS4lConnector)

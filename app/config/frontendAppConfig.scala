@@ -41,6 +41,14 @@ trait AppConfig {
   val submissionFrontendServiceBaseUrl: String
   val attachmentsServiceUrl: String
   val attachmentFileUploadOutsideUrl: String
+  val emailVerificationTemplate: String
+  val emailVerificationEisReturnUrlOne: String
+  val emailVerificationSeisReturnUrlOne: String
+  val emailVerificationEisReturnUrlTwo: String
+  val emailVerificationSeisReturnUrlTwo: String
+  val sendVerificationEmailURL: String
+  val checkVerifiedEmailURL: String
+
 }
 
 object FrontendAppConfig extends AppConfig with ServicesConfig {
@@ -79,6 +87,17 @@ object FrontendAppConfig extends AppConfig with ServicesConfig {
   override lazy val uploadFeatureEnabled: Boolean = getFeature(s"$env.features.UploadEnabled")
 
   override lazy val attachmentsServiceUrl: String = baseUrl("investment-tax-relief-attachments")
+
+  override lazy val emailVerificationTemplate = loadConfig("email.emailVerificationTemplate")
+  override lazy val emailVerificationEisReturnUrlOne = loadConfig(s"email.returnUrlEisOne")
+  override lazy val emailVerificationSeisReturnUrlOne = loadConfig(s"email.returnUrlSeisOne")
+  override lazy val emailVerificationEisReturnUrlTwo = loadConfig(s"email.returnUrlEisTwo")
+  override lazy val emailVerificationSeisReturnUrlTwo = loadConfig(s"email.returnUrlSeisTwo")
+
+  override lazy val sendVerificationEmailURL = baseUrl("email-verification") + loadConfig("email-vs.sendVerificationEmailURL")
+  override lazy val checkVerifiedEmailURL = baseUrl("email-verification") + loadConfig("email-vs.checkVerifiedEmailURL")
+
+
 
   val attachmentFileUploadOutsideUrl =
     s"$attachmentsFrontEndServiceBaseUrl/file-upload?continueUrl=$submissionFrontendServiceBaseUrl" +
