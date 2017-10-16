@@ -54,6 +54,7 @@ trait TestEndpointEISController extends FrontendController with AuthorisedAndEnr
   def showPageOne: Action[AnyContent] = AuthorisedAndEnrolled.async {
     implicit user => implicit request =>
 
+      s4lConnector.saveFormData(KeystoreKeys.kiProcessingModel, kiProcessingModelNo)
       for {
         natureOfBusinessForm <- fillForm[NatureOfBusinessModel](KeystoreKeys.natureOfBusiness, NatureOfBusinessForm.natureOfBusinessForm)
         dateOfIncorporationForm <- fillForm[DateOfIncorporationModel](KeystoreKeys.dateOfIncorporation, DateOfIncorporationForm.dateOfIncorporationForm)
