@@ -6,7 +6,7 @@
 
 @(submissionResponseModel: SubmissionResponse)(implicit request: Request[_], messages: Messages)
 
-@main_template(Messages("page.seis.checkAndSubmit.acknowledgement.title"), bodyClasses = None) {
+@main_template(Messages("page.checkAndSubmit.acknowledgement.title"), bodyClasses = None) {
 
 
 <div class="grid-row">
@@ -14,64 +14,64 @@
 
         <div class="form-group">
             <div class="transaction-banner--complete">
-                <h1 id="submission-confirmation" class="heading-large banner-white">@Messages("page.seis.checkAndSubmit.acknowledgement.submissionConfirmation")</h1>
-                <p id="ref-number-heading">@Messages("page.seis.checkAndSubmit.acknowledgement.refNumberHeading")</p>
+                <h1 id="submission-confirmation" class="heading-large banner-white">@Messages("page.checkAndSubmit.acknowledgement.submissionConfirmation")</h1>
+                <p id="ref-number-heading">@Messages("page.checkAndSubmit.acknowledgement.refNumberHeading")</p>
                 <span id="ref-number" class="bold-medium">@submissionResponseModel.formBundleNumber</span>
             </div>
-            <p>@Messages("page.seis.checkAndSubmit.acknowledgement.refNumber.note")</p>
+            <p>@Messages("page.checkAndSubmit.acknowledgement.refNumber.note")</p>
         </div>
 
         <div class="form-group">
             <h2 class="heading-medium">@Messages("common.error.soft.secondaryHeading")</h2>
 
-            <p>@Messages("page.seis.checkAndSubmit.acknowledgement.whatNext.list.heading")</p>
+            <p>@Messages("page.checkAndSubmit.acknowledgement.whatNext.list.heading")</p>
 
             <ul class="list-bullet">
-                <li>@Messages("page.seis.checkAndSubmit.acknowledgement.whatNext.list.one")</li>
-                <li>@Messages("page.seis.checkAndSubmit.acknowledgement.whatNext.list.two")</li>
+                <li>@Messages("page.checkAndSubmit.acknowledgement.whatNext.list.one")</li>
+                <li>@Messages("page.checkAndSubmit.acknowledgement.whatNext.list.two")</li>
             </ul>
 
-            <p>@Messages("page.seis.checkAndSubmit.acknowledgement.whatNext.outcome")</p>
+            <p>@Messages("page.checkAndSubmit.acknowledgement.whatNext.outcome")</p>
 
             <p>@Messages("page.seis.checkAndSubmit.acknowledgement.whatNext.issue")</p>
 
             <div class="form-group">
                 <p class="important-notice">
                     <span class="bold-medium">
-                        @Messages("page.seis.checkAndSubmit.acknowledgement.whatNext.certificate.warning")
+                        @Messages("page.checkAndSubmit.acknowledgement.whatNext.certificate.warning")
                     </span>
                 </p>
             </div>
 
-            <p>@Messages("page.seis.checkAndSubmit.acknowledgement.whatNext.conditions")</p>
+            <p>@Messages("page.checkAndSubmit.acknowledgement.whatNext.conditions")</p>
         </div>
 
         <div class="form-group">
-            <h2 id="supporting-docs" class="heading-medium">@Messages("page.seis.checkAndSubmit.acknowledgement.supporting.docs.heading")</h2>
+            <h2 id="supporting-docs" class="heading-medium">@Messages("page.checkAndSubmit.acknowledgement.supporting.docs.heading")</h2>
 
-            <p id="remember-to-include">@Messages("page.seis.checkAndSubmit.acknowledgement.review")</p>
+            <p id="remember-to-include">@Messages("page.checkAndSubmit.acknowledgement.review")</p>
 
             <ul class="list list-bullet">
-                <li id="business-plan">@Messages("page.seis.checkAndSubmit.acknowledgement.doc.one")</li>
-                <li id="company-accounts">@Messages("page.seis.checkAndSubmit.acknowledgement.doc.two")</li>
-                <li id="shareholder-agree">@Messages("page.seis.checkAndSubmit.acknowledgement.doc.three")</li>
-                <li id="memorandum-articles">@Messages("page.seis.checkAndSubmit.acknowledgement.doc.four")</li>
-                <li id="prospectus-docs">@Messages("page.seis.checkAndSubmit.acknowledgement.doc.five")</li>
+                <li id="business-plan">@Messages("page.supportingDocuments.bullet.one")</li>
+                <li id="company-accounts">@Messages("page.supportingDocuments.bullet.two")</li>
+                <li id="shareholder-agree">@Messages("page.supportingDocuments.bullet.three")</li>
+                <li id="memorandum-articles">@Messages("page.supportingDocuments.bullet.four")</li>
+                <li id="prospectus-docs">@Messages("page.supportingDocuments.bullet.five")</li>
             </ul>
         </div>
 
         <div class="form-group">
             <p>
-                <span>@Messages("page.seis.checkAndSubmit.acknowledgement.upload.one")</span>
-                <a href="@controllers.seis.routes.SupportingDocumentsController.show().url">@Messages("page.seis.checkAndSubmit.acknowledgement.upload.link")</a>
-                <span>@Messages("page.seis.checkAndSubmit.acknowledgement.upload.two")</span>
-                <a href="/hub">@Messages("page.seis.checkAndSubmit.acknowledgement.upload.dashboard")</a>.
+                <span>@Messages("page.checkAndSubmit.acknowledgement.upload.one")</span>
+                <a href="@controllers.seis.routes.SupportingDocumentsController.show().url">@Messages("page.checkAndSubmit.acknowledgement.upload.link")</a>
+                <span>@Messages("page.checkAndSubmit.acknowledgement.upload.two")</span>
+                <a href="@controllers.routes.ApplicationHubController.show()">@Messages("page.checkAndSubmit.acknowledgement.upload.dashboard")</a>.
             </p>
 
         </div>
 
         <div class="form-group">
-            <a id="submit" class="button" href="@controllers.feedback.routes.FeedbackController.show().url">@Messages("page.seis.checkAndSubmit.acknowledgement.button.confirm")</a>
+            <a id="submit" class="button" href="@controllers.feedback.routes.FeedbackController.show().url">@Messages("page.checkAndSubmit.acknowledgement.button.confirm")</a>
         </div>
     </div>
 </div>

@@ -35,7 +35,6 @@ import play.api.mvc.{Action, AnyContent, Request, Result}
 import services.{FileUploadService, RegistrationDetailsService}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import uk.gov.hmrc.play.http.HeaderCarrier
-import utils.Validation
 
 import scala.concurrent.Future
 
@@ -452,14 +451,6 @@ trait AcknowledgementController extends FrontendController with AuthorisedAndEnr
 
   def submit: Action[AnyContent] = AuthorisedAndEnrolled.apply { implicit user => implicit request =>
     Redirect(feedback.routes.FeedbackController.show().url)
-  }
-
-  private def getTradeStartDate(tradeStartDateModel: TradeStartDateModel): String = {
-    if (tradeStartDateModel.hasTradeStartDate.equals(Constants.StandardRadioButtonYesValue)) {
-      Validation.dateToDesFormat(tradeStartDateModel.tradeStartDay.get, tradeStartDateModel.tradeStartMonth.get, tradeStartDateModel.tradeStartYear.get)
-    } else {
-      Constants.standardIgnoreYearValue
-    }
   }
 
 }

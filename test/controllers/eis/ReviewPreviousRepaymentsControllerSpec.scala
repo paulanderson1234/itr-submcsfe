@@ -116,7 +116,7 @@ class ReviewPreviousRepaymentsControllerSpec extends BaseSpec{
 
     "does not find any repayments" should {
       lazy val result = {
-        setupMocks(Some(inCompleteSharesRepaymentDetailsVector))
+        setupMocks(Some(incompleteSharesRepaymentDetailsVector))
         testController.change(2)(authorisedFakeRequest)
       }
 
@@ -147,7 +147,7 @@ class ReviewPreviousRepaymentsControllerSpec extends BaseSpec{
 
     "finds previous repayment details, some of which are incomplete" should {
       lazy val result = {
-        setupMocks(Some(inCompleteSharesRepaymentDetailsVector))
+        setupMocks(Some(incompleteSharesRepaymentDetailsVector))
         testController.change(1)(authorisedFakeRequest)
       }
 
@@ -164,7 +164,7 @@ class ReviewPreviousRepaymentsControllerSpec extends BaseSpec{
   "Making a GET request to the ReviewAllInvestorsController remove method" should {
 
     lazy val result = {
-      setupMocks(Some(inCompleteSharesRepaymentDetailsVector))
+      setupMocks(Some(incompleteSharesRepaymentDetailsVector))
       testController.remove(1)(authorisedFakeRequest)
     }
 

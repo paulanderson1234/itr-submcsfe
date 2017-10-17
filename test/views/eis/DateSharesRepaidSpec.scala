@@ -46,7 +46,7 @@ class DateSharesRepaidSpec extends ViewSpec {
         .thenReturn(Future.successful(dateSharesRepaidModel))
     when(mockS4lConnector.fetchAndGetFormData[Vector[SharesRepaymentDetailsModel]](Matchers.eq(KeystoreKeys.sharesRepaymentDetails))
       (Matchers.any(), Matchers.any(), Matchers.any()))
-      .thenReturn(Some(inCompleteSharesRepaymentDetailsVector))
+      .thenReturn(Some(incompleteSharesRepaymentDetailsVector))
 
     when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.backLinkSharesRepaymentDate))
       (Matchers.any(), Matchers.any(), Matchers.any()))
@@ -115,6 +115,10 @@ class DateSharesRepaidSpec extends ViewSpec {
       
       //Check error present:
       document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe true
+      document.getElementById("error-summary-heading").text shouldBe Messages("common.error.summary.heading")
+      document.getElementById("dateSharesRepaidDay-error-summary").text shouldBe Messages("validation.error.DateNotEntered")
+      document.getElementsByClass("error-notification").text shouldBe Messages("validation.error.DateNotEntered")
+
 
 
     }

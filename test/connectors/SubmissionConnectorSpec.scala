@@ -318,7 +318,7 @@ class SubmissionConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndA
 
     "return a OK" in {
 
-      val validRequest = validSEISAnswersModel
+      val validRequest = SEISAnswersModelToPost
       when(mockHttp.POST[JsValue, HttpResponse](Matchers.any(), Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
         .thenReturn(Future.successful(HttpResponse(OK)))
       val result = TargetSubmissionConnector.submitComplianceStatement(validRequest, tavcReferenceId, Some(registrationDetailsModel))
@@ -330,7 +330,7 @@ class SubmissionConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndA
 
     "return throw an illegal argument exception" in {
 
-      val validRequest = validSEISAnswersModel
+      val validRequest = SEISAnswersModelToPost
       when(mockHttp.POST[JsValue, HttpResponse](Matchers.any(), Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
         .thenReturn(Future.successful(HttpResponse(OK)))
 
@@ -344,7 +344,7 @@ class SubmissionConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndA
 
     "return throw an illegal argument exception" in {
 
-      val validRequest = validSEISAnswersModel
+      val validRequest = SEISAnswersModelToPost
       when(mockHttp.POST[JsValue, HttpResponse](Matchers.any(), Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
         .thenReturn(Future.successful(HttpResponse(OK)))
 

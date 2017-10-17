@@ -49,7 +49,7 @@ case class ComplianceStatementAnswersModel(companyDetailsAnswersModel: CompanyDe
 
   def validateSeis(submissionConnector: SubmissionConnector)(implicit hc: HeaderCarrier): Future[Boolean] = {
     for {
-      companyCheck <- companyDetailsAnswersModel.validate(submissionConnector)
+      companyCheck <- companyDetailsAnswersModel.validateSeis(submissionConnector)
       shareCheck <- shareDetailsAnswersModel.validateSeis(companyDetailsAnswersModel.qualifyBusinessActivityModel,
         companyDetailsAnswersModel.hasInvestmentTradeStartedModel, companyDetailsAnswersModel.researchStartDateModel, submissionConnector)
     } yield companyCheck && previousSchemesAnswersModel.validate && shareCheck && investorDetailsAnswersModel.validate
@@ -70,6 +70,9 @@ case class ComplianceStatementAnswersModel(companyDetailsAnswersModel: CompanyDe
     val isMarketRouteApplicable = TotalAmountRaisedHelper.checkIfMarketInfoApplies(s4lConnector)
     val prevDofcs = s4lConnector.fetchAndGetFormData[PreviousBeforeDOFCSModel](KeystoreKeys.previousBeforeDOFCS)
     val usedInvestmentReasonBefore = s4lConnector.fetchAndGetFormData[UsedInvestmentReasonBeforeModel](KeystoreKeys.usedInvestmentReasonBefore)
+
+
+
 
     def checkMarketInfo(prevDofcs: Option[PreviousBeforeDOFCSModel],
                         usedInvestmentReasonBefore: Option[UsedInvestmentReasonBeforeModel],
@@ -117,7 +120,7 @@ case class CompanyDetailsAnswersModel(natureOfBusinessModel: NatureOfBusinessMod
                                       fullTimeEmployeeCountModel: FullTimeEmployeeCountModel,
                                       commercialSaleModel:Option[CommercialSaleModel]) {
 
-  def validate(submissionConnector: SubmissionConnector)(implicit hc: HeaderCarrier): Future[Boolean] = {
+  def validateSeis(submissionConnector: SubmissionConnector)(implicit hc: HeaderCarrier): Future[Boolean] = {
 
     def validateStartCondition[T](check: String)(f: Option[Future[Boolean]]) = {
       if(check == Constants.StandardRadioButtonYesValue) f else Some(Future.successful(seventyPercentSpentModel.isDefined))

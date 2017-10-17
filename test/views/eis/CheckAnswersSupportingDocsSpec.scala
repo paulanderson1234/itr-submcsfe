@@ -33,6 +33,7 @@ class CheckAnswersSupportingDocsSpec extends CheckAnswersSpec {
     override lazy val authConnector = MockAuthConnector
     override lazy val s4lConnector = mockS4lConnector
     override lazy val enrolmentConnector = mockEnrolmentConnector
+    override val emailVerificationService = mockEmailVerificationService
   }
 
   "The Check Answers page" should {
@@ -64,15 +65,15 @@ class CheckAnswersSupportingDocsSpec extends CheckAnswersSpec {
       document.getElementById("supportingDocsSection-table-heading").text() shouldBe Messages("page.summaryQuestion.supportingDocsSection")
       document.getElementById("supportingDocs-sub-text").text() shouldBe Messages("page.checkAndSubmit.checkAnswers.suportingDocs.desc")
       supportingDocsTableBody .select("tr").get(0).getElementById("supportingDocs-business-plan").text() shouldBe
-        Messages("page.supportingDocuments.SupportingDocuments.bullet.one")
+        Messages("page.supportingDocuments.bullet.one")
       supportingDocsTableBody .select("tr").get(0).getElementById("supportingDocs-company-accounts").text() shouldBe
-        Messages("page.supportingDocuments.SupportingDocuments.bullet.two")
+        Messages("page.supportingDocuments.bullet.two")
       supportingDocsTableBody .select("tr").get(0).getElementById("shareholder-agree").text() shouldBe
-        Messages("page.supportingDocuments.SupportingDocuments.bullet.three")
+        Messages("page.supportingDocuments.bullet.three")
       supportingDocsTableBody .select("tr").get(0).getElementById("memorandum-docs").text() shouldBe
-        Messages("page.supportingDocuments.SupportingDocuments.bullet.four")
+        Messages("page.supportingDocuments.bullet.four")
       supportingDocsTableBody .select("tr").get(0).getElementById("supportingDocs-prospectus").text() shouldBe
-        Messages("page.supportingDocuments.SupportingDocuments.bullet.five")
+        Messages("page.supportingDocuments.bullet.five")
 
 
       document.getElementById("submit").text() shouldBe Messages("page.checkAndSubmit.checkAnswers.button.confirm")

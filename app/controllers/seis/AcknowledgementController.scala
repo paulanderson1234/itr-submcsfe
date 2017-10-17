@@ -310,13 +310,5 @@ trait AcknowledgementController extends FrontendController with AuthorisedAndEnr
     Redirect(feedback.routes.FeedbackController.show().url)
   }
 
-  private def getTradeStartDate(tradeStartDateModel: TradeStartDateModel): String = {
-    if (tradeStartDateModel.hasTradeStartDate.equals(Constants.StandardRadioButtonYesValue)) {
-      Validation.dateToDesFormat(tradeStartDateModel.tradeStartDay.get, tradeStartDateModel.tradeStartMonth.get, tradeStartDateModel.tradeStartYear.get)
-    } else {
-      Constants.standardIgnoreYearValue
-    }
-  }
-
 }
 

@@ -20,9 +20,13 @@
             </ul>
 
             <div class="form-group">
-                <span id="still-apply">@Messages("page.hubGuidance.whoCanUseNewService.still.apply")
-                    <a href="@Constants.guidanceRedirectUrl" class="link-style" id="change-answers">
-                        @Messages("page.hubGuidance.whoCanUseNewService.existing")</a></span>
+                <h2 id="sub-heading" class="banner-white">@Messages("page.hubGuidance.whoCanUseNewService.conditions.apply")</h2>
+                <span id="still-apply">@Messages("page.hubGuidance.whoCanUseNewService.still.apply.one")
+                    <a href="@Constants.eisGuidanceRedirectUrl" class="link-style" id="eis-guidance">
+                        @Constants.schemeTypeEis</a> or <a href="@Constants.seisGuidanceRedirectUrl" class="link-style" id="seis-guidance">
+                        @Constants.schemeTypeSeis</a>
+                     @Messages("page.hubGuidance.whoCanUseNewService.still.apply.two")
+                </span>
             </div>
 
 

@@ -17,22 +17,20 @@
 package controllers.eis
 
 import auth.{AuthorisedAndEnrolledForTAVC, EIS, TAVCUser}
-import common.KeystoreKeys
+import common.{Constants, KeystoreKeys}
 import config.{FrontendAppConfig, FrontendAuthConnector}
-import config.FrontendGlobal.internalServerErrorTemplate
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.Helpers.PreviousSchemesHelper
 import models._
 import models.investorDetails.InvestorDetailsModel
 import models.repayments.{AnySharesRepaymentModel, SharesRepaymentDetailsModel}
-import models.submission.SchemeTypesModel
-import play.api.Logger
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import uk.gov.hmrc.play.http.HeaderCarrier
 import views.html.eis.checkAndSubmit.CheckAnswers
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
 import play.api.mvc.{Action, AnyContent}
+import services.EmailVerificationService
 
 import scala.concurrent.Future
 
@@ -41,15 +39,16 @@ object CheckAnswersController extends CheckAnswersController{
   override lazy val applicationConfig = FrontendAppConfig
   override lazy val authConnector = FrontendAuthConnector
   override lazy val enrolmentConnector = EnrolmentConnector
+  val emailVerificationService = EmailVerificationService
 }
 
 trait CheckAnswersController extends FrontendController with AuthorisedAndEnrolledForTAVC with PreviousSchemesHelper {
 
   override val acceptedFlows = Seq(Seq(EIS))
 
+  val emailVerificationService: EmailVerificationService
 
-
-  def checkAnswersModel(implicit headerCarrier: HeaderCarrier, user: TAVCUser) : Future[CheckAnswersModel] = for {
+  def checkAnswersModel(implicit headerCarrier: HeaderCarrier, user: TAVCUser): Future[CheckAnswersModel] = for {
     registeredAddress <- s4lConnector.fetchAndGetFormData[RegisteredAddressModel](KeystoreKeys.registeredAddress)
     dateOfIncorporation <- s4lConnector.fetchAndGetFormData[DateOfIncorporationModel](KeystoreKeys.dateOfIncorporation)
     natureOfBusiness <- s4lConnector.fetchAndGetFormData[NatureOfBusinessModel](KeystoreKeys.natureOfBusiness)
@@ -84,15 +83,15 @@ trait CheckAnswersController extends FrontendController with AuthorisedAndEnroll
     grossAssetsAfterIssue <- s4lConnector.fetchAndGetFormData[GrossAssetsAfterIssueModel](KeystoreKeys.grossAssetsAfterIssue)
     researchStartDateModel <- s4lConnector.fetchAndGetFormData[ResearchStartDateModel](KeystoreKeys.researchStartDate)
     turnoverCosts <- s4lConnector.fetchAndGetFormData[AnnualTurnoverCostsModel](KeystoreKeys.turnoverCosts)
-  }yield new CheckAnswersModel(registeredAddress,dateOfIncorporation,natureOfBusiness,commercialSale,isCompanyKnowledgeIntensive, isKnowledgeIntensive,
-    operatingCosts,percentageStaffWithMasters,tenYearPlan,hadPreviousRFI, previousSchemes, totalAmountRaised,
-    thirtyDayRuleModel,anySharesRepaymentModel,newGeographicalMarket,newProduct,contactDetails,contactAddress,
-    investmentGrowModel, qualifyBusinessActivity,hasInvestmentTradeStarted, shareIssueDate,grossAssets,fullTimeEmployees,
-    shareDescription, numberOfShares,investorDetails,valueReceived,shareCapitalChanges, marketDescription,repaymentDetails,
-    grossAssetsAfterIssue,turnoverCosts,researchStartDateModel, applicationConfig.uploadFeatureEnabled)
+  } yield new CheckAnswersModel(registeredAddress, dateOfIncorporation, natureOfBusiness, commercialSale, isCompanyKnowledgeIntensive, isKnowledgeIntensive,
+    operatingCosts, percentageStaffWithMasters, tenYearPlan, hadPreviousRFI, previousSchemes, totalAmountRaised,
+    thirtyDayRuleModel, anySharesRepaymentModel, newGeographicalMarket, newProduct, contactDetails, contactAddress,
+    investmentGrowModel, qualifyBusinessActivity, hasInvestmentTradeStarted, shareIssueDate, grossAssets, fullTimeEmployees,
+    shareDescription, numberOfShares, investorDetails, valueReceived, shareCapitalChanges, marketDescription, repaymentDetails,
+    grossAssetsAfterIssue, turnoverCosts, researchStartDateModel, applicationConfig.uploadFeatureEnabled)
 
 
-  def show (envelopeId: Option[String]) : Action[AnyContent]= AuthorisedAndEnrolled.async { implicit user => implicit request =>
+  def show(envelopeId: Option[String]): Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user => implicit request =>
 
     checkAnswersModel.flatMap {
       checkAnswers =>
@@ -101,8 +100,15 @@ trait CheckAnswersController extends FrontendController with AuthorisedAndEnroll
   }
 
   val submit = AuthorisedAndEnrolled.async { implicit user => implicit request =>
-    Future.successful(Redirect(controllers.eis.routes.DeclarationController.show()))
-  }
+    val verifyStatus = for {
+      contactDetails <- s4lConnector.fetchAndGetFormData[ContactDetailsModel](KeystoreKeys.contactDetails)
+      isVerified <- emailVerificationService.verifyEmailAddress(contactDetails.get.email)
+    } yield isVerified.getOrElse(false)
 
+    verifyStatus.flatMap {
+      case true => Future.successful(Redirect(routes.DeclarationController.show()))
+      case false => Future.successful(Redirect(routes.EmailVerificationController.verify(Constants.CheckAnswersReturnUrl)))
+    }
+  }
 
 }

@@ -42,7 +42,7 @@ class SEISAnswersModelSpec extends UnitSpec with MockitoSugar {
     val mockShares = mock[ShareDetailsAnswersModel]
     val mockInvestors = mock[InvestorDetailsAnswersModel]
 
-    when(mockCompany.validate(Matchers.any())(Matchers.any()))
+    when(mockCompany.validateSeis(Matchers.any())(Matchers.any()))
       .thenReturn(Future.successful(validCompany))
     when(mockSchemes.validate)
       .thenReturn(validSchemes)

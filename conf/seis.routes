@@ -176,3 +176,6 @@ GET        /declaration                          controllers.seis.DeclarationCon
 GET        /initial-declaration                          controllers.seis.InitialDeclarationController.show
 
 GET        /terms-and-conditions                          controllers.seis.TermsAndConditionsController.show
+
+# Email verification
+GET        /email-verification/:urlPosition         controllers.seis.EmailVerificationController.verify(urlPosition: Int)

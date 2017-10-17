@@ -62,15 +62,15 @@ class SupportingDocumentsSpec extends ViewSpec {
       document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.ConfirmCorrespondAddressController.show().url
       document.getElementById("description-one").text() shouldBe Messages("page.supportingDocuments.SupportingDocuments.text.one")
       document .select("tr").get(0).getElementById("supportingDocs-business-plan").text() shouldBe
-        Messages("page.supportingDocuments.SupportingDocuments.bullet.one")
+        Messages("page.supportingDocuments.bullet.one")
       document .select("tr").get(1).getElementById("supportingDocs-company-accounts").text() shouldBe
-        Messages("page.supportingDocuments.SupportingDocuments.bullet.two")
+        Messages("page.supportingDocuments.bullet.two")
       document .select("tr").get(2).getElementById("shareholder-agree").text() shouldBe
-        Messages("page.supportingDocuments.SupportingDocuments.bullet.three")
+        Messages("page.supportingDocuments.bullet.three")
       document .select("tr").get(3).getElementById("memorandum-docs").text() shouldBe
-        Messages("page.supportingDocuments.SupportingDocuments.bullet.four")
+        Messages("page.supportingDocuments.bullet.four")
       document .select("tr").get(4).getElementById("supportingDocs-prospectus").text() shouldBe
-        Messages("page.supportingDocuments.SupportingDocuments.bullet.five")
+        Messages("page.supportingDocuments.bullet.five")
       document.getElementById("description-two").text() shouldBe Messages("page.supportingDocuments.SupportingDocuments.text.two")
       document.body.getElementById("get-help-action").text shouldBe Messages("common.error.help.text")
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.five")
