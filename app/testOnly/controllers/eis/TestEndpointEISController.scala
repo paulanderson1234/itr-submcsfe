@@ -183,8 +183,11 @@ trait TestEndpointEISController extends FrontendController with AuthorisedAndEnr
     val percentageStaffWithMasters = bindForm[PercentageStaffWithMastersModel](KeystoreKeys.percentageStaffWithMasters,
       PercentageStaffWithMastersForm.percentageStaffWithMastersForm)
     val tenYearPlan = bindForm[TenYearPlanModel](KeystoreKeys.tenYearPlan, TenYearPlanForm.tenYearPlanForm)
+
     saveBackLinks()
     saveSchemeType()
+    saveSubsidiaries()
+
     Future.successful(Ok(
       testOnly.views.html.eis.testEndpointEISPageOne(
         natureOfBusiness,
@@ -226,6 +229,8 @@ trait TestEndpointEISController extends FrontendController with AuthorisedAndEnr
     val investorModelOptions = bindForm[TestInvestorModeOptionsModel](keyStoreKeyInvestorModelOptions, TestInvestorModeOptionsForm.testInvestorModeOptionsForm)
 
     saveInvestorDetails(populateIvestorTestData(investorModelOptions.value.fold("1")(_.testInvestorModeOptions)))
+    saveSubsidiaries()
+
     Future.successful(Ok(
       testOnly.views.html.eis.testEndpointEISPageTwo(
         fullTimeEmployeeCount,
