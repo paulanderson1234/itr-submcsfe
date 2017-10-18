@@ -1,19 +1,189 @@
-
 @import models._
-@import testOnly.models.TestPreviousSchemesModel
+@import testOnly.models._
 @import uk.gov.hmrc.play.views.html.helpers.form
 @import common.Constants
 @import utils.CountriesHelper
 @import views.html.helpers.{externalLink,formHint, formInputRadioGroup, backButtonWithProgress, input, inputWithCurrencySymbol, formInlineDateInput, hiddenField, errorSummary, formHiddenYesNoRadioNoError, textArea, dropdown}
 
-@(totalAmountRaisedForm: Form[TotalAmountRaisedModel], usedInvestmentReasonBeforeForm: Form[UsedInvestmentReasonBeforeModel], previousBeforeDOFCSForm: Form[PreviousBeforeDOFCSModel], newGeographicalMarketForm: Form[NewGeographicalMarketModel],
-newProductForm: Form[NewProductModel], testTurnoverCostsForm: Form[AnnualTurnoverCostsModel], investmentGrowForm: Form[InvestmentGrowModel], confirmContactDetailsForm: Form[ConfirmContactDetailsModel], contactDetailsForm: Form[ContactDetailsModel],
-confirmCorrespondAddressForm: Form[ConfirmCorrespondAddressModel], contactAddressForm: Form[AddressModel])(implicit request: Request[_], messages: Messages)
+@(fullTimeEmployeeCountForm: Form[FullTimeEmployeeCountModel],
+  hadPreviousRFIForm: Form[HadPreviousRFIModel],
+  testPreviousSchemesForm: Form[TestPreviousSchemesModel],
+  previousSchemesSize: Int,
+  hadOtherInvestmentsForm: Form[HadOtherInvestmentsModel],
+  shareDescriptionForm: Form[ShareDescriptionModel],
+  numberOfSharesForm: Form[NumberOfSharesModel],
+  totalAmountRaisedForm: Form[TotalAmountRaisedModel],
+  usedInvestmentReasonBeforeForm: Form[UsedInvestmentReasonBeforeModel],
+  previousBeforeDOFCSForm: Form[PreviousBeforeDOFCSModel],
+  newGeographicalMarketForm: Form[NewGeographicalMarketModel],
+  newProductForm: Form[NewProductModel],
+  testTurnoverCostsForm: Form[AnnualTurnoverCostsModel],
+  thirtyDayRuleForm: Form[ThirtyDayRuleModel],
+  marketDescriptionForm: Form[MarketDescriptionModel],
+  investmentGrowForm: Form[InvestmentGrowModel],
+  testInvestorModeOptionsForm:Form[TestInvestorModeOptionsModel])(implicit request: Request[_], messages: Messages)
 @main_template(Messages("page.test.page-two.title")) {
 <div class="grid-row">
 
     @form(action = testOnly.controllers.eis.routes.TestEndpointEISController.submitPageTwo()) {
-    <h2>How much you want to raise</h2>
+    <h2>Full Time Employee Count</h2>
+    <div class="form-group">
+        @input(
+        fullTimeEmployeeCountForm("employeeCount"),
+        '_divClass -> "form-label",
+        '_labelId -> "label-fullTimeEmployeeCount",
+        '_label -> Messages("page.companyDetails.fullTimeEmployeeCount.heading"),
+        '_labelTextClass -> "visuallyhidden",
+        '_maxlength -> "9",
+        '_inputClass -> "input--normal"
+        )
+    </div>
+    <h2>Used Investment Scheme Before</h2>
+    <div class="form-group">
+        @formInputRadioGroup(
+        field = hadPreviousRFIForm("hadPreviousRFI"),
+        Seq(
+        Constants.StandardRadioButtonYesValue -> Messages("common.radioYesLabel"),
+        Constants.StandardRadioButtonNoValue -> Messages("common.radioNoLabel")),
+        '_legend -> Messages("page.previousInvestment.hadPreviousRFI.heading"),
+        '_legendClass -> "visuallyhidden",
+        '_labelAfter -> true,
+        '_labelClass -> "block-label",
+        '_legendID -> "hadPreviousRFI",
+        '_groupClass -> "inline"
+        )
+    </div>
+
+    <h2>Had other previous investments Before</h2>
+    <div class="form-group">
+        @formInputRadioGroup(
+        field = hadOtherInvestmentsForm("hadOtherInvestments"),
+        Seq(
+        Constants.StandardRadioButtonYesValue -> Messages("common.radioYesLabel"),
+        Constants.StandardRadioButtonNoValue -> Messages("common.radioNoLabel")),
+        '_legend -> Messages("page.previousInvestment.hadOtherInvestments.heading"),
+        '_legendClass -> "visuallyhidden",
+        '_labelAfter -> true,
+        '_labelClass -> "block-label",
+        '_legendID -> "hadOtherInvestments",
+        '_groupClass -> "inline"
+        )
+    </div>
+
+    <h2>Add Previous Scheme</h2>
+
+    @for(previousScheme <- 0 to previousSchemesSize - 1) {
+    <div class="form-group">
+        <h3>Scheme @(previousScheme + 1)</h3>
+        <div class="form-group">
+            @formInputRadioGroup(
+            field = testPreviousSchemesForm(s"testPreviousSchemes[$previousScheme].schemeTypeDesc"),
+            Seq(
+            Constants.schemeTypeEis->Messages("page.previousInvestment.schemeType.eis"),
+            Constants.schemeTypeSeis->Messages("page.previousInvestment.schemeType.seis"),
+            Constants.schemeTypeSitr->Messages("page.previousInvestment.schemeType.sitr"),
+            Constants.schemeTypeVct->Messages("page.previousInvestment.schemeType.vct"),
+            Constants.schemeTypeOther->Messages("page.previousInvestment.schemeType.other")),
+            '_legend -> Messages("page.investment.PreviousScheme.schemeType"),
+            '_legendClass -> "heading-small",
+            '_legendID -> "scheme-type",
+            '_labelAfter -> true,
+            '_labelClass -> "block-label"
+            )
+        </div>
+
+        <div class="panel-indent form-group"  id="other-scheme">
+            @input(
+            testPreviousSchemesForm(s"testPreviousSchemes[$previousScheme].previousSchemeOtherSchemeName"),
+            '_divClass -> "form-label",
+            '_labelId -> "label-other-scheme",
+            '_hintId -> "label-other-scheme-hint",
+            '_label -> Messages("page.investment.PreviousScheme.otherSchemeName.label"),
+            '_labelTextClass -> "heading-small block",
+            '_inputHint -> "",
+            '_inputClass -> "",
+            '_type -> "text",
+            '_maxlength -> "50",
+            'id -> "previousSchemeOtherSchemeName"
+            )
+
+        </div>
+        <div class="form-group"></div>
+
+        <div class="form-group divider--top--thick">
+            @inputWithCurrencySymbol(
+            testPreviousSchemesForm(s"testPreviousSchemes[$previousScheme].previousSchemeInvestmentAmount"),
+            '_divClass -> "form-label",
+            '_labelId -> "label-amount",
+            '_hintId -> "label-amount-hint",
+            '_label -> Messages("page.investment.PreviousScheme.investmentAmount"),
+            '_labelTextClass -> "heading-small block",
+            '_inputHint -> "",
+            '_inputClass -> "input--normal input--no-spinner input--left-padding",
+            '_type -> "text",
+            '_maxlength -> "9",
+            'id -> "previousSchemeInvestmentAmount"
+            )
+        </div>
+
+        <div class="panel-indent" id="investment-spent">
+            @inputWithCurrencySymbol(
+            testPreviousSchemesForm(s"testPreviousSchemes[$previousScheme].previousSchemeInvestmentSpent"),
+            '_divClass -> "form-label",
+            '_labelId -> "label-amount-spent",
+            '_hintId -> "label-amount-spent-hint",
+            '_label -> Messages("page.previousInvestment.amountSpent.label"),
+            '_labelTextClass -> "heading-small block",
+            '_inputHint -> "",
+            '_inputClass -> "input--normal input--no-spinner input--left-padding",
+            '_type -> "text",
+            '_maxlength -> "9",
+            'id -> "previousSchemeInvestmentSpent"
+            )
+        </div>
+        <div class="form-group"></div>
+
+        <div class="form-group divider--top--thick"></div>
+
+        @formInlineDateInput(testPreviousSchemesForm,s"testPreviousSchemes[$previousScheme].previousSchemeInvestment",
+        Some(Messages("page.previousInvestment.reviewPreviousSchemes.dateOfShareIssue")),
+        false, Some(Messages("common.date.hint.example")), Some("heading-small"))
+
+        <div>
+            <input type="hidden" name="testPreviousSchemes[@previousScheme].previousSchemeProcessingId" id="testPreviousSchemes[@previousScheme].previousSchemeProcessingId" value="@{previousScheme + 1}" />
+        </div>
+    </div>
+    }
+
+
+    <h2>Share Description/Market Description/Investment Grow</h2>
+    <div class="form-group">
+        <span class = "form-hint" id="desc-one">@Messages("page.shares.shareDescription.question.hint")</span>
+        @textArea(
+        shareDescriptionForm("descriptionTextArea"),
+        '_cols -> "45",
+        '_rows -> "3",
+        '_maxLength-> Constants.shortTextLimit,
+        '_label-> Messages("page.shares.shareDescription.heading"),
+        '_labelTextClass-> "visuallyhidden"
+        )
+    </div>
+
+    <h2>Number of shares</h2>
+    <div class="form-group">
+        @input(
+        numberOfSharesForm("numberOfShares"),
+        '_divClass -> "form-label",
+        '_labelId -> "label-numberOfShares",
+        '_label -> Messages("page.shareDetails.numberOfShares.heading"),
+        '_labelTextClass -> "visuallyhidden",
+        '_maxlength -> "25",
+        '_inputClass -> "input--fullwidth"
+        )
+    </div>
+
+
+    <h2>Total Amount Raised</h2>
     <div class="form-group">
         @inputWithCurrencySymbol(
         totalAmountRaisedForm("amount"),
@@ -253,195 +423,41 @@ confirmCorrespondAddressForm: Form[ConfirmCorrespondAddressModel], contactAddres
         </table>
     </div>
 
-    <h2>How you plan to use investment</h2>
+    <h2>30 Day Rule</h2>
     <div class="form-group">
-        <span id="description-two">@Messages("page.investment.InvestmentGrow.description.two")</span>
-        <ul id="optional-bullet-list" class="list list-bullet">
-            <li id="bullet-geographical-market">@Messages("page.investment.InvestmentGrow.bullet.geographicalMarket")</li>
-            <li id="bullet-product-market">@Messages("page.investment.InvestmentGrow.bullet.productMarket")</li>
-        </ul>
-    </div>
-    <div class="form-group">
-        <span class = "form-hint" id="desc-one">@Messages("page.investment.InvestmentGrow.question.hint")</span>
-        @textArea(
-        investmentGrowForm("descriptionTextArea"),
-        '_cols -> "50",
-        '_rows -> "10",
-        '_maxLength-> Constants.SuggestedTextMaxLength,
-        '_label-> Messages("page.investment.InvestmentGrow.heading"),
-        '_labelTextClass-> "visuallyhidden"
-        )
-    </div>
-
-    <h2>Confirm Contact Details</h2>
-    <div class="form-group">
-
-        <div id="storedContactDetailsDiv" class="form-group">
-            <input id="contactDetails.forename" name="contactDetails.forename" type="text" class="form-group" value="testName1"/>
-            <input id="contactDetails.surname" name="contactDetails.surname" type="text" class="form-group" value="testName2"/>
-            <input id="contactDetails.telephoneNumber" name="contactDetails.telephoneNumber" type="text" class="form-group" value="000000000000"/>
-            <input id="contactDetails.mobileNumber" name="contactDetails.mobileNumber" type="text" class="form-group" value="000000000001"/>
-            <input id="contactDetails.email" name="contactDetails.email" type="text" class="form-group" value="test&commat;test.com"/>
-        </div>
-
         @formInputRadioGroup(
-        field = confirmContactDetailsForm("contactDetailsUse"),
+        field = thirtyDayRuleForm("thirtyDayRule"),
         Seq(
-        Constants.StandardRadioButtonYesValue->Messages("common.radioYesLabel"),
-        Constants.StandardRadioButtonNoValue->Messages("common.radioNoLabel")),
-        '_legend -> Messages("page.contactInformation.ConfirmContactDetails.heading"),
+        Constants.StandardRadioButtonYesValue -> Messages("common.radioYesLabel"),
+        Constants.StandardRadioButtonNoValue -> Messages("common.radioNoLabel")),
+        '_legend -> Messages("page.ThirtyDayRule.legend"),
         '_legendClass -> "visuallyhidden",
         '_labelAfter -> true,
         '_labelClass -> "block-label",
+        '_legendID -> "thirtyDayRule",
         '_groupClass -> "inline"
         )
     </div>
 
-    <h2>Contact Details</h2>
+    <h2>Investors</h2>
     <div class="form-group">
-
-        @input(
-        contactDetailsForm("forename"),
-        '_divClass -> "form-label",
-        '_labelId -> "label-forename",
-        '_label -> Messages("page.contactInformation.contactDetails.forename.label"),
-        '_maxlength -> "35",
-        '_inputClass -> "input--medium input--cleared",
-        'id -> "forename"
-        )
-
-        @input(
-        contactDetailsForm("surname"),
-        '_divClass -> "form-label",
-        '_labelId -> "label-surname",
-        '_label -> Messages("page.contactInformation.contactDetails.surname.label"),
-        '_maxlength -> "35",
-        '_inputClass -> "input--medium input--cleared",
-        'id -> "surname"
-        )
-
-        @input(
-        contactDetailsForm("telephoneNumber"),
-        '_divClass -> "form-label",
-        '_labelId -> "label-telephoneNumber",
-        '_label -> Messages("page.contactInformation.contactDetails.phoneNumber.label"),
-        '_maxlength -> "24",
-        '_inputClass -> "input--medium input--cleared",
-        'id -> "phoneNumber"
-        )
-
-        @input(
-        contactDetailsForm("mobileNumber"),
-        '_divClass -> "form-label",
-        '_labelId -> "label-mobileNumber",
-        '_label -> Messages("page.contactInformation.contactDetails.mobileNumber.label"),
-        '_maxlength -> "24",
-        '_inputClass -> "input--medium input--cleared",
-        'id -> "mobileNumber"
-        )
-
-        @input(
-        contactDetailsForm("email"),
-        '_divClass -> "form-label",
-        '_labelId -> "label-email",
-        '_label -> Messages("page.contactInformation.contactDetails.email.label"),
-        '_inputClass -> "input--medium input--cleared",
-        '_maxlength -> "129",
-        'id -> "email"
-        )
-
-    </div>
-
-    <h2>Confirm Contact Address</h2>
-    <div class="form-group">
-
-        <div id="storedAddressDiv" class="form-group">
-            <input id="address.addressline1" name="address.addressline1" type="text" class="form-group" value="testLine1"/>
-            <input id="address.addressline2" name="address.addressline2" type="text" class="form-group" value="testLine2"/>
-            <input id="address.addressline3" name="address.addressline3" type="text" class="form-group" value="testLine3"/>
-            <input id="address.addressline4" name="address.addressline4" type="text" class="form-group" value="testLine4"/>
-            <input id="address.postcode" name="address.postcode" type="text" class="form-group" value="AA1 1AA"/>
-            <input id="address.countryCode" name="address.countryCode" type="text" class="form-group" value="GB"/>
-        </div>
-
         @formInputRadioGroup(
-        field = confirmCorrespondAddressForm("contactAddressUse"),
+        field = testInvestorModeOptionsForm("testInvestorModeOptions"),
         Seq(
-        Constants.StandardRadioButtonYesValue->Messages("common.radioYesLabel"),
-        Constants.StandardRadioButtonNoValue->Messages("common.radioNoLabel")),
-        '_legend -> Messages("page.contactInformation.ConfirmCorrespondAddress.title"),
+        "1" -> "Single Investor without holdings",
+        "2" -> "Single Investor with 5 holdings",
+        "3" -> "5 Investors with 4 holdings each",
+        "4" -> "5 Investors with 4 holdings each. Last Holding incomplete",
+        "5" -> "5 Investors with 4 holdings each. Last Investor incomplete (0 holdings)",
+        "6" -> "20 complete Investors with 5 holdings each",
+        "7" -> "20 complete Investors with 0 holdings each"),
+        '_legend -> "Select the investor population option desired",
         '_legendClass -> "visuallyhidden",
         '_labelAfter -> true,
         '_labelClass -> "block-label",
-        '_groupClass -> "inline"
+        '_legendID -> "investorPopulationOptions",
+        '_groupClass -> "block"
         )
-    </div>
-
-    <h2>Contact Address</h2>
-    <div class="form-group">
-        @input(
-        contactAddressForm("addressline1"),
-        '_divClass -> "form-label",
-        '_labelId -> "label-addressline1",
-        '_label -> Messages("page.contactInformation.ProvideContactAddress.addressline1.label"),
-        '_maxlength -> "35",
-        '_inputClass -> "input--medium input--cleared",
-        'id -> "addressline1"
-        )
-    </div>
-    <div class="form-group">
-        @input(
-        contactAddressForm("addressline2"),
-        '_divClass -> "form-label",
-        '_labelId -> "label-addressline2",
-        '_label -> Messages("page.contactInformation.ProvideContactAddress.addressline2.label"),
-        '_maxlength -> "35",
-        '_inputClass -> "input--medium input--cleared",
-        'id -> "addressline2"
-        )
-    </div>
-    <div class="form-group">
-        @input(
-        contactAddressForm("addressline3"),
-        '_divClass -> "form-label",
-        '_labelId -> "label-addressline3",
-        '_label -> Messages("page.contactInformation.ProvideContactAddress.addressline3.label"),
-        '_maxlength -> "35",
-        '_inputClass -> "input--medium input--cleared",
-        'id -> "addressline3"
-        )
-    </div>
-    <div class="form-group">
-        @input(
-        contactAddressForm("addressline4"),
-        '_divClass -> "form-label",
-        '_labelId -> "label-addressline4",
-        '_label -> Messages("page.contactInformation.ProvideContactAddress.addressline4.label"),
-        '_maxlength -> "35",
-        '_inputClass -> "input--medium input--cleared",
-        'id -> "addressline4"
-        )
-    </div>
-    <div class="form-group">
-        @input(
-        contactAddressForm("postcode"),
-        '_divClass -> "form-label",
-        '_labelId -> "label-postcode",
-        '_label -> Messages("page.contactInformation.ProvideContactAddress.postcode.label"),
-        '_maxlength -> "10",
-        '_inputClass -> "input--small input--cleared",
-        'id -> "postcode"
-        )
-    </div>
-    <div class="form-group">
-        @dropdown(contactAddressForm("countryCode"),
-        elementOptions = CountriesHelper.getIsoCodeTupleList,
-        displayEmptyValue = true,
-        '_emptyValueText -> Messages("page.address.country.select"),
-        '_labelId -> "label-country",
-        '_id -> "countryCode",
-        '_inputClass -> "input--medium input--cleared",
-        '_label -> Html(Messages("page.contactInformation.ProvideContactAddress.country.label")))
     </div>
 
     <div class="form-group">
@@ -453,8 +469,8 @@ confirmCorrespondAddressForm: Form[ConfirmCorrespondAddressModel], contactAddres
             @Messages("page.test.clear-cache.button")
         </a>
 
-        <a class="btn button" id="page-one" href="@testOnly.controllers.eis.routes.TestEndpointEISController.showPageOne(None)">
-            @Messages("page.test.page-one.button")
+        <a class="btn button" id="page-three" href="@testOnly.controllers.eis.routes.TestEndpointEISController.showPageThree()">
+            @Messages("page.test.page-three.button")
         </a>
 
     </div>
