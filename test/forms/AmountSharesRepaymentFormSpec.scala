@@ -25,7 +25,7 @@ import play.api.i18n.Messages.Implicits._
 
 class AmountSharesRepaymentFormSpec extends UnitSpec with OneAppPerSuite{
 
-  val maxAmount:BigDecimal = BigDecimal("99999999999")
+  val maxAmount:BigDecimal = BigDecimal("999999999")
   val minAmount = 0
   val validAmount = 15
   val decimalAmount = BigDecimal(10.02)

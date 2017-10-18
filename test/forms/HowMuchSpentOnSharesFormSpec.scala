@@ -25,7 +25,7 @@ import uk.gov.hmrc.play.test.UnitSpec
 
 class HowMuchSpentOnSharesFormSpec extends UnitSpec with OneAppPerSuite {
 
-  val maxAmount:BigDecimal = BigDecimal("99999999999")
+  val maxAmount:BigDecimal = BigDecimal("999999999")
   val mimAmount = 0
   val invalidAmount = 12.12
   val negativeAmount = -1
