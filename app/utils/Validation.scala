@@ -35,7 +35,7 @@ import scala.util.{Failure, Success, Try}
 object Validation {
 
   val EmailThresholdLength = 132
-  val financialMaxAmountLength = 11
+  val financialMaxAmountLength = 9
 
   // use new Date() to get the date now
   lazy val sf = new SimpleDateFormat("dd/MM/yyyy")
