@@ -22,7 +22,7 @@ import config.{AppConfig, FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.Helpers.ControllerHelpers
 import forms.FullTimeEmployeeCountForm._
-import models.{FullTimeEmployeeCountModel, KiProcessingModel}
+import models.{FullTimeEmployeeCountModel, KiProcessingModel, SubsidiariesModel}
 import play.api.Play.current
 import play.api.i18n.Messages.Implicits._
 import services.SubmissionService
@@ -73,19 +73,19 @@ trait FullTimeEmployeeCountController extends FrontendController with Authorised
         validFormData => {
           s4lConnector.saveFormData[FullTimeEmployeeCountModel](KeystoreKeys.fullTimeEmployeeCount, validFormData)
           s4lConnector.saveFormData(KeystoreKeys.backLinkHadRFI, routes.HadPreviousRFIController.show().url)
-          val fteStatus = getSchemeType(s4lConnector).flatMap (schemeType => {
-            schemeType match {
-              case Constants.schemeTypeEisKi =>
-                submissionService.validateFullTimeEmployeeCount(Constants.schemeTypeEisKi, validFormData.employeeCount)
-              case Constants.schemeTypeEis =>
-                submissionService.validateFullTimeEmployeeCount(Constants.schemeTypeEis, validFormData.employeeCount)
-            }
-          })
+          val fteStatus = getSchemeType(s4lConnector).flatMap {
+            case Constants.schemeTypeEisKi =>
+              submissionService.validateFullTimeEmployeeCount(Constants.schemeTypeEisKi, validFormData.employeeCount)
+            case Constants.schemeTypeEis =>
+              submissionService.validateFullTimeEmployeeCount(Constants.schemeTypeEis, validFormData.employeeCount)
+          }
 
           fteStatus.map {
             case true => s4lConnector.saveFormData(KeystoreKeys.backLinkSubsidiaries, routes.FullTimeEmployeeCountController.show().url)
               Redirect(routes.SubsidiariesController.show())
             case false => s4lConnector.saveFormData(KeystoreKeys.backLinkSubsidiaries, routes.FullTimeEmployeeCountController.show().url)
+              // default subsidiaries to yes - remove hen subsidiaries properly implemented
+              s4lConnector.saveFormData[SubsidiariesModel](KeystoreKeys.subsidiaries, SubsidiariesModel(Constants.StandardRadioButtonNoValue))
               Redirect(routes.FullTimeEmployeeCountErrorController.show())
           }
         }
@@ -94,7 +94,7 @@ trait FullTimeEmployeeCountController extends FrontendController with Authorised
 
   def getSchemeType(s4lConnector: connectors.S4LConnector) (implicit hc: HeaderCarrier, user: TAVCUser): Future[String] = {
     s4lConnector.fetchAndGetFormData[KiProcessingModel](KeystoreKeys.kiProcessingModel).map {
-      case Some(data) if(data.isKi)=> Constants.schemeTypeEisKi
+      case Some(data) if data.isKi => Constants.schemeTypeEisKi
       case _ => Constants.schemeTypeEis
     }
   }
