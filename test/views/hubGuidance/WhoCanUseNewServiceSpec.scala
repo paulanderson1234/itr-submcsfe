@@ -49,7 +49,7 @@ class WhoCanUseNewServiceSpec extends ViewSpec {
       document.body.getElementById("reason-four").text() shouldBe Messages("page.hubGuidance.whoCanUseNewService.apply.if.four")
       document.body.getElementById("sub-heading").text() shouldBe Messages("page.hubGuidance.whoCanUseNewService.conditions.apply")
       document.body.getElementById("still-apply").text() shouldBe
-        Messages("page.hubGuidance.whoCanUseNewService.still.apply.one") + " "+ Constants.schemeTypeEis +" " +
+        Messages("page.hubGuidance.whoCanUseNewService.still.apply.one") + " " + Constants.schemeTypeEis + " " +
           "or " + Constants.schemeTypeSeis + " " + Messages("page.hubGuidance.whoCanUseNewService.still.apply.two")
 
       //link
