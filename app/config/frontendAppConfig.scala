@@ -18,7 +18,6 @@ package config
 
 import play.api.Play.{configuration, current}
 import uk.gov.hmrc.play.config.ServicesConfig
-import java.util.Base64
 
 trait AppConfig {
   val analyticsToken: String
@@ -97,16 +96,7 @@ object FrontendAppConfig extends AppConfig with ServicesConfig {
   override lazy val sendVerificationEmailURL = baseUrl("email-verification") + loadConfig("email-vs.sendVerificationEmailURL")
   override lazy val checkVerifiedEmailURL = baseUrl("email-verification") + loadConfig("email-vs.checkVerifiedEmailURL")
 
-
-
   val attachmentFileUploadOutsideUrl =
     s"$attachmentsFrontEndServiceBaseUrl/file-upload?continueUrl=$submissionFrontendServiceBaseUrl" +
       s"/check-your-documents&backUrl=$submissionFrontendServiceBaseUrl/supporting-documents-upload"
-
-  private def whitelistConfig(key: String): Seq[String] = Some(new String(Base64.getDecoder
-    .decode(loadConfig(key)), "UTF-8"))
-    .map(_.split(",")).getOrElse(Array.empty).toSeq
-
-  lazy val whitelist = whitelistConfig("whitelist")
-  lazy val whitelistExcluded = whitelistConfig("whitelist-excluded")
 }
