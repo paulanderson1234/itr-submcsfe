@@ -759,13 +759,12 @@ page.shareDetails.totalAmountRaised.descriptionOne.text=You must only include th
 page.hubGuidance.whoCanUseNewService.title=Who can use this new service
 page.hubGuidance.whoCanUseNewService.heading=Who can use this new service
 page.hubGuidance.whoCanUseNewService.apply.if=At the moment, you can only use the new online service if your company:
-page.hubGuidance.whoCanUseNewService.apply.if.one=is applying for the Enterprise Investment Scheme (EIS) or Seed Enterprise Investment Scheme (SEIS)
+page.hubGuidance.whoCanUseNewService.apply.if.one=is applying for the Enterprise Investment Scheme, Seed Enterprise Investment Scheme or for investment from a Venture Capital Trust
 page.hubGuidance.whoCanUseNewService.apply.if.two=isn''t using an agent to apply
 page.hubGuidance.whoCanUseNewService.apply.if.three=isn''t part of a group of companies
-page.hubGuidance.whoCanUseNewService.apply.if.four=didn''t acquire the business activity you raised investment for
-page.hubGuidance.whoCanUseNewService.conditions.apply=If you don''t meet these conditions
-page.hubGuidance.whoCanUseNewService.still.apply.one=You can still use our existing forms to submit an
-page.hubGuidance.whoCanUseNewService.still.apply.two=Compliance Statement.
+page.hubGuidance.whoCanUseNewService.conditions.apply.one=If you don''t meet these conditions, you can still apply for Advance Assurance or submit a Compliance Statement.
+page.hubGuidance.whoCanUseNewService.conditions.apply.two=Find out how to use our existing service.
+
 
 page.hubGuidance.hubGuidanceFeedback.title=Feedback
 page.hubGuidance.hubGuidanceFeedback.heading=Feedback
