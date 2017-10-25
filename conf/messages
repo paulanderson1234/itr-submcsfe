@@ -1056,3 +1056,18 @@ page.termsAndConditions.declaration.four.bullet.two=the company either exists fo
 page.termsAndConditions.declaration.four.bullet.three=the company issuing the shares has a permanent establishment in the UK
 page.termsAndConditions.declaration.four.bullet.four=the company only has qualifying subsidiaries
 page.termsAndConditions.declaration.four.bullet.five=any property managing subsidiary is a qualifying 90% subsidiary
+
+# Terms and conditions EIS-specific
+
+page.termsAndConditions.eis.declaration.one.bullet.two=the money raised in this share issue will be employed for the business activity you’ve told us about in this Compliance Statement, within 2 years from the share issue date. Or, within 2 years after starting the trade if the money raised will be employed for preparing to trade and this date is later
+
+page.termsAndConditions.eis.declaration.two.bullet.five=the company had fewer than either 250 full-time equivalent employees or 500 full-time equivalent employees if it''s a knowledge-intensive company
+page.termsAndConditions.eis.declaration.two.bullet.six=immediately before the share issue the company and its subsidiaries'' assets didn''t exceed £15 million and immediately after the issue the value didn''t exceed £16 million
+page.termsAndConditions.eis.declaration.two.bullet.seven=the company was an unquoted company and there were no arrangements in existence for it to stop being so
+
+page.termsAndConditions.eis.declaration.three.heading=3. The following conditions have been met from the share issue date to the date of this declaration and the company intends to meet them until the third anniversary of the share issue date. If the money was raised for a trade that started after the share issue date, then the company intends to meet these conditions for 3 years after the date the trade began:
+page.termsAndConditions.eis.declaration.three.bullet.three=the shares are ordinary shares which have never carried any preferential right to the company''s assets or any right to be redeemed. They must meet the requirements of EIS about restrictions on preferential rights to dividends
+page.termsAndConditions.eis.declaration.three.bullet.four=the company either exists for the purpose of carrying out one or more new qualifying business activities or is the parent company of a trading group
+page.termsAndConditions.eis.declaration.three.bullet.five=the company issuing the shares has a permanent establishment in the UK
+page.termsAndConditions.eis.declaration.three.bullet.six=the company only has qualifying subsidiaries
+page.termsAndConditions.eis.declaration.three.bullet.seven=any property managing subsidiary is a qualifying 90% subsidiary
