@@ -46,18 +46,12 @@ class WhoCanUseNewServiceSpec extends ViewSpec {
       document.body.getElementById("reason-one").text() shouldBe Messages("page.hubGuidance.whoCanUseNewService.apply.if.one")
       document.body.getElementById("reason-two").text() shouldBe Messages("page.hubGuidance.whoCanUseNewService.apply.if.two")
       document.body.getElementById("reason-three").text() shouldBe Messages("page.hubGuidance.whoCanUseNewService.apply.if.three")
-      document.body.getElementById("reason-four").text() shouldBe Messages("page.hubGuidance.whoCanUseNewService.apply.if.four")
-      document.body.getElementById("sub-heading").text() shouldBe Messages("page.hubGuidance.whoCanUseNewService.conditions.apply")
-      document.body.getElementById("still-apply").text() shouldBe
-        Messages("page.hubGuidance.whoCanUseNewService.still.apply.one") + " "+ Constants.schemeTypeEis +" " +
-          "or " + Constants.schemeTypeSeis + " " + Messages("page.hubGuidance.whoCanUseNewService.still.apply.two")
+      document.body.getElementById("still-apply").text() shouldBe Messages("page.hubGuidance.whoCanUseNewService.conditions.apply.one") +
+        " " + Messages("page.hubGuidance.whoCanUseNewService.conditions.apply.two")
 
       //link
-      document.body.getElementById("eis-guidance").text() shouldBe Constants.schemeTypeEis
-      document.body.getElementById("seis-guidance").text() shouldBe Constants.schemeTypeSeis
-      document.body.getElementById("eis-guidance").attr("href") shouldBe Constants.eisGuidanceRedirectUrl
-      document.body.getElementById("seis-guidance").attr("href") shouldBe Constants.seisGuidanceRedirectUrl
-
+      document.body.getElementById("guidance").text() shouldBe Messages("page.hubGuidance.whoCanUseNewService.conditions.apply.two")
+      document.body.getElementById("guidance").attr("href") shouldBe Constants.guidanceRedirectUrl
       //continue button
       document.body.getElementById("next").text() shouldBe Messages("common.button.continue")
     }
