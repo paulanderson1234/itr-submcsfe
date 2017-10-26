@@ -1041,7 +1041,7 @@ page.termsAndConditions.declaration.two.bullet.four=the issuing arrangements did
 page.termsAndConditions.declaration.two.bullet.five=the company had fewer than 25 full-time equivalent employees
 page.termsAndConditions.declaration.two.bullet.six=immediately before the share issue the company and its subsidiaries'' assets didn''t exceed £200,000
 page.termsAndConditions.declaration.two.bullet.seven=before the share issue, neither the company, nor any company which is a subsidiary at the time of issue, has had investment from a Venture Capital Trust (VCT) or has provided a Compliance Statement under the Enterprise Investment Scheme (EIS)
-page.termsAndConditions.declaration.two.bullet.eight=the new qualifying business activity that the shares were issued for hasn’t been carried on by the issuing company or by any other person at any date earlier than 2 years prior to the share issue date
+page.termsAndConditions.declaration.two.bullet.eight=the new qualifying business activity that the shares were issued for hasn''t been carried on by the issuing company or by any other person at any date earlier than 2 years prior to the share issue date
 page.termsAndConditions.declaration.two.bullet.nine=the company was an unquoted company and there were no arrangements in existence for it to stop being so
 
 page.termsAndConditions.declaration.three.heading=3. The following conditions were met from the date of the incorporation of the company to the date of this declaration. The company intends to meet them until the third anniversary of the share issue date:
@@ -1059,7 +1059,7 @@ page.termsAndConditions.declaration.four.bullet.five=any property managing subsi
 
 # Terms and conditions EIS-specific
 
-page.termsAndConditions.eis.declaration.one.bullet.two=the money raised in this share issue will be employed for the business activity you’ve told us about in this Compliance Statement, within 2 years from the share issue date. Or, within 2 years after starting the trade if the money raised will be employed for preparing to trade and this date is later
+page.termsAndConditions.eis.declaration.one.bullet.two=the money raised in this share issue will be employed for the business activity you''ve told us about in this Compliance Statement, within 2 years from the share issue date. Or, within 2 years after starting the trade if the money raised will be employed for preparing to trade and this date is later
 
 page.termsAndConditions.eis.declaration.two.bullet.five=the company had fewer than either 250 full-time equivalent employees or 500 full-time equivalent employees if it''s a knowledge-intensive company
 page.termsAndConditions.eis.declaration.two.bullet.six=immediately before the share issue the company and its subsidiaries'' assets didn''t exceed £15 million and immediately after the issue the value didn''t exceed £16 million
