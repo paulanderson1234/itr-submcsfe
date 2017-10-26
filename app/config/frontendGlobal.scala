@@ -70,9 +70,4 @@ object AuditFilter extends FrontendAuditFilter with RunMode with AppName with Mi
   override def controllerNeedsAuditing(controllerName: String): Boolean = ControllerConfiguration.paramsForController(controllerName).needsAuditing
 }
 
-object ProductionFrontendGlobal extends FrontendGlobal {
-
-  override def filters = WhitelistFilter +: super.filters
-}
-
 
