@@ -5,7 +5,6 @@ object FrontendBuild extends Build with MicroService {
 
  val appName = "investment-tax-relief-submission-cs-frontend"
 
-
   override lazy val appDependencies: Seq[ModuleID] = AppDependencies()
 }
 
@@ -30,7 +29,6 @@ private object AppDependencies {
   private val pegDownVersion = "1.6.0"
   private val jSoupVersion = "1.8.3"
   private val mockitoAll = "1.9.5"
-  private val ipWhiteList = "2.0.0"
 
   val compile = Seq(
     ws,
@@ -44,8 +42,7 @@ private object AppDependencies {
     "uk.gov.hmrc" %% "play-ui" % playUiVersion,
     "uk.gov.hmrc" %% "http-caching-client" % cachingClientVersion,
     "uk.gov.hmrc" %% "mongo-caching" % mongoCachingVersion,
-    "uk.gov.hmrc" %% "play-conditional-form-mapping" % playConditionalMappingVersion,
-    "uk.gov.hmrc" %% "play-whitelist-filter" % ipWhiteList
+    "uk.gov.hmrc" %% "play-conditional-form-mapping" % playConditionalMappingVersion
   )
 
 
