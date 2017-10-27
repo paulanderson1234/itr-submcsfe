@@ -21,10 +21,12 @@ import config.FrontendAppConfig
 import connectors.{AttachmentsConnector, AttachmentsFrontEndConnector}
 import models.fileUpload.{Envelope, EnvelopeFile}
 import play.Logger
+import play.api.libs.json.JsValue
 import play.mvc.Http.Status._
 import uk.gov.hmrc.play.http.{HeaderCarrier, HttpResponse}
 
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.parsing.json.JSON
 
 object FileUploadService extends FileUploadService {
   override val attachmentsFrontEndConnector = AttachmentsFrontEndConnector
@@ -73,6 +75,18 @@ trait FileUploadService {
     checkEnvelopeStatus(envelopeID).map {
       case Some(envelope) => envelope.files.getOrElse(Seq())
       case _ => Seq()
+    }
+  }
+
+  def getFileData(envelopeID: String, fileId: String)(implicit hc: HeaderCarrier, ex: ExecutionContext): Future[String] = {
+    attachmentsConnector.getFileData(envelopeID, fileId).map {
+      result => result.status match {
+        case OK => Logger.warn(s" FILE DATA :: \n${result.body}")
+          result.body
+        case _ =>
+          Logger.warn(s"[FileUploadConnector][checkEnvelopeStatus] Error ${result.status} received.")
+          result.body
+      }
     }
   }
 }
