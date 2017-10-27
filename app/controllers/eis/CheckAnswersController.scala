@@ -88,7 +88,7 @@ trait CheckAnswersController extends FrontendController with AuthorisedAndEnroll
     thirtyDayRuleModel, anySharesRepaymentModel, newGeographicalMarket, newProduct, contactDetails, contactAddress,
     investmentGrowModel, qualifyBusinessActivity, hasInvestmentTradeStarted, shareIssueDate, grossAssets, fullTimeEmployees,
     shareDescription, numberOfShares, investorDetails, valueReceived, shareCapitalChanges, marketDescription, repaymentDetails,
-    grossAssetsAfterIssue, turnoverCosts, researchStartDateModel, applicationConfig.uploadFeatureEnabled)
+    grossAssetsAfterIssue, turnoverCosts, researchStartDateModel)
 
 
   def show(envelopeId: Option[String]): Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user => implicit request =>

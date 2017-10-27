@@ -42,7 +42,7 @@ class CheckAnswersInvestorSpec extends CheckAnswersSpec {
         Some(hasInvestmentTradeStartedModelYes), Some(shareIssuetDateModel), Some(grossAssetsModel), Some(fullTimeEmployeeModel),
         Some(shareDescriptionModel), Some(numberOfSharesModel), Some(listOfInvestorsWithShareHoldings), Some(wasAnyValueReceivedModel), Some(shareCapitalChangesModel),
         Some(MarketDescriptionModel("test")), Some(validSharesRepaymentDetailsVector), Some(grossAssetsAfterIssueModel),
-        Some(turnoverCostsValid), Some(researchStartDateModelYes), false)
+        Some(turnoverCostsValid), Some(researchStartDateModelYes))
       val page = CheckAnswers(model)(authorisedFakeRequest, applicationMessages)
       val document = Jsoup.parse(page.body)
 
@@ -118,7 +118,7 @@ class CheckAnswersInvestorSpec extends CheckAnswersSpec {
         Some(hasInvestmentTradeStartedModelYes), Some(shareIssuetDateModel), Some(grossAssetsModel), Some(fullTimeEmployeeModel),
         Some(shareDescriptionModel), Some(numberOfSharesModel), None, None, None, Some(MarketDescriptionModel("test")),
         None, Some(grossAssetsAfterIssueModel),
-        Some(turnoverCostsValid), Some(researchStartDateModelYes), false)
+        Some(turnoverCostsValid), Some(researchStartDateModelYes))
       val page = CheckAnswers(model)(authorisedFakeRequest, applicationMessages)
       val document = Jsoup.parse(page.body)
 

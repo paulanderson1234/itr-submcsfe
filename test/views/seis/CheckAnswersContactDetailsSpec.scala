@@ -31,7 +31,7 @@ class CheckAnswersContactDetailsSpec extends CheckAnswersSpec {
     "Verify that the Check Answers page contains the correct elements for Section 4: Contact Details" +
       " when the contact details model is fully populated" in {
       val model = SEISCheckAnswersModel(None, None, None, Vector(), Some(contactDetailsModel), Some(contactAddressModel),
-        None, None, None, None, None, None, None, None, None, None, None, None, None, None, false)
+        None, None, None, None, None, None, None, None, None, None, None, None, None, None)
       val page = CheckAnswers(model)(authorisedFakeRequest, applicationMessages)
       val document = Jsoup.parse(page.body)
 
@@ -72,7 +72,7 @@ class CheckAnswersContactDetailsSpec extends CheckAnswersSpec {
     "Verify that the Check Answers page contains an empty table for Section 4: Contact Details" +
       " when the contact details model is not populated" in {
       val model = SEISCheckAnswersModel(None, None, None, Vector(), None, None,
-        None, None, None, None, None, None, None, None, None, None, None, None, None, None, false)
+        None, None, None, None, None, None, None, None, None, None, None, None, None, None)
       val page = CheckAnswers(model)(authorisedFakeRequest, applicationMessages)
       val document = Jsoup.parse(page.body)
 

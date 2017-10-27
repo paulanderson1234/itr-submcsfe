@@ -49,7 +49,7 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
         Some(shareDescriptionModel), Some(numberOfSharesModel), Some(listOfInvestorsWithShareHoldings), Some(WasAnyValueReceivedModel(Constants.StandardRadioButtonYesValue,
           Some("text"))), Some(ShareCapitalChangesModel(Constants.StandardRadioButtonYesValue, Some("test"))), Some(MarketDescriptionModel("test")),
         Some(validSharesRepaymentDetailsVector), Some(grossAssetsAfterIssueModel),
-        Some(turnoverCostsValid), Some(researchStartDateModelYes), attachmentsEnabled = false)
+        Some(turnoverCostsValid), Some(researchStartDateModelYes))
 
       val page = CheckAnswers(model)(authorisedFakeRequest, applicationMessages)
       val document = Jsoup.parse(page.body)
@@ -196,7 +196,7 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
         .attr("href") shouldEqual controllers.eis.routes.FullTimeEmployeeCountController.show().url
 
       document.getElementById("submit").text() shouldBe Messages("page.checkAndSubmit.checkAnswers.button.confirm")
-      document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.SupportingDocumentsController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.SupportingDocumentsUploadController.show().url
     }
   }
 
@@ -214,7 +214,7 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
         Some(shareDescriptionModel), Some(numberOfSharesModel), Some(listOfInvestorsWithShareHoldings), Some(WasAnyValueReceivedModel(Constants.StandardRadioButtonYesValue,
           Some("text"))), Some(ShareCapitalChangesModel(Constants.StandardRadioButtonYesValue, Some("test"))), Some(MarketDescriptionModel("test")),
         Some(validSharesRepaymentDetailsVector), Some(grossAssetsAfterIssueModel),
-        Some(turnoverCostsValid), Some(researchStartDateModelYes), false)
+        Some(turnoverCostsValid), Some(researchStartDateModelYes))
 
       val page = CheckAnswers(model)(authorisedFakeRequest, applicationMessages)
       val document = Jsoup.parse(page.body)
@@ -349,7 +349,7 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
         .attr("href") shouldEqual controllers.eis.routes.FullTimeEmployeeCountController.show().url
 
       document.getElementById("submit").text() shouldBe Messages("page.checkAndSubmit.checkAnswers.button.confirm")
-      document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.SupportingDocumentsController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.SupportingDocumentsUploadController.show().url
     }
   }
 
@@ -367,7 +367,7 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
         Some(shareDescriptionModel), Some(numberOfSharesModel), Some(listOfInvestorsWithShareHoldings), Some(WasAnyValueReceivedModel(Constants.StandardRadioButtonYesValue,
           Some("text"))), Some(ShareCapitalChangesModel(Constants.StandardRadioButtonYesValue, Some("test"))), Some(MarketDescriptionModel("test")),
         Some(validSharesRepaymentDetailsVector), Some(grossAssetsAfterIssueModel),
-        Some(turnoverCostsValid), Some(researchStartDateModelYes), false)
+        Some(turnoverCostsValid), Some(researchStartDateModelYes))
 
       val page = CheckAnswers(model)(authorisedFakeRequest, applicationMessages)
       val document = Jsoup.parse(page.body)
@@ -497,7 +497,7 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
         .attr("href") shouldEqual controllers.eis.routes.FullTimeEmployeeCountController.show().url
 
       document.getElementById("submit").text() shouldBe Messages("page.checkAndSubmit.checkAnswers.button.confirm")
-      document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.SupportingDocumentsController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.SupportingDocumentsUploadController.show().url
     }
   }
 
@@ -514,7 +514,7 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
         Some(shareDescriptionModel), Some(numberOfSharesModel), Some(listOfInvestorsWithShareHoldings), Some(WasAnyValueReceivedModel(Constants.StandardRadioButtonYesValue,
           Some("text"))), Some(ShareCapitalChangesModel(Constants.StandardRadioButtonYesValue, Some("test"))), Some(MarketDescriptionModel("test")),
         Some(validSharesRepaymentDetailsVector), Some(grossAssetsAfterIssueModel),
-        Some(turnoverCostsValid), Some(researchStartDateModelYes), false)
+        Some(turnoverCostsValid), Some(researchStartDateModelYes))
 
       val page = CheckAnswers(model)(authorisedFakeRequest, applicationMessages)
       val document = Jsoup.parse(page.body)
@@ -602,7 +602,7 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
       companyDetailsTableTBody.select("tr").get(9).getElementById("fullTimeEmployees-link")
         .attr("href") shouldEqual controllers.eis.routes.FullTimeEmployeeCountController.show().url
       document.getElementById("submit").text() shouldBe Messages("page.checkAndSubmit.checkAnswers.button.confirm")
-      document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.SupportingDocumentsController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.SupportingDocumentsUploadController.show().url
     }
   }
 
@@ -621,7 +621,7 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
         Some(WasAnyValueReceivedModel(Constants.StandardRadioButtonYesValue, Some("text"))),
         Some(ShareCapitalChangesModel(Constants.StandardRadioButtonYesValue, Some("test"))), Some(MarketDescriptionModel("test")),
         Some(validSharesRepaymentDetailsVector), Some(grossAssetsAfterIssueModel),
-        Some(turnoverCostsValid), Some(researchStartDateModelYes), false)
+        Some(turnoverCostsValid), Some(researchStartDateModelYes))
 
       val page = CheckAnswers(model)(authorisedFakeRequest, applicationMessages)
       val document = Jsoup.parse(page.body)
@@ -755,7 +755,7 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
         .attr("href") shouldEqual controllers.eis.routes.FullTimeEmployeeCountController.show().url
 
       document.getElementById("submit").text() shouldBe Messages("page.checkAndSubmit.checkAnswers.button.confirm")
-      document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.SupportingDocumentsController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.SupportingDocumentsUploadController.show().url
     }
   }
 
@@ -774,7 +774,7 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
         Some(WasAnyValueReceivedModel(Constants.StandardRadioButtonYesValue, Some("text"))),
         Some(ShareCapitalChangesModel(Constants.StandardRadioButtonYesValue, Some("test"))), Some(MarketDescriptionModel("test")),
         Some(validSharesRepaymentDetailsVector), Some(grossAssetsAfterIssueModel),
-        Some(turnoverCostsValid), Some(researchStartDateModelYes), false)
+        Some(turnoverCostsValid), Some(researchStartDateModelYes))
 
       val page = CheckAnswers(model)(authorisedFakeRequest, applicationMessages)
       val document = Jsoup.parse(page.body)
@@ -921,7 +921,7 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
         .attr("href") shouldEqual controllers.eis.routes.FullTimeEmployeeCountController.show().url
 
       document.getElementById("submit").text() shouldBe Messages("page.checkAndSubmit.checkAnswers.button.confirm")
-      document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.SupportingDocumentsController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.SupportingDocumentsUploadController.show().url
     }
   }
 }
