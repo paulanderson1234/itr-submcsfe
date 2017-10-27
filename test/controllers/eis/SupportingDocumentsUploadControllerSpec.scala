@@ -67,7 +67,7 @@ class SupportingDocumentsUploadControllerSpec extends BaseSpec {
       }
     }
 
-    "Sending a GET request to SupportingDocumentsUploadController with upload feature enabled" should {
+    "Sending a GET request to SupportingDocumentsUploadController" should {
       "return a 200 OK" in {
         mockEnrolledRequest(eisSchemeTypesModel)
         setupMocks(Some(routes.ConfirmCorrespondAddressController.show().url), Some(supportingDocumentsUploadDoUpload))
@@ -101,7 +101,7 @@ class SupportingDocumentsUploadControllerSpec extends BaseSpec {
       }
     }
 
-    "Posting to the SupportingDocumentsUploadController when authenticated and enrolledd" should {
+    "Posting 'Yes' to the SupportingDocumentsUploadController when authenticated and enrolled" should {
       "redirect to Check your answers page" in {
         mockEnrolledRequest(eisSchemeTypesModel)
         setupMocks()
@@ -112,7 +112,7 @@ class SupportingDocumentsUploadControllerSpec extends BaseSpec {
       }
     }
 
-    "Posting to the SupportingDocumentsUploadController when authenticated and enrolled" should {
+    "Posting 'No' to the SupportingDocumentsUploadController when authenticated and enrolled" should {
       "redirect to Check your answers page" in {
         mockEnrolledRequest(eisSchemeTypesModel)
         setupMocks()

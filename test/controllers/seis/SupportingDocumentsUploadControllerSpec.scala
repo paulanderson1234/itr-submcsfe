@@ -67,7 +67,7 @@ class SupportingDocumentsUploadControllerSpec extends BaseSpec {
       }
     }
 
-    "Sending a GET request to SupportingDocumentsUploadController with upload feature enabled" should {
+    "Sending a GET request to SupportingDocumentsUploadController" should {
       "return a 200 OK" in {
         mockEnrolledRequest(seisSchemeTypesModel)
         setupMocks(Some(routes.ConfirmCorrespondAddressController.show().url), Some(supportingDocumentsUploadDoUpload))
@@ -89,7 +89,7 @@ class SupportingDocumentsUploadControllerSpec extends BaseSpec {
       }
     }
 
-    "Sending a Get request to the SupportingDocumentsUploadController when authenticated and enrolled with upload feature enabled" should {
+    "Sending a Get request to the SupportingDocumentsUploadController when authenticated and enrolled" should {
       "redirect to the confirm correspondence address page if no SupportingDocumentsUploadModel is found" in {
         mockEnrolledRequest(seisSchemeTypesModel)
         setupMocks(Some(routes.ConfirmCorrespondAddressController.show().url))
@@ -101,7 +101,7 @@ class SupportingDocumentsUploadControllerSpec extends BaseSpec {
       }
     }
 
-    "Posting to the SupportingDocumentsUploadController when authenticated and enrolled and with upload feature enabled" should {
+    "Posting 'Yes' to the SupportingDocumentsUploadController when authenticated and enrolled" should {
       "redirect to Check your answers page" in {
         mockEnrolledRequest(seisSchemeTypesModel)
         setupMocks()
@@ -112,7 +112,7 @@ class SupportingDocumentsUploadControllerSpec extends BaseSpec {
       }
     }
 
-    "Posting to the SupportingDocumentsUploadController when authenticated and enrolled and with upload feature disabled" should {
+    "Posting 'No' to the SupportingDocumentsUploadController when authenticated and enrolled" should {
       "redirect to Check your answers page" in {
         mockEnrolledRequest(seisSchemeTypesModel)
         setupMocks()
