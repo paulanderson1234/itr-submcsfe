@@ -17,7 +17,6 @@
 package services
 
 import auth.TAVCUser
-import config.FrontendAppConfig
 import connectors.{AttachmentsConnector, AttachmentsFrontEndConnector}
 import models.fileUpload.{Envelope, EnvelopeFile}
 import play.Logger
@@ -28,7 +27,6 @@ import scala.concurrent.{ExecutionContext, Future}
 
 object FileUploadService extends FileUploadService {
   override val attachmentsFrontEndConnector = AttachmentsFrontEndConnector
-  override def getUploadFeatureEnabled: Boolean = FrontendAppConfig.uploadFeatureEnabled
   override lazy val attachmentsConnector = AttachmentsConnector
 }
 
@@ -36,8 +34,6 @@ trait FileUploadService {
 
   val attachmentsFrontEndConnector: AttachmentsFrontEndConnector
   val attachmentsConnector: AttachmentsConnector
-
-  def getUploadFeatureEnabled: Boolean
 
   def closeEnvelope(tavcRef: String, envelopeId: String)(implicit hc: HeaderCarrier, ex: ExecutionContext, user: TAVCUser): Future[HttpResponse] = {
     if (envelopeId.nonEmpty) {

@@ -36,7 +36,6 @@ trait MockConfig extends AppConfig {
   override val attachmentsFrontEndServiceBaseUrl = "http://localhost:9643/investment-tax-relief-attachments-frontend"
   override val internalAttachmentsUrl = "localhost"
   override val submissionFrontendServiceBaseUrl = "http://localhost:9645/investment-tax-relief-submission"
-  override val uploadFeatureEnabled: Boolean = false
 
   override lazy val attachmentFileUploadUrl: (String) => String = schemeType =>
     s"http://localhost:9643/investment-tax-relief-attachments-frontend/file-upload?continueUrl=http://localhost:9645/" +
@@ -64,8 +63,4 @@ object MockConfigSingleFlow extends MockConfig{
 
 object MockConfigEISFlow extends MockConfig{
 
-}
-
-object MockConfigUploadFeature extends MockConfig{
-  override val uploadFeatureEnabled: Boolean = FrontendAppConfig.uploadFeatureEnabled
 }

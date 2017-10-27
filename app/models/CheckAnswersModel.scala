@@ -53,6 +53,5 @@ case class CheckAnswersModel(
                               repaymentDetails: Option[Vector[SharesRepaymentDetailsModel]],
                               grossAssetsAfterIssue: Option[GrossAssetsAfterIssueModel],
                               turnoverCosts: Option[AnnualTurnoverCostsModel],
-                              researchStartDateModel: Option[ResearchStartDateModel],
-                              attachmentsEnabled: Boolean
+                              researchStartDateModel: Option[ResearchStartDateModel]
                               )

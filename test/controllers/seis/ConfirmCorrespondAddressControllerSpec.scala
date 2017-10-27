@@ -185,7 +185,7 @@ class ConfirmCorrespondAddressControllerSpec extends BaseSpec {
       submitWithSessionAndAuth(TestController.submit, formInput: _*)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some("/investment-tax-relief-cs/seis/supporting-documents")
+          redirectLocation(result) shouldBe Some(routes.SupportingDocumentsUploadController.show().url)
         }
       )
     }
@@ -208,6 +208,7 @@ class ConfirmCorrespondAddressControllerSpec extends BaseSpec {
         result => {
           status(result) shouldBe SEE_OTHER
           redirectLocation(result) shouldBe Some("/investment-tax-relief-cs/seis/contact-address")
+          redirectLocation(result) shouldBe Some(routes.ContactAddressController.show().url)
         }
       )
     }
