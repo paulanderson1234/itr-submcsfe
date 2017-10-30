@@ -56,7 +56,7 @@ class TradingForTooLongControllerSpec extends BaseSpec {
       showWithSessionAndAuth(TestController.submit)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(routes.TurnoverCostsController.show().url)
+          redirectLocation(result) shouldBe Some(routes.InvestmentGrowController.show().url)
         }
       )
     }
