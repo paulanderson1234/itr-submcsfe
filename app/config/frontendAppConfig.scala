@@ -36,7 +36,6 @@ trait AppConfig {
   val attachmentFileUploadUrl: (String)=> String
   val internalAttachmentsUrl: String
   val attachmentsFrontEndServiceBaseUrl: String
-  val uploadFeatureEnabled: Boolean
   val submissionFrontendServiceBaseUrl: String
   val aaSubmissionFrontendServiceBaseUrl: String
   val attachmentsServiceUrl: String
@@ -85,8 +84,6 @@ object FrontendAppConfig extends AppConfig with ServicesConfig {
     s"$attachmentsFrontEndServiceBaseUrl/file-upload?continueUrl=$submissionFrontendServiceBaseUrl" +
       s"/$schemeType/check-your-answers&backUrl=$submissionFrontendServiceBaseUrl/$schemeType/supporting-documents-upload"
   }
-  override lazy val uploadFeatureEnabled: Boolean = getFeature(s"$env.features.UploadEnabled")
-
   override lazy val attachmentsServiceUrl: String = baseUrl("investment-tax-relief-attachments")
 
   override lazy val emailVerificationTemplate = loadConfig("email.emailVerificationTemplate")

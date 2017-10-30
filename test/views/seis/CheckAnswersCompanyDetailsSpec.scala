@@ -34,7 +34,7 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
       val model = SEISCheckAnswersModel(Some(registeredAddressModel), Some(dateOfIncorporationModel), Some(natureOfBusinessModel),
         Vector(), None, None, Some(qualifyTrade), Some(hasInvestmentTradeStartedModelYes),
         Some(isSeventyPercentSpentModelYes), Some(shareIssuetDateModel), grossAssets, fullTimeEmployees, None, None, None, None, None,
-        None, None, None, false)
+        None, None, None)
       val page = CheckAnswers(model)(authorisedFakeRequest, applicationMessages)
       val document = Jsoup.parse(page.body)
 
@@ -111,7 +111,7 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
         .attr("href") shouldEqual controllers.seis.routes.FullTimeEmployeeCountController.show().url
 
       document.getElementById("submit").text() shouldBe Messages("page.checkAndSubmit.checkAnswers.button.confirm")
-      document.body.getElementById("back-link").attr("href") shouldEqual controllers.seis.routes.SupportingDocumentsController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual controllers.seis.routes.SupportingDocumentsUploadController.show().url
     }
 
     "Verify that the Check Answers page contains the correct elements for Section 1: Company details" +
@@ -119,7 +119,7 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
       val model = SEISCheckAnswersModel(Some(registeredAddressModel), Some(dateOfIncorporationModel),
         Some(natureOfBusinessModel), Vector(), None, None, Some(qualifyTrade), Some(hasInvestmentTradeStartedModelYes),
         Some(isSeventyPercentSpentModelYes), Some(shareIssuetDateModel), grossAssets, fullTimeEmployees, None, None, None, None, None,
-        None, None, None, false)
+        None, None, None)
       val page = CheckAnswers(model)(authorisedFakeRequest, applicationMessages)
       val document = Jsoup.parse(page.body)
 
@@ -195,13 +195,13 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
         .attr("href") shouldEqual controllers.seis.routes.FullTimeEmployeeCountController.show().url
 
       document.getElementById("submit").text() shouldBe Messages("page.checkAndSubmit.checkAnswers.button.confirm")
-      document.body.getElementById("back-link").attr("href") shouldEqual controllers.seis.routes.SupportingDocumentsController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual controllers.seis.routes.SupportingDocumentsUploadController.show().url
     }
 
     "Verify that the Check Answers page contains an empty table for Section 1: Company details" +
       " when an empty set of company detail models are passed" in {
       val model = SEISCheckAnswersModel(None, None, None, Vector(), None, None, None, None,
-        None, None, None, None, None, None, None, None, None, None, None, None, false)
+        None, None, None, None, None, None, None, None, None, None, None, None)
       val page = CheckAnswers(model)(authorisedFakeRequest, applicationMessages)
       val document = Jsoup.parse(page.body)
 
@@ -216,7 +216,7 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
       companyDetailsTableTBody.select("tr").size() shouldBe 0
 
       document.getElementById("submit").text() shouldBe Messages("page.checkAndSubmit.checkAnswers.button.confirm")
-      document.body.getElementById("back-link").attr("href") shouldEqual controllers.seis.routes.SupportingDocumentsController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual controllers.seis.routes.SupportingDocumentsUploadController.show().url
     }
   }
 
@@ -225,7 +225,7 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
     "Verify that the scheme description contains only SEIS" in {
 
       val model = SEISCheckAnswersModel(None, None, None, Vector(), None, None, None, None, None, None, None, None,
-        None, None, None, None, None, None, None, None, false)
+        None, None, None, None, None, None, None, None)
       val page = CheckAnswers(model)(authorisedFakeRequest, applicationMessages)
       val document = Jsoup.parse(page.body)
 
@@ -243,7 +243,7 @@ document.getElementById("main-heading").text() shouldBe Messages("page.checkAndS
       companyDetailsTableTBody.select("tr").size() shouldBe 0
 
       document.getElementById("submit").text() shouldBe Messages("page.checkAndSubmit.checkAnswers.button.confirm")
-      document.body.getElementById("back-link").attr("href") shouldEqual controllers.seis.routes.SupportingDocumentsController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual controllers.seis.routes.SupportingDocumentsUploadController.show().url
     }
   }
 

@@ -73,7 +73,7 @@ trait AcknowledgementController extends FrontendController with AuthorisedAndEnr
                     investorDetailsAnswersModel: Option[InvestorDetailsAnswersModel],
                     contactDetailsAnswersModel: Option[ContactDetailsAnswersModel],
                     supportingDocumentsUploadModel: Option[SupportingDocumentsUploadModel],
-                    schemeTypeModel:Option[SchemeTypesModel]) = {
+                    schemeTypeModel: Option[SchemeTypesModel]) = {
       for {
         companyDetailsAnswersModel <- companyDetailsAnswersModel
         previousSchemesAnswersModel <- previousSchemesAnswersModel
@@ -83,7 +83,7 @@ trait AcknowledgementController extends FrontendController with AuthorisedAndEnr
         supportingDocumentsUploadModel <- supportingDocumentsUploadModel
         schemeTypeModel <- schemeTypeModel
       } yield ComplianceStatementAnswersModel(companyDetailsAnswersModel, previousSchemesAnswersModel, shareDetailsAnswersModel, investorDetailsAnswersModel,
-        contactDetailsAnswersModel, supportingDocumentsUploadModel,schemeTypeModel, kiAnswersModel = None,
+        contactDetailsAnswersModel, supportingDocumentsUploadModel, schemeTypeModel, kiAnswersModel = None,
         marketInfo = None, CostsAnswerModel(None, None), thirtyDayRuleAnswersModel = None, investmentGrow = None, subsidiaries = None, repaidSharesAnswersModel = None)
     }
 
@@ -130,7 +130,7 @@ trait AcknowledgementController extends FrontendController with AuthorisedAndEnr
         fullTimeEmployeeCountModel <- fullTimeEmployeeCountModel
       } yield {
         CompanyDetailsAnswersModel(natureOfBusinessModel, dateOfIncorporationModel, qualifyingBusinessActivityModel, hasInvestmentTradeStartedModel,
-          researchStartDateModel,seventyPercentSpentModel, shareIssueDateModel, grossAssetsModel, grossAssetsAfterModel = None, fullTimeEmployeeCountModel, commercialSaleModel = None)
+          researchStartDateModel, seventyPercentSpentModel, shareIssueDateModel, grossAssetsModel, grossAssetsAfterModel = None, fullTimeEmployeeCountModel, commercialSaleModel = None)
       }
     }
 
@@ -236,33 +236,9 @@ trait AcknowledgementController extends FrontendController with AuthorisedAndEnr
     } yield createModel(contactDetailsModel, correspondenceAddressModel)
   }
 
-
-
-  private def processResult(seisAnswersModel: ComplianceStatementAnswersModel, tavcReferenceNumber: String,
-                    registrationDetailsModel: Option[RegistrationDetailsModel])
-                   (implicit hc: HeaderCarrier, user: TAVCUser, request: Request[AnyContent]): Future[Result] = {
-    submissionConnector.submitComplianceStatement(seisAnswersModel, tavcReferenceNumber, registrationDetailsModel).map { submissionResponse =>
-      submissionResponse.status match {
-        case OK =>
-          s4lConnector.clearCache()
-          Ok(views.html.seis.checkAndSubmit.Acknowledgement(submissionResponse.json.as[SubmissionResponse]))
-        case _ => {
-          Logger.warn(s"[AcknowledgementController][processResult] - " +
-            s"HTTP Submission failed. Response Code: ${submissionResponse.status}")
-          InternalServerError
-        }
-      }
-    }
-  }.recover {
-    case e: Exception => {
-      Logger.warn(s"[AcknowledgementController][submit] - Exception submitting application: ${e.getMessage}")
-      InternalServerError(internalServerErrorTemplate)
-    }
-  }
-
   private def processResultUpload(seisAnswersModel: ComplianceStatementAnswersModel, tavcReferenceNumber: String,
-                          registrationDetailsModel: Option[RegistrationDetailsModel])
-                         (implicit hc: HeaderCarrier, user: TAVCUser, request: Request[AnyContent]): Future[Result] = {
+                                  registrationDetailsModel: Option[RegistrationDetailsModel])
+                                 (implicit hc: HeaderCarrier, user: TAVCUser, request: Request[AnyContent]): Future[Result] = {
     submissionConnector.submitComplianceStatement(seisAnswersModel, tavcReferenceNumber, registrationDetailsModel).flatMap { submissionResponse =>
       submissionResponse.status match {
         case OK =>
@@ -285,6 +261,7 @@ trait AcknowledgementController extends FrontendController with AuthorisedAndEnr
       InternalServerError(internalServerErrorTemplate)
     }
   }
+
   //noinspection ScalaStyle
   val show = AuthorisedAndEnrolled.async { implicit user =>
     implicit request =>
@@ -296,10 +273,9 @@ trait AcknowledgementController extends FrontendController with AuthorisedAndEnr
         registrationDetailsModel <- registrationDetailsService.getRegistrationDetails(tavcReferenceNumber)
       } yield if (isValid) (answersModel, tavcReferenceNumber, registrationDetailsModel) else (None, tavcReferenceNumber, registrationDetailsModel)
 
-      sourceWithRef.flatMap{
+      sourceWithRef.flatMap {
         case (Some(seisAnswersModel), tavcReferenceNumber, registrationDetailsModel) => {
-          if (fileUploadService.getUploadFeatureEnabled) processResultUpload(seisAnswersModel, tavcReferenceNumber, registrationDetailsModel)
-          else processResult(seisAnswersModel, tavcReferenceNumber, registrationDetailsModel)
+          processResultUpload(seisAnswersModel, tavcReferenceNumber, registrationDetailsModel)
         }
         case (None, _, _) => Future.successful(Redirect(controllers.routes.HomeController.redirectToHub()))
       }

@@ -72,7 +72,7 @@ trait CheckAnswersController extends FrontendController with AuthorisedAndEnroll
   } yield SEISCheckAnswersModel(registeredAddress, dateOfIncorporation, natureOfBusiness, previousSchemes,
     contactDetails, contactAddress, qualifyBusinessActivity, hasInvestmentTradeStarted, isSeventyPercentSpent, shareIssueDate,
     grossAssets, fullTimeEmployees, shareDescription, numberOfShares, totalAmountRaised, totalAmountSpent, investorDetails,
-    valueReceived, shareCapitalChanges, supportingDocumentsUpload, applicationConfig.uploadFeatureEnabled)
+    valueReceived, shareCapitalChanges, supportingDocumentsUpload)
 
   def show(envelopeId: Option[String]): Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user => implicit request =>
     if (envelopeId.fold("")(_.toString).length > 0) {

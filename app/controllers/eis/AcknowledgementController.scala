@@ -85,7 +85,7 @@ trait AcknowledgementController extends FrontendController with AuthorisedAndEnr
                     thirtyDayRuleAnswersModel: Option[ThirtyDayRuleAnswersModel],
                     investmentGrowAnswersModel: Option[InvestmentGrowAnswersModel],
                     subsidiariesAnswersModel: Option[SubsidiariesAnswersModel],
-                    repaidSharesAnswersModel:Option[RepaidSharesAnswersModel]) = {
+                    repaidSharesAnswersModel: Option[RepaidSharesAnswersModel]) = {
 
       for {
         companyDetailsAnswersModel <- companyDetailsAnswersModel
@@ -98,7 +98,7 @@ trait AcknowledgementController extends FrontendController with AuthorisedAndEnr
 
 
       } yield ComplianceStatementAnswersModel(companyDetailsAnswersModel, previousSchemesAnswersModel, shareDetailsAnswersModel, investorDetailsAnswersModel,
-        contactDetailsAnswersModel,supportingDocumentsUploadModel, schemeTypeModel, kiAnswersModel, marketInfoAnswersModel, costsAnswersModel, thirtyDayRuleAnswersModel,
+        contactDetailsAnswersModel, supportingDocumentsUploadModel, schemeTypeModel, kiAnswersModel, marketInfoAnswersModel, costsAnswersModel, thirtyDayRuleAnswersModel,
         investmentGrowAnswersModel, subsidiariesAnswersModel, repaidSharesAnswersModel)
     }
 
@@ -118,7 +118,7 @@ trait AcknowledgementController extends FrontendController with AuthorisedAndEnr
       subsidiariesAnswersModel <- subsidiariesAnswers
       repaidSharesAnswersModel <- repaidSharesAnswers
     } yield createModel(companyDetailsAnswersModel, previousSchemesAnswersModel, shareDetailsAnswersModel, investorDetailsAnswersModel,
-      contactDetailsAnswersModel, supportingDocumentsUploadModel, schemeTypeModel, marketInfoAnswersModel, kiAnswersModel,costsAnswersModel, thirtyDayRuleAnswersModel,
+      contactDetailsAnswersModel, supportingDocumentsUploadModel, schemeTypeModel, marketInfoAnswersModel, kiAnswersModel, costsAnswersModel, thirtyDayRuleAnswersModel,
       investmentGrowAnswersModel, subsidiariesAnswersModel, repaidSharesAnswersModel)
   }
 
@@ -153,7 +153,7 @@ trait AcknowledgementController extends FrontendController with AuthorisedAndEnr
         fullTimeEmployeeCountModel <- fullTimeEmployeeCountModel
       } yield {
         CompanyDetailsAnswersModel(natureOfBusinessModel, dateOfIncorporationModel, qualifyingBusinessActivityModel, hasInvestmentTradeStartedModel,
-          researchStartDateModel,seventyPercentSpentModel = None, shareIssueDateModel, grossAssetsModel, grossAssetsAfterModel,fullTimeEmployeeCountModel, commercialSaleModel)
+          researchStartDateModel, seventyPercentSpentModel = None, shareIssueDateModel, grossAssetsModel, grossAssetsAfterModel, fullTimeEmployeeCountModel, commercialSaleModel)
       }
     }
 
@@ -283,7 +283,7 @@ trait AcknowledgementController extends FrontendController with AuthorisedAndEnr
     def createModel(newGeographicalMarketModel: Option[NewGeographicalMarketModel],
                     newProductModel: Option[NewProductModel], marketDescriptionModel: Option[MarketDescriptionModel],
                     isMarketRouteApplicable: MarketRoutingCheckResult,
-                    turnoverApiCheckPassedModel:Option[Boolean]) = {
+                    turnoverApiCheckPassedModel: Option[Boolean]) = {
       for {
         newGeographicalMarketModel <- newGeographicalMarketModel
         newProductModel <- newProductModel
@@ -353,7 +353,7 @@ trait AcknowledgementController extends FrontendController with AuthorisedAndEnr
     val thirtyYearRule = s4lConnector.fetchAndGetFormData[ThirtyDayRuleModel](KeystoreKeys.thirtyDayRule)
     val turnoverApiCheckPassed = s4lConnector.fetchAndGetFormData[Boolean](KeystoreKeys.turnoverAPiCheckPassed)
 
-    def createModel(thirtyYearRuleModel: Option[ThirtyDayRuleModel], turnoverApiCheckPassedModel:Option[Boolean]) = {
+    def createModel(thirtyYearRuleModel: Option[ThirtyDayRuleModel], turnoverApiCheckPassedModel: Option[Boolean]) = {
       for {
         thirtyYearRuleModel <- thirtyYearRuleModel
         turnoverApiCheckPassedModel <- turnoverApiCheckPassedModel
@@ -378,28 +378,6 @@ trait AcknowledgementController extends FrontendController with AuthorisedAndEnr
     for {
       investmentGrowModel <- investmentGrow
     } yield createModel(investmentGrowModel)
-  }
-
-  def processResult(answerModel: ComplianceStatementAnswersModel, tavcReferenceNumber: String,
-                    registrationDetailsModel: Option[RegistrationDetailsModel])
-                   (implicit hc: HeaderCarrier, user: TAVCUser, request: Request[AnyContent]): Future[Result] = {
-    submissionConnector.submitComplianceStatement(answerModel, tavcReferenceNumber, registrationDetailsModel).map { submissionResponse =>
-      submissionResponse.status match {
-        case OK =>
-          s4lConnector.clearCache()
-          Ok(views.html.eis.checkAndSubmit.Acknowledgement(submissionResponse.json.as[SubmissionResponse]))
-        case _ => {
-          Logger.warn(s"[AcknowledgementController][getSubsidiariesAnswersModel] - " +
-            s"HTTP Submission failed. Response Code: ${submissionResponse.status}")
-          InternalServerError
-        }
-      }
-    }
-  }.recover {
-    case e: Exception => {
-      Logger.warn(s"[AcknowledgementController][submit] - Exception submitting application: ${e.getMessage}")
-      InternalServerError(internalServerErrorTemplate)
-    }
   }
 
   def processResultUpload(answersModel: ComplianceStatementAnswersModel, tavcReferenceNumber: String,
@@ -441,12 +419,10 @@ trait AcknowledgementController extends FrontendController with AuthorisedAndEnr
 
       sourceWithRef.flatMap {
         case (Some(answersModel), tavcReferenceNumber, registrationDetailsModel) => {
-          if (fileUploadService.getUploadFeatureEnabled) processResultUpload(answersModel, tavcReferenceNumber, registrationDetailsModel)
-          else processResult(answersModel, tavcReferenceNumber, registrationDetailsModel)
+          processResultUpload(answersModel, tavcReferenceNumber, registrationDetailsModel)
         }
         case (None, _, _) => Future.successful(Redirect(controllers.routes.HomeController.redirectToHub()))
       }
-
   }
 
   def submit: Action[AnyContent] = AuthorisedAndEnrolled.apply { implicit user => implicit request =>

@@ -138,7 +138,7 @@ class AcknowledgementSpec extends ViewSpec {
         lazy val link = paragraph.select("a").first()
 
         "links to the upload page" in {
-          link.attr("href") shouldBe controllers.seis.routes.SupportingDocumentsController.show().url
+          link.attr("href") shouldBe controllers.seis.routes.SupportingDocumentsUploadController.show().url
         }
 
         "has the correct part of the message" in {

@@ -16,8 +16,7 @@
 
 package controllers
 
-import auth.{AuthorisedAndEnrolledForTAVC, EIS, VCT}
-import config.FrontendGlobal.notFoundTemplate
+import auth.{AuthorisedAndEnrolledForTAVC}
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import services.FileUploadService
@@ -44,14 +43,9 @@ trait SupportingDocumentsUploadController extends FrontendController with Author
 
   val show = AuthorisedAndEnrolled.async { implicit user =>
     implicit request =>
-      if (!fileUploadService.getUploadFeatureEnabled) {
-        Future.successful(NotFound(notFoundTemplate))
-      }
-      else {
-        Future.successful(Ok(SupportingDocumentsUpload()))
-      }
+      Future.successful(Ok(SupportingDocumentsUpload()))
   }
-  
+
   val submit = AuthorisedAndEnrolled.async { implicit user => implicit request =>
     Future.successful(Redirect(applicationConfig.attachmentFileUploadOutsideUrl))
   }

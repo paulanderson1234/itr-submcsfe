@@ -922,20 +922,8 @@ class AcknowledgementControllerSpec extends BaseSpec with ModelSubmissionFixture
   }
 
   "Sending an Authenticated and Enrolled GET request with a session to AcknowledgementController" should {
-    "return a 200 and delete the current application when a valid submission data is submitted" in {
-      when(mockFileUploadService.getUploadFeatureEnabled).thenReturn(false)
-      when(mockS4lConnector.clearCache()(Matchers.any(), Matchers.any())).thenReturn(HttpResponse(NO_CONTENT))
-      setupEisSubmissionMocks()
-      mockEnrolledRequest(eisSchemeTypesModel)
-      val result = TestController.show.apply(authorisedFakeRequest)
-      status(result) shouldBe OK
-    }
-  }
-
-  "Sending an Authenticated and Enrolled GET request with a session to AcknowledgementController" should {
     "return a 200, close the file upload envelope and " +
       "delete the current application when a valid submission data is submitted with the file upload flag enabled" in {
-      when(mockFileUploadService.getUploadFeatureEnabled).thenReturn(true)
       when(mockFileUploadService.closeEnvelope(Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(),
         Matchers.any())).thenReturn(Future(HttpResponse(OK)))
       when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.envelopeId))
@@ -950,7 +938,6 @@ class AcknowledgementControllerSpec extends BaseSpec with ModelSubmissionFixture
 
   "Sending an Authenticated and Enrolled GET request with a session to AcknowledgementController" should {
     "return a 500 internal server error if the submitComplianceStatement fails with an internal server error" in {
-      when(mockFileUploadService.getUploadFeatureEnabled).thenReturn(true)
       when(mockFileUploadService.closeEnvelope(Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(),
         Matchers.any())).thenReturn(Future(HttpResponse(500)))
       when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.envelopeId))
