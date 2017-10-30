@@ -28,7 +28,7 @@ class InitialDeclarationSpec extends ViewSpec {
 
   "The Initial Declaration page" should {
 
-    val requestType = "GET"
+    val requestType = "POST"
 
     "Verify that the declaration page has the correct elements" in {
       val document: Document = {
@@ -45,7 +45,7 @@ class InitialDeclarationSpec extends ViewSpec {
         Messages("page.initial.declaration.description.bullet.one") + "" +
           " " + Messages("page.initial.declaration.description.bullet.two.seis") + " opens in a new window"
       document.select("form").attr("method") shouldBe requestType
-      document.select("form").attr("action") shouldBe routes.NatureOfBusinessController.show().url
+      document.select("form").attr("action") shouldBe routes.InitialDeclarationController.submit().url
       document.getElementById("do-not-agree").text() shouldBe Messages("page.declaration.doNotAgree")
       document.getElementById("do-not-agree").attr("href") shouldBe controllers.routes.ApplicationHubController.show().toString
     }
