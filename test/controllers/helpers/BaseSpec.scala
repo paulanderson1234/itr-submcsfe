@@ -21,7 +21,7 @@ import java.util.Date
 
 import auth.{Enrolment, Identifier}
 import common.{Constants, KeystoreKeys}
-import connectors.{EnrolmentConnector, S4LConnector, SubmissionConnector}
+import connectors.{AdvancedAssuranceConnector, EnrolmentConnector, S4LConnector, SubmissionConnector}
 import fixtures.SubmissionFixture
 import models.investorDetails._
 import models.repayments.{AmountSharesRepaymentModel, _}
@@ -33,7 +33,7 @@ import org.scalatest.BeforeAndAfterEach
 import org.scalatest.mock.MockitoSugar
 import org.scalatestplus.play.OneAppPerSuite
 import play.api.libs.json.Json
-import services.{EmailVerificationService, FileUploadService, RegistrationDetailsService, SubscriptionService}
+import services._
 import uk.gov.hmrc.http.cache.client.CacheMap
 import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
@@ -50,6 +50,8 @@ trait BaseSpec extends UnitSpec with OneAppPerSuite with MockitoSugar with FakeR
   val mockRegistrationDetailsService = mock[RegistrationDetailsService]
   val mockFileUploadService = mock[FileUploadService]
   val mockEmailVerificationService = mock[EmailVerificationService]
+  val mockInternalService = mock[InternalService]
+  val mockAdvancedAssuranceConnector = mock[AdvancedAssuranceConnector]
 
   override def beforeEach() {
     reset(mockS4lConnector)

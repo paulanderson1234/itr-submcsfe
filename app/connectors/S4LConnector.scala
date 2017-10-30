@@ -40,8 +40,16 @@ trait S4LConnector {
     shortLivedCache.fetchAndGetEntry(user.internalId, key)
   }
 
+  def fetchAndGetFormData[T](internalId: String, key : String)(implicit hc: HeaderCarrier, format: Format[T]): Future[Option[T]] = {
+    shortLivedCache.fetchAndGetEntry(internalId, key)
+  }
+
   def clearCache()(implicit hc : HeaderCarrier, user: TAVCUser) : Future[HttpResponse] = {
     shortLivedCache.remove(user.internalId)
+  }
+
+  def clearCache(internalId: String)(implicit hc : HeaderCarrier) : Future[HttpResponse] = {
+    shortLivedCache.remove(internalId)
   }
 
   def fetch()(implicit hc : HeaderCarrier, user: TAVCUser) : Future[Option[CacheMap]] = {

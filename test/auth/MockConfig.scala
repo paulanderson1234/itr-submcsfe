@@ -32,10 +32,11 @@ trait MockConfig extends AppConfig {
   override val ggSignOutUrl: String = "/gg/sign-out"
   override val signOutPageUrl: String = "/investment-tax-relief-cs/signed-out"
   override val submissionUrl: String = "localhost"
-
   override val attachmentsFrontEndServiceBaseUrl = "http://localhost:9643/investment-tax-relief-attachments-frontend"
   override val internalAttachmentsUrl = "localhost"
-  override val submissionFrontendServiceBaseUrl = "http://localhost:9645/investment-tax-relief-submission"
+  override val internalAASubmissionUrl = "localhost"
+  override val submissionFrontendServiceBaseUrl = "http://localhost:9645/investment-tax-relief-submission-cs"
+  override val aaSubmissionFrontendServiceBaseUrl: String = "http://localhost:9635/investment-tax-relief-submission"
   override val uploadFeatureEnabled: Boolean = false
 
   override lazy val attachmentFileUploadUrl: (String) => String = schemeType =>
