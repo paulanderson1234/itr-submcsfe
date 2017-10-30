@@ -23,7 +23,7 @@
 
 @main_template(title = Messages("page.supportingDocuments.SupportingDocuments.title"), bodyClasses = None) {
 
-@backButtonWithProgress(routes.ApplicationHubController.show().url, Messages("common.back.dashboard"))
+@backButtonWithProgress(routes.HomeController.redirectToHub().url, Messages("common.back.dashboard"))
 
 
 <h1 class="heading-xlarge" id="main-heading">@Messages("page.supportingDocuments.SupportingDocuments.heading")</h1>

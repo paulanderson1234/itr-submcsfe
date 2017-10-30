@@ -44,7 +44,7 @@ class DeclarationSpec extends ViewSpec {
       document.select("form").attr("method") shouldBe requestType
       document.select("form").attr("action") shouldBe routes.AcknowledgementController.show().url
       document.getElementById("do-not-agree").text() shouldBe Messages("page.declaration.doNotAgree")
-      document.getElementById("do-not-agree").attr("href") shouldBe controllers.routes.ApplicationHubController.show().toString
+      document.getElementById("do-not-agree").attr("href") shouldBe controllers.routes.HomeController.redirectToHub().toString
     }
   }
 

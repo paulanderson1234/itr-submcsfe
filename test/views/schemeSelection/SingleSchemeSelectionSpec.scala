@@ -34,7 +34,7 @@ class SingleSchemeSelectionSpec extends ViewSpec {
       val page = SingleSchemeSelection(singleSchemeSelectionForm)(fakeRequest, applicationMessages)
       val document = Jsoup.parse(page.body)
 
-      document.body.getElementById("back-link").attr("href") shouldEqual routes.ApplicationHubController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual routes.HomeController.redirectToHub().url
       document.title() shouldBe Messages("page.schemeSelection.SchemeSelection.singlescheme.title")
       document.getElementById("main-heading").text() shouldBe Messages("page.schemeSelection.SchemeSelection.singlescheme.heading")
       document.getElementById("scheme-selection-desc").text() shouldBe Messages("page.schemeSelection.SchemeSelection.desc")

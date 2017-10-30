@@ -38,6 +38,7 @@ trait AppConfig {
   val attachmentsFrontEndServiceBaseUrl: String
   val uploadFeatureEnabled: Boolean
   val submissionFrontendServiceBaseUrl: String
+  val aaSubmissionFrontendServiceBaseUrl: String
   val attachmentsServiceUrl: String
   val attachmentFileUploadOutsideUrl: String
   val emailVerificationTemplate: String
@@ -64,6 +65,7 @@ object FrontendAppConfig extends AppConfig with ServicesConfig {
 
   override lazy val attachmentsFrontEndServiceBaseUrl: String = loadConfig(s"investment-tax-relief-attachments-frontend.url")
   override lazy val submissionFrontendServiceBaseUrl: String = loadConfig(s"investment-tax-relief-submission-cs-frontend.url")
+  override lazy val aaSubmissionFrontendServiceBaseUrl: String = loadConfig(s"investment-tax-relief-submission-frontend.url")
 
   override lazy val subscriptionUrl: String = loadConfig("investment-tax-relief-subscription.url")
   override lazy val signOutPageUrl: String = configuration.getString(s"sign-out-page.url").getOrElse("")

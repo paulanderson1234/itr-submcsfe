@@ -21,6 +21,6 @@
     <h2 class="heading-small" id="hub-application-heading">@Messages("page.introduction.hub.new.heading")</h2>
 </div>
 
-@form(action = controllers.routes.ApplicationHubController.newApplication()) {
+@form(action = controllers.routes.HomeController.redirectToHub()) {
     <button class="button" type="submit" id="create-new-application">@Messages("page.introduction.hub.button")</button>
 }

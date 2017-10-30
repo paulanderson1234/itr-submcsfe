@@ -93,7 +93,7 @@ class AcknowledgementControllerSpec extends BaseSpec with ModelSubmissionFixture
       mockEnrolledRequest(seisSchemeTypesModel)
       val result = TestController.show.apply(authorisedFakeRequest)
       status(result) shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+      redirectLocation(result) shouldBe Some(controllers.routes.HomeController.redirectToHub().url)
     }
   }
 
@@ -105,7 +105,7 @@ class AcknowledgementControllerSpec extends BaseSpec with ModelSubmissionFixture
       mockEnrolledRequest(seisSchemeTypesModel)
       val result = TestController.show.apply(authorisedFakeRequest)
       status(result) shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+      redirectLocation(result) shouldBe Some(controllers.routes.HomeController.redirectToHub().url)
     }
   }
 
@@ -117,7 +117,7 @@ class AcknowledgementControllerSpec extends BaseSpec with ModelSubmissionFixture
 
       val result = TestController.show.apply(authorisedFakeRequest)
       status(result) shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+      redirectLocation(result) shouldBe Some(controllers.routes.HomeController.redirectToHub().url)
     }
   }
 
@@ -129,7 +129,7 @@ class AcknowledgementControllerSpec extends BaseSpec with ModelSubmissionFixture
 
       val result = TestController.show.apply(authorisedFakeRequest)
       status(result) shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+      redirectLocation(result) shouldBe Some(controllers.routes.HomeController.redirectToHub().url)
     }
   }
 
@@ -141,7 +141,7 @@ class AcknowledgementControllerSpec extends BaseSpec with ModelSubmissionFixture
 
       val result = TestController.show.apply(authorisedFakeRequest)
       status(result) shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+      redirectLocation(result) shouldBe Some(controllers.routes.HomeController.redirectToHub().url)
     }
   }
 
@@ -154,7 +154,7 @@ class AcknowledgementControllerSpec extends BaseSpec with ModelSubmissionFixture
 
       val result = TestController.show.apply(authorisedFakeRequest)
       status(result) shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+      redirectLocation(result) shouldBe Some(controllers.routes.HomeController.redirectToHub().url)
     }
   }
 
@@ -169,7 +169,7 @@ class AcknowledgementControllerSpec extends BaseSpec with ModelSubmissionFixture
 
       val result = TestController.show.apply(authorisedFakeRequest)
       status(result) shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+      redirectLocation(result) shouldBe Some(controllers.routes.HomeController.redirectToHub().url)
     }
   }
 
@@ -181,7 +181,7 @@ class AcknowledgementControllerSpec extends BaseSpec with ModelSubmissionFixture
 
       val result = TestController.show.apply(authorisedFakeRequest)
       status(result) shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+      redirectLocation(result) shouldBe Some(controllers.routes.HomeController.redirectToHub().url)
     }
   }
 
@@ -193,7 +193,7 @@ class AcknowledgementControllerSpec extends BaseSpec with ModelSubmissionFixture
 
       val result = TestController.show.apply(authorisedFakeRequest)
       status(result) shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+      redirectLocation(result) shouldBe Some(controllers.routes.HomeController.redirectToHub().url)
     }
   }
 
@@ -205,7 +205,7 @@ class AcknowledgementControllerSpec extends BaseSpec with ModelSubmissionFixture
 
       val result = TestController.show.apply(authorisedFakeRequest)
       status(result) shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+      redirectLocation(result) shouldBe Some(controllers.routes.HomeController.redirectToHub().url)
     }
   }
 
@@ -217,7 +217,7 @@ class AcknowledgementControllerSpec extends BaseSpec with ModelSubmissionFixture
 
       val result = TestController.show.apply(authorisedFakeRequest)
       status(result) shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+      redirectLocation(result) shouldBe Some(controllers.routes.HomeController.redirectToHub().url)
     }
   }
 
@@ -229,7 +229,7 @@ class AcknowledgementControllerSpec extends BaseSpec with ModelSubmissionFixture
 
       val result = TestController.show.apply(authorisedFakeRequest)
       status(result) shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+      redirectLocation(result) shouldBe Some(controllers.routes.HomeController.redirectToHub().url)
     }
   }
 
@@ -241,7 +241,7 @@ class AcknowledgementControllerSpec extends BaseSpec with ModelSubmissionFixture
 
       val result = TestController.show.apply(authorisedFakeRequest)
       status(result) shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+      redirectLocation(result) shouldBe Some(controllers.routes.HomeController.redirectToHub().url)
     }
   }
 
@@ -253,7 +253,7 @@ class AcknowledgementControllerSpec extends BaseSpec with ModelSubmissionFixture
 
       val result = TestController.show.apply(authorisedFakeRequest)
       status(result) shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+      redirectLocation(result) shouldBe Some(controllers.routes.HomeController.redirectToHub().url)
     }
   }
 
@@ -265,7 +265,7 @@ class AcknowledgementControllerSpec extends BaseSpec with ModelSubmissionFixture
 
       val result = TestController.show.apply(authorisedFakeRequest)
       status(result) shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+      redirectLocation(result) shouldBe Some(controllers.routes.HomeController.redirectToHub().url)
     }
   }
 
@@ -277,7 +277,7 @@ class AcknowledgementControllerSpec extends BaseSpec with ModelSubmissionFixture
 
       val result = TestController.show.apply(authorisedFakeRequest)
       status(result) shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+      redirectLocation(result) shouldBe Some(controllers.routes.HomeController.redirectToHub().url)
     }
   }
 
@@ -289,7 +289,7 @@ class AcknowledgementControllerSpec extends BaseSpec with ModelSubmissionFixture
 
       val result = TestController.show.apply(authorisedFakeRequest)
       status(result) shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+      redirectLocation(result) shouldBe Some(controllers.routes.HomeController.redirectToHub().url)
     }
   }
 
@@ -305,7 +305,7 @@ class AcknowledgementControllerSpec extends BaseSpec with ModelSubmissionFixture
 
       val result = TestController.show.apply(authorisedFakeRequest)
       status(result) shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+      redirectLocation(result) shouldBe Some(controllers.routes.HomeController.redirectToHub().url)
     }
   }
 
@@ -321,7 +321,7 @@ class AcknowledgementControllerSpec extends BaseSpec with ModelSubmissionFixture
 
       val result = TestController.show.apply(authorisedFakeRequest)
       status(result) shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+      redirectLocation(result) shouldBe Some(controllers.routes.HomeController.redirectToHub().url)
     }
   }
 
@@ -337,7 +337,7 @@ class AcknowledgementControllerSpec extends BaseSpec with ModelSubmissionFixture
 
       val result = TestController.show.apply(authorisedFakeRequest)
       status(result) shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+      redirectLocation(result) shouldBe Some(controllers.routes.HomeController.redirectToHub().url)
     }
   }
 
@@ -353,7 +353,7 @@ class AcknowledgementControllerSpec extends BaseSpec with ModelSubmissionFixture
 
       val result = TestController.show.apply(authorisedFakeRequest)
       status(result) shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+      redirectLocation(result) shouldBe Some(controllers.routes.HomeController.redirectToHub().url)
     }
   }
 
@@ -369,7 +369,7 @@ class AcknowledgementControllerSpec extends BaseSpec with ModelSubmissionFixture
 
       val result = TestController.show.apply(authorisedFakeRequest)
       status(result) shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+      redirectLocation(result) shouldBe Some(controllers.routes.HomeController.redirectToHub().url)
     }
   }
 
@@ -385,7 +385,7 @@ class AcknowledgementControllerSpec extends BaseSpec with ModelSubmissionFixture
 
       val result = TestController.show.apply(authorisedFakeRequest)
       status(result) shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+      redirectLocation(result) shouldBe Some(controllers.routes.HomeController.redirectToHub().url)
     }
   }
 
@@ -400,7 +400,7 @@ class AcknowledgementControllerSpec extends BaseSpec with ModelSubmissionFixture
 
       val result = TestController.show.apply(authorisedFakeRequest)
       status(result) shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+      redirectLocation(result) shouldBe Some(controllers.routes.HomeController.redirectToHub().url)
     }
   }
 
@@ -416,7 +416,7 @@ class AcknowledgementControllerSpec extends BaseSpec with ModelSubmissionFixture
 
       val result = TestController.show.apply(authorisedFakeRequest)
       status(result) shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+      redirectLocation(result) shouldBe Some(controllers.routes.HomeController.redirectToHub().url)
     }
   }
 
@@ -431,7 +431,7 @@ class AcknowledgementControllerSpec extends BaseSpec with ModelSubmissionFixture
 
       val result = TestController.show.apply(authorisedFakeRequest)
       status(result) shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+      redirectLocation(result) shouldBe Some(controllers.routes.HomeController.redirectToHub().url)
     }
   }
 

@@ -82,7 +82,7 @@ class FlowControlPredicate(s4lConnector: S4LConnector, acceptedFlows: Seq[Seq[Fl
 
   }
 
-  private def redirect = Future.successful(Redirect(controllers.routes.ApplicationHubController.show()))
+    private def redirect = Future.successful(Redirect(controllers.routes.HomeController.redirectToHub()))
   private def error(request: Request[AnyContent]) = Future.successful(InternalServerError(internalServerErrorTemplate(request)))
 
 }

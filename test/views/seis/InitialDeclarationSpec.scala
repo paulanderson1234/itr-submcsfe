@@ -37,7 +37,7 @@ class InitialDeclarationSpec extends ViewSpec {
       }
       document.title() shouldBe Messages("page.initial.declaration.title")
       document.getElementById("main-heading").text() shouldBe Messages("page.initial.declaration.heading")
-      document.body.getElementById("back-link").attr("href") shouldEqual controllers.routes.ApplicationHubController.show().url
+      document.body.getElementById("back-link").attr("href") shouldEqual controllers.routes.HomeController.redirectToHub().url
       document.getElementById("description").text() shouldBe Messages("page.initial.declaration.description")
       document.getElementById("warningMessage").text() shouldBe Messages("page.declaration.warning")
       document.getElementById("next").text() shouldBe Messages("page.initial.declaration.submit")
@@ -47,7 +47,7 @@ class InitialDeclarationSpec extends ViewSpec {
       document.select("form").attr("method") shouldBe requestType
       document.select("form").attr("action") shouldBe routes.NatureOfBusinessController.show().url
       document.getElementById("do-not-agree").text() shouldBe Messages("page.declaration.doNotAgree")
-      document.getElementById("do-not-agree").attr("href") shouldBe controllers.routes.ApplicationHubController.show().toString
+      document.getElementById("do-not-agree").attr("href") shouldBe controllers.routes.HomeController.redirectToHub().toString
     }
   }
 

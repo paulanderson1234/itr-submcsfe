@@ -56,7 +56,7 @@ class FeatureSwitchSpec extends BaseSpec {
       "redirect to the hub page" in {
         val result = TestControllerOff.test.apply(fakeRequest)
         status(result) shouldBe SEE_OTHER
-        redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+        redirectLocation(result) shouldBe Some(controllers.routes.HomeController.redirectToHub().url)
       }
 
     }

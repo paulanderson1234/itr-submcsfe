@@ -38,7 +38,7 @@ class HasInvestmentTradeStartedErrorSpec extends ViewSpec {
       document.body.getElementById("change-answers").attr("href") shouldEqual routes.HasInvestmentTradeStartedController.show().url
       document.body.getElementById("back-link").attr("href") shouldEqual routes.HasInvestmentTradeStartedController.show().url
       document.body.getElementById("return-dashboard").text() shouldEqual Messages("common.returnToDashboard")
-      document.body.getElementById("return-dashboard").attr("href") shouldEqual controllers.routes.ApplicationHubController.show().url
+      document.body.getElementById("return-dashboard").attr("href") shouldEqual controllers.routes.HomeController.redirectToHub().url
     }
   }
 }

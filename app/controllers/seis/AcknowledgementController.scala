@@ -301,7 +301,7 @@ trait AcknowledgementController extends FrontendController with AuthorisedAndEnr
           if (fileUploadService.getUploadFeatureEnabled) processResultUpload(seisAnswersModel, tavcReferenceNumber, registrationDetailsModel)
           else processResult(seisAnswersModel, tavcReferenceNumber, registrationDetailsModel)
         }
-        case (None, _, _) => Future.successful(Redirect(controllers.routes.ApplicationHubController.show()))
+        case (None, _, _) => Future.successful(Redirect(controllers.routes.HomeController.redirectToHub()))
       }
 
   }
