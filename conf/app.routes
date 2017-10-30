@@ -20,6 +20,8 @@ POST       /select-scheme                           controllers.schemeSelection.
 GET        /sign-out                                controllers.SignOutController.signout
 GET        /signed-out                              controllers.SignOutController.show
 
+GET        /hub                                     controllers.HomeController.redirectToHub
+
 GET        /fileUpload-acknowledgement              controllers.FileUploadAcknowledgementController.show
 POST       /fileUpload-acknowledgement              controllers.FileUploadAcknowledgementController.finish
 

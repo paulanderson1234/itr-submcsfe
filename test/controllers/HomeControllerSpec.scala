@@ -17,17 +17,10 @@
 package controllers
 
 import auth.{MockAuthConnector, MockConfig}
-import common.KeystoreKeys
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
-import models.fileUpload.{EnvelopeFile, Metadata}
-import org.mockito.Matchers
-import org.mockito.Mockito._
 import play.api.test.Helpers.{redirectLocation, _}
-import services.FileUploadService
-
-import scala.concurrent.Future
 
 class HomeControllerSpec extends BaseSpec {
 
@@ -48,25 +41,16 @@ class HomeControllerSpec extends BaseSpec {
     "use the correct enrolment connector" in {
       HomeController.enrolmentConnector shouldBe EnrolmentConnector
     }
-    "use the correct registration service" in {
+    "use the correct config" in {
       HomeController.applicationConfig shouldBe FrontendAppConfig
     }
   }
 
 
-  def setupMocks(): Unit = {
-
-    val files = Seq(EnvelopeFile("1","PROCESSING","test.pdf","application/pdf","2016-03-31T12:33:45Z",Metadata(None),"test.url"))
-    when(mockS4lConnector.fetchAndGetFormData[String](Matchers.eq(KeystoreKeys.envelopeId))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(envelopeId))
-    when(mockFileUploadService.getEnvelopeFiles(Matchers.any())(Matchers.any(), Matchers.any())).thenReturn(Future.successful(files))
-  }
-
 
   "Sending a GET request to HomeController" should {
 
     "redirect to the AA hub page" in {
-      setupMocks()
       mockEnrolledRequest()
       submitWithSessionAndAuth(TestController.redirectToHub){
         result => status(result) shouldBe SEE_OTHER

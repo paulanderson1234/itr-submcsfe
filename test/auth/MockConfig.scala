@@ -36,7 +36,7 @@ trait MockConfig extends AppConfig {
   override val attachmentsFrontEndServiceBaseUrl = "http://localhost:9643/investment-tax-relief-attachments-frontend"
   override val internalAttachmentsUrl = "localhost"
   override val submissionFrontendServiceBaseUrl = "http://localhost:9645/investment-tax-relief-submission"
-  override val aaSubmissionFrontendServiceBaseUrl = "http://localhost:9635/investment-tax-relief-submission"
+  override val aaSubmissionFrontendServiceBaseUrl = "http://localhost:9635/investment-tax-relief"
 
 
   override lazy val attachmentFileUploadUrl: (String) => String = schemeType =>

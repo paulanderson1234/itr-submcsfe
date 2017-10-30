@@ -23,9 +23,6 @@ import uk.gov.hmrc.play.frontend.controller.FrontendController
 
 import scala.concurrent.Future
 
-/**
-  * Created by ladon on 27/10/17.
-  */
 object HomeController extends HomeController
 {
   override lazy val applicationConfig = FrontendAppConfig
