@@ -57,10 +57,3 @@ trait MockConfig extends AppConfig {
 }
 
 object MockConfig extends MockConfig
-
-object MockConfigSingleFlow extends MockConfig{
-}
-
-object MockConfigEISFlow extends MockConfig{
-
-}

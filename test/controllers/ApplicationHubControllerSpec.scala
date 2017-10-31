@@ -16,7 +16,7 @@
 
 package controllers
 
-import auth.{MockConfigSingleFlow, MockConfigEISFlow, MockAuthConnector, MockConfig}
+import auth.{MockAuthConnector, MockConfig}
 import common.KeystoreKeys
 import config.FrontendAuthConnector
 import connectors.{EnrolmentConnector, S4LConnector}
@@ -48,14 +48,6 @@ class ApplicationHubControllerSpec extends BaseSpec{
     override lazy val applicationConfig = MockConfig
   }
 
-  object TestControllerSingle extends TestController {
-    override lazy val applicationConfig = MockConfigSingleFlow
-  }
-
-  object TestControllerEIS extends TestController {
-    override lazy val applicationConfig = MockConfigEISFlow
-  }
-
   val cacheMapSchemeTypes: CacheMap = CacheMap("", Map("" -> Json.toJson(SchemeTypesModel(eis = true))))
 
 
@@ -78,8 +70,6 @@ class ApplicationHubControllerSpec extends BaseSpec{
     when(mockSubscriptionService.getSubscriptionContactDetails(Matchers.any())(Matchers.any(),Matchers.any())).
       thenReturn(Future.successful(None))
   }
-
-
 
   val cacheMap: CacheMap = CacheMap("", Map("" -> Json.toJson(true)))
 
@@ -144,21 +134,6 @@ class ApplicationHubControllerSpec extends BaseSpec{
       showWithSessionAndAuth(TestControllerCombined.show())(
         result => {
           status(result) shouldBe INTERNAL_SERVER_ERROR
-        }
-      )
-    }
-  }
-
-
-  "Posting to the 'create new application' button on the ApplicationHubController when authenticated and enrolled" should {
-    "redirect to 'scheme selection' page if eisSeisFlowEnabled is disabled but seisFlowEnabled is enabled" in {
-      when(mockS4lConnector.saveFormData(Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
-        .thenReturn(Future.successful(CacheMap("", Map())))
-      mockEnrolledRequest(None)
-      submitWithSessionAndAuth(TestControllerSingle.newApplication)(
-        result => {
-          status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(controllers.schemeSelection.routes.SingleSchemeSelectionController.show().url)
         }
       )
     }
