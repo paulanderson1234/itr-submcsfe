@@ -44,6 +44,7 @@ class InitialDeclarationSpec extends ViewSpec {
       document.getElementById("help-bullet-one").text() shouldBe
         Messages("page.initial.declaration.description.bullet.one") + "" +
           " " + Messages("page.initial.declaration.description.bullet.two.seis") + " opens in a new window"
+      document.getElementById("help-bullet-three").text() shouldBe Messages("page.initial.declaration.description.bullet.three")
       document.select("form").attr("method") shouldBe requestType
       document.select("form").attr("action") shouldBe routes.InitialDeclarationController.submit().url
       document.getElementById("do-not-agree").text() shouldBe Messages("page.declaration.doNotAgree")
