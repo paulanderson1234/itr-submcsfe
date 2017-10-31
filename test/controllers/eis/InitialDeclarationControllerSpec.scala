@@ -56,4 +56,16 @@ class InitialDeclarationControllerSpec extends BaseSpec {
     }
   }
 
+  "Sending a POST request to InitialDeclarationController when authenticated and enrolled" should {
+    "redirect to Nature of business page" in {
+      mockEnrolledRequest(eisSchemeTypesModel)
+      submitWithSessionAndAuth(InitialDeclarationControllerTest.submit)(
+        result => {
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(routes.NatureOfBusinessController.show().url)
+        }
+      )
+    }
+  }
+
 }

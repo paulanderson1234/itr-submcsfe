@@ -41,4 +41,8 @@ trait InitialDeclarationController extends FrontendController with AuthorisedAnd
   val show = AuthorisedAndEnrolled.async { implicit user => implicit request =>
     Future.successful(Ok(InitialDeclaration()))
   }
+
+  val submit = AuthorisedAndEnrolled.async { implicit user => implicit request =>
+    Future.successful(Redirect(routes.NatureOfBusinessController.show()))
+  }
 }

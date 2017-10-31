@@ -58,4 +58,15 @@ class DeclarationControllerSpec extends BaseSpec {
     }
   }
 
+  "Sending a POST request to DeclarationController when authenticated and enrolled" should {
+    "redirect to Acknowledge page" in {
+      mockEnrolledRequest(eisSchemeTypesModel)
+      submitWithSessionAndAuth(DeclarationControllerTest.submit)(
+        result => {
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(routes.AcknowledgementController.show().url)
+        }
+      )
+    }
+  }
 }

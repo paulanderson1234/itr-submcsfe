@@ -166,8 +166,10 @@ GET       /share-capital-changes                        controllers.seis.ShareCa
 POST      /share-capital-changes                        controllers.seis.ShareCapitalChangesController.submit
 
 GET        /declaration                          controllers.seis.DeclarationController.show
+POST       /declaration                          controllers.seis.DeclarationController.submit
 
 GET        /initial-declaration                          controllers.seis.InitialDeclarationController.show
+POST       /initial-declaration                          controllers.seis.InitialDeclarationController.submit
 
 GET        /terms-and-conditions                          controllers.seis.TermsAndConditionsController.show
 
