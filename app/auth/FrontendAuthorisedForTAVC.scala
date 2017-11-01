@@ -17,6 +17,7 @@
 package auth
 
 import auth.authModels.UserIDs
+import config.FrontendGlobal.internalServerErrorTemplate
 import play.api.Logger
 import play.api.mvc.{Action, AnyContent, Request, Result}
 import uk.gov.hmrc.play.frontend.auth.{Actions, AuthContext}
@@ -52,7 +53,7 @@ trait FrontendAuthorisedForTAVC extends Actions {
           } recover {
             case ex: Exception =>
               Logger.error(s"[FrontendAuthorised] - Received an error when retrieving Authority - error: ${ex.getMessage}")
-              InternalServerError
+              InternalServerError(internalServerErrorTemplate)
           }
       }
     }
