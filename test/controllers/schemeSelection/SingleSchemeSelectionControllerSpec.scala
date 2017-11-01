@@ -16,7 +16,7 @@
 
 package controllers.schemeSelection
 
-import auth.{MockAuthConnector, MockConfigSingleFlow}
+import auth.{MockAuthConnector, MockConfig}
 import common.{Constants, KeystoreKeys}
 import config.FrontendAuthConnector
 import connectors.{AdvancedAssuranceConnector, EnrolmentConnector, S4LConnector}
@@ -33,7 +33,7 @@ import scala.concurrent.Future
 class SingleSchemeSelectionControllerSpec extends BaseSpec {
 
   object TestController extends SingleSchemeSelectionController {
-    override lazy val applicationConfig = MockConfigSingleFlow
+    override lazy val applicationConfig = MockConfig
     override lazy val authConnector = MockAuthConnector
     override lazy val s4lConnector = mockS4lConnector
     override lazy val enrolmentConnector = mockEnrolmentConnector

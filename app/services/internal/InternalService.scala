@@ -14,16 +14,18 @@
  * limitations under the License.
  */
 
-package services
+package services.internal
 
-import auth.TAVCUser
+import auth.authModels.UserIDs
 import common.KeystoreKeys
-import connectors.{S4LConnector, SubmissionConnector}
+import config.FrontendAuthConnector
+import connectors.S4LConnector
 import models.internal.CSApplicationModel
-import models.submission.{SchemeTypesModel, SingleSchemeTypesModel, SubmissionDetailsModel}
-import play.api.Logger
-import play.api.libs.json.{JsError, JsSuccess}
-import uk.gov.hmrc.play.http.HeaderCarrier
+import models.submission.{SchemeTypesModel, SingleSchemeTypesModel}
+import uk.gov.hmrc.play.frontend.auth.AuthContext
+import uk.gov.hmrc.play.frontend.auth.connectors.AuthConnector
+import uk.gov.hmrc.play.frontend.auth.connectors.domain.Authority
+import uk.gov.hmrc.play.http.{HeaderCarrier, HttpResponse}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -31,13 +33,16 @@ import scala.concurrent.Future
 
 object InternalService extends InternalService {
   override lazy val s4lConnector = S4LConnector
+  override lazy val authConnector = FrontendAuthConnector
 }
 
 trait InternalService {
 
   val s4lConnector: S4LConnector
+  val authConnector: AuthConnector
 
   def getCSApplicationModel(internalId: String)(implicit headerCarrier: HeaderCarrier): Future[CSApplicationModel] = {
+
     def getSchemeType(schemeTypesModel: SchemeTypesModel): String = SingleSchemeTypesModel.convertToSingleScheme(schemeTypesModel).schemeType
 
     for {
@@ -48,6 +53,10 @@ trait InternalService {
       }
     }yield CSApplicationModel(isApplicationInProgress.getOrElse(false),
       if(schemeTypesModel.isDefined) Some(getSchemeType(schemeTypesModel.get)) else None)
-
   }
+
+  def deleteCSApplication(internalId: String)(implicit headerCarrier: HeaderCarrier): Future[HttpResponse] = {
+    s4lConnector.clearCache(internalId)
+  }
+
 }

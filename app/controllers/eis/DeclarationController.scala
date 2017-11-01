@@ -41,4 +41,8 @@ trait DeclarationController extends FrontendController with AuthorisedAndEnrolle
   val show = AuthorisedAndEnrolled.async { implicit user => implicit request =>
     Future.successful(Ok(Declaration()))
   }
+
+  val submit = AuthorisedAndEnrolled.async { implicit user => implicit request =>
+    Future.successful(Redirect(routes.AcknowledgementController.show()))
+  }
 }

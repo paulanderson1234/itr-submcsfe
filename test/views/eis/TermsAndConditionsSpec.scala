@@ -40,31 +40,27 @@ class TermsAndConditionsSpec extends ViewSpec {
 
       document.getElementById("declarationOne").text() shouldBe Messages("page.termsAndConditions.declaration.one.heading")
       document.getElementById("help-bullet-declarationOne-one").text() shouldBe Messages("page.termsAndConditions.declaration.one.bullet.one")
-      document.getElementById("help-bullet-declarationOne-two").text() shouldBe Messages("page.termsAndConditions.declaration.one.bullet.two")
-      document.getElementById("help-bullet-declarationOne-three").text() shouldBe Messages("page.termsAndConditions.declaration.one.bullet.three")
+      document.getElementById("help-bullet-declarationOne-two").text() shouldBe Messages("page.termsAndConditions.eis.declaration.one.bullet.two")
+
 
       document.getElementById("declarationTwo").text() shouldBe Messages("page.termsAndConditions.declaration.two.heading")
       document.getElementById("help-bullet-declarationTwo-one").text() shouldBe Messages("page.termsAndConditions.declaration.two.bullet.one")
       document.getElementById("help-bullet-declarationTwo-two").text() shouldBe Messages("page.termsAndConditions.declaration.two.bullet.two")
       document.getElementById("help-bullet-declarationTwo-three").text() shouldBe Messages("page.termsAndConditions.declaration.two.bullet.three")
       document.getElementById("help-bullet-declarationTwo-four").text() shouldBe Messages("page.termsAndConditions.declaration.two.bullet.four")
-      document.getElementById("help-bullet-declarationTwo-five").text() shouldBe Messages("page.termsAndConditions.declaration.two.bullet.five")
-      document.getElementById("help-bullet-declarationTwo-six").text() shouldBe Messages("page.termsAndConditions.declaration.two.bullet.six")
-      document.getElementById("help-bullet-declarationTwo-seven").text() shouldBe Messages("page.termsAndConditions.declaration.two.bullet.seven")
-      document.getElementById("help-bullet-declarationTwo-eight").text() shouldBe Messages("page.termsAndConditions.declaration.two.bullet.eight")
-      document.getElementById("help-bullet-declarationTwo-nine").text() shouldBe Messages("page.termsAndConditions.declaration.two.bullet.nine")
+      document.getElementById("help-bullet-declarationTwo-five").text() shouldBe Messages("page.termsAndConditions.eis.declaration.two.bullet.five")
+      document.getElementById("help-bullet-declarationTwo-six").text() shouldBe Messages("page.termsAndConditions.eis.declaration.two.bullet.six")
+      document.getElementById("help-bullet-declarationTwo-seven").text() shouldBe Messages("page.termsAndConditions.eis.declaration.two.bullet.seven")
 
-      document.getElementById("declarationThree").text() shouldBe Messages("page.termsAndConditions.declaration.three.heading")
+      document.getElementById("declarationThree").text() shouldBe Messages("page.termsAndConditions.eis.declaration.three.heading")
       document.getElementById("help-bullet-declarationThree-one").text() shouldBe Messages("page.termsAndConditions.declaration.three.bullet.one")
       document.getElementById("help-bullet-declarationThree-two").text() shouldBe Messages("page.termsAndConditions.declaration.three.bullet.two")
-      document.getElementById("help-bullet-declarationThree-three").text() shouldBe Messages("page.termsAndConditions.declaration.three.bullet.three")
+      document.getElementById("help-bullet-declarationThree-three").text() shouldBe Messages("page.termsAndConditions.eis.declaration.three.bullet.three")
+      document.getElementById("help-bullet-declarationThree-four").text() shouldBe Messages("page.termsAndConditions.eis.declaration.three.bullet.four")
+      document.getElementById("help-bullet-declarationThree-five").text() shouldBe Messages("page.termsAndConditions.eis.declaration.three.bullet.five")
+      document.getElementById("help-bullet-declarationThree-six").text() shouldBe Messages("page.termsAndConditions.eis.declaration.three.bullet.six")
+      document.getElementById("help-bullet-declarationThree-seven").text() shouldBe Messages("page.termsAndConditions.eis.declaration.three.bullet.seven")
 
-      document.getElementById("declarationFour").text() shouldBe Messages("page.termsAndConditions.declaration.four.heading")
-      document.getElementById("help-bullet-declarationFour-one").text() shouldBe Messages("page.termsAndConditions.declaration.four.bullet.one.eis")
-      document.getElementById("help-bullet-declarationFour-two").text() shouldBe Messages("page.termsAndConditions.declaration.four.bullet.two")
-      document.getElementById("help-bullet-declarationFour-three").text() shouldBe Messages("page.termsAndConditions.declaration.four.bullet.three")
-      document.getElementById("help-bullet-declarationFour-four").text() shouldBe Messages("page.termsAndConditions.declaration.four.bullet.four")
-      document.getElementById("help-bullet-declarationFour-five").text() shouldBe Messages("page.termsAndConditions.declaration.four.bullet.five")
     }
   }
 

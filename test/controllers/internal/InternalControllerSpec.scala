@@ -26,7 +26,7 @@ import org.mockito.Matchers
 import org.mockito.Mockito._
 import play.api.libs.json.Json
 import play.api.test.Helpers._
-import services.InternalService
+import services.internal.InternalService
 import uk.gov.hmrc.play.http.HttpResponse
 
 import scala.concurrent.Future

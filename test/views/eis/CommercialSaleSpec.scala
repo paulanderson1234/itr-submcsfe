@@ -16,7 +16,7 @@
 
 package views.eis
 
-import auth.{MockConfigEISFlow, MockAuthConnector}
+import auth.{MockConfig, MockAuthConnector}
 import common.{Constants, KeystoreKeys}
 import config.FrontendAppConfig
 import controllers.eis.CommercialSaleController
@@ -39,7 +39,7 @@ class CommercialSaleSpec extends ViewSpec {
   val testUrlAnother = "/test/testing/another"
 
   object TestController extends CommercialSaleController {
-    override lazy val applicationConfig = MockConfigEISFlow
+    override lazy val applicationConfig = MockConfig
     override lazy val authConnector = MockAuthConnector
     override lazy val s4lConnector = mockS4lConnector
     override lazy val enrolmentConnector = mockEnrolmentConnector

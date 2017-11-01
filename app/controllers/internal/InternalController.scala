@@ -15,39 +15,40 @@
  */
 
 package controllers.internal
-import auth.{AuthorisedAndEnrolledForTAVC, Flow}
-import common.KeystoreKeys
-import config.{FrontendAppConfig, FrontendAuthConnector}
-import connectors.{EnrolmentConnector, S4LConnector}
-import models.internal.CSApplicationModel
+import auth.FrontendAuthorised
+import config.FrontendAuthConnector
+import connectors.S4LConnector
+import play.api.Logger
 import play.api.libs.json.Json
-import play.api.mvc.{Action, AnyContent, Results}
-import services.InternalService
+import play.api.mvc.{Action, AnyContent}
+import services.internal.InternalService
 import uk.gov.hmrc.play.frontend.controller.FrontendController
+import uk.gov.hmrc.play.http.HeaderCarrier
 
 import scala.concurrent.Future
 
 object InternalController extends InternalController{
   override lazy val s4lConnector = S4LConnector
   override lazy val internalService = InternalService
+  override lazy val authConnector = FrontendAuthConnector
 }
 
 
-trait InternalController extends FrontendController{
+trait InternalController extends FrontendController with FrontendAuthorised{
 
   val s4lConnector: S4LConnector
   val internalService: InternalService
 
-  def getApplicationInProgress(internalId: String): Action[AnyContent] = Action.async {
-    implicit request =>{
-      internalService.getCSApplicationModel(internalId).map(csApplication => Ok(Json.toJson(csApplication)))
-    }
-  }
+  def getApplicationInProgress: Action[AnyContent] = FrontendAuthorised.async {
+        implicit userIds => implicit request =>{
+          internalService.getCSApplicationModel(userIds.internalId).map(csApplication => Ok(Json.toJson(csApplication)))
+        }
+      }
 
-  def deleteCSApplication(internalId: String): Action[AnyContent] = Action.async {
-    implicit request =>{
-      s4lConnector.clearCache(internalId).map{
-        response => Status(response.status)
+  def deleteCSApplication: Action[AnyContent] = FrontendAuthorised.async {
+    implicit userIds => implicit request => {
+      s4lConnector.clearCache(userIds.internalId).map{
+        res => Status(res.status)
       }
     }
   }

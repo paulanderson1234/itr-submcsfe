@@ -86,8 +86,6 @@ class ReviewInvestorDetailsSpec extends ViewSpec {
           val id = "td#investor-or-nominee"
 
           "has the correct question text" in {
-            println("============= nom")
-            println(table.select(s"$id-question").text())
             table.select(s"$id-question").text() shouldBe Messages("page.investors.reviewInvestorDetails.investor.investorOrNominee")
           }
 

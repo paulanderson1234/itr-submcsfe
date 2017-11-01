@@ -35,6 +35,6 @@ trait AdvancedAssuranceConnector {
 
   def getAdvancedAssuranceApplication()(implicit hc: HeaderCarrier, user: TAVCUser): Future[Boolean] = {
     val headerCarrier = hc.copy(extraHeaders = hc.extraHeaders ++ Seq("CSRF-Token" -> "nocheck"))
-    http.GET[Boolean](s"$serviceUrl/internal/${user.internalId}/aa-application-in-progress")(implicitly[HttpReads[Boolean]], headerCarrier)
+    http.GET[Boolean](s"$serviceUrl/internal/aa-application-in-progress")(implicitly[HttpReads[Boolean]], headerCarrier)
   }
 }

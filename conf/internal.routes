@@ -1,5 +1,5 @@
 # microservice specific routes
 
 
-GET       /:internalId/cs-application-in-progress                 controllers.internal.InternalController.getApplicationInProgress(internalId:String)
-POST      /:internalId/delete-cs-application                      controllers.internal.InternalController.deleteCSApplication(internalId:String)
+GET       /cs-application-in-progress                 controllers.internal.InternalController.getApplicationInProgress
+POST      /delete-cs-application                      controllers.internal.InternalController.deleteCSApplication

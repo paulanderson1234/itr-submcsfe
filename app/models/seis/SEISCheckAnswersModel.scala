@@ -39,6 +39,5 @@ case class SEISCheckAnswersModel(
                                   investorDetails: Option[Vector[InvestorDetailsModel]],
                                   valueReceived: Option[WasAnyValueReceivedModel],
                                   shareCapitalChanges: Option[ShareCapitalChangesModel],
-                                  supportingDocumentsUpload: Option[SupportingDocumentsUploadModel],
-                                  attachmentsEnabled: Boolean
-                            )
+                                  supportingDocumentsUpload: Option[SupportingDocumentsUploadModel]
+                                )

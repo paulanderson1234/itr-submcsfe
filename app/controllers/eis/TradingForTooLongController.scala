@@ -17,6 +17,7 @@
 package controllers.eis
 
 import auth.{AuthorisedAndEnrolledForTAVC, EIS, VCT}
+import common.KeystoreKeys
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
@@ -43,6 +44,7 @@ trait TradingForTooLongController extends FrontendController with AuthorisedAndE
   }
 
   val submit = AuthorisedAndEnrolled.async { implicit user => implicit request =>
-    Future.successful(Redirect(routes.TurnoverCostsController.show()))
+    s4lConnector.saveFormData(KeystoreKeys.backLinkInvestmentGrow, routes.NewProductController.show().url)
+    Future.successful(Redirect(routes.InvestmentGrowController.show()))
   }
 }

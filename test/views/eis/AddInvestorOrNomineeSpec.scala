@@ -16,7 +16,7 @@
 
 package views.eis
 
-import auth.{MockAuthConnector, MockConfigSingleFlow}
+import auth.{MockAuthConnector, MockConfig}
 import common.{Constants, KeystoreKeys}
 import controllers.eis.AddInvestorOrNomineeController
 import models.AddInvestorOrNomineeModel
@@ -40,7 +40,7 @@ class AddInvestorOrNomineeSpec extends ViewSpec {
   val validModel = AddInvestorOrNomineeModel(Constants.investor, Some(1))
 
   object TestController extends AddInvestorOrNomineeController {
-    override lazy val applicationConfig = MockConfigSingleFlow
+    override lazy val applicationConfig = MockConfig
     override lazy val authConnector = MockAuthConnector
     override lazy val s4lConnector = mockS4lConnector
     override lazy val enrolmentConnector = mockEnrolmentConnector
