@@ -70,7 +70,7 @@ class AdvancedAssuranceConnectorSpec extends UnitSpec with MockitoSugar with Bef
       lazy val result = TestAdvancedAssuranceConnector.getAdvancedAssuranceApplication()
       "return a valid boolean response" in {
         when(TestAdvancedAssuranceConnector.http.GET[Boolean](
-          Matchers.eq(s"${TestAdvancedAssuranceConnector.serviceUrl}/internal/${user.internalId}/aa-application-in-progress"))
+          Matchers.eq(s"${TestAdvancedAssuranceConnector.serviceUrl}/internal/aa-application-in-progress"))
           (Matchers.any(), Matchers.any())).thenReturn(Future.successful(false))
         await(result) match {
           case response => response shouldBe false

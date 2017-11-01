@@ -16,7 +16,9 @@
 
 package services
 
+import auth.MockAuthConnector
 import common.{Constants, KeystoreKeys}
+import config.FrontendAuthConnector
 import connectors.S4LConnector
 import models.internal.CSApplicationModel
 import models.submission.SchemeTypesModel
@@ -25,6 +27,7 @@ import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
 import org.scalatestplus.play.OneServerPerSuite
 import services.internal.InternalService
+import uk.gov.hmrc.play.frontend.auth.connectors.AuthConnector
 import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
 
@@ -36,13 +39,20 @@ class InternalServiceSpec extends UnitSpec with MockitoSugar with OneServerPerSu
   implicit val hc = HeaderCarrier()
   val internalId = "Int-312e5e92-762e-423b-ac3d-8686af27fdb5"
 
+
+
   object TestInternalService extends InternalService{
     override val s4lConnector: S4LConnector = mock[S4LConnector]
+    override val authConnector: AuthConnector = MockAuthConnector
   }
 
   "InternalService" should {
     "use the correct s4lConnector" in {
       InternalService.s4lConnector shouldBe S4LConnector
+    }
+
+    "use the correct auth connector" in {
+      InternalService.authConnector shouldBe FrontendAuthConnector
     }
   }
 

@@ -15,7 +15,7 @@
  */
 
 package controllers.internal
-import auth.FrontendAuthorised
+import auth.FrontendAuthorisedForTAVC
 import config.FrontendAuthConnector
 import connectors.S4LConnector
 import play.api.Logger
@@ -34,7 +34,7 @@ object InternalController extends InternalController{
 }
 
 
-trait InternalController extends FrontendController with FrontendAuthorised{
+trait InternalController extends FrontendController with FrontendAuthorisedForTAVC{
 
   val s4lConnector: S4LConnector
   val internalService: InternalService

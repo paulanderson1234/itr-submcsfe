@@ -18,6 +18,8 @@ package controllers.eis
 
 import akka.actor.ActorSystem
 import akka.stream.{ActorMaterializer, Materializer}
+import auth.MockAuthConnector
+import config.FrontendAuthConnector
 import connectors.S4LConnector
 import controllers.helpers.BaseSpec
 import controllers.internal.InternalController
@@ -27,6 +29,7 @@ import org.mockito.Mockito._
 import play.api.libs.json.Json
 import play.api.test.Helpers._
 import services.internal.InternalService
+import uk.gov.hmrc.play.frontend.auth.connectors.AuthConnector
 import uk.gov.hmrc.play.http.HttpResponse
 
 import scala.concurrent.Future
@@ -40,6 +43,8 @@ class InternalControllerSpec extends BaseSpec {
   object TestController extends InternalController {
     override lazy val internalService = mockInternalService
     override lazy val s4lConnector = mockS4lConnector
+
+    override val authConnector: AuthConnector = MockAuthConnector
   }
 
   "InternalController" should {
@@ -50,6 +55,10 @@ class InternalControllerSpec extends BaseSpec {
 
     "use the correct internal service" in {
       InternalController.internalService shouldBe InternalService
+    }
+
+    "use the correct auth connector" in {
+      InternalController.authConnector shouldBe FrontendAuthConnector
     }
   }
 
@@ -63,12 +72,9 @@ class InternalControllerSpec extends BaseSpec {
       when(TestController.internalService.getCSApplicationModel(Matchers.any())(Matchers.any()))
         .thenReturn(Future.successful(testCSApplicationModel))
 
-      showWithSessionAndAuth(TestController.getApplicationInProgress(internalId))(
-        result => {
-          status(result) shouldBe OK
-          await(jsonBodyOf(result)) shouldBe Json.parse(expectedJsonBody)
-        }
-      )
+      lazy val result = TestController.getApplicationInProgress.apply(authorisedFakeFrontendRequest)
+      status(result) shouldBe OK
+      await(jsonBodyOf(result)) shouldBe Json.parse(expectedJsonBody)
     }
   }
 
@@ -76,7 +82,7 @@ class InternalControllerSpec extends BaseSpec {
     "return the correct HttpResponse" in {
       mockEnrolledRequest()
       when(TestController.s4lConnector.clearCache(Matchers.any())(Matchers.any())).thenReturn(HttpResponse(OK))
-      lazy val result = TestController.deleteCSApplication(internalId).apply(authorisedFakeRequest)
+      lazy val result = TestController.deleteCSApplication.apply(authorisedFakeFrontendRequest)
       status(await(result)) shouldBe OK
     }
   }

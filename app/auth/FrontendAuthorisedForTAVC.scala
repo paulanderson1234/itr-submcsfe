@@ -17,14 +17,15 @@
 package auth
 
 import auth.authModels.UserIDs
-import config.FrontendAuthConnector
+import play.api.Logger
 import play.api.mvc.{Action, AnyContent, Request, Result}
 import uk.gov.hmrc.play.frontend.auth.{Actions, AuthContext}
 import uk.gov.hmrc.play.http.HeaderCarrier
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-trait FrontendAuthorised extends Actions {
+trait FrontendAuthorisedForTAVC extends Actions {
 
   private type PlayRequest = Request[AnyContent] => Result
   private type UserRequest = UserIDs => PlayRequest
@@ -45,8 +46,13 @@ trait FrontendAuthorised extends Actions {
               }
             }
             case None => {
+              Logger.error(s"[FrontendAuthorised] - No Authority record found")
               Future.successful(Unauthorized)
             }
+          } recover {
+            case ex: Exception =>
+              Logger.error(s"[FrontendAuthorised] - Received an error when retrieving Authority - error: ${ex.getMessage}")
+              InternalServerError
           }
       }
     }

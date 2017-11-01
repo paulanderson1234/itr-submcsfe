@@ -55,8 +55,4 @@ trait InternalService {
       if(schemeTypesModel.isDefined) Some(getSchemeType(schemeTypesModel.get)) else None)
   }
 
-  def deleteCSApplication(internalId: String)(implicit headerCarrier: HeaderCarrier): Future[HttpResponse] = {
-    s4lConnector.clearCache(internalId)
-  }
-
 }
