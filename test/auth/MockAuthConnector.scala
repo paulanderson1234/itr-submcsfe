@@ -31,7 +31,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 
-object MockAuthConnector extends AuthConnector with MockitoSugar {
+class MockAuthConnector extends AuthConnector with MockitoSugar {
   override val http = mock[WSHttp]
   override val serviceUrl: String = ""
   override def getIds[T](authContext : uk.gov.hmrc.play.frontend.auth.AuthContext)
@@ -84,3 +84,5 @@ object MockAuthConnector extends AuthConnector with MockitoSugar {
       ""
     ))
 }
+
+object MockAuthConnector extends MockAuthConnector

@@ -16,7 +16,7 @@
 
 package views.eis
 
-import auth.{MockAuthConnector, MockConfigEISFlow}
+import auth.{MockAuthConnector, MockConfig}
 import common.Constants
 import config.FrontendAppConfig
 import controllers.eis.CheckAnswersController
@@ -33,7 +33,7 @@ import views.html.eis.checkAndSubmit.CheckAnswers
 class CheckAnswersContactDetailsSpec extends CheckAnswersSpec {
 
   object TestController extends CheckAnswersController {
-    override lazy val applicationConfig = MockConfigEISFlow
+    override lazy val applicationConfig = MockConfig
     override lazy val authConnector = MockAuthConnector
     override lazy val s4lConnector = mockS4lConnector
     override lazy val enrolmentConnector = mockEnrolmentConnector

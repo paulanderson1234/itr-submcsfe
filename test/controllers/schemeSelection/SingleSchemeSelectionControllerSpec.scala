@@ -16,13 +16,11 @@
 
 package controllers.schemeSelection
 
-import auth.{MockConfigSingleFlow, MockAuthConnector, MockConfig}
+import auth.{MockAuthConnector, MockConfig}
 import common.{Constants, KeystoreKeys}
 import config.FrontendAuthConnector
-import connectors.{EnrolmentConnector, S4LConnector}
+import connectors.{AdvancedAssuranceConnector, EnrolmentConnector, S4LConnector}
 import controllers.helpers.BaseSpec
-import controllers.schemeSelection.SingleSchemeSelectionController
-import models._
 import models.submission.SchemeTypesModel
 import org.mockito.Matchers
 import org.mockito.Mockito._
@@ -35,10 +33,11 @@ import scala.concurrent.Future
 class SingleSchemeSelectionControllerSpec extends BaseSpec {
 
   object TestController extends SingleSchemeSelectionController {
-    override lazy val applicationConfig = MockConfigSingleFlow
+    override lazy val applicationConfig = MockConfig
     override lazy val authConnector = MockAuthConnector
     override lazy val s4lConnector = mockS4lConnector
     override lazy val enrolmentConnector = mockEnrolmentConnector
+    override lazy val advancedAssuranceConnector = mockAdvancedAssuranceConnector
   }
 
   val cacheMapSchemeTypesEis: CacheMap = CacheMap("", Map("" -> Json.toJson(SchemeTypesModel(eis = true))))
@@ -55,11 +54,16 @@ class SingleSchemeSelectionControllerSpec extends BaseSpec {
     "use the correct enrolment connector" in {
       SingleSchemeSelectionController.enrolmentConnector shouldBe EnrolmentConnector
     }
+    "use the correct advanced assurance connector" in {
+      SingleSchemeSelectionController.advancedAssuranceConnector shouldBe AdvancedAssuranceConnector
+    }
   }
 
   "Sending a GET request to SingleSchemeSelectionController when authenticated and enrolled" should {
-    "return a 200 when something is fetched from keystore" in {
+    "return a 200 when something is fetched from keystore and no AA application is in progress" in {
       mockEnrolledRequest(None)
+      when(TestController.advancedAssuranceConnector.getAdvancedAssuranceApplication()
+      (Matchers.any(), Matchers.any())).thenReturn(Future.successful(false))
       when(mockS4lConnector.fetchAndGetFormData[SchemeTypesModel](Matchers.eq(KeystoreKeys.selectedSchemes))
         (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(eisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show())(
@@ -67,19 +71,36 @@ class SingleSchemeSelectionControllerSpec extends BaseSpec {
       )
     }
 
-    "provide an empty model and return a 200 when nothing is fetched using keystore" in {
+    "provide an empty model and return a 200 when nothing is fetched using keystore and no AA application is in progress" in {
       mockEnrolledRequest(None)
+      when(TestController.advancedAssuranceConnector.getAdvancedAssuranceApplication()
+      (Matchers.any(), Matchers.any())).thenReturn(Future.successful(false))
       when(mockS4lConnector.fetchAndGetFormData[SchemeTypesModel](Matchers.eq(KeystoreKeys.selectedSchemes))
         (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(None)
       showWithSessionAndAuth(TestController.show())(
         result => status(result) shouldBe OK
       )
     }
+
+    /*Todo needs to redirect to AA hub*/
+    "redirect to the application hub when there is an AA application in progress" in {
+      mockEnrolledRequest(None)
+      when(TestController.advancedAssuranceConnector.getAdvancedAssuranceApplication()
+      (Matchers.any(), Matchers.any())).thenReturn(Future.successful(true))
+      showWithSessionAndAuth(TestController.show())(
+        result => {
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(controllers.routes.HomeController.redirectToHub().url)
+        }
+      )
+    }
   }
 
   "Sending a valid 'EIS' form submit to the SingleSchemeSelectionController when authenticated and enrolled" should {
-    "redirect to review schemes page" in {
+    "redirect to review schemes page when no AA application is in progress" in {
       mockEnrolledRequest(None)
+      when(TestController.advancedAssuranceConnector.getAdvancedAssuranceApplication()
+      (Matchers.any(), Matchers.any())).thenReturn(Future.successful(false))
       when(mockS4lConnector.fetchAndGetFormData[SchemeTypesModel](Matchers.eq(KeystoreKeys.selectedSchemes))
         (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(eisSchemeTypesModel)
       when(mockS4lConnector.saveFormData(Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(cacheMapSchemeTypesEis)
@@ -94,8 +115,10 @@ class SingleSchemeSelectionControllerSpec extends BaseSpec {
   }
 
   "Sending a valid 'SEIS' form submit to the SingleSchemeSelectionController when authenticated and enrolled" should {
-    "redirect to review schemes page" in {
+    "redirect to review schemes page when no AA application is in progress" in {
       mockEnrolledRequest(None)
+      when(TestController.advancedAssuranceConnector.getAdvancedAssuranceApplication()
+      (Matchers.any(), Matchers.any())).thenReturn(Future.successful(false))
       when(mockS4lConnector.fetchAndGetFormData[SchemeTypesModel](Matchers.eq(KeystoreKeys.selectedSchemes))
         (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(seisSchemeTypesModel)
       when(mockS4lConnector.saveFormData(Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(cacheMapSchemeTypesSeis)
@@ -108,26 +131,12 @@ class SingleSchemeSelectionControllerSpec extends BaseSpec {
       )
     }
   }
-//
-//  "Sending a valid 'SEIS' form submit to the SingleSchemeSelectionController when authenticated and enrolled" should {
-//    "redirect to review schemes page" in {
-//      mockEnrolledRequest(None)
-//      when(mockS4lConnector.fetchAndGetFormData[SchemeTypesModel](Matchers.eq(KeystoreKeys.selectedSchemes))
-//        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(seisSchemeTypesModel)
-//      when(mockS4lConnector.saveFormData(Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(cacheMapSchemeTypesSeis)
-//      val formInput = "singleSchemeSelection" -> Constants.schemeTypeSeis
-//      submitWithSessionAndAuth(TestController.submit(),formInput)(
-//        result => {
-//          status(result) shouldBe SEE_OTHER
-//          redirectLocation(result) shouldBe Some(controllers.seis.routes.NatureOfBusinessController.show().url)
-//        }
-//      )
-//    }
-//  }
 
-  "Sending an invlaid 'VCT' form submit to the SingleSchemeSelectionController when authenticated and enrolled" should {
-    "respond with a bad request" in {
+  "Sending an invalid scheme type form submit to the SingleSchemeSelectionController when authenticated and enrolled" should {
+    "respond with a bad request when no AA application is in progress" in {
       mockEnrolledRequest(None)
+      when(TestController.advancedAssuranceConnector.getAdvancedAssuranceApplication()
+      (Matchers.any(), Matchers.any())).thenReturn(Future.successful(false))
       when(mockS4lConnector.fetchAndGetFormData[SchemeTypesModel](Matchers.eq(KeystoreKeys.selectedSchemes))
         (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(vctSchemeTypesModel)
       when(mockS4lConnector.saveFormData(Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(cacheMapSchemeTypesVct)
@@ -141,12 +150,28 @@ class SingleSchemeSelectionControllerSpec extends BaseSpec {
   }
 
   "Sending an invalid form submission with validation errors to the SingleSchemeSelectionController when authenticated and enrolled" should {
-    "redirect to itself" in {
+    "redirect to itself when no AA application is in progress" in {
       mockEnrolledRequest(None)
+      when(TestController.advancedAssuranceConnector.getAdvancedAssuranceApplication()
+      (Matchers.any(), Matchers.any())).thenReturn(Future.successful(false))
       val formInput = "singleSchemeSelection" -> ""
       submitWithSessionAndAuth(TestController.submit(),formInput)(
         result => {
           status(result) shouldBe BAD_REQUEST
+        }
+      )
+    }
+  }
+
+  "Posting to the SingleSchemeSelectionController when authenticated and enrolled" should {
+    "redirect to the application hub when an AA application is in progress" in {
+      mockEnrolledRequest(None)
+      when(TestController.advancedAssuranceConnector.getAdvancedAssuranceApplication()
+      (Matchers.any(), Matchers.any())).thenReturn(Future.successful(true))
+      submitWithSessionAndAuth(TestController.submit())(
+        result => {
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(controllers.routes.HomeController.redirectToHub().url)
         }
       )
     }

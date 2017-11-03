@@ -19,7 +19,7 @@ package controllers.schemeSelection
 import auth.AuthorisedAndEnrolledForTAVC
 import common.KeystoreKeys
 import config.{FrontendAppConfig, FrontendAuthConnector}
-import connectors.{EnrolmentConnector, S4LConnector}
+import connectors.{AdvancedAssuranceConnector, EnrolmentConnector, S4LConnector}
 import controllers.predicates.FeatureSwitch
 import play.api.mvc.{Action, AnyContent, Request, Result}
 import forms.schemeSelection.SingleSchemeSelectionForm._
@@ -37,21 +37,31 @@ object SingleSchemeSelectionController extends SingleSchemeSelectionController {
   override lazy val applicationConfig = FrontendAppConfig
   override lazy val authConnector = FrontendAuthConnector
   override lazy val s4lConnector = S4LConnector
+  val advancedAssuranceConnector = AdvancedAssuranceConnector
 }
 
 trait SingleSchemeSelectionController extends FrontendController with AuthorisedAndEnrolledForTAVC with FeatureSwitch {
 
+  val advancedAssuranceConnector: AdvancedAssuranceConnector
   override val acceptedFlows = Seq()
 
   def show(): Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user => implicit request =>
-    s4lConnector.fetchAndGetFormData[SchemeTypesModel](KeystoreKeys.selectedSchemes).map {
-      case Some(scheme) => Ok(SingleSchemeSelection(singleSchemeSelectionForm.fill(SingleSchemeTypesModel.convertToSingleScheme(scheme))))
-      case _ => Ok(SingleSchemeSelection(singleSchemeSelectionForm))
+
+    def continue = {
+      s4lConnector.fetchAndGetFormData[SchemeTypesModel](KeystoreKeys.selectedSchemes).map {
+        case Some(scheme) => Ok(SingleSchemeSelection(singleSchemeSelectionForm.fill(SingleSchemeTypesModel.convertToSingleScheme(scheme))))
+        case _ => Ok(SingleSchemeSelection(singleSchemeSelectionForm))
+      }
     }
+
+    for{
+      aaInProgress <- advancedAssuranceConnector.getAdvancedAssuranceApplication()
+      result <-continue
+    } yield if(aaInProgress) Redirect(controllers.routes.HomeController.redirectToHub()) else result
   }
 
   def submit(): Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user => implicit request =>
-    singleSchemeSelectionForm.bindFromRequest.fold(
+    def continue = singleSchemeSelectionForm.bindFromRequest.fold(
       formWithErrors => {
         Future.successful(BadRequest(SingleSchemeSelection(formWithErrors)))
 
@@ -69,6 +79,11 @@ trait SingleSchemeSelectionController extends FrontendController with Authorised
         }
       }
     )
+
+    for{
+      aaInProgress <- advancedAssuranceConnector.getAdvancedAssuranceApplication()
+      result <-continue
+    } yield if(aaInProgress) Redirect(controllers.routes.HomeController.redirectToHub()) else result
   }
 
   private def routeToScheme(schemeTypesModel: SchemeTypesModel, singleSchemeTypesModel: SingleSchemeTypesModel)

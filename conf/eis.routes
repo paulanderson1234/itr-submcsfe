@@ -129,6 +129,7 @@ GET        /company-or-individual/:id             controllers.eis.CompanyOrIndiv
 POST       /company-or-individual                 controllers.eis.CompanyOrIndividualController.submit(investorOrNominee: Option[String]?=None)
 
 GET        /declaration                          controllers.eis.DeclarationController.show
+POST       /declaration                          controllers.eis.DeclarationController.submit
 
 GET        /delete-investor/:investorId             controllers.eis.DeleteInvestorController.show(investorId: Int)
 POST       /delete-investor/:investorProcessingId             controllers.eis.DeleteInvestorController.submit(investorProcessingId: Int)
@@ -264,6 +265,7 @@ GET        /delete-shares-repayment/:repaymentId                       controlle
 POST       /delete-shares-repayment/:repaymentProcessingId             controllers.eis.DeleteSharesRepaymentController.submit(repaymentProcessingId: Int)
 
 GET        /initial-declaration                          controllers.eis.InitialDeclarationController.show
+POST       /initial-declaration                          controllers.eis.InitialDeclarationController.submit
 
 GET        /terms-and-conditions                          controllers.eis.TermsAndConditionsController.show
 

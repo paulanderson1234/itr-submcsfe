@@ -42,7 +42,7 @@ class TradingForTooLongControllerSpec extends BaseSpec {
   }
 
   "Sending a GET request to TradingForTooLongController when authenticated and enrolled" should {
-    "retun an OK and load the page" in {
+    "return an OK and load the page" in {
       mockEnrolledRequest(eisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show)(
         result => status(result) shouldBe OK
@@ -51,12 +51,12 @@ class TradingForTooLongControllerSpec extends BaseSpec {
   }
 
   "Sending a POST request to TradingForTooLongController when authenticated and enrolled" should {
-    "REDIRECT to the TurnoverCostsController" in {
+    "REDIRECT to the InvestmentGrowController" in {
       mockEnrolledRequest(eisSchemeTypesModel)
       showWithSessionAndAuth(TestController.submit)(
         result => {
           status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(routes.TurnoverCostsController.show().url)
+          redirectLocation(result) shouldBe Some(routes.InvestmentGrowController.show().url)
         }
       )
     }

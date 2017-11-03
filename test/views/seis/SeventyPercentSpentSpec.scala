@@ -16,7 +16,7 @@
 
 package views.seis
 
-import auth.{MockAuthConnector, MockConfigSingleFlow}
+import auth.{MockAuthConnector, MockConfig}
 import common.KeystoreKeys
 import controllers.seis.SeventyPercentSpentController
 import models.SeventyPercentSpentModel
@@ -38,7 +38,7 @@ class SeventyPercentSpentSpec extends ViewSpec {
   val testUrlOther = "/test/test/testanother"
 
   object TestController extends SeventyPercentSpentController {
-    override lazy val applicationConfig = MockConfigSingleFlow
+    override lazy val applicationConfig = MockConfig
     override lazy val authConnector = MockAuthConnector
     override lazy val s4lConnector = mockS4lConnector
     override lazy val enrolmentConnector = mockEnrolmentConnector

@@ -16,7 +16,7 @@
 
 package views.seis
 
-import auth.{MockAuthConnector, MockConfigSingleFlow}
+import auth.{MockAuthConnector, MockConfig}
 import common.{Constants, KeystoreKeys}
 import controllers.seis.{ContactDetailsController, routes}
 import forms.ContactDetailsForm._

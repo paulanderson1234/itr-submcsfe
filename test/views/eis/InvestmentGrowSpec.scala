@@ -16,7 +16,7 @@
 
 package views.eis
 
-import auth.{MockAuthConnector, MockConfigEISFlow}
+import auth.{MockAuthConnector, MockConfig}
 import common.{Constants, KeystoreKeys}
 import controllers.eis.InvestmentGrowController
 import controllers.helpers.MockDataGenerator
@@ -38,7 +38,7 @@ class InvestmentGrowSpec extends ViewSpec {
   val validInvestmentGrowModelMaxLength = InvestmentGrowModel(SuggestedMaxLengthText)
 
   object TestController extends InvestmentGrowController {
-    override lazy val applicationConfig = MockConfigEISFlow
+    override lazy val applicationConfig = MockConfig
     override lazy val authConnector = MockAuthConnector
     override lazy val s4lConnector = mockS4lConnector
     override lazy val enrolmentConnector = mockEnrolmentConnector
