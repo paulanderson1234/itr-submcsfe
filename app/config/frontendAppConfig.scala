@@ -35,8 +35,10 @@ trait AppConfig {
   val submissionUrl: String
   val attachmentFileUploadUrl: (String)=> String
   val internalAttachmentsUrl: String
+  val internalAASubmissionUrl: String
   val attachmentsFrontEndServiceBaseUrl: String
   val submissionFrontendServiceBaseUrl: String
+  val aaSubmissionFrontendServiceBaseUrl: String
   val attachmentsServiceUrl: String
   val attachmentFileUploadOutsideUrl: String
   val emailVerificationTemplate: String
@@ -63,6 +65,7 @@ object FrontendAppConfig extends AppConfig with ServicesConfig {
 
   override lazy val attachmentsFrontEndServiceBaseUrl: String = loadConfig(s"investment-tax-relief-attachments-frontend.url")
   override lazy val submissionFrontendServiceBaseUrl: String = loadConfig(s"investment-tax-relief-submission-cs-frontend.url")
+  override lazy val aaSubmissionFrontendServiceBaseUrl: String = loadConfig(s"investment-tax-relief-submission-frontend.url")
 
   override lazy val subscriptionUrl: String = loadConfig("investment-tax-relief-subscription.url")
   override lazy val signOutPageUrl: String = configuration.getString(s"sign-out-page.url").getOrElse("")
@@ -78,6 +81,7 @@ object FrontendAppConfig extends AppConfig with ServicesConfig {
 
   override lazy val submissionUrl = baseUrl("investment-tax-relief-submission")
   override lazy val internalAttachmentsUrl = baseUrl("internal-attachments")
+  override lazy val internalAASubmissionUrl = baseUrl("internal-submission")
   override lazy val attachmentFileUploadUrl: (String)=> String = schemeType => {
     s"$attachmentsFrontEndServiceBaseUrl/file-upload?continueUrl=$submissionFrontendServiceBaseUrl" +
       s"/$schemeType/check-your-answers&backUrl=$submissionFrontendServiceBaseUrl/$schemeType/supporting-documents-upload"
