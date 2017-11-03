@@ -421,7 +421,7 @@ trait AcknowledgementController extends FrontendController with AuthorisedAndEnr
         case (Some(answersModel), tavcReferenceNumber, registrationDetailsModel) => {
           processResultUpload(answersModel, tavcReferenceNumber, registrationDetailsModel)
         }
-        case (None, _, _) => Future.successful(Redirect(controllers.routes.ApplicationHubController.show()))
+        case (None, _, _) => Future.successful(Redirect(controllers.routes.HomeController.redirectToHub()))
       }
   }
 

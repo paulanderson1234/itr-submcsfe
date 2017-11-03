@@ -154,7 +154,7 @@ class AcknowledgementSpec extends ViewSpec {
         lazy val link = paragraph.select("a").last()
 
         "links to the hub" in {
-          link.attr("href") shouldBe controllers.routes.ApplicationHubController.show().url
+          link.attr("href") shouldBe controllers.routes.HomeController.redirectToHub().url
         }
 
         "has the correct part of the message" in {

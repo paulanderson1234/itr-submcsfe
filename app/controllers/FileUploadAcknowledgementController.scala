@@ -55,7 +55,7 @@ trait FileUploadAcknowledgementController extends FrontendController with Author
   }
 
   val finish = AuthorisedAndEnrolled.async { implicit user => implicit request =>
-    Future.successful(Redirect(routes.ApplicationHubController.show()))
+    Future.successful(Redirect(routes.HomeController.redirectToHub()))
   }
 
 }

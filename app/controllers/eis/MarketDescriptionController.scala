@@ -49,7 +49,7 @@ trait MarketDescriptionController extends FrontendController with AuthorisedAndE
           case None => Ok(MarketDescription(marketDescriptionForm, backUrl.get))
         }
       }
-      else Future.successful(Redirect(controllers.routes.ApplicationHubController.show()))
+      else Future.successful(Redirect(controllers.routes.HomeController.redirectToHub()))
     }
 
     for {

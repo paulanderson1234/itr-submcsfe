@@ -55,7 +55,7 @@ class SupportingDocumentsUploadSpec extends ViewSpec {
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.six")
       document.body.getElementById("back-link").attr("href") shouldEqual routes.ConfirmCorrespondAddressController.show().url
       document.body.getElementById("venture-capital-schemes-dashboard").getElementsByTag("a").first().attr("href") shouldBe
-        controllers.routes.ApplicationHubController.show().url
+        controllers.routes.HomeController.redirectToHub().url
 
     }
 
@@ -78,7 +78,7 @@ class SupportingDocumentsUploadSpec extends ViewSpec {
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.six")
       document.body.getElementById("back-link").attr("href") shouldEqual routes.ConfirmCorrespondAddressController.show().url
       document.body.getElementById("venture-capital-schemes-dashboard").getElementsByTag("a").first().attr("href") shouldBe
-        controllers.routes.ApplicationHubController.show().url
+        controllers.routes.HomeController.redirectToHub().url
     }
   }
 

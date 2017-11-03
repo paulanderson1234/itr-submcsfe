@@ -57,7 +57,7 @@ trait SingleSchemeSelectionController extends FrontendController with Authorised
     for{
       aaInProgress <- advancedAssuranceConnector.getAdvancedAssuranceApplication()
       result <-continue
-    } yield if(aaInProgress) Redirect(controllers.routes.ApplicationHubController.show()) else result
+    } yield if(aaInProgress) Redirect(controllers.routes.HomeController.redirectToHub()) else result
   }
 
   def submit(): Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user => implicit request =>
@@ -83,7 +83,7 @@ trait SingleSchemeSelectionController extends FrontendController with Authorised
     for{
       aaInProgress <- advancedAssuranceConnector.getAdvancedAssuranceApplication()
       result <-continue
-    } yield if(aaInProgress) Redirect(controllers.routes.ApplicationHubController.show()) else result
+    } yield if(aaInProgress) Redirect(controllers.routes.HomeController.redirectToHub()) else result
   }
 
   private def routeToScheme(schemeTypesModel: SchemeTypesModel, singleSchemeTypesModel: SingleSchemeTypesModel)

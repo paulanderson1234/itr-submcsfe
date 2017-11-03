@@ -74,7 +74,7 @@ class SupportingDocumentsUploadControllerSpec extends BaseSpec {
       mockEnrolledRequest()
       submitWithSessionAndAuth(TestController.cancel){
         result => status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(routes.ApplicationHubController.show().url)
+          redirectLocation(result) shouldBe Some(routes.HomeController.redirectToHub().url)
       }
     }
   }

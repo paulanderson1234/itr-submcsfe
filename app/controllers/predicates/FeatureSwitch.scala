@@ -27,7 +27,7 @@ trait FeatureSwitch {
   }
 
   private def redirect = Action.apply {
-    implicit request => Redirect(controllers.routes.ApplicationHubController.show())
+    implicit request => Redirect(controllers.routes.HomeController.redirectToHub())
   }
 
 }

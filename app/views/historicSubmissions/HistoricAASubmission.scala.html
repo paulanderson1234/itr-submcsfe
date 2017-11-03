@@ -24,7 +24,7 @@
 
 @main_template(Messages("page.historicSubmissions.applications.aa.title"), bodyClasses = None, articleLayout=false) {
 
-@backButtonWithProgress(controllers.routes.ApplicationHubController.show().url, Messages("page.historicSubmissions.applications.aa.section.dashboard"))
+@backButtonWithProgress(controllers.routes.HomeController.redirectToHub().url, Messages("page.historicSubmissions.applications.aa.section.dashboard"))
 
 
 <div class="grid-row">
@@ -45,7 +45,7 @@
         </div>
 
         <div class="form-group">
-            @form(action = controllers.routes.ApplicationHubController.newApplication()) {
+            @form(action = controllers.routes.HomeController.redirectToHub) {
             <button class="button" type="submit" id="create-new-application">@Messages("page.introduction.hub.button")</button>
             }
         </div>

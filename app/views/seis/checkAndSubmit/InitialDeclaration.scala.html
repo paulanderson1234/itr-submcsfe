@@ -22,7 +22,7 @@
 
 @main_template(title = Messages("page.initial.declaration.title"), bodyClasses = None) {
 
-    @backButton(controllers.routes.ApplicationHubController.show().url)
+    @backButton(controllers.routes.HomeController.redirectToHub().url)
 
     <h1 class="heading-xlarge" id="main-heading">@Messages("page.initial.declaration.heading")</h1>
 
@@ -54,7 +54,7 @@
     }
 
     <div class="form-group">
-       <a id="do-not-agree" href="@controllers.routes.ApplicationHubController.show()">@Messages("page.declaration.doNotAgree")</a>
+       <a id="do-not-agree" href="@controllers.routes.HomeController.redirectToHub()">@Messages("page.declaration.doNotAgree")</a>
     </div>
 
 }

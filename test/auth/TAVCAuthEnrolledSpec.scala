@@ -179,7 +179,7 @@ class TAVCAuthEnrolledSpec extends BaseSpec {
         .thenReturn(Future.successful(Option(enrolledUser)))
       val result = TestController.authorisedAsyncAction(authenticatedFakeRequest(AuthenticationProviderIds.GovernmentGatewayId))
       status(result) shouldBe Status.SEE_OTHER
-      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+      redirectLocation(result) shouldBe Some(controllers.routes.HomeController.redirectToHub().url)
     }
   }
 
@@ -200,7 +200,7 @@ class TAVCAuthEnrolledSpec extends BaseSpec {
         .thenReturn(Future.successful(Option(enrolledUser)))
       val result = TestController.authorisedAsyncAction(authenticatedFakeRequest(AuthenticationProviderIds.GovernmentGatewayId))
       status(result) shouldBe Status.SEE_OTHER
-      redirectLocation(result) shouldBe Some(controllers.routes.ApplicationHubController.show().url)
+      redirectLocation(result) shouldBe Some(controllers.routes.HomeController.redirectToHub().url)
     }
   }
 }

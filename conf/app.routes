@@ -5,7 +5,7 @@ GET         /assets/*file            controllers.Assets.at(path="/public", file)
 
 #Start route
 #####################################################################################################################
-GET        /                                        controllers.ApplicationHubController.show
+GET        /                                        controllers.HomeController.redirectToHub
 #####################################################################################################################
 
 #Session Timeout route
@@ -20,9 +20,7 @@ POST       /select-scheme                           controllers.schemeSelection.
 GET        /sign-out                                controllers.SignOutController.signout
 GET        /signed-out                              controllers.SignOutController.show
 
-GET        /hub                                     controllers.ApplicationHubController.show
-POST       /hub                                     controllers.ApplicationHubController.newApplication
-POST       /hub-delete                              controllers.ApplicationHubController.delete
+GET        /hub                                     controllers.HomeController.redirectToHub
 
 GET        /fileUpload-acknowledgement              controllers.FileUploadAcknowledgementController.show
 POST       /fileUpload-acknowledgement              controllers.FileUploadAcknowledgementController.finish

@@ -16,41 +16,30 @@
 
 package controllers
 
-import auth.{AuthorisedAndEnrolledForTAVC}
+import auth.{AuthorisedAndEnrolledForTAVC, Flow}
 import config.{FrontendAppConfig, FrontendAuthConnector}
 import connectors.{EnrolmentConnector, S4LConnector}
-import services.FileUploadService
 import uk.gov.hmrc.play.frontend.controller.FrontendController
-import views.html.supportingDocuments.SupportingDocumentsUpload
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
 
 import scala.concurrent.Future
 
-object SupportingDocumentsUploadController extends SupportingDocumentsUploadController
+object HomeController extends HomeController
 {
-  override lazy val s4lConnector: S4LConnector = S4LConnector
   override lazy val applicationConfig = FrontendAppConfig
   override lazy val authConnector = FrontendAuthConnector
   override lazy val enrolmentConnector = EnrolmentConnector
-  val fileUploadService: FileUploadService = FileUploadService
+  override lazy val s4lConnector = S4LConnector
+
 }
 
-trait SupportingDocumentsUploadController extends FrontendController with AuthorisedAndEnrolledForTAVC {
+trait HomeController extends FrontendController with AuthorisedAndEnrolledForTAVC
+{
 
   override val acceptedFlows = Seq()
-  val fileUploadService: FileUploadService
 
-  val show = AuthorisedAndEnrolled.async { implicit user =>
-    implicit request =>
-      Future.successful(Ok(SupportingDocumentsUpload()))
+  val redirectToHub = AuthorisedAndEnrolled.async { implicit user => implicit request =>
+    Future.successful(Redirect(config.FrontendAppConfig.aaSubmissionFrontendServiceBaseUrl))
   }
 
-  val submit = AuthorisedAndEnrolled.async { implicit user => implicit request =>
-    Future.successful(Redirect(applicationConfig.attachmentFileUploadOutsideUrl))
-  }
 
-  val cancel = AuthorisedAndEnrolled.async { implicit user => implicit request =>
-    Future.successful(Redirect(routes.HomeController.redirectToHub()))
-  }
 }
