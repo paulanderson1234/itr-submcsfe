@@ -132,7 +132,7 @@ class SingleSchemeSelectionControllerSpec extends BaseSpec {
     }
   }
 
-  "Sending an invlaid 'VCT' form submit to the SingleSchemeSelectionController when authenticated and enrolled" should {
+  "Sending an invalid scheme type form submit to the SingleSchemeSelectionController when authenticated and enrolled" should {
     "respond with a bad request when no AA application is in progress" in {
       mockEnrolledRequest(None)
       when(TestController.advancedAssuranceConnector.getAdvancedAssuranceApplication()
