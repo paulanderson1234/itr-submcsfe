@@ -39,8 +39,11 @@ class GrossAssetsSpec extends ViewSpec {
       val document = Jsoup.parse(page(grossAssetsForm.fill(GrossAssetsModel(grossAssetsAmount))).body)
       document.title() shouldBe Messages("page.grossAssets.amount.title")
       document.getElementById("main-heading").text() shouldBe Messages("page.grossAssets.amount.heading")
+
+      document.getElementById()
       document.getElementById("label-amount").select("span").hasClass("visuallyhidden") shouldBe true
       document.getElementById("label-amount").select(".visuallyhidden").text() shouldBe Messages("page.grossAssets.amount.heading")
+
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       document.body.getElementById("back-link").attr("href") shouldEqual routes.ShareIssueDateController.show().url
       document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.one")

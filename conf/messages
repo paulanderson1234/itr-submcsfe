@@ -697,8 +697,16 @@ page.historicSubmissions.applications.aa.no-previous.text=You have not submitted
 
 
 #Gross assets pages
-page.grossAssets.amount.title=What were your company''s gross assets worth immediately before the share issue?
-page.grossAssets.amount.heading=What were your company''s gross assets worth immediately before the share issue?
+page.grossAssets.amount.title=What were the company''s gross assets worth just before it issued the shares?
+page.grossAssets.amount.heading=What were the company''s gross assets worth just before it issued the shares?
+page.grossAssets.amount.legend=What were the company''s gross assets worth just before it issued the shares?
+page.grossAssets.guidance.title=How to work this out
+page.grossAssets.guidance.one=Gross assets are all of the assets that would have appeared on your balance sheet just before the share issue. Don''t deduct any liabilities and don''t include the money raised for the share issue.
+page.grossAssets.option.one=Up to £1,000,000
+page.grossAssets.option.two=£1,000,001 to £5,000,000
+page.grossAssets.option.three=£5,000,001 to £10,000,000
+page.grossAssets.option.four=£10,000,001 to £15,000,000
+page.grossAssets.option.five=More than £15,000,000
 
 #Gross assets after issue page
 page.grossAssetsAfterIssue.amount.title=What were your company''s gross assets worth immediately after the share issue?
