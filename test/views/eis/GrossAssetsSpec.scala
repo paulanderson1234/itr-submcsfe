@@ -16,6 +16,7 @@
 
 package views.eis
 
+import common.Constants
 import controllers.eis.routes
 import forms.GrossAssetsForm._
 import models.GrossAssetsModel
@@ -28,7 +29,7 @@ import views.html.eis.companyDetails.GrossAssets
 
 class GrossAssetsSpec extends ViewSpec {
 
-  val grossAssetsAmount = 200000
+  val grossAssetsAmount = 500000
 
   val page = (form: Form[GrossAssetsModel]) =>
     GrossAssets(form)(fakeRequest, applicationMessages)
@@ -39,11 +40,15 @@ class GrossAssetsSpec extends ViewSpec {
       val document = Jsoup.parse(page(grossAssetsForm.fill(GrossAssetsModel(grossAssetsAmount))).body)
       document.title() shouldBe Messages("page.grossAssets.amount.title")
       document.getElementById("main-heading").text() shouldBe Messages("page.grossAssets.amount.heading")
-
-      document.getElementById()
-      document.getElementById("label-amount").select("span").hasClass("visuallyhidden") shouldBe true
-      document.getElementById("label-amount").select(".visuallyhidden").text() shouldBe Messages("page.grossAssets.amount.heading")
-
+      document.getElementById("grossAssetsAmount-legend").hasClass("visuallyhidden") shouldBe true
+      document.getElementById("grossAssetsAmount-legend").select(".visuallyhidden").text() shouldBe Messages("page.grossAssets.amount.legend")
+      document.getElementById("help").text shouldBe Messages("page.grossAssets.guidance.title")
+      document.getElementById("how-to-work-this-out").text shouldBe Messages("page.grossAssets.guidance.one")
+      document.getElementById("grossAmount-1000000").attr("value") shouldBe Constants.grossAssetsBandOne
+      document.getElementById("grossAmount-5000000").attr("value") shouldBe Constants.grossAssetsBandTwo
+      document.getElementById("grossAmount-10000000").attr("value") shouldBe Constants.grossAssetsBandThree
+      document.getElementById("grossAmount-15000000").attr("value") shouldBe Constants.grossAssetsBandFour
+      document.getElementById("grossAmount-15000001").attr("value") shouldBe Constants.grossAssetsBandFive
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       document.body.getElementById("back-link").attr("href") shouldEqual routes.ShareIssueDateController.show().url
       document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.one")
@@ -56,14 +61,20 @@ class GrossAssetsSpec extends ViewSpec {
       val document = Jsoup.parse(page(grossAssetsForm).body)
       document.title() shouldBe Messages("page.grossAssets.amount.title")
       document.getElementById("main-heading").text() shouldBe Messages("page.grossAssets.amount.heading")
-      document.getElementById("label-amount").select("span").hasClass("visuallyhidden") shouldBe true
-      document.getElementById("label-amount").select(".visuallyhidden").text() shouldBe Messages("page.grossAssets.amount.heading")
+      document.getElementById("grossAssetsAmount-legend").hasClass("visuallyhidden") shouldBe true
+      document.getElementById("grossAssetsAmount-legend").select(".visuallyhidden").text() shouldBe Messages("page.grossAssets.amount.legend")
+      document.getElementById("help").text shouldBe Messages("page.grossAssets.guidance.title")
+      document.getElementById("how-to-work-this-out").text shouldBe Messages("page.grossAssets.guidance.one")
+      document.getElementById("grossAmount-1000000").attr("value") shouldBe Constants.grossAssetsBandOne
+      document.getElementById("grossAmount-5000000").attr("value") shouldBe Constants.grossAssetsBandTwo
+      document.getElementById("grossAmount-10000000").attr("value") shouldBe Constants.grossAssetsBandThree
+      document.getElementById("grossAmount-15000000").attr("value") shouldBe Constants.grossAssetsBandFour
+      document.getElementById("grossAmount-15000001").attr("value") shouldBe Constants.grossAssetsBandFive
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       document.body.getElementById("back-link").attr("href") shouldEqual routes.ShareIssueDateController.show().url
       document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.one")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       document.select(".error-summary").isEmpty shouldBe true
-
     }
 
     "Verify that the gross assets page contains the correct elements when an invalid form with errors is passed" in  {
