@@ -16,13 +16,24 @@
 
 package models
 
+import common.Constants
 import play.api.libs.json.Json
+import play.api.i18n.Messages
 import utils.CostFormatter
 
-case class GrossAssetsModel(grossAmount : BigDecimal)
+case class GrossAssetsModel(grossAmount : BigDecimal){
+  def grossAssetsAmountBandEIS()(implicit messages: Messages): String = {
+    grossAmount.toString() match{
+      case Constants.grossAssetsBandOne => Messages("page.grossAssets.option.one")
+      case Constants.grossAssetsBandTwo => Messages("page.grossAssets.option.two")
+      case Constants.grossAssetsBandThree => Messages("page.grossAssets.option.three")
+      case Constants.grossAssetsBandFour => Messages("page.grossAssets.option.four")
+      case Constants.grossAssetsBandFive => Messages("page.grossAssets.option.five")
+    }
+  }
+}
 
 object GrossAssetsModel extends CostFormatter{
-
   implicit val format = Json.format[GrossAssetsModel]
   implicit val writes = Json.writes[GrossAssetsModel]
 }
