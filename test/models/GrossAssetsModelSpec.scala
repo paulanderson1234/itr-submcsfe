@@ -50,7 +50,7 @@ class GrossAssetsModelSpec extends BaseSpec with MockitoSugar  {
 
 
     "throw an Exception when given a non valid number" in {
-      intercept[Exception] {
+      intercept[MatchError] {
         GrossAssetsModel("12345").grossAssetsAmountBandEIS()
       }
     }
