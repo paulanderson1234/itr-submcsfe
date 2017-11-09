@@ -16,7 +16,8 @@
 
 @import models.GrossAssetsAfterIssueModel
 @import uk.gov.hmrc.play.views.html.helpers.form
-@import views.html.helpers.{errorSummary, inputWithCurrencySymbol, backButtonWithProgress}
+@import views.html.helpers.{errorSummary, inputWithCurrencySymbol, backButtonWithProgress, formInputRadioGroup}
+@import common.Constants
 
 @(grossAssetsAfterIssueForm: Form[GrossAssetsAfterIssueModel])(implicit request: Request[_], messages: Messages)
 
@@ -32,19 +33,32 @@
         <h1 id="main-heading" class="form-title heading-xlarge">@Messages("page.grossAssetsAfterIssue.amount.heading")</h1>
 
         @form(action = controllers.eis.routes.GrossAssetsAfterIssueController.submit()) {
+
+        <details>
+            <summary><span id="help" class="summary">@Messages("page.grossAssetsAfterIssue.guidance.title")</span></summary>
+            <div class="panel panel-indent panel-border-narrow">
+                <p id="how-to-work-this-out">@Messages("page.grossAssetsAfterIssue.guidance.one")</p>
+            </div>
+        </details>
+
         <div class="form-group">
-            @inputWithCurrencySymbol(
-            grossAssetsAfterIssueForm("grossAmount"),
-            '_divClass -> "form-label",
-            '_labelId -> "label-amount",
-            '_label -> Messages("page.grossAssetsAfterIssue.amount.heading"),
-            '_labelTextClass -> "visuallyhidden",
-            '_inputClass -> "input--no-spinner input--left-padding",
-            '_type -> "text",
-            '_maxlength -> "9",
-            'id -> "amount"
+            @formInputRadioGroup(
+            field = grossAssetsAfterIssueForm("grossAmount"),
+            Seq(
+            Constants.grossAssetsBandOne -> Messages("page.grossAssetsAfterIssue.option.one"),
+            Constants.grossAssetsBandTwo -> Messages("page.grossAssetsAfterIssue.option.two"),
+            Constants.grossAssetsBandThree -> Messages("page.grossAssetsAfterIssue.option.three"),
+            Constants.grossAssetsAfterIssueBandFour -> Messages("page.grossAssetsAfterIssue.option.four"),
+            Constants.grossAssetsAfterIssueBandFive -> Messages("page.grossAssetsAfterIssue.option.five")),
+            '_legend -> Messages("page.grossAssetsAfterIssue.amount.legend"),
+            '_legendClass -> "visuallyhidden",
+            '_legendID -> "grossAssetsAfterIssueAmount",
+            '_labelAfter -> true,
+            '_labelClass -> "block-label"
             )
         </div>
+
+
 
         <div class="form-group">
             <button class="btn button" type="submit" id="next">@Messages("common.button.snc")</button>

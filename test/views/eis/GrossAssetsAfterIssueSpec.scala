@@ -16,6 +16,7 @@
 
 package views.eis
 
+import common.Constants
 import controllers.eis.routes
 import forms.GrossAssetsAfterIssueForm._
 import models.GrossAssetsAfterIssueModel
@@ -39,8 +40,15 @@ class GrossAssetsAfterIssueSpec extends ViewSpec {
       val document = Jsoup.parse(page(grossAssetsAfterIssueForm.fill(GrossAssetsAfterIssueModel(grossAssetsAmount))).body)
       document.title() shouldBe Messages("page.grossAssetsAfterIssue.amount.title")
       document.getElementById("main-heading").text() shouldBe Messages("page.grossAssetsAfterIssue.amount.heading")
-      document.getElementById("label-amount").select("span").hasClass("visuallyhidden") shouldBe true
-      document.getElementById("label-amount").select(".visuallyhidden").text() shouldBe Messages("page.grossAssetsAfterIssue.amount.heading")
+      document.getElementById("grossAssetsAfterIssueAmount-legend").hasClass("visuallyhidden") shouldBe true
+      document.getElementById("grossAssetsAfterIssueAmount-legend").select(".visuallyhidden").text() shouldBe Messages("page.grossAssetsAfterIssue.amount.legend")
+      document.getElementById("help").text shouldBe Messages("page.grossAssetsAfterIssue.guidance.title")
+      document.getElementById("how-to-work-this-out").text shouldBe Messages("page.grossAssetsAfterIssue.guidance.one")
+      document.getElementById("grossAmount-1000000").attr("value") shouldBe Constants.grossAssetsBandOne
+      document.getElementById("grossAmount-5000000").attr("value") shouldBe Constants.grossAssetsBandTwo
+      document.getElementById("grossAmount-10000000").attr("value") shouldBe Constants.grossAssetsBandThree
+      document.getElementById("grossAmount-16000000").attr("value") shouldBe Constants.grossAssetsAfterIssueBandFour
+      document.getElementById("grossAmount-16000001").attr("value") shouldBe Constants.grossAssetsAfterIssueBandFive
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       document.body.getElementById("back-link").attr("href") shouldEqual routes.GrossAssetsController.show().url
       document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.one")
@@ -53,8 +61,15 @@ class GrossAssetsAfterIssueSpec extends ViewSpec {
       val document = Jsoup.parse(page(grossAssetsAfterIssueForm).body)
       document.title() shouldBe Messages("page.grossAssetsAfterIssue.amount.title")
       document.getElementById("main-heading").text() shouldBe Messages("page.grossAssetsAfterIssue.amount.heading")
-      document.getElementById("label-amount").select("span").hasClass("visuallyhidden") shouldBe true
-      document.getElementById("label-amount").select(".visuallyhidden").text() shouldBe Messages("page.grossAssetsAfterIssue.amount.heading")
+      document.getElementById("grossAssetsAfterIssueAmount-legend").hasClass("visuallyhidden") shouldBe true
+      document.getElementById("grossAssetsAfterIssueAmount-legend").select(".visuallyhidden").text() shouldBe Messages("page.grossAssetsAfterIssue.amount.legend")
+      document.getElementById("help").text shouldBe Messages("page.grossAssetsAfterIssue.guidance.title")
+      document.getElementById("how-to-work-this-out").text shouldBe Messages("page.grossAssetsAfterIssue.guidance.one")
+      document.getElementById("grossAmount-1000000").attr("value") shouldBe Constants.grossAssetsBandOne
+      document.getElementById("grossAmount-5000000").attr("value") shouldBe Constants.grossAssetsBandTwo
+      document.getElementById("grossAmount-10000000").attr("value") shouldBe Constants.grossAssetsBandThree
+      document.getElementById("grossAmount-16000000").attr("value") shouldBe Constants.grossAssetsAfterIssueBandFour
+      document.getElementById("grossAmount-16000001").attr("value") shouldBe Constants.grossAssetsAfterIssueBandFive
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       document.body.getElementById("back-link").attr("href") shouldEqual routes.GrossAssetsController.show().url
       document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.one")

@@ -16,10 +16,23 @@
 
 package models
 
+import common.Constants
+import play.api.i18n.Messages
 import play.api.libs.json.Json
 import utils.CostFormatter
 
-case class GrossAssetsAfterIssueModel(grossAmount : BigDecimal)
+case class GrossAssetsAfterIssueModel(grossAmount : BigDecimal){
+  def grossAssetsAfterIssueAmountBand()(implicit messages: Messages): String = {
+    grossAmount.toString() match{
+      case Constants.grossAssetsBandOne => Messages("page.grossAssetsAfterIssue.option.one")
+      case Constants.grossAssetsBandTwo => Messages("page.grossAssetsAfterIssue.option.two")
+      case Constants.grossAssetsBandThree => Messages("page.grossAssetsAfterIssue.option.three")
+      case Constants.grossAssetsAfterIssueBandFour => Messages("page.grossAssetsAfterIssue.option.four")
+      case Constants.grossAssetsAfterIssueBandFive => Messages("page.grossAssetsAfterIssue.option.five")
+    }
+  }
+}
+
 
 object GrossAssetsAfterIssueModel extends CostFormatter{
 

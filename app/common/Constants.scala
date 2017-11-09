@@ -126,4 +126,9 @@ trait Constants {
   val grossAssetsBandThree  = "10000000"
   val grossAssetsBandFour = "15000000"
   val grossAssetsBandFive = "15000001"
+
+  val grossAssetsAfterIssueBandFour = "16000000"
+  val grossAssetsAfterIssueBandFive = "16000001"
+
+
 }
