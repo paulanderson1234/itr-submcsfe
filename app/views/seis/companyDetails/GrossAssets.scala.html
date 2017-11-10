@@ -16,7 +16,8 @@
 
 @import models.GrossAssetsModel
 @import uk.gov.hmrc.play.views.html.helpers.form
-@import views.html.helpers.{errorSummary, inputWithCurrencySymbol, backButtonWithProgress}
+@import views.html.helpers.{errorSummary, inputWithCurrencySymbol, backButtonWithProgress, formInputRadioGroup}
+@import common.Constants
 
 @(grossAssetsForm: Form[GrossAssetsModel])(implicit request: Request[_], messages: Messages)
 
@@ -31,20 +32,29 @@
 
         <h1 id="main-heading" class="form-title heading-xlarge">@Messages("page.grossAssets.amount.heading")</h1>
 
+        <details>
+            <summary><span id="help" class="summary">@Messages("page.grossAssets.guidance.title")</span></summary>
+            <div class="panel panel-indent panel-border-narrow">
+                <p id="how-to-work-this-out">@Messages("page.grossAssets.guidance.one")</p>
+            </div>
+        </details>
+
         @form(action = controllers.seis.routes.GrossAssetsController.submit()) {
         <div class="form-group">
-            @inputWithCurrencySymbol(
-            grossAssetsForm("grossAmount"),
-            '_divClass -> "form-label",
-            '_labelId -> "label-amount",
-            '_label -> Messages("page.grossAssets.amount.heading"),
-            '_labelTextClass -> "visuallyhidden",
-            '_inputClass -> "input--no-spinner input--left-padding",
-            '_type -> "text",
-            '_maxlength -> "9",
-            'id -> "amount"
+            @formInputRadioGroup(
+            field = grossAssetsForm("grossAmount"),
+            Seq(
+            Constants.grossAssetsSEISBandOne -> Messages("page.grossAssets.seis.option.one"),
+            Constants.grossAssetsSEISBandTwo -> Messages("page.grossAssets.seis.option.two"),
+            Constants.grossAssetsSEISBandThree -> Messages("page.grossAssets.seis.option.three")),
+            '_legend -> Messages("page.grossAssets.amount.legend"),
+            '_legendClass -> "visuallyhidden",
+            '_legendID -> "grossAssetsAmount",
+            '_labelAfter -> true,
+            '_labelClass -> "block-label"
             )
         </div>
+
 
         <div class="form-group">
             <button class="btn button" type="submit" id="next">@Messages("common.button.snc")</button>
