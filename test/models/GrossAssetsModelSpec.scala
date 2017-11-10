@@ -26,32 +26,43 @@ class GrossAssetsModelSpec extends BaseSpec with MockitoSugar  {
 
   implicit def stringToIntConverter(string: String): BigDecimal = BigDecimal(string)
 
-  "Calling .grossAssetsAmountBandEIS on GrossAssetsModel" should {
+  "Calling .grossAssetsAmountBand on GrossAssetsModel" should {
 
     "return 'Up to £1,000,000' as a string" in {
-      GrossAssetsModel(Constants.grossAssetsBandOne).grossAssetsAmountBandEIS() shouldBe Messages("page.grossAssets.option.one")
+      GrossAssetsModel(Constants.grossAssetsBandOne).grossAssetsAmountBand() shouldBe Messages("page.grossAssets.option.one")
     }
 
     "return 'Up to £5,000,000' as a string" in {
-      GrossAssetsModel(Constants.grossAssetsBandTwo).grossAssetsAmountBandEIS() shouldBe Messages("page.grossAssets.option.two")
+      GrossAssetsModel(Constants.grossAssetsBandTwo).grossAssetsAmountBand() shouldBe Messages("page.grossAssets.option.two")
     }
 
     "return 'Up to £10,000,000' as a string" in {
-      GrossAssetsModel(Constants.grossAssetsBandThree).grossAssetsAmountBandEIS() shouldBe Messages("page.grossAssets.option.three")
+      GrossAssetsModel(Constants.grossAssetsBandThree).grossAssetsAmountBand() shouldBe Messages("page.grossAssets.option.three")
     }
 
     "return 'Up to £15,000,000' as a string" in {
-      GrossAssetsModel(Constants.grossAssetsBandFour).grossAssetsAmountBandEIS() shouldBe Messages("page.grossAssets.option.four")
+      GrossAssetsModel(Constants.grossAssetsBandFour).grossAssetsAmountBand() shouldBe Messages("page.grossAssets.option.four")
     }
 
     "return 'Up to £15,000,001' as a string" in {
-      GrossAssetsModel(Constants.grossAssetsBandFive).grossAssetsAmountBandEIS() shouldBe Messages("page.grossAssets.option.five")
+      GrossAssetsModel(Constants.grossAssetsBandFive).grossAssetsAmountBand() shouldBe Messages("page.grossAssets.option.five")
     }
 
+    "return 'Up to £100,000' as a string" in {
+      GrossAssetsModel(Constants.grossAssetsSEISBandOne).grossAssetsAmountBand() shouldBe Messages("page.grossAssets.seis.option.one")
+    }
+
+    "return 'Up to £200,000' as a string" in {
+      GrossAssetsModel(Constants.grossAssetsSEISBandTwo).grossAssetsAmountBand() shouldBe Messages("page.grossAssets.seis.option.two")
+    }
+
+    "return 'Up to £200,001' as a string" in {
+      GrossAssetsModel(Constants.grossAssetsSEISBandThree).grossAssetsAmountBand() shouldBe Messages("page.grossAssets.seis.option.three")
+    }
 
     "throw an Exception when given a non valid number" in {
       intercept[MatchError] {
-        GrossAssetsModel("12345").grossAssetsAmountBandEIS()
+        GrossAssetsModel("12345").grossAssetsAmountBand()
       }
     }
 
