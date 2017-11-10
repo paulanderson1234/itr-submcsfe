@@ -16,6 +16,7 @@
 
 package views.eis
 
+import common.Constants
 import org.jsoup.Jsoup
 import play.api.test.FakeRequest
 import views.helpers.ViewSpec
@@ -50,6 +51,11 @@ class NumberOfPreviouslyIssuedSharesSpec extends ViewSpec {
       "have the correct back link url" in {
         document.select("a.back-link").attr("href") shouldBe backUrl
       }
+
+      "have max length for the input field" in {
+        document.select("input").attr("maxlength") shouldBe s"${Constants.decimalMaxLength}"
+      }
+
 
       "have the correct heading" in {
         document.select("h1").text() shouldBe Messages("page.investors.numberOfPreviouslyIssuedShares.title", "company")
@@ -102,6 +108,10 @@ class NumberOfPreviouslyIssuedSharesSpec extends ViewSpec {
 
       "have the correct question in a label" in {
         document.select("label span.visuallyhidden").text() shouldBe Messages("page.investors.numberOfPreviouslyIssuedShares.heading", "company")
+      }
+
+      "have max length for the input field" in {
+        document.select("input").attr("maxlength") shouldBe s"${Constants.decimalMaxLength}"
       }
 
       "have an input for numberOfPreviouslyIssuedShares" in {

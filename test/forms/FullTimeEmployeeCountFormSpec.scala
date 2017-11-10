@@ -26,6 +26,8 @@ import play.api.i18n.Messages.Implicits._
 class FullTimeEmployeeCountFormSpec extends UnitSpec with OneAppPerSuite {
 
   val minimumValue:Int = 0
+  val maxLengthValue = "123565666.222222222222222"
+  val overMaxLengthValue:String = maxLengthValue + "1"
 
   "The FullTimeEmployeeCountForm" when {
 
@@ -87,6 +89,28 @@ class FullTimeEmployeeCountFormSpec extends UnitSpec with OneAppPerSuite {
 
       "contain the too large error message" in {
         form.errors.head.message shouldBe Messages("validation.error.employeeCount.size", minimumValue)
+      }
+    }
+
+    "provided with an invalid map which is at max length" should {
+      val map = Map("employeeCount" -> s"$maxLengthValue")
+      lazy val form = fullTimeEmployeeCountForm.bind(map)
+
+      "contain one error" in {
+        form.errors.size shouldBe 0
+      }
+    }
+
+    "provided with an invalid map which is above max length" should {
+      val map = Map("employeeCount" -> s"{$overMaxLengthValue")
+      lazy val form = fullTimeEmployeeCountForm.bind(map)
+
+      "contain one error" in {
+        form.errors.size shouldBe 2
+      }
+
+      "contain the too large error message" in {
+        form.errors.head.message shouldBe "error.maxLength"
       }
     }
 
