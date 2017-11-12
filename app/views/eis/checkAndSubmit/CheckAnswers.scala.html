@@ -94,7 +94,7 @@
             }
             <!-- Gross Assets -->
             @if(checkAnswersModel.grossAssets.isDefined){
-            @textRowHelperBasic("grossAssets", Messages("summaryQuestion.businessGrossAssets"), GrossAssetsModel.getAmountAsFormattedString(checkAnswersModel.grossAssets.get.grossAmount), Some(controllers.eis.routes.GrossAssetsController.show().url))
+            @textRowHelperBasic("grossAssets", Messages("summaryQuestion.businessGrossAssets"), checkAnswersModel.grossAssets.get.grossAssetsAmountBandEIS(), Some(controllers.eis.routes.GrossAssetsController.show().url))
             }
             <!-- Gross Assets After Issue -->
             @if(checkAnswersModel.grossAssetsAfterIssue.isDefined){

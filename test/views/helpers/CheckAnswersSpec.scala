@@ -28,7 +28,7 @@ import scala.concurrent.Future
 trait CheckAnswersSpec extends ViewSpec {
 
 
-  val grossAssetsAmount = 12345
+  val grossAssetsAmount = 1000000
   val grossAssetsAfterIssueModel = GrossAssetsAfterIssueModel(grossAssetsAmount)
   val grossAssetsModel = GrossAssetsModel(grossAssetsAmount)
   val fullTimeEmployeeModel = FullTimeEmployeeCountModel(22)
@@ -103,7 +103,7 @@ trait CheckAnswersSpec extends ViewSpec {
       (Matchers.any(), Matchers.any(), Matchers.any()))
       .thenReturn(Future.successful(Some(hasInvestmentTradeStartedModelYes)))
     when(mockS4lConnector.fetchAndGetFormData[GrossAssetsModel](Matchers.eq(KeystoreKeys.grossAssets))
-      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(GrossAssetsModel(12345))))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(GrossAssetsModel(grossAssetsAmount))))
     when(mockS4lConnector.fetchAndGetFormData[FullTimeEmployeeCountModel](Matchers.eq(KeystoreKeys.fullTimeEmployeeCount))
       (Matchers.any(), Matchers.any(), Matchers.any()))
       .thenReturn(Future.successful(Some(FullTimeEmployeeCountModel(22))))

@@ -119,4 +119,11 @@ trait Constants {
   val fullTimeEquivalenceInvalidLimit = -0.001
   val fullTimeEquivalenceFieldMaxLength = "9"
   val notApplicable = "N/A"
+
+
+  val grossAssetsBandOne = "1000000"
+  val grossAssetsBandTwo = "5000000"
+  val grossAssetsBandThree  = "10000000"
+  val grossAssetsBandFour = "15000000"
+  val grossAssetsBandFive = "15000001"
 }
