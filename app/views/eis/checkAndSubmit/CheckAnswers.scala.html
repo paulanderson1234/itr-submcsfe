@@ -98,7 +98,7 @@
             }
             <!-- Gross Assets After Issue -->
             @if(checkAnswersModel.grossAssetsAfterIssue.isDefined){
-            @textRowHelperBasic("grossAssetsAfterIssue", Messages("summaryQuestion.businessGrossAssetsAfterIssue"), GrossAssetsModel.getAmountAsFormattedString(checkAnswersModel.grossAssetsAfterIssue.get.grossAmount), Some(controllers.eis.routes.GrossAssetsAfterIssueController.show().url))
+            @textRowHelperBasic("grossAssetsAfterIssue", Messages("summaryQuestion.businessGrossAssetsAfterIssue"), checkAnswersModel.grossAssetsAfterIssue.get.grossAssetsAfterIssueAmountBand(), Some(controllers.eis.routes.GrossAssetsAfterIssueController.show().url))
             }
             <!--Is Knowledge Intensive -->
             @if(checkAnswersModel.isCompanyKnowledgeIntensiveModel.isDefined){

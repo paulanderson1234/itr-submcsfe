@@ -117,7 +117,7 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
       companyDetailsTableTBody.select("tr").get(7).getElementById("grossAssetsAfterIssue-question").text() shouldBe
         Messages("summaryQuestion.businessGrossAssetsAfterIssue")
       companyDetailsTableTBody.select("tr").get(7).getElementById("grossAssetsAfterIssue-answer").text() shouldBe
-        GrossAssetsModel.getAmountAsFormattedString(grossAssetsAfterIssueModel.grossAmount)
+        grossAssetsAfterIssueModel.grossAssetsAfterIssueAmountBand()
       companyDetailsTableTBody.select("tr").get(7).getElementById("grossAssetsAfterIssue-link")
         .attr("href") shouldEqual controllers.eis.routes.GrossAssetsAfterIssueController.show().url
 
@@ -282,7 +282,7 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
       companyDetailsTableTBody.select("tr").get(7).getElementById("grossAssetsAfterIssue-question").text() shouldBe
         Messages("summaryQuestion.businessGrossAssetsAfterIssue")
       companyDetailsTableTBody.select("tr").get(7).getElementById("grossAssetsAfterIssue-answer").text() shouldBe
-        GrossAssetsModel.getAmountAsFormattedString(grossAssetsAfterIssueModel.grossAmount)
+        grossAssetsAfterIssueModel.grossAssetsAfterIssueAmountBand()
       companyDetailsTableTBody.select("tr").get(7).getElementById("grossAssetsAfterIssue-link")
         .attr("href") shouldEqual controllers.eis.routes.GrossAssetsAfterIssueController.show().url
 
@@ -431,7 +431,7 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
       companyDetailsTableTBody.select("tr").get(7).getElementById("grossAssetsAfterIssue-question").text() shouldBe
         Messages("summaryQuestion.businessGrossAssetsAfterIssue")
       companyDetailsTableTBody.select("tr").get(7).getElementById("grossAssetsAfterIssue-answer").text() shouldBe
-        GrossAssetsModel.getAmountAsFormattedString(grossAssetsAfterIssueModel.grossAmount)
+        grossAssetsAfterIssueModel.grossAssetsAfterIssueAmountBand()
       companyDetailsTableTBody.select("tr").get(7).getElementById("grossAssetsAfterIssue-link")
         .attr("href") shouldEqual controllers.eis.routes.GrossAssetsAfterIssueController.show().url
 
@@ -582,7 +582,7 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
       companyDetailsTableTBody.select("tr").get(7).getElementById("grossAssetsAfterIssue-question").text() shouldBe
         Messages("summaryQuestion.businessGrossAssetsAfterIssue")
       companyDetailsTableTBody.select("tr").get(7).getElementById("grossAssetsAfterIssue-answer").text() shouldBe
-        GrossAssetsModel.getAmountAsFormattedString(grossAssetsAfterIssueModel.grossAmount)
+        grossAssetsAfterIssueModel.grossAssetsAfterIssueAmountBand()
       companyDetailsTableTBody.select("tr").get(7).getElementById("grossAssetsAfterIssue-link")
         .attr("href") shouldEqual controllers.eis.routes.GrossAssetsAfterIssueController.show().url
 
@@ -689,7 +689,7 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
       companyDetailsTableTBody.select("tr").get(7).getElementById("grossAssetsAfterIssue-question").text() shouldBe
         Messages("summaryQuestion.businessGrossAssetsAfterIssue")
       companyDetailsTableTBody.select("tr").get(7).getElementById("grossAssetsAfterIssue-answer").text() shouldBe
-        GrossAssetsModel.getAmountAsFormattedString(grossAssetsAfterIssueModel.grossAmount)
+        grossAssetsAfterIssueModel.grossAssetsAfterIssueAmountBand()
       companyDetailsTableTBody.select("tr").get(7).getElementById("grossAssetsAfterIssue-link")
         .attr("href") shouldEqual controllers.eis.routes.GrossAssetsAfterIssueController.show().url
 
@@ -842,7 +842,7 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
       companyDetailsTableTBody.select("tr").get(7).getElementById("grossAssetsAfterIssue-question").text() shouldBe
         Messages("summaryQuestion.businessGrossAssetsAfterIssue")
       companyDetailsTableTBody.select("tr").get(7).getElementById("grossAssetsAfterIssue-answer").text() shouldBe
-        GrossAssetsModel.getAmountAsFormattedString(grossAssetsAfterIssueModel.grossAmount)
+        grossAssetsAfterIssueModel.grossAssetsAfterIssueAmountBand()
       companyDetailsTableTBody.select("tr").get(7).getElementById("grossAssetsAfterIssue-link")
         .attr("href") shouldEqual controllers.eis.routes.GrossAssetsAfterIssueController.show().url
 
