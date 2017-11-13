@@ -16,6 +16,7 @@
 
 package views.seis
 
+import common.Constants
 import controllers.seis.routes
 import forms.GrossAssetsForm._
 import models.GrossAssetsModel
@@ -39,8 +40,13 @@ class GrossAssetsSpec extends ViewSpec {
       val document = Jsoup.parse(page(grossAssetsForm.fill(GrossAssetsModel(grossAssetsAmount))).body)
       document.title() shouldBe Messages("page.grossAssets.amount.title")
       document.getElementById("main-heading").text() shouldBe Messages("page.grossAssets.amount.heading")
-      document.getElementById("label-amount").select("span").hasClass("visuallyhidden") shouldBe true
-      document.getElementById("label-amount").select(".visuallyhidden").text() shouldBe Messages("page.grossAssets.amount.heading")
+      document.getElementById("grossAssetsAmount-legend").hasClass("visuallyhidden") shouldBe true
+      document.getElementById("grossAssetsAmount-legend").select(".visuallyhidden").text() shouldBe Messages("page.grossAssets.amount.legend")
+      document.getElementById("help").text shouldBe Messages("page.grossAssets.guidance.title")
+      document.getElementById("how-to-work-this-out").text shouldBe Messages("page.grossAssets.guidance.one")
+      document.getElementById("grossAmount-100000").attr("value") shouldBe Constants.grossAssetsSEISBandOne
+      document.getElementById("grossAmount-200000").attr("value") shouldBe Constants.grossAssetsSEISBandTwo
+      document.getElementById("grossAmount-200001").attr("value") shouldBe Constants.grossAssetsSEISBandThree
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       document.body.getElementById("back-link").attr("href") shouldEqual routes.ShareIssueDateController.show().url
       document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.one")
@@ -53,8 +59,13 @@ class GrossAssetsSpec extends ViewSpec {
       val document = Jsoup.parse(page(grossAssetsForm).body)
       document.title() shouldBe Messages("page.grossAssets.amount.title")
       document.getElementById("main-heading").text() shouldBe Messages("page.grossAssets.amount.heading")
-      document.getElementById("label-amount").select("span").hasClass("visuallyhidden") shouldBe true
-      document.getElementById("label-amount").select(".visuallyhidden").text() shouldBe Messages("page.grossAssets.amount.heading")
+      document.getElementById("grossAssetsAmount-legend").hasClass("visuallyhidden") shouldBe true
+      document.getElementById("grossAssetsAmount-legend").select(".visuallyhidden").text() shouldBe Messages("page.grossAssets.amount.legend")
+      document.getElementById("help").text shouldBe Messages("page.grossAssets.guidance.title")
+      document.getElementById("how-to-work-this-out").text shouldBe Messages("page.grossAssets.guidance.one")
+      document.getElementById("grossAmount-100000").attr("value") shouldBe Constants.grossAssetsSEISBandOne
+      document.getElementById("grossAmount-200000").attr("value") shouldBe Constants.grossAssetsSEISBandTwo
+      document.getElementById("grossAmount-200001").attr("value") shouldBe Constants.grossAssetsSEISBandThree
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       document.body.getElementById("back-link").attr("href") shouldEqual routes.ShareIssueDateController.show().url
       document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.one")

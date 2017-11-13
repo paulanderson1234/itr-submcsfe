@@ -77,7 +77,7 @@
         }
         <!-- Gross Assets -->
         @if(checkAnswersModel.grossAssets.isDefined){
-        @textRowHelperBasic("grossAssets", Messages("summaryQuestion.businessGrossAssets"), GrossAssetsModel.getAmountAsFormattedString(checkAnswersModel.grossAssets.get.grossAmount), Some(controllers.seis.routes.GrossAssetsController.show().url))
+        @textRowHelperBasic("grossAssets", Messages("summaryQuestion.businessGrossAssets"), checkAnswersModel.grossAssets.get.grossAssetsAmountBand(), Some(controllers.seis.routes.GrossAssetsController.show().url))
         }
         <!-- Full time employees -->
         @if(checkAnswersModel.fullTimeEmployees.isDefined){

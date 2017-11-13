@@ -29,8 +29,10 @@ trait CheckAnswersSpec extends ViewSpec {
 
 
   val grossAssetsAmount = 1000000
+  val grossAssetsSEISAmount = 100000
   val grossAssetsAfterIssueModel = GrossAssetsAfterIssueModel(grossAssetsAmount)
   val grossAssetsModel = GrossAssetsModel(grossAssetsAmount)
+  val grossAssetsSEISModel = GrossAssetsModel(grossAssetsSEISAmount)
   val fullTimeEmployeeModel = FullTimeEmployeeCountModel(22)
   val shareHoldersModelForReview = Vector(PreviousShareHoldingModel(investorShareIssueDateModel = Some(investorShareIssueDateModel1),
     numberOfPreviouslyIssuedSharesModel = Some (numberOfPreviouslyIssuedSharesModel1),

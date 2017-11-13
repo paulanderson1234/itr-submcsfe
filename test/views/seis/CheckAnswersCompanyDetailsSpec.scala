@@ -26,7 +26,7 @@ import views.html.seis.checkAndSubmit.CheckAnswers
 
 class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
 
-  val grossAssets = Some(GrossAssetsModel(12345))
+  val grossAssets = Some(GrossAssetsModel(100000))
   val fullTimeEmployees = Some(FullTimeEmployeeCountModel(22))
   "The Check Answers page" should {
     "Verify that the Check Answers page contains the correct elements for Section 1: Company details" +
@@ -98,7 +98,7 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
       companyDetailsTableTBody.select("tr").get(6).getElementById("grossAssets-question").text() shouldBe
         Messages("summaryQuestion.businessGrossAssets")
       companyDetailsTableTBody.select("tr").get(6).getElementById("grossAssets-answer").text() shouldBe
-        GrossAssetsModel.getAmountAsFormattedString(grossAssets.get.grossAmount)
+        grossAssetsSEISModel.grossAssetsAmountBand()
       companyDetailsTableTBody.select("tr").get(6).getElementById("grossAssets-link")
         .attr("href") shouldEqual controllers.seis.routes.GrossAssetsController.show().url
 
@@ -182,7 +182,7 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
       companyDetailsTableTBody.select("tr").get(6).getElementById("grossAssets-question").text() shouldBe
         Messages("summaryQuestion.businessGrossAssets")
       companyDetailsTableTBody.select("tr").get(6).getElementById("grossAssets-answer").text() shouldBe
-        GrossAssetsModel.getAmountAsFormattedString(grossAssets.get.grossAmount)
+        grossAssetsSEISModel.grossAssetsAmountBand()
       companyDetailsTableTBody.select("tr").get(6).getElementById("grossAssets-link")
         .attr("href") shouldEqual controllers.seis.routes.GrossAssetsController.show().url
 

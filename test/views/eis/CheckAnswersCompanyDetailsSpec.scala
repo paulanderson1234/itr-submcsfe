@@ -109,7 +109,7 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
       companyDetailsTableTBody.select("tr").get(6).getElementById("grossAssets-question").text() shouldBe
         Messages("summaryQuestion.businessGrossAssets")
       companyDetailsTableTBody.select("tr").get(6).getElementById("grossAssets-answer").text() shouldBe
-        grossAssetsModel.grossAssetsAmountBandEIS()
+        grossAssetsModel.grossAssetsAmountBand()
       companyDetailsTableTBody.select("tr").get(6).getElementById("grossAssets-link")
         .attr("href") shouldEqual controllers.eis.routes.GrossAssetsController.show().url
 
@@ -274,7 +274,7 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
       companyDetailsTableTBody.select("tr").get(6).getElementById("grossAssets-question").text() shouldBe
         Messages("summaryQuestion.businessGrossAssets")
       companyDetailsTableTBody.select("tr").get(6).getElementById("grossAssets-answer").text() shouldBe
-        grossAssetsModel.grossAssetsAmountBandEIS()
+        grossAssetsModel.grossAssetsAmountBand()
       companyDetailsTableTBody.select("tr").get(6).getElementById("grossAssets-link")
         .attr("href") shouldEqual controllers.eis.routes.GrossAssetsController.show().url
 
@@ -423,7 +423,7 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
       companyDetailsTableTBody.select("tr").get(6).getElementById("grossAssets-question").text() shouldBe
         Messages("summaryQuestion.businessGrossAssets")
       companyDetailsTableTBody.select("tr").get(6).getElementById("grossAssets-answer").text() shouldBe
-        grossAssetsModel.grossAssetsAmountBandEIS()
+        grossAssetsModel.grossAssetsAmountBand()
       companyDetailsTableTBody.select("tr").get(6).getElementById("grossAssets-link")
         .attr("href") shouldEqual controllers.eis.routes.GrossAssetsController.show().url
 
@@ -574,7 +574,7 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
       companyDetailsTableTBody.select("tr").get(6).getElementById("grossAssets-question").text() shouldBe
         Messages("summaryQuestion.businessGrossAssets")
       companyDetailsTableTBody.select("tr").get(6).getElementById("grossAssets-answer").text() shouldBe
-        grossAssetsModel.grossAssetsAmountBandEIS()
+        grossAssetsModel.grossAssetsAmountBand()
       companyDetailsTableTBody.select("tr").get(6).getElementById("grossAssets-link")
         .attr("href") shouldEqual controllers.eis.routes.GrossAssetsController.show().url
 
@@ -681,7 +681,7 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
       companyDetailsTableTBody.select("tr").get(6).getElementById("grossAssets-question").text() shouldBe
         Messages("summaryQuestion.businessGrossAssets")
       companyDetailsTableTBody.select("tr").get(6).getElementById("grossAssets-answer").text() shouldBe
-        grossAssetsModel.grossAssetsAmountBandEIS()
+        grossAssetsModel.grossAssetsAmountBand()
       companyDetailsTableTBody.select("tr").get(6).getElementById("grossAssets-link")
         .attr("href") shouldEqual controllers.eis.routes.GrossAssetsController.show().url
 
@@ -834,7 +834,7 @@ class CheckAnswersCompanyDetailsSpec extends CheckAnswersSpec {
       companyDetailsTableTBody.select("tr").get(6).getElementById("grossAssets-question").text() shouldBe
         Messages("summaryQuestion.businessGrossAssets")
       companyDetailsTableTBody.select("tr").get(6).getElementById("grossAssets-answer").text() shouldBe
-        grossAssetsModel.grossAssetsAmountBandEIS()
+        grossAssetsModel.grossAssetsAmountBand()
       companyDetailsTableTBody.select("tr").get(6).getElementById("grossAssets-link")
         .attr("href") shouldEqual controllers.eis.routes.GrossAssetsController.show().url
 
