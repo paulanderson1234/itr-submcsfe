@@ -26,6 +26,8 @@ import play.api.i18n.Messages.Implicits._
 class NumberOfSharesFormSpec extends UnitSpec with OneAppPerSuite {
 
   val minimumValue:Int = 1
+  val maxLengthValue = "123565666.222222222222222"
+  val overMaxLengthValue:String = maxLengthValue + "1"
 
   "The NumberOfSharesForm" when {
 
@@ -76,6 +78,30 @@ class NumberOfSharesFormSpec extends UnitSpec with OneAppPerSuite {
         form.value shouldBe Some(NumberOfSharesModel(9999999999999.0))
       }
     }
+
+
+    "provided with an invalid map which is at max length" should {
+      val map = Map("numberOfShares" -> s"$maxLengthValue")
+      lazy val form = numberOfSharesForm.bind(map)
+
+      "contain one error" in {
+        form.errors.size shouldBe 0
+      }
+    }
+
+    "provided with an invalid map which is above max length" should {
+      val map = Map("numberOfShares" -> s"{$overMaxLengthValue")
+      lazy val form = numberOfSharesForm.bind(map)
+
+      "contain one error" in {
+        form.errors.size shouldBe 2
+      }
+
+      "contain the too large error message" in {
+        form.errors.head.message shouldBe "error.maxLength"
+      }
+    }
+
 
     "provided with an invalid map which is too large" should {
       val map = Map("numberOfShares" -> "9999999999999.1")

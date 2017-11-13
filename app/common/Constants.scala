@@ -33,7 +33,9 @@ trait Constants {
   val emailLength = 132
   val postcodeLength = 10
 
+
   val shortTextLimit: Int = 250
+  val decimalMaxLength = 25
 
   val businessActivityPreparation = "Trade"
   val businessActivityRAndD = "Research And Development"
