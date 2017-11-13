@@ -121,16 +121,17 @@ fullTimeEmployeeCountForm : Form[FullTimeEmployeeCountModel])(implicit request: 
 
     <h2>Gross Assets</h2>
     <div class="form-group">
-        @inputWithCurrencySymbol(
-        grossAssetsForm("grossAmount"),
-        '_divClass -> "form-label",
-        '_labelId -> "label-amount",
-        '_label -> Messages("page.grossAssets.amount.heading"),
-        '_labelTextClass -> "visuallyhidden",
-        '_inputClass -> "input--normal input--no-spinner input--left-padding",
-        '_type -> "text",
-        '_maxlength -> "15",
-        'id -> "grossAmount"
+        @formInputRadioGroup(
+        field = grossAssetsForm("grossAmount"),
+        Seq(
+        Constants.grossAssetsSEISBandOne -> Messages("page.grossAssets.seis.option.one"),
+        Constants.grossAssetsSEISBandTwo -> Messages("page.grossAssets.seis.option.two"),
+        Constants.grossAssetsSEISBandThree -> Messages("page.grossAssets.seis.option.three")),
+        '_legend -> Messages("page.grossAssets.amount.legend"),
+        '_legendClass -> "visuallyhidden",
+        '_legendID -> "grossAssetsAmount",
+        '_labelAfter -> true,
+        '_labelClass -> "block-label"
         )
     </div>
 
