@@ -16,6 +16,7 @@
 
 package views.seis
 
+import common.Constants
 import org.jsoup.Jsoup
 import play.api.test.FakeRequest
 import views.helpers.ViewSpec
@@ -69,6 +70,10 @@ class NumberOfSharesSpec extends ViewSpec {
         document.select("fieldset label").text() shouldBe Messages("page.shareDetails.numberOfShares.heading")
       }
 
+      "have max length for the employeeCount input field" in {
+        document.select("input").attr("maxlength") shouldBe s"${Constants.decimalMaxLength}"
+      }
+
       "have an input for numberOfShares" in {
         document.select("input").attr("name") shouldBe "numberOfShares"
       }
@@ -91,6 +96,10 @@ class NumberOfSharesSpec extends ViewSpec {
 
       "have the correct title" in {
         document.title() shouldBe Messages("page.shareDetails.numberOfShares.title")
+      }
+
+      "have max length for the employeeCount input field" in {
+        document.select("input").attr("maxlength") shouldBe s"${Constants.decimalMaxLength}"
       }
 
       "have the correct back link text" in {

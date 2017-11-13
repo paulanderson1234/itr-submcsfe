@@ -16,6 +16,7 @@
 
 package forms
 
+import common.Constants
 import models.FullTimeEmployeeCountModel
 import play.api.data.Form
 import play.api.data.Forms._
@@ -28,7 +29,7 @@ object FullTimeEmployeeCountForm {
 
   val fullTimeEmployeeCountForm = Form(
     mapping(
-      "employeeCount" -> nonEmptyText
+      "employeeCount" -> nonEmptyText(maxLength = Constants.decimalMaxLength)
         .verifying(genericDecimalCheck(formValueMessageKey, minimumValue))
         .transform[BigDecimal](input => BigDecimal(input).setScale(5, BigDecimal.RoundingMode.HALF_UP), _.toString)
     )(FullTimeEmployeeCountModel.apply)(FullTimeEmployeeCountModel.unapply)

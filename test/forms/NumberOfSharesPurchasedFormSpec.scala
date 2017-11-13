@@ -27,6 +27,9 @@ class NumberOfSharesPurchasedFormSpec extends UnitSpec with OneAppPerSuite {
 
   val minimumValue:Int = 1
 
+  val maxLengthValue = "123565666.222222222222222"
+  val overMaxLengthValue:String = maxLengthValue + "1"
+
   "The NumberOfSharesForm" when {
 
     "provided with a model" should {
@@ -87,6 +90,29 @@ class NumberOfSharesPurchasedFormSpec extends UnitSpec with OneAppPerSuite {
 
       "contain the too large error message" in {
         form.errors.head.message shouldBe Messages("validation.error.numberOfSharesPurchased.size", minimumValue)
+      }
+    }
+
+
+    "provided with an invalid map which is at max length" should {
+      val map = Map("numberOfSharesPurchased" -> s"$maxLengthValue")
+      lazy val form = numberOfSharesPurchasedForm.bind(map)
+
+      "contain one error" in {
+        form.errors.size shouldBe 0
+      }
+    }
+
+    "provided with an invalid map which is above max length" should {
+      val map = Map("numberOfSharesPurchased" -> s"{$overMaxLengthValue")
+      lazy val form = numberOfSharesPurchasedForm.bind(map)
+
+      "contain one error" in {
+        form.errors.size shouldBe 2
+      }
+
+      "contain the too large error message" in {
+        form.errors.head.message shouldBe "error.maxLength"
       }
     }
 

@@ -16,6 +16,7 @@
 
 package views.eis
 
+import common.Constants
 import org.jsoup.Jsoup
 import play.api.test.FakeRequest
 import views.helpers.ViewSpec
@@ -65,6 +66,10 @@ class NumberOfSharesPurchasedSpec extends ViewSpec with DateFormatter{
         document.select("fieldset label").text() shouldBe Messages("page.investors.numberOfSharesPurchased.heading", "company", "TODO")
       }
 
+      "have max length for the input field" in {
+        document.select("input").attr("maxlength") shouldBe s"${Constants.decimalMaxLength}"
+      }
+
       "have an input for SharesPurchased" in {
         document.select("input").attr("name") shouldBe "numberOfSharesPurchased"
       }
@@ -94,6 +99,11 @@ class NumberOfSharesPurchasedSpec extends ViewSpec with DateFormatter{
       "have the correct back link url" in {
         document.select("a.back-link").attr("href") shouldBe backUrl
       }
+
+      "have max length for the input field" in {
+        document.select("input").attr("maxlength") shouldBe s"${Constants.decimalMaxLength}"
+      }
+
 
       "have a form posting to the correct route" in {
         document.select("form").attr("action") shouldBe controllers.eis.routes.NumberOfSharesPurchasedController.submit(Some("TODO")).url

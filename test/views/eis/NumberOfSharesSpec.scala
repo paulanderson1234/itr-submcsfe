@@ -16,6 +16,7 @@
 
 package views.eis
 
+import common.Constants
 import org.jsoup.Jsoup
 import play.api.test.FakeRequest
 import views.helpers.ViewSpec
@@ -40,6 +41,11 @@ class NumberOfSharesSpec extends ViewSpec {
       "have the correct title" in {
         document.title() shouldBe Messages("page.shareDetails.numberOfShares.title")
       }
+
+      "have max length for the input field" in {
+        document.select("input").attr("maxlength") shouldBe s"${Constants.decimalMaxLength}"
+      }
+
 
       "have the correct back link text" in {
         document.select("a.back-link").text() shouldBe Messages("common.button.back")
@@ -124,6 +130,11 @@ class NumberOfSharesSpec extends ViewSpec {
       "have an input for numberOfShares" in {
         document.select("input").attr("name") shouldBe "numberOfShares"
       }
+
+      "have max length for the input field" in {
+        document.select("input").attr("maxlength") shouldBe s"${Constants.decimalMaxLength}"
+      }
+
 
       "have a next button" in {
         document.select("button").text() shouldBe Messages("common.button.snc")
