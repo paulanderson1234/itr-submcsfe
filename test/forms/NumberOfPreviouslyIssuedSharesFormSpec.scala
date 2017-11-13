@@ -26,6 +26,8 @@ import uk.gov.hmrc.play.test.UnitSpec
 class NumberOfPreviouslyIssuedSharesFormSpec extends UnitSpec with OneAppPerSuite {
 
   val minimumValue:Int = 1
+  val maxLengthValue = "123565666.222222222222222"
+  val overMaxLengthValue:String = maxLengthValue + "1"
 
   "The NumberOfPreviouslyIssuedSharesForm" when {
 
@@ -87,6 +89,29 @@ class NumberOfPreviouslyIssuedSharesFormSpec extends UnitSpec with OneAppPerSuit
 
       "contain the too large error message" in {
         form.errors.head.message shouldBe Messages("validation.error.numberOfPreviouslyIssuedShares.size", minimumValue)
+      }
+    }
+
+
+    "provided with an invalid map which is at max length" should {
+      val map = Map("numberOfPreviouslyIssuedShares" -> s"$maxLengthValue")
+      lazy val form = numberOfPreviouslyIssuedSharesForm.bind(map)
+
+      "contain one error" in {
+        form.errors.size shouldBe 0
+      }
+    }
+
+    "provided with an invalid map which is above max length" should {
+      val map = Map("numberOfPreviouslyIssuedShares" -> s"{$overMaxLengthValue")
+      lazy val form = numberOfPreviouslyIssuedSharesForm.bind(map)
+
+      "contain one error" in {
+        form.errors.size shouldBe 2
+      }
+
+      "contain the too large error message" in {
+        form.errors.head.message shouldBe "error.maxLength"
       }
     }
 

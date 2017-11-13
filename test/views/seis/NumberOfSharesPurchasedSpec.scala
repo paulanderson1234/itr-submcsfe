@@ -16,6 +16,7 @@
 
 package views.seis
 
+import common.Constants
 import org.jsoup.Jsoup
 import play.api.test.FakeRequest
 import views.helpers.ViewSpec
@@ -51,6 +52,10 @@ class NumberOfSharesPurchasedSpec extends ViewSpec with DateFormatter{
 
       "have the correct back link url" in {
         document.select("a.back-link").attr("href") shouldBe backUrl
+      }
+
+      "have max length for the input field" in {
+        document.getElementById("numberOfSharesPurchased").attr("maxlength") shouldBe s"${Constants.decimalMaxLength}"
       }
 
      "have the correct heading" in {
@@ -89,6 +94,10 @@ class NumberOfSharesPurchasedSpec extends ViewSpec with DateFormatter{
       }
       "have the correct back link text" in {
         document.select("a.back-link").text() shouldBe Messages("common.button.back")
+      }
+
+      "have max length for the numberOfSharesPurchased input field" in {
+        document.getElementById("numberOfSharesPurchased").attr("maxlength") shouldBe s"${Constants.decimalMaxLength}"
       }
 
       "have the correct back link url" in {

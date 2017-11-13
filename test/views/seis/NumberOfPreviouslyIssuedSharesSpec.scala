@@ -16,6 +16,7 @@
 
 package views.seis
 
+import common.Constants
 import org.jsoup.Jsoup
 import play.api.test.FakeRequest
 import views.helpers.ViewSpec
@@ -67,6 +68,11 @@ class NumberOfPreviouslyIssuedSharesSpec extends ViewSpec {
       "have an input for NumberOfPreviouslyIssuedShares" in {
         document.select("input").attr("name") shouldBe "numberOfPreviouslyIssuedShares"
       }
+
+      "have max length for the input field" in {
+        document.select("input").attr("maxlength") shouldBe s"${Constants.decimalMaxLength}"
+      }
+
       "have a next button" in {
         document.select("button").text() shouldBe Messages("common.button.snc")
       }
@@ -94,6 +100,10 @@ class NumberOfPreviouslyIssuedSharesSpec extends ViewSpec {
 
       "have the correct heading" in {
         document.select("h1").text() shouldBe Messages("page.investors.numberOfPreviouslyIssuedShares.heading", "company")
+      }
+
+      "have max length for the input field" in {
+        document.select("input").attr("maxlength") shouldBe s"${Constants.decimalMaxLength}"
       }
 
       "have a form posting to the correct route" in {

@@ -17,6 +17,7 @@
 @import models.investorDetails.NumberOfPreviouslyIssuedSharesModel
 @import uk.gov.hmrc.play.views.html.helpers.form
 @import views.html.helpers.{backButtonWithProgress, input, errorSummary, hiddenField}
+@import common.Constants
 
 @(companyOrIndividual: String, numberOfPreviouslyIssuedSharesForm: Form[NumberOfPreviouslyIssuedSharesModel], backUrl: String, investorProcessingId: Int)(implicit request: Request[_], messages: Messages)
 
@@ -39,7 +40,7 @@
             '_labelId -> "label-numberOfPreviouslyIssuedShares",
             '_label -> Messages("page.investors.numberOfPreviouslyIssuedShares.heading", companyOrIndividual.toLowerCase()),
             '_labelTextClass -> "visuallyhidden",
-            '_maxlength -> "25",
+            '_maxlength-> Constants.decimalMaxLength,
             '_inputClass -> "input--fullwidth"
             )
         </div>

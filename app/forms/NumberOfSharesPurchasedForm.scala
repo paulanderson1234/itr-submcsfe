@@ -16,6 +16,7 @@
 
 package forms
 
+import common.Constants
 import play.api.data.Form
 import play.api.data.Forms._
 import utils.Validation._
@@ -28,7 +29,7 @@ object NumberOfSharesPurchasedForm {
 
   val numberOfSharesPurchasedForm = Form(
     mapping(
-      "numberOfSharesPurchased" -> nonEmptyText
+      "numberOfSharesPurchased" -> nonEmptyText(maxLength = Constants.decimalMaxLength)
         .verifying(genericDecimalCheck(formValueMessageKey, minimumValue))
         .transform[BigDecimal](input => BigDecimal(input).setScale(5, BigDecimal.RoundingMode.HALF_UP), _.toString),
         "processingId" -> optional(number)
