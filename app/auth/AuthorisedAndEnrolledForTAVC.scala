@@ -21,7 +21,7 @@ import play.api.mvc.{Action, AnyContent, Request, Result}
 import config.AppConfig
 import uk.gov.hmrc.play.frontend.auth.connectors.domain.Accounts
 import uk.gov.hmrc.play.frontend.auth.{Actions, AuthContext, AuthenticationProvider, TaxRegime}
-import uk.gov.hmrc.play.http.HeaderCarrier
+import uk.gov.hmrc.http.HeaderCarrier
 import scala.concurrent.Future
 import connectors.{EnrolmentConnector, S4LConnector}
 
@@ -88,7 +88,7 @@ trait AuthorisedAndEnrolledForTAVC extends Actions {
     case _ => NotEnrolled
   }
 
-  implicit private def hc(implicit request: Request[_]): HeaderCarrier = HeaderCarrier.fromHeadersAndSession(request.headers, Some(request.session))
+  implicit private def hc(implicit request: Request[_]): HeaderCarrier = HeaderCarrier(otherHeaders = request.headers.headers)
 
   val tavcAuthProvider: GovernmentGatewayProvider = new GovernmentGatewayProvider(postSignInRedirectUrl, applicationConfig.ggSignInUrl)
 

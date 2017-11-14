@@ -26,7 +26,7 @@ import models.{HadOtherInvestmentsModel, HadPreviousRFIModel}
 import play.api.Play.current
 import play.api.i18n.Messages.Implicits._
 import play.api.mvc.Result
-import uk.gov.hmrc.play.http.HeaderCarrier
+import uk.gov.hmrc.http.HeaderCarrier
 import views.html.seis.previousInvestment
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 

@@ -18,7 +18,7 @@ package services
 
 import connectors.{EmailVerificationConnector, S4LConnector}
 import models._
-import uk.gov.hmrc.play.http.HeaderCarrier
+import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

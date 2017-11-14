@@ -21,7 +21,7 @@ import java.util.UUID
 import auth._
 import play.api.mvc.{AnyContentAsFormUrlEncoded, Action, AnyContent, Result}
 import play.api.test.FakeRequest
-import uk.gov.hmrc.play.http.SessionKeys
+import uk.gov.hmrc.http.SessionKeys
 
 import scala.concurrent.Future
 

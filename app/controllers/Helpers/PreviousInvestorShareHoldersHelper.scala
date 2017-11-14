@@ -20,10 +20,11 @@ import auth.TAVCUser
 import common.KeystoreKeys
 import models.investorDetails._
 import uk.gov.hmrc.http.cache.client.CacheMap
-import uk.gov.hmrc.play.http.{HeaderCarrier, InternalServerException}
+import uk.gov.hmrc.http.{HeaderCarrier, InternalServerException}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
+import uk.gov.hmrc.play.http.logging.MdcLoggingExecutionContext._
 
 object PreviousInvestorShareHoldersHelper extends PreviousInvestorShareHoldersHelper {
 

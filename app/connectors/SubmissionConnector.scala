@@ -23,8 +23,8 @@ import models.{TotalAmountRaisedModel, AnnualTurnoverCostsModel, GrossAssetsMode
 import play.api.Logger
 import play.api.libs.json.{JsValue, Json}
 import uk.gov.hmrc.play.config.ServicesConfig
-import uk.gov.hmrc.play.http._
-
+import uk.gov.hmrc.http._
+import uk.gov.hmrc.play.http.logging.MdcLoggingExecutionContext._
 import scala.concurrent.Future
 
 object SubmissionConnector extends SubmissionConnector with ServicesConfig {

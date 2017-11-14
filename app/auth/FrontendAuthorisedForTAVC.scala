@@ -21,7 +21,7 @@ import config.FrontendGlobal.internalServerErrorTemplate
 import play.api.Logger
 import play.api.mvc.{Action, AnyContent, Request, Result}
 import uk.gov.hmrc.play.frontend.auth.{Actions, AuthContext}
-import uk.gov.hmrc.play.http.HeaderCarrier
+import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -37,7 +37,7 @@ trait FrontendAuthorisedForTAVC extends Actions {
     def async(action: AsyncUserRequest): Action[AnyContent] = {
       Action.async {
         implicit request =>
-          implicit val hc = HeaderCarrier.fromHeadersAndSession(request.headers)
+          implicit val hc = HeaderCarrier(otherHeaders = request.headers.headers)
           authConnector.currentAuthority.flatMap {
             case Some(authority) => {
               authConnector.getIds[UserIDs](AuthContext(authority)).flatMap {

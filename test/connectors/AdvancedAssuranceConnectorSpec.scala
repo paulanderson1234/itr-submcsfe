@@ -33,27 +33,28 @@
 package connectors
 
 import auth.{MockConfig, TAVCUser, ggUser}
-import controllers.helpers.{BaseSpec, FakeRequestHelper}
-import uk.gov.hmrc.play.http.{HeaderCarrier, HttpResponse}
-import uk.gov.hmrc.play.http.logging.SessionId
 import config.WSHttp
+import controllers.helpers.FakeRequestHelper
 import fixtures.SubmissionFixture
 import org.mockito.Matchers
 import org.mockito.Mockito.when
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.mock.MockitoSugar
 import org.scalatestplus.play.OneAppPerSuite
-import play.api.test.Helpers.OK
-import uk.gov.hmrc.play.http.ws.WSHttp
+import uk.gov.hmrc.http._
+import uk.gov.hmrc.http.logging.SessionId
+import uk.gov.hmrc.play.http.logging.MdcLoggingExecutionContext._
 import uk.gov.hmrc.play.test.UnitSpec
 
 import scala.concurrent.Future
 
 class AdvancedAssuranceConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach with OneAppPerSuite with SubmissionFixture {
 
+  trait MockHttp extends HttpGet with HttpPost with HttpPut with HttpDelete
+
   object TestAdvancedAssuranceConnector extends AdvancedAssuranceConnector with FakeRequestHelper{
     override val serviceUrl: String = MockConfig.internalAASubmissionUrl
-    override val http = mock[WSHttp]
+    override val http = mock[MockHttp]
   }
 
   implicit val headerCarrier: HeaderCarrier = HeaderCarrier(sessionId = Some(SessionId("1013")))
@@ -71,7 +72,7 @@ class AdvancedAssuranceConnectorSpec extends UnitSpec with MockitoSugar with Bef
       "return a valid boolean response" in {
         when(TestAdvancedAssuranceConnector.http.GET[Boolean](
           Matchers.eq(s"${TestAdvancedAssuranceConnector.serviceUrl}/internal/aa-application-in-progress"))
-          (Matchers.any(), Matchers.any())).thenReturn(Future.successful(false))
+          (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(false))
         await(result) match {
           case response => response shouldBe false
           case _ => fail("No response was received, when one was expected")

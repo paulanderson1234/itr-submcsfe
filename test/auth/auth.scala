@@ -21,7 +21,7 @@ import uk.gov.hmrc.play.frontend.auth.AuthContext
 import uk.gov.hmrc.play.frontend.auth.connectors.domain.{ConfidenceLevel, CredentialStrength}
 import uk.gov.hmrc.play.frontend.auth.connectors.domain
 import uk.gov.hmrc.play.frontend.auth.AuthenticationProviderIds
-import uk.gov.hmrc.play.http.SessionKeys
+import uk.gov.hmrc.http.SessionKeys
 import uk.gov.hmrc.time.DateTimeUtils
 import java.util.UUID
 import play.api.mvc.AnyContentAsEmpty
