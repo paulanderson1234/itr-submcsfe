@@ -23,24 +23,22 @@ import org.scalatest.mock.MockitoSugar
 import uk.gov.hmrc.http._
 import uk.gov.hmrc.play.frontend.auth.connectors.AuthConnector
 import uk.gov.hmrc.play.frontend.auth.connectors.domain.{Accounts, Authority, ConfidenceLevel, CredentialStrength}
-import uk.gov.hmrc.play.http.ws.WSHttp
-import uk.gov.hmrc.play.http.logging.MdcLoggingExecutionContext._
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 trait MockHttp extends HttpGet with HttpPost with HttpPut with HttpDelete
 
 object MockAuthConnector extends AuthConnector with MockitoSugar {
   override val http = mock[MockHttp]
   override val serviceUrl: String = ""
-  def getIds[T](authContext : uk.gov.hmrc.play.frontend.auth.AuthContext)
+  override def getIds[T](authContext : uk.gov.hmrc.play.frontend.auth.AuthContext)
                         (implicit hc : uk.gov.hmrc.http.HeaderCarrier,
-                         reads : uk.gov.hmrc.http.HttpReads[T]) : scala.concurrent.Future[T] = {
+                         reads : uk.gov.hmrc.http.HttpReads[T], ec: ExecutionContext) : scala.concurrent.Future[T] = {
     when(http.GET[UserIDs](Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
       .thenReturn(Future(UserIDs("Int-312e5e92-762e-423b-ac3d-8686af27fdb5", "Ext-312e5e92-762e-423b-ac3d-8686af27fdb5")))
     http.GET[T]("/")
   }
-  def currentAuthority(implicit hc: HeaderCarrier): Future[Option[Authority]] = {
+  override def currentAuthority(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[Authority]] = {
     Future.successful(strongStrengthUser)
   }
 
