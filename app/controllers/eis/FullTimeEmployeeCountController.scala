@@ -28,10 +28,10 @@ import play.api.i18n.Messages.Implicits._
 import services.SubmissionService
 import uk.gov.hmrc.play.frontend.auth.connectors.AuthConnector
 import uk.gov.hmrc.play.frontend.controller.FrontendController
-import uk.gov.hmrc.play.http.HeaderCarrier
 import views.html.eis.companyDetails.FullTimeEmployeeCount
 
 import scala.concurrent.Future
+import uk.gov.hmrc.http.HeaderCarrier
 
 object FullTimeEmployeeCountController extends FullTimeEmployeeCountController {
   override lazy val enrolmentConnector: EnrolmentConnector = EnrolmentConnector

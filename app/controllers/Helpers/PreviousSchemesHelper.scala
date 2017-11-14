@@ -21,10 +21,10 @@ import common.KeystoreKeys
 import models.{PreviousSchemeModel, ShareIssueDateModel}
 import org.joda.time.DateTime
 import uk.gov.hmrc.http.cache.client.CacheMap
-import uk.gov.hmrc.play.http.HeaderCarrier
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
+import uk.gov.hmrc.http.HeaderCarrier
 
 object PreviousSchemesHelper extends PreviousSchemesHelper {
 

@@ -22,12 +22,12 @@ import connectors.SubmissionConnector
 import models._
 import models.investorDetails.InvestorDetailsModel
 import models.repayments.{AnySharesRepaymentModel, SharesRepaymentDetailsModel}
-import uk.gov.hmrc.play.http.HeaderCarrier
 import connectors.S4LConnector
 import controllers.Helpers.TotalAmountRaisedHelper
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
+import uk.gov.hmrc.http.HeaderCarrier
 
 case class ComplianceStatementAnswersModel(companyDetailsAnswersModel: CompanyDetailsAnswersModel,
                                            previousSchemesAnswersModel: PreviousSchemesAnswersModel,

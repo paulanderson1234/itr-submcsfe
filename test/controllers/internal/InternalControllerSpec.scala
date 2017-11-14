@@ -30,9 +30,9 @@ import play.api.libs.json.Json
 import play.api.test.Helpers._
 import services.internal.InternalService
 import uk.gov.hmrc.play.frontend.auth.connectors.AuthConnector
-import uk.gov.hmrc.play.http.HttpResponse
 
 import scala.concurrent.Future
+import uk.gov.hmrc.http.HttpResponse
 
 class InternalControllerSpec extends BaseSpec {
 

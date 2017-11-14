@@ -31,12 +31,13 @@ import views.html.feedback.feedback_thankyou
 import uk.gov.hmrc.play.frontend.auth.connectors.AuthConnector
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import uk.gov.hmrc.play.frontend.filters.SessionCookieCryptoFilter
-import uk.gov.hmrc.play.http.{HeaderCarrier, HttpGet, HttpPost, _}
+import uk.gov.hmrc.play.http._
 import uk.gov.hmrc.play.partials._
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
 
 import scala.concurrent.Future
+import uk.gov.hmrc.http.{ HeaderCarrier, HttpGet, HttpPost, HttpReads, HttpResponse }
 
 object FeedbackController extends FeedbackController with PartialRetriever {
 

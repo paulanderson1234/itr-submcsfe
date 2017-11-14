@@ -34,8 +34,6 @@ package connectors
 
 import auth.{MockConfig, TAVCUser, ggUser}
 import controllers.helpers.{BaseSpec, FakeRequestHelper}
-import uk.gov.hmrc.play.http.{HeaderCarrier, HttpResponse}
-import uk.gov.hmrc.play.http.logging.SessionId
 import config.WSHttp
 import fixtures.SubmissionFixture
 import org.mockito.Matchers
@@ -48,6 +46,8 @@ import uk.gov.hmrc.play.http.ws.WSHttp
 import uk.gov.hmrc.play.test.UnitSpec
 
 import scala.concurrent.Future
+import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.logging.SessionId
 
 class AdvancedAssuranceConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach with OneAppPerSuite with SubmissionFixture {
 

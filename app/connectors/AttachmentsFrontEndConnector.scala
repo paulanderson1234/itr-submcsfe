@@ -21,6 +21,7 @@ import config.{FrontendAppConfig, WSHttp}
 import uk.gov.hmrc.play.config.ServicesConfig
 import uk.gov.hmrc.play.http._
 import scala.concurrent.Future
+import uk.gov.hmrc.http.{ HeaderCarrier, HttpGet, HttpPost, HttpReads, HttpResponse }
 
 object AttachmentsFrontEndConnector extends AttachmentsFrontEndConnector with ServicesConfig {
   val internalAttachmentsUrl = FrontendAppConfig.internalAttachmentsUrl

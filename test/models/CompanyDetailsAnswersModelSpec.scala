@@ -22,10 +22,10 @@ import models.submission.CompanyDetailsAnswersModel
 import org.mockito.Matchers
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
-import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
 
 import scala.concurrent.Future
+import uk.gov.hmrc.http.HeaderCarrier
 
 class CompanyDetailsAnswersModelSpec extends UnitSpec with MockitoSugar {
 

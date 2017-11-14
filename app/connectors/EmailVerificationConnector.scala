@@ -25,6 +25,7 @@ import uk.gov.hmrc.play.http._
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.util.control.NoStackTrace
+import uk.gov.hmrc.http.{ BadGatewayException, BadRequestException, HeaderCarrier, HttpDelete, HttpErrorFunctions, HttpException, HttpGet, HttpPost, HttpPut, HttpResponse, InternalServerException, NotFoundException }
 
 private[connectors] class EmailErrorResponse(s: String) extends NoStackTrace
 

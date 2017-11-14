@@ -22,6 +22,7 @@ import uk.gov.hmrc.play.config.ServicesConfig
 import uk.gov.hmrc.play.http._
 
 import scala.concurrent.Future
+import uk.gov.hmrc.http.{ HeaderCarrier, HttpGet, HttpReads }
 
 object AdvancedAssuranceConnector extends AdvancedAssuranceConnector with ServicesConfig {
   val serviceUrl = FrontendAppConfig.internalAASubmissionUrl

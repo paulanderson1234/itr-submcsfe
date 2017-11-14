@@ -27,11 +27,11 @@ import play.api.data.Form
 import play.api.i18n.Messages
 import play.api.mvc.Results._
 import play.api.mvc.{AnyContent, Request, Result}
-import uk.gov.hmrc.play.http.HeaderCarrier
 import utils.Validation
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
+import uk.gov.hmrc.http.HeaderCarrier
 
 object ControllerHelpers extends ControllerHelpers {
 
