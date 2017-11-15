@@ -16,20 +16,17 @@
 
 package services.internal
 
-import auth.authModels.UserIDs
 import common.KeystoreKeys
 import config.FrontendAuthConnector
 import connectors.S4LConnector
 import models.internal.CSApplicationModel
 import models.submission.{SchemeTypesModel, SingleSchemeTypesModel}
-import uk.gov.hmrc.play.frontend.auth.AuthContext
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.frontend.auth.connectors.AuthConnector
-import uk.gov.hmrc.play.frontend.auth.connectors.domain.Authority
-import uk.gov.hmrc.play.http.{HeaderCarrier, HttpResponse}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-
+import uk.gov.hmrc.play.http.logging.MdcLoggingExecutionContext._
 
 object InternalService extends InternalService {
   override lazy val s4lConnector = S4LConnector

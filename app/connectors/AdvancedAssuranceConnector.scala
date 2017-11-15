@@ -19,9 +19,9 @@ package connectors
 import auth.TAVCUser
 import config.{FrontendAppConfig, WSHttp}
 import uk.gov.hmrc.play.config.ServicesConfig
-import uk.gov.hmrc.play.http._
+import uk.gov.hmrc.http._
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 object AdvancedAssuranceConnector extends AdvancedAssuranceConnector with ServicesConfig {
   val serviceUrl = FrontendAppConfig.internalAASubmissionUrl
@@ -33,8 +33,8 @@ trait AdvancedAssuranceConnector {
   val serviceUrl: String
   val http: HttpGet
 
-  def getAdvancedAssuranceApplication()(implicit hc: HeaderCarrier, user: TAVCUser): Future[Boolean] = {
+  def getAdvancedAssuranceApplication()(implicit hc: HeaderCarrier, user: TAVCUser, ec: ExecutionContext): Future[Boolean] = {
     val headerCarrier = hc.copy(extraHeaders = hc.extraHeaders ++ Seq("CSRF-Token" -> "nocheck"))
-    http.GET[Boolean](s"$serviceUrl/internal/aa-application-in-progress")(implicitly[HttpReads[Boolean]], headerCarrier)
+    http.GET[Boolean](s"$serviceUrl/internal/aa-application-in-progress")(implicitly[HttpReads[Boolean]], headerCarrier, ec)
   }
 }

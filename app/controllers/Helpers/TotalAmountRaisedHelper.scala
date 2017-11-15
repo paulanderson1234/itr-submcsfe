@@ -22,7 +22,7 @@ import controllers.eis.routes
 import models._
 import play.api.mvc.Results._
 import play.api.mvc.Result
-import uk.gov.hmrc.play.http.HeaderCarrier
+import uk.gov.hmrc.http.HeaderCarrier
 import utils.Validation
 import connectors.S4LConnector
 import models.submission.MarketRoutingCheckResult

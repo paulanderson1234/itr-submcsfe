@@ -22,7 +22,7 @@ import connectors.{S4LConnector, SubmissionConnector}
 import models.registration.{ETMPRegistrationDetailsModel, RegistrationDetailsModel}
 import play.api.Logger
 import play.api.libs.json.{JsError, JsSuccess}
-import uk.gov.hmrc.play.http.HeaderCarrier
+import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
 

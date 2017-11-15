@@ -18,9 +18,9 @@ package connectors
 
 import config.WSHttp
 import play.api.http.Status._
-import uk.gov.hmrc.play.http.HeaderCarrier
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.config.ServicesConfig
-import uk.gov.hmrc.play.http._
+import uk.gov.hmrc.http._
 import auth.Enrolment
 import common.Constants
 

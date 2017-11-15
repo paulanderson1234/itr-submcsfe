@@ -63,7 +63,7 @@ class SingleSchemeSelectionControllerSpec extends BaseSpec {
     "return a 200 when something is fetched from keystore and no AA application is in progress" in {
       mockEnrolledRequest(None)
       when(TestController.advancedAssuranceConnector.getAdvancedAssuranceApplication()
-      (Matchers.any(), Matchers.any())).thenReturn(Future.successful(false))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(false))
       when(mockS4lConnector.fetchAndGetFormData[SchemeTypesModel](Matchers.eq(KeystoreKeys.selectedSchemes))
         (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(eisSchemeTypesModel)
       showWithSessionAndAuth(TestController.show())(
@@ -74,7 +74,7 @@ class SingleSchemeSelectionControllerSpec extends BaseSpec {
     "provide an empty model and return a 200 when nothing is fetched using keystore and no AA application is in progress" in {
       mockEnrolledRequest(None)
       when(TestController.advancedAssuranceConnector.getAdvancedAssuranceApplication()
-      (Matchers.any(), Matchers.any())).thenReturn(Future.successful(false))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(false))
       when(mockS4lConnector.fetchAndGetFormData[SchemeTypesModel](Matchers.eq(KeystoreKeys.selectedSchemes))
         (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(None)
       showWithSessionAndAuth(TestController.show())(
@@ -86,7 +86,7 @@ class SingleSchemeSelectionControllerSpec extends BaseSpec {
     "redirect to the application hub when there is an AA application in progress" in {
       mockEnrolledRequest(None)
       when(TestController.advancedAssuranceConnector.getAdvancedAssuranceApplication()
-      (Matchers.any(), Matchers.any())).thenReturn(Future.successful(true))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(true))
       showWithSessionAndAuth(TestController.show())(
         result => {
           status(result) shouldBe SEE_OTHER
@@ -100,7 +100,7 @@ class SingleSchemeSelectionControllerSpec extends BaseSpec {
     "redirect to review schemes page when no AA application is in progress" in {
       mockEnrolledRequest(None)
       when(TestController.advancedAssuranceConnector.getAdvancedAssuranceApplication()
-      (Matchers.any(), Matchers.any())).thenReturn(Future.successful(false))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(false))
       when(mockS4lConnector.fetchAndGetFormData[SchemeTypesModel](Matchers.eq(KeystoreKeys.selectedSchemes))
         (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(eisSchemeTypesModel)
       when(mockS4lConnector.saveFormData(Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(cacheMapSchemeTypesEis)
@@ -118,7 +118,7 @@ class SingleSchemeSelectionControllerSpec extends BaseSpec {
     "redirect to review schemes page when no AA application is in progress" in {
       mockEnrolledRequest(None)
       when(TestController.advancedAssuranceConnector.getAdvancedAssuranceApplication()
-      (Matchers.any(), Matchers.any())).thenReturn(Future.successful(false))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(false))
       when(mockS4lConnector.fetchAndGetFormData[SchemeTypesModel](Matchers.eq(KeystoreKeys.selectedSchemes))
         (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(seisSchemeTypesModel)
       when(mockS4lConnector.saveFormData(Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(cacheMapSchemeTypesSeis)
@@ -136,7 +136,7 @@ class SingleSchemeSelectionControllerSpec extends BaseSpec {
     "respond with a bad request when no AA application is in progress" in {
       mockEnrolledRequest(None)
       when(TestController.advancedAssuranceConnector.getAdvancedAssuranceApplication()
-      (Matchers.any(), Matchers.any())).thenReturn(Future.successful(false))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(false))
       when(mockS4lConnector.fetchAndGetFormData[SchemeTypesModel](Matchers.eq(KeystoreKeys.selectedSchemes))
         (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(vctSchemeTypesModel)
       when(mockS4lConnector.saveFormData(Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(cacheMapSchemeTypesVct)
@@ -153,7 +153,7 @@ class SingleSchemeSelectionControllerSpec extends BaseSpec {
     "redirect to itself when no AA application is in progress" in {
       mockEnrolledRequest(None)
       when(TestController.advancedAssuranceConnector.getAdvancedAssuranceApplication()
-      (Matchers.any(), Matchers.any())).thenReturn(Future.successful(false))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(false))
       val formInput = "singleSchemeSelection" -> ""
       submitWithSessionAndAuth(TestController.submit(),formInput)(
         result => {
@@ -167,7 +167,7 @@ class SingleSchemeSelectionControllerSpec extends BaseSpec {
     "redirect to the application hub when an AA application is in progress" in {
       mockEnrolledRequest(None)
       when(TestController.advancedAssuranceConnector.getAdvancedAssuranceApplication()
-      (Matchers.any(), Matchers.any())).thenReturn(Future.successful(true))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(true))
       submitWithSessionAndAuth(TestController.submit())(
         result => {
           status(result) shouldBe SEE_OTHER

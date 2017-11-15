@@ -22,7 +22,7 @@ import connectors.SubmissionConnector
 import models._
 import models.investorDetails.InvestorDetailsModel
 import models.repayments.{AnySharesRepaymentModel, SharesRepaymentDetailsModel}
-import uk.gov.hmrc.play.http.HeaderCarrier
+import uk.gov.hmrc.http.HeaderCarrier
 import connectors.S4LConnector
 import controllers.Helpers.TotalAmountRaisedHelper
 

@@ -33,16 +33,14 @@ import org.scalatestplus.play.OneServerPerSuite
 import play.api.libs.json.JsValue
 import play.api.test.Helpers._
 import uk.gov.hmrc.play.frontend.controller.FrontendController
-import uk.gov.hmrc.play.http._
-import uk.gov.hmrc.play.http.logging.SessionId
-import uk.gov.hmrc.play.http.ws.WSHttp
+import uk.gov.hmrc.http._
+import uk.gov.hmrc.http.logging.SessionId
 import uk.gov.hmrc.play.test.UnitSpec
-
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class SubmissionConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndAfterEach with OneServerPerSuite with SubmissionFixture {
 
-  val mockHttp: WSHttp = mock[WSHttp]
   val sessionId = UUID.randomUUID.toString
 
   val addressModel = AddressModel("line1", "line2", countryCode = "NZ")
@@ -75,10 +73,11 @@ class SubmissionConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndA
     SchemeTypesModel(eis = false, seis = true),kiAnswersModel = None,
     marketInfo = None, CostsAnswerModel(None, None), thirtyDayRuleAnswersModel = None, investmentGrow = None, subsidiaries = None, repaidSharesAnswersModel = None)
 
+  trait MockHttp extends HttpGet with HttpPost with HttpPut with HttpDelete
 
   object TargetSubmissionConnector extends SubmissionConnector with FrontendController {
     override val serviceUrl = MockConfig.submissionUrl
-    override val http = mockHttp
+    override val http = mock[MockHttp]
   }
 
   val validResponse = true
@@ -89,7 +88,7 @@ class SubmissionConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndA
 
   "Calling validateKiCostConditions" should {
 
-    when(mockHttp.GET[Option[Boolean]](Matchers.anyString())(Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(validResponse)))
+    when(TargetSubmissionConnector.http.GET[Option[Boolean]](Matchers.anyString())(Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(validResponse)))
 
     "return a valid response" in {
 
@@ -104,7 +103,7 @@ class SubmissionConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndA
 
   "Calling validateSecondaryKiConditions" should {
 
-    when(mockHttp.GET[Option[Boolean]](Matchers.anyString())(Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(validResponse)))
+    when(TargetSubmissionConnector.http.GET[Option[Boolean]](Matchers.anyString())(Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(validResponse)))
 
     "return a valid response" in {
 
@@ -118,7 +117,7 @@ class SubmissionConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndA
 
   "Calling checkLifetimeAllowanceExceeded" should {
 
-    when(mockHttp.GET[Option[Boolean]](Matchers.anyString())(Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(validResponse)))
+    when(TargetSubmissionConnector.http.GET[Option[Boolean]](Matchers.anyString())(Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(validResponse)))
 
     "return a valid response" in {
 
@@ -135,7 +134,7 @@ class SubmissionConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndA
 
   "Calling checkAveragedAnnualTurnover" should {
 
-    when(mockHttp.GET[Option[Boolean]](Matchers.anyString())(Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(validResponse)))
+    when(TargetSubmissionConnector.http.GET[Option[Boolean]](Matchers.anyString())(Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(validResponse)))
 
     "return a valid response" in {
 
@@ -154,9 +153,9 @@ class SubmissionConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndA
     lazy val result = TargetSubmissionConnector.getRegistrationDetails(safeID)
 
     "return a RegistrationDetailsModel" in {
-      when(mockHttp.GET[Option[RegistrationDetailsModel]](Matchers.eq(
+      when(TargetSubmissionConnector.http.GET[Option[RegistrationDetailsModel]](Matchers.eq(
         s"${TargetSubmissionConnector.serviceUrl}/investment-tax-relief/registration/registration-details/safeid/$safeID"))
-        (Matchers.any(), Matchers.any())).thenReturn(Some(registrationDetailsModel))
+        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Some(registrationDetailsModel))
       await(result) shouldBe Some(registrationDetailsModel)
     }
 
@@ -167,9 +166,9 @@ class SubmissionConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndA
     lazy val result = TargetSubmissionConnector.checkMarketCriteria(newGeographicalYes, newProductYes)
 
     "return true" in {
-      when(mockHttp.GET[Option[Boolean]](Matchers.eq(
+      when(TargetSubmissionConnector.http.GET[Option[Boolean]](Matchers.eq(
         s"${TargetSubmissionConnector.serviceUrl}/investment-tax-relief/market-criteria/new-geographical/$newGeographicalYes/new-product/$newProductYes"))
-        (Matchers.any(), Matchers.any())).thenReturn(Some(true))
+        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Some(true))
       await(result) shouldBe Some(true)
     }
 
@@ -180,9 +179,9 @@ class SubmissionConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndA
     lazy val result = TargetSubmissionConnector.checkMarketCriteria(newGeographicalNo, newProductYes)
 
     "return true" in {
-      when(mockHttp.GET[Option[Boolean]](Matchers.eq(
+      when(TargetSubmissionConnector.http.GET[Option[Boolean]](Matchers.eq(
         s"${TargetSubmissionConnector.serviceUrl}/investment-tax-relief/market-criteria/new-geographical/$newGeographicalNo/new-product/$newProductYes"))
-        (Matchers.any(), Matchers.any())).thenReturn(Some(true))
+        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Some(true))
       await(result) shouldBe Some(true)
     }
 
@@ -193,9 +192,9 @@ class SubmissionConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndA
     lazy val result = TargetSubmissionConnector.checkMarketCriteria(newGeographicalYes, newProductNo)
 
     "return true" in {
-      when(mockHttp.GET[Option[Boolean]](Matchers.eq(
+      when(TargetSubmissionConnector.http.GET[Option[Boolean]](Matchers.eq(
         s"${TargetSubmissionConnector.serviceUrl}/investment-tax-relief/market-criteria/new-geographical/$newGeographicalYes/new-product/$newProductNo"))
-        (Matchers.any(), Matchers.any())).thenReturn(Some(true))
+        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Some(true))
       await(result) shouldBe Some(true)
     }
 
@@ -206,9 +205,9 @@ class SubmissionConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndA
     lazy val result = TargetSubmissionConnector.checkMarketCriteria(newGeographicalNo, newProductNo)
 
     "return false" in {
-      when(mockHttp.GET[Option[Boolean]](Matchers.eq(
+      when(TargetSubmissionConnector.http.GET[Option[Boolean]](Matchers.eq(
         s"${TargetSubmissionConnector.serviceUrl}/investment-tax-relief/market-criteria/new-geographical/$newGeographicalNo/new-product/$newProductNo"))
-        (Matchers.any(), Matchers.any())).thenReturn(Some(false))
+        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Some(false))
       await(result) shouldBe Some(false)
     }
 
@@ -216,7 +215,7 @@ class SubmissionConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndA
 
   "Calling validateTradeStartDateCondition" should {
 
-    when(mockHttp.GET[Option[Boolean]](Matchers.anyString())(Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(validResponse)))
+    when(TargetSubmissionConnector.http.GET[Option[Boolean]](Matchers.anyString())(Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(validResponse)))
 
     "return a valid response" in {
 
@@ -233,7 +232,7 @@ class SubmissionConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndA
 
   "Calling validateHasInvestmentTradeStartedCondition" should {
 
-    when(mockHttp.GET[Option[Boolean]](Matchers.anyString())(Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(validResponse)))
+    when(TargetSubmissionConnector.http.GET[Option[Boolean]](Matchers.anyString())(Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(Some(validResponse)))
 
     "return a valid response" in {
 
@@ -253,7 +252,7 @@ class SubmissionConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndA
       }
     }
     "return a response if a valid TAVCRef is given" in {
-      when(mockHttp.GET[HttpResponse](Matchers.any())(Matchers.any(), Matchers.any()))
+      when(TargetSubmissionConnector.http.GET[HttpResponse](Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
         .thenReturn(Future.successful(HttpResponse(OK)))
       val result = TargetSubmissionConnector.getReturnsSummary(tavcReferenceId)
       await(result).status shouldBe OK
@@ -265,9 +264,9 @@ class SubmissionConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndA
     lazy val result = TargetSubmissionConnector.checkGrossAssetsAmountExceeded(schemeTypeEis, GrossAssetsModel(grossAssetsAmount))
 
     "return a valid Boolean" in {
-      when(mockHttp.GET[Option[Boolean]](Matchers.eq(
+      when(TargetSubmissionConnector.http.GET[Option[Boolean]](Matchers.eq(
         s"${TargetSubmissionConnector.serviceUrl}/investment-tax-relief/gross-assets/gross-assets-checker/check-total/gross-amount/$schemeTypeEis/$grossAssetsAmount"))
-        (Matchers.any(), Matchers.any())).thenReturn(Some(validResponse))
+        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Some(validResponse))
       await(result) shouldBe Some(validResponse)
     }
   }
@@ -281,11 +280,11 @@ class SubmissionConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndA
       dummyShareIssueDate._1, dummyShareIssueDate._2, dummyShareIssueDate._3)
 
     "return a valid Boolean" in {
-      when(mockHttp.GET[Boolean](Matchers.eq(
+      when(TargetSubmissionConnector.http.GET[Boolean](Matchers.eq(
         s"${TargetSubmissionConnector.serviceUrl}/investment-tax-relief/submission-period/submission-period-checker" +
           s"/trade-start-date/${dummyTradeStartDate._1}/${dummyTradeStartDate._2}/${dummyTradeStartDate._3}" +
           s"/share-issue-date/${dummyShareIssueDate._1}/${dummyShareIssueDate._2}/${dummyShareIssueDate._3}"))
-        (Matchers.any(), Matchers.any())).thenReturn(validResponse)
+        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(validResponse)
       await(result) shouldBe validResponse
     }
   }
@@ -295,9 +294,9 @@ class SubmissionConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndA
     lazy val result = TargetSubmissionConnector.checkGrossAssetsAfterIssueAmountExceeded(grossAssetsAfterIssueAmount + 1)
 
     "return a valid Boolean" in {
-      when(mockHttp.GET[Option[Boolean]](Matchers.eq(
+      when(TargetSubmissionConnector.http.GET[Option[Boolean]](Matchers.eq(
         s"${TargetSubmissionConnector.serviceUrl}/investment-tax-relief/gross-assets/gross-assets-after-issue-checker/check-total/gross-amount/${grossAssetsAfterIssueAmount + 1}"))
-        (Matchers.any(), Matchers.any())).thenReturn(Some(trueResponse))
+        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Some(trueResponse))
       await(result) shouldBe Some(trueResponse)
     }
   }
@@ -307,9 +306,9 @@ class SubmissionConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndA
     lazy val result = TargetSubmissionConnector.checkGrossAssetsAfterIssueAmountExceeded(grossAssetsAfterIssueAmount)
 
     "return a valid Boolean" in {
-      when(mockHttp.GET[Option[Boolean]](Matchers.eq(
+      when(TargetSubmissionConnector.http.GET[Option[Boolean]](Matchers.eq(
         s"${TargetSubmissionConnector.serviceUrl}/investment-tax-relief/gross-assets/gross-assets-after-issue-checker/check-total/gross-amount/$grossAssetsAfterIssueAmount"))
-        (Matchers.any(), Matchers.any())).thenReturn(Some(falseResponse))
+        (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Some(falseResponse))
       await(result) shouldBe Some(falseResponse)
     }
   }
@@ -319,7 +318,7 @@ class SubmissionConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndA
     "return a OK" in {
 
       val validRequest = SEISAnswersModelToPost
-      when(mockHttp.POST[JsValue, HttpResponse](Matchers.any(), Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
+      when(TargetSubmissionConnector.http.POST[JsValue, HttpResponse](Matchers.any(), Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any(), Matchers.any()))
         .thenReturn(Future.successful(HttpResponse(OK)))
       val result = TargetSubmissionConnector.submitComplianceStatement(validRequest, tavcReferenceId, Some(registrationDetailsModel))
       await(result).status shouldBe OK
@@ -331,7 +330,7 @@ class SubmissionConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndA
     "return throw an illegal argument exception" in {
 
       val validRequest = SEISAnswersModelToPost
-      when(mockHttp.POST[JsValue, HttpResponse](Matchers.any(), Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
+      when(TargetSubmissionConnector.http.POST[JsValue, HttpResponse](Matchers.any(), Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any(), Matchers.any()))
         .thenReturn(Future.successful(HttpResponse(OK)))
 
       val exception = the[IllegalArgumentException] thrownBy
@@ -345,7 +344,7 @@ class SubmissionConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndA
     "return throw an illegal argument exception" in {
 
       val validRequest = SEISAnswersModelToPost
-      when(mockHttp.POST[JsValue, HttpResponse](Matchers.any(), Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
+      when(TargetSubmissionConnector.http.POST[JsValue, HttpResponse](Matchers.any(), Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any(), Matchers.any()))
         .thenReturn(Future.successful(HttpResponse(OK)))
 
       val exception = the[IllegalArgumentException] thrownBy
@@ -359,7 +358,7 @@ class SubmissionConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndA
     "return a BAD_REQUEST error" in {
 
       val request = retrieveCSSourceModel("badrequest@badrequest.com")
-      when(mockHttp.POST[JsValue, HttpResponse](Matchers.any(), Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
+      when(TargetSubmissionConnector.http.POST[JsValue, HttpResponse](Matchers.any(), Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any(), Matchers.any()))
         .thenReturn(Future.successful(HttpResponse(BAD_REQUEST)))
       val result = TargetSubmissionConnector.submitComplianceStatement(request, tavcReferenceId, Some(registrationDetailsModel))
       await(result).status shouldBe BAD_REQUEST
@@ -372,7 +371,7 @@ class SubmissionConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndA
     "return a FORBIDDEN Error" in {
 
       val request = retrieveCSSourceModel("forbidden@forbidden.com")
-      when(mockHttp.POST[JsValue, HttpResponse](Matchers.any(), Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
+      when(TargetSubmissionConnector.http.POST[JsValue, HttpResponse](Matchers.any(), Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any(), Matchers.any()))
         .thenReturn(Future.successful(HttpResponse(FORBIDDEN)))
       val result = TargetSubmissionConnector.submitComplianceStatement(request, tavcReferenceId, Some(registrationDetailsModel))
       await(result).status shouldBe FORBIDDEN
@@ -385,7 +384,7 @@ class SubmissionConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndA
     "return a SERVICE UNAVAILABLE ERROR" in {
 
       val request = retrieveCSSourceModel("serviceunavailable@serviceunavailable.com")
-      when(mockHttp.POST[JsValue, HttpResponse](Matchers.any(), Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
+      when(TargetSubmissionConnector.http.POST[JsValue, HttpResponse](Matchers.any(), Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any(), Matchers.any()))
         .thenReturn(Future.successful(HttpResponse(SERVICE_UNAVAILABLE)))
       val result = TargetSubmissionConnector.submitComplianceStatement(request, tavcReferenceId, Some(registrationDetailsModel))
       await(result).status shouldBe SERVICE_UNAVAILABLE
@@ -397,7 +396,7 @@ class SubmissionConnectorSpec extends UnitSpec with MockitoSugar with BeforeAndA
     "return a INTERNAL SERVER ERROR" in {
 
       val request = retrieveCSSourceModel("internalservererror@internalservererror.com")
-      when(mockHttp.POST[JsValue, HttpResponse](Matchers.any(), Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
+      when(TargetSubmissionConnector.http.POST[JsValue, HttpResponse](Matchers.any(), Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any(), Matchers.any()))
         .thenReturn(Future.successful(HttpResponse(INTERNAL_SERVER_ERROR)))
       val result = TargetSubmissionConnector.submitComplianceStatement(request, tavcReferenceId, Some(registrationDetailsModel))
       await(result).status shouldBe INTERNAL_SERVER_ERROR

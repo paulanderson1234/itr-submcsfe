@@ -19,7 +19,7 @@ package connectors
 import config.WSHttp
 import play.api.Logger
 import uk.gov.hmrc.play.config.ServicesConfig
-import uk.gov.hmrc.play.http._
+import uk.gov.hmrc.http._
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
