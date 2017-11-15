@@ -25,7 +25,7 @@ import models._
 import models.investorDetails.InvestorDetailsModel
 import models.repayments.{AnySharesRepaymentModel, SharesRepaymentDetailsModel}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
-import uk.gov.hmrc.play.http.HeaderCarrier
+import uk.gov.hmrc.http.HeaderCarrier
 import views.html.eis.checkAndSubmit.CheckAnswers
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current

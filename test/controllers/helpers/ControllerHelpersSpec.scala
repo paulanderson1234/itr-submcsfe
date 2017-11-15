@@ -31,8 +31,8 @@ import org.mockito.Mockito._
 import play.api.test.Helpers.{redirectLocation, _}
 import services.FileUploadService
 import uk.gov.hmrc.http.cache.client.CacheMap
-import uk.gov.hmrc.play.http.HeaderCarrier
-import uk.gov.hmrc.play.http.logging.SessionId
+import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.logging.SessionId
 import views.html.seis.companyDetails.QualifyBusinessActivity_Scope0.QualifyBusinessActivity_Scope1.QualifyBusinessActivity
 
 import scala.concurrent.Future

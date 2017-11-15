@@ -25,7 +25,7 @@ import play.api.mvc.{AnyContent, Request, RequestHeader}
 import play.api.test.Helpers._
 import play.twirl.api.Html
 import uk.gov.hmrc.play.http.ws.WSHttp
-import uk.gov.hmrc.play.http.{HttpGet, HttpPost, HttpResponse}
+import uk.gov.hmrc.http.{HttpGet, HttpPost, HttpResponse}
 import uk.gov.hmrc.play.partials.{CachedStaticHtmlPartialRetriever, FormPartialRetriever, HtmlPartial}
 
 import scala.concurrent.Future
@@ -50,7 +50,7 @@ class FeedbackControllerSpec extends BaseSpec {
     }
 
     protected def loadPartial(url: String)(implicit request: RequestHeader): HtmlPartial = ???
-    override def httpPost: HttpPost = mockHttp
+    override def httpPost = mockHttp
     override def localSubmitUrl(implicit request: Request[AnyContent]): String = ""
     override def contactFormReferer(implicit request: Request[AnyContent]): String = request.headers.get(REFERER).getOrElse("")
 
@@ -62,7 +62,7 @@ class FeedbackControllerSpec extends BaseSpec {
   }
 
   def setupMocks(status: Int = Status.OK, response: Option[String] = None): Unit =
-    when(mockHttp.POSTForm[HttpResponse](Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any()))
+    when(mockHttp.POSTForm[HttpResponse](Matchers.any(), Matchers.any())(Matchers.any(), Matchers.any(), Matchers.any()))
       .thenReturn(Future.successful(HttpResponse(status, responseString = response)))
 
   "GET /feedback" should {

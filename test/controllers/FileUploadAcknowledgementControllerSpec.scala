@@ -26,7 +26,7 @@ import org.mockito.Matchers
 import org.mockito.Mockito.when
 import play.api.test.Helpers._
 import services.FileUploadService
-import uk.gov.hmrc.play.http.HttpResponse
+import uk.gov.hmrc.http.HttpResponse
 import scala.concurrent.ExecutionContext.Implicits.global
 
 import scala.concurrent.Future
