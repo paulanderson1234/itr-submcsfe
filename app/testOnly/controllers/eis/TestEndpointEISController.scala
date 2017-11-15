@@ -65,7 +65,6 @@ trait TestEndpointEISController extends FrontendController with AuthorisedAndEnr
         commercialSaleForm <- fillForm[CommercialSaleModel](KeystoreKeys.commercialSale, CommercialSaleForm.commercialSaleForm)
         shareIssueDateForm <- fillForm[ShareIssueDateModel](KeystoreKeys.shareIssueDate, ShareIssueDateForm.shareIssueDateForm)
         grossAssetsBeforeForm <- fillForm[GrossAssetsModel](KeystoreKeys.grossAssets, GrossAssetsForm.grossAssetsForm)
-        grossAssetsAfterForm <- fillForm[GrossAssetsAfterIssueModel](KeystoreKeys.grossAssetsAfterIssue, GrossAssetsAfterIssueForm.grossAssetsAfterIssueForm)
         isCompanyKnowledgeIntensiveForm <- fillForm[IsCompanyKnowledgeIntensiveModel](KeystoreKeys.isCompanyKnowledgeIntensive, IsCompanyKnowledgeIntensiveForm.isCompanyKnowledgeIntensiveForm)
         isKnowledgeIntensiveForm <- fillForm[IsKnowledgeIntensiveModel](KeystoreKeys.isKnowledgeIntensive, IsKnowledgeIntensiveForm.isKnowledgeIntensiveForm)
         operatingCostsForm <- fillForm[OperatingCostsModel](KeystoreKeys.operatingCosts, TestOperatingCostsForm.testOperatingCostsForm)
@@ -83,7 +82,6 @@ trait TestEndpointEISController extends FrontendController with AuthorisedAndEnr
           commercialSaleForm,
           shareIssueDateForm,
           grossAssetsBeforeForm,
-          grossAssetsAfterForm,
           isCompanyKnowledgeIntensiveForm,
           isKnowledgeIntensiveForm,
           operatingCostsForm,
@@ -96,6 +94,8 @@ trait TestEndpointEISController extends FrontendController with AuthorisedAndEnr
 
   def showPageTwo(schemes: Option[Int]): Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user => implicit request =>
     for {
+      grossAssetsAfterForm <- fillForm[GrossAssetsAfterIssueModel](KeystoreKeys.grossAssetsAfterIssue, GrossAssetsAfterIssueForm.grossAssetsAfterIssueForm)
+
       fullTimeEmployeeCountForm <- fillForm[FullTimeEmployeeCountModel](KeystoreKeys.fullTimeEmployeeCount,FullTimeEmployeeCountForm.fullTimeEmployeeCountForm)
       hadPreviousRFIForm <- fillForm[HadPreviousRFIModel](KeystoreKeys.hadPreviousRFI, HadPreviousRFIForm.hadPreviousRFIForm)
       previousSchemesForm <- fillPreviousSchemesForm
@@ -116,6 +116,8 @@ trait TestEndpointEISController extends FrontendController with AuthorisedAndEnr
         TestInvestorModeOptionsForm.testInvestorModeOptionsForm)
     } yield Ok(
       testOnly.views.html.eis.testEndpointEISPageTwo(
+        grossAssetsAfterForm,
+
         fullTimeEmployeeCountForm,
         hadPreviousRFIForm,
         previousSchemesForm,
@@ -176,7 +178,6 @@ trait TestEndpointEISController extends FrontendController with AuthorisedAndEnr
     val commercialSale = bindForm[CommercialSaleModel](KeystoreKeys.commercialSale, CommercialSaleForm.commercialSaleForm)
     val shareIssuDate = bindForm[ShareIssueDateModel](KeystoreKeys.shareIssueDate, ShareIssueDateForm.shareIssueDateForm)
     val grossAssetsBefore = bindForm[GrossAssetsModel](KeystoreKeys.grossAssets, GrossAssetsForm.grossAssetsForm)
-    val grossAssetsAfter = bindForm[GrossAssetsAfterIssueModel](KeystoreKeys.grossAssetsAfterIssue, GrossAssetsAfterIssueForm.grossAssetsAfterIssueForm)
     val isCompanyKnowledgeIntensive = bindKIFormOne()
     val isKnowledgeIntensive = bindKIFormTwo()
     val testOperatingCosts = bindForm[OperatingCostsModel](KeystoreKeys.operatingCosts, TestOperatingCostsForm.testOperatingCostsForm)
@@ -198,7 +199,6 @@ trait TestEndpointEISController extends FrontendController with AuthorisedAndEnr
         commercialSale,
         shareIssuDate,
         grossAssetsBefore,
-        grossAssetsAfter,
         isCompanyKnowledgeIntensive,
         isKnowledgeIntensive,
         testOperatingCosts,
@@ -209,6 +209,8 @@ trait TestEndpointEISController extends FrontendController with AuthorisedAndEnr
   }
 
   def submitPageTwo: Action[AnyContent] = AuthorisedAndEnrolled.async { implicit user => implicit request =>
+    val grossAssetsAfter = bindForm[GrossAssetsAfterIssueModel](KeystoreKeys.grossAssetsAfterIssue, GrossAssetsAfterIssueForm.grossAssetsAfterIssueForm)
+
     val fullTimeEmployeeCount = bindForm[FullTimeEmployeeCountModel](KeystoreKeys.fullTimeEmployeeCount,FullTimeEmployeeCountForm.fullTimeEmployeeCountForm)
     val hadPreviousRFI = bindForm[HadPreviousRFIModel](KeystoreKeys.hadPreviousRFI, HadPreviousRFIForm.hadPreviousRFIForm)
     val testPreviousSchemes = bindPreviousSchemesForm()
@@ -233,6 +235,8 @@ trait TestEndpointEISController extends FrontendController with AuthorisedAndEnr
 
     Future.successful(Ok(
       testOnly.views.html.eis.testEndpointEISPageTwo(
+        grossAssetsAfter,
+
         fullTimeEmployeeCount,
         hadPreviousRFI,
         testPreviousSchemes,

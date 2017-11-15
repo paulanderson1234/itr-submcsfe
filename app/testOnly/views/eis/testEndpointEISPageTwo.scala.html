@@ -21,7 +21,8 @@
 @import utils.CountriesHelper
 @import views.html.helpers.{externalLink,formHint, formInputRadioGroup, backButtonWithProgress, input, inputWithCurrencySymbol, formInlineDateInput, hiddenField, errorSummary, formHiddenYesNoRadioNoError, textArea, dropdown}
 
-@(fullTimeEmployeeCountForm: Form[FullTimeEmployeeCountModel],
+@(grossAssetsAfterIssueForm: Form[GrossAssetsAfterIssueModel],
+  fullTimeEmployeeCountForm: Form[FullTimeEmployeeCountModel],
   hadPreviousRFIForm: Form[HadPreviousRFIModel],
   testPreviousSchemesForm: Form[TestPreviousSchemesModel],
   previousSchemesSize: Int,
@@ -41,7 +42,28 @@
 @main_template(Messages("page.test.page-two.title")) {
 <div class="grid-row">
 
+
     @form(action = testOnly.controllers.eis.routes.TestEndpointEISController.submitPageTwo()) {
+
+    <h2>Gross Assets After</h2>
+    <div class="form-group">
+        @formInputRadioGroup(
+        field = grossAssetsAfterIssueForm("grossAmount"),
+        Seq(
+        Constants.grossAssetsBandOne -> Messages("page.grossAssetsAfterIssue.option.one"),
+        Constants.grossAssetsBandTwo -> Messages("page.grossAssetsAfterIssue.option.two"),
+        Constants.grossAssetsBandThree -> Messages("page.grossAssetsAfterIssue.option.three"),
+        Constants.grossAssetsAfterIssueBandFour -> Messages("page.grossAssetsAfterIssue.option.four"),
+        Constants.grossAssetsAfterIssueBandFive -> Messages("page.grossAssetsAfterIssue.option.five")),
+        '_legend -> Messages("page.grossAssetsAfterIssue.amount.legend"),
+        '_legendClass -> "visuallyhidden",
+        '_legendID -> "grossAssetsAfterIssueAmount",
+        '_labelAfter -> true,
+        '_labelClass -> "block-label"
+        )
+    </div>
+
+
     <h2>Full Time Employee Count</h2>
     <div class="form-group">
         @input(
