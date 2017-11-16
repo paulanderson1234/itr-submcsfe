@@ -29,23 +29,23 @@ class GrossAssetsAfterIssueModelSpec extends BaseSpec with MockitoSugar  {
   "Calling .grossAssetsAfterIssueAmountBand on GrossAssetsModelAfterIssue" should {
 
     "return 'Up to £1,000,000' as a string" in {
-      GrossAssetsAfterIssueModel(Constants.grossAssetsBandOne).grossAssetsAfterIssueAmountBand() shouldBe Messages("page.grossAssetsAfterIssue.option.one")
+      GrossAssetsAfterIssueModel(Constants.grossAssetsBandOne).grossAssetsAfterIssueAmountBand() shouldBe "Up to £1,000,000"
     }
 
-    "return 'Up to £5,000,000' as a string" in {
-      GrossAssetsAfterIssueModel(Constants.grossAssetsBandTwo).grossAssetsAfterIssueAmountBand() shouldBe Messages("page.grossAssetsAfterIssue.option.two")
+    "return '£1,000,001 to £5,000,000' as a string" in {
+      GrossAssetsAfterIssueModel(Constants.grossAssetsBandTwo).grossAssetsAfterIssueAmountBand() shouldBe "£1,000,001 to £5,000,000"
     }
 
-    "return 'Up to £10,000,000' as a string" in {
-      GrossAssetsAfterIssueModel(Constants.grossAssetsBandThree).grossAssetsAfterIssueAmountBand() shouldBe Messages("page.grossAssetsAfterIssue.option.three")
+    "return '£5,000,001 to £10,000,000' as a string" in {
+      GrossAssetsAfterIssueModel(Constants.grossAssetsBandThree).grossAssetsAfterIssueAmountBand() shouldBe "£5,000,001 to £10,000,000"
     }
 
-    "return 'Up to £16,000,000' as a string" in {
-      GrossAssetsAfterIssueModel(Constants.grossAssetsAfterIssueBandFour).grossAssetsAfterIssueAmountBand() shouldBe Messages("page.grossAssetsAfterIssue.option.four")
+    "return '£10,000,001 to £16,000,000' as a string" in {
+      GrossAssetsAfterIssueModel(Constants.grossAssetsAfterIssueBandFour).grossAssetsAfterIssueAmountBand() shouldBe "£10,000,001 to £16,000,000"
     }
 
-    "return 'Up to £16,000,001' as a string" in {
-      GrossAssetsAfterIssueModel(Constants.grossAssetsAfterIssueBandFive).grossAssetsAfterIssueAmountBand() shouldBe Messages("page.grossAssetsAfterIssue.option.five")
+    "return 'More than £16,000,000' as a string" in {
+      GrossAssetsAfterIssueModel(Constants.grossAssetsAfterIssueBandFive).grossAssetsAfterIssueAmountBand() shouldBe "More than £16,000,000"
     }
 
 

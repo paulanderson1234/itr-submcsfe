@@ -22,16 +22,26 @@ import play.api.i18n.Messages
 import utils.CostFormatter
 
 case class GrossAssetsModel(grossAmount : BigDecimal){
+
+  import GrossAssetsModel._
+  import Constants._
+
   def grossAssetsAmountBand()(implicit messages: Messages): String = {
+
     grossAmount.toString() match{
-      case Constants.grossAssetsBandOne => Messages("page.grossAssets.option.one")
-      case Constants.grossAssetsBandTwo => Messages("page.grossAssets.option.two")
-      case Constants.grossAssetsBandThree => Messages("page.grossAssets.option.three")
-      case Constants.grossAssetsBandFour => Messages("page.grossAssets.option.four")
-      case Constants.grossAssetsBandFive => Messages("page.grossAssets.option.five")
-      case Constants.grossAssetsSEISBandOne => Messages("page.grossAssets.seis.option.one")
-      case Constants.grossAssetsSEISBandTwo => Messages("page.grossAssets.seis.option.two")
-      case Constants.grossAssetsSEISBandThree => Messages("page.grossAssets.seis.option.three")
+      case `grossAssetsBandOne` => Messages("page.grossAssets.option.up.to", getAmountAsFormattedString(grossAssetsBandOne.toInt))
+      case `grossAssetsBandTwo` => Messages("page.grossAssets.option.band",
+        getAmountAsFormattedString(grossAssetsBandOne.toInt + 1) , getAmountAsFormattedString(grossAssetsBandTwo.toInt))
+      case `grossAssetsBandThree` => Messages("page.grossAssets.option.band",
+        getAmountAsFormattedString(grossAssetsBandTwo.toInt + 1), getAmountAsFormattedString(grossAssetsBandThree.toInt))
+      case `grossAssetsBandFour` => Messages("page.grossAssets.option.band",
+        getAmountAsFormattedString(grossAssetsBandThree.toInt + 1), getAmountAsFormattedString(grossAssetsBandFour.toInt))
+      case `grossAssetsBandFive` => Messages("page.grossAssets.option.more.than",
+        getAmountAsFormattedString(grossAssetsBandFour.toInt))
+      case `grossAssetsSEISBandOne` => Messages("page.grossAssets.option.up.to", getAmountAsFormattedString(grossAssetsSEISBandOne.toInt))
+      case `grossAssetsSEISBandTwo` => Messages("page.grossAssets.option.band",
+        getAmountAsFormattedString(grossAssetsSEISBandOne.toInt + 1) , getAmountAsFormattedString(grossAssetsSEISBandTwo.toInt))
+      case `grossAssetsSEISBandThree` => Messages("page.grossAssets.option.more.than", getAmountAsFormattedString(grossAssetsSEISBandTwo.toInt))
     }
   }
 }
