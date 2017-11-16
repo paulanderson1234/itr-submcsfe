@@ -167,7 +167,7 @@ class AcknowledgementSpec extends ViewSpec {
       lazy val button = document.select("a.button")
 
       "links to the feedback page" in {
-        button.attr("href") shouldBe controllers.feedback.routes.FeedbackController.show().url
+        button.attr("href") shouldBe config.FrontendAppConfig.feedbackUrl
       }
 
       "has the correct part of the message" in {

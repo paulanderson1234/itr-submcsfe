@@ -55,6 +55,8 @@ trait MockConfig extends AppConfig {
   override lazy val sendVerificationEmailURL = "http://localhost:9640/email-verification/verification-requests"
   override lazy val checkVerifiedEmailURL = "http://localhost:9640/email-verification/verified-email-addresses"
   override lazy val emailVerificationTemplate = "verifyEmailAddress"
+
+  override lazy val feedbackUrl: String = "http://localhost:9514/feedback-survey/?origin=TAVC"
 }
 
 object MockConfig extends MockConfig
