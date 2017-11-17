@@ -22,13 +22,22 @@ import play.api.libs.json.Json
 import utils.CostFormatter
 
 case class GrossAssetsAfterIssueModel(grossAmount : BigDecimal){
+
+  import GrossAssetsAfterIssueModel._
+  import Constants._
+
   def grossAssetsAfterIssueAmountBand()(implicit messages: Messages): String = {
+
     grossAmount.toString() match{
-      case Constants.grossAssetsBandOne => Messages("page.grossAssetsAfterIssue.option.one")
-      case Constants.grossAssetsBandTwo => Messages("page.grossAssetsAfterIssue.option.two")
-      case Constants.grossAssetsBandThree => Messages("page.grossAssetsAfterIssue.option.three")
-      case Constants.grossAssetsAfterIssueBandFour => Messages("page.grossAssetsAfterIssue.option.four")
-      case Constants.grossAssetsAfterIssueBandFive => Messages("page.grossAssetsAfterIssue.option.five")
+      case `grossAssetsBandOne` => Messages("page.grossAssets.option.up.to", getAmountAsFormattedString(grossAssetsBandOne.toInt))
+      case `grossAssetsBandTwo` => Messages("page.grossAssets.option.band",
+        getAmountAsFormattedString(grossAssetsBandOne.toInt + 1) , getAmountAsFormattedString(grossAssetsBandTwo.toInt))
+      case `grossAssetsBandThree` => Messages("page.grossAssets.option.band",
+        getAmountAsFormattedString(grossAssetsBandTwo.toInt + 1), getAmountAsFormattedString(grossAssetsBandThree.toInt))
+      case `grossAssetsAfterIssueBandFour` => Messages("page.grossAssets.option.band",
+        getAmountAsFormattedString(grossAssetsBandThree.toInt + 1), getAmountAsFormattedString(grossAssetsAfterIssueBandFour.toInt))
+      case `grossAssetsAfterIssueBandFive` => Messages("page.grossAssets.option.more.than",
+        getAmountAsFormattedString(grossAssetsAfterIssueBandFour.toInt))
     }
   }
 }

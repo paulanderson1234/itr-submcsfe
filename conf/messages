@@ -702,14 +702,9 @@ page.grossAssets.amount.heading=What were the company''s gross assets worth just
 page.grossAssets.amount.legend=What were the company''s gross assets worth just before it issued the shares?
 page.grossAssets.guidance.title=How to work this out
 page.grossAssets.guidance.one=Gross assets are all of the assets that would have appeared on your balance sheet just before the share issue. Don''t deduct any liabilities and don''t include the money raised for the share issue.
-page.grossAssets.option.one=Up to £1,000,000
-page.grossAssets.option.two=£1,000,001 to £5,000,000
-page.grossAssets.option.three=£5,000,001 to £10,000,000
-page.grossAssets.option.four=£10,000,001 to £15,000,000
-page.grossAssets.option.five=More than £15,000,000
-page.grossAssets.seis.option.one=Up to £100,000
-page.grossAssets.seis.option.two=£100,001 to £200,000
-page.grossAssets.seis.option.three=More than £200,000
+page.grossAssets.option.up.to=Up to {0}
+page.grossAssets.option.band={0} to {1}
+page.grossAssets.option.more.than=More than {0}
 
 #Gross assets after issue page
 page.grossAssetsAfterIssue.amount.title=What were the company''s gross assets worth just after it issued the shares?
@@ -717,11 +712,6 @@ page.grossAssetsAfterIssue.amount.heading=What were the company''s gross assets 
 page.grossAssetsAfterIssue.amount.legend=What were the company''s gross assets worth just after it issued the shares?
 page.grossAssetsAfterIssue.guidance.title=How to work this out
 page.grossAssetsAfterIssue.guidance.one=Gross assets are all of the assets that would appear on your balance sheet just after the share issue. Don''t deduct any liabilities.
-page.grossAssetsAfterIssue.option.one=Up to £1,000,000
-page.grossAssetsAfterIssue.option.two=£1,000,001 to £5,000,000
-page.grossAssetsAfterIssue.option.three=£5,000,001 to £10,000,000
-page.grossAssetsAfterIssue.option.four=£10,000,001 to £16,000,000
-page.grossAssetsAfterIssue.option.five=More than £16,000,000
 
 #gross assets error
 page.companyDetails.grossAssetsError.description.seis=This is because your company''s gross assets were worth more than £200,000 when the shares were issued.

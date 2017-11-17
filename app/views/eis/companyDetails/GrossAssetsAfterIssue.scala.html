@@ -18,6 +18,7 @@
 @import uk.gov.hmrc.play.views.html.helpers.form
 @import views.html.helpers.{errorSummary, inputWithCurrencySymbol, backButtonWithProgress, formInputRadioGroup}
 @import common.Constants
+@import GrossAssetsAfterIssueModel._
 
 @(grossAssetsAfterIssueForm: Form[GrossAssetsAfterIssueModel])(implicit request: Request[_], messages: Messages)
 
@@ -45,11 +46,14 @@
             @formInputRadioGroup(
             field = grossAssetsAfterIssueForm("grossAmount"),
             Seq(
-            Constants.grossAssetsBandOne -> Messages("page.grossAssetsAfterIssue.option.one"),
-            Constants.grossAssetsBandTwo -> Messages("page.grossAssetsAfterIssue.option.two"),
-            Constants.grossAssetsBandThree -> Messages("page.grossAssetsAfterIssue.option.three"),
-            Constants.grossAssetsAfterIssueBandFour -> Messages("page.grossAssetsAfterIssue.option.four"),
-            Constants.grossAssetsAfterIssueBandFive -> Messages("page.grossAssetsAfterIssue.option.five")),
+            Constants.grossAssetsBandOne -> Messages("page.grossAssets.option.up.to", getAmountAsFormattedString(Constants.grossAssetsBandOne.toInt)),
+            Constants.grossAssetsBandTwo -> Messages("page.grossAssets.option.band",
+            getAmountAsFormattedString(Constants.grossAssetsBandOne.toInt+1), getAmountAsFormattedString(Constants.grossAssetsBandTwo.toInt)),
+            Constants.grossAssetsBandThree -> Messages("page.grossAssets.option.band",
+            getAmountAsFormattedString(Constants.grossAssetsBandTwo.toInt+1), getAmountAsFormattedString(Constants.grossAssetsBandThree.toInt)),
+            Constants.grossAssetsAfterIssueBandFour -> Messages("page.grossAssets.option.band",
+            getAmountAsFormattedString(Constants.grossAssetsBandThree.toInt+1), getAmountAsFormattedString(Constants.grossAssetsAfterIssueBandFour.toInt)),
+            Constants.grossAssetsAfterIssueBandFive -> Messages("page.grossAssets.option.more.than", getAmountAsFormattedString(Constants.grossAssetsAfterIssueBandFour.toInt))),
             '_legend -> Messages("page.grossAssetsAfterIssue.amount.legend"),
             '_legendClass -> "visuallyhidden",
             '_legendID -> "grossAssetsAfterIssueAmount",
