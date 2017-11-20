@@ -152,5 +152,4 @@ class ReviewPreviousSchemesControllerSpec extends BaseSpec {
       )
     }
   }
-
 }
