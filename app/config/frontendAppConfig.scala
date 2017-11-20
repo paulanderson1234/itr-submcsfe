@@ -48,6 +48,7 @@ trait AppConfig {
   val emailVerificationSeisReturnUrlTwo: String
   val sendVerificationEmailURL: String
   val checkVerifiedEmailURL: String
+  val feedbackUrl: String
 
 }
 
@@ -69,6 +70,7 @@ object FrontendAppConfig extends AppConfig with ServicesConfig {
 
   override lazy val subscriptionUrl: String = loadConfig("investment-tax-relief-subscription.url")
   override lazy val signOutPageUrl: String = configuration.getString(s"sign-out-page.url").getOrElse("")
+  override lazy val feedbackUrl: String = loadConfig("feedback.initialFeedbackUrl")
 
 
   //Contact Frontend Config
