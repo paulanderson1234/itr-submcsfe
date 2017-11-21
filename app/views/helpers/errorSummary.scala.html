@@ -26,7 +26,6 @@
         @form.errors.map { error =>
         @if(error.key.equals("")) {
         <li role="tooltip" data-journey="@page:error:@errorKey">
-            <p>@form.globalErrors.head.key</p>
             <a href= "#@if(form.hasGlobalErrors) {@errorKey} else {@error.key}"
                id="@{errorKey}-error-summary"
                data-focuses="@errorKey">
@@ -35,7 +34,6 @@
         </li>
         } else {
         <li role="tooltip" data-journey="@page:error:@error.key">
-            <p>@form.hasGlobalErrors</p>
             <a href= "#@if(form.hasGlobalErrors) {@form.globalErrors.head.key} else {@error.key}"
                id="@{error.key}-error-summary"
                data-focuses="@error.key">
