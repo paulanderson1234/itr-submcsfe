@@ -26,8 +26,6 @@
 @backButtonWithProgress(controllers.eis.routes.ShareIssueDateController.show().url, Messages("common.section.progress.details.one"))
 
 <div class="grid-row">
-    <div class="column-two-thirds">
-
         @errorSummary(grossAssetsForm, "gross-assets", "amount")
 
         <h1 id="main-heading" class="form-title heading-xlarge">@Messages("page.grossAssets.amount.heading")</h1>
@@ -63,6 +61,5 @@
             <button class="btn button" type="submit" id="next">@Messages("common.button.snc")</button>
         </div>
         }
-    </div>
 </div>
 }

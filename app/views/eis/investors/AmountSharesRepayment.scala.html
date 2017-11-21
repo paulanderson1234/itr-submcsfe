@@ -27,8 +27,7 @@
 
 
 <div class="grid-row">
-    <div class="column-two-thirds">
-        @errorSummary(amountSharesRepaymentForm, "amount-shares-repayment", "amount")        
+        @errorSummary(amountSharesRepaymentForm, "amount-shares-repayment", "amount")
         <h1 class="heading-xlarge" id="main-heading">@Messages("page.AmountSharesRepayment.heading")</h1>
 
         @form(action = controllers.eis.routes.AmountSharesRepaymentController.submit()) {
@@ -58,6 +57,5 @@
             <button class="btn button" type="submit" id="next">@Messages("common.button.snc")</button>
         </div>
         }
-    </div>
 </div>
 }
