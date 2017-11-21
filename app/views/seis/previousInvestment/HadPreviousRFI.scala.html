@@ -15,9 +15,7 @@
  *@
 
 @import models.HadPreviousRFIModel
-@import uk.gov.hmrc.play.views.html.helpers.form
-@import uk.gov.hmrc.play.views.html.helpers.errorSummary
-@import uk.gov.hmrc.play.views.html.helpers.inputRadioGroup
+@import uk.gov.hmrc.play.views.html.helpers.{form, inputRadioGroup, errorSummary}
 @import common.Constants
 @import views.html.helpers.{backButtonWithProgress, formHint}
 
@@ -27,7 +25,8 @@
 
 @backButtonWithProgress(controllers.seis.routes.FullTimeEmployeeCountController.show().url, Messages("common.section.progress.details.two"))
 
-@errorSummary("gfgfdfgdgffdgfdfg", hadPreviousRFIForm)
+@errorSummary(Messages("common.error.summary.heading"), hadPreviousRFIForm)
+
 
 <h1 class="heading-xlarge" id="main-heading">@Messages("page.previousInvestment.hadPreviousRFI.title")</h1>
 
@@ -45,8 +44,7 @@
 
 @form(action = controllers.seis.routes.HadPreviousRFIController.submit()) {
 
-
-@*<div class="form-group">
+<div class="form-group" id="hadPreviousRFI">
     @inputRadioGroup(
     field = hadPreviousRFIForm("hadPreviousRFI"),
     Seq(
@@ -56,30 +54,10 @@
     '_legendClass -> "visuallyhidden",
     '_labelAfter -> true,
     '_labelClass -> "block-label",
-    '_legendID -> "hadPreviousRFIr4t53",
+    '_legendID -> "hadPreviousRFI",
     '_groupClass -> "inline"
     )
-</div>*@
-
-<div id="satisfaction" class="form-group">
-    @inputRadioGroup(
-    hadPreviousRFIForm("hadPreviousRFI"),
-    Seq("ttt" -> "vsat",
-    "satisfied-4" -> "sat",
-    "neither_satisfied_nor_dissatisfied-3" -> "fickle",
-    "dissatisfied-2" -> "dis",
-    "very_dissatisfied-1" -> "vdis"
-    ),
-    '_labelAfter -> true,
-    '_labelClass -> "block-label",
-    '_legend -> "leggy",
-    '_legendClass -> "visuallyhidden",
-    '_id -> "hadPreviousRFI"
-
-    )
-
 </div>
-
 
 
 <div class="form-group">

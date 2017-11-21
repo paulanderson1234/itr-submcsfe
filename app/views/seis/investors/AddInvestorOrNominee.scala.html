@@ -16,19 +16,18 @@
 
 @import models.FullTimeEmployeeCountModel
 @import views.html.helpers.backButtonWithProgress
-@import views.html.helpers.errorSummary
 @import views.html.helpers.input
 @import uk.gov.hmrc.play.views.html.helpers.form
 @import common.Constants
-@import views.html.helpers.{backButtonWithProgress, formInputRadioGroup, errorSummary, formHint, hiddenField}
+@import views.html.helpers.{backButtonWithProgress, formHint, hiddenField}
+@import uk.gov.hmrc.play.views.html.helpers.{form, inputRadioGroup, errorSummary}
 
 @(addInvestorOrNomineeForm: Form[AddInvestorOrNomineeModel], backUrl: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(Messages("page.investors.AddInvestorOrNominee.title")) {
 
     @backButtonWithProgress(backUrl, Messages("common.section.progress.details.four"))
-
-    @errorSummary(addInvestorOrNomineeForm, "add-investor-or-nominee", "addInvestorOrNominee")
+    @errorSummary(Messages("common.error.summary.heading"), addInvestorOrNomineeForm)
 
     <h1 class="heading-xlarge" id="main-heading">@Messages("page.investors.AddInvestorOrNominee.heading")</h1>
 
@@ -39,8 +38,8 @@
     </div>
 
     @form(action = controllers.seis.routes.AddInvestorOrNomineeController.submit()) {
-        <div class="form-group">
-            @formInputRadioGroup(
+        <div class="form-group" id="addInvestorOrNominee">
+            @inputRadioGroup(
             field = addInvestorOrNomineeForm("addInvestorOrNominee"),
             Seq(
             Constants.investor -> Messages("page.investors.AddInvestorOrNominee.radioButton.one"),

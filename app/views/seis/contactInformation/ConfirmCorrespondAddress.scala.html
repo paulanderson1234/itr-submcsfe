@@ -17,8 +17,8 @@
 @import models.ConfirmCorrespondAddressModel
 @import common.Constants
 @import utils.CountriesHelper
-@import uk.gov.hmrc.play.views.html.helpers.form
-@import views.html.helpers.{errorSummary, formInputRadioGroup, textWithConstErrors, backButtonWithProgress, hiddenField}
+@import uk.gov.hmrc.play.views.html.helpers.{form, inputRadioGroup, errorSummary}
+@import views.html.helpers.{textWithConstErrors, backButtonWithProgress, hiddenField}
 
 @(confirmCorrespondAddressForm: Form[ConfirmCorrespondAddressModel], backLink: String)(implicit request: Request[_], messages: Messages)
 
@@ -29,7 +29,7 @@
     <div class="grid-row">
         <div class="column-two-thirds">
 
-            @errorSummary(confirmCorrespondAddressForm, "confirm-correspondence-address", "contactAddressUse")
+            @errorSummary(Messages("common.error.summary.heading"), confirmCorrespondAddressForm)
 
             <h1 id="main-heading" class="form-title heading-xlarge">@Messages("page.contactInformation.ConfirmCorrespondAddress.heading")</h1>
 
@@ -45,8 +45,9 @@
 
             @form(action = controllers.seis.routes.ConfirmCorrespondAddressController.submit()) {
                 <div id="radioContactAddressDiv">
-                    <div class="form-group">
-                        @formInputRadioGroup(
+                    <div class="form-group" id="contactAddressUse">
+
+                        @inputRadioGroup(
                         field = confirmCorrespondAddressForm("contactAddressUse"),
                         Seq(
                         Constants.StandardRadioButtonYesValue->Messages("common.radioYesLabel"),

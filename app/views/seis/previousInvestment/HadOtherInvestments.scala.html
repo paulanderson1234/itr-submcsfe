@@ -15,9 +15,9 @@
  *@
 
 @import models.HadOtherInvestmentsModel
-@import uk.gov.hmrc.play.views.html.helpers.form
+@import uk.gov.hmrc.play.views.html.helpers.{form, inputRadioGroup, errorSummary}
 @import common.Constants
-@import views.html.helpers.{backButtonWithProgress, formInputRadioGroup, errorSummary}
+@import views.html.helpers.{backButtonWithProgress}
 
 @(hadOtherInvestmentsForm: Form[HadOtherInvestmentsModel], backUrl: String)(implicit request: Request[_], messages: Messages)
 
@@ -25,7 +25,7 @@
 
     @backButtonWithProgress(backUrl, Messages("common.section.progress.details.two"))
 
-    @errorSummary(hadOtherInvestmentsForm, "had-other-investments", "hadOtherInvestments")
+    @errorSummary(Messages("common.error.summary.heading"), hadOtherInvestmentsForm)
 
     <h1 class="heading-xlarge" id="main-heading">@Messages("page.previousInvestment.hadOtherInvestments.heading")</h1>
 
@@ -45,8 +45,8 @@
         </div>
     </details>
 
-    <div class="form-group">
-        @formInputRadioGroup(
+    <div class="form-group" id="hadOtherInvestments">
+        @inputRadioGroup(
         field = hadOtherInvestmentsForm("hadOtherInvestments"),
         Seq(
         Constants.StandardRadioButtonYesValue -> Messages("common.radioYesLabel"),

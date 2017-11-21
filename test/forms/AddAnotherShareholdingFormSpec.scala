@@ -20,6 +20,7 @@ import models.AddAnotherShareholdingModel
 import org.scalatestplus.play.OneAppPerSuite
 import uk.gov.hmrc.play.test.UnitSpec
 import forms.AddAnotherShareholdingForm._
+import play.api.data.FormError
 import play.api.i18n.Messages
 import play.api.i18n.Messages.Implicits._
 
@@ -36,6 +37,15 @@ class AddAnotherShareholdingFormSpec extends UnitSpec with OneAppPerSuite {
 
     "return a valid map from a false" in {
       val model = AddAnotherShareholdingModel(false)
+
+
+      val x : FormError = ???
+      form.hasGlobalErrors
+      form.globalErrors.head.key.toString
+
+      form.globalErrors map { errors =>
+
+      }
 
       form.fill(model).data shouldBe Map("addAnotherShareholding" -> "No")
     }

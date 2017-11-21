@@ -15,9 +15,9 @@
  *@
 
 @import models.SupportingDocumentsUploadModel
-@import uk.gov.hmrc.play.views.html.helpers.form
+@import uk.gov.hmrc.play.views.html.helpers.{form, inputRadioGroup, errorSummary}
 @import common.Constants
-@import views.html.helpers.{errorSummary, formInputRadioGroup, backButtonWithProgress, formHiddenYesNoRadioNoError, formHint}
+@import views.html.helpers.{backButtonWithProgress, formHiddenYesNoRadioNoError, formHint}
 
 @(supportingDocumentsForm: Form[SupportingDocumentsUploadModel], backlinkUrl: String)(implicit request: Request[_], messages: Messages)
 
@@ -25,7 +25,7 @@
 
 @backButtonWithProgress(backlinkUrl, Messages("common.section.progress.details.six"))
 
-@errorSummary(supportingDocumentsForm, "supporting-documents", "doUpload")
+@errorSummary(Messages("common.error.summary.heading"), supportingDocumentsForm)
 
 <h1 class="heading-xlarge" id="main-heading">@Messages("page.supportingDocuments.SupportingDocuments.heading")</h1>
 
@@ -55,8 +55,8 @@
 @form(action = controllers.seis.routes.SupportingDocumentsUploadController.submit()) {
 
 
-<div class="form-group">
-    @formInputRadioGroup(
+<div class="form-group" id="doUpload">
+    @inputRadioGroup(
     field = supportingDocumentsForm("doUpload"),
     Seq(
     Constants.StandardRadioButtonYesValue->Messages("common.radioYesLabel"),

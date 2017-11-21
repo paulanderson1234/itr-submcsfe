@@ -15,8 +15,8 @@
  *@
 
 @import models.GrossAssetsModel
-@import uk.gov.hmrc.play.views.html.helpers.form
-@import views.html.helpers.{errorSummary, inputWithCurrencySymbol, backButtonWithProgress, formInputRadioGroup}
+@import views.html.helpers.{backButtonWithProgress}
+@import uk.gov.hmrc.play.views.html.helpers.{form, inputRadioGroup, errorSummary}
 @import common.Constants
 
 @(grossAssetsForm: Form[GrossAssetsModel])(implicit request: Request[_], messages: Messages)
@@ -28,7 +28,7 @@
 <div class="grid-row">
     <div class="column-two-thirds">
 
-        @errorSummary(grossAssetsForm, "gross-assets", "amount")
+        @errorSummary(Messages("common.error.summary.heading"), grossAssetsForm)
 
         <h1 id="main-heading" class="form-title heading-xlarge">@Messages("page.grossAssets.amount.heading")</h1>
 
@@ -40,8 +40,8 @@
         </details>
 
         @form(action = controllers.seis.routes.GrossAssetsController.submit()) {
-        <div class="form-group">
-            @formInputRadioGroup(
+        <div class="form-group" id="grossAmount">
+            @inputRadioGroup(
             field = grossAssetsForm("grossAmount"),
             Seq(
             Constants.grossAssetsSEISBandOne -> Messages("page.grossAssets.seis.option.one"),

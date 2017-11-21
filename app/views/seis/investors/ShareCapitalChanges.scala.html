@@ -41,6 +41,7 @@
 
     @form(action = controllers.seis.routes.ShareCapitalChangesController.submit()) {
 
+    <div id ="hasChanges">
     @formHiddenYesNoRadio(
     shareCapitalChangesForm,
     "hasChanges",
@@ -58,7 +59,7 @@
     None,
     Some("visuallyhidden")
     )
-
+    </div>
 
     <div class="form-group">
         <button class="btn button" type="submit" id="next">@Messages("common.button.snc")</button>
