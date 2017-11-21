@@ -17,8 +17,8 @@
 @import models.PreviousSchemeModel
 @import uk.gov.hmrc.play.views.html.helpers.form
 @import common.Constants
-@import uk.gov.hmrc.play.views.html.helpers.{form, inputRadioGroup, errorSummary}
-@import views.html.helpers.{externalLink, backButtonWithProgress, input, inputWithCurrencySymbol, formInlineDateInput, hiddenField}
+@import uk.gov.hmrc.play.views.html.helpers.{form, inputRadioGroup}
+@import views.html.helpers.{externalLink, backButtonWithProgress, input, inputWithCurrencySymbol, formInlineDateInput, hiddenField, errorSummary}
 
 @(previousSchemeForm: Form[PreviousSchemeModel], backlinkUrl: String)(implicit request: Request[_], messages: Messages)
 
@@ -26,7 +26,7 @@
 
 @backButtonWithProgress(backlinkUrl, Messages("common.section.progress.details.two"))
 
-    @errorSummary(Messages("common.error.summary.heading"), previousSchemeForm)
+    @errorSummary(previousSchemeForm, "previous-scheme", "investmentDay")
 
     <h1 class="heading-xlarge" id="main-heading">@Messages("page.investment.PreviousScheme.heading")</h1>
 
