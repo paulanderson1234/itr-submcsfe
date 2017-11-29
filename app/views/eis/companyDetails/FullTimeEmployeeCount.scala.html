@@ -16,9 +16,7 @@
 
 @import models.FullTimeEmployeeCountModel
 @import views.html.helpers.backButtonWithProgress
-@import views.html.helpers.errorSummary
-@import views.html.helpers.input
-@import uk.gov.hmrc.play.views.html.helpers.form
+@import uk.gov.hmrc.play.views.html.helpers.{form, errorSummary, input}
 @import common.Constants
 
 @(fullTimeEmployeeCountForm: Form[FullTimeEmployeeCountModel], backUrl: String)(implicit request: Request[_], messages: Messages)
@@ -27,7 +25,7 @@
 
     @backButtonWithProgress(backUrl, Messages("common.section.progress.details.one"))
 
-    @errorSummary(fullTimeEmployeeCountForm, "full-time-employee-count", "fullTimeEmployeeCount")
+    @errorSummary(Messages("common.error.summary.heading"), fullTimeEmployeeCountForm)
 
     <h1 class="heading-xlarge" id="main-heading">@Messages("page.companyDetails.fullTimeEmployeeCount.heading")</h1>
 

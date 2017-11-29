@@ -17,7 +17,9 @@
 @import models.QualifyBusinessActivityModel
 @import uk.gov.hmrc.play.views.html.helpers.form
 @import common.Constants
-@import views.html.helpers.{backButtonWithProgress, formInputRadioGroup, errorSummary, formHint}
+@import views.html.helpers.{backButtonWithProgress, formHint}
+@import uk.gov.hmrc.play.views.html.helpers.{form, inputRadioGroup, errorSummary}
+
 
 @(qualifyBusinessActivityForm: Form[QualifyBusinessActivityModel])(implicit request: Request[_], messages: Messages)
 
@@ -25,14 +27,15 @@
 
 @backButtonWithProgress(controllers.eis.routes.DateOfIncorporationController.show().url, Messages("common.section.progress.details.one"))
 
-@errorSummary(qualifyBusinessActivityForm, "isQualifyBusinessActivity", "isQualifyBusinessActivity")
+@errorSummary(Messages("common.error.summary.heading"), qualifyBusinessActivityForm)
 
 <h1 class="heading-xlarge" id="main-heading">@Messages("page.companyDetails.qualifyBusinessActivity.heading")</h1>
 
 @form(action = controllers.eis.routes.QualifyBusinessActivityController.submit()) {
 
-<div class="form-group">
-    @formInputRadioGroup(
+
+<div class="form-group" id="isQualifyBusinessActivity">
+    @inputRadioGroup(
     field = qualifyBusinessActivityForm("isQualifyBusinessActivity"),
     Seq(
     Constants.qualifyTrade -> Messages("page.companyDetails.qualifyBusinessActivity.bullet.one"),

@@ -14,10 +14,10 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.play.views.html.helpers.form
+@import uk.gov.hmrc.play.views.html.helpers.{form, input, errorSummary}
 @import models.NatureOfBusinessModel
 @import common.Constants
-@import views.html.helpers.{backButtonWithProgress, errorSummary, input}
+@import views.html.helpers.{backButtonWithProgress}
 
 @(natureOfbusinessForm: Form[NatureOfBusinessModel])(implicit request: Request[_], messages: Messages)
 
@@ -25,7 +25,7 @@
 
     @backButtonWithProgress(controllers.eis.routes.InitialDeclarationController.show().url, Messages("common.section.progress.details.one"))
 
-    @errorSummary(natureOfbusinessForm, "nature-of-business", "natureofbusiness")
+    @errorSummary(Messages("common.error.summary.heading"), natureOfbusinessForm)
 
     <h1 id="main-heading" class="form-title heading-xlarge">@Messages("page.companyDetails.natureofbusiness.heading")</h1>
 

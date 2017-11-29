@@ -15,8 +15,8 @@
  *@
 
 @import models.TotalAmountRaisedModel
-@import uk.gov.hmrc.play.views.html.helpers.form
-@import views.html.helpers.{errorSummary, inputWithCurrencySymbol, backButtonWithProgress}
+@import uk.gov.hmrc.play.views.html.helpers.{form, errorSummary}
+@import views.html.helpers.{inputWithCurrencySymbol, backButtonWithProgress}
 
 @(totalAmountRaisedForm: Form[TotalAmountRaisedModel])(implicit request: Request[_], messages: Messages)
 
@@ -27,8 +27,9 @@
 
 <div class="grid-row">
 
-        @errorSummary(totalAmountRaisedForm, "total-amount-raised", "amount")        
-		<h1 class="heading-xlarge" id="main-heading">@Messages("page.shareDetails.totalAmountRaised.heading")</h1>
+    @errorSummary(Messages("common.error.summary.heading"), totalAmountRaisedForm)
+
+    <h1 class="heading-xlarge" id="main-heading">@Messages("page.shareDetails.totalAmountRaised.heading")</h1>
 
 		<div class="form-group">
 			<p id="description-one" class="lede">@Messages("page.shareDetails.totalAmountRaised.descriptionOne.text")</p>
