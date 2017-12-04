@@ -44,7 +44,6 @@
 
     <fieldset>
         <legend class="visuallyhidden">@Messages("page.shares.shareDescription.heading", shareIssueDate)</legend>
-        <div class="form-group">
             <span class = "form-hint" id="desc-one">@Messages("page.shares.shareDescription.question.hint")</span>
             <div class="char-counter" data-char-counter>
                 @textArea(
@@ -61,7 +60,6 @@
                     @Messages("common.max.length.no.js", Constants.shortTextLimit)
                 </p>
             </div>
-        </div>
 
         <details>
             <summary><span id="help" class="summary">@Messages("common.help.whereToFind")</span></summary>
@@ -73,9 +71,7 @@
 
 
     </fieldset>
-    <div class="form-group">
         <button class="btn button" type="submit" id="next">@Messages("common.button.snc")</button>
-    </div>
     }
 
     <script>
