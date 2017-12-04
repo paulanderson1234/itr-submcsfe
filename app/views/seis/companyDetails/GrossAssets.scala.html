@@ -18,6 +18,7 @@
 @import views.html.helpers.{backButtonWithProgress}
 @import uk.gov.hmrc.play.views.html.helpers.{form, inputRadioGroup, errorSummary}
 @import common.Constants
+@import GrossAssetsAfterIssueModel._
 
 @(grossAssetsForm: Form[GrossAssetsModel])(implicit request: Request[_], messages: Messages)
 
@@ -42,9 +43,10 @@
             @inputRadioGroup(
             field = grossAssetsForm("grossAmount"),
             Seq(
-            Constants.grossAssetsSEISBandOne -> Messages("page.grossAssets.seis.option.one"),
-            Constants.grossAssetsSEISBandTwo -> Messages("page.grossAssets.seis.option.two"),
-            Constants.grossAssetsSEISBandThree -> Messages("page.grossAssets.seis.option.three")),
+            Constants.grossAssetsSEISBandOne -> Messages("page.grossAssets.option.up.to", getAmountAsFormattedString(Constants.grossAssetsSEISBandOne.toInt)),
+            Constants.grossAssetsSEISBandTwo -> Messages("page.grossAssets.option.band",
+            getAmountAsFormattedString(Constants.grossAssetsSEISBandOne.toInt + 1) , getAmountAsFormattedString(Constants.grossAssetsSEISBandTwo.toInt)),
+            Constants.grossAssetsSEISBandThree -> Messages("page.grossAssets.option.more.than",getAmountAsFormattedString(Constants.grossAssetsSEISBandTwo.toInt))),
             '_legend -> Messages("page.grossAssets.amount.legend"),
             '_legendClass -> "visuallyhidden",
             '_legendID -> "grossAssetsAmount",

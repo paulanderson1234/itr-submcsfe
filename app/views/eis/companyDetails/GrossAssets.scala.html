@@ -19,6 +19,7 @@
 @import views.html.helpers.{backButtonWithProgress}
 
 @import common.Constants
+@import GrossAssetsAfterIssueModel._
 
 @(grossAssetsForm: Form[GrossAssetsModel])(implicit request: Request[_], messages: Messages)
 
@@ -45,11 +46,15 @@
             @inputRadioGroup(
             field = grossAssetsForm("grossAmount"),
             Seq(
-            Constants.grossAssetsBandOne -> Messages("page.grossAssets.option.one"),
-            Constants.grossAssetsBandTwo -> Messages("page.grossAssets.option.two"),
-            Constants.grossAssetsBandThree -> Messages("page.grossAssets.option.three"),
-            Constants.grossAssetsBandFour -> Messages("page.grossAssets.option.four"),
-            Constants.grossAssetsBandFive -> Messages("page.grossAssets.option.five")),
+            Constants.grossAssetsBandOne -> Messages("page.grossAssets.option.up.to", getAmountAsFormattedString(Constants.grossAssetsBandOne.toInt)),
+            Constants.grossAssetsBandTwo -> Messages("page.grossAssets.option.band",
+            getAmountAsFormattedString(Constants.grossAssetsBandOne.toInt + 1) , getAmountAsFormattedString(Constants.grossAssetsBandTwo.toInt)),
+            Constants.grossAssetsBandThree ->  Messages("page.grossAssets.option.band",
+            getAmountAsFormattedString(Constants.grossAssetsBandTwo.toInt + 1), getAmountAsFormattedString(Constants.grossAssetsBandThree.toInt)),
+            Constants.grossAssetsBandFour -> Messages("page.grossAssets.option.band",
+            getAmountAsFormattedString(Constants.grossAssetsBandThree.toInt + 1), getAmountAsFormattedString(Constants.grossAssetsBandFour.toInt)),
+            Constants.grossAssetsBandFive -> Messages("page.grossAssets.option.more.than",
+            getAmountAsFormattedString(Constants.grossAssetsBandFour.toInt))),
             '_legend -> Messages("page.grossAssets.amount.legend"),
             '_legendClass -> "visuallyhidden",
             '_legendID -> "grossAssetsAmount",
