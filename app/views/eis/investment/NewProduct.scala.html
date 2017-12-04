@@ -15,9 +15,9 @@
  *@
 
 @import models.NewProductModel
-@import uk.gov.hmrc.play.views.html.helpers.form
+@import uk.gov.hmrc.play.views.html.helpers.{form, inputRadioGroup, errorSummary}
 @import common.Constants
-@import views.html.helpers.{errorSummary, formInputRadioGroup, backButtonWithProgress, externalLink}
+@import views.html.helpers.{backButtonWithProgress, externalLink}
 
 @(newProductForm: Form[NewProductModel])(implicit request: Request[_], messages: Messages)
 
@@ -25,7 +25,7 @@
 
 @backButtonWithProgress(controllers.eis.routes.NewGeographicalMarketController.show().toString, Messages("common.section.progress.details.three"))
 
-    @errorSummary(newProductForm, "new-product", "newProduct")
+    @errorSummary(Messages("common.error.summary.heading"), newProductForm)
 
     <h1 class="heading-xlarge" id="main-heading">@Messages("page.investment.NewProduct.heading")</h1>
 
@@ -37,8 +37,8 @@
 
     @form(action = controllers.eis.routes.NewProductController.submit()) {
 
-        <div class="form-group">
-            @formInputRadioGroup(
+        <div class="form-group" id="isNewProduct">
+            @inputRadioGroup(
             field = newProductForm("isNewProduct"),
             Seq(
             Constants.StandardRadioButtonYesValue-> Messages("common.radioYesLabel"),

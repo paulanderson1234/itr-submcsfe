@@ -60,14 +60,16 @@ class NewGeographicalMarketSpec extends ViewSpec {
       document.getElementById("main-heading").text() shouldBe Messages("page.investment.NewGeographicalMarket.heading")
       document.select("#isNewGeographicalMarket-yes").size() shouldBe 1
       document.select("#isNewGeographicalMarket-no").size() shouldBe 1
-      document.getElementById("isNewGeographicalMarket-yesLabel").text() shouldBe Messages("common.radioYesLabel")
-      document.getElementById("isNewGeographicalMarket-noLabel").text() shouldBe Messages("common.radioNoLabel")
+      document.select("label[for=isNewGeographicalMarket-yes]").text() shouldBe Messages("common.radioYesLabel")
+      document.select("label[for=isNewGeographicalMarket-no]").text() shouldBe Messages("common.radioNoLabel")
+      document.select("legend").text() shouldBe Messages("page.investment.NewGeographicalMarket.legend")
+      document.select("legend").hasClass("visuallyhidden") shouldBe true
+      document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe false
+
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.three")
       document.body.getElementById("external-hint").text shouldBe
         s"${Messages("page.investment.NewGeographicalMarket.hint")} ${Messages("page.investment.NewGeographicalMarket.hint.link")} opens in a new window"
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
-      document.getElementById("isNewGeographicalMarket-legend").hasClass("visuallyhidden") shouldBe true
-      document.getElementById("isNewGeographicalMarket-legend").text shouldBe Messages("page.investment.NewGeographicalMarket.legend")
     }
 
     "Verify that the correct elements are loaded when navigating from UsedInvestmentReasonBefore page" in new Setup {
@@ -81,14 +83,14 @@ class NewGeographicalMarketSpec extends ViewSpec {
       document.getElementById("main-heading").text() shouldBe Messages("page.investment.NewGeographicalMarket.heading")
       document.select("#isNewGeographicalMarket-yes").size() shouldBe 1
       document.select("#isNewGeographicalMarket-no").size() shouldBe 1
-      document.getElementById("isNewGeographicalMarket-yesLabel").text() shouldBe Messages("common.radioYesLabel")
-      document.getElementById("isNewGeographicalMarket-noLabel").text() shouldBe Messages("common.radioNoLabel")
+      document.select("label[for=isNewGeographicalMarket-yes]").text() shouldBe Messages("common.radioYesLabel")
+      document.select("label[for=isNewGeographicalMarket-no]").text() shouldBe Messages("common.radioNoLabel")
+      document.select("legend").text() shouldBe Messages("page.investment.NewGeographicalMarket.legend")
+      document.select("legend").hasClass("visuallyhidden") shouldBe true
+      document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe false
       document.body.getElementById("external-hint").text shouldBe
         s"${Messages("page.investment.NewGeographicalMarket.hint")} ${Messages("page.investment.NewGeographicalMarket.hint.link")} opens in a new window"
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
-      document.getElementById("isNewGeographicalMarket-legend").hasClass("visuallyhidden") shouldBe true
-      document.getElementById("isNewGeographicalMarket-legend").text shouldBe Messages("page.investment.NewGeographicalMarket.legend")
-      document.select(".error-summary").isEmpty shouldBe true
     }
 
     "Verify that the correct elements are loaded when navigating from PreviousBeforeDOFCS page" in new Setup {
@@ -102,15 +104,15 @@ class NewGeographicalMarketSpec extends ViewSpec {
       document.getElementById("main-heading").text() shouldBe Messages("page.investment.NewGeographicalMarket.heading")
       document.select("#isNewGeographicalMarket-yes").size() shouldBe 1
       document.select("#isNewGeographicalMarket-no").size() shouldBe 1
-      document.getElementById("isNewGeographicalMarket-yesLabel").text() shouldBe Messages("common.radioYesLabel")
-      document.getElementById("isNewGeographicalMarket-noLabel").text() shouldBe Messages("common.radioNoLabel")
+      document.select("label[for=isNewGeographicalMarket-yes]").text() shouldBe Messages("common.radioYesLabel")
+      document.select("label[for=isNewGeographicalMarket-no]").text() shouldBe Messages("common.radioNoLabel")
+      document.select("legend").text() shouldBe Messages("page.investment.NewGeographicalMarket.legend")
+      document.select("legend").hasClass("visuallyhidden") shouldBe true
+      document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe false
       document.body.getElementById("external-hint").text shouldBe
         s"${Messages("page.investment.NewGeographicalMarket.hint")} ${Messages("page.investment.NewGeographicalMarket.hint.link")} opens in a new window"
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.three")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
-      document.getElementById("isNewGeographicalMarket-legend").hasClass("visuallyhidden") shouldBe true
-      document.getElementById("isNewGeographicalMarket-legend").text shouldBe Messages("page.investment.NewGeographicalMarket.legend")
-      document.select(".error-summary").isEmpty shouldBe true
     }
 
     "Verify that NewGeographicalMarket page contains error summary when no model is submitted" in new Setup {

@@ -94,10 +94,12 @@ class ConfirmContactDetailsSpec extends UnitSpec with OneAppPerSuite{
 
       "include a 'Yes' option" in {
         document.body.getElementById("contactDetailsUse-yes").attr("value") shouldBe Messages("common.radioYesLabel")
+        document.select("label[for=contactDetailsUse-yes]").text() shouldBe Messages("common.radioYesLabel")
       }
 
       "includes a 'No' option" in {
         document.body.getElementById("contactDetailsUse-no").attr("value") shouldBe Messages("common.radioNoLabel")
+        document.select("label[for=contactDetailsUse-no]").text() shouldBe Messages("common.radioNoLabel")
       }
 
     }
