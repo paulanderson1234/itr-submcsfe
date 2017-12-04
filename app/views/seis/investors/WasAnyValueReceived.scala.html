@@ -68,8 +68,9 @@
         <p>@Messages("page.investors.wasAnyValueReceived.guidance.hint")</p>
     </div>
 
-    <div id ="wasAnyValueReceived">
+
     @form(action = controllers.seis.routes.WasAnyValueReceivedController.submit()) {
+        <div id ="wasAnyValueReceived">
         @formHiddenYesNoRadio(
             wasAnyValueReceivedForm,
             "wasAnyValueReceived",

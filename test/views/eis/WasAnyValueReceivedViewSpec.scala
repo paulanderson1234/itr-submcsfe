@@ -118,11 +118,13 @@ class WasAnyValueReceivedViewSpec extends ViewSpec with FakeRequestHelper {
       }
 
       "have en element for an option of 'Yes'" in {
-        doc.select("label input#wasAnyValueReceived-yes").attr("value") shouldBe "Yes"
+        //doc.select("label input#wasAnyValueReceived-yes").attr("value") shouldBe "Yes"
+        doc.select("label[for=wasAnyValueReceived-yes]").text() shouldBe Messages("common.radioYesLabel")
       }
 
       "have en element for an option of 'No'" in {
-        doc.select("label input#wasAnyValueReceived-no").attr("value") shouldBe "No"
+        //doc.select("label input#wasAnyValueReceived-no").attr("value") shouldBe "No"
+        doc.select("label[for=wasAnyValueReceived-no]").text() shouldBe Messages("common.radioNoLabel")
       }
 
       "have a hidden dropdown section" which {

@@ -72,13 +72,14 @@ class SeventyPercentSpentSpec extends ViewSpec {
       document.title() shouldBe Messages("page.companyDetails.seventyPercentSpent.title")
       document.getElementById("main-heading").text() shouldBe Messages("page.companyDetails.seventyPercentSpent.heading")
       document.getElementById("main-heading").hasClass("h1-heading")
-      document.getElementById("isSeventyPercentSpent-yesLabel").text() shouldBe Messages("common.radioYesLabel")
-      document.getElementById("isSeventyPercentSpent-noLabel").text() shouldBe Messages("common.radioNoLabel")
       document.body.getElementById("back-link").attr("href") shouldEqual testUrl
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.one")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
-      document.getElementById("seventyPercentSpent-legend").hasClass("visuallyhidden") shouldBe true
-      document.getElementById("seventyPercentSpent-legend").text shouldBe Messages("page.companyDetails.seventyPercentSpent.legend")
+      document.select("label[for=isSeventyPercentSpent-yes]").text() shouldBe Messages("common.radioYesLabel")
+      document.select("label[for=isSeventyPercentSpent-no]").text() shouldBe Messages("common.radioNoLabel")
+      document.select("legend").text() shouldBe Messages("page.companyDetails.seventyPercentSpent.legend")
+      document.select("legend").hasClass("visuallyhidden") shouldBe true
+      document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe false
     }
 
     "Verify that the page contains the correct elements when a valid IsFirstTRadeModel is passed from keystore with alternate url" in new SEISSetup {
@@ -90,13 +91,15 @@ class SeventyPercentSpentSpec extends ViewSpec {
       document.title() shouldBe Messages("page.companyDetails.seventyPercentSpent.title")
       document.getElementById("main-heading").text() shouldBe Messages("page.companyDetails.seventyPercentSpent.heading")
       document.getElementById("main-heading").hasClass("h1-heading")
-      document.getElementById("isSeventyPercentSpent-yesLabel").text() shouldBe Messages("common.radioYesLabel")
-      document.getElementById("isSeventyPercentSpent-noLabel").text() shouldBe Messages("common.radioNoLabel")
       document.body.getElementById("back-link").attr("href") shouldEqual testUrlOther
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.one")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
-      document.getElementById("seventyPercentSpent-legend").hasClass("visuallyhidden") shouldBe true
-      document.getElementById("seventyPercentSpent-legend").text shouldBe Messages("page.companyDetails.seventyPercentSpent.legend")
+
+      document.select("label[for=isSeventyPercentSpent-yes]").text() shouldBe Messages("common.radioYesLabel")
+      document.select("label[for=isSeventyPercentSpent-no]").text() shouldBe Messages("common.radioNoLabel")
+      document.select("legend").text() shouldBe Messages("page.companyDetails.seventyPercentSpent.legend")
+      document.select("legend").hasClass("visuallyhidden") shouldBe true
+      document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe false
     }
 
 
@@ -109,15 +112,15 @@ class SeventyPercentSpentSpec extends ViewSpec {
       document.title() shouldBe Messages("page.companyDetails.seventyPercentSpent.title")
       document.getElementById("main-heading").text() shouldBe Messages("page.companyDetails.seventyPercentSpent.heading")
       document.getElementById("main-heading").hasClass("h1-heading")
-      document.getElementById("isSeventyPercentSpent-yesLabel").text() shouldBe Messages("common.radioYesLabel")
-      document.getElementById("isSeventyPercentSpent-noLabel").text() shouldBe Messages("common.radioNoLabel")
       document.body.getElementById("back-link").attr("href") shouldEqual testUrl
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.one")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
-      document.getElementById("seventyPercentSpent-legend").hasClass("visuallyhidden") shouldBe true
-      document.getElementById("seventyPercentSpent-legend").text shouldBe Messages("page.companyDetails.seventyPercentSpent.legend")
-      document.getElementById("error-summary-display").hasClass("error-summary--show")
-      document.getElementById("seventyPercentSpent-error-summary")
+
+      document.select("label[for=isSeventyPercentSpent-yes]").text() shouldBe Messages("common.radioYesLabel")
+      document.select("label[for=isSeventyPercentSpent-no]").text() shouldBe Messages("common.radioNoLabel")
+      document.select("legend").text() shouldBe Messages("page.companyDetails.seventyPercentSpent.legend")
+      document.select("legend").hasClass("visuallyhidden") shouldBe true
+      document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe true
 
     }
   }

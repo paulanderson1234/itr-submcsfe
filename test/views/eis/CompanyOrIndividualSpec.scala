@@ -27,16 +27,18 @@ import views.html.eis.investors.CompanyOrIndividual
 class CompanyOrIndividualSpec extends ViewSpec{
 
   def commonTests(document: Document, templateText: String): Unit = {
+
     document.title() shouldBe Messages("page.investors.companyOrIndividual.title", templateText)
     document.getElementById("main-heading").text() shouldBe Messages("page.investors.companyOrIndividual.title", templateText)
     document.getElementById("next").text() shouldBe Messages("common.button.snc")
     document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.AddInvestorOrNomineeController.show(Some(1)).url
+
     document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.four")
-    document.getElementById("companyOrIndividual-companyLabel").text() shouldBe Messages("page.investors.companyOrIndividual.company")
-    document.getElementById("companyOrIndividual-individualLabel").text() shouldBe Messages("page.investors.companyOrIndividual.individual")
+    document.select("label[for=companyOrIndividual-company]").text() shouldBe Messages("page.investors.companyOrIndividual.company")
+    document.select("label[for=companyOrIndividual-individual]").text() shouldBe Messages("page.investors.companyOrIndividual.individual")
   }
 
-  val backUrl = controllers.eis.routes.AddInvestorOrNomineeController.show(Some(1)).url
+  lazy val backUrl = controllers.eis.routes.AddInvestorOrNomineeController.show(Some(1)).url
 
   "The CompanyOrIndividual page" should {
     val templateText = "individual"
@@ -54,7 +56,7 @@ class CompanyOrIndividualSpec extends ViewSpec{
 
         commonTests(document, templateText)
 
-        document.getElementById("error-summary-display").hasClass("error-summary--show")
+        document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe true
       }
     }
   }

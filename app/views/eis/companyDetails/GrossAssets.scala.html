@@ -15,7 +15,6 @@
  *@
 
 @import models.GrossAssetsModel
-@import uk.gov.hmrc.play.views.html.helpers.form
 @import uk.gov.hmrc.play.views.html.helpers.{form, inputRadioGroup, errorSummary}
 @import views.html.helpers.{backButtonWithProgress}
 
@@ -42,7 +41,7 @@
             </div>
         </details>
 
-        <div class="form-group">
+        <div class="form-group" id="grossAmount">
             @inputRadioGroup(
             field = grossAssetsForm("grossAmount"),
             Seq(

@@ -32,7 +32,7 @@
     <h1 id="main-heading" class="form-title heading-xlarge">@Messages("page.investors.companyOrIndividual.heading", investorOrNominee)</h1>
 
         @form(action = controllers.eis.routes.CompanyOrIndividualController.submit(Some(investorOrNominee))) {
-        <div class="form-group" id="addInvestorOrNominee">
+        <div class="form-group" id="companyOrIndividual">
             @inputRadioGroup(
             field = companyOrIndividualForm("companyOrIndividual"),
             Seq(

@@ -28,7 +28,7 @@ import views.html.seis.shareDetails.ShareDescription
 
 class ShareDescriptionSpec extends ViewSpec {
 
-  val shareIssueDate = "1 January 2008"
+  lazy val shareIssueDate = "1 January 2008"
 
   "The share description page" should {
     "show the correct elements" when {
@@ -56,7 +56,7 @@ class ShareDescriptionSpec extends ViewSpec {
         document.getElementById("help").text() shouldBe Messages("common.help.whereToFind")
         document.getElementById("share-description-where-to-find").text() shouldBe Messages("page.shares.ShareDescription.location")
         document.getElementById("next").text() shouldBe Messages("common.button.snc")
-        document.select(".error-summary").isEmpty shouldBe true
+        document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe false
       }
 
       "there is a share description model" in {
@@ -89,7 +89,7 @@ class ShareDescriptionSpec extends ViewSpec {
         document.getElementById("help").text() shouldBe Messages("common.help.whereToFind")
         document.getElementById("share-description-where-to-find").text() shouldBe Messages("page.shares.ShareDescription.location")
         document.getElementById("next").text() shouldBe Messages("common.button.snc")
-        document.select(".error-summary").isEmpty shouldBe true
+        document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe false
       }
 
       "Verify that the Share Description page contains the correct elements when an invalid ShareDescriptionModel is passed" in {

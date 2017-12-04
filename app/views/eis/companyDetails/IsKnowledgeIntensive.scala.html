@@ -15,9 +15,10 @@
  *@
 
 @import models.IsKnowledgeIntensiveModel
-@import uk.gov.hmrc.play.views.html.helpers.form
 @import common.Constants
-@import views.html.helpers.{backButtonWithProgress, errorSummary, formInputRadioGroup}
+@import views.html.helpers.{backButtonWithProgress}
+@import uk.gov.hmrc.play.views.html.helpers.{form, inputRadioGroup, errorSummary}
+
 
 @(isKnowledgeIntensiveForm: Form[IsKnowledgeIntensiveModel])(implicit request: Request[_], messages: Messages)
 
@@ -25,7 +26,7 @@
 
 @backButtonWithProgress(controllers.eis.routes.IsCompanyKnowledgeIntensiveController.show().toString, Messages("common.section.progress.details.one"))
 
-@errorSummary(isKnowledgeIntensiveForm, "is-knowledge-intensive", "isKnowledgeIntensive")
+@errorSummary(Messages("common.error.summary.heading"), isKnowledgeIntensiveForm)
 
 <h1 class="heading-xlarge" id="main-heading">@Messages("page.companyDetails.ApplyForKI.heading")</h1>
 
@@ -45,8 +46,8 @@
 
 @form(action = controllers.eis.routes.IsKnowledgeIntensiveController.submit()) {
 
-<div class="form-group">
-    @formInputRadioGroup(
+<div class="form-group" id="isKnowledgeIntensive">
+    @inputRadioGroup(
     field = isKnowledgeIntensiveForm("isKnowledgeIntensive"),
     Seq(
     Constants.StandardRadioButtonYesValue->Messages("common.radioYesLabel"),

@@ -34,11 +34,12 @@ class IsExistingShareHolderSpec extends ViewSpec {
     document.getElementById("next").text() shouldBe Messages("common.button.snc")
     document.body.getElementById("back-link").attr("href") shouldEqual controllers.seis.routes.HowMuchSpentOnSharesController.show(1).url
     document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.four")
-    document.getElementById("isExistingShareHolder-yesLabel").text() shouldBe Messages("common.radioYesLabel")
-    document.getElementById("isExistingShareHolder-noLabel").text() shouldBe Messages("common.radioNoLabel")
+
+    document.select("label[for=isExistingShareHolder-yes]").text() shouldBe Messages("common.radioYesLabel")
+    document.select("label[for=isExistingShareHolder-no]").text() shouldBe Messages("common.radioNoLabel")
   }
 
-  val backUrl = controllers.seis.routes.HowMuchSpentOnSharesController.show(1).url
+  lazy val backUrl = controllers.seis.routes.HowMuchSpentOnSharesController.show(1).url
 
   "The Is Existing Share Holder page" should {
     val templateText = "individual"

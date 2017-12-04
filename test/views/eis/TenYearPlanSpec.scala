@@ -63,9 +63,10 @@ class TenYearPlanSpec extends ViewSpec {
       document.getElementById("infoId").text() shouldBe Messages("page.knowledgeIntensive.TenYearPlan.question.hint.three")
       document.getElementById("infoId-2").text() shouldBe Messages("page.knowledgeIntensive.TenYearPlan.question.hint.four")
       document.getElementById("info-heading").text() shouldBe Messages("page.knowledgeIntensive.TenYearPlan.description.one")
-      document.getElementsByTag("legend").select(".visuallyhidden").text() shouldBe Messages("page.knowledgeIntensive.TenYearPlan.heading")
-      document.getElementById("hasTenYearPlan-yesLabel").text() shouldBe Messages("common.radioYesLabel")
-      document.getElementById("hasTenYearPlan-noLabel").text() shouldBe Messages("common.radioNoLabel")
+      document.select("label[for=hasTenYearPlan-yes]").text() shouldBe Messages("common.radioYesLabel")
+      document.select("label[for=hasTenYearPlan-no]").text() shouldBe Messages("common.radioNoLabel")
+      document.select("legend").text() shouldBe Messages("page.knowledgeIntensive.TenYearPlan.heading")
+      document.select("legend").hasClass("visuallyhidden") shouldBe true
       document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.PercentageStaffWithMastersController.show().url
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.one")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
@@ -86,9 +87,10 @@ class TenYearPlanSpec extends ViewSpec {
       document.getElementById("infoId").text() shouldBe Messages("page.knowledgeIntensive.TenYearPlan.question.hint.three")
       document.getElementById("infoId-2").text() shouldBe Messages("page.knowledgeIntensive.TenYearPlan.question.hint.four")
       document.getElementById("info-heading").text() shouldBe Messages("page.knowledgeIntensive.TenYearPlan.description.one")
-      document.getElementsByTag("legend").select(".visuallyhidden").text() shouldBe Messages("page.knowledgeIntensive.TenYearPlan.heading")
-      document.getElementById("hasTenYearPlan-yesLabel").text() shouldBe Messages("common.radioYesLabel")
-      document.getElementById("hasTenYearPlan-noLabel").text() shouldBe Messages("common.radioNoLabel")
+      document.select("label[for=hasTenYearPlan-yes]").text() shouldBe Messages("common.radioYesLabel")
+      document.select("label[for=hasTenYearPlan-no]").text() shouldBe Messages("common.radioNoLabel")
+      document.select("legend").text() shouldBe Messages("page.knowledgeIntensive.TenYearPlan.heading")
+      document.select("legend").hasClass("visuallyhidden") shouldBe true
       document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.PercentageStaffWithMastersController.show().url
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.one")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
@@ -108,10 +110,10 @@ class TenYearPlanSpec extends ViewSpec {
       document.getElementById("desc-two").text() shouldBe Messages("page.knowledgeIntensive.TenYearPlan.question.hint.two")
       document.getElementById("infoId").text() shouldBe Messages("page.knowledgeIntensive.TenYearPlan.question.hint.three")
       document.getElementById("infoId-2").text() shouldBe Messages("page.knowledgeIntensive.TenYearPlan.question.hint.four")
-      document.getElementById("info-heading").text() shouldBe Messages("page.knowledgeIntensive.TenYearPlan.description.one")
-      document.getElementsByTag("legend").select(".visuallyhidden").text() shouldBe Messages("page.knowledgeIntensive.TenYearPlan.heading")
-      document.getElementById("hasTenYearPlan-yesLabel").text() shouldBe Messages("common.radioYesLabel")
-      document.getElementById("hasTenYearPlan-noLabel").text() shouldBe Messages("common.radioNoLabel")
+      document.select("label[for=hasTenYearPlan-yes]").text() shouldBe Messages("common.radioYesLabel")
+      document.select("label[for=hasTenYearPlan-no]").text() shouldBe Messages("common.radioNoLabel")
+      document.select("legend").text() shouldBe Messages("page.knowledgeIntensive.TenYearPlan.heading")
+      document.select("legend").hasClass("visuallyhidden") shouldBe true
       document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.PercentageStaffWithMastersController.show().url
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.one")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
@@ -132,9 +134,11 @@ class TenYearPlanSpec extends ViewSpec {
       document.getElementById("infoId").text() shouldBe Messages("page.knowledgeIntensive.TenYearPlan.question.hint.three")
       document.getElementById("infoId-2").text() shouldBe Messages("page.knowledgeIntensive.TenYearPlan.question.hint.four")
       document.getElementById("info-heading").text() shouldBe Messages("page.knowledgeIntensive.TenYearPlan.description.one")
-      document.getElementsByTag("legend").select(".visuallyhidden").text() shouldBe Messages("page.knowledgeIntensive.TenYearPlan.heading")
-      document.getElementById("hasTenYearPlan-yesLabel").text() shouldBe Messages("common.radioYesLabel")
-      document.getElementById("hasTenYearPlan-noLabel").text() shouldBe Messages("common.radioNoLabel")
+      document.select("label[for=hasTenYearPlan-yes]").text() shouldBe Messages("common.radioYesLabel")
+      document.select("label[for=hasTenYearPlan-no]").text() shouldBe Messages("common.radioNoLabel")
+      document.select("legend").text() shouldBe Messages("page.knowledgeIntensive.TenYearPlan.heading")
+
+
       document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.PercentageStaffWithMastersController.show().url
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.one")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")

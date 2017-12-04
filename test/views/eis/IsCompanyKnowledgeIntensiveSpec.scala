@@ -40,13 +40,14 @@ class IsCompanyKnowledgeIntensiveSpec extends ViewSpec {
     override lazy val enrolmentConnector = mockEnrolmentConnector
   }
 
-  def setupMocks(isCompanyKnowledgeIntensiveModel: Option[IsCompanyKnowledgeIntensiveModel] = None): Unit =
+  def setupMocks(isCompanyKnowledgeIntensiveModel: Option[IsCompanyKnowledgeIntensiveModel] = None): Unit = {
     when(mockS4lConnector.fetchAndGetFormData[IsCompanyKnowledgeIntensiveModel](Matchers.eq(KeystoreKeys.isCompanyKnowledgeIntensive))
-      (Matchers.any(), Matchers.any(),Matchers.any())).thenReturn(Future.successful(isCompanyKnowledgeIntensiveModel))
+      (Matchers.any(), Matchers.any(), Matchers.any())).thenReturn(Future.successful(isCompanyKnowledgeIntensiveModel))
+  }
 
   "Verify that the isCompanyKnowledgeIntensive page contains the correct elements " +
     "when a valid IsCompanyKnowledgeIntensiveModel is passed as returned from keystore" in new Setup {
-    val document : Document = {
+    val document: Document = {
       setupMocks(Some(isCompanyKnowledgeIntensiveModelYes))
       val result = TestController.show.apply(authorisedFakeRequest)
       Jsoup.parse(contentAsString(result))
@@ -62,12 +63,15 @@ class IsCompanyKnowledgeIntensiveSpec extends ViewSpec {
     document.getElementById("ki-requirement-four").text() shouldBe Messages("page.companyDetails.IsCompanyKnowledgeIntensive.ki-requirement-four")
     document.select("#isCompanyKnowledgeIntensive-yes").size() shouldBe 1
     document.select("#isCompanyKnowledgeIntensive-no").size() shouldBe 1
-    document.getElementById("isCompanyKnowledgeIntensive-yesLabel").text() shouldBe Messages("common.radioYesLabel")
-    document.getElementById("isCompanyKnowledgeIntensive-noLabel").text() shouldBe Messages("common.radioNoLabel")
+    document.select("label[for=isCompanyKnowledgeIntensive-yes]").text() shouldBe Messages("common.radioYesLabel")
+    document.select("label[for=isCompanyKnowledgeIntensive-no]").text() shouldBe Messages("common.radioNoLabel")
+    document.select("legend").text() shouldBe Messages("page.companyDetails.IsCompanyKnowledgeIntensive.heading")
+    document.select("legend").hasClass("visuallyhidden") shouldBe true
+    document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe false
+
     document.getElementById("next").text() shouldBe Messages("common.button.snc")
-    document.getElementsByTag("legend").select(".visuallyhidden").text() shouldBe Messages("page.companyDetails.IsCompanyKnowledgeIntensive.heading")
-    document.select(".error-summary").isEmpty shouldBe true
   }
+
 
   "Verify that isCompanyKnowledgeIntensive page contains the correct elements when an empty model " +
     "is passed because nothing was returned from keystore" in new Setup {
@@ -87,11 +91,12 @@ class IsCompanyKnowledgeIntensiveSpec extends ViewSpec {
     document.getElementById("ki-requirement-four").text() shouldBe Messages("page.companyDetails.IsCompanyKnowledgeIntensive.ki-requirement-four")
     document.select("#isCompanyKnowledgeIntensive-yes").size() shouldBe 1
     document.select("#isCompanyKnowledgeIntensive-no").size() shouldBe 1
-    document.getElementById("isCompanyKnowledgeIntensive-yesLabel").text() shouldBe Messages("common.radioYesLabel")
-    document.getElementById("isCompanyKnowledgeIntensive-noLabel").text() shouldBe Messages("common.radioNoLabel")
+    document.select("label[for=isCompanyKnowledgeIntensive-yes]").text() shouldBe Messages("common.radioYesLabel")
+    document.select("label[for=isCompanyKnowledgeIntensive-no]").text() shouldBe Messages("common.radioNoLabel")
+    document.select("legend").text() shouldBe Messages("page.companyDetails.IsCompanyKnowledgeIntensive.heading")
+    document.select("legend").hasClass("visuallyhidden") shouldBe true
     document.getElementById("next").text() shouldBe Messages("common.button.snc")
-    document.getElementsByTag("legend").select(".visuallyhidden").text() shouldBe Messages("page.companyDetails.IsCompanyKnowledgeIntensive.heading")
-    document.select(".error-summary").isEmpty shouldBe true
+    document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe false
   }
 
   "Verify that IsCompanyKnowledgeIntensive page contains show the error summary when an invalid model (no radio button selection) is submitted" in new Setup {

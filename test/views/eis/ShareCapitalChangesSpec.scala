@@ -68,14 +68,13 @@ class ShareCapitalChangesSpec extends ViewSpec {
       document.title() shouldBe "Have there been any changes in your company's share capital since 29 February 2004?"
       document.getElementById("main-heading").text() shouldBe "Have there been any changes in your company's share capital since 29 February 2004?"
       document.getElementById("main-heading").hasClass("h1-heading")
-      document.getElementById("hasChanges-yesLabel").text() shouldBe Messages("common.radioYesLabel")
-      document.getElementById("hasChanges-noLabel").text() shouldBe Messages("common.radioNoLabel")
+      document.select("label[for=hasChanges-yes]").text() shouldBe Messages("common.radioYesLabel")
+      document.select("label[for=hasChanges-no]").text() shouldBe Messages("common.radioNoLabel")
       document.body.getElementById("back-link").attr("href") shouldEqual routes.WasAnyValueReceivedController.show().url
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.four")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
-      document.getElementById("hasChanges-legend").hasClass("visuallyhidden") shouldBe true
-      document.getElementById("hasChanges-legend").text shouldBe "Have there been any changes in your company's share capital since 29 February 2004?"
-      document.select(".error-summary").isEmpty shouldBe true
+      document.select("legend").text() shouldBe "Have there been any changes in your company's share capital since 29 February 2004?"
+      document.select("legend").hasClass("visuallyhidden") shouldBe true
     }
 
     "Verify that the page contains the correct elements when a valid IsFirstTRadeModel is passed from keystore with alternate url" in new Setup {
@@ -87,14 +86,11 @@ class ShareCapitalChangesSpec extends ViewSpec {
       document.title() shouldBe "Have there been any changes in your company's share capital since 2 March 1970?"
       document.getElementById("main-heading").text() shouldBe "Have there been any changes in your company's share capital since 2 March 1970?"
       document.getElementById("main-heading").hasClass("h1-heading")
-      document.getElementById("hasChanges-yesLabel").text() shouldBe Messages("common.radioYesLabel")
-      document.getElementById("hasChanges-noLabel").text() shouldBe Messages("common.radioNoLabel")
+      document.select("legend").text() shouldBe "Have there been any changes in your company's share capital since 2 March 1970?"
+      document.select("legend").hasClass("visuallyhidden") shouldBe true
       document.body.getElementById("back-link").attr("href") shouldEqual routes.WasAnyValueReceivedController.show().url
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.four")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
-      document.getElementById("hasChanges-legend").hasClass("visuallyhidden") shouldBe true
-      document.getElementById("hasChanges-legend").text shouldBe "Have there been any changes in your company's share capital since 2 March 1970?"
-      document.select(".error-summary").isEmpty shouldBe true
     }
 
 
@@ -107,16 +103,16 @@ class ShareCapitalChangesSpec extends ViewSpec {
       document.title() shouldBe "Have there been any changes in your company's share capital since 2 March 1970?"
       document.getElementById("main-heading").text() shouldBe "Have there been any changes in your company's share capital since 2 March 1970?"
       document.getElementById("main-heading").hasClass("h1-heading")
-      document.getElementById("hasChanges-yesLabel").text() shouldBe Messages("common.radioYesLabel")
-      document.getElementById("hasChanges-noLabel").text() shouldBe Messages("common.radioNoLabel")
+      //document.getElementById("hasChanges-yesLabel").text() shouldBe Messages("common.radioYesLabel")
+      //document.getElementById("hasChanges-noLabel").text() shouldBe Messages("common.radioNoLabel")
+
+      document.select("legend").text() shouldBe "Have there been any changes in your company's share capital since 2 March 1970?"
+      document.select("legend").hasClass("visuallyhidden") shouldBe true
+
       document.body.getElementById("back-link").attr("href") shouldEqual routes.WasAnyValueReceivedController.show().url
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.four")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
-      document.getElementById("hasChanges-legend").hasClass("visuallyhidden") shouldBe true
-      document.getElementById("hasChanges-legend").text shouldBe "Have there been any changes in your company's share capital since 2 March 1970?"
       document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe true
-      document.getElementById("hasChanges-error-summary")
-      document.select(".error-summary").isEmpty shouldBe false
 
     }
   }

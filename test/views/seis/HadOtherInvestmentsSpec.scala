@@ -42,14 +42,14 @@ class HadOtherInvestmentsSpec extends ViewSpec {
       document.getElementById("main-heading").text() shouldBe Messages("page.previousInvestment.hadOtherInvestments.heading")
       document.select("#hadOtherInvestments-yes").size() shouldBe 1
       document.select("#hadOtherInvestments-no").size() shouldBe 1
-      document.getElementById("hadOtherInvestments-yesLabel").text() shouldBe Messages("common.radioYesLabel")
-      document.getElementById("hadOtherInvestments-noLabel").text() shouldBe Messages("common.radioNoLabel")
+      document.select("label[for=hadOtherInvestments-yes]").text() shouldBe Messages("common.radioYesLabel")
+      document.select("label[for=hadOtherInvestments-no]").text() shouldBe Messages("common.radioNoLabel")
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.two")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
 
-      document.getElementById("hadOtherInvestments-legend").hasClass("visuallyhidden") shouldBe true
-      document.getElementById("hadOtherInvestments-legend").text shouldBe Messages("page.previousInvestment.hadOtherInvestments.legend")
-      document.select(".error-summary").isEmpty shouldBe true
+      document.select("legend").text() shouldBe Messages("page.previousInvestment.hadOtherInvestments.legend")
+      document.select("legend").hasClass("visuallyhidden") shouldBe true
+      document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe false
     }
 
     "contain the correct elements when a valid populated form is passed" in {
@@ -62,14 +62,14 @@ class HadOtherInvestmentsSpec extends ViewSpec {
       document.getElementById("main-heading").text() shouldBe Messages("page.previousInvestment.hadOtherInvestments.heading")
       document.select("#hadOtherInvestments-yes").size() shouldBe 1
       document.select("#hadOtherInvestments-no").size() shouldBe 1
-      document.getElementById("hadOtherInvestments-yesLabel").text() shouldBe Messages("common.radioYesLabel")
-      document.getElementById("hadOtherInvestments-noLabel").text() shouldBe Messages("common.radioNoLabel")
+      document.select("label[for=hadOtherInvestments-yes]").text() shouldBe Messages("common.radioYesLabel")
+      document.select("label[for=hadOtherInvestments-no]").text() shouldBe Messages("common.radioNoLabel")
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.two")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
 
-      document.getElementById("hadOtherInvestments-legend").hasClass("visuallyhidden") shouldBe true
-      document.getElementById("hadOtherInvestments-legend").text shouldBe Messages("page.previousInvestment.hadOtherInvestments.legend")
-      document.select(".error-summary").isEmpty shouldBe true
+      document.select("legend").text() shouldBe Messages("page.previousInvestment.hadOtherInvestments.legend")
+      document.select("legend").hasClass("visuallyhidden") shouldBe true
+      document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe false
     }
 
     "contain an error summary when a form with errors is passed" in {
@@ -79,6 +79,7 @@ class HadOtherInvestmentsSpec extends ViewSpec {
       }
       document.title() shouldBe Messages("page.previousInvestment.hadOtherInvestments.title")
       document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe true
+      document.select(".error-summary").first().getElementsByAttributeValueContaining("style", "display").isEmpty shouldBe true
       document.getElementById("error-summary-heading").text shouldBe Messages("common.error.summary.heading")
       document.getElementById("hadOtherInvestments-error-summary").text shouldBe Messages("validation.common.error.fieldRequired")
       document.getElementsByClass("error-notification").text shouldBe Messages("validation.common.error.fieldRequired")

@@ -32,11 +32,11 @@ class CompanyOrIndividualSpec extends ViewSpec{
     document.getElementById("next").text() shouldBe Messages("common.button.snc")
     document.body.getElementById("back-link").attr("href") shouldEqual controllers.seis.routes.AddInvestorOrNomineeController.show(Some(1)).url
     document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.four")
-    document.getElementById("companyOrIndividual-companyLabel").text() shouldBe Messages("page.investors.companyOrIndividual.company")
-    document.getElementById("companyOrIndividual-individualLabel").text() shouldBe Messages("page.investors.companyOrIndividual.individual")
+    document.select("label[for=companyOrIndividual-company]").text() shouldBe Messages("page.investors.companyOrIndividual.company")
+    document.select("label[for=companyOrIndividual-individual]").text() shouldBe Messages("page.investors.companyOrIndividual.individual")
   }
 
-  val backUrl = controllers.seis.routes.AddInvestorOrNomineeController.show(Some(1)).url
+  lazy val backUrl = controllers.seis.routes.AddInvestorOrNomineeController.show(Some(1)).url
 
   "The CompanyOrIndividual page" should {
     val templateText = "individual"

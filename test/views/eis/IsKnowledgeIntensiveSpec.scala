@@ -57,11 +57,16 @@ class IsKnowledgeIntensiveSpec extends ViewSpec {
     document.getElementById("main-heading").text() shouldBe Messages("page.companyDetails.ApplyForKI.heading")
     document.select("#isKnowledgeIntensive-yes").size() shouldBe 1
     document.select("#isKnowledgeIntensive-yes").size() shouldBe 1
-    document.getElementById("isKnowledgeIntensive-yesLabel").text() shouldBe Messages("common.radioYesLabel")
-    document.getElementById("isKnowledgeIntensive-noLabel").text() shouldBe Messages("common.radioNoLabel")
+
+    document.select("label[for=isKnowledgeIntensive-yes]").text() shouldBe Messages("common.radioYesLabel")
+    document.select("label[for=isKnowledgeIntensive-no]").text() shouldBe Messages("common.radioNoLabel")
+    document.select("legend").text() shouldBe Messages("page.companyDetails.ApplyForKI.heading")
+    document.select("legend").hasClass("visuallyhidden") shouldBe true
+    document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe false
+
+
     document.getElementById("next").text() shouldBe Messages("common.button.snc")
-    document.getElementsByTag("legend").select(".visuallyhidden").text() shouldBe Messages("page.companyDetails.ApplyForKI.heading")
-    document.select(".error-summary").isEmpty shouldBe true
+    //document.select(".error-summary").isEmpty shouldBe true
   }
 
   "Verify that isKnowledgeIntensive page contains the correct elements when an empty model " +
@@ -76,11 +81,13 @@ class IsKnowledgeIntensiveSpec extends ViewSpec {
     document.getElementById("main-heading").text() shouldBe Messages("page.companyDetails.ApplyForKI.heading")
     document.select("#isKnowledgeIntensive-yes").size() shouldBe 1
     document.select("#isKnowledgeIntensive-yes").size() shouldBe 1
-    document.getElementById("isKnowledgeIntensive-yesLabel").text() shouldBe Messages("common.radioYesLabel")
-    document.getElementById("isKnowledgeIntensive-noLabel").text() shouldBe Messages("common.radioNoLabel")
+    document.select("label[for=isKnowledgeIntensive-yes]").text() shouldBe Messages("common.radioYesLabel")
+    document.select("label[for=isKnowledgeIntensive-no]").text() shouldBe Messages("common.radioNoLabel")
+    document.select("legend").text() shouldBe Messages("page.companyDetails.ApplyForKI.heading")
+    document.select("legend").hasClass("visuallyhidden") shouldBe true
+    document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe false
     document.getElementById("next").text() shouldBe Messages("common.button.snc")
-    document.getElementsByTag("legend").select(".visuallyhidden").text() shouldBe Messages("page.companyDetails.ApplyForKI.heading")
-    document.select(".error-summary").isEmpty shouldBe true
+    //document.select(".error-summary").isEmpty shouldBe true
   }
 
   "Verify that IsKnowledgeIntensive page contains show the error summary when an invalid model (no radio button selection) is submitted" in new Setup {

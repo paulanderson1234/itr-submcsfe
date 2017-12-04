@@ -58,13 +58,17 @@ class PercentageStaffWithMastersSpec extends ViewSpec {
     document.getElementById("condition-for-KI").text() shouldBe Messages("page.knowledgeIntensive.PercentageStaffWithMasters.hint")
     document.select("#staffWithMasters-yes").size() shouldBe 1
     document.select("#staffWithMasters-no").size() shouldBe 1
-    document.getElementById("staffWithMasters-yesLabel").text() shouldBe Messages("common.radioYesLabel")
-    document.getElementById("staffWithMasters-noLabel").text() shouldBe Messages("common.radioNoLabel")
+
+    document.select("label[for=staffWithMasters-yes]").text() shouldBe Messages("common.radioYesLabel")
+    document.select("label[for=staffWithMasters-no]").text() shouldBe Messages("common.radioNoLabel")
+    document.select("legend").text() shouldBe Messages("page.knowledgeIntensive.PercentageStaffWithMasters.heading")
+    document.select("legend").hasClass("visuallyhidden") shouldBe true
+    document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe false
+
     document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.one")
-    document.getElementById("desc-one").text() shouldBe Messages("page.percentageStaffWithMasters.yes.hint")
+    //document.getElementById("desc-one").text() shouldBe Messages("page.percentageStaffWithMasters.yes.hint")
     document.getElementById("next").text() shouldBe Messages("common.button.snc")
-    document.getElementsByTag("legend").select(".visuallyhidden").text() shouldBe Messages("page.knowledgeIntensive.PercentageStaffWithMasters.hint")
-    document.select(".error-summary").isEmpty shouldBe true
+
   }
 
   "Verify that PercentageStaffWithMasters page contains the correct elements when an empty model " +
@@ -80,13 +84,15 @@ class PercentageStaffWithMastersSpec extends ViewSpec {
     document.getElementById("condition-for-KI").text() shouldBe Messages("page.knowledgeIntensive.PercentageStaffWithMasters.hint")
     document.select("#staffWithMasters-yes").size() shouldBe 1
     document.select("#staffWithMasters-no").size() shouldBe 1
-    document.getElementById("staffWithMasters-yesLabel").text() shouldBe Messages("common.radioYesLabel")
-    document.getElementById("staffWithMasters-noLabel").text() shouldBe Messages("common.radioNoLabel")
+    document.select("label[for=staffWithMasters-yes]").text() shouldBe Messages("common.radioYesLabel")
+    document.select("label[for=staffWithMasters-no]").text() shouldBe Messages("common.radioNoLabel")
+    document.select("legend").text() shouldBe Messages("page.knowledgeIntensive.PercentageStaffWithMasters.heading")
+    document.select("legend").hasClass("visuallyhidden") shouldBe true
+    document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe false
     document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.one")
     document.getElementById("desc-one").text() shouldBe Messages("page.percentageStaffWithMasters.yes.hint")
     document.getElementById("next").text() shouldBe Messages("common.button.snc")
-    document.getElementsByTag("legend").select(".visuallyhidden").text() shouldBe Messages("page.knowledgeIntensive.PercentageStaffWithMasters.hint")
-    document.select(".error-summary").isEmpty shouldBe true
+    document.getElementsByTag("legend").select(".visuallyhidden").text() shouldBe Messages("page.knowledgeIntensive.PercentageStaffWithMasters.heading")
   }
 
 

@@ -38,8 +38,10 @@ class NatureOfBusinessSpec extends ViewSpec {
       document.title() shouldBe Messages("page.companyDetails.natureofbusiness.title")
       document.select(".error-summary--show").isEmpty shouldBe true
       document.getElementById("main-heading").text() shouldBe Messages("page.companyDetails.natureofbusiness.heading")
-      document.getElementById("label-natureofbusiness").select("span").hasClass("visuallyhidden") shouldBe true
-      document.getElementById("label-natureofbusiness").select(".visuallyhidden").text() shouldBe Messages("page.companyDetails.natureofbusiness.heading")
+      document.select("legend").text() shouldBe Messages("page.companyDetails.natureofbusiness.heading")
+      document.select("legend").hasClass("visuallyhidden") shouldBe true
+
+
       document.getElementById("label-natureofbusiness-hint").text() shouldBe Messages("page.companyDetails.natureofbusiness.question.hint")
       document.getElementById("description-two").text() shouldBe Messages("page.companyDetails.natureofbusiness.example.text")
       document.getElementById("bullet-one").text() shouldBe Messages("page.companyDetails.natureofbusiness.bullet.one")
@@ -52,19 +54,18 @@ class NatureOfBusinessSpec extends ViewSpec {
       document.select("button").attr("type") shouldBe "submit"
       document.select("a.back-link").text() shouldBe Messages("common.button.back")
       document.getElementsByTag("legend").select(".visuallyhidden").text() shouldBe Messages("page.companyDetails.natureofbusiness.heading")
-      document.select(".error-summary").isEmpty shouldBe true
+      document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe false
     }
 
     "Verify that the nature of business page contains the correct elements when an invalid NatureOfBusinessModel model is passed" in new SEISSetup {
       val document: Document = Jsoup.parse(contentAsString(NatureOfBusiness(natureOfBusinessForm.bind(Map("natureofbusiness" -> "")))))
-
-      // Check the error summary is displayed - the whole purpose of this test
-      document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe true
-      // additional page checks to make sure everything else still as expected if errors on page
       document.title() shouldBe Messages("page.companyDetails.natureofbusiness.title")
+      document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe true
+
       document.getElementById("main-heading").text() shouldBe Messages("page.companyDetails.natureofbusiness.heading")
-      document.getElementById("label-natureofbusiness").select("span").hasClass("visuallyhidden") shouldBe true
-      document.getElementById("label-natureofbusiness").select(".visuallyhidden").text() shouldBe Messages("page.companyDetails.natureofbusiness.heading")
+      document.select("legend").text() shouldBe Messages("page.companyDetails.natureofbusiness.heading")
+      document.select("legend").hasClass("visuallyhidden") shouldBe true
+
       document.getElementById("label-natureofbusiness-hint").text() shouldBe Messages("page.companyDetails.natureofbusiness.question.hint")
       document.getElementById("description-two").text() shouldBe Messages("page.companyDetails.natureofbusiness.example.text")
       document.getElementById("bullet-one").text() shouldBe Messages("page.companyDetails.natureofbusiness.bullet.one")
