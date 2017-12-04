@@ -15,9 +15,9 @@
  *@
 
 @import models.ThirtyDayRuleModel
-@import uk.gov.hmrc.play.views.html.helpers.form
+@import uk.gov.hmrc.play.views.html.helpers.{form, inputRadioGroup, errorSummary}
 @import common.Constants
-@import views.html.helpers.{backButtonWithProgress, formInputRadioGroup, errorSummary, formHint}
+@import views.html.helpers.{backButtonWithProgress, formHint}
 
 @(thirtyDayRuleForm: Form[ThirtyDayRuleModel])(implicit request: Request[_], messages: Messages)
 
@@ -25,7 +25,9 @@
 
     @backButtonWithProgress(controllers.eis.routes.TurnoverCostsController.show().url, Messages("common.section.progress.details.three"))
 
-    @errorSummary(thirtyDayRuleForm, "thirty-day-rule", "thirtyDayRule")
+    @errorSummary(Messages("common.error.summary.heading"), thirtyDayRuleForm)
+
+
     <h1 class="heading-xlarge" id="main-heading">@Messages("page.ThirtyDayRule.heading")</h1>
 
     <div class="form-group">
@@ -42,8 +44,8 @@
 
     @form(action = controllers.eis.routes.ThirtyDayRuleController.submit()) {
 
-    <div class="form-group">
-        @formInputRadioGroup(
+    <div class="form-group" id="thirtyDayRule">
+        @inputRadioGroup(
         field = thirtyDayRuleForm("thirtyDayRule"),
         Seq(
         Constants.StandardRadioButtonYesValue -> Messages("common.radioYesLabel"),

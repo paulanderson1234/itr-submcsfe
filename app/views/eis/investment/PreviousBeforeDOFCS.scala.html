@@ -15,8 +15,8 @@
  *@
 
 @import models.PreviousBeforeDOFCSModel
-@import uk.gov.hmrc.play.views.html.helpers.form
-@import views.html.helpers._
+@import uk.gov.hmrc.play.views.html.helpers.{form, inputRadioGroup, errorSummary}
+@import views.html.helpers.{backButtonWithProgress}
 @import common.Constants
 
 @(previousBeforeDOFCSForm: Form[PreviousBeforeDOFCSModel], question: String, description: String)(implicit request: Request[_], messages: Messages)
@@ -25,15 +25,15 @@
 
     @backButtonWithProgress(controllers.eis.routes.UsedInvestmentReasonBeforeController.show().toString, Messages("common.section.progress.details.three"))
 
-    @errorSummary(previousBeforeDOFCSForm, "previous-before-dofcs", "previousBeforeDOFCS")
+    @errorSummary(Messages("common.error.summary.heading"), previousBeforeDOFCSForm)
+
 
     <h1 class="heading-xlarge" id="main-heading">@question</h1>
 
-
     @form(action = controllers.eis.routes.PreviousBeforeDOFCSController.submit()) {
 
-        <div class="form-group">
-            @formInputRadioGroup(
+        <div class="form-group" id="previousBeforeDOFCS">
+            @inputRadioGroup(
             field = previousBeforeDOFCSForm("previousBeforeDOFCS"),
             Seq(
             Constants.StandardRadioButtonYesValue -> Messages("common.radioYesLabel"),

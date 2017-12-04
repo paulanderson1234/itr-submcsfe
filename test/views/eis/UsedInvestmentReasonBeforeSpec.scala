@@ -57,13 +57,15 @@ class UsedInvestmentReasonBeforeSpec extends ViewSpec {
     document.getElementById("main-heading").text() shouldBe Messages("page.investment.UsedInvestmentReasonBefore.heading")
     document.select("#usedInvestmentReasonBefore-yes").size() shouldBe 1
     document.select("#usedInvestmentReasonBefore-no").size() shouldBe 1
-    document.getElementById("usedInvestmentReasonBefore-yesLabel").text() shouldBe Messages("common.radioYesLabel")
-    document.getElementById("usedInvestmentReasonBefore-noLabel").text() shouldBe Messages("common.radioNoLabel")
+    document.select("label[for=usedInvestmentReasonBefore-yes]").text() shouldBe Messages("common.radioYesLabel")
+    document.select("label[for=usedInvestmentReasonBefore-no]").text() shouldBe Messages("common.radioNoLabel")
+    document.select("legend").text() shouldBe Messages("page.investment.UsedInvestmentReasonBefore.legend")
+    document.select("legend").hasClass("visuallyhidden") shouldBe true
+    document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe false
+
+
     document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.three")
     document.getElementById("next").text() shouldBe Messages("common.button.snc")
-    document.getElementById("usedInvestmentReasonBefore-legend").hasClass("visuallyhidden") shouldBe true
-    document.getElementById("usedInvestmentReasonBefore-legend").text shouldBe Messages("page.investment.UsedInvestmentReasonBefore.legend")
-    document.select(".error-summary").isEmpty shouldBe true
   }
 
   "Verify that UsedInvestmentReasonBefore page contains the correct elements when an empty model " +
@@ -78,13 +80,13 @@ class UsedInvestmentReasonBeforeSpec extends ViewSpec {
     document.getElementById("main-heading").text() shouldBe Messages("page.investment.UsedInvestmentReasonBefore.heading")
     document.select("#usedInvestmentReasonBefore-yes").size() shouldBe 1
     document.select("#usedInvestmentReasonBefore-no").size() shouldBe 1
-    document.getElementById("usedInvestmentReasonBefore-yesLabel").text() shouldBe Messages("common.radioYesLabel")
-    document.getElementById("usedInvestmentReasonBefore-noLabel").text() shouldBe Messages("common.radioNoLabel")
+    document.select("label[for=usedInvestmentReasonBefore-yes]").text() shouldBe Messages("common.radioYesLabel")
+    document.select("label[for=usedInvestmentReasonBefore-no]").text() shouldBe Messages("common.radioNoLabel")
+    document.select("legend").text() shouldBe Messages("page.investment.UsedInvestmentReasonBefore.legend")
+    document.select("legend").hasClass("visuallyhidden") shouldBe true
+    document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe false
     document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.three")
     document.getElementById("next").text() shouldBe Messages("common.button.snc")
-    document.getElementById("usedInvestmentReasonBefore-legend").hasClass("visuallyhidden") shouldBe true
-    document.getElementById("usedInvestmentReasonBefore-legend").text shouldBe Messages("page.investment.UsedInvestmentReasonBefore.legend")
-    document.select(".error-summary").isEmpty shouldBe true
   }
 
   "Verify that UsedInvestmentReasonBefore page contains error summary when invalid model is submitted" in new Setup {

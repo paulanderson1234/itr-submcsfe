@@ -57,18 +57,19 @@ class ThirtyDayRuleSpec extends ViewSpec {
       document.title() shouldBe Messages("page.ThirtyDayRule.title")
       document.getElementById("main-heading").text() shouldBe Messages("page.ThirtyDayRule.heading")
       document.getElementById("main-heading").hasClass("heading-xlarge") shouldBe true
-      document.getElementById("thirtyDayRule-yesLabel").text() shouldBe Messages("common.radioYesLabel")
-      document.getElementById("thirtyDayRule-noLabel").text() shouldBe Messages("common.radioNoLabel")
+      document.select("label[for=thirtyDayRule-yes]").text() shouldBe Messages("common.radioYesLabel")
+      document.select("label[for=thirtyDayRule-no]").text() shouldBe Messages("common.radioNoLabel")
+      document.getElementById("next").text() shouldBe Messages("common.button.snc")
+      document.select("legend").text() shouldBe Messages("page.ThirtyDayRule.legend")
+      document.select("legend").hasClass("visuallyhidden") shouldBe true
+      document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe false
       document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.TurnoverCostsController.show().url
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.three")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
-      document.getElementById("thirtyDayRule-legend").hasClass("visuallyhidden") shouldBe true
-      document.getElementById("thirtyDayRule-legend").text shouldBe Messages("page.ThirtyDayRule.legend")
       document.body.getElementById("description-one").text shouldBe Messages("page.ThirtyDayRule.descriptionOne.text")
       document.getElementById("help-bullet-one").text() shouldBe Messages("page.ThirtyDayRule.help.bullet.one")
       document.getElementById("help-bullet-two").text() shouldBe Messages("page.ThirtyDayRule.help.bullet.two")
       document.getElementById("help-bullet-three").text() shouldBe Messages("page.ThirtyDayRule.help.bullet.three")
-      document.select(".error-summary").isEmpty shouldBe true
     }
 	
     "contain the correct elements for a GET when there is no ThirtyDayRuleModel returned from keystore" in new Setup {
@@ -80,18 +81,19 @@ class ThirtyDayRuleSpec extends ViewSpec {
       document.title() shouldBe Messages("page.ThirtyDayRule.title")
       document.getElementById("main-heading").text() shouldBe Messages("page.ThirtyDayRule.heading")
       document.getElementById("main-heading").hasClass("heading-xlarge") shouldBe true
-      document.getElementById("thirtyDayRule-yesLabel").text() shouldBe Messages("common.radioYesLabel")
-      document.getElementById("thirtyDayRule-noLabel").text() shouldBe Messages("common.radioNoLabel")
+      document.select("label[for=thirtyDayRule-yes]").text() shouldBe Messages("common.radioYesLabel")
+      document.select("label[for=thirtyDayRule-no]").text() shouldBe Messages("common.radioNoLabel")
+      document.getElementById("next").text() shouldBe Messages("common.button.snc")
+      document.select("legend").text() shouldBe Messages("page.ThirtyDayRule.legend")
+      document.select("legend").hasClass("visuallyhidden") shouldBe true
+      document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe false
       document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.TurnoverCostsController.show().url
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.three")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
-      document.getElementById("thirtyDayRule-legend").hasClass("visuallyhidden") shouldBe true
-      document.getElementById("thirtyDayRule-legend").text shouldBe Messages("page.ThirtyDayRule.legend")
       document.body.getElementById("description-one").text shouldBe Messages("page.ThirtyDayRule.descriptionOne.text")
       document.getElementById("help-bullet-one").text() shouldBe Messages("page.ThirtyDayRule.help.bullet.one")
       document.getElementById("help-bullet-two").text() shouldBe Messages("page.ThirtyDayRule.help.bullet.two")
       document.getElementById("help-bullet-three").text() shouldBe Messages("page.ThirtyDayRule.help.bullet.three")
-      document.select(".error-summary").isEmpty shouldBe true
     }
 
 
@@ -104,14 +106,14 @@ class ThirtyDayRuleSpec extends ViewSpec {
       document.title() shouldBe Messages("page.ThirtyDayRule.title")
       document.getElementById("main-heading").text() shouldBe Messages("page.ThirtyDayRule.heading")
       document.getElementById("main-heading").hasClass("heading-xlarge") shouldBe true
-      document.getElementById("thirtyDayRule-yesLabel").text() shouldBe Messages("common.radioYesLabel")
-      document.getElementById("thirtyDayRule-noLabel").text() shouldBe Messages("common.radioNoLabel")
+      document.select("label[for=thirtyDayRule-yes]").text() shouldBe Messages("common.radioYesLabel")
+      document.select("label[for=thirtyDayRule-no]").text() shouldBe Messages("common.radioNoLabel")
+      document.getElementById("next").text() shouldBe Messages("common.button.snc")
+      document.select("legend").text() shouldBe Messages("page.ThirtyDayRule.legend")
+      document.select("legend").hasClass("visuallyhidden") shouldBe true
       document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.TurnoverCostsController.show().url
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.three")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
-      document.getElementById("thirtyDayRule-legend").hasClass("visuallyhidden") shouldBe true
-      document.getElementById("thirtyDayRule-legend").text shouldBe Messages("page.ThirtyDayRule.legend")
-      document.getElementById("error-summary-display").hasClass("error-summary--show")
       document.body.getElementById("description-one").text shouldBe Messages("page.ThirtyDayRule.descriptionOne.text")
       document.getElementById("help-bullet-one").text() shouldBe Messages("page.ThirtyDayRule.help.bullet.one")
       document.getElementById("help-bullet-two").text() shouldBe Messages("page.ThirtyDayRule.help.bullet.two")

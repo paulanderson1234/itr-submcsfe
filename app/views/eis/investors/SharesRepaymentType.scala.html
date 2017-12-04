@@ -15,9 +15,9 @@
  *@
 
 @import models.repayments.SharesRepaymentTypeModel
-@import uk.gov.hmrc.play.views.html.helpers.form
+@import uk.gov.hmrc.play.views.html.helpers.{form, inputRadioGroup, errorSummary}
 @import common.Constants
-@import views.html.helpers.{backButtonWithProgress, formInputRadioGroup, errorSummary, formHint, hiddenField}
+@import views.html.helpers.{backButtonWithProgress, formHint, hiddenField}
 
 @(sharesRepaymentTypeForm: Form[SharesRepaymentTypeModel], backUrl: String)(implicit request: Request[_], messages: Messages)
 
@@ -25,14 +25,15 @@
 
 @backButtonWithProgress(backUrl, Messages("common.section.progress.details.four"))
 
-@errorSummary(sharesRepaymentTypeForm, "shares-repayment-type", "sharesRepaymentType")
+@errorSummary(Messages("common.error.summary.heading"), sharesRepaymentTypeForm)
+
 
 <h1 class="heading-xlarge" id="main-heading">@Messages("page.sharesRepaymentType.heading")</h1>
 
     @form(action = controllers.eis.routes.SharesRepaymentTypeController.submit()) {
 
-        <div class="form-group">
-            @formInputRadioGroup(
+        <div class="form-group" id="sharesRepaymentType">
+            @inputRadioGroup(
             field = sharesRepaymentTypeForm("sharesRepaymentType"),
             Seq(
             Constants.repaymentTypeShares -> Messages("page.sharesRepaymentType.shares"),

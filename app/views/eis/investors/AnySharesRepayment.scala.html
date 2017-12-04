@@ -15,9 +15,9 @@
  *@
 
 @import models.repayments.AnySharesRepaymentModel
-@import uk.gov.hmrc.play.views.html.helpers.form
+@import uk.gov.hmrc.play.views.html.helpers.{form, inputRadioGroup, errorSummary}
 @import common.Constants
-@import views.html.helpers.{backButtonWithProgress, formInputRadioGroup, errorSummary, formHint}
+@import views.html.helpers.{backButtonWithProgress, formHint}
 
 @(anySharesRepaymentForm: Form[AnySharesRepaymentModel])(implicit request: Request[_], messages: Messages)
 
@@ -25,7 +25,8 @@
 
     @backButtonWithProgress(controllers.eis.routes.ReviewAllInvestorsController.show().url, Messages("common.section.progress.details.four"))
 
-    @errorSummary(anySharesRepaymentForm, "any-shares-repayment", "anySharesRepayment")
+    @errorSummary(Messages("common.error.summary.heading"), anySharesRepaymentForm)
+
     <h1 class="heading-xlarge" id="main-heading">@Messages("page.AnySharesRepayment.heading")</h1>
 
     <div class="form-group">
@@ -42,8 +43,8 @@
 
     @form(action = controllers.eis.routes.AnySharesRepaymentController.submit()) {
 
-    <div class="form-group">
-        @formInputRadioGroup(
+    <div class="form-group" id="anySharesRepayment">
+        @inputRadioGroup(
         field = anySharesRepaymentForm("anySharesRepayment"),
         Seq(
         Constants.StandardRadioButtonYesValue -> Messages("common.radioYesLabel"),

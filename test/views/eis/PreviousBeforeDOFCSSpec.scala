@@ -75,12 +75,12 @@ class PreviousBeforeDOFCSSpec extends ViewSpec with DateFormatter {
       Messages("page.previousInvestment.previousBeforeDOFCS.heading",commercialDate,secondDate(Constants.IsKnowledgeIntensiveYears))
     document.select("#previousBeforeDOFCS-yes").size() shouldBe 1
     document.select("#previousBeforeDOFCS-yes").size() shouldBe 1
-    document.getElementById("previousBeforeDOFCS-yesLabel").text() shouldBe Messages("common.radioYesLabel")
-    document.getElementById("previousBeforeDOFCS-noLabel").text() shouldBe Messages("common.radioNoLabel")
-    document.getElementById("previousBeforeDOFCS").getElementsByClass("form-hint").first().text() shouldBe
-      Messages("page.previousInvestment.previousBeforeDOFCS.description",Constants.IsKnowledgeIntensiveYears)
-    document.getElementById("previousBeforeDOFCS-legend").select(".visuallyhidden").text() shouldBe
-      Messages("page.previousInvestment.previousBeforeDOFCS.heading",commercialDate,secondDate(Constants.IsKnowledgeIntensiveYears))
+    document.select("label[for=previousBeforeDOFCS-yes]").text() shouldBe Messages("common.radioYesLabel")
+    document.select("label[for=previousBeforeDOFCS-no]").text() shouldBe Messages("common.radioNoLabel")
+    document.select("legend").text() shouldBe  Messages("page.previousInvestment.previousBeforeDOFCS.heading",commercialDate,secondDate(Constants.IsKnowledgeIntensiveYears))
+    document.select("legend").hasClass("visuallyhidden") shouldBe true
+    document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe false
+
     document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.three")
     document.getElementById("next").text() shouldBe Messages("common.button.snc")
   }
@@ -99,12 +99,12 @@ class PreviousBeforeDOFCSSpec extends ViewSpec with DateFormatter {
       Messages("page.previousInvestment.previousBeforeDOFCS.heading",commercialDate,secondDate(Constants.IsNotKnowledgeIntensiveYears))
     document.select("#previousBeforeDOFCS-yes").size() shouldBe 1
     document.select("#previousBeforeDOFCS-yes").size() shouldBe 1
-    document.getElementById("previousBeforeDOFCS-yesLabel").text() shouldBe Messages("common.radioYesLabel")
-    document.getElementById("previousBeforeDOFCS-noLabel").text() shouldBe Messages("common.radioNoLabel")
-    document.getElementById("previousBeforeDOFCS").getElementsByClass("form-hint").first().text() shouldBe
-      Messages("page.previousInvestment.previousBeforeDOFCS.description",Constants.IsNotKnowledgeIntensiveYears)
-    document.getElementById("previousBeforeDOFCS-legend").select(".visuallyhidden").text() shouldBe
-      Messages("page.previousInvestment.previousBeforeDOFCS.heading",commercialDate,secondDate(Constants.IsNotKnowledgeIntensiveYears))
+    document.select("label[for=previousBeforeDOFCS-yes]").text() shouldBe Messages("common.radioYesLabel")
+    document.select("label[for=previousBeforeDOFCS-no]").text() shouldBe Messages("common.radioNoLabel")
+    document.select("legend").text() shouldBe   Messages("page.previousInvestment.previousBeforeDOFCS.heading",commercialDate,secondDate(Constants.IsNotKnowledgeIntensiveYears))
+    document.select("legend").hasClass("visuallyhidden") shouldBe true
+    document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe false
+
     document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.three")
     document.getElementById("next").text() shouldBe Messages("common.button.snc")
   }
@@ -123,12 +123,11 @@ class PreviousBeforeDOFCSSpec extends ViewSpec with DateFormatter {
       Messages("page.previousInvestment.previousBeforeDOFCS.heading",commercialDate,secondDate(Constants.IsKnowledgeIntensiveYears))
     document.select("#previousBeforeDOFCS-yes").size() shouldBe 1
     document.select("#previousBeforeDOFCS-no").size() shouldBe 1
-    document.getElementById("previousBeforeDOFCS-yesLabel").text() shouldBe Messages("common.radioYesLabel")
-    document.getElementById("previousBeforeDOFCS-noLabel").text() shouldBe Messages("common.radioNoLabel")
-    document.getElementById("previousBeforeDOFCS").getElementsByClass("form-hint").first().text() shouldBe
-      Messages("page.previousInvestment.previousBeforeDOFCS.description",Constants.IsKnowledgeIntensiveYears)
-    document.getElementById("previousBeforeDOFCS-legend").select(".visuallyhidden").text() shouldBe
-      Messages("page.previousInvestment.previousBeforeDOFCS.heading",commercialDate,secondDate(Constants.IsKnowledgeIntensiveYears))
+    document.select("label[for=previousBeforeDOFCS-yes]").text() shouldBe Messages("common.radioYesLabel")
+    document.select("label[for=previousBeforeDOFCS-no]").text() shouldBe Messages("common.radioNoLabel")
+    document.select("legend").text() shouldBe   Messages("page.previousInvestment.previousBeforeDOFCS.heading",commercialDate,secondDate(Constants.IsKnowledgeIntensiveYears))
+    document.select("legend").hasClass("visuallyhidden") shouldBe true
+    document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe false
     document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.three")
     document.getElementById("next").text() shouldBe Messages("common.button.snc")
   }
@@ -147,12 +146,11 @@ class PreviousBeforeDOFCSSpec extends ViewSpec with DateFormatter {
       Messages("page.previousInvestment.previousBeforeDOFCS.heading",commercialDate,secondDate(Constants.IsNotKnowledgeIntensiveYears))
     document.select("#previousBeforeDOFCS-yes").size() shouldBe 1
     document.select("#previousBeforeDOFCS-no").size() shouldBe 1
-    document.getElementById("previousBeforeDOFCS-yesLabel").text() shouldBe Messages("common.radioYesLabel")
-    document.getElementById("previousBeforeDOFCS-noLabel").text() shouldBe Messages("common.radioNoLabel")
-    document.getElementById("previousBeforeDOFCS").getElementsByClass("form-hint").first().text() shouldBe
-      Messages("page.previousInvestment.previousBeforeDOFCS.description",Constants.IsNotKnowledgeIntensiveYears)
-    document.getElementById("previousBeforeDOFCS-legend").select(".visuallyhidden").text() shouldBe
-      Messages("page.previousInvestment.previousBeforeDOFCS.heading",commercialDate,secondDate(Constants.IsNotKnowledgeIntensiveYears))
+    document.select("label[for=previousBeforeDOFCS-yes]").text() shouldBe Messages("common.radioYesLabel")
+    document.select("label[for=previousBeforeDOFCS-no]").text() shouldBe Messages("common.radioNoLabel")
+    document.select("legend").text() shouldBe  Messages("page.previousInvestment.previousBeforeDOFCS.heading",commercialDate,secondDate(Constants.IsNotKnowledgeIntensiveYears))
+    document.select("legend").hasClass("visuallyhidden") shouldBe true
+    document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe false
     document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.three")
     document.getElementById("next").text() shouldBe Messages("common.button.snc")
   }

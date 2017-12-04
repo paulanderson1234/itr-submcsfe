@@ -40,8 +40,8 @@ class GrossAssetsAfterIssueSpec extends ViewSpec {
       val document = Jsoup.parse(page(grossAssetsAfterIssueForm.fill(GrossAssetsAfterIssueModel(grossAssetsAmount))).body)
       document.title() shouldBe Messages("page.grossAssetsAfterIssue.amount.title")
       document.getElementById("main-heading").text() shouldBe Messages("page.grossAssetsAfterIssue.amount.heading")
-      document.getElementById("grossAssetsAfterIssueAmount-legend").hasClass("visuallyhidden") shouldBe true
-      document.getElementById("grossAssetsAfterIssueAmount-legend").select(".visuallyhidden").text() shouldBe Messages("page.grossAssetsAfterIssue.amount.legend")
+      document.select("legend").text() shouldBe Messages("page.grossAssetsAfterIssue.amount.legend")
+      document.select("legend").hasClass("visuallyhidden") shouldBe true
       document.getElementById("help").text shouldBe Messages("page.grossAssetsAfterIssue.guidance.title")
       document.getElementById("how-to-work-this-out").text shouldBe Messages("page.grossAssetsAfterIssue.guidance.one")
       document.getElementById("grossAmount-1000000").attr("value") shouldBe Constants.grossAssetsBandOne
@@ -53,7 +53,7 @@ class GrossAssetsAfterIssueSpec extends ViewSpec {
       document.body.getElementById("back-link").attr("href") shouldEqual routes.GrossAssetsController.show().url
       document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.one")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
-      document.select(".error-summary").isEmpty shouldBe true
+      document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe false
     }
 
 
@@ -61,8 +61,8 @@ class GrossAssetsAfterIssueSpec extends ViewSpec {
       val document = Jsoup.parse(page(grossAssetsAfterIssueForm).body)
       document.title() shouldBe Messages("page.grossAssetsAfterIssue.amount.title")
       document.getElementById("main-heading").text() shouldBe Messages("page.grossAssetsAfterIssue.amount.heading")
-      document.getElementById("grossAssetsAfterIssueAmount-legend").hasClass("visuallyhidden") shouldBe true
-      document.getElementById("grossAssetsAfterIssueAmount-legend").select(".visuallyhidden").text() shouldBe Messages("page.grossAssetsAfterIssue.amount.legend")
+      document.select("legend").text() shouldBe Messages("page.grossAssetsAfterIssue.amount.legend")
+      document.select("legend").hasClass("visuallyhidden") shouldBe true
       document.getElementById("help").text shouldBe Messages("page.grossAssetsAfterIssue.guidance.title")
       document.getElementById("how-to-work-this-out").text shouldBe Messages("page.grossAssetsAfterIssue.guidance.one")
       document.getElementById("grossAmount-1000000").attr("value") shouldBe Constants.grossAssetsBandOne
@@ -74,7 +74,7 @@ class GrossAssetsAfterIssueSpec extends ViewSpec {
       document.body.getElementById("back-link").attr("href") shouldEqual routes.GrossAssetsController.show().url
       document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.one")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
-      document.select(".error-summary").isEmpty shouldBe true
+      document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe false
 
     }
 
