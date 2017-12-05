@@ -33,16 +33,18 @@
     <p id="description-one" class="lede">@Messages("page.companyDetails.HasInvestmentTradeStarted.descriptionOne.text")</p>
 
 @form(action = controllers.eis.routes.HasInvestmentTradeStartedController.submit()) {
-
-@formHiddenYesNoRadioNoError(
-hasInvestmentTradeStartedForm,
-"hasInvestmentTradeStarted",
-Messages("page.companyDetails.HasInvestmentTradeStarted.question.hint"),
-formInlineDateInput(hasInvestmentTradeStartedForm,"hasInvestmentTradeStarted",Some(Messages("page.companyDetails.HasInvestmentTradeStarted.question.hint")),
-false, Some(Messages("common.date.hint.example")), None),
-None,
-Some("visuallyhidden")
-)
+    <div class="form-group" id="hasInvestmentTradeStarted">
+       @formHiddenYesNoRadioNoError(
+            hasInvestmentTradeStartedForm,
+            "hasInvestmentTradeStarted",
+            Messages("page.companyDetails.HasInvestmentTradeStarted.question.hint"),
+            formInlineDateInput(hasInvestmentTradeStartedForm, "hasInvestmentTradeStarted",
+                Some(Messages("page.companyDetails.HasInvestmentTradeStarted.question.hint")), false,
+                Some(Messages("common.date.hint.example")), None),
+            None,
+            Some("visuallyhidden")
+        )
+    </div>
 
 
 <div class="form-group">

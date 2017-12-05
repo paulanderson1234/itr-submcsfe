@@ -34,8 +34,6 @@
 @backButtonWithProgress(controllers.eis.routes.ConfirmCorrespondAddressController.show().url, Messages("common.section.progress.details.five"))
 
 <div class="grid-row">
-    <div class="column-two-thirds">
-
         @errorSummary(contactAddress, "contact-address", "postcode")
 
         <h1 id="main-heading" class="form-title heading-xlarge">@Messages("page.contactInformation.ProvideContactAddress.heading")</h1>
@@ -110,7 +108,6 @@
             <button class="btn button" id="next">@Messages("common.button.snc")</button>
         </div>
         }
-    </div>
 </div>
 
 }

@@ -30,7 +30,7 @@ class PreviousSchemeSpec extends ViewSpec {
 
   "The  Add Previous Scheme page" should {
 
-    val backLink = routes.ReviewPreviousSchemesController.show().url
+    lazy val backLink = routes.ReviewPreviousSchemesController.show().url
 
     "contain the correct elements for a new scheme" in {
       val document: Document = {
@@ -44,13 +44,14 @@ class PreviousSchemeSpec extends ViewSpec {
       document.getElementById("main-heading").text() shouldBe Messages("page.investment.PreviousScheme.heading")
 
       document.getElementById("guideline").text() shouldBe Messages("page.investment.PreviousScheme.oneAtATime")
-      document.getElementById("scheme-type-legend").text() shouldBe Messages("page.investment.PreviousScheme.schemeType")
-      document.getElementById("schemeTypeDesc-eisLabel").text() shouldBe Messages("page.previousInvestment.schemeType.eis")
-      document.getElementById("schemeTypeDesc-seisLabel").text() shouldBe Messages("page.previousInvestment.schemeType.seis")
-      document.getElementById("schemeTypeDesc-sitrLabel").text() shouldBe Messages("page.previousInvestment.schemeType.sitr")
-      document.getElementById("schemeTypeDesc-vctLabel").text() shouldBe Messages("page.previousInvestment.schemeType.vct")
-      document.getElementById("schemeTypeDesc-otherLabel").text() shouldBe Messages("page.previousInvestment.schemeType.other")
+      //document.select("legend").text() shouldBe Messages("page.previousInvestment.reviewPreviousSchemes.dateOfShareIssue")
+      document.select("label[for=schemeTypeDesc-eis]").text() shouldBe Messages("page.previousInvestment.schemeType.eis")
+      document.select("label[for=schemeTypeDesc-seis]").text() shouldBe Messages("page.previousInvestment.schemeType.seis")
+      document.select("label[for=schemeTypeDesc-sitr]").text() shouldBe Messages("page.previousInvestment.schemeType.sitr")
+      document.select("label[for=schemeTypeDesc-vct]").text() shouldBe Messages("page.previousInvestment.schemeType.vct")
+      document.select("label[for=schemeTypeDesc-other]").text() shouldBe Messages("page.previousInvestment.schemeType.other")
       document.getElementById("label-amount").text() shouldBe Messages("page.investment.PreviousScheme.investmentAmount")
+
 
       document.getElementById("label-amount-spent").text() shouldBe Messages("page.previousInvestment.amountSpent.label")
       document.getElementById("label-other-scheme").text() shouldBe Messages("page.investment.PreviousScheme.otherSchemeName.label")
@@ -64,9 +65,6 @@ class PreviousSchemeSpec extends ViewSpec {
       document.getElementById("date-of-share-issue-where-to-find").text() should include(Messages("page.investment.PreviousScheme.location"))
       document.getElementById("company-house-db").attr("href") shouldBe "https://www.gov.uk/get-information-about-a-company"
       document.body.getElementById("company-house-db").text() shouldEqual getExternalLinkText(Messages("page.investment.PreviousScheme.companiesHouse"))
-
-      document.getElementById("scheme-type-legend").hasClass("heading-small") shouldBe true
-      document.getElementById("scheme-type-legend").text shouldBe Messages("page.investment.PreviousScheme.schemeType")
 
       document.getElementById("next").text() shouldBe Messages("page.investment.PreviousScheme.button.add")
       document.select(".error-summary").isEmpty shouldBe true
@@ -85,12 +83,13 @@ class PreviousSchemeSpec extends ViewSpec {
       document.getElementById("main-heading").text() shouldBe Messages("page.investment.PreviousScheme.heading")
 
       document.getElementById("guideline").text() shouldBe Messages("page.investment.PreviousScheme.oneAtATime")
-      document.getElementById("scheme-type-legend").text() shouldBe Messages("page.investment.PreviousScheme.schemeType")
-      document.getElementById("schemeTypeDesc-eisLabel").text() shouldBe Messages("page.previousInvestment.schemeType.eis")
-      document.getElementById("schemeTypeDesc-seisLabel").text() shouldBe Messages("page.previousInvestment.schemeType.seis")
-      document.getElementById("schemeTypeDesc-sitrLabel").text() shouldBe Messages("page.previousInvestment.schemeType.sitr")
-      document.getElementById("schemeTypeDesc-vctLabel").text() shouldBe Messages("page.previousInvestment.schemeType.vct")
-      document.getElementById("schemeTypeDesc-otherLabel").text() shouldBe Messages("page.previousInvestment.schemeType.other")
+      //document.select("legend").text() shouldBe Messages("page.investment.PreviousScheme.schemeType")
+      document.select("label[for=schemeTypeDesc-eis]").text() shouldBe Messages("page.previousInvestment.schemeType.eis")
+      document.select("label[for=schemeTypeDesc-seis]").text() shouldBe Messages("page.previousInvestment.schemeType.seis")
+      document.select("label[for=schemeTypeDesc-sitr]").text() shouldBe Messages("page.previousInvestment.schemeType.sitr")
+      document.select("label[for=schemeTypeDesc-vct]").text() shouldBe Messages("page.previousInvestment.schemeType.vct")
+      document.select("label[for=schemeTypeDesc-other]").text() shouldBe Messages("page.previousInvestment.schemeType.other")
+
       document.getElementById("label-amount").text() shouldBe Messages("page.previousInvestment.reviewPreviousSchemes.investmentAmountRaised")
 
       document.getElementById("label-amount-spent").text() shouldBe Messages("page.previousInvestment.amountSpent.label")
@@ -106,8 +105,7 @@ class PreviousSchemeSpec extends ViewSpec {
       document.getElementById("company-house-db").attr("href") shouldBe "https://www.gov.uk/get-information-about-a-company"
       document.body.getElementById("company-house-db").text() shouldEqual getExternalLinkText(Messages("page.investment.PreviousScheme.companiesHouse"))
 
-      document.getElementById("scheme-type-legend").hasClass("heading-small") shouldBe true
-      document.getElementById("scheme-type-legend").text shouldBe Messages("page.investment.PreviousScheme.schemeType")
+
 
       document.getElementById("next").text() shouldBe Messages("page.investment.PreviousScheme.button.update")
       document.select(".error-summary").isEmpty shouldBe true

@@ -42,6 +42,7 @@ common.returnToDashboard=Return to dashboard
 common.page.forename.label=First Name
 common.page.surname.label=Last Name
 common.suggestedLimit.hint.long=Suggested limit: 200 words
+common.max.length.no.js=Max {0} characters
 
 ## Common date Messages ##
 common.date.fields.day=Day
@@ -789,6 +790,7 @@ feedback.thankyou.title = Feedback received
 
 # Compant details qualify business activity #
 page.companyDetails.qualifyBusinessActivity.title=What will the money your company has raised be used for?
+page.companyDetails.qualifyBusinessActivity.legend=What will the money your company has raised be used for?
 page.companyDetails.qualifyBusinessActivity.heading=What will the money your company has raised be used for?
 page.companyDetails.qualifyBusinessActivity.bullet.one=Doing business or getting ready to do business
 page.companyDetails.qualifyBusinessActivity.bullet.two=Research and development to do with your business activity

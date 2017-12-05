@@ -57,20 +57,20 @@ class AnySharesRepaymentSpec extends ViewSpec {
       document.title() shouldBe Messages("page.AnySharesRepayment.title")
       document.getElementById("main-heading").text() shouldBe Messages("page.AnySharesRepayment.heading")
       document.getElementById("main-heading").hasClass("heading-xlarge") shouldBe true
-      document.getElementById("anySharesRepayment-yesLabel").text() shouldBe Messages("common.radioYesLabel")
-      document.getElementById("anySharesRepayment-noLabel").text() shouldBe Messages("common.radioNoLabel")
+      document.select("label[for=anySharesRepayment-yes]").text() shouldBe Messages("common.radioYesLabel")
+      document.select("label[for=anySharesRepayment-no]").text() shouldBe Messages("common.radioNoLabel")
+      document.select("legend").text() shouldBe Messages("page.AnySharesRepayment.legend")
+      document.select("legend").hasClass("visuallyhidden") shouldBe true
+      document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe false
       document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.ReviewAllInvestorsController.show().url
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.four")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
-      document.getElementById("anySharesRepayment-legend").hasClass("visuallyhidden") shouldBe true
-      document.getElementById("anySharesRepayment-legend").text shouldBe Messages("page.AnySharesRepayment.legend")
 
       // secondary paragraph:
       document.body.getElementById("description-one").text shouldBe Messages("page.AnySharesRepayment.descriptionOne.text")
       document.getElementById("help-bullet-one").text() shouldBe Messages("page.AnySharesRepayment.help.bullet.one")
       document.getElementById("help-bullet-two").text() shouldBe Messages("page.AnySharesRepayment.help.bullet.two")
       document.getElementById("help-bullet-three").text() shouldBe Messages("page.AnySharesRepayment.help.bullet.three")
-      document.select(".error-summary").isEmpty shouldBe true
     }
 	
     "contain the correct elements for a GET when there is no AnySharesRepaymentModel returned from keystore" in new Setup {
@@ -82,20 +82,20 @@ class AnySharesRepaymentSpec extends ViewSpec {
       document.title() shouldBe Messages("page.AnySharesRepayment.title")
       document.getElementById("main-heading").text() shouldBe Messages("page.AnySharesRepayment.heading")
       document.getElementById("main-heading").hasClass("heading-xlarge") shouldBe true
-      document.getElementById("anySharesRepayment-yesLabel").text() shouldBe Messages("common.radioYesLabel")
-      document.getElementById("anySharesRepayment-noLabel").text() shouldBe Messages("common.radioNoLabel")
+      document.select("label[for=anySharesRepayment-yes]").text() shouldBe Messages("common.radioYesLabel")
+      document.select("label[for=anySharesRepayment-no]").text() shouldBe Messages("common.radioNoLabel")
+      document.select("legend").text() shouldBe Messages("page.AnySharesRepayment.legend")
+      document.select("legend").hasClass("visuallyhidden") shouldBe true
+      document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe false
       document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.ReviewAllInvestorsController.show().url
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.four")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
-      document.getElementById("anySharesRepayment-legend").hasClass("visuallyhidden") shouldBe true
-      document.getElementById("anySharesRepayment-legend").text shouldBe Messages("page.AnySharesRepayment.legend")
 
       // secondary paragraph:
       document.body.getElementById("description-one").text shouldBe Messages("page.AnySharesRepayment.descriptionOne.text")
       document.getElementById("help-bullet-one").text() shouldBe Messages("page.AnySharesRepayment.help.bullet.one")
       document.getElementById("help-bullet-two").text() shouldBe Messages("page.AnySharesRepayment.help.bullet.two")
       document.getElementById("help-bullet-three").text() shouldBe Messages("page.AnySharesRepayment.help.bullet.three")
-      document.select(".error-summary").isEmpty shouldBe true
     }
 
 
@@ -107,13 +107,15 @@ class AnySharesRepaymentSpec extends ViewSpec {
       }
       document.title() shouldBe Messages("page.AnySharesRepayment.title")
       document.getElementById("main-heading").text() shouldBe Messages("page.AnySharesRepayment.heading")
-      document.getElementById("anySharesRepayment-yesLabel").text() shouldBe Messages("common.radioYesLabel")
-      document.getElementById("anySharesRepayment-noLabel").text() shouldBe Messages("common.radioNoLabel")
+
+      document.select("label[for=anySharesRepayment-yes]").text() shouldBe Messages("common.radioYesLabel")
+      document.select("label[for=anySharesRepayment-no]").text() shouldBe Messages("common.radioNoLabel")
+      document.select("legend").text() shouldBe Messages("page.AnySharesRepayment.legend")
+      document.select("legend").hasClass("visuallyhidden") shouldBe true
+
       document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.ReviewAllInvestorsController.show().url
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.four")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
-      document.getElementById("anySharesRepayment-legend").hasClass("visuallyhidden") shouldBe true
-      document.getElementById("anySharesRepayment-legend").text shouldBe Messages("page.AnySharesRepayment.legend")
 
       // secondary paragraph:
       document.body.getElementById("description-one").text shouldBe Messages("page.AnySharesRepayment.descriptionOne.text")

@@ -15,9 +15,9 @@
  *@
 
 @import models.CompanyOrIndividualModel
-@import uk.gov.hmrc.play.views.html.helpers.form
+@import uk.gov.hmrc.play.views.html.helpers.{form, inputRadioGroup, errorSummary}
 @import common.Constants
-@import views.html.helpers.{backButtonWithProgress, formInputRadioGroup, errorSummary, hiddenField}
+@import views.html.helpers.{backButtonWithProgress, hiddenField}
 
 @(investorOrNominee: String, companyOrIndividualForm: Form[CompanyOrIndividualModel], backUrl: String)(implicit request: Request[_], messages: Messages)
 
@@ -26,15 +26,13 @@
 @backButtonWithProgress(backUrl, Messages("common.section.progress.details.four"))
 
 <div class="grid-row">
-    <div class="column-two-thirds">
-
-        @errorSummary(companyOrIndividualForm, "company-or-individual", "companyOrIndividual")
+        @errorSummary(Messages("common.error.summary.heading"), companyOrIndividualForm)
 
         <h1 id="main-heading" class="form-title heading-xlarge">@Messages("page.investors.companyOrIndividual.heading", investorOrNominee)</h1>
 
         @form(action = controllers.seis.routes.CompanyOrIndividualController.submit(Some(investorOrNominee))) {
-        <div class="form-group">
-            @formInputRadioGroup(
+        <div class="form-group"  id="companyOrIndividual">
+            @inputRadioGroup(
             field = companyOrIndividualForm("companyOrIndividual"),
             Seq(
             Constants.typeCompany -> Messages("page.investors.companyOrIndividual.company"),
@@ -59,6 +57,5 @@
             <button class="btn button" type="submit" id="next">@Messages("common.button.snc")</button>
         </div>
         }
-    </div>
 </div>
 }

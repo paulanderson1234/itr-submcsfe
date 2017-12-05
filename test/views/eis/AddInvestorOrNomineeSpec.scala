@@ -72,12 +72,13 @@ class AddInvestorOrNomineeSpec extends ViewSpec {
 
         document.select("article span").first().text shouldBe Messages("common.section.progress.details.four")
         document.select("h1").text() shouldBe Messages("page.investors.AddInvestorOrNominee.heading")
-        document.select("article p").get(0).text() shouldBe Messages("page.investors.AddInvestorOrNominee.info.one")
-        document.select("article p").get(1).text() shouldBe Messages("page.investors.AddInvestorOrNominee.info.two")
-        document.getElementById("addInvestorOrNominee-investorLabel").text() shouldBe Messages("page.investors.AddInvestorOrNominee.radioButton.one")
-        document.getElementById("addInvestorOrNominee-nomineeLabel").text() shouldBe Messages("page.investors.AddInvestorOrNominee.radioButton.two")
-        document.getElementById("addInvestorOrNominee-legend").select(".visuallyhidden").text() shouldBe
-          Messages("page.investors.AddInvestorOrNominee.heading")
+
+        document.select("label[for=addInvestorOrNominee-investor]").text() shouldBe Messages("page.investors.AddInvestorOrNominee.radioButton.one")
+        document.select("label[for=addInvestorOrNominee-nominee]").text() shouldBe Messages("page.investors.AddInvestorOrNominee.radioButton.two")
+
+        document.select("legend").text() shouldBe Messages("page.investors.AddInvestorOrNominee.heading")
+        document.select("legend").hasClass("visuallyhidden") shouldBe true
+        document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe false
 
         document.select("form").attr("action") shouldBe controllers.eis.routes.AddInvestorOrNomineeController.submit().url
         document.select("button").text() shouldBe Messages("common.button.snc")
@@ -99,10 +100,14 @@ class AddInvestorOrNomineeSpec extends ViewSpec {
       document.select("h1").text() shouldBe Messages("page.investors.AddInvestorOrNominee.heading")
       document.select("article p").get(0).text() shouldBe Messages("page.investors.AddInvestorOrNominee.info.one")
       document.select("article p").get(1).text() shouldBe Messages("page.investors.AddInvestorOrNominee.info.two")
-      document.getElementById("addInvestorOrNominee-investorLabel").text() shouldBe Messages("page.investors.AddInvestorOrNominee.radioButton.one")
-      document.getElementById("addInvestorOrNominee-nomineeLabel").text() shouldBe Messages("page.investors.AddInvestorOrNominee.radioButton.two")
-      document.getElementById("addInvestorOrNominee-legend").select(".visuallyhidden").text() shouldBe
-        Messages("page.investors.AddInvestorOrNominee.heading")
+
+
+      document.select("legend").text() shouldBe Messages("page.investors.AddInvestorOrNominee.heading")
+      document.select("legend").hasClass("visuallyhidden") shouldBe true
+      document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe false
+
+      document.select("label[for=addInvestorOrNominee-investor]").text() shouldBe Messages("page.investors.AddInvestorOrNominee.radioButton.one")
+      document.select("label[for=addInvestorOrNominee-nominee]").text() shouldBe Messages("page.investors.AddInvestorOrNominee.radioButton.two")
 
       document.select("form").attr("action") shouldBe controllers.eis.routes.AddInvestorOrNomineeController.submit().url
       document.select("button").text() shouldBe Messages("common.button.snc")
@@ -122,10 +127,13 @@ class AddInvestorOrNomineeSpec extends ViewSpec {
       document.select("h1").text() shouldBe Messages("page.investors.AddInvestorOrNominee.heading")
       document.select("article p").get(0).text() shouldBe Messages("page.investors.AddInvestorOrNominee.info.one")
       document.select("article p").get(1).text() shouldBe Messages("page.investors.AddInvestorOrNominee.info.two")
-      document.getElementById("addInvestorOrNominee-investorLabel").text() shouldBe Messages("page.investors.AddInvestorOrNominee.radioButton.one")
-      document.getElementById("addInvestorOrNominee-nomineeLabel").text() shouldBe Messages("page.investors.AddInvestorOrNominee.radioButton.two")
-      document.getElementById("addInvestorOrNominee-legend").select(".visuallyhidden").text() shouldBe
-        Messages("page.investors.AddInvestorOrNominee.heading")
+
+
+      document.select("label[for=addInvestorOrNominee-investor]").text() shouldBe Messages("page.investors.AddInvestorOrNominee.radioButton.one")
+      document.select("label[for=addInvestorOrNominee-nominee]").text() shouldBe Messages("page.investors.AddInvestorOrNominee.radioButton.two")
+
+      document.select("legend").text() shouldBe Messages("page.investors.AddInvestorOrNominee.heading")
+      document.select("legend").hasClass("visuallyhidden") shouldBe true
 
       document.select("form").attr("action") shouldBe controllers.eis.routes.AddInvestorOrNomineeController.submit().url
       document.select("button").text() shouldBe Messages("common.button.snc")

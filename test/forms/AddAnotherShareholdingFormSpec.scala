@@ -20,6 +20,7 @@ import models.AddAnotherShareholdingModel
 import org.scalatestplus.play.OneAppPerSuite
 import uk.gov.hmrc.play.test.UnitSpec
 import forms.AddAnotherShareholdingForm._
+import play.api.data.FormError
 import play.api.i18n.Messages
 import play.api.i18n.Messages.Implicits._
 

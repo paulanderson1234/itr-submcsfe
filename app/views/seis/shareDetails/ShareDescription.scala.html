@@ -14,10 +14,10 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.play.views.html.helpers.form
+@import uk.gov.hmrc.play.views.html.helpers.{form, errorSummary}
 @import models.ShareDescriptionModel
 @import common.Constants
-@import views.html.helpers.{backButtonWithProgress, errorSummary, textArea, externalLink}
+@import views.html.helpers.{backButtonWithProgress, textArea, externalLink}
 
 @(shareDescriptionForm: Form[ShareDescriptionModel], backUrl: String, shareIssueDate: String)(implicit request: Request[_], messages: Messages)
 
@@ -25,7 +25,7 @@
 
 @backButtonWithProgress(backUrl, Messages("common.section.progress.details.three"))
 
-    @errorSummary(shareDescriptionForm, "share-description", "descriptionTextArea")
+    @errorSummary(Messages("common.error.summary.heading"), shareDescriptionForm)
 
     <h1 id="main-heading" class="form-title heading-xlarge">@Messages("page.shares.shareDescription.heading", shareIssueDate)</h1>
 
@@ -44,17 +44,22 @@
 
     <fieldset>
         <legend class="visuallyhidden">@Messages("page.shares.shareDescription.heading", shareIssueDate)</legend>
-        <div class="form-group">
             <span class = "form-hint" id="desc-one">@Messages("page.shares.shareDescription.question.hint")</span>
-            @textArea(
-            shareDescriptionForm("descriptionTextArea"),
-            '_cols -> "45",
-            '_rows -> "3",
-            '_maxLength-> Constants.shortTextLimit,
-            '_label-> Messages("page.shares.shareDescription.heading", shareIssueDate),
-            '_labelTextClass-> "visuallyhidden"
-            )
-        </div>
+            <div class="char-counter" data-char-counter>
+                @textArea(
+                shareDescriptionForm("descriptionTextArea"),
+                '_cols -> "45",
+                '_rows -> "3",
+                '_maxLength-> Constants.shortTextLimit,
+                '_label-> Messages("page.shares.shareDescription.heading", shareIssueDate),
+                '_labelTextClass-> "visuallyhidden",
+                '_percentageWidth -> 98,
+                '_dataCharField -> "data_char_field"
+                )
+                <p class="char-counter-text flush" id="no-js-counter-text">
+                    @Messages("common.max.length.no.js", Constants.shortTextLimit)
+                </p>
+            </div>
 
         <details>
             <summary><span id="help" class="summary">@Messages("common.help.whereToFind")</span></summary>
@@ -66,8 +71,10 @@
 
 
     </fieldset>
-    <div class="form-group">
         <button class="btn button" type="submit" id="next">@Messages("common.button.snc")</button>
-    </div>
     }
+
+    <script>
+        document.getElementById("no-js-counter-text").style.visibility = "hidden";
+    </script>
 }

@@ -52,7 +52,7 @@ class AcknowledgementSpec extends ViewSpec {
     }
 
     "have a what next section" which {
-      lazy val section = document.select("div.column-two-thirds > div.form-group").get(1)
+      lazy val section = document.select("div.form-group").get(1)
 
       "has the correct subheading" in {
         section.select("h2").text() shouldBe Messages("common.error.soft.secondaryHeading")
@@ -92,7 +92,7 @@ class AcknowledgementSpec extends ViewSpec {
     }
 
     "have a supporting documents section" which {
-      lazy val section = document.select("div.column-two-thirds > div.form-group").get(2)
+      lazy val section = document.select("div.form-group").get(3)
 
       "has the correct subheading" in {
         section.select("h2").text() shouldBe Messages("page.checkAndSubmit.acknowledgement.supporting.docs.heading")
@@ -128,7 +128,7 @@ class AcknowledgementSpec extends ViewSpec {
     }
 
     "has a final instructions paragraph" which {
-      lazy val paragraph = document.select("div.column-two-thirds > div.form-group").get(3).select("p")
+      lazy val paragraph = document.select("div.form-group").get(4).select("p")
 
       "has the first part of the message" in {
         paragraph.select("span").first().text() shouldBe Messages("page.checkAndSubmit.acknowledgement.upload.one")

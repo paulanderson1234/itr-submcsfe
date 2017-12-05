@@ -15,12 +15,13 @@
  *@
 
 @import uk.gov.hmrc.play.views.html.{helpers => govHelpers}
+@import uk.gov.hmrc.play.views.html.helpers.{form, inputRadioGroup}
 
 @(form: Form[_], fieldName: String, questionText:String, content:Html, helpText:Option[String] = None, legendClass:Option[String] = None)(implicit messages: Messages)
 
-<div class="form-group" data-hidden='hidden'>
+<div class="form-group" data-hidden='hidden' id="hasStartedResearch">
 
-    @formInputRadioGroup(
+    @inputRadioGroup(
     field = form(fieldName),
     Seq(
     "Yes"->Messages("common.base.yes"),

@@ -15,8 +15,8 @@
  *@
 
 @import models.TotalAmountSpentModel
-@import views.html.helpers.{errorSummary, inputWithCurrencySymbol, backButtonWithProgress}
-@import uk.gov.hmrc.play.views.html.helpers.form
+@import views.html.helpers.{inputWithCurrencySymbol, backButtonWithProgress}
+@import uk.gov.hmrc.play.views.html.helpers.{form, errorSummary}
 @import common.Constants
 
 @(totalAmountSpentForm: Form[TotalAmountSpentModel])(implicit request: Request[_], messages: Messages)
@@ -25,7 +25,7 @@
 
 @backButtonWithProgress(controllers.seis.routes.TotalAmountRaisedController.show().url, Messages("common.section.progress.details.three"))
 
-@errorSummary(totalAmountSpentForm, "total-amount-spent", "totalAmountSpent")
+@errorSummary(Messages("common.error.summary.heading"), totalAmountSpentForm)
 
 <h1 class="heading-xlarge" id="main-heading">@Messages("page.shareDetails.totalAmountSpent.heading")</h1>
 

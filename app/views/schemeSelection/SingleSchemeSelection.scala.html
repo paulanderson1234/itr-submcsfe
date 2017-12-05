@@ -16,8 +16,8 @@
 
 @import models.submission.SingleSchemeTypesModel
 @import common.Constants
-@import uk.gov.hmrc.play.views.html.helpers.form
-@import views.html.helpers.{externalLink,backButton,singleRadioButton,errorSummary, formInputRadioGroupSingleScheme}
+@import uk.gov.hmrc.play.views.html.helpers.{form, inputRadioGroup, errorSummary}
+@import views.html.helpers.{externalLink,backButton}
 
 @(singleSchemeSelectionForm: Form[SingleSchemeTypesModel])(implicit request: Request[_], messages: Messages)
 
@@ -49,26 +49,28 @@
 
 @backButton(controllers.routes.HomeController.redirectToHub().url)
 
-@errorSummary(singleSchemeSelectionForm, "single-scheme-selection", "singleSchemeSelection")
+
+@errorSummary(Messages("common.error.summary.heading"), singleSchemeSelectionForm)
 
 <h1 class="form-title heading-xlarge" id="main-heading">@Messages("page.schemeSelection.SchemeSelection.singlescheme.heading")</h1>
 
 @form(action = controllers.schemeSelection.routes.SingleSchemeSelectionController.submit()) {
 
-<div class="form-group">
+<div class="form-group" id ="singleSchemeSelection">
     <p id="scheme-selection-desc">@Messages("page.schemeSelection.SchemeSelection.desc")</p>
-    @formInputRadioGroupSingleScheme(
+    @inputRadioGroup(
     field = singleSchemeSelectionForm("singleSchemeSelection"),
     Seq(Constants.schemeTypeEis -> Messages("page.schemeSelection.SchemeSelection.radiobutton.eis"),
     Constants.schemeTypeSeis -> Messages("page.schemeSelection.SchemeSelection.radiobutton.seis")),
     '_legend -> Messages("page.schemeSelection.SchemeSelection.singlescheme.heading"),
-    '_legendClass -> "visuallyhidden",
     '_labelAfter -> true,
+    '_legendClass -> "visuallyhidden",
     '_labelClass -> "block-label",
-    '_groupClass -> "block",
-    '_schemeDescription -> schemeDescription
+    '_groupClass -> "block"
     )
 </div>
+
+@schemeDescription
 
 <div class="form-group">
     <button class="btn button" type="submit" id="next">@Messages("common.button.snc")</button>

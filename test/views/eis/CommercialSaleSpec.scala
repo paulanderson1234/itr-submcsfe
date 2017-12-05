@@ -65,12 +65,18 @@ class CommercialSaleSpec extends ViewSpec {
       document.getElementById("form-hint-id").text() shouldBe Messages("common.date.hint.example")
       document.getElementById("question-text-id").text() shouldBe Messages("page.companyDetails.CommercialSale.question.hint")
       document.getElementById("question-text-id").hasClass("h2-heading") shouldBe true
-      document.body.getElementById("question-date-text-legend-id").text shouldBe Messages("page.companyDetails.CommercialSale.question.hint")
-      document.getElementById("hasCommercialSale-yesLabel").text() shouldBe Messages("common.radioYesLabel")
-      document.getElementById("hasCommercialSale-noLabel").text() shouldBe Messages("common.radioNoLabel")
+
+      document.select("label[for=hasCommercialSale-yes]").text() shouldBe Messages("common.radioYesLabel")
+      document.select("label[for=hasCommercialSale-no]").text() shouldBe Messages("common.radioNoLabel")
+      //println(s"=================" +  document.select("legend").text())
+     // document.select("legend").text() shouldBe Messages("page.companyDetails.CommercialSale.question.hint")
+      document.select("legend").hasClass("visuallyhidden") shouldBe true
+
       document.body.getElementById("back-link").attr("href") shouldEqual testUrl
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.one")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
+
+      document.select("error-summary--show").isEmpty shouldBe true
     }
 
 
@@ -85,9 +91,11 @@ class CommercialSaleSpec extends ViewSpec {
       document.getElementById("form-hint-id").text() shouldBe Messages("common.date.hint.example")
       document.getElementById("question-text-id").text() shouldBe Messages("page.companyDetails.CommercialSale.question.hint")
       document.getElementById("question-text-id").hasClass("h2-heading")  shouldBe true
-      document.body.getElementById("question-date-text-legend-id").text shouldBe Messages("page.companyDetails.CommercialSale.question.hint")
-      document.getElementById("hasCommercialSale-yesLabel").text() shouldBe Messages("common.radioYesLabel")
-      document.getElementById("hasCommercialSale-noLabel").text() shouldBe Messages("common.radioNoLabel")
+      document.select("label[for=hasCommercialSale-yes]").text() shouldBe Messages("common.radioYesLabel")
+      document.select("label[for=hasCommercialSale-no]").text() shouldBe Messages("common.radioNoLabel")
+      //document.select("legend").text() shouldBe Messages("page.companyDetails.CommercialSale.question.hint")
+      document.select("legend").hasClass("visuallyhidden") shouldBe true
+      document.select("error-summary--show").isEmpty shouldBe true
       document.body.getElementById("back-link").attr("href") shouldEqual testUrlAnother
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.one")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
@@ -104,13 +112,14 @@ class CommercialSaleSpec extends ViewSpec {
       document.getElementById("form-hint-id").text() shouldBe Messages("common.date.hint.example")
       document.getElementById("question-text-id").text() shouldBe Messages("page.companyDetails.CommercialSale.question.hint")
       document.getElementById("question-text-id").hasClass("h2-heading") shouldBe true
-      document.body.getElementById("question-date-text-legend-id").text shouldBe Messages("page.companyDetails.CommercialSale.question.hint")
-      document.getElementById("hasCommercialSale-yesLabel").text() shouldBe Messages("common.radioYesLabel")
-      document.getElementById("hasCommercialSale-noLabel").text() shouldBe Messages("common.radioNoLabel")
+      document.select("label[for=hasCommercialSale-yes]").text() shouldBe Messages("common.radioYesLabel")
+      document.select("label[for=hasCommercialSale-no]").text() shouldBe Messages("common.radioNoLabel")
+     // document.select("legend").text() shouldBe Messages("page.companyDetails.CommercialSale.question.hint")
+      document.select("legend").hasClass("visuallyhidden") shouldBe true
       document.body.getElementById("back-link").attr("href") shouldEqual testUrl
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.one")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
-      document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe true
+      document.select("error-summary--show").isEmpty shouldBe true
     }
 
     "Verify that the commercial sale page contains the correct elements when an invalid CommercialSaleYesModel is passed" in new Setup {
@@ -124,9 +133,10 @@ class CommercialSaleSpec extends ViewSpec {
       document.getElementById("form-hint-id").text() shouldBe Messages("common.date.hint.example")
       document.getElementById("question-text-id").text() shouldBe Messages("page.companyDetails.CommercialSale.question.hint")
       document.getElementById("question-text-id").hasClass("h2-heading") shouldBe true
-      document.body.getElementById("question-date-text-legend-id").text shouldBe Messages("page.companyDetails.CommercialSale.question.hint")
-      document.getElementById("hasCommercialSale-yesLabel").text() shouldBe Messages("common.radioYesLabel")
-      document.getElementById("hasCommercialSale-noLabel").text() shouldBe Messages("common.radioNoLabel")
+      document.select("label[for=hasCommercialSale-yes]").text() shouldBe Messages("common.radioYesLabel")
+      document.select("label[for=hasCommercialSale-no]").text() shouldBe Messages("common.radioNoLabel")
+      //document.select("legend").text() shouldBe Messages("page.companyDetails.CommercialSale.question.hint")
+      document.select("legend").hasClass("visuallyhidden") shouldBe true
       document.body.getElementById("back-link").attr("href") shouldEqual testUrl
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.one")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")

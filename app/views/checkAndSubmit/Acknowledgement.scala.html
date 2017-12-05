@@ -26,11 +26,9 @@
 
 
 <div class="grid-row">
-    <div class="column-two-thirds">
-
         <div class="form-group">
             <div class="transaction-banner--complete">
-                <h1 id="submission-confirmation" class="heading-large banner-white">@Messages("page.checkAndsubmit.attachments.acknowledgement.submission.confirmation")</h1>
+                <h1 id="submission-confirmation" class="transaction-banner__heading">@Messages("page.checkAndsubmit.attachments.acknowledgement.submission.confirmation")</h1>
 
 
             </div>
@@ -46,7 +44,6 @@
         <div class="form-group">
             <a id="submit" class="button" href="@controllers.routes.HomeController.redirectToHub().url">@Messages("page.checkAndsubmit.attachments.acknowledgement.button.confirm")</a>
         </div>
-    </div>
 </div>
 
 }

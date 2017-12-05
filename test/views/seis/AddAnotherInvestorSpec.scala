@@ -57,13 +57,14 @@ class AddAnotherInvestorSpec extends ViewSpec {
       document.title() shouldBe Messages("page.investors.addAnotherInvestor.title")
       document.getElementById("main-heading").text() shouldBe Messages("page.investors.addAnotherInvestor.heading")
       document.getElementById("main-heading").hasClass("h1-heading")
-      document.getElementById("addAnotherInvestor-yesLabel").text() shouldBe Messages("common.radioYesLabel")
-      document.getElementById("addAnotherInvestor-noLabel").text() shouldBe Messages("common.radioNoLabel")
+      document.select("label[for=addAnotherInvestor-yes]").text() shouldBe Messages("common.radioYesLabel")
+      document.select("label[for=addAnotherInvestor-no]").text() shouldBe Messages("common.radioNoLabel")
+      document.select("legend").text() shouldBe Messages("page.investors.addAnotherInvestor.legend")
+      document.select("legend").hasClass("visuallyhidden") shouldBe true
+      document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe false
       document.body.getElementById("back-link").attr("href") shouldEqual routes.ReviewAllInvestorsController.show().url
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.four")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
-      document.getElementById("addAnotherInvestor-legend").hasClass("visuallyhidden")
-      document.getElementById("addAnotherInvestor-legend").text shouldBe Messages("page.investors.addAnotherInvestor.legend")
     }
 
 
@@ -75,15 +76,14 @@ class AddAnotherInvestorSpec extends ViewSpec {
       }
       document.title() shouldBe Messages("page.investors.addAnotherInvestor.title")
       document.getElementById("main-heading").text() shouldBe Messages("page.investors.addAnotherInvestor.heading")
-      document.getElementById("addAnotherInvestor-yesLabel").text() shouldBe Messages("common.radioYesLabel")
-      document.getElementById("addAnotherInvestor-noLabel").text() shouldBe Messages("common.radioNoLabel")
+      document.select("label[for=addAnotherInvestor-yes]").text() shouldBe Messages("common.radioYesLabel")
+      document.select("label[for=addAnotherInvestor-no]").text() shouldBe Messages("common.radioNoLabel")
+      document.select("legend").text() shouldBe Messages("page.investors.addAnotherInvestor.legend")
+      document.select("legend").hasClass("visuallyhidden") shouldBe true
       document.body.getElementById("back-link").attr("href") shouldEqual controllers.seis.routes.ReviewAllInvestorsController.show().url
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.four")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
-      document.getElementById("addAnotherInvestor-legend").hasClass("visuallyhidden")
-      document.getElementById("addAnotherInvestor-legend").text shouldBe Messages("page.investors.addAnotherInvestor.legend")
-      document.getElementById("error-summary-display").hasClass("error-summary--show")
-      document.getElementById("addAnotherInvestor-error-summary")
+      document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe true
 
     }
   }

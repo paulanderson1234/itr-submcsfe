@@ -15,9 +15,9 @@
  *@
 
 @import models.AddAnotherInvestorModel
-@import uk.gov.hmrc.play.views.html.helpers.form
+@import uk.gov.hmrc.play.views.html.helpers.{form, inputRadioGroup, errorSummary}
 @import common.Constants
-@import views.html.helpers.{backButtonWithProgress, formInputRadioGroup, errorSummary, hiddenField}
+@import views.html.helpers.{backButtonWithProgress, hiddenField}
 
 @(addAnotherInvestorForm: Form[AddAnotherInvestorModel])(implicit request: Request[_], messages: Messages)
 
@@ -27,15 +27,14 @@
 @backButtonWithProgress(controllers.seis.routes.ReviewAllInvestorsController.show().url, Messages("common.section.progress.details.four"))
 
 <div class="grid-row">
-    <div class="column-two-thirds">
 
-        @errorSummary(addAnotherInvestorForm, "add-another-investor", "addAnotherInvestor")
+        @errorSummary(Messages("common.error.summary.heading"), addAnotherInvestorForm)
 
         <h1 id="main-heading" class="form-title heading-xlarge">@Messages("page.investors.addAnotherInvestor.heading")</h1>
 
         @form(action = controllers.seis.routes.AddAnotherInvestorController.submit()) {
-        <div class="form-group">
-            @formInputRadioGroup(
+        <div class="form-group" id="addAnotherInvestor">
+            @inputRadioGroup(
             field = addAnotherInvestorForm("addAnotherInvestor"),
             Seq(
             Constants.StandardRadioButtonYesValue -> Messages("common.radioYesLabel"),
@@ -52,7 +51,6 @@
         <div class="form-group">
             <button class="btn button" type="submit" id="next">@Messages("common.button.snc")</button>
         </div>
-        }
-    </div>
+    }
 </div>
 }

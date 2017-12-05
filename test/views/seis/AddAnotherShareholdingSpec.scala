@@ -50,7 +50,7 @@ class AddAnotherShareholdingSpec extends ViewSpec with FakeRequestHelper {
       }
 
       "not contain an error summary" in {
-        doc.select("div.error-summary").isEmpty shouldBe true
+        doc.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe false
       }
 
       "has a progress bar with the correct text" in {
@@ -78,13 +78,12 @@ class AddAnotherShareholdingSpec extends ViewSpec with FakeRequestHelper {
       }
 
       "have an input label for 'Yes'" which {
-
         "contains the correct text" in {
           doc.select("label[for=addAnotherShareholding-yes]").text() shouldBe Constants.StandardRadioButtonYesValue
         }
 
         "contains the correct value" in {
-          doc.select("label[for=addAnotherShareholding-yes] input").attr("value") shouldBe Constants.StandardRadioButtonYesValue
+          doc.select("#addAnotherShareholding-yes").attr("value") shouldBe Constants.StandardRadioButtonYesValue
         }
       }
 
@@ -95,7 +94,7 @@ class AddAnotherShareholdingSpec extends ViewSpec with FakeRequestHelper {
         }
 
         "contains the correct value" in {
-          doc.select("label[for=addAnotherShareholding-no] input").attr("value") shouldBe Constants.StandardRadioButtonNoValue
+          doc.select("#addAnotherShareholding-no").attr("value") shouldBe Constants.StandardRadioButtonNoValue
         }
       }
 
@@ -159,7 +158,7 @@ class AddAnotherShareholdingSpec extends ViewSpec with FakeRequestHelper {
         }
 
         "contains the correct value" in {
-          doc.select("label[for=addAnotherShareholding-yes] input").attr("value") shouldBe Constants.StandardRadioButtonYesValue
+          doc.select("#addAnotherShareholding-yes").attr("value") shouldBe Constants.StandardRadioButtonYesValue
         }
       }
 
@@ -170,7 +169,7 @@ class AddAnotherShareholdingSpec extends ViewSpec with FakeRequestHelper {
         }
 
         "contains the correct value" in {
-          doc.select("label[for=addAnotherShareholding-no] input").attr("value") shouldBe Constants.StandardRadioButtonNoValue
+          doc.select("#addAnotherShareholding-no").attr("value") shouldBe Constants.StandardRadioButtonNoValue
         }
       }
 

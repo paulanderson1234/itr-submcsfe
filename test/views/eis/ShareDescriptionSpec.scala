@@ -56,7 +56,7 @@ class ShareDescriptionSpec extends ViewSpec {
         document.getElementById("help").text() shouldBe Messages("common.help.whereToFind")
         document.getElementById("share-description-where-to-find").text() shouldBe Messages("page.shares.ShareDescription.location")
         document.getElementById("next").text() shouldBe Messages("common.button.snc")
-        document.select(".error-summary").isEmpty shouldBe true
+        document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe false
 
         <div class="form-group">
           <p id="description-one" class="lede">@Messages("page.shares.shareDescription.text.two")</p>
@@ -100,7 +100,7 @@ class ShareDescriptionSpec extends ViewSpec {
         document.getElementById("help").text() shouldBe Messages("common.help.whereToFind")
         document.getElementById("share-description-where-to-find").text() shouldBe Messages("page.shares.ShareDescription.location")
         document.getElementById("next").text() shouldBe Messages("common.button.snc")
-        document.select(".error-summary").isEmpty shouldBe true
+        document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe false
 
       }
 

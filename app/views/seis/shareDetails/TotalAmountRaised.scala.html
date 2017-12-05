@@ -1,22 +1,22 @@
 @*
- * Copyright 2017 HM Revenue & Customs
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *@
+* Copyright 2017 HM Revenue & Customs
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*     http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*@
 
 @import models.TotalAmountRaisedModel
-@import uk.gov.hmrc.play.views.html.helpers.form
-@import views.html.helpers.{errorSummary, inputWithCurrencySymbol, backButtonWithProgress}
+@import uk.gov.hmrc.play.views.html.helpers.{form, errorSummary}
+@import views.html.helpers.{inputWithCurrencySymbol, backButtonWithProgress}
 
 @(totalAmountRaisedForm: Form[TotalAmountRaisedModel])(implicit request: Request[_], messages: Messages)
 
@@ -26,35 +26,34 @@
 
 
 <div class="grid-row">
-    <div class="column-two-thirds">
 
-        @errorSummary(totalAmountRaisedForm, "total-amount-raised", "amount")        
-		<h1 class="heading-xlarge" id="main-heading">@Messages("page.shareDetails.totalAmountRaised.heading")</h1>
+    @errorSummary(Messages("common.error.summary.heading"), totalAmountRaisedForm)
 
-		<div class="form-group">
-			<p id="description-one" class="lede">@Messages("page.shareDetails.totalAmountRaised.descriptionOne.text")</p>
-		</div>
-        
-		@form(action = controllers.seis.routes.TotalAmountRaisedController.submit()) {
-        <div class="form-group">
-            @inputWithCurrencySymbol(
-            totalAmountRaisedForm("amount"),
-            '_divClass -> "form-label",
-            '_labelId -> "label-amount",
-            '_label -> Messages("page.shareDetails.totalAmountRaised.heading"),
-            '_labelTextClass -> "visuallyhidden",
-            '_inputClass -> "input--no-spinner input--left-padding",
-            '_type -> "text",
-            '_maxlength -> "9",
-            'id -> "amount"
-            )
+    <h1 class="heading-xlarge" id="main-heading">@Messages("page.shareDetails.totalAmountRaised.heading")</h1>
 
-        </div>
-
-        <div class="form-group">
-            <button class="btn button" type="submit" id="next">@Messages("common.button.snc")</button>
-        </div>
-        }
+    <div class="form-group">
+        <p id="description-one" class="lede">@Messages("page.shareDetails.totalAmountRaised.descriptionOne.text")</p>
     </div>
+
+    @form(action = controllers.seis.routes.TotalAmountRaisedController.submit()) {
+    <div class="form-group" id="amount">
+        @inputWithCurrencySymbol(
+        totalAmountRaisedForm("amount"),
+        '_divClass -> "form-label",
+        '_labelId -> "label-amount",
+        '_label -> Messages("page.shareDetails.totalAmountRaised.heading"),
+        '_labelTextClass -> "visuallyhidden",
+        '_inputClass -> "input--no-spinner input--left-padding",
+        '_type -> "text",
+        '_maxlength -> "9",
+        'id -> "amount"
+        )
+
+    </div>
+
+    <div class="form-group">
+        <button class="btn button" type="submit" id="next">@Messages("common.button.snc")</button>
+    </div>
+    }
 </div>
 }

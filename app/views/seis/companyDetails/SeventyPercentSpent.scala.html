@@ -15,9 +15,9 @@
  *@
 
 @import models.SeventyPercentSpentModel
-@import uk.gov.hmrc.play.views.html.helpers.form
+@import uk.gov.hmrc.play.views.html.helpers.{form, inputRadioGroup, errorSummary}
 @import common.Constants
-@import views.html.helpers.{backButtonWithProgress, formInputRadioGroup, errorSummary, formHint}
+@import views.html.helpers.{backButtonWithProgress, formHint}
 
 @(seventyPercentSpentForm: Form[SeventyPercentSpentModel], backLink:String)(implicit request: Request[_], messages: Messages)
 
@@ -25,13 +25,14 @@
 
 @backButtonWithProgress(backLink, Messages("common.section.progress.details.one"))
 
-@errorSummary(seventyPercentSpentForm, "is-first-trade", "isSeventyPercentSpent")
+@errorSummary(Messages("common.error.summary.heading"), seventyPercentSpentForm)
+
 <h1 class="heading-xlarge" id="main-heading">@Messages("page.companyDetails.seventyPercentSpent.heading")</h1>
 
 @form(action = controllers.seis.routes.SeventyPercentSpentController.submit()) {
 
-<div class="form-group">
-    @formInputRadioGroup(
+<div class="form-group" id="isSeventyPercentSpent">
+    @inputRadioGroup(
     field = seventyPercentSpentForm("isSeventyPercentSpent"),
     Seq(
     Constants.StandardRadioButtonYesValue -> Messages("common.radioYesLabel"),

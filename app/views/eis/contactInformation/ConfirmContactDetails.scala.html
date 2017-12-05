@@ -17,8 +17,8 @@
 @import models.ConfirmCorrespondAddressModel
 @import common.Constants
 @import utils.CountriesHelper
-@import uk.gov.hmrc.play.views.html.helpers.form
-@import views.html.helpers.{errorSummary, formInputRadioGroup, textWithConstErrors, backButtonWithProgress, hiddenField}
+@import uk.gov.hmrc.play.views.html.helpers.{form, inputRadioGroup, errorSummary}
+@import views.html.helpers.{textWithConstErrors, backButtonWithProgress, hiddenField}
 
 @(confirmContactDetailsForm: Form[ConfirmContactDetailsModel])(implicit request: Request[_], messages: Messages)
 
@@ -27,9 +27,8 @@
 @backButtonWithProgress(controllers.eis.routes.InvestmentGrowController.show().toString, Messages("common.section.progress.details.five"))
 
 <div class="grid-row">
-    <div class="column-two-thirds">
 
-        @errorSummary(confirmContactDetailsForm, "confirm-contact-details", "contactDetailsUsed")
+        @errorSummary(Messages("common.error.summary.heading"), confirmContactDetailsForm)
 
         <h1 id="main-heading" class="form-title heading-xlarge">@Messages("page.contactInformation.ConfirmContactDetails.heading")</h1>
 
@@ -45,8 +44,8 @@
 
         @form(action = controllers.eis.routes.ConfirmContactDetailsController.submit()) {
         <div id="radioContactDetailsDiv">
-            <div class="form-group">
-                @formInputRadioGroup(
+            <div class="form-group" id="contactDetailsUse">
+                @inputRadioGroup(
                 field = confirmContactDetailsForm("contactDetailsUse"),
                 Seq(
                 Constants.StandardRadioButtonYesValue->Messages("common.radioYesLabel"),
@@ -88,7 +87,6 @@
         </div>
         }
 
-    </div>
 </div>
 
 }

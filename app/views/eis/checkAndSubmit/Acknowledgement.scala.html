@@ -26,11 +26,9 @@
 
 
 <div class="grid-row">
-    <div class="column-two-thirds">
-
         <div class="form-group">
             <div class="transaction-banner--complete">
-                <h1 id="submission-confirmation" class="heading-large banner-white">@Messages("page.checkAndSubmit.acknowledgement.submissionConfirmation")</h1>
+                <h1 id="submission-confirmation" class="transaction-banner__heading">@Messages("page.checkAndSubmit.acknowledgement.submissionConfirmation")</h1>
                 <p id="ref-number-heading">@Messages("page.checkAndSubmit.acknowledgement.refNumberHeading")</p>
                 <span id="ref-number" class="bold-medium">@submissionResponseModel.formBundleNumber</span>
             </div>
@@ -89,7 +87,6 @@
         <div class="form-group">
             <a id="submit" class="button" href="@config.FrontendAppConfig.feedbackUrl">@Messages("page.checkAndSubmit.acknowledgement.button.confirm")</a>
         </div>
-    </div>
 </div>
 
 }

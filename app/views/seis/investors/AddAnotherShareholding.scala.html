@@ -18,8 +18,7 @@
 @import views.html.helpers.backButtonWithProgress
 @import uk.gov.hmrc.play.views.html.helpers.form
 @import common.Constants
-@import views.html.helpers.formInputRadioGroup
-@import views.html.helpers.errorSummary
+@import uk.gov.hmrc.play.views.html.helpers.{form, inputRadioGroup, errorSummary}
 
 @(addAnotherShareholdingForm: Form[AddAnotherShareholdingModel], processingId: Int)(implicit request: Request[_], messages: Messages)
 
@@ -27,13 +26,13 @@
 
     @backButtonWithProgress(controllers.seis.routes.PreviousShareHoldingsReviewController.show(processingId).url, Messages("common.section.progress.details.four"))
 
-    @errorSummary(addAnotherShareholdingForm, "add-another-shareholding", "addAnotherShareholding")
+    @errorSummary(Messages("common.error.summary.heading"), addAnotherShareholdingForm)
 
     <h1 class="heading-xlarge" id="main-heading">@Messages("page.investors.AddAnotherShareholding.title")</h1>
 
     @form(action = controllers.seis.routes.AddAnotherShareholdingController.submit(processingId)) {
-        <div class="form-group">
-            @formInputRadioGroup(
+        <div class="form-group" id="addAnotherShareholding">
+            @inputRadioGroup(
                 field = addAnotherShareholdingForm("addAnotherShareholding"),
                 Seq(
                     Constants.StandardRadioButtonYesValue -> Messages("common.radioYesLabel"),

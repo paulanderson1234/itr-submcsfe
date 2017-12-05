@@ -15,9 +15,9 @@
  *@
 
 @import models.UsedInvestmentReasonBeforeModel
-@import uk.gov.hmrc.play.views.html.helpers.form
 @import common.Constants
-@import views.html.helpers.{errorSummary, formInputRadioGroup, backButtonWithProgress}
+@import views.html.helpers.{backButtonWithProgress}
+@import uk.gov.hmrc.play.views.html.helpers.{form, inputRadioGroup, errorSummary}
 
 @(usedInvestmentReasonBeforeForm: Form[UsedInvestmentReasonBeforeModel])(implicit request: Request[_], messages: Messages)
 
@@ -25,14 +25,15 @@
 
 @backButtonWithProgress(controllers.eis.routes.TotalAmountRaisedController.show().toString, Messages("common.section.progress.details.three"))
 
-    @errorSummary(usedInvestmentReasonBeforeForm, "used-investment-reason-before", "usedInvestmentReasonBefore")
+    @errorSummary(Messages("common.error.summary.heading"), usedInvestmentReasonBeforeForm)
+
 
     <h1 class="heading-xlarge" id="main-heading">@Messages("page.investment.UsedInvestmentReasonBefore.heading")</h1>
 
     @form(action = controllers.eis.routes.UsedInvestmentReasonBeforeController.submit()) {
 
-        <div class="form-group">
-            @formInputRadioGroup(
+        <div class="form-group" id="usedInvestmentReasonBefore">
+            @inputRadioGroup(
             field = usedInvestmentReasonBeforeForm("usedInvestmentReasonBefore"),
             Seq(
             Constants.StandardRadioButtonYesValue -> Messages("common.radioYesLabel"),

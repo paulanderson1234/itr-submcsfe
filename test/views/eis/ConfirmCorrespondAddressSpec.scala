@@ -49,8 +49,9 @@ class ConfirmCorrespondAddressSpec extends ViewSpec with BaseSpec {
       document.select("form").attr("action") shouldBe controllers.eis.routes.ConfirmCorrespondAddressController.submit().url
       document.select("legend").text() shouldBe Messages("page.contactInformation.ConfirmCorrespondAddress.heading")
       document.select("legend").hasClass("visuallyhidden") shouldBe true
-      document.body.getElementById("contactAddressUse-yesLabel").text shouldBe Messages("common.radioYesLabel")
-      document.body.getElementById("contactAddressUse-noLabel").text shouldBe Messages("common.radioNoLabel")
+      document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe false
+      document.select("label[for=contactAddressUse-yes]").text() shouldBe Messages("common.radioYesLabel")
+      document.select("label[for=contactAddressUse-no]").text() shouldBe Messages("common.radioNoLabel")
       document.body.select("#contactAddressUse-yes").size() shouldBe 1
       document.body.select("#contactAddressUse-no").size() shouldBe 1
       document.body.getElementById("get-help-action").text shouldBe Messages("common.error.help.text")
@@ -76,8 +77,10 @@ class ConfirmCorrespondAddressSpec extends ViewSpec with BaseSpec {
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       document.body.getElementById("back-link").attr("href") shouldEqual "back-link"
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.five")
-      document.body.getElementById("contactAddressUse-yesLabel").text shouldBe Messages("common.radioYesLabel")
-      document.body.getElementById("contactAddressUse-noLabel").text shouldBe Messages("common.radioNoLabel")
+      document.select("legend").text() shouldBe Messages("page.contactInformation.ConfirmCorrespondAddress.heading")
+      document.select("legend").hasClass("visuallyhidden") shouldBe true
+      document.select("label[for=contactAddressUse-yes]").text() shouldBe Messages("common.radioYesLabel")
+      document.select("label[for=contactAddressUse-no]").text() shouldBe Messages("common.radioNoLabel")
       document.body.select("#contactAddressUse-yes").size() shouldBe 1
       document.body.select("#contactAddressUse-no").size() shouldBe 1
       document.body.getElementById("get-help-action").text shouldBe Messages("common.error.help.text")

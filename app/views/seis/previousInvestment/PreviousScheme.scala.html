@@ -17,7 +17,8 @@
 @import models.PreviousSchemeModel
 @import uk.gov.hmrc.play.views.html.helpers.form
 @import common.Constants
-@import views.html.helpers.{externalLink, formInputRadioGroup, backButtonWithProgress, input, inputWithCurrencySymbol, formInlineDateInput, hiddenField, errorSummary}
+@import uk.gov.hmrc.play.views.html.helpers.{form, inputRadioGroup}
+@import views.html.helpers.{externalLink, backButtonWithProgress, input, inputWithCurrencySymbol, formInlineDateInput, hiddenField, errorSummary}
 
 @(previousSchemeForm: Form[PreviousSchemeModel], backlinkUrl: String)(implicit request: Request[_], messages: Messages)
 
@@ -25,7 +26,7 @@
 
 @backButtonWithProgress(backlinkUrl, Messages("common.section.progress.details.two"))
 
-    @errorSummary(previousSchemeForm, "previous-investment", "investmentDay")
+    @errorSummary(previousSchemeForm, "previous-scheme", "investmentDay")
 
     <h1 class="heading-xlarge" id="main-heading">@Messages("page.investment.PreviousScheme.heading")</h1>
 
@@ -36,8 +37,8 @@
     @form(action = controllers.seis.routes.PreviousSchemeController.submit()) {
         <div class="form-group" data-previous-investment="hidden-other-scheme" data-previous-investment-spent="hidden-investment-spent">
 
-            <div class="form-group">
-            @formInputRadioGroup(
+            <div class="form-group" id="schemeTypeDesc">
+            @inputRadioGroup(
             field = previousSchemeForm("schemeTypeDesc"),
             Seq(
             Constants.schemeTypeEis->Messages("page.previousInvestment.schemeType.eis"),

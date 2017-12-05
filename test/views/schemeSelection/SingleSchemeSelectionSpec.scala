@@ -39,15 +39,18 @@ class SingleSchemeSelectionSpec extends ViewSpec {
       document.getElementById("main-heading").text() shouldBe Messages("page.schemeSelection.SchemeSelection.singlescheme.heading")
       document.getElementById("scheme-selection-desc").text() shouldBe Messages("page.schemeSelection.SchemeSelection.desc")
       document.select("#singleSchemeSelection-eis").size() shouldBe 1
-      document.getElementById("singleSchemeSelection-eisLabel").text() shouldBe Messages("page.schemeSelection.SchemeSelection.radiobutton.eis")
+      //document.getElementById("singleSchemeSelection-eisLabel").text() shouldBe Messages("page.schemeSelection.SchemeSelection.radiobutton.eis")
       document.getElementById("help").text() shouldBe Messages("page.schemeSelection.SchemeSelection.help.subHeading")
 
       document.getElementById("EIS-help-text").text() shouldBe Messages("page.schemeSelection.SchemeSelection.help.eis.text")
       document.getElementById("EIS-bullet-one").text() shouldBe Messages("page.schemeSelection.SchemeSelection.help.eis.bullet.one")
       document.getElementById("EIS-bullet-two").text() shouldBe Messages("page.schemeSelection.SchemeSelection.help.eis.bullet.two")
 
+      document.select("label[for=singleSchemeSelection-eis]").text() shouldBe Messages("page.schemeSelection.SchemeSelection.radiobutton.eis")
+      document.select("label[for=singleSchemeSelection-seis]").text() shouldBe Messages("page.schemeSelection.SchemeSelection.radiobutton.seis")
+
       document.select("#singleSchemeSelection-seis").size() shouldBe 1
-      document.getElementById("singleSchemeSelection-seisLabel").text() shouldBe Messages("page.schemeSelection.SchemeSelection.radiobutton.seis")
+      //document.getElementById("singleSchemeSelection-seisLabel").text() shouldBe Messages("page.schemeSelection.SchemeSelection.radiobutton.seis")
       document.getElementById("SEIS-help-text").text() shouldBe Messages("page.schemeSelection.SchemeSelection.help.seis.text")
 
       document.getElementById("next").text() shouldBe Messages("common.button.snc")

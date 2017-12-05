@@ -104,7 +104,7 @@ class FullTimeEmployeeCountSpec extends ViewSpec {
       }
 
       "have an error summary" in {
-        document.select(".error-summary").isEmpty shouldBe true
+        document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe false
       }
 
       "have a next button" in {
@@ -184,7 +184,7 @@ class FullTimeEmployeeCountSpec extends ViewSpec {
       }
 
       "have an error summary" in {
-        document.select(".error-summary").isEmpty shouldBe true
+        document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe false
       }
 
       "have a next button" in {
@@ -264,7 +264,8 @@ class FullTimeEmployeeCountSpec extends ViewSpec {
       }
 
       "have an error summary" in {
-        document.select(".error-summary").isEmpty shouldBe true
+
+        document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe false
       }
 
       "have a next button" in {

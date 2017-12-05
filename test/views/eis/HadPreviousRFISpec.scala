@@ -44,14 +44,13 @@ class HadPreviousRFISpec extends ViewSpec {
       document.getElementById("bullet-four").text() shouldBe Messages("page.previousInvestment.schemes.bullet.four")
       document.select("#hadPreviousRFI-yes").size() shouldBe 1
       document.select("#hadPreviousRFI-yes").size() shouldBe 1
-      document.getElementById("hadPreviousRFI-yesLabel").text() shouldBe Messages("common.radioYesLabel")
-      document.getElementById("hadPreviousRFI-noLabel").text() shouldBe Messages("common.radioNoLabel")
+      document.select("label[for=hadPreviousRFI-yes]").text() shouldBe Messages("common.radioYesLabel")
+      document.select("label[for=hadPreviousRFI-no]").text() shouldBe Messages("common.radioNoLabel")
       document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.two")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
-
-      document.getElementById("hadPreviousRFI-legend").hasClass("visuallyhidden") shouldBe true
-      document.getElementById("hadPreviousRFI-legend").text shouldBe Messages("page.previousInvestment.hadPreviousRFI.legend")
-      document.select(".error-summary").isEmpty shouldBe true
+      document.select("legend").text() shouldBe Messages("page.previousInvestment.hadPreviousRFI.legend")
+      document.select("legend").hasClass("visuallyhidden") shouldBe true
+      document.select(".error-summary").first().getElementsByAttributeValueContaining("style", "display").isEmpty shouldBe true
     }
 
     "contain the correct elements when a populated form is passed to the view" in {
@@ -68,15 +67,16 @@ class HadPreviousRFISpec extends ViewSpec {
       document.getElementById("bullet-three").text() shouldBe Messages("page.previousInvestment.schemes.bullet.three")
       document.getElementById("bullet-four").text() shouldBe Messages("page.previousInvestment.schemes.bullet.four")
       document.select("#hadPreviousRFI-yes").size() shouldBe 1
-      document.select("#hadPreviousRFI-yes").size() shouldBe 1
-      document.getElementById("hadPreviousRFI-yesLabel").text() shouldBe Messages("common.radioYesLabel")
-      document.getElementById("hadPreviousRFI-noLabel").text() shouldBe Messages("common.radioNoLabel")
+      document.select("#hadPreviousRFI-no").size() shouldBe 1
+      document.select("label[for=hadPreviousRFI-yes]").text() shouldBe Messages("common.radioYesLabel")
+      document.select("label[for=hadPreviousRFI-no]").text() shouldBe Messages("common.radioNoLabel")
       document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.two")
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
 
-      document.getElementById("hadPreviousRFI-legend").hasClass("visuallyhidden") shouldBe true
-      document.getElementById("hadPreviousRFI-legend").text shouldBe Messages("page.previousInvestment.hadPreviousRFI.legend")
-      document.select(".error-summary").isEmpty shouldBe true
+      document.select("legend").text() shouldBe Messages("page.previousInvestment.hadPreviousRFI.legend")
+      document.select("legend").hasClass("visuallyhidden") shouldBe true
+      document.select(".error-summary").first().getElementsByAttributeValueContaining("style", "display").isEmpty shouldBe true
+
     }
 
     "contain an error summary when a form with errors is passed to the view" in  {

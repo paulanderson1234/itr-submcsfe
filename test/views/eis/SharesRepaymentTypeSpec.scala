@@ -38,12 +38,12 @@ class SharesRepaymentTypeSpec extends ViewSpec {
       document.getElementById("main-heading").text() shouldBe Messages("page.sharesRepaymentType.heading")
       document.getElementById("main-heading").hasClass("heading-xlarge") shouldBe true
       document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.four")
-      document.getElementById("sharesRepaymentType-sharesLabel").text() shouldBe Messages("page.sharesRepaymentType.shares")
-      document.getElementById("sharesRepaymentType-debenturesLabel").text() shouldBe Messages("page.sharesRepaymentType.debentures")
+      document.select("label[for=sharesRepaymentType-shares]").text() shouldBe Messages("page.sharesRepaymentType.shares")
+      document.select("label[for=sharesRepaymentType-debentures]").text() shouldBe Messages("page.sharesRepaymentType.debentures")
+      document.select("legend").text() shouldBe Messages("page.sharesRepaymentType.heading")
+      document.select("legend").hasClass("visuallyhidden") shouldBe true
+      document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe false
       document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.WhoRepaidSharesController.show(Some(1)).url
-      document.getElementById("sharesRepaymentType-legend").hasClass("visuallyhidden") shouldBe true
-      document.getElementById("sharesRepaymentType-legend").text shouldBe Messages("page.sharesRepaymentType.heading")
-      document.select(".error-summary").isEmpty shouldBe true
     }
 
     "contain the correct elements when the model is empty and no SharesRepaymentTypeModel is loaded" in new Setup {
@@ -52,12 +52,12 @@ class SharesRepaymentTypeSpec extends ViewSpec {
       document.getElementById("main-heading").text() shouldBe Messages("page.sharesRepaymentType.heading")
       document.getElementById("main-heading").hasClass("heading-xlarge") shouldBe true
       document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.four")
-      document.getElementById("sharesRepaymentType-sharesLabel").text() shouldBe Messages("page.sharesRepaymentType.shares")
-      document.getElementById("sharesRepaymentType-debenturesLabel").text() shouldBe Messages("page.sharesRepaymentType.debentures")
+      document.select("label[for=sharesRepaymentType-shares]").text() shouldBe Messages("page.sharesRepaymentType.shares")
+      document.select("label[for=sharesRepaymentType-debentures]").text() shouldBe Messages("page.sharesRepaymentType.debentures")
+      document.select("legend").text() shouldBe Messages("page.sharesRepaymentType.heading")
+      document.select("legend").hasClass("visuallyhidden") shouldBe true
+      document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe false
       document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.WhoRepaidSharesController.show(Some(1)).url
-      document.getElementById("sharesRepaymentType-legend").hasClass("visuallyhidden") shouldBe true
-      document.getElementById("sharesRepaymentType-legend").text shouldBe Messages("page.sharesRepaymentType.heading")
-      document.select(".error-summary").isEmpty shouldBe true
     }
 
     "contains the correct elements when the page is bound to a request that is invalid and has model errors" in new Setup {
@@ -66,11 +66,11 @@ class SharesRepaymentTypeSpec extends ViewSpec {
       document.getElementById("main-heading").text() shouldBe Messages("page.sharesRepaymentType.heading")
       document.getElementById("main-heading").hasClass("heading-xlarge") shouldBe true
       document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.four")
-      document.getElementById("sharesRepaymentType-sharesLabel").text() shouldBe Messages("page.sharesRepaymentType.shares")
-      document.getElementById("sharesRepaymentType-debenturesLabel").text() shouldBe Messages("page.sharesRepaymentType.debentures")
+      document.select("label[for=sharesRepaymentType-shares]").text() shouldBe Messages("page.sharesRepaymentType.shares")
+      document.select("label[for=sharesRepaymentType-debentures]").text() shouldBe Messages("page.sharesRepaymentType.debentures")
+      document.select("legend").text() shouldBe Messages("page.sharesRepaymentType.heading")
+      document.select("legend").hasClass("visuallyhidden") shouldBe true
       document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.WhoRepaidSharesController.show(Some(1)).url
-      document.getElementById("sharesRepaymentType-legend").hasClass("visuallyhidden") shouldBe true
-      document.getElementById("sharesRepaymentType-legend").text shouldBe Messages("page.sharesRepaymentType.heading")
       document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe true
       document.getElementById("error-summary-heading").text shouldBe Messages("common.error.summary.heading")
       document.getElementById("sharesRepaymentType-error-summary").text shouldBe Messages("validation.common.error.fieldRequired")

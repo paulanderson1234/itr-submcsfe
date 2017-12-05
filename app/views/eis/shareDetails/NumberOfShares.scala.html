@@ -16,9 +16,7 @@
 
 @import models.NumberOfSharesModel
 @import views.html.helpers.backButtonWithProgress
-@import views.html.helpers.errorSummary
-@import views.html.helpers.input
-@import uk.gov.hmrc.play.views.html.helpers.form
+@import uk.gov.hmrc.play.views.html.helpers.{form, input, errorSummary}
 @import common.Constants
 
 @(numberOfSharesForm: Form[NumberOfSharesModel])(implicit request: Request[_], messages: Messages)
@@ -27,7 +25,7 @@
 
     @backButtonWithProgress(controllers.eis.routes.ShareDescriptionController.show().url, Messages("common.section.progress.details.three"))
 
-    @errorSummary(numberOfSharesForm, "full-time-employee-count", "numberOfShares")
+    @errorSummary(Messages("common.error.summary.heading"), numberOfSharesForm)
 
     <h1 class="heading-xlarge" id="main-heading">@Messages("page.shareDetails.numberOfShares.heading")</h1>
 

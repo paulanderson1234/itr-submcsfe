@@ -16,11 +16,9 @@
 
 package views.eis
 
-import controllers.eis.routes
 import forms.IsExistingShareHolderForm._
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import play.api.data.FormError
 import play.api.i18n.Messages
 import views.helpers.ViewSpec
 import play.api.i18n.Messages.Implicits._
@@ -34,11 +32,11 @@ class IsExistingShareHolderSpec extends ViewSpec {
     document.getElementById("next").text() shouldBe Messages("common.button.snc")
     document.body.getElementById("back-link").attr("href") shouldEqual controllers.eis.routes.HowMuchSpentOnSharesController.show(1).url
     document.body.getElementById("progress-section").text shouldBe  Messages("common.section.progress.details.four")
-    document.getElementById("isExistingShareHolder-yesLabel").text() shouldBe Messages("common.radioYesLabel")
-    document.getElementById("isExistingShareHolder-noLabel").text() shouldBe Messages("common.radioNoLabel")
+    document.select("label[for=isExistingShareHolder-yes]").text() shouldBe Messages("common.radioYesLabel")
+    document.select("label[for=isExistingShareHolder-no]").text() shouldBe Messages("common.radioNoLabel")
   }
 
-  val backUrl = controllers.eis.routes.HowMuchSpentOnSharesController.show(1).url
+  lazy val backUrl = controllers.eis.routes.HowMuchSpentOnSharesController.show(1).url
 
   "The Is Existing Share Holder page" should {
     val templateText = "individual"
@@ -56,7 +54,7 @@ class IsExistingShareHolderSpec extends ViewSpec {
 
         commonTests(document, templateText)
 
-        document.getElementById("error-summary-display").hasClass("error-summary--show")
+        document.getElementById("error-summary-display").hasClass("error-summary--show") shouldBe true
       }
     }
   }

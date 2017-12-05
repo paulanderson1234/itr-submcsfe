@@ -15,12 +15,10 @@
  *@
 
 @import models.WasAnyValueReceivedModel
-@import views.html.helpers.backButtonWithProgress
-@import views.html.helpers.errorSummary
-@import views.html.helpers.formHiddenYesNoRadio
-@import views.html.helpers.textArea
 @import common.Constants
 @import uk.gov.hmrc.play.views.html.helpers.form
+
+@import views.html.helpers.{externalLink, backButtonWithProgress, errorSummary, formHiddenYesNoRadio, formInlineDateInput, textArea}
 
 @(wasAnyValueReceivedForm: Form[WasAnyValueReceivedModel])(implicit request: Request[_], messages: Messages)
 
@@ -70,7 +68,9 @@
         <p>@Messages("page.investors.wasAnyValueReceived.guidance.hint")</p>
     </div>
 
+
     @form(action = controllers.seis.routes.WasAnyValueReceivedController.submit()) {
+        <div id ="wasAnyValueReceived">
         @formHiddenYesNoRadio(
             wasAnyValueReceivedForm,
             "wasAnyValueReceived",
@@ -79,9 +79,12 @@
             None,
             Some("visuallyhidden")
         )
+    </div>
+
 
         <div class="form-group">
             <button class="btn button" type="submit" id="next">@Messages("common.button.snc")</button>
         </div>
     }
+
 }

@@ -15,8 +15,9 @@
  *@
 
 @import models.GrossAssetsModel
-@import uk.gov.hmrc.play.views.html.helpers.form
-@import views.html.helpers.{errorSummary, inputWithCurrencySymbol, backButtonWithProgress, formInputRadioGroup}
+@import uk.gov.hmrc.play.views.html.helpers.{form, inputRadioGroup, errorSummary}
+@import views.html.helpers.{backButtonWithProgress}
+
 @import common.Constants
 @import GrossAssetsAfterIssueModel._
 
@@ -27,9 +28,7 @@
 @backButtonWithProgress(controllers.eis.routes.ShareIssueDateController.show().url, Messages("common.section.progress.details.one"))
 
 <div class="grid-row">
-    <div class="column-two-thirds">
-
-        @errorSummary(grossAssetsForm, "gross-assets", "amount")
+        @errorSummary(Messages("common.error.summary.heading"), grossAssetsForm)
 
         <h1 id="main-heading" class="form-title heading-xlarge">@Messages("page.grossAssets.amount.heading")</h1>
 
@@ -43,8 +42,8 @@
             </div>
         </details>
 
-        <div class="form-group">
-            @formInputRadioGroup(
+        <div class="form-group" id="grossAmount">
+            @inputRadioGroup(
             field = grossAssetsForm("grossAmount"),
             Seq(
             Constants.grossAssetsBandOne -> Messages("page.grossAssets.option.up.to", getAmountAsFormattedString(Constants.grossAssetsBandOne.toInt)),
@@ -68,6 +67,5 @@
             <button class="btn button" type="submit" id="next">@Messages("common.button.snc")</button>
         </div>
         }
-    </div>
 </div>
 }

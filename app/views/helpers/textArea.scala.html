@@ -37,6 +37,8 @@
     @if( elements.args.get('_info2) ) { <div id="infoId-2" class="@if( elements.args.get('_infoTextClass) ){ @elements.args.get('_infoTextClass) }">@elements.args.get('_info2)</div> }
     <textarea
             @if( elements.args.get('_inputClass) ){ class="@elements.args.get('_inputClass)" }
+            @if( elements.args.get('_dataCharField) ){ data-char-field="@elements.args.get('_dataCharField)" }
+            @if( elements.args.get('_percentageWidth) ){ style="width:@elements.args.get('_percentageWidth)%" }
             @if( elements.args.get('_rows) ){ rows="@elements.args.get('_rows)" }
             @if( elements.args.get('_cols) ){ cols="@elements.args.get('_cols)" }
             @if( elements.args.get('_maxLength) ){ maxLength="@elements.args.get('_maxLength)" }

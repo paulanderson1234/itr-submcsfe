@@ -17,7 +17,8 @@
 @(field: play.api.data.Field, args: (Symbol,Any)*)(implicit messages: Messages)
 
 @import play.api.i18n._
-@import views.html.helper._
+@import views.html.helper.FieldElements
+@import uk.gov.hmrc.play.views.html.helpers.{form, input}
 
 
 @elements = @{ new FieldElements(field.id, field, null, args.toMap, messages) }

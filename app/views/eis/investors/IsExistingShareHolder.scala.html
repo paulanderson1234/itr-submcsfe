@@ -14,10 +14,10 @@
  * limitations under the License.
  *@
 
-@import views.html.helpers.errorSummary
-@import uk.gov.hmrc.play.views.html.helpers.form
+
+@import uk.gov.hmrc.play.views.html.helpers.{form, inputRadioGroup, errorSummary}
 @import common.Constants
-@import views.html.helpers.{backButtonWithProgress, formInputRadioGroup, hiddenField}
+@import views.html.helpers.{backButtonWithProgress, hiddenField}
 @import models.investorDetails.IsExistingShareHolderModel
 
 @(companyOrIndividual: String, IsExistingShareHolderForm: Form[IsExistingShareHolderModel], backUrl: String)(implicit request: Request[_], messages: Messages)
@@ -26,13 +26,13 @@
 
     @backButtonWithProgress(backUrl, Messages("common.section.progress.details.four"))
 
-    @errorSummary(IsExistingShareHolderForm, "is-existing-share-holder", "isExistingShareHolder")
+    @errorSummary(Messages("common.error.summary.heading"), IsExistingShareHolderForm)
 
     <h1 class="heading-xlarge" id="main-heading">@Messages("page.investors.isExistingShareHolder.heading", companyOrIndividual.toLowerCase)</h1>
 
     @form(action = controllers.eis.routes.IsExistingShareHolderController.submit(Some(companyOrIndividual))) {
-        <div class="form-group">
-        @formInputRadioGroup(
+    <div class="form-group" id="isExistingShareHolder">
+        @inputRadioGroup(
             field = IsExistingShareHolderForm("isExistingShareHolder"),
             Seq(
                 Constants.StandardRadioButtonYesValue -> Messages("common.radioYesLabel"),

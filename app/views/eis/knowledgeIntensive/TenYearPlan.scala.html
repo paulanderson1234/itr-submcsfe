@@ -17,11 +17,13 @@
 @import models.TenYearPlanModel
 @import common.Constants
 @import uk.gov.hmrc.play.views.html.helpers.form
-@import views.html.helpers.{errorSummary, formHiddenYesNoRadioNoError, formTextInput, backButtonWithProgress, formSpanMessage, textArea}
+@import views.html.helpers.{errorSummary, formHiddenYesNoRadioNoError, backButtonWithProgress, formSpanMessage, textArea}
 
 @(tenYearPlanForm: Form[TenYearPlanModel])(implicit request: Request[_], messages: Messages)
 
 @additionalContent() = {
+<div class="form-group">
+
     <div class="form-group">
         <span class="h2-heading" id="info-heading">@Messages("page.knowledgeIntensive.TenYearPlan.description.one")</span>
     </div>
@@ -30,15 +32,24 @@
         <span class="H2" id="infoId">@Messages("page.knowledgeIntensive.TenYearPlan.question.hint.three")</span>
     </div>
 
-    @textArea(
-    tenYearPlanForm("descriptionTextArea"),
-    '_cols -> "50",
-    '_rows -> "10",
-    '_maxLength-> Constants.SuggestedTextMaxLengthLower,
-    '_infoTextClass-> "form-hint",
-     '_info2-> Messages("page.knowledgeIntensive.TenYearPlan.question.hint.four")
-    )
+    <div class="char-counter" data-char-counter>
+        @textArea(
+        tenYearPlanForm("descriptionTextArea"),
+        '_cols -> "50",
+        '_rows -> "10",
+        '_maxLength-> Constants.SuggestedTextMaxLengthLower,
+        '_infoTextClass-> "form-hint",
+        '_info2-> Messages("page.knowledgeIntensive.TenYearPlan.question.hint.four"),
+        '_percentageWidth -> 98,
+        '_dataCharField -> "data_char_field"
+        )
+        <p class="char-counter-text flush" id="no-js-counter-text">
+            @Messages("common.max.length.no.js", Constants.SuggestedTextMaxLengthLower)
+        </p>
+    </div>
+</div>
 }
+
 
 @main_template(Messages("page.knowledgeIntensive.TenYearPlan.title")) {
 
@@ -53,6 +64,7 @@
 
     @form(action = controllers.eis.routes.TenYearPlanController.submit()) {
 
+<div class="form-group" id="hasTenYearPlan">
     @formHiddenYesNoRadioNoError(
     tenYearPlanForm,
     "hasTenYearPlan",
@@ -61,6 +73,8 @@
     None,
     Some("visuallyhidden")
     )
+</div>
+
 
 <div class="form-group">
     <button class="btn button" type="submit" id="next">@Messages("common.button.snc")</button>

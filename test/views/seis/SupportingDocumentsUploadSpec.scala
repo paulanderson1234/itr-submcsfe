@@ -49,8 +49,9 @@ class SupportingDocumentsUploadSpec extends ViewSpec {
       document.getElementById("bullet-five").text() shouldBe Messages("page.supportingDocuments.bullet.five")
       document.getElementById("docs-current").text() shouldBe Messages("page.supportingDocumentsUpload.docs.current")
       document.getElementById("noticeMessage").text() shouldBe Messages("page.supportingDocumentsUpload.Note")
-      document.getElementById("doUpload-yesLabel").text() shouldBe Messages("common.radioYesLabel")
-      document.getElementById("doUpload-noLabel").text() shouldBe Messages("common.radioNoLabel")
+      document.select("label[for=doUpload-yes]").text() shouldBe Messages("common.radioYesLabel")
+      document.select("label[for=doUpload-no]").text() shouldBe Messages("common.radioNoLabel")
+
       document.getElementById("next").text() shouldBe Messages("common.button.snc")
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.six")
       document.body.getElementById("back-link").attr("href") shouldEqual routes.ConfirmCorrespondAddressController.show().url
@@ -71,8 +72,11 @@ class SupportingDocumentsUploadSpec extends ViewSpec {
       documentEmpty.getElementById("bullet-five").text() shouldBe Messages("page.supportingDocuments.bullet.five")
       documentEmpty.getElementById("docs-current").text() shouldBe Messages("page.supportingDocumentsUpload.docs.current")
       documentEmpty.getElementById("noticeMessage").text() shouldBe Messages("page.supportingDocumentsUpload.Note")
-      documentEmpty.getElementById("doUpload-yesLabel").text() shouldBe Messages("common.radioYesLabel")
-      documentEmpty.getElementById("doUpload-noLabel").text() shouldBe Messages("common.radioNoLabel")
+
+
+      document.select("label[for=doUpload-yes]").text() shouldBe Messages("common.radioYesLabel")
+      document.select("label[for=doUpload-no]").text() shouldBe Messages("common.radioNoLabel")
+
       documentEmpty.getElementById("next").text() shouldBe Messages("common.button.snc")
       documentEmpty.getElementById("error-summary-display").hasClass("error-summary--show")
       document.body.getElementById("progress-section").text shouldBe Messages("common.section.progress.details.six")
